@@ -1,1 +1,5 @@
-
+Toon Sauvillers (CEO)
+Seppe Van Steenbergen (CTO)
+Dirk Vanbeveren (TC1)
+Bert Van den Bosch (TC2)
+Martijn Debeuf (Code Reviewer)
