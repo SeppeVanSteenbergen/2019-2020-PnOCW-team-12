@@ -1,6 +1,8 @@
-import Vue from "vue";
-import Router from "vue-router";
-import Home from "./views/Home.vue";
+import Vue from "vue"
+import Router from "vue-router"
+import Home from "./views/Home.vue"
+import Master from './views/Master'
+import Client from './views/Client'
 
 Vue.use(Router);
 
@@ -22,6 +24,16 @@ export default new Router({
       component: function() {
         return import(/* webpackChunkName: "about" */ "./views/About.vue");
       }
+    },
+    {
+      path: '/master/:room_id?',
+      name: 'master',
+      component: Master
+    },
+    {
+      path:'/client/:room_id?',
+      name: 'client',
+      component: Client
     }
   ]
 });

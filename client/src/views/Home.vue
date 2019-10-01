@@ -44,10 +44,11 @@ export default {
 
         },
         master() {
-
+            console.log('master')
+            this.$router.push({name: 'master'})
         },
         client() {
-
+            this.$router.push({name: 'client'})
         }
     }
 };

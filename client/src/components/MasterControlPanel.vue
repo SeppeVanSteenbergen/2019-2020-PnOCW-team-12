@@ -12,10 +12,10 @@
               </v-toolbar>
               <v-container>
  	<div class='flex-column mb-6' justify='center' align='center'>
- 		<v-btn color='warning' @click="$emit('master')"> Master</v-btn>
+ 		<v-btn color='warning' @click="master()"> Master</v-btn>
  		<br/>
  		<br/>
- 		<v-btn  color='error' @click="$emit('client')"> Client </v-btn>
+ 		<v-btn  color='error' @click="client()"> Client </v-btn>
 
  		</div>
  	</v-container>
@@ -30,12 +30,21 @@
 
 <script>
 export default {
-	name: 'MasterClientCard',
+	name: 'MasterControlPanel',
 	data() {
 		return {
 
 		}
-	}
+	},
+  methods: {
+    master() {
+      console.log('master clicked')
+      this.$emit('master')
+    },
+    client() {
+      this.$emit('client')
+    }
+  }
 }
 
 
