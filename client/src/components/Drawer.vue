@@ -1,16 +1,32 @@
 <template>
 <v-navigation-drawer
       class="deep-purple accent-4"
+      src="https://cdn.vuetifyjs.com/images/backgrounds/bg-2.jpg"
       dark
       v-model='drawer'
       app
       clipped
       temporary
     >
+    <v-list-item>
+      <v-list-item-avatar>
+        <v-img src="../../public/img/icons/screencast_icon_512_blue.png"></v-img>
+      </v-list-item-avatar>
+        <v-list-item-content>
+          <v-list-item-title class="title">
+            SCREENCASTER
+          </v-list-item-title>
+          <v-list-item-subtitle>
+            P&O Groep 12
+          </v-list-item-subtitle>
+        </v-list-item-content>
+      </v-list-item>
+
       <v-list>
         <v-list-item
           v-for="item in items"
           :key="item.title"
+          @click="$router.push(item.link)"
           link
         >
           <v-list-item-icon>
@@ -41,9 +57,9 @@ import {mapMutations} from 'vuex'
     data () {
       return {
         items: [
-          { title: 'Dashboard', icon: 'mdi-square' },
-          { title: 'Account', icon: 'mdi-account' },
-          { title: 'Admin', icon: 'mdi-gavel' },
+          { title: 'Home', icon: 'mdi-home', link: '/' },
+          { title: 'Master', icon: 'mdi-account-tie', link: 'master' },
+          { title: 'Client', icon: 'mdi-account', link: 'client' },
         ],
       }
     },

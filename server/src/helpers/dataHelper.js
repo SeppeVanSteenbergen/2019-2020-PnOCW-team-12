@@ -124,6 +124,9 @@ module.exports = {
 
     const room_id = clientList[user_id].room
 
+    console.log('room_id: ' + room_id)
+    console.log(roomList[room_id])
+
 
     console.log('try disconnecting master')
     if (roomList[room_id].master === user_id) {
@@ -218,6 +221,11 @@ module.exports = {
     throw new Error('socket_id ' + socket_id + ' not linked to user_id')
   },
 
+  // TODO Handle errors
+  getSocketIDFromUserID(user_id) {
+  	return clientList[user_id].socket_id
+  },
+
   getRoomList() {
     return roomList
   },
@@ -231,5 +239,35 @@ module.exports = {
       }
     }
     return result
+  },
+
+  closeRoom(user_id) {
+  	//TODO check can be written more efficiently without searching all the rooms
+		if(!this.isMasterUser(user_id)) {
+			console.log('The user is not allowed to send the close room command')
+			return 1
+		}
+
+		roomList[this.getUserRoom(user_id)].open = false
+  },
+
+  openRoom(user_id) {
+  	//TODO check can be written more efficiently without searching all the rooms
+		if(!this.isMasterUser(user_id)) {
+			console.log('The user is not allowed to send the close room command')
+			return 1
+		}
+
+		roomList[this.getUserRoom(user_id)].open = true
+
+  },
+
+  toggleRoom(user_id) {
+    if(!this.isMasterUser(user_id)) {
+      console.log('The user is not allowed to send the close room command')
+      return 1
+    }
+
+    roomList[this.getUserRoom(user_id)].open = !roomList[this.getUserRoom(user_id)].open
   }
 }

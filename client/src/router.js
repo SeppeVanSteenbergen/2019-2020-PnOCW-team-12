@@ -9,7 +9,11 @@ Vue.use(Router);
 export default new Router({
   mode: "history",
   base: process.env.BASE_URL,
-  routes: [
+  routes: [{
+      path: '/index.html',
+      alias: '/',
+      component: Home
+    },
     {
       path: "/",
       name: "home",
@@ -22,7 +26,7 @@ export default new Router({
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: function() {
-        return import(/* webpackChunkName: "about" */ "./views/About.vue");
+        return import( /* webpackChunkName: "about" */ "./views/About.vue");
       }
     },
     {
@@ -31,7 +35,7 @@ export default new Router({
       component: Master
     },
     {
-      path:'/client/:room_id?',
+      path: '/client/:room_id?',
       name: 'client',
       component: Client
     }

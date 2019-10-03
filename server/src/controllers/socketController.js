@@ -71,5 +71,36 @@ module.exports = (io) => {
 			dataHelper.addClientToRoom(dataHelper.getUserIDFromSocketID(socket.id), room_id)
 			socketHelper.updateAllRoomLists()
 		})
+
+		socket.on('screenCommand', (command) => {
+			socketHelper.screenCommand(dataHelper.getUserIDFromSocketID(socket.id), command)
+		})
+
+		socket.on('closeRoom', () => {
+			socketHelper.closeRoom(dataHelper.getUserIDFromSocketID(socket.id))
+		})
+
+		socket.on('openRoom', () => {
+			socketHelper.openRoom(dataHelper.getUserIDFromSocketID(socket.id))
+		})
+
+		socket.on('toggleRoom', () => {
+			console.log(roomList)
+			socketHelper.toggleRoom(dataHelper.getUserIDFromSocketID(socket.id))
+			console.log(roomList)
+		})
+
+
+
+
+		/////////////////////////////////////
+		//////////// COMMANDS ///////////////
+		/////////////////////////////////////
+
+
+
+		//////////////////////////////////////
+		///////////// END COMMANDS ///////////
+		///////////////////////////////////////
 	})
 }

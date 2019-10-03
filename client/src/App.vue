@@ -9,8 +9,8 @@
     <v-app-bar app clipped-left>
       <v-app-bar-nav-icon @click="toggleDrawer"></v-app-bar-nav-icon>
       <v-toolbar-title class="headline text-uppercase">
-        <span>Image</span>
-        <span class="font-weight-light">Connection</span>
+        <span>Screen</span>
+        <span class="font-weight-light">Caster</span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
         <span class='mr-2'>user id:{{user.uuid}} </span>

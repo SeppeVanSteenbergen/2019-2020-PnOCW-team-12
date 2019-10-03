@@ -1,14 +1,14 @@
 {
-  "name": "client",
-  "short_name": "client",
+  "name": "ScreenCaster",
+  "short_name": "ScreenCaster",
   "icons": [
     {
-      "src": "./img/icons/android-chrome-192x192.png",
+      "src": "./img/icons/screencast_icon_192_blue.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "./img/icons/android-chrome-512x512.png",
+      "src": "./img/icons/screencast_icon_512_blue.png",
       "sizes": "512x512",
       "type": "image/png"
     }

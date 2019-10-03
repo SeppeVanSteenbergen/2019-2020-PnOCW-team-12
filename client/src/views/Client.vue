@@ -30,8 +30,8 @@
         </canvas>
       </div>
     </v-row>
-    <v-btn color="primary" fab large dark bottom left fixed @click="$router.push({name:'home'})">
-      <v-icon>mdi-home</v-icon>
+    <v-btn color="error" fab large dark bottom left fixed @click="exitRoom()">
+      <v-icon>mdi-exit-to-app</v-icon>
     </v-btn>
   </v-container>
 </template>
@@ -58,33 +58,91 @@ export default {
       return this.$store.state.roomList
     }
   },
+  sockets: {
+    screenCommand(message) {
+      switch (message.type) {
+        case 'flood-screen':
+          this.floodScreenHandler(message.data)
+          break
+        case 'count-down':
+          this.countDownHandler(message.data)
+          break
+        case 'draw-directions':
+          this.drawDirectionsHandler(message.data)
+          break
+        default:
+          console.log('command not supported')
+          break
+      }
+    },
+    commandFloodScreen(command) {
+      this.floodScreenHandler(message.data)
+    },
+    commandCountDown(command) {
+      this.countDownHandler(message.data)
+    },
+    commandDrawDirections(command) {
+      this.drawDirectionsHandler(message.data)
+    }
+  },
   methods: {
+    floodScreenHandler(data) {
+      this.runFloodScreenCommandList(data.command, 0)
+
+    },
+    runFloodScreenCommandList(list, startIndex) {
+      for (let i = startIndex; i < list.length; i++) {
+        if (list[i].type === 'color') {
+          this.colorCanvas(list[i].value)
+        } else if (list[i].type === 'interval') {
+          setTimeout(this.runFloodScreenCommandList(list, i + 1), parseInt(list[i].value))
+        }
+      }
+    },
+    countDownHandler(data) {
+
+    },
+    drawDirectionsHandler(data) {
+
+    },
+    colorCanvas(color) {
+      const rgb = JSON.parse(color)
+      this.clearCanvas()
+      let ctx = canvas.getContext("2d")
+      ctx.fillStyle = 'rgb(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ')'
+      ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+    },
+    clearCanvas() {
+      let ctx = this.canvas.getContext('2d')
+      ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    },
     joinRoom(room_id) {
       this.$socket.emit('joinRoom', room_id)
       this.$router.push({ params: { room_id: room_id } })
     },
     goFullscreen() {
-        this.fullscreen = true
+      this.fullscreen = true
       //this.$refs['full'].toggle()
       //this.fullscreen = !this.fullscreen
-      
+
       this.canvas = this.$refs['canvas']
       this.openFullscreen(this.canvas)
-        const width = window.screen.width
-        const height = window.screen.height
-        
-        this.canvas.height = height
-        this.canvas.width = width
-        
-        let ctx = this.canvas.getContext("2d")
-        ctx.fillStyle = "white"
-        ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
-        ctx.fillStyle = "black"
-        ctx.beginPath()
-        ctx.arc(width / 2, height / 2, width / 4, 0, 2 * Math.PI)
-        ctx.stroke()
+      const width = window.screen.width
+      const height = window.screen.height
 
-        this.canvas.style.display = 'block'
+      this.canvas.height = height
+      this.canvas.width = width
+
+      let ctx = this.canvas.getContext("2d")
+      ctx.fillStyle = "white"
+      ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
+      ctx.fillStyle = "black"
+      ctx.beginPath()
+      ctx.arc(width / 2, height / 2, width / 4, 0, 2 * Math.PI)
+      ctx.stroke()
+
+      this.canvas.style.display = 'block'
 
 
     },
@@ -100,17 +158,21 @@ export default {
       }
     },
     exitHandler() {
-        if(!this.fullscreen){
-            try{
-                this.canvas.style.display = 'none'
-            } catch (e) {
-                
-            }
-            
-        } else {
-            this.fullscreen = false
+      if (!this.fullscreen) {
+        try {
+          this.canvas.style.display = 'none'
+        } catch (e) {
+
         }
-        
+
+      } else {
+        this.fullscreen = false
+      }
+
+    },
+    exitRoom() {
+      this.$socket.emit('exitRoom')
+      this.$router.push({ name: 'home' })
     }
   }
 }

@@ -27,7 +27,7 @@ export default new Vuex.Store({
         SOCKET_SOCKETSTATE(state, socketState) {
             state.socket.state = socketState
         },
-        SOCKET_ROOMLISTUPDATE(state, roomList) {
+        SOCKET_roomListUpdate(state, roomList) {
             console.log('room list updated')
             console.log(roomList)
             state.roomList = roomList
