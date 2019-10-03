@@ -6,13 +6,15 @@ Vue.use(Vuex);
 export default new Vuex.Store({
     state: {
         socket: {
-            connected: false
+            connected: false,
+            state:{}
         },
         drawer: false,
         user: {
             uuid: null
         },
-        userLoggedIn: false
+        userLoggedIn: false,
+        roomList: {}
     },
     mutations: {
         SOCKET_CONNECT(state) {
@@ -20,6 +22,15 @@ export default new Vuex.Store({
         },
         SOCKET_DISCONNECT(state) {
             state.socket.connected = false
+            state.socket.state = {}
+        },
+        SOCKET_SOCKETSTATE(state, socketState) {
+            state.socket.state = socketState
+        },
+        SOCKET_ROOMLISTUPDATE(state, roomList) {
+            console.log('room list updated')
+            console.log(roomList)
+            state.roomList = roomList
         },
         drawerOpen(state) {
             state.drawer = true

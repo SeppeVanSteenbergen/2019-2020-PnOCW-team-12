@@ -3,6 +3,7 @@ const serveStatic = require('serve-static')
 const path = require('path')
 const AuthenticationPolicy = require('./policies/AuthenticationPolicy')
 const AuthenticationController = require('./controllers/AuthenticationController')
+const DataController = require('./controllers/DataController')
 
 module.exports = (app, passport) => {
 
@@ -12,16 +13,13 @@ module.exports = (app, passport) => {
     })
 
 
-    app.get('/login/guest', AuthenticationController.tryLogin, (req, res, done)=> {
-    	console.log('going to login')
-    	done()
-    },
-
+    app.get('/login/guest', AuthenticationController.tryLogin,
 
     	passport.authenticate('anonymId', {session:true}),
     	(req, res) => {
     		console.log(req.user)
     		res.send({status: 'success', user: req.user})
+
     	}
     )
 
@@ -31,6 +29,7 @@ module.exports = (app, passport) => {
     app.get('/login/session', AuthenticationPolicy.isAuthenticated, AuthenticationController.sessionLogin)
 
 
+    app.get('/room/roomList', AuthenticationPolicy.isAuthenticated, DataController.getAllRooms)
 
 
 
@@ -38,12 +37,11 @@ module.exports = (app, passport) => {
 
 
 
-
-    app.use("/", serveStatic(path.join(__dirname, '/dist2')))
+    app.use("/", serveStatic(path.join(__dirname, '../dist')))
 
 
     app.use((req, res) => {
-        fs.readFile('dist2/index.html', 'utf-8', (err, content) => {
+        fs.readFile(path.join(__dirname,'../dist/index.html'), 'utf-8', (err, content) => {
             if (err) {
             	console.log(err)
                 console.log('cannot open file')

@@ -24,6 +24,8 @@ app.use(cookieParser())
 // allows connection from any origin + cookies
 app.use(cors({ credentials: true, origin: config.client.url }))
 
+// exporting io object
+exports.io = io
 
 //----PASSPORT----//
 // This will tell passport if the user is already logged in
@@ -54,9 +56,12 @@ routes(app, passport)
 
 require('./controllers/socketController')(io)
 
+
 /* start web server */
 
 http.listen(config.server.port, function(){
   console.log('listening on port ' + config.server.port);
 });
+
+
 

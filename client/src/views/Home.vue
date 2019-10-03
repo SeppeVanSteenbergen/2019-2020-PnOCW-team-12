@@ -45,6 +45,7 @@ export default {
         },
         master() {
             console.log('master')
+            this.$socket.emit('createRoom')
             this.$router.push({name: 'master'})
         },
         client() {

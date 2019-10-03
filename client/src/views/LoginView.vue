@@ -31,7 +31,7 @@
           height='100%'
         >
               	<div align='center' justify='center' height='100%'>
-              	<v-btn color='warning' align='center' justify='center' @click='$auth.login()'>
+              	<v-btn color='warning' align='center' justify='center' @click='login()'>
               		Login as Guest
               	</v-btn>
               </div>
@@ -54,5 +54,12 @@
     data: () => ({
       drawer: null,
     }),
+    methods: {
+      async login() {
+        await this.$auth.login()
+        if(this.$store.state.userLoggedIn)
+          this.$socket.emit('registerUserSocket', this.$store.state.user.uuid)
+      }
+    }
   }
 </script>

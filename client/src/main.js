@@ -8,12 +8,16 @@ import socketio from 'socket.io-client'
 import VueSocketIO from 'vue-socket.io'
 import './plugins'
 import './services/AuthenticationService'
+import config from './config/config'
+import fullscreen from 'vue-fullscreen'
 
 Vue.config.productionTip = false;
 
+Vue.use(fullscreen)
+
 Vue.use(new VueSocketIO({
     debug: true,
-    connection: 'http://localhost:8012',
+    connection: config.backend.url,
     vuex: {
         store,
         actionPrefix: 'SOCKET_',

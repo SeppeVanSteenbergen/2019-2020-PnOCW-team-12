@@ -59,6 +59,8 @@ export default {
   },
   sockets: {
         connect: function () {
+            if(this.$store.state.userLoggedIn)
+              this.$socket.emit('registerUserSocket', this.$store.state.user.uuid)
             console.log('socket connected')
         },
         customEmit: function (data) {
@@ -84,8 +86,10 @@ export default {
         }
       }
     },
-    mounted() {
-      this.$auth.sessionLogin()
+    async mounted() {
+      await this.$auth.sessionLogin()
+      if(this.$store.state.userLoggedIn)
+        this.$socket.emit('registerUserSocket', this.$store.state.user.uuid)
     }
 };
 </script>
