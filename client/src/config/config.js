@@ -1,4 +1,4 @@
-const dev = false
+const dev = true
 
 let secure = true // true for https, false for http
 
@@ -16,12 +16,16 @@ const devServ = {
 }
 const servPub = {
   backend: {
-    url: 'http://stylify.duckdns.org:3040', // This server
-    port: 3040
+    url: secure
+      ? 'https://stylify.duckdns.org:443'
+      : 'http://stylify.duckdns.org',
+    port: secure ? 443 : 80
   },
   frontend: {
-    url: 'http://stylify.duckdns.org:3040',
-    port: 3040
+    url: secure
+      ? 'https://stylify.duckdns.org:443'
+      : 'http://stylify.duckdns.org',
+    port: secure ? 443 : 80
   }
 }
 

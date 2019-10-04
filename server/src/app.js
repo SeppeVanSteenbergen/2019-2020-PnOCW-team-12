@@ -77,6 +77,16 @@ if (config.secure) {
       'listening on port ' + config.server.port + ' using https protocol'
     )
   })
+
+
+  // Redirecting to https
+  const httpApp = express()
+
+  httpApp.get('*', function(req, res) {
+    console.log('Redirect server running')
+    res.redirect('https://' + req.headers.host  + req.path)
+  })
+  httpApp.listen(80)
 } else {
   /* http server */
   httpServer.listen(config.server.port, function() {

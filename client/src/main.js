@@ -25,9 +25,7 @@ Vue.use(
     /*connection: SocketIO(config.secure
         ? config.backend.url.replace('http', 'https')
         : config.backend.url, options),*/
-    connection: config.secure
-      ? config.backend.url.replace('http', 'https')
-      : config.backend.url,
+    connection: config.backend.url,
     options,
     vuex: {
       store,
