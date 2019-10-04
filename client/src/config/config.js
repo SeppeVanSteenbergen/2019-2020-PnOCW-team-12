@@ -1,14 +1,18 @@
-const dev = true
+const dev = false
+
+let secure = true // true for https, false for http
+
+if (dev) secure = false
 
 const devServ = {
   backend: {
-		url: 'http://localhost:8012',
-		port: 8012
-	},
-	frontend: {
-		url: 'http://localhost:8080',
-		port: 8080
-	},
+    url: 'http://localhost:8012',
+    port: 8012
+  },
+  frontend: {
+    url: 'http://localhost:8080',
+    port: 8080
+  }
 }
 const servPub = {
   backend: {
@@ -29,7 +33,7 @@ if (dev) {
 }
 
 export default {
-	backend: {
+  backend: {
     url: server.backend.url,
     port: server.backend.port
   },
@@ -37,4 +41,5 @@ export default {
     url: server.frontend.url,
     port: server.frontend.port
   },
+  secure: secure // true for https, false for http
 }

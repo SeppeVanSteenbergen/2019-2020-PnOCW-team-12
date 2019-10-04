@@ -10,31 +10,34 @@ class AuthenticationService {
 
   async login() {
     let response = {
-    	success:false
+      success: false
     }
-    await axios.get('/login/guest').then((result) => {
-    	store.commit('setUser', result.data.user)
-    	store.commit('setLoggedIn', true) 
-      
-    	console.log(result)
-    	response.success = true
-    	response.data = result.data
-    }).catch(err => {
-    	response.data = err
-    })
+    await axios
+      .get('/login/guest')
+      .then(result => {
+        store.commit('setUser', result.data.user)
+        store.commit('setLoggedIn', true)
+
+        console.log(result)
+        response.success = true
+        response.data = result.data
+      })
+      .catch(err => {
+        response.data = err
+      })
 
     return response
   }
 
   async sessionLogin() {
     let response = {
-    	success: false
+      success: false
     }
     await axios
       .get('/login/session')
       .then(res => {
         // set the store to logged in
-        store.commit('setLoggedIn', true) 
+        store.commit('setLoggedIn', true)
         store.commit('setUser', res.data.user)
         console.log(res)
         response.success = true
@@ -66,4 +69,3 @@ class AuthenticationService {
 Vue.prototype.$auth = new AuthenticationService()
 
 Vue.$auth = new AuthenticationService()
-

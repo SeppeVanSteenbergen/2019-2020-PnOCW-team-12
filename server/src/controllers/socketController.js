@@ -1,4 +1,3 @@
-
 const dataHelper = require('../helpers/dataHelper')
 const socketHelper = require('../helpers/socketHelper')
 
@@ -29,78 +28,78 @@ value:
 */
 roomList = {}
 
-module.exports = (io) => {
-	io.on('connect', (socket) => {
-		console.log('client connected')
+module.exports = io => {
+  io.on('connect', socket => {
+    console.log('client connected')
 
-		socketHelper.updateAllRoomLists()
+    socketHelper.updateAllRoomLists()
 
-		io.compress(true).emit('data', {
-			message: 'welcome to the server'
-		})
+    io.compress(true).emit('data', {
+      message: 'welcome to the server'
+    })
 
-		socket.on('message', (message) => {
-			console.log('client message: ' + message)
-		})
+    socket.on('message', message => {
+      console.log('client message: ' + message)
+    })
 
+    socket.on('disconnect', () => {
+      console.log('client disconnected')
+    })
 
-		socket.on('disconnect', () => {
-			console.log('client disconnected')
-		})
+    socket.on('registerUserSocket', user_id => {
+      dataHelper.registerUserSocket(user_id, socket.id)
+    })
 
-		socket.on('registerUserSocket', (user_id) => {
-			dataHelper.registerUserSocket(user_id, socket.id)
-		})
+    socket.on('createRoom', () => {
+      dataHelper.createRoom(dataHelper.getUserIDFromSocketID(socket.id))
+      socketHelper.updateAllRoomLists()
+    })
 
-		socket.on('createRoom', () => {
-			dataHelper.createRoom(dataHelper.getUserIDFromSocketID(socket.id))
-			socketHelper.updateAllRoomLists()
-		})
+    socket.on('updateRoomList', () => {
+      socketHelper.updateRoomList(socket.id)
+    })
 
-		socket.on('updateRoomList', () => {
-			socketHelper.updateRoomList(socket.id)
-		})
+    socket.on('exitRoom', () => {
+      console.log('exiting room')
+      dataHelper.exitRoom(dataHelper.getUserIDFromSocketID(socket.id))
+      socketHelper.updateAllRoomLists()
+    })
 
-		socket.on('exitRoom', () => {
-			console.log('exiting room')
-			dataHelper.exitRoom(dataHelper.getUserIDFromSocketID(socket.id))
-			socketHelper.updateAllRoomLists()
-		})
+    socket.on('joinRoom', room_id => {
+      dataHelper.addClientToRoom(
+        dataHelper.getUserIDFromSocketID(socket.id),
+        room_id
+      )
+      socketHelper.updateAllRoomLists()
+    })
 
-		socket.on('joinRoom', (room_id) => {
-			dataHelper.addClientToRoom(dataHelper.getUserIDFromSocketID(socket.id), room_id)
-			socketHelper.updateAllRoomLists()
-		})
+    socket.on('screenCommand', command => {
+      socketHelper.screenCommand(
+        dataHelper.getUserIDFromSocketID(socket.id),
+        command
+      )
+    })
 
-		socket.on('screenCommand', (command) => {
-			socketHelper.screenCommand(dataHelper.getUserIDFromSocketID(socket.id), command)
-		})
+    socket.on('closeRoom', () => {
+      socketHelper.closeRoom(dataHelper.getUserIDFromSocketID(socket.id))
+    })
 
-		socket.on('closeRoom', () => {
-			socketHelper.closeRoom(dataHelper.getUserIDFromSocketID(socket.id))
-		})
+    socket.on('openRoom', () => {
+      socketHelper.openRoom(dataHelper.getUserIDFromSocketID(socket.id))
+    })
 
-		socket.on('openRoom', () => {
-			socketHelper.openRoom(dataHelper.getUserIDFromSocketID(socket.id))
-		})
+    socket.on('toggleRoom', () => {
+      console.log(roomList)
+      socketHelper.toggleRoom(dataHelper.getUserIDFromSocketID(socket.id))
+      console.log(roomList)
+    })
 
-		socket.on('toggleRoom', () => {
-			console.log(roomList)
-			socketHelper.toggleRoom(dataHelper.getUserIDFromSocketID(socket.id))
-			console.log(roomList)
-		})
+    /////////////////////////////////////
+    //////////// COMMANDS ///////////////
+    /////////////////////////////////////
 
-
-
-
-		/////////////////////////////////////
-		//////////// COMMANDS ///////////////
-		/////////////////////////////////////
-
-
-
-		//////////////////////////////////////
-		///////////// END COMMANDS ///////////
-		///////////////////////////////////////
-	})
+    //////////////////////////////////////
+    ///////////// END COMMANDS ///////////
+    ///////////////////////////////////////
+  })
 }

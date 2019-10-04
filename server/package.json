@@ -7,6 +7,7 @@
     "body-parser": "^1.19.0",
     "cookie-parser": "^1.4.4",
     "cors": "^2.8.5",
+    "eslint-plugin-react": "^7.15.1",
     "express": "^4.17.1",
     "express-session": "^1.16.2",
     "morgan": "^1.9.1",
@@ -20,7 +21,8 @@
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon src/app.js --ignore sessions/"
+    "start": "nodemon src/app.js --ignore sessions/",
+    "forever": "nodemon -x 'node src/app.js || touch src/app.js' --ignore sessions/"
   },
   "author": "PnO 12",
   "license": "ISC"

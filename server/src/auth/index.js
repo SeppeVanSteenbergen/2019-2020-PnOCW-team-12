@@ -21,7 +21,7 @@ passport.serializeUser(function(user, done) {
 passport.deserializeUser(async function(user, done) {
   console.log('DESERIALIZING')
   //TODO add permissions to user
-	done(null, user) // set the first row of data as the user
+  done(null, user) // set the first row of data as the user
 })
 
 module.exports = passport

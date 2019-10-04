@@ -6,14 +6,29 @@ const expressSession = require('express-session')
 const FileStore = require('session-file-store')(expressSession)
 const cookieParser = require('cookie-parser')
 const app = express()
-const http = require('http').createServer(app)
-const io = require('socket.io')(http, { origins: '*:*'})
 const config = require('./config/config')
 const routes = require('./routes')
 const passport = require('./auth')
+const https = require('https')
+const fs = require('fs')
+const path = require('path')
+const credentials = {
+  key: fs.readFileSync(path.join(__dirname, 'keys/private.key'), 'utf8'),
+  cert: fs.readFileSync(path.join(__dirname, 'keys/certificate.crt'), 'utf8')
+}
+const httpsServer = https.createServer(credentials, app)
+
+const httpServer = require('http').createServer(app)
+
+let io
+if (config.secure) {
+  io = require('socket.io')(httpsServer, { origins: '*:*' })
+} else {
+  io = require('socket.io')(httpServer, { origins: '*:*' })
+}
 
 // adds connection logs to console
-app.use(morgan('combined'))  
+app.use(morgan('combined'))
 
 // parses json messages into objects
 app.use(bodyParser.json())
@@ -37,7 +52,7 @@ app.use(
     saveUninitialized: false,
     store: new FileStore(),
     name: config.session.name,
-    cookie:{
+    cookie: {
       maxAge: 604800000 // 7 days in milliseconds
     }
   })
@@ -46,22 +61,25 @@ app.use(
 app.use(passport.initialize())
 app.use(passport.session())
 
-
-
 /* add routes to application */
 routes(app, passport)
-
 
 /* add socket handler */
 
 require('./controllers/socketController')(io)
 
-
 /* start web server */
 
-http.listen(config.server.port, function(){
-  console.log('listening on port ' + config.server.port);
-});
-
-
-
+if (config.secure) {
+  /* https server */
+  httpsServer.listen(config.server.port, () => {
+    console.log(
+      'listening on port ' + config.server.port + ' using https protocol'
+    )
+  })
+} else {
+  /* http server */
+  httpServer.listen(config.server.port, function() {
+    console.log('listening on port ' + config.server.port)
+  })
+}

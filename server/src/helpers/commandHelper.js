@@ -1,5 +1,3 @@
 module.exports = {
-	sendColorCommand(user_id) {
-		
-	}
+  sendColorCommand(user_id) {}
 }

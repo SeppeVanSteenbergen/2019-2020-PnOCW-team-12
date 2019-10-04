@@ -1,5 +1,5 @@
-pluginOptions: {
-    webpackBundleAnalyzer: {
-      openAnalyzer: true
-    }
+{
+  {
+    true
   }
+}

@@ -22,8 +22,6 @@ value:
 }
 */
 module.exports = {
-
-
   addUser(user_id) {
     clientList[user_id] = {
       socket_id: -1,
@@ -36,8 +34,7 @@ module.exports = {
    * Links the active socket connection to the user_id
    */
   registerUserSocket(user_id, socket_id) {
-    if (typeof clientList[user_id] === 'undefined')
-      this.addUser(user_id)
+    if (typeof clientList[user_id] === 'undefined') this.addUser(user_id)
 
     clientList[user_id].socket_id = socket_id
 
@@ -49,8 +46,7 @@ module.exports = {
   },
 
   removeUser(user_id) {
-    if (typeof clientList[user_id] === 'undefined')
-      return 0
+    if (typeof clientList[user_id] === 'undefined') return 0
 
     this.exitRoom(user_id)
 
@@ -60,7 +56,7 @@ module.exports = {
   },
 
   addClientToRoom(client_user_id, room_id) {
-    if (!this.canAddToRoom(client_user_id, room_id)){
+    if (!this.canAddToRoom(client_user_id, room_id)) {
       console.log('not possible to add user to room')
       return 1
     }
@@ -79,8 +75,6 @@ module.exports = {
       console.log('Not possible to create a room')
       return 1
     }
-
-
 
     for (let i = 0; i < Object.keys(roomList).length + 10; i++) {
       if (!roomList.hasOwnProperty(i)) {
@@ -119,14 +113,12 @@ module.exports = {
       return 0
     }
 
-
     console.log(1)
 
     const room_id = clientList[user_id].room
 
     console.log('room_id: ' + room_id)
     console.log(roomList[room_id])
-
 
     console.log('try disconnecting master')
     if (roomList[room_id].master === user_id) {
@@ -137,8 +129,11 @@ module.exports = {
       console.log('master removed')
       console.log(roomList)
     } else {
-      if(roomList[room_id].clients.includes(user_id))
-        roomList[room_id].clients.splice(roomList[room_id].clients.indexOf(user_id), 1)
+      if (roomList[room_id].clients.includes(user_id))
+        roomList[room_id].clients.splice(
+          roomList[room_id].clients.indexOf(user_id),
+          1
+        )
     }
 
     clientList[user_id].room = -1
@@ -147,8 +142,7 @@ module.exports = {
   },
 
   disconnectAllClientsFromRoom(room_id) {
-    if (typeof roomList[room_id] === 'undefined'){
-
+    if (typeof roomList[room_id] === 'undefined') {
       return 0
     }
 
@@ -171,18 +165,19 @@ module.exports = {
       return false
     }
 
-    if (roomList[this.getUserRoom(user_id)].master === user_id)
-      return true
+    if (roomList[this.getUserRoom(user_id)].master === user_id) return true
 
     return false
-
   },
 
   isClientUser(user_id) {
-    if (this.getUserRoom(user_id) === -1)
-      return false
+    if (this.getUserRoom(user_id) === -1) return false
 
-    for (let i = 0; i < roomList[this.getUserRoom(user_id)].clients.length; i++) {
+    for (
+      let i = 0;
+      i < roomList[this.getUserRoom(user_id)].clients.length;
+      i++
+    ) {
       if (roomList[this.getUserRoom(user_id)].clients[i] === user_id)
         return true
     }
@@ -195,18 +190,14 @@ module.exports = {
   },
 
   canAddToRoom(user_id, room_id) {
-    if (clientList[user_id].room !== -1)
-      return false
+    if (clientList[user_id].room !== -1) return false
 
-    if (!roomList[room_id].open)
-      return false
-
+    if (!roomList[room_id].open) return false
 
     return true
   },
   canCreateRoom(user_id) {
-    if (clientList[user_id].room !== -1)
-      return false
+    if (clientList[user_id].room !== -1) return false
 
     return true
   },
@@ -223,7 +214,7 @@ module.exports = {
 
   // TODO Handle errors
   getSocketIDFromUserID(user_id) {
-  	return clientList[user_id].socket_id
+    return clientList[user_id].socket_id
   },
 
   getRoomList() {
@@ -242,32 +233,37 @@ module.exports = {
   },
 
   closeRoom(user_id) {
-  	//TODO check can be written more efficiently without searching all the rooms
-		if(!this.isMasterUser(user_id)) {
-			console.log('The user is not allowed to send the close room command')
-			return 1
-		}
-
-		roomList[this.getUserRoom(user_id)].open = false
-  },
-
-  openRoom(user_id) {
-  	//TODO check can be written more efficiently without searching all the rooms
-		if(!this.isMasterUser(user_id)) {
-			console.log('The user is not allowed to send the close room command')
-			return 1
-		}
-
-		roomList[this.getUserRoom(user_id)].open = true
-
-  },
-
-  toggleRoom(user_id) {
-    if(!this.isMasterUser(user_id)) {
+    //TODO check can be written more efficiently without searching all the rooms
+    if (!this.isMasterUser(user_id)) {
       console.log('The user is not allowed to send the close room command')
       return 1
     }
 
-    roomList[this.getUserRoom(user_id)].open = !roomList[this.getUserRoom(user_id)].open
+    roomList[this.getUserRoom(user_id)].open = false
+  },
+
+  openRoom(user_id) {
+    //TODO check can be written more efficiently without searching all the rooms
+    if (!this.isMasterUser(user_id)) {
+      console.log('The user is not allowed to send the close room command')
+      return 1
+    }
+
+    roomList[this.getUserRoom(user_id)].open = true
+  },
+
+  toggleRoom(user_id) {
+    if (!this.isMasterUser(user_id)) {
+      console.log('The user is not allowed to send the close room command')
+      return 1
+    }
+
+    roomList[this.getUserRoom(user_id)].open = !roomList[
+      this.getUserRoom(user_id)
+    ].open
+  },
+
+  getClientsOfRoom(room_id) {
+    return roomList[room_id].clients
   }
 }

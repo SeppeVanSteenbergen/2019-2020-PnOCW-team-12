@@ -1,21 +1,32 @@
 <template>
   <v-container class="fill-height" fluid>
-    <v-row align="center" justify="center" min-height='300px'>
+    <v-row align="center" justify="center" min-height="300px">
       <div>
-        <v-card max-width='400px'>
+        <v-card max-width="400px">
           <v-toolbar color="primary" dark flat>
             <v-toolbar-title>Choose a room</v-toolbar-title>
             <div class="flex-grow-1"></div>
           </v-toolbar>
           <v-container>
-            <v-list v-if='roomList.length !== 0'>
+            <v-list v-if="roomList.length !== 0">
               <v-list>
-                <v-list-item v-for="room_id in Object.keys(roomList)" :key="room_id" @click="joinRoom(room_id)">
+                <v-list-item
+                  v-for="room_id in Object.keys(roomList)"
+                  :key="room_id"
+                  @click="joinRoom(room_id)"
+                >
                   <v-list-item-icon>
-                    <v-icon :color="roomList[room_id].open?'success':'error'">{{roomList[room_id].open?'mdi-lock-open':'mdi-lock'}}</v-icon>
+                    <v-icon
+                      :color="roomList[room_id].open ? 'success' : 'error'"
+                      >{{
+                        roomList[room_id].open ? 'mdi-lock-open' : 'mdi-lock'
+                      }}</v-icon
+                    >
                   </v-list-item-icon>
                   <v-list-item-content>
-                    <v-list-item-title v-text="roomList[room_id].name"></v-list-item-title>
+                    <v-list-item-title
+                      v-text="roomList[room_id].name"
+                    ></v-list-item-title>
                   </v-list-item-content>
                 </v-list-item>
               </v-list>
@@ -23,11 +34,10 @@
           </v-container>
         </v-card>
         <br />
-        <v-btn @click='goFullscreen()'>
+        <v-btn @click="goFullscreen()">
           Go Fullscreen
         </v-btn>
-        <canvas ref='canvas' class='fullscreen'>
-        </canvas>
+        <canvas ref="canvas" class="fullscreen"> </canvas>
       </div>
     </v-row>
     <v-btn color="error" fab large dark bottom left fixed @click="exitRoom()">
@@ -48,10 +58,10 @@ export default {
     console.log('updateRoomList')
     this.$socket.emit('updateRoomList')
 
-    document.addEventListener('fullscreenchange', this.exitHandler, false);
-    document.addEventListener('mozfullscreenchange', this.exitHandler, false);
-    document.addEventListener('MSFullscreenChange', this.exitHandler, false);
-    document.addEventListener('webkitfullscreenchange', this.exitHandler, false);
+    document.addEventListener('fullscreenchange', this.exitHandler, false)
+    document.addEventListener('mozfullscreenchange', this.exitHandler, false)
+    document.addEventListener('MSFullscreenChange', this.exitHandler, false)
+    document.addEventListener('webkitfullscreenchange', this.exitHandler, false)
   },
   computed: {
     roomList() {
@@ -60,6 +70,9 @@ export default {
   },
   sockets: {
     screenCommand(message) {
+      if (!this.fullscreen) {
+        this.goFullscreen()
+      }
       switch (message.type) {
         case 'flood-screen':
           this.floodScreenHandler(message.data)
@@ -74,48 +87,37 @@ export default {
           console.log('command not supported')
           break
       }
-    },
-    commandFloodScreen(command) {
-      this.floodScreenHandler(message.data)
-    },
-    commandCountDown(command) {
-      this.countDownHandler(message.data)
-    },
-    commandDrawDirections(command) {
-      this.drawDirectionsHandler(message.data)
     }
   },
   methods: {
     floodScreenHandler(data) {
+      console.log('given command:')
+      console.log(data.command)
       this.runFloodScreenCommandList(data.command, 0)
-
     },
     runFloodScreenCommandList(list, startIndex) {
       for (let i = startIndex; i < list.length; i++) {
         if (list[i].type === 'color') {
           this.colorCanvas(list[i].value)
         } else if (list[i].type === 'interval') {
-          setTimeout(this.runFloodScreenCommandList(list, i + 1), parseInt(list[i].value))
+          setTimeout(
+            this.runFloodScreenCommandList(list, i + 1),
+            parseInt(list[i].value)
+          )
         }
       }
     },
-    countDownHandler(data) {
-
-    },
-    drawDirectionsHandler(data) {
-
-    },
-    colorCanvas(color) {
-      const rgb = JSON.parse(color)
-      this.clearCanvas()
-      let ctx = canvas.getContext("2d")
+    countDownHandler(data) {},
+    drawDirectionsHandler(data) {},
+    colorCanvas(rgb) {
+      //this.clearCanvas()
+      let ctx = this.canvas.getContext('2d')
       ctx.fillStyle = 'rgb(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ')'
-      ctx.fillRect(0, 0, canvas.width, canvas.height)
-
+      ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
     },
     clearCanvas() {
       let ctx = this.canvas.getContext('2d')
-      ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
     },
     joinRoom(room_id) {
       this.$socket.emit('joinRoom', room_id)
@@ -134,41 +136,36 @@ export default {
       this.canvas.height = height
       this.canvas.width = width
 
-      let ctx = this.canvas.getContext("2d")
-      ctx.fillStyle = "white"
+      let ctx = this.canvas.getContext('2d')
+      ctx.fillStyle = 'white'
       ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
-      ctx.fillStyle = "black"
+      ctx.fillStyle = 'black'
       ctx.beginPath()
       ctx.arc(width / 2, height / 2, width / 4, 0, 2 * Math.PI)
       ctx.stroke()
 
       this.canvas.style.display = 'block'
-
-
     },
     openFullscreen(elem) {
       if (elem.requestFullscreen) {
-        elem.requestFullscreen();
-      } else if (elem.mozRequestFullScreen) { /* Firefox */
-        elem.mozRequestFullScreen();
-      } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
-        elem.webkitRequestFullscreen();
-      } else if (elem.msRequestFullscreen) { /* IE/Edge */
-        elem.msRequestFullscreen();
+        elem.requestFullscreen()
+      } else if (elem.mozRequestFullScreen) {
+        /* Firefox */
+        elem.mozRequestFullScreen()
+      } else if (elem.webkitRequestFullscreen) {
+        /* Chrome, Safari and Opera */
+        elem.webkitRequestFullscreen()
+      } else if (elem.msRequestFullscreen) {
+        /* IE/Edge */
+        elem.msRequestFullscreen()
       }
     },
     exitHandler() {
       if (!this.fullscreen) {
-        try {
-          this.canvas.style.display = 'none'
-        } catch (e) {
-
-        }
-
+        this.canvas.style.display = 'none'
       } else {
         this.fullscreen = false
       }
-
     },
     exitRoom() {
       this.$socket.emit('exitRoom')
@@ -181,6 +178,6 @@ export default {
 .fullscreen {
   width: 100%;
   height: 100%;
-  display: none
+  display: none;
 }
 </style>
