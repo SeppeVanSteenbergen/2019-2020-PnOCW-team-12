@@ -108,7 +108,43 @@ export default {
       }
     },
     countDownHandler(data) {},
-    drawDirectionsHandler(data) {},
+    drawDirectionsHandler(data) {
+      this.clearCanvas()
+      let ctx = this.canvas.getContext('2d')
+      ctx.beginPath()
+      ctx.strokeStyle = 'rgb(0,0,0)'
+      for (let i = 0; i < data.command.length; i++) {
+        this.drawArrow(ctx, data.command[i].deg, data.command[i].label)
+      }
+      ctx.stroke()
+    },
+    drawArrow(ctx, orientation, label) {
+      let headLen = 10
+      const radians = (orientation * Math.PI) / 180
+      const arrowLength =
+        this.canvas.width > this.canvas.height
+          ? this.canvas.height * 0.7
+          : this.canvas.width * 0.7
+      let dx = Math.sin(radians) * arrowLength
+      let dy = Math.cos(radians) * arrowLength
+      let midX = this.canvas.width / 2
+      let midY = this.canvas.height / 2
+      let arrowEndX = this.canvas.width / 2 + dx
+      let arrowEndY = this.canvas.height / 2 + dy
+
+      ctx.moveTo(midX, midY)
+
+      ctx.lineTo(arrowEndX, arrowEndY)
+      ctx.lineTo(
+        arrowEndX - headLen * Math.cos(-radians - Math.PI / 2 - Math.PI / 6),
+        arrowEndY - headLen * Math.sin(-radians - Math.PI / 2 - Math.PI / 6)
+      )
+      ctx.lineTo(arrowEndX, arrowEndY)
+      ctx.lineTo(
+        arrowEndX - headLen * Math.cos(-radians - Math.PI / 2 + Math.PI / 6),
+        arrowEndY - headLen * Math.sin(-radians - Math.PI / 2 + Math.PI / 6)
+      )
+    },
     colorCanvas(rgb) {
       //this.clearCanvas()
       let ctx = this.canvas.getContext('2d')
