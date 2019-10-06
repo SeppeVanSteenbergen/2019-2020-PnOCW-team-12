@@ -87,22 +87,17 @@
           <v-tab-item>
             <v-content>
               webcam
-              <v-btn @click="pictureModeDialog = true" class="mx-auto">
-                open dialog
-              </v-btn>
+              <v-btn @click="pictureModeDialog = true" class="mx-auto"
+                >open dialog</v-btn
+              >
             </v-content>
-          </v-tab-item>
-          <v-tab-item>
-            <PictureUpload></PictureUpload>
           </v-tab-item>
         </v-tabs>
       </v-card>
     </v-row>
-
     <v-btn color="error" fab large dark bottom left fixed @click="disconnect()">
       <v-icon class="v-rotate-90">mdi-exit-to-app</v-icon>
     </v-btn>
-
     <v-dialog v-model="floodFillDialog">
       <v-card class="pa-4">
         <v-card-title>
@@ -146,16 +141,14 @@
           <div class="flex-grow-1"></div>
           <v-btn color="success"> Send To All</v-btn>
           <v-btn @click="pictureModeDialog = false" color="error" text>
-            close
-          </v-btn>
+            close</v-btn
+          >
         </v-card-actions>
       </v-card>
     </v-dialog>
   </v-container>
 </template>
-
 <script>
-  import PictureUpload from '../components/PictureUpload.vue';
 export default {
   name: 'master',
   data() {
@@ -207,41 +200,18 @@ export default {
               }
             ]
           }
-        ],
-        color: { r: 200, g: 100, b: 0, a: 1 },
-        floodFillDialog: false,
-        continousFloodMode: false,
-        pictureModeDialog: false,
-        videoStream: null,
-        uploadedPicture: null
+        },
+        to: user_id === null ? 'all' : user_id
       }
+
+      console.log(object)
+      this.$socket.emit('screenCommand', object)
     },
-    methods: {
-      action() {},
-      master() {},
-      client() {},
-      disconnect() {
-        this.$socket.emit('exitRoom')
-        this.$router.push({ name: 'home' })
-      },
-      toggleRoom() {
-        this.$socket.emit('toggleRoom')
-      },
-      colorClient(user_id = null) {
-        let object = {
-          payload: {
-            type: 'flood-screen',
-            data: {
-              command: [
-                {
-                  type: 'color',
-                  value: [this.color.r, this.color.g, this.color.b]
-                }
-              ]
-            }
-          },
-          to: user_id === null ? 'all' : user_id
-        }
+    startVideo() {
+      const constraints = {
+        video: true
+      }
+      const video = this.$refs.video
 
       navigator.mediaDevices.getUserMedia(constraints).then(stream => {
         video.srcObject = stream
@@ -279,52 +249,29 @@ export default {
         ) {
           return this.$store.state.roomList[i]
         }
-        const video = this.$refs.video
-
-        navigator.mediaDevices.getUserMedia(constraints).then(stream => {
-          video.srcObject = stream
-          this.videoStream = stream
-        })
-      },
+      }
+      return null
     },
-    components: {
-      PictureUpload
-    },
-    mounted() {
-      this.$socket.emit('updateRoomList')
-    },
-    computed: {
-      myRoom() {
-        for (let i in this.$store.state.roomList) {
-          if (
-            typeof this.$store.state.roomList[i] !== 'undefined' &&
-            this.$store.state.roomList[i].master === this.$store.state.user.uuid
-          ) {
-            return this.$store.state.roomList[i]
-          }
-        }
-        return null
-      },
-      roomList() {
-        return this.$store.state.roomList
+    roomList() {
+      return this.$store.state.roomList
+    }
+  },
+  watch: {
+    color() {
+      if (this.continousFloodMode) {
+        this.colorClient()
       }
     },
-    watch: {
-      color() {
-        if (this.continousFloodMode) {
-          this.colorClient()
-        }
-      },
-      pictureModeDialog(n) {
-        console.log('exit picture ' + n)
-        if (!n && this.videoStream !== null) {
-          this.videoStream.getTracks().forEach(track => {
-            track.stop()
-          })
-        }
+    pictureModeDialog(n) {
+      console.log('exit picture ' + n)
+      if (!n && this.videoStream !== null) {
+        this.videoStream.getTracks().forEach(track => {
+          track.stop()
+        })
       }
     }
   }
+}
 </script>
 
 <style>
