@@ -74,17 +74,31 @@
           <v-tab-item>
             <v-content>
               webcam
-              <v-btn @click="pictureModeDialog = true" class="mx-auto"
-                >open dialog</v-btn
-              >
+              <v-btn @click="pictureModeDialog = true" class="mx-auto">
+                open dialog
+              </v-btn>
             </v-content>
+          </v-tab-item>
+          <v-tab-item>
+            <v-file-input 
+              label="File input" 
+              id="picture"
+              clearable 
+              show-size counter multiple
+              prepend-icon="mdi-camera"
+              accept="image/*"
+              @change="onFileSelected"
+            ></v-file-input>
+            <v-btn @click="uploadPicture" >upload picture</v-btn>
           </v-tab-item>
         </v-tabs>
       </v-card>
     </v-row>
+
     <v-btn color="error" fab large dark bottom left fixed @click="disconnect()">
       <v-icon class="v-rotate-90">mdi-exit-to-app</v-icon>
     </v-btn>
+
     <v-dialog v-model="floodFillDialog">
       <v-card class="pa-4">
         <v-card-title>
@@ -128,8 +142,8 @@
           <div class="flex-grow-1"></div>
           <v-btn color="success"> Send To All</v-btn>
           <v-btn @click="pictureModeDialog = false" color="error" text>
-            close</v-btn
-          >
+            close
+          </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -153,13 +167,17 @@ export default {
         },
         {
           title: 'PicutreMode'
+        },
+        {
+          title: 'PictureUpload'
         }
       ],
       color: { r: 200, g: 100, b: 0, a: 1 },
       floodFillDialog: false,
       continousFloodMode: false,
       pictureModeDialog: false,
-      videoStream: null
+      videoStream: null,
+      uploadedPicture: null
     }
   },
   methods: {
@@ -202,7 +220,7 @@ export default {
         video.srcObject = stream
         this.videoStream = stream
       })
-    }
+    },
   },
   mounted() {
     this.$socket.emit('updateRoomList')
