@@ -165,7 +165,10 @@ export default {
           title: 'countdown'
         },
         {
-          title: 'PicutreMode'
+          title: 'PictureMode'
+        },
+        {
+          title: 'PictureUpload'
         }
       ],
       color: { r: 200, g: 100, b: 0, a: 1 },
