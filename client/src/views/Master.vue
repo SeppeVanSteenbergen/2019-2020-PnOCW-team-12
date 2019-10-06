@@ -64,9 +64,22 @@
             <v-btn @click="floodFillDialog = true"> open </v-btn>
           </v-tab-item>
           <v-tab-item>
-            <v-card flat tile>
-              <v-card-text>Draw Directions</v-card-text>
-            </v-card>
+            <v-container>
+              <v-card flat tile>
+                <v-card-title>Draw Directions</v-card-title>
+                <v-card-text>
+                  <v-slider
+                    v-model="angleSlider"
+                    thumb-label="always"
+                    :min="0"
+                    :max="360"
+                  ></v-slider>
+                  <v-card-actions>
+                    <v-btn @click="executeDirections()">Send To All</v-btn>
+                  </v-card-actions>
+                </v-card-text>
+              </v-card>
+            </v-container>
           </v-tab-item>
           <v-tab-item>
             Some text
@@ -159,7 +172,9 @@ export default {
       floodFillDialog: false,
       continousFloodMode: false,
       pictureModeDialog: false,
-      videoStream: null
+      videoStream: null,
+      angleSlider: 0,
+      directionLabel: 'Hello'
     }
   },
   methods: {
@@ -202,6 +217,24 @@ export default {
         video.srcObject = stream
         this.videoStream = stream
       })
+    },
+    executeDirections(user_id = null) {
+      let object = {
+        payload: {
+          type: 'draw-directions',
+          data: {
+            command: [
+              {
+                deg: this.angleSlider,
+                label: this.directionLabel
+              }
+            ]
+          }
+        },
+        to: user_id === null ? 'all' : user_id
+      }
+
+      this.$socket.emit('screenCommand', object)
     }
   },
   mounted() {

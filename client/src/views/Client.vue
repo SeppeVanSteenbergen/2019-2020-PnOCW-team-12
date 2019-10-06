@@ -109,6 +109,7 @@ export default {
     },
     countDownHandler(data) {},
     drawDirectionsHandler(data) {
+      console.log('clearing console')
       this.clearCanvas()
       let ctx = this.canvas.getContext('2d')
       ctx.beginPath()
