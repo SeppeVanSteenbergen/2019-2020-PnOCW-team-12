@@ -92,6 +92,9 @@
               >
             </v-content>
           </v-tab-item>
+          <v-tab-item>
+            <PictureUpload/>
+          </v-tab-item>
         </v-tabs>
       </v-card>
     </v-row>
@@ -149,6 +152,7 @@
   </v-container>
 </template>
 <script>
+  import PictureUpload from '../components/PictureUpload'
 export default {
   name: 'master',
   data() {
@@ -179,6 +183,9 @@ export default {
       angleSlider: 0,
       directionLabel: 'Hello'
     }
+  },
+  components: {
+    PictureUpload
   },
   methods: {
     action() {},

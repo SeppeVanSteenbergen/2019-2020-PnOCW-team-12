@@ -3,6 +3,7 @@
     <v-file-input
       label="File input"
       id="inpFile"
+      ref="inpFile"
       clearable
       show-size
       counter
@@ -23,11 +24,13 @@
 export default {
   name: 'PictureUpload',
   data() {
-    return {}
+    return {
+      file: null
+    }
   },
   methods: {
     onFileSelected() {
-      const inpFile = document.getElementById('inpFile')
+      const inpFile = this.$refs.inpFile
       const previewContainer = document.getElementById('imagePreview')
       const previewImage = previewContainer.querySelector(
         '.image-preview__image'
