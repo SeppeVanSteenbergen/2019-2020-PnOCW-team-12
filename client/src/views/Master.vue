@@ -63,6 +63,7 @@
           <v-tab-item>
             <v-btn @click="floodFillDialog = true"> open </v-btn>
           </v-tab-item>
+
           <v-tab-item>
             <v-container>
               <v-card flat tile>
@@ -74,16 +75,39 @@
                     :min="0"
                     :max="360"
                   ></v-slider>
-                  <v-card-actions>
-                    <v-btn @click="executeDirections()">Send To All</v-btn>
-                  </v-card-actions>
+                  <v-switch
+                    v-model="continousDrawDirectionMode"
+                    label="continuous mode"
+                  ></v-switch>
                 </v-card-text>
+
+                <v-card-actions>
+                  <v-btn @click="executeDirections()">Send To All</v-btn>
+                </v-card-actions>
               </v-card>
             </v-container>
           </v-tab-item>
+
           <v-tab-item>
-            Some text
+            <v-content>
+              <v-text-field
+                label="Starting number"
+                outlined
+                type="number"
+                v-model="countDownNumber"
+              ></v-text-field>
+
+              <v-text-field
+                label="Interval in ms"
+                outlined
+                type="number"
+                v-model="countDownInterval"
+              ></v-text-field>
+
+              <v-btn @click="executeCountdown()">Send To all</v-btn>
+            </v-content>
           </v-tab-item>
+
           <v-tab-item>
             <v-content>
               webcam
@@ -92,8 +116,9 @@
               >
             </v-content>
           </v-tab-item>
+
           <v-tab-item>
-            <PictureUpload/>
+            <PictureUpload />
           </v-tab-item>
         </v-tabs>
       </v-card>
@@ -135,7 +160,7 @@
           <span class="headline">Picture Mode</span>
         </v-card-title>
         <v-card-text>
-          <video autoplay="true" id="videoElement" ref="video"></video>
+          <video :autoplay="true" id="videoElement" ref="video"></video>
           <br />
           <v-btn @click="startVideo">start video</v-btn>
         </v-card-text>
@@ -152,7 +177,7 @@
   </v-container>
 </template>
 <script>
-  import PictureUpload from '../components/PictureUpload'
+import PictureUpload from '../components/PictureUpload'
 export default {
   name: 'master',
   data() {
@@ -181,7 +206,10 @@ export default {
       pictureModeDialog: false,
       videoStream: null,
       angleSlider: 0,
-      directionLabel: 'Hello'
+      directionLabel: 'Hello',
+      countDownNumber: null,
+      countDownInterval: null,
+      continousDrawDirectionMode: false
     }
   },
   components: {
@@ -245,6 +273,22 @@ export default {
       }
 
       this.$socket.emit('screenCommand', object)
+    },
+    executeCountdown(user_id = null) {
+      let object = {
+        payload: {
+          type: 'count-down',
+          data: {
+            start: this.countDownNumber,
+            interval: this.countDownInterval
+          }
+        },
+        to: user_id === null ? 'all' : user_id
+      }
+      console.log('executing countdown')
+      console.log(object)
+
+      this.$socket.emit('screenCommand', object)
     }
   },
   mounted() {
@@ -279,6 +323,9 @@ export default {
           track.stop()
         })
       }
+    },
+    angleSlider() {
+      if (this.continousDrawDirectionMode) this.executeDirections()
     }
   }
 }

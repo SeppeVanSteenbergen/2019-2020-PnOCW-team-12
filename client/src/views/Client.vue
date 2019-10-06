@@ -101,13 +101,53 @@ export default {
           this.colorCanvas(list[i].value)
         } else if (list[i].type === 'interval') {
           setTimeout(
-            this.runFloodScreenCommandList(list, i + 1),
-            parseInt(list[i].value)
+            this.runFloodScreenCommandList,
+            parseInt(list[i].value),
+            list,
+            i + 1
           )
         }
       }
     },
-    countDownHandler(data) {},
+    countDownHandler(data) {
+      this.countdownRecursive(data.start, data.interval)
+    },
+    countdownRecursive(number, interval) {
+      console.log(
+        'countdown recursive num: ' + number + ' interval: ' + interval
+      )
+      if (number === 0) {
+        this.drawCounterFinish()
+      } else {
+        this.drawNumberOnCanvas(number)
+        setTimeout(
+          this.countdownRecursive,
+          parseInt(interval),
+          number - 1,
+          interval
+        )
+      }
+    },
+    drawNumberOnCanvas(num) {
+      this.clearCanvas()
+      let ctx = this.canvas.getContext('2d')
+
+      ctx.fillStyle = 'black'
+      ctx.textAlign = 'center'
+      ctx.textBaseline = 'middle'
+
+      let baseCanvasWidth = 1000
+      let fontSize = 200
+
+      let currentFontSize = (this.canvas.width * fontSize) / baseCanvasWidth
+
+      ctx.font = currentFontSize + 'px sans-serif'
+
+      ctx.fillText(num, this.canvas.width / 2, this.canvas.height / 2)
+    },
+    drawCounterFinish() {
+      this.drawNumberOnCanvas('BOOM!')
+    },
     drawDirectionsHandler(data) {
       console.log('clearing console')
       this.clearCanvas()
