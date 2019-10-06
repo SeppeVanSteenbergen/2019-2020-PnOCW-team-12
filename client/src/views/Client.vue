@@ -124,25 +124,25 @@ export default {
       const radians = (orientation * Math.PI) / 180
       const arrowLength =
         this.canvas.width > this.canvas.height
-          ? this.canvas.height * 0.7
-          : this.canvas.width * 0.7
+          ? this.canvas.height * 0.4
+          : this.canvas.width * 0.4
       let dx = Math.sin(radians) * arrowLength
       let dy = Math.cos(radians) * arrowLength
       let midX = this.canvas.width / 2
       let midY = this.canvas.height / 2
       let arrowEndX = this.canvas.width / 2 + dx
-      let arrowEndY = this.canvas.height / 2 + dy
+      let arrowEndY = this.canvas.height / 2 - dy
 
       ctx.moveTo(midX, midY)
 
       ctx.lineTo(arrowEndX, arrowEndY)
       ctx.lineTo(
-        arrowEndX - headLen * Math.cos(-radians - Math.PI / 2 - Math.PI / 6),
+        arrowEndX + headLen * Math.cos(-radians - Math.PI / 2 - Math.PI / 6),
         arrowEndY - headLen * Math.sin(-radians - Math.PI / 2 - Math.PI / 6)
       )
       ctx.lineTo(arrowEndX, arrowEndY)
       ctx.lineTo(
-        arrowEndX - headLen * Math.cos(-radians - Math.PI / 2 + Math.PI / 6),
+        arrowEndX + headLen * Math.cos(-radians - Math.PI / 2 + Math.PI / 6),
         arrowEndY - headLen * Math.sin(-radians - Math.PI / 2 + Math.PI / 6)
       )
     },
@@ -154,7 +154,10 @@ export default {
     },
     clearCanvas() {
       let ctx = this.canvas.getContext('2d')
-      ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
+      ctx.fillStyle = 'white'
+      ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
+      //ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
+      //ctx.fill()
     },
     joinRoom(room_id) {
       this.$socket.emit('joinRoom', room_id)
