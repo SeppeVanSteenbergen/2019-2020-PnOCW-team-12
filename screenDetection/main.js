@@ -1,8 +1,12 @@
-let image = cv.imread("image");
-screenDetection = new screenDetection(image);
-let imageOutRed = screenDetection.makeRedMask();
-let imageOutGreen = screenDetection.makeGreenMask();
-let imageOutBlue = screenDetection.makeBlueMask();
-cv.imshow("imageOutRed", imageOutRed);
-cv.imshow("imageOutGreen", imageOutGreen);
-cv.imshow("imageOutBlue", imageOutBlue);
+let imgElement = document.getElementById('imageSrc');
+let inputElement = document.getElementById('fileInput');
+inputElement.addEventListener('change', (e) => {
+  imgElement.src = URL.createObjectURL(e.target.files[0]);
+}, false);
+imgElement.onload = function() {
+    let image = cv.imread(imgElement);
+    screenDetection(image);
+};
+function onOpenCvReady() {
+    document.getElementById('status').innerHTML = 'OpenCV.js is ready.';
+}
