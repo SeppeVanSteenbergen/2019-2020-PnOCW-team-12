@@ -14,18 +14,6 @@ function makeMask(image, lowerBound, upperBound) {
     return imageOut;
 }
 
-function makeRedMask(image, sensitivity) {
-    let lowerBound1 = new cv.Scalar(0, 65, 125);
-    let upperBound1 = new cv.Scalar(sensitivity, 190, 255);
-    let redMask1 = makeMask(image, lowerBound1, upperBound1);
-    let lowerBound2 = new cv.Scalar(180 - sensitivity, 65, 125);
-    let upperBound2 = new cv.Scalar(180, 190, 255);
-    let redMask2 = makeMask(image, lowerBound2, upperBound2);
-    let redMask = new cv.Mat();
-    cv.add(redMask1, redMask2, redMask);
-    return redMask;
-}
-
 function makeGreenMask(image, sensitivity) {
     let lowerBound = new cv.Scalar(60 - sensitivity, 65, 125);
     let upperBound = new cv.Scalar(60 + sensitivity, 190, 255);
@@ -41,14 +29,11 @@ function makeBlueMask(image, sensitivity) {
 function screenDetection(image) {
     let hlsImage = changeColorSpace(image);
     var sensitivity = 15;
-    let imageOutRed = makeRedMask(hlsImage, sensitivity);
     let imageOutGreen = makeGreenMask(hlsImage, sensitivity);
     let imageOutBlue = makeBlueMask(hlsImage, sensitivity);
     let imageOutConcatenated = new cv.Mat();
-    cv.add(imageOutRed, imageOutGreen, imageOutConcatenated);
-    cv.add(imageOutConcatenated, imageOutBlue, imageOutConcatenated);
+    cv.add(imageOutGreen, imageOutBlue, imageOutConcatenated);
     let rect = cv.boundingRect(imageOutConcatenated);
-    alert(rect.x);
     let imageOutSmoothened = new cv.Mat();
     cv.medianBlur(imageOutConcatenated, imageOutSmoothened, 11);
     let imageOutContours = image.clone();
@@ -65,7 +50,6 @@ function screenDetection(image) {
             cv.line(imageOutContours, vertices[i], vertices[(i + 1) % 4], new cv.Scalar(255, 0, 255, 255), 2, cv.LINE_AA, 0);
         }
     }
-    cv.imshow("imageOutRed", imageOutRed);
     cv.imshow("imageOutGreen", imageOutGreen);
     cv.imshow("imageOutBlue", imageOutBlue);
     cv.imshow("imageOutConcatenated", imageOutConcatenated);

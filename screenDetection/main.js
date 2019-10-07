@@ -8,6 +8,3 @@ imgElement.onload = function() {
     image = rescale(image);
     screenDetection(image);
 };
-function onOpenCvReady() {
-    document.getElementById('status').innerHTML = 'OpenCV.js is ready.';
-}
