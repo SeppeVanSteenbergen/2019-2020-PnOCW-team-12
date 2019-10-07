@@ -83,6 +83,9 @@ export default {
         case 'draw-directions':
           this.drawDirectionsHandler(message.data)
           break
+        case 'display-image':
+          this.drawImageHandler(message.data)
+          break
         default:
           console.log('command not supported')
           break
@@ -250,6 +253,15 @@ export default {
     exitRoom() {
       this.$socket.emit('exitRoom')
       this.$router.push({ name: 'home' })
+    },
+    drawImageHandler(data) {
+      const base64Image = data.image
+      let ctx = this.canvas.getContext('2d')
+      let image = new Image()
+      image.onload = function() {
+        ctx.drawImage(image, 0, 0)
+      }
+      image.src = base64Image
     }
   }
 }

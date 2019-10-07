@@ -167,7 +167,10 @@
         <br />
         <v-card-actions>
           <div class="flex-grow-1"></div>
-          <v-btn color="success"> Send To All</v-btn>
+          <v-switch v-model="continuousVideoStream">Continous mode</v-switch>
+          <v-btn color="success" @click="executeDisplayImage()">
+            Send To All</v-btn
+          >
           <v-btn @click="pictureModeDialog = false" color="error" text>
             close</v-btn
           >
@@ -209,7 +212,8 @@ export default {
       directionLabel: 'Hello',
       countDownNumber: null,
       countDownInterval: null,
-      continousDrawDirectionMode: false
+      continousDrawDirectionMode: false,
+      continuousVideoStream: false
     }
   },
   components: {
@@ -289,6 +293,33 @@ export default {
       console.log(object)
 
       this.$socket.emit('screenCommand', object)
+    },
+    executeDisplayImage(user_id = null) {
+
+      let base64 = this.getBase64Image()
+      console.log(base64)
+      let object = {
+        payload: {
+          type: 'display-image',
+          data: {
+            image: base64 // base64 image
+          }
+        },
+        to: user_id === null ? 'all' : user_id
+      }
+
+      this.$socket.emit('screenCommand', object)
+    },
+    getBase64Image() {
+      console.log(this.$refs.video)
+      console.log(this.$refs.video.width)
+      const canvas = document.createElement('canvas')
+      canvas.setAttribute('id', 'canv')
+      canvas.width = this.$refs.video.width
+      canvas.height = this.$refs.video.height
+      canvas.getContext('2d').drawImage(this.$refs.video, 0, 0)
+      console.log()
+      return canvas.toDataURL('image/png')
     }
   },
   mounted() {
