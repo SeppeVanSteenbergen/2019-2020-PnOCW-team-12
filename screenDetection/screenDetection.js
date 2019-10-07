@@ -33,10 +33,15 @@ function screenDetection(image) {
     let imageOutBlue = makeBlueMask(hlsImage, sensitivity);
     let imageOutConcatenated = new cv.Mat();
     cv.add(imageOutGreen, imageOutBlue, imageOutConcatenated);
-    let rect = cv.boundingRect(imageOutConcatenated);
     let imageOutSmoothened = new cv.Mat();
     cv.medianBlur(imageOutConcatenated, imageOutSmoothened, 3);
-    let imageOutContours = image.clone();
+    let imageOutCropped = new cv.Mat();
+    let rect = cv.boundingRect(imageOutSmoothened);
+    imageOutCropped = imageOutSmoothened.roi(rect);
+    let imageOutDetectedScreens = image.clone();
+    let point1 = new cv.Point(rect.x, rect.y);
+    let point2 = new cv.Point(rect.x + rect.width, rect.y + rect.height);
+    cv.rectangle(imageOutDetectedScreens, point1, point2, new cv.Scalar(255, 0, 0, 255), 2, cv.LINE_AA, 0);
     let contours = new cv.MatVector();
     let hierarchy = new cv.Mat();
     cv.findContours(imageOutSmoothened, contours, hierarchy, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE);
@@ -45,16 +50,21 @@ function screenDetection(image) {
         let rotatedRect = cv.minAreaRect(cnt);
         // new Screen(rotatedRect.size, rotatedRect.center, rotatedRect.angle);
         let vertices = cv.RotatedRect.points(rotatedRect);
-        // cv.drawContours(imageOutContours, contours, i, new cv.Scalar(255, 255, 255);, 1, 8, hierarchy, 100);
         for (let i = 0; i < 4; i++) {
-            cv.line(imageOutContours, vertices[i], vertices[(i + 1) % 4], new cv.Scalar(255, 0, 255, 255), 2, cv.LINE_AA, 0);
+            cv.line(imageOutDetectedScreens, vertices[i], vertices[(i + 1) % 4], new cv.Scalar(255, 255, 0, 255), 2, cv.LINE_AA, 0);
         }
+        let tmp = new cv.Mat();
+        cv.convexHull(cnt, tmp, false, true);
+        let hull = new cv.MatVector();
+        hull.push_back(tmp);
+        cv.drawContours(imageOutDetectedScreens, hull, 0, new cv.Scalar(255, 0, 255, 255), 2, cv.LINE_AA, hierarchy, 100);
     }
     cv.imshow("imageOutGreen", imageOutGreen);
     cv.imshow("imageOutBlue", imageOutBlue);
     cv.imshow("imageOutConcatenated", imageOutConcatenated);
     cv.imshow("imageOutSmoothened", imageOutSmoothened);
-    cv.imshow("imageOutContours", imageOutContours);
+    cv.imshow("imageOutCropped", imageOutCropped);
+    cv.imshow("imageOutDetectedScreens", imageOutDetectedScreens)
 }
 
 function rescale(image){
