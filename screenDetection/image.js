@@ -1,6 +1,7 @@
 class image{
     constructor(img, colorSpace){
-        var canvas = document.createElement("canvas");
+        this.image = img;
+        this.canvas = document.createElement("canvas");
         canvas.width = img.width;
         canvas.height = img.height;
         canvas.getContext("2d").drawImage(img, 0, 0);
@@ -17,7 +18,7 @@ class image{
     
     getPixel(xPixel, yPixel){
         var i = (yPixel * canvas.width + xPixel) * 4;
-        return new Array([i, ++i, ++i]);
+        return new Array([i, ++i, ++i, ++i]);
     }
 
     getHeight(){
