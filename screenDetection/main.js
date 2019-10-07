@@ -5,6 +5,7 @@ inputElement.addEventListener('change', (e) => {
 }, false);
 imgElement.onload = function() {
     let image = cv.imread(imgElement);
+    image = rescale(image);
     screenDetection(image);
 };
 function onOpenCvReady() {

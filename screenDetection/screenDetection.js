@@ -72,3 +72,10 @@ function screenDetection(image) {
     cv.imshow("imageOutSmoothened", imageOutSmoothened);
     cv.imshow("imageOutContours", imageOutContours);
 }
+
+function rescale(image){
+    let imageOut = new cv.Mat();
+    let newScale = new cv.Size(400, 400);
+    cv.resize(image, imageOut, newScale, 0, 0,  INTER_AREA);
+    return imageOut;
+}
