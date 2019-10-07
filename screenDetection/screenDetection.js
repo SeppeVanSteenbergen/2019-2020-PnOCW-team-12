@@ -35,7 +35,7 @@ function screenDetection(image) {
     cv.add(imageOutGreen, imageOutBlue, imageOutConcatenated);
     let rect = cv.boundingRect(imageOutConcatenated);
     let imageOutSmoothened = new cv.Mat();
-    cv.medianBlur(imageOutConcatenated, imageOutSmoothened, 11);
+    cv.medianBlur(imageOutConcatenated, imageOutSmoothened, 3);
     let imageOutContours = image.clone();
     let contours = new cv.MatVector();
     let hierarchy = new cv.Mat();
