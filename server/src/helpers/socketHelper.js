@@ -26,7 +26,7 @@ module.exports = {
 		payload: {
 			type: (type of command)
 			data: { (all data needed for the execution)
-						command:    (the actual command)
+						command:    (example of data to be sent)
 						...
 			}
 		}
@@ -34,6 +34,8 @@ module.exports = {
 		to: 'all' / user_id
 
 	}
+
+	 -----PAYLOADS----
 
 	countDown
 	{

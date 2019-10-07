@@ -2,6 +2,19 @@ const dev = true
 
 let secure = true // true for https, false for http
 
+let kuleuven = false
+
+const kuleuvenServer = {
+  backend: {
+    url: 'https://penocw12.student.cs.kuleuven.be',
+    port: 8012
+  },
+  frontend: {
+    url: 'https://penocw12.student.cs.kuleuven.be',
+    port: 443
+  }
+}
+
 if (dev) secure = false
 
 const devServ = {
@@ -35,6 +48,9 @@ if (dev) {
 } else {
   server = servPub
 }
+
+if(kuleuven)
+  server = kuleuvenServer
 
 module.exports = {
   server: {

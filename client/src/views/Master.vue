@@ -147,7 +147,14 @@
           ></v-switch>
           <div class="flex-grow-1"></div>
           <v-btn @click="colorClient()" color="success"> Send To All</v-btn>
-          <v-btn @click="floodFillDialog = false" color="error" text>
+          <v-btn
+            @click="
+              floodFillDialog = false
+              continuousVideoStream = false
+            "
+            color="error"
+            text
+          >
             close</v-btn
           >
         </v-card-actions>
@@ -163,11 +170,15 @@
           <video :autoplay="true" id="videoElement" ref="video"></video>
           <br />
           <v-btn @click="startVideo">start video</v-btn>
+          <canvas ref="canv"></canvas>
         </v-card-text>
         <br />
         <v-card-actions>
           <div class="flex-grow-1"></div>
-          <v-switch v-model="continuousVideoStream">Continous mode</v-switch>
+          <v-switch
+            v-model="continuousVideoStream"
+            label="Continuous mode"
+          ></v-switch>
           <v-btn color="success" @click="executeDisplayImage()">
             Send To All</v-btn
           >
@@ -213,7 +224,8 @@ export default {
       countDownNumber: null,
       countDownInterval: null,
       continousDrawDirectionMode: false,
-      continuousVideoStream: false
+      continuousVideoStream: false,
+      videoSendInterval: null
     }
   },
   components: {
@@ -253,12 +265,17 @@ export default {
       const constraints = {
         video: true
       }
-      const video = this.$refs.video
-
-      navigator.mediaDevices.getUserMedia(constraints).then(stream => {
-        video.srcObject = stream
-        this.videoStream = stream
-      })
+      let video = this.$refs.video
+      console.log(video)
+      navigator.mediaDevices
+        .getUserMedia(constraints)
+        .then(stream => {
+          video.srcObject = stream
+          this.videoStream = stream
+        })
+        .catch(error => {
+          console.log(error.message)
+        })
     },
     executeDirections(user_id = null) {
       let object = {
@@ -295,7 +312,6 @@ export default {
       this.$socket.emit('screenCommand', object)
     },
     executeDisplayImage(user_id = null) {
-
       let base64 = this.getBase64Image()
       console.log(base64)
       let object = {
@@ -312,14 +328,13 @@ export default {
     },
     getBase64Image() {
       console.log(this.$refs.video)
-      console.log(this.$refs.video.width)
+      console.log(this.$refs.video.videoWidth)
       const canvas = document.createElement('canvas')
-      canvas.setAttribute('id', 'canv')
-      canvas.width = this.$refs.video.width
-      canvas.height = this.$refs.video.height
+      canvas.width = this.$refs.video.videoWidth
+      canvas.height = this.$refs.video.videoHeight
       canvas.getContext('2d').drawImage(this.$refs.video, 0, 0)
       console.log()
-      return canvas.toDataURL('image/png')
+      return canvas.toDataURL('image/jpeg')
     }
   },
   mounted() {
@@ -357,6 +372,13 @@ export default {
     },
     angleSlider() {
       if (this.continousDrawDirectionMode) this.executeDirections()
+    },
+    continuousVideoStream(n) {
+      if (n) {
+        this.videoSendInterval = setInterval(this.executeDisplayImage, 1000/10)
+      } else {
+        clearInterval(this.videoSendInterval)
+      }
     }
   }
 }

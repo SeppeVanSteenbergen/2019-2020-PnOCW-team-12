@@ -256,10 +256,29 @@ export default {
     },
     drawImageHandler(data) {
       const base64Image = data.image
+      console.log('got image as base64')
+      console.log(base64Image)
+      const canvas = this.canvas
       let ctx = this.canvas.getContext('2d')
       let image = new Image()
+
       image.onload = function() {
-        ctx.drawImage(image, 0, 0)
+        let wRatio = canvas.width / image.width
+        let hRatio = canvas.height / image.height
+
+        let ratio = Math.min(wRatio, hRatio)
+
+        ctx.drawImage(
+          image,
+          0,
+          0,
+          image.width,
+          image.height,
+          canvas.width / 2 - (image.width * ratio) / 2,
+          canvas.height / 2 - (image.height * ratio) / 2,
+          image.width * ratio,
+          image.height * ratio
+        )
       }
       image.src = base64Image
     }
