@@ -75,7 +75,7 @@ function screenDetection(image) {
 
 function rescale(image){
     let imageOut = new cv.Mat();
-    let newScale = new cv.Size(400, 400);
-    cv.resize(image, imageOut, newScale, 0, 0,  INTER_AREA);
+    let newScale = new cv.Size(504, 378);
+    cv.resize(image, imageOut, newScale, 0, 0,  cv.INTER_AREA);
     return imageOut;
 }
