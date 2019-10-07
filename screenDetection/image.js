@@ -1,11 +1,14 @@
 class image{
+    image;
+    canvas;
     constructor(img, colorSpace){
         this.image = img;
-        this.canvas = document.createElement("canvas");
-        canvas.width = img.width;
-        canvas.height = img.height;
-        canvas.getContext("2d").drawImage(img, 0, 0);
+        this.canvas = document.createElement("CANVAS");
+        this.canvas.width = img.width;
+        this.canvas.height = img.height;
+        this.canvas.getContext("2d").drawImage(img, 0, 0);
         this.colorSpace = colorSpace;
+        console.log("image is constructed " + colorSpace);
     }
 
     changeColorSpace(newColorSpace){
@@ -17,15 +20,15 @@ class image{
     }
     
     getPixel(xPixel, yPixel){
-        var i = (yPixel * canvas.width + xPixel) * 4;
-        return new Array([i, ++i, ++i, ++i]);
+        var i = (yPixel * this.canvas.width + xPixel) * 4;
+        return new Array([this.canvas[i], this.canvas[++i], this.canvas[++i], this.canvas[++i]]);
     }
 
     getHeight(){
-        return canvas.height;
+        return this.image.height;
     }
 
     getWidth(){
-        return canvas.width;
+        return this.image.width;
     }
 }

@@ -35,6 +35,7 @@ function rgbToHsl(image){
         }
     }
     image.changeColorSpace("HSL");
+    console.log("converted to hsl");
 }
 
 /*
@@ -59,6 +60,7 @@ function hslToRgb(image){
             }
         }
     }
+    console.log("converted to rgb");
 
 }
 
@@ -117,11 +119,12 @@ function createMask(image, low, high){
                 };
         }
     }
+    console.log("created mask");
     return imageOut;
 }
 
 function createGreenMask(image, sensitivity){
     var lowerBound = [120 - sensitivity, 25, 50];
     var upperBound = [120 + sensitivity, 75, 100];
-    return makeMask(image, lowerBound, upperBound);
+    return createMask(image, lowerBound, upperBound);
 }
