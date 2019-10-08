@@ -39,6 +39,9 @@
           <v-list-item-title>{{ item.title }}</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
+      <v-list-item>
+        <v-switch v-model="darkMode" label="Dark Mode"></v-switch>
+      </v-list-item>
     </v-list>
 
     <template v-slot:append>
@@ -66,7 +69,8 @@ export default {
         { title: 'Home', icon: 'mdi-home', link: '/' },
         { title: 'Master', icon: 'mdi-account-tie', link: 'master' },
         { title: 'Client', icon: 'mdi-account', link: 'client' }
-      ]
+      ],
+      darkMode: false
     }
   },
   computed: {
@@ -80,7 +84,13 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['setDrawer', 'toggleDrawer'])
+    ...mapMutations(['setDrawer', 'toggleDrawer', 'setDarkMode'])
+  },
+  watch: {
+    darkMode(n) {
+      this.$vuetify.theme.dark = n
+      this.setDrawer(false)
+    }
   }
 }
 </script>
