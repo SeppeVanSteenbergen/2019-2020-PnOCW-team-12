@@ -1,25 +1,26 @@
 class Image {
-
-    canvas;
-    context;
+    
     imgData;
+    canvas;
     colorSpace;
 
-    constructor(imgElement, colorSpace) {
-        this.canvas = document.getElementById("outputCanvas");
-        this.context = this.canvas.getContext("2d");
-        this.canvas.width = imgElement.width;
-        this.canvas.height = imgElement.height;
-        this.context.drawImage(imgElement, 0, 0);
-        this.imgData = this.context.getImageData(0, 0, this.canvas.width, this.canvas.height);
+    constructor(imgData, canvasName, colorSpace) {
+        this.imgData = imgData;
+        this.canvas = document.getElementById(canvasName);
+        this.canvas.width = imgData.width;
+        this.canvas.height = imgData.height;
         this.colorSpace = colorSpace;
+        let context = this.canvas.getContext("2d");
+        context.putImageData(imgData, 0, 0);
         console.log("image is constructed " + colorSpace);
     }
 
     getImgData() {
-        return this.imgData;
+        let context = this.canvas.getContext("2d");
+        let imgData = context.createImageData(this.imgData.width, this.imgData.height);
+        imgData.data.set(this.imgData.data);
+        return imgData;
     }
-
 
     changeColorSpace(newColorSpace) {
         this.colorSpace = newColorSpace;
@@ -43,7 +44,8 @@ class Image {
     }
 
     show() {
-        this.context.putImageData(this.imgData, 0, 0);
+        let context = this.canvas.getContext("2d");
+        context.putImageData(this.imgData, 0, 0);
     }
 
     /*
@@ -205,8 +207,6 @@ class Image {
         console.log("converted to rgba");
     }
 
-
-
     /* 
     image as Image
     mask color = white
@@ -214,34 +214,48 @@ class Image {
     low = array[low Hue, low Saturation, low Luminance]
     high = array[""]
     */
-    createMask(image, low, high) {
-        imageOut = image;
-        for (x = 0; x < image.getWidth(); x++) {
-            for (y = 0; y < image.getHeight(); y++) {
-                var pixel = image.getPixel(x, y);
-                var h = pixel[0];
-                var s = pixel[1];
-                var l = pixel[2];
-
-                if (h >= low[0] && s >= low[1] && l >= low[2] &&
-                    h <= high[0] && s <= high[1] && l <= high[2]) {
-                    pixel[2] = 0;
-                    pixel[3] = 1;
-                } else {
-                    pixel[1] = 100;
-                    pixel[2] = 100;
-                    pixel[3] = 0;
-                };
+    createMask(low, high) {
+        var pixels = this.imgData.data;
+        for (var i = 0; i < pixels.length; i += 4) {
+            var H = pixels[i];
+            var S = pixels[i + 1];
+            var L = pixels[i + 2];
+            
+            if (H >= low[0] && S >= low[1] && L >= low[2] &&
+                H <= high[0] && S <= high[1] && L <= high[2]) {
+                    pixels[i + 1] = 0;
+                    pixels[i + 2] = 100;
+                }
+            else {
+                pixels[i + 1] = 0;
+                pixels[i + 2] = 0;
             }
         }
         console.log("created mask");
-        return imageOut;
     }
 
-    createGreenMask(image, sensitivity) {
-        var lowerBound = [120 - sensitivity, 25, 50];
-        var upperBound = [120 + sensitivity, 75, 100];
-        return createMask(image, lowerBound, upperBound);
+    createGreenMask() {
+        var sensitivity = 30;
+        var lowerBound = [120 - sensitivity, 50, 25];
+        var upperBound = [120 + sensitivity, 100, 75];
+        this.createMask(lowerBound, upperBound);
+    }
+
+    createBlueMask() {
+        var sensitivity = 30;
+        var lowerBound = [240 - sensitivity, 50, 25];
+        var upperBound = [240 + sensitivity, 100, 75];
+        this.createMask(lowerBound, upperBound);
+    }
+
+    addImgData(imgData) {
+        var pixels = this.imgData.data;
+        var pixelsToAdd = imgData.data;
+        for (var i = 0; i < pixels.length; i += 4) {
+            pixels[i] += pixelsToAdd[i];
+            pixels[i + 1] += pixelsToAdd[i + 1];
+            pixels[i + 2] += pixelsToAdd[i + 2];
+        }
     }
 
 }
