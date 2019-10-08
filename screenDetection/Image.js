@@ -3,6 +3,7 @@ class Image {
     pixels;
     canvas;
     colorSpace;
+    sensitivity = 30;
 
     constructor(imgData, canvasName, colorSpace) {
         this.pixels = imgData.data;
@@ -104,7 +105,6 @@ class Image {
     /*
         image as Image
         math from: http://www.niwa.nu/2013/05/math-behind-colorspace-conversions-rgb-hsl/
-        !!! works only after creating mask --> in last value of pixel 0 == black, 1 == white
     */
     hslaToRgba(image) {
         if (this.colorSpace != "HSLA") {
@@ -223,16 +223,14 @@ class Image {
     }
 
     createGreenMask() {
-        var sensitivity = 30;
-        var lowerBound = [120 - sensitivity, 50, 25];
-        var upperBound = [120 + sensitivity, 100, 75];
+        var lowerBound = [120 - this.sensitivity, 50, 25];
+        var upperBound = [120 + this.sensitivity, 100, 75];
         this.createMask(lowerBound, upperBound);
     }
 
     createBlueMask() {
-        var sensitivity = 30;
-        var lowerBound = [240 - sensitivity, 50, 25];
-        var upperBound = [240 + sensitivity, 100, 75];
+        var lowerBound = [240 - this.sensitivity, 50, 25];
+        var upperBound = [240 + this.sensitivity, 100, 75];
         this.createMask(lowerBound, upperBound);
     }
 
@@ -290,5 +288,12 @@ class Image {
         }
         var i = (yPixel * this.canvas.width + xPixel) * 4;
         return [this.pixels[i], this.pixels[i + 1], this.pixels[i + 2]];
+    }
+
+    scale(width){
+        var height = imgData.height / imgData.width * width;
+        imgData.style.width = width;
+        imgData.style.height = height;
+        
     }
 }
