@@ -8,12 +8,16 @@ imgElement.onload = function() {
     /*let image = cv.imread(imgElement);
     image = rescale(image);
     screenDetection(image);*/
-    var img = new image(imgElement, "RGB");
-    rgbToHsl(img);
-    createGreenMask(img);
-    hslToRgb(img);
-    var canvas = document.getElementById("outputCanvas");
-    var ctx = canvas.getContext("2d");
-    ctx.fillStyle = "#FF0000";
-    console.log("end main");
+    var img = new Image(imgElement, "RGBA");
+    img.rgbaToHsla();
+    img.show();
+    alert("HSLA");
+    img.hslaToRgba();
+    img.show();
+    // createGreenMask(img);
+    // hslToRgb(img);
+    // var canvas = document.getElementById("outputCanvas");
+    // var ctx = canvas.getContext("2d");
+    // ctx.drawImage(img.canvas, 0, 0);
+    // console.log("end main");
 };
