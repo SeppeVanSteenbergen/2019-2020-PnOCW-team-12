@@ -9,9 +9,9 @@ imgElement.onload = function () {
   image = rescale(image);
   screenDetection(image);*/
   let maxAmountOfPixels = 1000;
-  if (imgElement.width + imgElement.height > maxAmountOfPixels) {
+  if (imgElement.width * imgElement.height > maxAmountOfPixels) { // * ipv + dacht ik
     let ratio = imgElement.width / imgElement.height;
-    imgElement.height = Math.round(maxAmountOfPixels / (ratio + 1.0));
+    imgElement.height = Math.round(maxAmountOfPixels / (ratio + 1.0)); //waarom ratio + 1?
     imgElement.width = Math.round(ratio * imgElement.height);
   }
   let inputCanvas = document.getElementById("inputImage");

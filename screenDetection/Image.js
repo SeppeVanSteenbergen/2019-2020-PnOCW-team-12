@@ -4,6 +4,11 @@ class Image {
     canvas;
     colorSpace;
     sensitivity = 30;
+    mask;
+    lowerBoundG = [120 - this.sensitivity, 50, 25];
+    upperBoundG = [120 + this.sensitivity, 100, 75];
+    lowerBoundB = [240 - this.sensitivity, 50, 25];
+    upperBoundB = [240 + this.sensitivity, 100, 75];
 
     constructor(imgData, canvasName, colorSpace) {
         this.pixels = imgData.data;
@@ -260,5 +265,37 @@ class Image {
         }
         var i = (yPixel * this.getWidth() + xPixel) * 4;
         return [this.pixels[i], this.pixels[i + 1], this.pixels[i + 2]];
+    }
+
+    createGreenBlueMask(){
+        for (var i = 0; i < this.pixels.length; i += 4) {
+            var H = this.pixels[i];
+            var S = this.pixels[i + 1];
+            var L = this.pixels[i + 2];
+
+            if (this.inGreenRange(H, S, L) || this.inBlueRange(H, S, L)) {
+                this.pixels[i + 1] = 0;
+                this.pixels[i + 2] = 100;
+            }
+            else {
+                this.pixels[i + 1] = 0;
+                this.pixels[i + 2] = 0;
+            }
+        }
+    }
+
+    inGreenRange(H, S, L){
+        if (H >= this.lowerBoundG[0] && S >= this.lowerBoundG[1] && L >= this.lowerBoundG[2] &&
+            H <= this.upperBoundG[0] && S <= this.upperBoundG[1] && L <= this.upperBoundG[2]) {
+            return true;
+        }
+        return false;
+    }
+    inBlueRange(H, S, L){
+        if (H >= this.lowerBoundB[0] && S >= this.lowerBoundB[1] && L >= this.lowerBoundB[2] &&
+            H <= this.upperBoundB[0] && S <= this.upperBoundB[1] && L <= this.upperBoundB[2]) {
+            return true;
+        }
+        return false;
     }
 }
