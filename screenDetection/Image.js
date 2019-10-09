@@ -18,6 +18,7 @@ class Image {
         this.colorSpace = colorSpace;
         let context = this.canvas.getContext("2d");
         context.putImageData(imgData, 0, 0);
+        this.mask = new Array(this.pixels.length/4);
     }
 
     getImgData() {
@@ -274,16 +275,23 @@ class Image {
             var L = this.pixels[i + 2];
 
             if (this.inGreenRange(H, S, L)) {
-                this.pixels[i] = 120;
-                this.pixels[i + 1] = 100;
-                this.pixels[i + 2] = 50;
+                //this.pixels[i] = 120;
+                //this.pixels[i + 1] = 100;
+                //this.pixels[i + 2] = 50;
+                this.pixels[i+1] = 0;
+                this.pixels[i+2] = 100;
+                this.mask[i/4] = true;
             } else if(this.inBlueRange(H, S, L)){
-                this.pixels[i] = 240;
-                this.pixels[i + 1] = 100;
-                this.pixels[i + 2] = 50;
+                //this.pixels[i] = 240;
+                //this.pixels[i + 1] = 100;
+                //this.pixels[i + 2] = 50;
+                this.pixels[i+1] = 0;
+                this.pixels[i+2] = 100;
+                this.mask[i/4] = true;
             } else {
                 this.pixels[i + 1] = 0;
                 this.pixels[i + 2] = 0;
+                this.mask[i/4] = false;
             }
         }
     }
@@ -312,15 +320,15 @@ class Image {
     }
 
     pixelToPosition(pixel){
-        return (yPixel * this.getWidth() + xPixel) * 4;
+        return (pixel[1] * this.getWidth() + pixel[0]) * 4;
     }
 
     makeRed(position){
-        if (this.getColorSpace() = "RGBA"){
+        if (this.getColorSpace() == "RGBA"){
             this.pixels[position] = 255;
             this.pixels[++position] = 0;
             this.pixels[++position] = 0;
-        }else if (this.getColorSpace() = "HSLA"){
+        }else if (this.getColorSpace() == "HSLA"){
             this.pixels[position] = 0;
             this.pixels[++position] = 100;
             this.pixels[++position] = 50;
@@ -334,22 +342,94 @@ class Image {
     detectScreens(){
         if(this.getColorSpace() != "HSLA"){
             console.error("detection screens can only be with HSLA as colorspace.");
-        }
-        for (var i = 0; i < this.pixels.length; i += 4) {
-            if(i[2] = 100){
+        };
+        for (var i = 0; i < this.pixels.length; i += 1) {
+            if(this.pixels[i + 1] == 0 && this.pixels[i + 2] == 100){
                 var cornerPixel = this.positionToPixel(i);
                 this.makeRed(i);
-                markScreen(cornerPixel);
+                console.log(cornerPixel.toString());
+                this.markScreen(cornerPixel);
                 return;
             }
         }
     }
-    /*
-    momenteel enkel als eerste hoek rechterbovenhoek is
-    */
+
     markScreen(corner){
         var corners = [corner];
-        
+        var stop = false;
+        var pixel = corner.slice(0);
+        console.log(corner.toString());
+        while(!stop){
+           pixel = this.goRight(pixel);
+           pixel = this.searchUpDown(pixel);
+           if(pixel == null){
+               corners.push(pixel);
+               stop = true;
+           }
+        }
 
+        stop = false;
+        pixel = corner.slice(0);
+        console.log(corner.toString());
+        while(!stop){
+           pixel = this.goDown(pixel);
+           pixel = this.searchLeftRight(pixel);
+           //stop = true;
+           if(pixel == null){
+               corners.push(pixel);
+               stop = true;
+           }
+        }
+    }
+    
+    searchUpDown(pixel){
+        var pixelUp = pixel.slice(0);
+        pixelUp[1] += 1;
+        var pixelDown = pixel.slice(0);
+        pixelDown[1] -= 1;
+        if(this.pixels[this.pixelToPosition(pixelUp) + 2] == 100){
+            return pixelUp;
+        }else if(this.pixels[this.pixelToPosition(pixelDown) + 2] == 100){
+            return pixelDown;
+        }
+        return null;
+        
+    }
+    goRight(pixel){
+        var pxPosition = this.pixelToPosition(pixel);
+        while(this.pixels[pxPosition + 4 + 2] == 100){
+            pixel[0] += 1;
+            pxPosition = this.pixelToPosition(pixel);
+            this.makeRed(pxPosition);
+        }
+        return pixel;
+    }
+
+    goDown(pixel){
+        var nextPixel = pixel.slice(0);
+        nextPixel[1] += 1;
+        var pxPosition = this.pixelToPosition(nextPixel);
+        while(this.pixels[pxPosition + 2] == 100){
+            this.makeRed(pxPosition);
+            nextPixel[1] += 1;
+            pxPosition = this.pixelToPosition(nextPixel);
+            console.log("go Down");
+        }
+        console.log("---------------end down--------------------");
+        return nextPixel;
+    }
+
+    searchLeftRight(pixel){
+        var pixelRight = pixel.slice(0);
+        pixelRight[0] += 1;
+        console.log(pixelRight.toString());
+        var pixelLeft = pixel.slice(0);
+        pixelLeft[0] -= 1;
+        if(this.pixels[this.pixelToPosition(pixelRight) + 2] == 100){
+            return pixelRight;
+        }else if(this.pixels[this.pixelToPosition(pixelLeft) + 2] == 100){
+            return pixelLeft;
+        }
+        return null;
     }
 }

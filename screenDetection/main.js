@@ -34,6 +34,7 @@ imgElement.onload = function () {
   
   var imageOutConcatenated = new Image(inputImage.getImgData(), "imageOutConcatenated", "HSLA");
   imageOutConcatenated.createGreenBlueMask();
+  imageOutConcatenated.detectScreens();
   
   imageOutGreen.hslaToRgba();
   imageOutGreen.show();
