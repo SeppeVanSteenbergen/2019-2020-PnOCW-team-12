@@ -31,11 +31,11 @@ class Image {
     }
 
     getHeight() {
-        return this.image.height;
+        return this.canvas.height;
     }
 
     getWidth() {
-        return this.image.width;
+        return this.canvas.width;
     }
 
     show() {
@@ -119,9 +119,7 @@ class Image {
                 var R = L;
                 var G = L;
                 var B = L;
-            }
-
-            else {
+            } else {
                 if (L < 0.5) {
                     var tmp1 = L * (1.0 + S);
                 }
@@ -131,63 +129,17 @@ class Image {
                 var tmp2 = 2 * L - tmp1
 
                 var tmpR = H + 1 / 3;
-                if (tmpR > 1) {
-                    tmpR -= 1;
-                }
-                else if (tmpR < 0) {
-                    tmpR += 1;
-                }
-                var tmpG = H;
-                if (tmpG > 1) {
-                    tmpG -= 1;
-                }
-                else if (tmpG < 0) {
-                    tmpG += 1;
-                }
-                var tmpB = H - 1 / 3;
-                if (tmpB > 1) {
-                    tmpB -= 1;
-                }
-                else if (tmpB < 0) {
-                    tmpB += 1;
-                }
+                tmpR = this.setTemporaryInRange(tmpR);
 
-                if (6 * tmpR < 1) {
-                    var R = tmp2 + (tmp1 - tmp2) * 6 * tmpR;
-                }
-                else if (2 * tmpR < 1) {
-                    var R = tmp1;
-                }
-                else if (3 * tmpR < 2) {
-                    var R = tmp2 + (tmp1 - tmp2) * (2 / 3 - tmpR) * 6;
-                }
-                else {
-                    var R = tmp2;
-                }
-                if (6 * tmpG < 1) {
-                    var G = tmp2 + (tmp1 - tmp2) * 6 * tmpG;
-                }
-                else if (2 * tmpG < 1) {
-                    var G = tmp1;
-                }
-                else if (3 * tmpG < 2) {
-                    var G = tmp2 + (tmp1 - tmp2) * (2 / 3 - tmpG) * 6;
-                }
-                else {
-                    var G = tmp2;
-                }
-                if (6 * tmpB < 1) {
-                    var B = tmp2 + (tmp1 - tmp2) * 6 * tmpB;
-                }
-                else if (2 * tmpB < 1) {
-                    var B = tmp1;
-                }
-                else if (3 * tmpB < 2) {
-                    var B = tmp2 + (tmp1 - tmp2) * (2 / 3 - tmpB) * 6;
-                }
-                else {
-                    var B = tmp2;
-                }
+                var tmpG = H;
+                tmpG = this.setTemporaryInRange(tmpG);
+
+                var tmpB = H - 1 / 3;
+                tmpB = this.setTemporaryInRange(tmpB);
+
+                var R = this.hslaToRgbaCalculateColor(tmp1, tmp2, tmpR);
+                var G = this.hslaToRgbaCalculateColor(tmp1, tmp2, tmpG);
+                var B = this.hslaToRgbaCalculateColor(tmp1, tmp2, tmpB);
             }
 
             this.pixels[i] = Math.round(R * 255);
@@ -195,6 +147,26 @@ class Image {
             this.pixels[i + 2] = Math.round(B * 255);
         }
         this.changeColorSpace("RGBA");
+    }
+
+    setTemporaryInRange(temp){
+        if (temp > 1) {
+            return temp - 1;
+        } else if (tmpB < 0) {
+            return temp + 1;
+        };
+        return temp;
+    }
+
+    hslaToRgbaCalculateColor(tmp1, tmp2, tmpColor){
+        if(6 * tmpColor < 1){
+            return tmp2 + (tmp1 - tmp2) * 6 * tmpColor;
+        }else if(2 * tmpColor < 1){
+            return tmp1;
+        }else if(3 * tmpColor < 2){
+            return tmp2 + (tmp1 - tmp2) * (0.666 - tmpColor) * 6;
+        };
+        return tmp2;
     }
 
     /* 
@@ -294,6 +266,6 @@ class Image {
         var height = imgData.height / imgData.width * width;
         imgData.style.width = width;
         imgData.style.height = height;
-        
+        this.pixels = imgData;
     }
 }
