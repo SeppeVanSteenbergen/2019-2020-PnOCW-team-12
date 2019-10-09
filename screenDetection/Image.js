@@ -157,7 +157,7 @@ class Image {
     setTemporaryInRange(temp){
         if (temp > 1) {
             return temp - 1;
-        } else if (tmpB < 0) {
+        } else if (temp < 0) {
             return temp + 1;
         };
         return temp;
@@ -273,11 +273,15 @@ class Image {
             var S = this.pixels[i + 1];
             var L = this.pixels[i + 2];
 
-            if (this.inGreenRange(H, S, L) || this.inBlueRange(H, S, L)) {
-                this.pixels[i + 1] = 0;
-                this.pixels[i + 2] = 100;
-            }
-            else {
+            if (this.inGreenRange(H, S, L)) {
+                this.pixels[i] = 120;
+                this.pixels[i + 1] = 100;
+                this.pixels[i + 2] = 50;
+            } else if(this.inBlueRange(H, S, L)){
+                this.pixels[i] = 240;
+                this.pixels[i + 1] = 100;
+                this.pixels[i + 2] = 50;
+            } else {
                 this.pixels[i + 1] = 0;
                 this.pixels[i + 2] = 0;
             }
@@ -307,22 +311,30 @@ class Image {
         return [x, y];
     }
 
+    pixelToPosition(pixel){
+        return (yPixel * this.getWidth() + xPixel) * 4;
+    }
+
     makeRed(position){
         if (this.getColorSpace() = "RGBA"){
-            this.pixels[i] = 255;
-            this.pixels[++i] = 0;
-            this.pixels[++i] = 0;
+            this.pixels[position] = 255;
+            this.pixels[++position] = 0;
+            this.pixels[++position] = 0;
         }else if (this.getColorSpace() = "HSLA"){
-            this.pixels[i] = 0;
-            this.pixels[++i] = 100;
-            this.pixels[++i] = 50;
+            this.pixels[position] = 0;
+            this.pixels[++position] = 100;
+            this.pixels[++position] = 50;
         }
     }
     /*
     returns list of screens
-    only works with black/white mask
+    only works with black/white mask in hsla
+    only one screen
     */
     detectScreens(){
+        if(this.getColorSpace() != "HSLA"){
+            console.error("detection screens can only be with HSLA as colorspace.");
+        }
         for (var i = 0; i < this.pixels.length; i += 4) {
             if(i[2] = 100){
                 var cornerPixel = this.positionToPixel(i);
@@ -332,8 +344,12 @@ class Image {
             }
         }
     }
-
+    /*
+    momenteel enkel als eerste hoek rechterbovenhoek is
+    */
     markScreen(corner){
+        var corners = [corner];
         
+
     }
 }
