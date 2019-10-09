@@ -8,12 +8,19 @@ imgElement.onload = function () {
   /*let image = cv.imread(imgElement);
   image = rescale(image);
   screenDetection(image);*/
+  let maxAmountOfPixels = 1000;
+  if (imgElement.width + imgElement.height > maxAmountOfPixels) {
+    let ratio = imgElement.width / imgElement.height;
+    imgElement.height = Math.round(maxAmountOfPixels / (ratio + 1.0));
+    imgElement.width = Math.round(ratio * imgElement.height);
+  }
   let inputCanvas = document.getElementById("inputImage");
   let inputContext = inputCanvas.getContext("2d");
+  inputContext.clearRect(0, 0, inputCanvas.width, inputCanvas.height);
   inputCanvas.width = imgElement.width;
   inputCanvas.height = imgElement.height;
-  inputContext.drawImage(imgElement, 0, 0);
-  inputImgData = inputContext.getImageData(0, 0, inputCanvas.width, inputCanvas.height);
+  inputContext.drawImage(imgElement, 0, 0, imgElement.width, imgElement.height);
+  inputImgData = inputContext.getImageData(0, 0, imgElement.width, imgElement.height);
   var inputImage = new Image(inputImgData, "inputImage", "RGBA");
   inputImage.rgbaToHsla();
   var imageOutGreen = new Image(inputImage.getImgData(), "imageOutGreen", "HSLA");
