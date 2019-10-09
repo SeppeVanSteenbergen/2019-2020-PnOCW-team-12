@@ -261,14 +261,4 @@ class Image {
         var i = (yPixel * this.canvas.width + xPixel) * 4;
         return [this.pixels[i], this.pixels[i + 1], this.pixels[i + 2]];
     }
-<<<<<<< HEAD
-
-    scale(width){
-        var height = imgData.height / imgData.width * width;
-        imgData.style.width = width;
-        imgData.style.height = height;
-        this.pixels = imgData;
-    }
-=======
->>>>>>> screenDetection
 }
