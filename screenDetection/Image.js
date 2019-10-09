@@ -291,11 +291,49 @@ class Image {
         }
         return false;
     }
+
     inBlueRange(H, S, L){
         if (H >= this.lowerBoundB[0] && S >= this.lowerBoundB[1] && L >= this.lowerBoundB[2] &&
             H <= this.upperBoundB[0] && S <= this.upperBoundB[1] && L <= this.upperBoundB[2]) {
             return true;
         }
         return false;
+    }
+
+    positionToPixel(position){
+        position /= 4;
+        var x = position % this.getWidth();
+        var y = (position - x) / this.getWidth();
+        return [x, y];
+    }
+
+    makeRed(position){
+        if (this.getColorSpace() = "RGBA"){
+            this.pixels[i] = 255;
+            this.pixels[++i] = 0;
+            this.pixels[++i] = 0;
+        }else if (this.getColorSpace() = "HSLA"){
+            this.pixels[i] = 0;
+            this.pixels[++i] = 100;
+            this.pixels[++i] = 50;
+        }
+    }
+    /*
+    returns list of screens
+    only works with black/white mask
+    */
+    detectScreens(){
+        for (var i = 0; i < this.pixels.length; i += 4) {
+            if(i[2] = 100){
+                var cornerPixel = this.positionToPixel(i);
+                this.makeRed(i);
+                markScreen(cornerPixel);
+                return;
+            }
+        }
+    }
+
+    markScreen(corner){
+        
     }
 }
