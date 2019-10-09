@@ -16,10 +16,11 @@ imgElement.onload = function () {
   }
   let inputCanvas = document.getElementById("inputImage");
   let inputContext = inputCanvas.getContext("2d");
+  inputContext.clearRect(0, 0, inputCanvas.width, inputCanvas.height);
   inputCanvas.width = imgElement.width;
   inputCanvas.height = imgElement.height;
-  inputContext.drawImage(imgElement, 0, 0, inputCanvas.width, inputCanvas.height);
-  inputImgData = inputContext.getImageData(0, 0, inputCanvas.width, inputCanvas.height);
+  inputContext.drawImage(imgElement, 0, 0, imgElement.width, imgElement.height);
+  inputImgData = inputContext.getImageData(0, 0, imgElement.width, imgElement.height);
   var inputImage = new Image(inputImgData, "inputImage", "RGBA");
   inputImage.rgbaToHsla();
   var imageOutGreen = new Image(inputImage.getImgData(), "imageOutGreen", "HSLA");
