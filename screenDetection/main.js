@@ -27,8 +27,14 @@ imgElement.onload = function () {
   imageOutGreen.createGreenMask();
   var imageOutBlue = new Image(inputImage.getImgData(), "imageOutBlue", "HSLA");
   imageOutBlue.createBlueMask();
+  /*
   var imageOutConcatenated = new Image(imageOutGreen.getImgData(), "imageOutConcatenated", "HSLA");
   imageOutConcatenated.addImgData(imageOutBlue.getImgData());
+  */
+  
+  var imageOutConcatenated = new Image(inputImage.getImgData(), "imageOutConcatenated", "HSLA");
+  imageOutConcatenated.createGreenBlueMask();
+  
   imageOutGreen.hslaToRgba();
   imageOutGreen.show();
   imageOutBlue.hslaToRgba();
