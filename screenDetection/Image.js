@@ -216,8 +216,8 @@ class Image {
     }
 
     medianBlur(ksize) {
-        for (var y = 0; y < this.canvas.height; y++) {
-            for (var x = 0; x < this.canvas.width; x++) {
+        for (var y = 0; y < this.getHeight(); y++) {
+            for (var x = 0; x < this.getWidth(); x++) {
                 var RArray = new Array();
                 var GArray = new Array();
                 var BArray = new Array();
@@ -248,17 +248,17 @@ class Image {
         if (xPixel < 0) {
             xPixel = 0;
         }
-        else if (xPixel >= this.canvas.width) {
-            xPixel = this.canvas.width - 1;
+        else if (xPixel >= this.getWidth()) {
+            xPixel = this.getWidth() - 1;
         }
 
         if (yPixel < 0) {
             yPixel = 0;
         }
-        else if (yPixel >= this.canvas.height) {
-            yPixel = this.canvas.height - 1;
+        else if (yPixel >= this.getHeight()) {
+            yPixel = this.getHeight() - 1;
         }
-        var i = (yPixel * this.canvas.width + xPixel) * 4;
+        var i = (yPixel * this.getWidth() + xPixel) * 4;
         return [this.pixels[i], this.pixels[i + 1], this.pixels[i + 2]];
     }
 }
