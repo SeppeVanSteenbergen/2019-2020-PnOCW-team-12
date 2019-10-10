@@ -250,6 +250,32 @@ class Image {
         }
     }
 
+    blur(){
+        var nbNeigbours = 2;
+        for (var y = 0; y < this.getHeight(); y++) {
+            for (var x = 0; x < this.getWidth(); x++) {
+                var white = 0;
+                var black = 0;
+                if(this.getPixel(x,y)[2] == 100){
+                    for (var yBox = -nbNeigbours; yBox <= nbNeigbours; yBox++) {
+                        for (var xBox = -nbNeigbours; xBox <= nbNeigbours; xBox++) {
+                            var pixel = this.getPixel(x + xBox, y + yBox);
+                            if(pixel[2] == 100){
+                                white += 1;
+                            }else if (pixel[2] == 0){
+                                black += 1;
+                            }
+                        }
+                    }
+                    if(white >= 8 && black >= 15){
+                        var i = this.pixelToPosition([x, y]);
+                        this.makeRed(i);
+                    }
+                }
+            }
+        }
+    }
+
     getPixel(xPixel, yPixel) {
         if (xPixel < 0) {
             xPixel = 0;

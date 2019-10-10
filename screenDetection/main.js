@@ -8,10 +8,10 @@ imgElement.onload = function () {
   /*let image = cv.imread(imgElement);
   image = rescale(image);
   screenDetection(image);*/
-  let maxAmountOfPixels = 1000;
-  if (imgElement.width * imgElement.height > maxAmountOfPixels) { // * ipv + dacht ik
+  let maxAmountBorderPx = 4000;
+  if (imgElement.width + imgElement.height > maxAmountBorderPx) { 
     let ratio = imgElement.width / imgElement.height;
-    imgElement.height = Math.round(maxAmountOfPixels / (ratio + 1.0)); //waarom ratio + 1?
+    imgElement.height = Math.round(maxAmountBorderPx / (ratio + 1.0));
     imgElement.width = Math.round(ratio * imgElement.height);
   }
   let inputCanvas = document.getElementById("inputImage");
@@ -34,15 +34,18 @@ imgElement.onload = function () {
   
   var imageOutConcatenated = new Image(inputImage.getImgData(), "imageOutConcatenated", "HSLA");
   imageOutConcatenated.createGreenBlueMask();
-  imageOutConcatenated.detectScreens();
+  //imageOutConcatenated.detectScreens();
   
   imageOutGreen.hslaToRgba();
   imageOutGreen.show();
   imageOutBlue.hslaToRgba();
   imageOutBlue.show();
+  var imageOutSmoothened = new Image(imageOutConcatenated.getImgData(), "imageOutSmoothened", "HSLA");
+
   imageOutConcatenated.hslaToRgba();
   imageOutConcatenated.show();
-  var imageOutSmoothened = new Image(imageOutConcatenated.getImgData(), "imageOutSmoothened", "RGBA");
-  imageOutSmoothened.medianBlur(3);
+  //imageOutSmoothened.medianBlur(5);
+  imageOutSmoothened.blur();
+  imageOutSmoothened.hslaToRgba();
   imageOutSmoothened.show();
 };
