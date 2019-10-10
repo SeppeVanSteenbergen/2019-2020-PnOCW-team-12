@@ -224,28 +224,20 @@ class Image {
     medianBlur(ksize) {
         for (var y = 0; y < this.getHeight(); y++) {
             for (var x = 0; x < this.getWidth(); x++) {
-                var RArray = new Array();
-                var GArray = new Array();
-                var BArray = new Array();
+                var LArray = new Array();
 
                 var halfKsize = Math.floor(ksize / 2);
                 for (var yBox = -halfKsize; yBox <= halfKsize; yBox++) {
                     for (var xBox = -halfKsize; xBox <= halfKsize; xBox++) {
                         var pixel = this.getPixel(x + xBox, y + yBox);
-                        RArray.push(pixel[0]);
-                        GArray.push(pixel[1]);
-                        BArray.push(pixel[2]);
+                        LArray.push(pixel[2]);
                     }
                 }
-                RArray.sort(function(a, b){return a-b});
-                GArray.sort(function(a, b){return a-b});
-                BArray.sort(function(a, b){return a-b});
+                LArray.sort(function(a, b){return a-b});
 
-                var i = (y * this.canvas.width + x) * 4;
-                var half = Math.floor(RArray.length / 2);
-                this.pixels[i] = RArray[half];
-                this.pixels[i + 1] = GArray[half];
-                this.pixels[i + 2] = BArray[half];
+                var i = this.pixelToPosition([x,y]);
+                var half = Math.floor(LArray.length / 2);
+                this.pixels[i + 2] = LArray[half];
             }
         }
     }
@@ -267,7 +259,7 @@ class Image {
                             }
                         }
                     }
-                    if(white >= 8 && black >= 15){
+                    if(white <= 12 && black >= 13){
                         var i = this.pixelToPosition([x, y]);
                         this.makeRed(i);
                     }
