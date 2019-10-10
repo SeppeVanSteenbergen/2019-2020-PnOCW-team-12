@@ -2,5 +2,3 @@
 .vscode/
 
 .DS_Store
-
-server/package.json
