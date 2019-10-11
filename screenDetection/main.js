@@ -33,7 +33,7 @@ imgElement.onload = function () {
   */
   
   var imageOutConcatenated = new Image(inputImage.getImgData(), "imageOutConcatenated", "HSLA");
-  imageOutConcatenated.createBlueMask();
+  imageOutConcatenated.createGreenBlueMask();
   //imageOutConcatenated.detectScreens();
   
   imageOutGreen.hslaToRgba();
@@ -44,8 +44,8 @@ imgElement.onload = function () {
 
   imageOutConcatenated.hslaToRgba();
   imageOutConcatenated.show();
-  //imageOutSmoothened.medianBlur(3);
-  imageOutSmoothened.blur();
+  imageOutSmoothened.medianBlur(5);
+  imageOutSmoothened.cornerDetection();
   imageOutSmoothened.hslaToRgba();
   imageOutSmoothened.show();
 };
