@@ -4,9 +4,6 @@ const path = require('path')
 const AuthenticationPolicy = require('./policies/AuthenticationPolicy')
 const AuthenticationController = require('./controllers/AuthenticationController')
 const DataController = require('./controllers/DataController')
-const express = require('express');
-const multer = require('multer');
-const upload = multer({dest: __dirname + '/uploads/images'});
 
 module.exports = (app, passport) => {
   app.get('/test', (req, res) => {
@@ -39,14 +36,9 @@ module.exports = (app, passport) => {
     DataController.getAllRooms
   )
 
-  app.post('/upload', upload.single('photo'), (req, res) => {
-    if(req.file) {
-        res.json(req.file);
-    }
-    else throw 'error';
-  });
-
-
+  app.post('/upload', (req, res) => {
+    res.json({cool: "yeah"});
+  })
 
   app.use('/', serveStatic(path.join(__dirname, '../dist')))
 

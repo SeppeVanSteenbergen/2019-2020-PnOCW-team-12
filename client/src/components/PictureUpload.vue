@@ -20,24 +20,30 @@
 </template>
 
 <script>
-  import axios from 'axios'
+  import axios from 'axios';
   export default {
     name: 'PictureUpload',
     data() {
       return {
         url: null,
+        file: ""
       }
     },
     methods: {
       loadFile: function(e)  {
-        const file = inpFile.files[0];
-        this.url = URL.createObjectURL(file);
+        this.file = inpFile.files[0];
+        this.url = URL.createObjectURL(this.file);
         console.log(this.url);
       },
-      onUpload() {
+      async onUpload() {
         const fd = new FormData();
-        fd.append('image',this.file,this.file.name)
-        axios.post(
+        fd.append('image',this.file)
+        
+        try {
+          await axios.post('/upload', fd);
+        } catch(error) {
+          console.log(error);
+        }
       }
     }
   };
