@@ -375,7 +375,10 @@ export default {
     },
     continuousVideoStream(n) {
       if (n) {
-        this.videoSendInterval = setInterval(this.executeDisplayImage, 1000/10)
+        this.videoSendInterval = setInterval(
+          this.executeDisplayImage,
+          1000 / 10
+        )
       } else {
         clearInterval(this.videoSendInterval)
       }

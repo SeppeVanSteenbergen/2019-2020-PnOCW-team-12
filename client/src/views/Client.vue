@@ -4,7 +4,11 @@
       <div>
         <v-card max-width="400px">
           <v-toolbar color="primary" dark flat>
-            <v-toolbar-title>Choose a room</v-toolbar-title>
+            <v-toolbar-title>{{
+              $store.getters.getRole.room >= 0
+                ? 'Connected to room ' + $store.getters.getRole.room
+                : 'Choose a room'
+            }}</v-toolbar-title>
             <div class="flex-grow-1"></div>
           </v-toolbar>
           <v-container>

@@ -46,6 +46,9 @@
 
     <template v-slot:append>
       <div class="pa-2">
+        <p style="color: #4e6686">user id:{{ user.uuid }}</p>
+      <br/>
+        <br/>
         <v-btn
           block
           @click="
@@ -80,6 +83,11 @@ export default {
       },
       set(val) {
         this.setDrawer(val)
+      }
+    },
+    user: {
+      get() {
+        return this.$store.state.user
       }
     }
   },
