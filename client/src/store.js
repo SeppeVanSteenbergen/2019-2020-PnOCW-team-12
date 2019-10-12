@@ -47,5 +47,39 @@ export default new Vuex.Store({
       state.user = payload
     }
   },
-  actions: {}
+  actions: {},
+  getters: {
+    getRole(state) {
+      if (state.roomList !== {}) {
+        console.log('calculating with')
+
+        for (let i = 0; i < Object.keys(state.roomList).length; i++) {
+          if (state.roomList[i].master === state.user.uuid) {
+            return {
+              role: 1,
+              room: i
+            }
+          }
+          console.log(state.roomList[i].clients.length)
+
+          for (let j = 0; j < Object.keys(state.roomList[i].clients).length; j++) {
+            console.log('COMPARING')
+            console.log(state.roomList[i].clients[j])
+            console.log(state.user.uuid)
+            if (state.roomList[i].clients[j] === state.user.uuid) {
+              return {
+                role: 0,
+                room: i
+              }
+            }
+          }
+        }
+      }
+
+      return {
+        role: -1,
+        room: -1
+      }
+    }
+  }
 })

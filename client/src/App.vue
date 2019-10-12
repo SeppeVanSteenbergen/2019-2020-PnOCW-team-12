@@ -10,7 +10,12 @@
           <span class="font-weight-light">Caster</span>
         </v-toolbar-title>
         <v-spacer></v-spacer>
-        <span class="mr-2">user id:{{ user.uuid }} </span>
+        <v-icon>{{
+          getRole().role === 1 ? 'mdi-account-tie' : getRole().role === 0 ? 'mdi-account' : 'mdi-account-alert'
+          }}</v-icon>
+        <span class="mr-2 font-weight-bold headline text-uppercase" id="sroleDisplay">{{
+          getRole().role === 1 ? 'Master' : getRole().role === 0 ? 'Client' : ''
+        }}</span>
         <!--<span class="mr-2">Latest Release</span>
         <v-icon>mdi-open-in-new</v-icon>-->
       </v-app-bar>
@@ -27,7 +32,7 @@
 
 <script>
 import Drawer from './components/Drawer'
-import { mapMutations } from 'vuex'
+import { mapMutations, mapGetters } from 'vuex'
 import LoginView from './views/LoginView'
 
 export default {
@@ -44,6 +49,7 @@ export default {
   methods: {
     ...mapMutations(['drawerOpen', 'drawerClose']),
     ...mapMutations(['setDrawer', 'toggleDrawer']),
+    ...mapGetters(['getRole']),
     pingServer() {
       // Send the "pingServer" event to the server.
       this.$socket.emit('pingServer', 'PING!')
@@ -90,3 +96,9 @@ export default {
   }
 }
 </script>
+
+<style>
+  #roleDisplay {
+    font-size: 40pt;
+  }
+</style>
