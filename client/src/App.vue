@@ -11,11 +11,23 @@
         </v-toolbar-title>
         <v-spacer></v-spacer>
         <v-icon>{{
-          getRole().role === 1 ? 'mdi-account-tie' : getRole().role === 0 ? 'mdi-account' : 'mdi-account-alert'
-          }}</v-icon>
-        <span class="mr-2 font-weight-bold headline text-uppercase" id="sroleDisplay">{{
-          getRole().role === 1 ? 'Master' : getRole().role === 0 ? 'Client' : ''
-        }}</span>
+          getRole().role === 1
+            ? 'mdi-account-tie'
+            : getRole().role === 0
+            ? 'mdi-account'
+            : 'mdi-account-alert'
+        }}</v-icon>
+        <span
+          class="mr-2 font-weight-bold headline text-uppercase"
+          id="sroleDisplay"
+          >{{
+            getRole().role === 1
+              ? 'Master'
+              : getRole().role === 0
+              ? 'Client'
+              : ''
+          }}</span
+        >
         <!--<span class="mr-2">Latest Release</span>
         <v-icon>mdi-open-in-new</v-icon>-->
       </v-app-bar>
@@ -59,9 +71,22 @@ export default {
     }
   },
   sockets: {
-    connect: function() {
-      if (this.$store.state.userLoggedIn)
-        this.$socket.emit('registerUserSocket', this.$store.state.user.uuid)
+    connect: async function() {
+      if (this.$store.state.userLoggedIn) {
+        /*let resp = await this.$auth.getSocketRegistrationKey()
+        if (resp.success) {
+          this.$socket.emit('registerUserSocket', {
+            user_id: this.$store.state.user.uuid,
+            key: resp.data.key
+          })*/
+
+        this.$socket.emit('registerUserSocket', {
+          user_id: this.$store.state.user.uuid
+        })
+      } else {
+        // display error message
+      }
+
       console.log('socket connected')
     },
     customEmit: function(data) {
@@ -92,13 +117,15 @@ export default {
   async mounted() {
     await this.$auth.sessionLogin()
     if (this.$store.state.userLoggedIn)
-      this.$socket.emit('registerUserSocket', this.$store.state.user.uuid)
+      this.$socket.emit('registerUserSocket',{
+        user_id: this.$store.state.user.uuid
+      })
   }
 }
 </script>
 
 <style>
-  #roleDisplay {
-    font-size: 40pt;
-  }
+#roleDisplay {
+  font-size: 40pt;
+}
 </style>

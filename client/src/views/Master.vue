@@ -170,18 +170,19 @@
           <video :autoplay="true" id="videoElement" ref="video"></video>
           <br />
           <v-btn @click="startVideo">start video</v-btn>
+          <v-btn @click="switchCamera">switch camera</v-btn>
           <canvas ref="canv"></canvas>
         </v-card-text>
         <br />
         <v-card-actions>
+
           <div class="flex-grow-1"></div>
           <v-switch
             v-model="continuousVideoStream"
             label="Continuous mode"
           ></v-switch>
           <v-btn color="success" @click="executeDisplayImage()">
-            Send To All</v-btn
-          >
+            Send To All</v-btn>
           <v-btn @click="pictureModeDialog = false" color="error" text>
             close</v-btn
           >
@@ -225,7 +226,8 @@ export default {
       countDownInterval: null,
       continousDrawDirectionMode: false,
       continuousVideoStream: false,
-      videoSendInterval: null
+      videoSendInterval: null,
+      facingUser: true
     }
   },
   components: {
@@ -263,7 +265,10 @@ export default {
     },
     startVideo() {
       const constraints = {
-        video: true
+        audio: false,
+        video: {
+          facingMode: this.facingUser ? 'user' : 'environment'
+        }
       }
       let video = this.$refs.video
       console.log(video)
@@ -335,6 +340,10 @@ export default {
       canvas.getContext('2d').drawImage(this.$refs.video, 0, 0)
       console.log()
       return canvas.toDataURL('image/jpeg')
+    },
+    switchCamera() {
+      this.facingMode = !this.facingMode
+      this.startVideo()
     }
   },
   mounted() {

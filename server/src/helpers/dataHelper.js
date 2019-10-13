@@ -209,6 +209,7 @@ module.exports = {
       }
     }
     console.log(clientList)
+    console.log('socket_id ' + socket_id + ' not linked to user_id')
     throw new Error('socket_id ' + socket_id + ' not linked to user_id')
   },
 
@@ -265,5 +266,21 @@ module.exports = {
 
   getClientsOfRoom(room_id) {
     return roomList[room_id].clients
+  },
+  addUserRegistration(user_id, key) {
+    registrationList.push({
+      user_id: user_id,
+      key: key
+    })
+  },
+  validRegistration(user_id, key) {
+    for(let i = 0; i < Object.keys(registrationList).length; i++) {
+      if(registrationList[i].user_id === user_id && registrationList[i].key === key) {
+        registrationList.splice(i, 1)
+        return true
+
+      }
+    }
+    return false
   }
 }

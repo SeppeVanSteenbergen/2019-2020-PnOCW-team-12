@@ -64,6 +64,25 @@ class AuthenticationService {
         console.log(err)
       })
   }
+
+  async getSocketRegistrationKey() {
+    let response = {
+      success: false
+    }
+    await axios
+      .get('/auth/regSocketKey')
+      .then(res => {
+        response.data = res.data
+        response.success = true
+      })
+      .catch(err => {
+        console.log('Error getting socket key')
+        console.log(err)
+        response.data = err
+      })
+
+    return response
+  }
 }
 
 Vue.prototype.$auth = new AuthenticationService()

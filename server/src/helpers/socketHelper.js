@@ -124,5 +124,12 @@ module.exports = {
     for (let client_id in clientList) {
       this.sendDataByUserID(name, data, clientList[client_id])
     }
+  },
+  sendSuccessMessageToSocket(socket_id, message) {
+    this.sendDataBySocketID('successMessage', message, socket_id)
+  },
+  sendErrorMessageToSocket(socket_id, message) {
+    this.sendDataBySocketID('errorMessage', message, socket_id)
   }
+
 }

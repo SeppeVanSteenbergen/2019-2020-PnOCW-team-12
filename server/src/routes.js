@@ -36,6 +36,8 @@ module.exports = (app, passport) => {
     DataController.getAllRooms
   )
 
+  app.get('/auth/regSocketKey', AuthenticationController.getSocketRegistrationKey)
+
   app.use('/', serveStatic(path.join(__dirname, '../dist')))
 
   app.use((req, res) => {

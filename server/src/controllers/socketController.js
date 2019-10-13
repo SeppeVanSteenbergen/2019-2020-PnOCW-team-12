@@ -28,6 +28,17 @@ value:
 */
 roomList = {}
 
+/*
+  contains the user_id + challenge password to register a socket
+
+  List
+  [{
+    user_id:
+    key:
+  }, ...]
+ */
+registrationList = []
+
 module.exports = io => {
   io.on('connect', socket => {
     console.log('client connected')
@@ -43,14 +54,29 @@ module.exports = io => {
     })
 
     socket.on('disconnect', () => {
+      dataHelper.removeUser(dataHelper.getUserIDFromSocketID(socket.id))
       console.log('client disconnected')
+      socketHelper.updateAllRoomLists()
     })
 
-    socket.on('registerUserSocket', user_id => {
-      dataHelper.registerUserSocket(user_id, socket.id)
+    socket.on('registerUserSocket', data => {
+      console.log('starting user registration')
+      console.log(registrationList)
+      console.log(data)
+      /*if(dataHelper.validRegistration(data.user_id, data.key)) {
+        console.log('successfull registration')
+        dataHelper.registerUserSocket(data.user_id, socket.id)
+        socketHelper.sendSuccessMessageToSocket(socket.id, 'Successfully registered socket')
+      } else {
+        console.log('failed registration')
+        socketHelper.sendErrorMessageToSocket(socket.id, 'Failed to register socket')
+      }*/
+      dataHelper.registerUserSocket(data.user_id, socket.id)
     })
 
     socket.on('createRoom', () => {
+      console.log('creating room')
+      console.log(dataHelper.getUserIDFromSocketID(socket.id))
       dataHelper.createRoom(dataHelper.getUserIDFromSocketID(socket.id))
       socketHelper.updateAllRoomLists()
     })

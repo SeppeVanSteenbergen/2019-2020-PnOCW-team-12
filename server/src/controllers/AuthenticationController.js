@@ -1,4 +1,5 @@
 const config = require('../config/config')
+const dataHelper = require('../helpers/dataHelper')
 
 module.exports = {
   logout(req, res) {
@@ -33,5 +34,16 @@ module.exports = {
       console.log('so creating new one')
       next()
     }
+  },
+  getSocketRegistrationKey(req, res) {
+    let randNumber = Math.floor(Math.random()*90000) + 10000
+
+    dataHelper.addUserRegistration(req.user.uuid, randNumber)
+
+    console.log('returning the key')
+    console.log(registrationList)
+    res.send({
+      key: randNumber
+    })
   }
 }
