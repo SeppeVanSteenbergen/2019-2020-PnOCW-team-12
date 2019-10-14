@@ -98,19 +98,19 @@ class Image {
             minY = Math.min(left[1], minY);
             maxX = Math.max(left[2], maxX);
             maxY = Math.max(left[3], maxY);
-        } else if(this.matrix[y][x + 1] == 1){ //right
+        } if(this.matrix[y][x + 1] == 1){ //right
             var right = this.floodfill(x + 1, y);
             minX = Math.min(right[0], minX);
             minY = Math.min(right[1], minY);
             maxX = Math.max(right[2], maxX);
             maxY = Math.max(right[3], maxY);
-        } else if(this.matrix[y - 1][x] == 1){ //up
+        } if(this.matrix[y - 1][x] == 1){ //up
             var up = this.floodfill(x, y - 1);
             minX = Math.min(up[0], minX);
             minY = Math.min(up[1], minY);
             maxX = Math.max(up[2], maxX);
             maxY = Math.max(up[3], maxY);
-        }else if(this.matrix[y + 1][x] == 1){ //down
+        } if(this.matrix[y + 1][x] == 1){ //down
             var down = this.floodfill(x, y + 1);
             minX = Math.min(down[0], minX);
             minY = Math.min(down[1], minY);
