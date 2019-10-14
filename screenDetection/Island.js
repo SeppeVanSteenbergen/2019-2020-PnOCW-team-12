@@ -11,10 +11,11 @@ class Island {
      * @param {int} y y co
      */
     constructor(x, y) {
-        this.minx, this.maxx = x;
+        this.minx = x;
+        this.maxx = x;
 
-        this.miny, this.maxy = y;
-
+        this.miny = y;
+        this.maxy = y;
     }
 
     /**
@@ -24,20 +25,20 @@ class Island {
      * @param {int} y y co
      */
     add(x, y) {
-        minx = Math.min(x, minx);
-        miny = Math.min(y, miny);
+        this.minx = Math.min(x, this.minx);
+        this.miny = Math.min(y, this.miny);
 
-        maxx = Math.max(x, maxx);
-        maxy = Math.max(y, maxy);
+        this.maxx = Math.max(x, this.maxx);
+        this.maxy = Math.max(y, this.maxy);
     }
 
     print(){
-        console.log("starting co: " + minx + ", " + miny);
-        console.log("ending co: " + maxx + ", " + maxy);
+        console.log("starting co: " + this.minx + ", " + this.miny);
+        console.log("ending co: " + this.maxx + ", " + this.maxy);
     }
 
     size(){
-        return (maxx - minx) * (maxy - miny) / 2;
+        return (this.maxx - this.minx) * (this.maxy - this.miny);
     }
 
     /**

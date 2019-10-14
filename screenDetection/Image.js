@@ -11,7 +11,7 @@ class Image {
     islands;
     matrix;
 
-    MIN_ISLAND_SIZE = 100;
+    MIN_ISLAND_SIZE = 1000000;
 
     lowerBoundG = [120 - this.sensitivity, 50, 25];
     upperBoundG = [120 + this.sensitivity, 100, 75];
@@ -65,8 +65,8 @@ class Image {
         context.putImageData(this.getImgData(), 0, 0);
         context.fillStyle = "#ff2626";
         var pointSize = 30;
-        console.log(this.corners.size);
-        for (var i = 0; i < this.corners.size; i++) {
+        //console.log(this.corners.size);
+        for(var i = 0; i < this.corners.size; i++){
             var x = Math.round(this.corners[i][0]);
             var y = Math.round(this.corners[i][1]);
             context.beginPath(); -
@@ -101,19 +101,18 @@ class Image {
         for (var j = 0; j < this.getHeight(); j++) {
             for (var i = 0; i < this.getWidth(); i++) {
                 if (this.matrix[j][i] == 1 && this.isSeperated(i, j)) {
+                    //console.log(i, j);
                     var island = new Island(i, j);
                     tmpIslands.push(island);
                 } else {
-                    var joiningIsland = null;
-                    var d = 20;
-
-                    for (const island of tmpIslands) {
-                        if (island.sqDist(i, j) < d) {
-                            d = island.sqDist(i, j);
-                            joiningIsland = island;
+                    var d = Infinity;
+                    for (var s = 0; s < tmpIslands.length; s++) {
+                        if (tmpIslands[s].sqDist(i, j) < d) {
+                            d = tmpIslands[s].sqDist(i, j);
+                            var joiningIsland = tmpIslands[s];
                         }
                     }
-
+                    
                     if (joiningIsland != null) {
                         joiningIsland.add(i, j);
                     }
@@ -122,15 +121,14 @@ class Image {
             }
         }
 
-        for (const island in tmpIslands) {
-            if (island instanceof Island) {
-                if (island.size() > this.MIN_ISLAND_SIZE) {
-                    this.islands.push(island);
-                }
+        for (var i = 0; i < tmpIslands.length; i++) {
+            //tmpIslands[i].print();
+            if (tmpIslands[i].size() > this.MIN_ISLAND_SIZE) {
+                this.islands.push(tmpIslands[i]);
             }
         }
 
-        console.log("aantal detected islands: " + tmpIslands.length);
+        console.log("aantal detected islands: " + this.islands.length);
     }
 
     isSeperated(x, y) {
@@ -378,7 +376,28 @@ class Image {
         }
     }
 
-    cornerDetection() {
+    medianBlurMatrix(ksize){
+        for (var y = 0; y < this.getHeight(); y++) {
+            for (var x = 0; x < this.getWidth(); x++) {
+                var LArray = new Array();
+
+                var halfKsize = Math.floor(ksize / 2);
+                for (var yBox = -halfKsize; yBox <= halfKsize; yBox++) {
+                    for (var xBox = -halfKsize; xBox <= halfKsize; xBox++) {
+                        if(y + yBox >= 0 && y + yBox < this.getHeight() && x + xBox >= 0 && x + xBox < this.getWidth()){
+                            var pixel = this.matrix[y + yBox][x + xBox];
+                            LArray.push(pixel);
+                        }
+                    }
+                }
+                LArray.sort(function(a, b){return a-b});
+                var half = Math.floor(LArray.length / 2);
+                this.matrix[y][x] = LArray[half];
+            }
+        }
+    }
+
+    cornerDetection(){
         var nbNeigbours = 2;
         var corners = new Array();
         for (var y = 0; y < this.getHeight(); y++) {
