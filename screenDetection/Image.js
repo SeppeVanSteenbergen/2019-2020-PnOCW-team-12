@@ -65,6 +65,61 @@ class Image {
         context.putImageData(this.getImgData(), 0, 0);
     }
 
+    calcIslandsFloodfill(){
+        var tmpIslands = new Array();
+        for(var y = 0; y < this.getHeight(); y++){
+            for(var x = 0; x < this.getWidth(); x++){
+                if(this.matrix[y][x] == 1){
+                    var newIslandCoo = this.floodfill(x, y);
+                    var newIsland = new Island(newIslandCoo[0], newIslandCoo[1], 8);
+                    newIsland.add(newIslandCoo[2], newIslandCoo[3]);
+                    tmpIslands.push(newIsland);
+                }
+            }
+        }
+        for (var i = 0; i < tmpIslands.length; i++) {
+            tmpIslands[i].print();
+            if (tmpIslands[i].size() > this.MIN_ISLAND_SIZE) {
+                this.drawFillRect([tmpIslands[i].minx, tmpIslands[i].miny], [tmpIslands[i].maxx, tmpIslands[i].maxy], 0.3);
+                this.islands.push(tmpIslands[i]);
+            }
+        }
+    }
+
+    floodfill(x, y){
+        this.matrix[y][x] = 0; //zelf op 0 zetten --> geen 2 maal in zelfde px
+        var minX = x;
+        var minY = y;
+        var maxX = x;
+        var maxY = y;
+        if(this.matrix[y][x - 1] == 1){ //left
+            var left = this.floodfill(x - 1, y);
+            minX = Math.min(left[0], minX);
+            minY = Math.min(left[1], minY);
+            maxX = Math.max(left[2], maxX);
+            maxY = Math.max(left[3], maxY);
+        } else if(this.matrix[y][x + 1] == 1){ //right
+            var right = this.floodfill(x + 1, y);
+            minX = Math.min(right[0], minX);
+            minY = Math.min(right[1], minY);
+            maxX = Math.max(right[2], maxX);
+            maxY = Math.max(right[3], maxY);
+        } else if(this.matrix[y - 1][x] == 1){ //up
+            var up = this.floodfill(x, y - 1);
+            minX = Math.min(up[0], minX);
+            minY = Math.min(up[1], minY);
+            maxX = Math.max(up[2], maxX);
+            maxY = Math.max(up[3], maxY);
+        }else if(this.matrix[y + 1][x] == 1){ //down
+            var down = this.floodfill(x, y + 1);
+            minX = Math.min(down[0], minX);
+            minY = Math.min(down[1], minY);
+            maxX = Math.max(down[2], maxX);
+            maxY = Math.max(down[3], maxY);
+        }
+        return [minX, minY, maxX, maxY];
+    }
+
     /**
      * Make a simple threshold cut
      * @param {float} value : value 0..1
