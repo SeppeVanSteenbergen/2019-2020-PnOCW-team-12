@@ -5,7 +5,7 @@ inputElement.addEventListener('change', (e) => {
   imgElement.src = URL.createObjectURL(e.target.files[0]);
 }, false);
 imgElement.onload = function () {
-  let maxAmountBorderPx = 4000;
+  let maxAmountBorderPx = 1000;
   if (imgElement.width + imgElement.height > maxAmountBorderPx) { 
     let ratio = imgElement.width / imgElement.height;
     imgElement.height = Math.round(maxAmountBorderPx / (ratio + 1.0));

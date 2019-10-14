@@ -4,18 +4,21 @@ class Island {
     maxx;
     miny;
     maxy;
+    id;
 
     /**
      * Create and Island starting with this pixel
      * @param {int} x x co
      * @param {int} y y co
      */
-    constructor(x, y) {
+    constructor(x, y, id) {
         this.minx = x;
         this.maxx = x;
 
         this.miny = y;
         this.maxy = y;
+
+        this.id = id;
     }
 
     /**
