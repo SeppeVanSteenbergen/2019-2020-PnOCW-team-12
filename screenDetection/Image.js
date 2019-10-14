@@ -268,13 +268,15 @@ class Image {
                 }
             }
         }
-        console.log(corners.length);
+        return corners;
+        /*
         var filteredCorners = this.cornerFilter(corners);
         for(var c = 0; c < filteredCorners.length; c++){
-            var i = this.pixelToPosition(filteredCorners[c]);
+            var i = Math.round(this.pixelToPosition(filteredCorners[c]));
+            console.log(i);
             this.makeRed(i);
         }
-        console.log(filteredCorners.length);
+        console.log(filteredCorners.length);*/
     }
 
     cornerFilter(corners){
