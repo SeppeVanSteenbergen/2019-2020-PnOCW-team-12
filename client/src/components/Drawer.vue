@@ -70,8 +70,8 @@ export default {
     return {
       items: [
         { title: 'Home', icon: 'mdi-home', link: '/' },
-        { title: 'Master', icon: 'mdi-account-tie', link: 'master' },
-        { title: 'Client', icon: 'mdi-account', link: 'client' }
+        /*{ title: 'Master', icon: 'mdi-account-tie', link: 'master' },
+        { title: 'Client', icon: 'mdi-account', link: 'client' }*/
       ],
       darkMode: false
     }

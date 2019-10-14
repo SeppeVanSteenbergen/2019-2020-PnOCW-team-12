@@ -82,7 +82,7 @@ module.exports = {
     }
 
     if (message.to !== 'all') {
-      this.sendDataByUserID('screenCommand', message.payload, user_id)
+      this.sendDataByUserID('screenCommand', message.payload, message.to)
     } else {
       this.sendDataToRoomOfMaster('screenCommand', message.payload, user_id)
     }
@@ -130,6 +130,9 @@ module.exports = {
   },
   sendErrorMessageToSocket(socket_id, message) {
     this.sendDataBySocketID('errorMessage', message, socket_id)
+  },
+  disconnectSocket(socket_id) {
+    io.sockets.connected[socket_id].disconnect()
   }
 
 }

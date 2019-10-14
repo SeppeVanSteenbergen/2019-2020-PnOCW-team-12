@@ -53,7 +53,11 @@ export default new Vuex.Store({
       if (state.roomList !== {}) {
         console.log('calculating with')
 
-        for (let i = 0; i < Object.keys(state.roomList).length; i++) {
+        for (let i in state.roomList) {
+          console.log('STORE MASTER')
+          console.log(i)
+          console.log(state.roomList[i])
+          console.log(state.roomList)
           if (state.roomList[i].master === state.user.uuid) {
             return {
               role: 1,

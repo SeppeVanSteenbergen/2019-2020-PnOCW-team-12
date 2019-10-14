@@ -34,7 +34,12 @@ module.exports = {
    * Links the active socket connection to the user_id
    */
   registerUserSocket(user_id, socket_id) {
+
     if (typeof clientList[user_id] === 'undefined') this.addUser(user_id)
+
+    if(clientList[user_id].socket_id !== -1) {
+      return 1
+    }
 
     clientList[user_id].socket_id = socket_id
 
@@ -106,7 +111,7 @@ module.exports = {
     return 1
   },
 
-  exitRoom(user_id) {
+   cxvwexitRoom(user_id) {
     console.log('start exit room func')
     if (clientList[user_id].room === -1) {
       console.log('Client is not in a room')
@@ -146,7 +151,7 @@ module.exports = {
       return 0
     }
 
-    for (let i = 0; i < roomList[room_id].clients; i++) {
+    for (let i = 0; i < roomList[room_id].clients.length; i++) {
       this.exitRoom(roomList[room_id].clients[i])
     }
 

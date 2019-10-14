@@ -54,7 +54,11 @@ module.exports = io => {
     })
 
     socket.on('disconnect', () => {
-      dataHelper.removeUser(dataHelper.getUserIDFromSocketID(socket.id))
+      try{
+        dataHelper.removeUser(dataHelper.getUserIDFromSocketID(socket.id))
+      } catch(e) {
+        console.log(e)
+      }
       console.log('client disconnected')
       socketHelper.updateAllRoomLists()
     })
@@ -71,7 +75,11 @@ module.exports = io => {
         console.log('failed registration')
         socketHelper.sendErrorMessageToSocket(socket.id, 'Failed to register socket')
       }*/
-      dataHelper.registerUserSocket(data.user_id, socket.id)
+      if(dataHelper.registerUserSocket(data.user_id, socket.id)) {
+        dataHelper.removeUser(data.user_id)
+        socketHelper.disconnectSocket(socket.id)
+        dataHelper.registerUserSocket(data.user_id, socket.id)
+      }
     })
 
     socket.on('createRoom', () => {
@@ -87,7 +95,12 @@ module.exports = io => {
 
     socket.on('exitRoom', () => {
       console.log('exiting room')
-      dataHelper.exitRoom(dataHelper.getUserIDFromSocketID(socket.id))
+      try {
+        dataHelper.exitRoom(dataHelper.getUserIDFromSocketID(socket.id))
+      } catch(e) {
+        console.log(e)
+      }
+
       socketHelper.updateAllRoomLists()
     })
 

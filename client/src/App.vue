@@ -97,6 +97,9 @@ export default {
     data: function(data) {
       console.log(data.message)
       this.socketMessage = data.message
+    },
+    disconnect: function() {
+      this.$router.push('/')
     }
   },
   computed: {
@@ -117,9 +120,17 @@ export default {
   async mounted() {
     await this.$auth.sessionLogin()
     if (this.$store.state.userLoggedIn)
-      this.$socket.emit('registerUserSocket',{
+      this.$socket.emit('registerUserSocket', {
         user_id: this.$store.state.user.uuid
       })
+
+    if (this.getRole().role === 1) {
+      this.$router.push('/master')
+    } else if (this.getRole().role === 0) {
+      this.$router.push('/client')
+    } else {
+      this.$router.push('/')
+    }
   }
 }
 </script>

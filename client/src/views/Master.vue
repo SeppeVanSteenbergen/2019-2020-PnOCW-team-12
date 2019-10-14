@@ -3,7 +3,11 @@
     <v-row align="center" justify="center" min-height="300px">
       <v-card max-width="400px">
         <v-toolbar color="primary" dark flat>
-          <v-toolbar-title>Room</v-toolbar-title>
+          <v-toolbar-title>{{
+            $store.getters.getRole.room >= 0
+              ? 'Room ' + $store.getters.getRole.room
+              : 'Not in Room'
+          }}</v-toolbar-title>
           <div class="flex-grow-1"></div>
           <v-btn
             v-if="typeof myRoom !== 'undefined'"
@@ -110,7 +114,6 @@
 
           <v-tab-item>
             <v-content>
-              webcam
               <v-btn @click="pictureModeDialog = true" class="mx-auto"
                 >open dialog</v-btn
               >
@@ -126,6 +129,7 @@
     <v-btn color="error" fab large dark bottom left fixed @click="disconnect()">
       <v-icon class="v-rotate-90">mdi-exit-to-app</v-icon>
     </v-btn>
+
     <v-dialog v-model="floodFillDialog">
       <v-card class="pa-4">
         <v-card-title>
@@ -138,6 +142,31 @@
             class="mx-auto"
             style="width:100%;"
           ></v-color-picker>
+          <v-expansion-panels :popout="false" :inset="false" :focusable="false">
+            <v-expansion-panel>
+              <v-expansion-panel-header
+                >Send To Client</v-expansion-panel-header
+              >
+              <v-expansion-panel-content>
+                <v-list v-if="myRoom !== null">
+                  <v-list-item
+                    v-for="client_id in myRoom.clients"
+                    :key="client_id"
+                    @click="colorClient(client_id)"
+                  >
+                    <v-list-item-content>
+                      <v-list-item-title
+                        v-text="'Client ' + myRoom.clients.indexOf(client_id)"
+                      ></v-list-item-title>
+                    </v-list-item-content>
+                    <!--<v-list-item-avatar>
+                                          <v-img :src="item.avatar"></v-img>
+                                      </v-list-item-avatar>-->
+                  </v-list-item>
+                </v-list>
+              </v-expansion-panel-content>
+            </v-expansion-panel>
+          </v-expansion-panels>
         </v-card-text>
         <br />
         <v-card-actions>
@@ -175,14 +204,14 @@
         </v-card-text>
         <br />
         <v-card-actions>
-
           <div class="flex-grow-1"></div>
           <v-switch
             v-model="continuousVideoStream"
             label="Continuous mode"
           ></v-switch>
           <v-btn color="success" @click="executeDisplayImage()">
-            Send To All</v-btn>
+            Send To All</v-btn
+          >
           <v-btn @click="pictureModeDialog = false" color="error" text>
             close</v-btn
           >
@@ -239,7 +268,7 @@ export default {
     client() {},
     disconnect() {
       this.$socket.emit('exitRoom')
-      this.$router.push({ name: 'home' })
+      this.$router.push({ name: 'home' }).catch(error => console.log(error))
     },
     toggleRoom() {
       this.$socket.emit('toggleRoom')
@@ -354,6 +383,7 @@ export default {
       for (let i in this.$store.state.roomList) {
         if (
           typeof this.$store.state.roomList[i] !== 'undefined' &&
+          this.$store.state.roomList[i] !== null &&
           this.$store.state.roomList[i].master === this.$store.state.user.uuid
         ) {
           return this.$store.state.roomList[i]

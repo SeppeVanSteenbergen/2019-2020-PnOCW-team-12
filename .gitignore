@@ -2,3 +2,5 @@
 .vscode/
 
 .DS_Store
+
+server/uploads/images/
