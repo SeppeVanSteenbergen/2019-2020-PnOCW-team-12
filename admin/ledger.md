@@ -29,5 +29,22 @@ Meeting 1 (7/10/2019)
 Meeting 2 (14/10/2019)
     Task 2, basic framework: (Dirk en Martijn)
         -> codereviewer = Seppe
+        functionaliteiten:
+            - foto's uploaden
+            - zien master/clients
+        code review begonnen, nog vraag wat er in paragraaf tekst moet
+        verslag vandaag aan beginnen --> grootte?
+        Vandaag vooral focus op verslag
+    Task 3, device recognition: (Seppe, Bert en Toon)
+        alles nu zonder openCV
+        laattijd met/zonder openCV?
+        island-detector (Bert) om schermen te herkennen (zonder identificatie)
+        Martijn al begonnen aan codereviewer
+        Tegen volgende week:
+            - identificatie, wat en hoe?
+                - Dirk stelt "kleurenbarcode" voor -> proberen dit uit te werken
+            - rotatie herkennen
+            - begin verslag    
+            - Martijn verder code reviewen
         
 
