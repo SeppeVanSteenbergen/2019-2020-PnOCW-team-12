@@ -26,5 +26,8 @@ Meeting 1 (7/10/2019)
             - omkaderen van schermen om afbeelding op af te beelden
             - eventueel beginnen reviewen (Martijn), kan ook verplaatst worden naar volgende week
 
-
+Meeting 2 (14/10/2019)
+    Task 2, basic framework: (Dirk en Martijn)
+        -> codereviewer = Seppe
+        
 
