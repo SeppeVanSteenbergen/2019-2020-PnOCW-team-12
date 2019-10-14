@@ -43,7 +43,9 @@ export default {
     async login() {
       await this.$auth.login()
       if (this.$store.state.userLoggedIn)
-        this.$socket.emit('registerUserSocket', this.$store.state.user.uuid)
+        this.$socket.emit('registerUserSocket', {
+          user_id: this.$store.state.user.uuid
+        })
     }
   }
 }

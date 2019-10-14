@@ -22,7 +22,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 export default {
   name: 'PictureUpload',
   data() {
@@ -33,7 +32,7 @@ export default {
     }
   },
   methods: {
-    loadFile: function (e) {
+    loadFile: function() {
       const file = inpFile.files[0]
       const allowedTypes = ['image/jpeg', 'image/png', 'image/gif']
       const MAX_SIZE = 200000
@@ -46,8 +45,8 @@ export default {
       } else {
         this.error = true
         this.message = tooLarge
-            ? `Too large Max size is ${MAX_SIZE / 1000}Kb`
-            : 'only images are allowed'
+          ? `Too large Max size is ${MAX_SIZE / 1000}Kb`
+          : 'only images are allowed'
       }
 
       this.url = URL.createObjectURL(this.file)
@@ -75,4 +74,9 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.image-preview {
+  width: 150px;
+  height: auto;
+}
+</style>

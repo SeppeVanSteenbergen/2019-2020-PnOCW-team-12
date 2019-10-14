@@ -111,7 +111,7 @@ module.exports = {
     return 1
   },
 
-   cxvwexitRoom(user_id) {
+   exitRoom(user_id) {
     console.log('start exit room func')
     if (clientList[user_id].room === -1) {
       console.log('Client is not in a room')

@@ -299,6 +299,7 @@ export default {
           facingMode: this.facingUser ? 'user' : 'environment'
         }
       }
+      console.log(constraints)
       let video = this.$refs.video
       console.log(video)
       navigator.mediaDevices
@@ -371,7 +372,7 @@ export default {
       return canvas.toDataURL('image/jpeg')
     },
     switchCamera() {
-      this.facingMode = !this.facingMode
+      this.facingUser = !this.facingUser
       this.startVideo()
     }
   },
