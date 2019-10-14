@@ -11,9 +11,9 @@ class Island {
      * @param {int} y y co
      */
     constructor(x, y) {
-        minx, maxx = x;
+        this.minx, this.maxx = x;
 
-        miny, maxy = y;
+        this.miny, this.maxy = y;
 
     }
 
@@ -36,14 +36,14 @@ class Island {
         console.log("ending co: " + maxx + ", " + maxy);
     }
 
-    get size(){
+    size(){
         return (maxx - minx) * (maxy - miny) / 2;
     }
 
     /**
      * Get the square distance from the given pixel position relative to the center of the island
      */
-    get sqDist(x, y) {
+    sqDist(x, y) {
         var cx = (this.maxx - this.minx) / 2;
         var cy = (this.maxy - this.miny) / 2;
 

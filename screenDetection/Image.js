@@ -4,7 +4,6 @@ class Image {
     canvas;
     colorSpace;
     sensitivity = 30;
-    mask;
     colorSpaces = ["RGBA", "HSLA", "BW"];
 
     corners = new Array();
@@ -28,12 +27,10 @@ class Image {
         let context = this.canvas.getContext("2d");
         context.putImageData(imgData, 0, 0);
 
-        this.mask = new Array(this.pixels.length/4);
-
-        this.islands = [];
-        this.matrix = [];
-        for (let i = 0; i < this.height; i++) {
-            this.matrix[i] = new Array(this.width);
+        this.islands = new Array();
+        this.matrix = new Array(this.getHeight);
+        for (let i = 0; i < this.getHeight(); i++) {
+            this.matrix[i] = new Array(this.getWidth);
         }
     }
 
@@ -99,16 +96,16 @@ class Image {
 
     calcIslands() {
 
-        let tmpIslands = [];
+        var tmpIslands = [];
 
-        for (let j = 0; j < this.height; j++) {
-            for (let i = 0; i < this.width; i++) {
+        for (var j = 0; j < this.getHeight(); j++) {
+            for (var i = 0; i < this.getWidth(); i++) {
                 if (this.isSeperated(i, j)) {
-                    let island = new Island(i, j);
+                    var island = new Island(i, j);
                     tmpIslands.push(island);
                 } else {
-                    let joiningIsland = null;
-                    let d = Infinity;
+                    var joiningIsland = null;
+                    var d = Infinity;
 
                     for (const island in tmpIslands) {
                         if (island instanceof Island) {
@@ -120,7 +117,7 @@ class Image {
                     }
 
                     if (joiningIsland != null) {
-                        joiningIsland.add(i, j);
+                        joiningIsland.push(i, j);
                     }
 
                 }
@@ -139,8 +136,8 @@ class Image {
     }
 
     isSeperated(x, y) {
-        for (let j = y - 1; j < y; j++) {
-            for (let i = 0; i < x + 1; i++) {
+        for (var j = y - 1; j < y; j++) {
+            for (var i = 0; i < x + 1; i++) {
                 if (i != x && j != y) {
                     if (this.matrix[j][i] == 1) {
                         return false;
@@ -151,7 +148,7 @@ class Image {
 
         return true;
     }
-
+    /*
     toBinary() {
         if (this.colorSpace == "RGBA") {
             this.rgbaToHsla();
@@ -166,10 +163,10 @@ class Image {
             }
         }
 
-        console.log("nu in matrix vorm")
+        console.log("nu in matrix vorm");
 
         this.changeColorSpace("BW");
-    }
+    }*/
 
     /**
      * 
@@ -177,7 +174,7 @@ class Image {
      */
     matrixToImgData(context){
 
-        let data = context.createImageData(this.width, this.height);
+        let data = context.createImageData(this.getWidth(), this.getHeight());
 
         
 
@@ -450,19 +447,21 @@ class Image {
             var H = this.pixels[i];
             var S = this.pixels[i + 1];
             var L = this.pixels[i + 2];
-
+            var pixel = this.positionToPixel(i);
+            var x = pixel[0];
+            var y = pixel[1];
             if (this.inGreenRange(H, S, L)) {
                 this.pixels[i+1] = 0;
                 this.pixels[i+2] = 100;
-                this.mask[i/4] = true;
+                this.matrix[y][x] = 1;
             } else if(this.inBlueRange(H, S, L)){
                 this.pixels[i+1] = 0;
                 this.pixels[i+2] = 100;
-                this.mask[i/4] = true;
+                this.matrix[y][x] = 1;
             } else {
                 this.pixels[i + 1] = 0;
                 this.pixels[i + 2] = 0;
-                this.mask[i/4] = false;
+                this.matrix[y][x] = 0;
             }
         }
     }
