@@ -45,7 +45,7 @@ imgElement.onload = function () {
   imageOutConcatenated.hslaToRgba();
   imageOutConcatenated.show();
   imageOutSmoothened.medianBlur(5);
-  var corners = imageOutSmoothened.cornerFilter(imageOutSmoothened.cornerDetection());
+  imageOutSmoothened.cornerDetection();
 
   imageOutSmoothened.hslaToRgba();
   imageOutSmoothened.show();

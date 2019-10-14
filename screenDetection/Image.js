@@ -5,6 +5,7 @@ class Image {
     colorSpace;
     sensitivity = 30;
     mask;
+    corners = new Array();
     lowerBoundG = [120 - this.sensitivity, 50, 25];
     upperBoundG = [120 + this.sensitivity, 100, 75];
     lowerBoundB = [240 - this.sensitivity, 50, 25];
@@ -47,6 +48,16 @@ class Image {
     show() {
         let context = this.canvas.getContext("2d");
         context.putImageData(this.getImgData(), 0, 0);
+        context.fillStyle = "#ff2626";
+        var pointSize = 30;
+        console.log(this.corners.size);
+        for(var i = 0; i < this.corners.size; i++){
+            var x = Math.round(this.corners[i][0]);
+            var y = Math.round(this.corners[i][1]);
+            context.beginPath();-
+            context.arc(x, y, pointSize, 0, Math.PI * 2, true);
+            context.fill();
+        }
     }
 
     /*
@@ -268,15 +279,11 @@ class Image {
                 }
             }
         }
-        return corners;
-        /*
-        var filteredCorners = this.cornerFilter(corners);
-        for(var c = 0; c < filteredCorners.length; c++){
+        this.corners = this.cornerFilter(corners);
+        /*for(var c = 0; c < filteredCorners.length; c++){
             var i = Math.round(this.pixelToPosition(filteredCorners[c]));
-            console.log(i);
             this.makeRed(i);
-        }
-        console.log(filteredCorners.length);*/
+        }*/
     }
 
     cornerFilter(corners){
