@@ -5,6 +5,7 @@ class Image {
     colorSpace;
     sensitivity = 30;
     mask;
+    colorSpaces = ["RGBA", "HSLA", "BW"];
 
     corners = new Array();
 
@@ -44,6 +45,9 @@ class Image {
     }
 
     changeColorSpace(newColorSpace) {
+        if(!this.colorSpaces.includes(newColorSpace)){
+            console.error("colorspace '" + newColorSpace + "' doesn't exist!");
+        }
         this.colorSpace = newColorSpace;
     }
 
@@ -242,7 +246,7 @@ class Image {
         image as Image
         math from: http://www.niwa.nu/2013/05/math-behind-colorspace-conversions-rgb-hsl/
     */
-    hslaToRgba(image) {
+    hslaToRgba() {
         if (this.colorSpace != "HSLA") {
             console.error("Image has to be in HSLA to convert from HSLA to RGBA!");
         }
@@ -399,10 +403,6 @@ class Image {
             }
         }
         this.corners = this.cornerFilter(corners);
-        /*for(var c = 0; c < filteredCorners.length; c++){
-            var i = Math.round(this.pixelToPosition(filteredCorners[c]));
-            this.makeRed(i);
-        }*/
     }
 
     cornerFilter(corners){
@@ -424,8 +424,6 @@ class Image {
         return newCorners;
     }
 
-
-
     getPixel(xPixel, yPixel) {
         if (xPixel < 0) {
             xPixel = 0;
@@ -445,22 +443,19 @@ class Image {
     }
 
     createGreenBlueMask() {
+        if(this.getColorSpace() != "HSLA"){
+            console.error("createGreenBlueMask only with HSLA as colorspace!");
+        }
         for (var i = 0; i < this.pixels.length; i += 4) {
             var H = this.pixels[i];
             var S = this.pixels[i + 1];
             var L = this.pixels[i + 2];
 
             if (this.inGreenRange(H, S, L)) {
-                //this.pixels[i] = 120;
-                //this.pixels[i + 1] = 100;
-                //this.pixels[i + 2] = 50;
                 this.pixels[i+1] = 0;
                 this.pixels[i+2] = 100;
                 this.mask[i/4] = true;
             } else if(this.inBlueRange(H, S, L)){
-                //this.pixels[i] = 240;
-                //this.pixels[i + 1] = 100;
-                //this.pixels[i + 2] = 50;
                 this.pixels[i+1] = 0;
                 this.pixels[i+2] = 100;
                 this.mask[i/4] = true;
