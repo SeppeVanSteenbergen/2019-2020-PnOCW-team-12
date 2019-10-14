@@ -107,7 +107,7 @@ class Image {
                     var joiningIsland = null;
                     var d = Infinity;
 
-                    for (const island in tmpIslands) {
+                    for (const island of tmpIslands) {
                         if (island instanceof Island) {
                             if (island.sqDist(i, j) < d) {
                                 d = island.sqDist(i, j);
@@ -136,15 +136,11 @@ class Image {
     }
 
     isSeperated(x, y) {
-        for (var j = y - 1; j < y; j++) {
-            for (var i = 0; i < x + 1; i++) {
-                if (i != x && j != y) {
-                    if (this.matrix[j][i] == 1) {
-                        return false;
-                    }
-                }
-            }
-        }
+        if(y - 1 < 0 || this.matrix[y - 1][x] == 1)
+            return false;
+        if(x - 1 < 0 || this.matrix[y][x-1] == 1)
+            return false;
+        //eventueel nog schuin checken
 
         return true;
     }
