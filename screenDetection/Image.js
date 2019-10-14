@@ -63,15 +63,6 @@ class Image {
     show() {
         let context = this.canvas.getContext("2d");
         context.putImageData(this.getImgData(), 0, 0);
-        context.fillStyle = "#ff2626";
-        var pointSize = 30;
-        //console.log(this.corners.size);
-        for (var i = 0; i < this.corners.size; i++) {
-            var x = Math.round(this.corners[i][0]);
-            var y = Math.round(this.corners[i][1]);
-            context.beginPath(); -
-                context.arc(x, y, pointSize, 0, Math.PI * 2, true);
-            context.fill();
         }
     }
 
