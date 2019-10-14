@@ -46,11 +46,12 @@ imgElement.onload = function () {
   var imageOutSmoothened = new Image(imageOutConcatenated.getImgData(), "imageOutSmoothened", "HSLA");
 
   imageOutConcatenated.hslaToRgba();
-  imageOutConcatenated.show();
-  //imageOutSmoothened.medianBlur(5);
-  imageOutSmoothened.cornerDetection();
-  imageOutSmoothened.calcIslands();
+  
 
+  imageOutSmoothened.cornerDetection();
+  imageOutConcatenated.medianBlur(7);
+  imageOutConcatenated.calcIslands();
+  imageOutConcatenated.show();
   imageOutSmoothened.hslaToRgba();
   imageOutSmoothened.show();
 };

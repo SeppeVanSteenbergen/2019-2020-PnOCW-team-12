@@ -28,9 +28,9 @@ class Image {
         context.putImageData(imgData, 0, 0);
 
         this.islands = new Array();
-        this.matrix = new Array(this.getHeight);
+        this.matrix = new Array(this.getHeight());
         for (let i = 0; i < this.getHeight(); i++) {
-            this.matrix[i] = new Array(this.getWidth);
+            this.matrix[i] = new Array(this.getWidth());
         }
     }
 
@@ -100,24 +100,22 @@ class Image {
 
         for (var j = 0; j < this.getHeight(); j++) {
             for (var i = 0; i < this.getWidth(); i++) {
-                if (this.isSeperated(i, j)) {
+                if (this.matrix[j][i] == 1 && this.isSeperated(i, j)) {
                     var island = new Island(i, j);
                     tmpIslands.push(island);
                 } else {
                     var joiningIsland = null;
-                    var d = Infinity;
+                    var d = 20;
 
                     for (const island of tmpIslands) {
-                        if (island instanceof Island) {
-                            if (island.sqDist(i, j) < d) {
-                                d = island.sqDist(i, j);
-                                joiningIsland = island;
-                            }
+                        if (island.sqDist(i, j) < d) {
+                            d = island.sqDist(i, j);
+                            joiningIsland = island;
                         }
                     }
 
                     if (joiningIsland != null) {
-                        joiningIsland.push(i, j);
+                        joiningIsland.add(i, j);
                     }
 
                 }
