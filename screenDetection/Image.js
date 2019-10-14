@@ -42,7 +42,7 @@ class Image {
     }
 
     changeColorSpace(newColorSpace) {
-        if(!this.colorSpaces.includes(newColorSpace)){
+        if (!this.colorSpaces.includes(newColorSpace)) {
             console.error("colorspace '" + newColorSpace + "' doesn't exist!");
         }
         this.colorSpace = newColorSpace;
@@ -66,11 +66,11 @@ class Image {
         context.fillStyle = "#ff2626";
         var pointSize = 30;
         console.log(this.corners.size);
-        for(var i = 0; i < this.corners.size; i++){
+        for (var i = 0; i < this.corners.size; i++) {
             var x = Math.round(this.corners[i][0]);
             var y = Math.round(this.corners[i][1]);
-            context.beginPath();-
-            context.arc(x, y, pointSize, 0, Math.PI * 2, true);
+            context.beginPath(); -
+                context.arc(x, y, pointSize, 0, Math.PI * 2, true);
             context.fill();
         }
     }
@@ -134,9 +134,9 @@ class Image {
     }
 
     isSeperated(x, y) {
-        if(y - 1 < 0 || this.matrix[y - 1][x] == 1)
+        if (y - 1 < 0 || this.matrix[y - 1][x] == 1)
             return false;
-        if(x - 1 < 0 || this.matrix[y][x-1] == 1)
+        if (x - 1 < 0 || this.matrix[y][x - 1] == 1)
             return false;
         //eventueel nog schuin checken
 
@@ -151,8 +151,8 @@ class Image {
             return;
         }
 
-        for (let j = 0; j < this.height; j++) {
-            for (let i = 0; i < this.width; i++) {
+        for (let j = 0; j < this.canvas.height; j++) {
+            for (let i = 0; i < this.canvas.width; i++) {
                 this.matrix[j][i] = this.pixels[this.pixelToPosition(i, j) + 2];
             }
         }
@@ -164,14 +164,25 @@ class Image {
 
     /**
      * 
-     * @param {CanvasRenderingContext2D} context ctx om imgdata op te pushen
+     * @param {HTMLCanvasElement} canvas canvas om imgdata op te pushen
      */
-    matrixToImgData(context){
+    matrixToImg(canvas) {
 
         let data = context.createImageData(this.getWidth(), this.getHeight());
 
-        
+        for (let j = 0; j < this.canvas.height; j++) {
+            for (let i = 0; i < this.canvas.width; i++) {
+                let pos = this.positionToPixel(i, j);
+                newData[pos], newData[pos + 1] = 0;
+                newData[pos + 2] = this.matrix[j][i];
+            }
+        }
 
+        let img = new Image(newData, canvas, "HSL");
+
+        img.hslaToRgba();
+
+        return img;
     }
 
     /*
@@ -358,34 +369,34 @@ class Image {
                         LArray.push(pixel[2]);
                     }
                 }
-                LArray.sort(function(a, b){return a-b});
+                LArray.sort(function (a, b) { return a - b });
 
-                var i = this.pixelToPosition([x,y]);
+                var i = this.pixelToPosition([x, y]);
                 var half = Math.floor(LArray.length / 2);
                 this.pixels[i + 2] = LArray[half];
             }
         }
     }
 
-    cornerDetection(){
+    cornerDetection() {
         var nbNeigbours = 2;
         var corners = new Array();
         for (var y = 0; y < this.getHeight(); y++) {
             for (var x = 0; x < this.getWidth(); x++) {
                 var white = 0;
                 var black = 0;
-                if(this.getPixel(x,y)[2] == 100){
+                if (this.getPixel(x, y)[2] == 100) {
                     for (var yBox = -nbNeigbours; yBox <= nbNeigbours; yBox++) {
                         for (var xBox = -nbNeigbours; xBox <= nbNeigbours; xBox++) {
                             var pixel = this.getPixel(x + xBox, y + yBox);
-                            if(pixel[2] == 100){
+                            if (pixel[2] == 100) {
                                 white += 1;
-                            }else if (pixel[2] == 0){
+                            } else if (pixel[2] == 0) {
                                 black += 1;
                             }
                         }
                     }
-                    if(white >= 7 && white <= 12 && black >= 13 && black <= 18){
+                    if (white >= 7 && white <= 12 && black >= 13 && black <= 18) {
                         var i = this.pixelToPosition([x, y]);
                         corners.push([x, y]);
                         //this.makeRed(i);
@@ -396,19 +407,19 @@ class Image {
         this.corners = this.cornerFilter(corners);
     }
 
-    cornerFilter(corners){
+    cornerFilter(corners) {
         var newCorners = new Array();
-        corners.sort(function(a, b){
+        corners.sort(function (a, b) {
             if (a[0] == b[0]) return a[1] - b[1];
             return a[0] - b[0];
         });
-        for(var i = 0; i < corners.length - 1; i++){
-            if(corners[i + 1][0] - corners[i][0] <= 10){
-                if(corners[i + 1][1] - corners[i][1] <= 10){
-                    var newX = (corners[i][0] + corners[i+1][0])/2;
-                    var newY =(corners[i][1] + corners[i+1][1])/2;
+        for (var i = 0; i < corners.length - 1; i++) {
+            if (corners[i + 1][0] - corners[i][0] <= 10) {
+                if (corners[i + 1][1] - corners[i][1] <= 10) {
+                    var newX = (corners[i][0] + corners[i + 1][0]) / 2;
+                    var newY = (corners[i][1] + corners[i + 1][1]) / 2;
                     newCorners.push([newX, newY])
-                    corners[i+1] = [newX, newY];
+                    corners[i + 1] = [newX, newY];
                 }
             }
         }
@@ -434,7 +445,7 @@ class Image {
     }
 
     createGreenBlueMask() {
-        if(this.getColorSpace() != "HSLA"){
+        if (this.getColorSpace() != "HSLA") {
             console.error("createGreenBlueMask only with HSLA as colorspace!");
         }
         for (var i = 0; i < this.pixels.length; i += 4) {
@@ -445,12 +456,12 @@ class Image {
             var x = pixel[0];
             var y = pixel[1];
             if (this.inGreenRange(H, S, L)) {
-                this.pixels[i+1] = 0;
-                this.pixels[i+2] = 100;
+                this.pixels[i + 1] = 0;
+                this.pixels[i + 2] = 100;
                 this.matrix[y][x] = 1;
-            } else if(this.inBlueRange(H, S, L)){
-                this.pixels[i+1] = 0;
-                this.pixels[i+2] = 100;
+            } else if (this.inBlueRange(H, S, L)) {
+                this.pixels[i + 1] = 0;
+                this.pixels[i + 2] = 100;
                 this.matrix[y][x] = 1;
             } else {
                 this.pixels[i + 1] = 0;
@@ -483,19 +494,73 @@ class Image {
         return [x, y];
     }
 
-    pixelToPosition(pixel){
+    pixelToPosition(pixel) {
         return (pixel[1] * this.getWidth() + pixel[0]) * 4;
     }
 
-    makeRed(position){
-        if (this.getColorSpace() == "RGBA"){
+    makeRed(position) {
+        if (this.getColorSpace() == "RGBA") {
             this.pixels[position] = 255;
             this.pixels[++position] = 0;
             this.pixels[++position] = 0;
-        }else if (this.getColorSpace() == "HSLA"){
+        } else if (this.getColorSpace() == "HSLA") {
             this.pixels[position] = 0;
             this.pixels[++position] = 100;
             this.pixels[++position] = 50;
+        }
+    }
+
+    /**
+     * DEBUG METHODS
+     */
+
+     /**
+      * Draw a cross at the given pixel location of the given pixel size
+      * @param {int} x x co
+      * @param {int} y y co
+      * @param {int} size size
+      */
+    drawPoint(x, y, size) {
+        size = Math.round(size);
+
+        //verticale lijn
+        for (let j = y - (size / 2); j < y + (size / 2); j++) {
+            let pos = this.pixelToPosition([x, j]);
+
+            this.pixels[pos] = 255;
+            this.pixels[pos + 1] = 0;
+            this.pixels[pos + 2] = 0;
+        }
+
+        //horizontale lijn
+        for (let i = x - (size / 2); i < x + (size / 2); i++) {
+            let pos = this.pixelToPosition([i, y]);
+
+            this.pixels[pos] = 255;
+            this.pixels[pos + 1] = 0;
+            this.pixels[pos + 2] = 0;
+        }
+    }
+
+    /**
+     * Draw a filled rectangle on top of the image
+     * 
+     * @param {Array} startCorner linkerbovenhoek vector co array
+     * @param {Array} endCorner rechteronderhoek vector co array
+     * @param {float} alpha getal 0..1
+     */
+    drawFillRect(startCorner, endCorner, alpha) {
+
+        alpha = alpha * 255;
+
+        for (let j = startCorner[1]; j < endCorner[1]; j++) {
+            for (let i = startCorner[0]; i < endCorner[0]; i++) {
+                let pos = this.pixelToPosition([i, j]);
+
+                this.pixels[pos] = Math.min(this.pixels[pos] + alpha, 255);
+                this.pixels[pos + 1] = 0;
+                this.pixels[pos + 2] = 0;
+            }
         }
     }
 
