@@ -384,3 +384,12 @@ class Image {
     }
 
 }
+
+/*
+Review by martijn:
+    -Method changeColorspace: maybe make an array with possible colorspaces and check if the given colorspace is one of them.
+        or if we only work with rgba and hsla change it to a boolean maybe.
+    -What's the difference between the method getImgData() and show()?
+    -rgba to hsla method: in first if also check if it isnt already in hsla?
+        same for inverse method
+*/
