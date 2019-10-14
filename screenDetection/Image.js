@@ -63,7 +63,6 @@ class Image {
     show() {
         let context = this.canvas.getContext("2d");
         context.putImageData(this.getImgData(), 0, 0);
-        }
     }
 
     /**
