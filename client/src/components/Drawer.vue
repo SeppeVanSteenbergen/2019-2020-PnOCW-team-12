@@ -28,7 +28,7 @@
       <v-list-item
         v-for="item in items"
         :key="item.title"
-        @click="$router.push(item.link)"
+        @click="goTo(item.link)"
         link
       >
         <v-list-item-icon>
@@ -92,7 +92,14 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['setDrawer', 'toggleDrawer', 'setDarkMode'])
+    ...mapMutations(['setDrawer', 'toggleDrawer', 'setDarkMode']),
+    goTo(link) {
+      try{
+        this.$router.push(link)
+      }catch(e){
+        console.log(e)
+      }
+    }
   },
   watch: {
     darkMode(n) {

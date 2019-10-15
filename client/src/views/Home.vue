@@ -41,10 +41,18 @@ export default {
     master() {
       console.log('master')
       this.$socket.emit('createRoom')
-      this.$router.push({ name: 'master' })
+      try {
+        this.$router.push({ name: 'master' })
+      } catch(e) {
+        console.log(e)
+      }
     },
     client() {
-      this.$router.push({ name: 'client' })
+      try {
+        this.$router.push({ name: 'client' })
+      } catch(e) {
+        console.log(e)
+      }
     }
   }
 }
