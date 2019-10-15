@@ -87,36 +87,29 @@ class Image {
     }
 
     floodfill(x, y){
-        this.matrix[y][x] = 0; //zelf op 0 zetten --> geen 2 maal in zelfde px
+        var stack = [[x,y]];
+        var pixel;
+        var x;
+        var y;
         var minX = x;
         var minY = y;
         var maxX = x;
         var maxY = y;
-        if(this.matrix[y][x - 1] == 1){ //left
-            var left = this.floodfill(x - 1, y);
-            minX = Math.min(left[0], minX);
-            minY = Math.min(left[1], minY);
-            maxX = Math.max(left[2], maxX);
-            maxY = Math.max(left[3], maxY);
-        } if(this.matrix[y][x + 1] == 1){ //right
-            var right = this.floodfill(x + 1, y);
-            minX = Math.min(right[0], minX);
-            minY = Math.min(right[1], minY);
-            maxX = Math.max(right[2], maxX);
-            maxY = Math.max(right[3], maxY);
-        } if(this.matrix[y - 1][x] == 1){ //up
-            var up = this.floodfill(x, y - 1);
-            minX = Math.min(up[0], minX);
-            minY = Math.min(up[1], minY);
-            maxX = Math.max(up[2], maxX);
-            maxY = Math.max(up[3], maxY);
-        } if(this.matrix[y + 1][x] == 1){ //down
-            var down = this.floodfill(x, y + 1);
-            minX = Math.min(down[0], minX);
-            minY = Math.min(down[1], minY);
-            maxX = Math.max(down[2], maxX);
-            maxY = Math.max(down[3], maxY);
+        while(stack.length > 0){
+            pixel = stack.pop();
+            x = pixel[0];
+            y = pixel[1];
+            this.matrix[y][x] = 0;
+            minX = Math.min(minX, x);
+            minY = Math.min(minY, y);
+            maxX = Math.max(maxX, x);
+            maxY = Math.max(maxY, y);
+            if(this.matrix[y][x - 1] == 1) stack.push([x - 1, y]);
+            if(this.matrix[y][x + 1] == 1) stack.push([x + 1, y]);
+            if(this.matrix[y - 1][x] == 1) stack.push([x, y - 1]);
+            if(this.matrix[y + 1][x] == 1) stack.push([x, y + 1]);
         }
+
         return [minX, minY, maxX, maxY];
     }
 
