@@ -3,6 +3,7 @@ class Image {
     pixels;
     canvas;
     colorSpace;
+
     sensitivity = 30;
     colorSpaces = ["RGBA", "HSLA", "BW"];
 
@@ -19,11 +20,9 @@ class Image {
     upperBoundB = [240 + this.sensitivity, 100, 75];
 
     constructor(imgData, canvasName, colorSpace) {
-        this.pixels = imgData.data;
-        this.canvas = document.getElementById(canvasName);
-        this.canvas.width = imgData.width;
-        this.canvas.height = imgData.height;
-        this.changeColorSpace(colorSpace);
+        this.setPixels(imgData.data);
+        this.setCanvas(canvasName, imgData.width, imgData.height);
+        this.setColorSpace(colorSpace);
         let context = this.canvas.getContext("2d");
         context.putImageData(imgData, 0, 0);
 
@@ -41,13 +40,6 @@ class Image {
         return imgData;
     }
 
-    changeColorSpace(newColorSpace) {
-        if (!this.colorSpaces.includes(newColorSpace)) {
-            console.error("colorspace '" + newColorSpace + "' doesn't exist!");
-        }
-        this.colorSpace = newColorSpace;
-    }
-
     getColorSpace() {
         return this.colorSpace;
     }
@@ -58,6 +50,36 @@ class Image {
 
     getWidth() {
         return this.canvas.width;
+    }
+
+    setPixels(pixels) {
+        this.pixels = pixels;
+    }
+
+    setCanvas(canvasName, width, height) {
+        this.canvas = document.getElementById(canvasName);
+        this.canvas.width = width;
+        this.canvas.height = height;
+    }
+
+    setColorSpace(newColorSpace) {
+        if (!this.colorSpaces.includes(newColorSpace)) {
+            console.error("colorspace '" + newColorSpace + "' doesn't exist!");
+        }
+        this.colorSpace = newColorSpace;
+    }
+
+    createPixelMatrix(pixels, width, height) {
+        var pixelMatrix = [];
+        for (var r = 0; r < height; r++) {
+            var row = [];
+            for (var c = 0; c < width; c++) {
+                var i = r * width + c;
+                row.push(pixels.slice(i * 4, i * 4 + 4));
+            }
+            pixelMatrix.push(row);
+        }
+        this.pixelMatrix = pixelMatrix;
     }
 
     show() {
@@ -254,7 +276,7 @@ class Image {
             this.pixels[i + 1] = Math.round(S * 100);
             this.pixels[i + 2] = Math.round(L * 100);
         }
-        this.changeColorSpace("HSLA");
+        this.setColorSpace("HSLA");
     }
 
     findSaturation(min, max, L) {
@@ -332,7 +354,7 @@ class Image {
             this.pixels[i + 1] = Math.round(G * 255);
             this.pixels[i + 2] = Math.round(B * 255);
         }
-        this.changeColorSpace("RGBA");
+        this.setColorSpace("RGBA");
     }
 
     setTemporaryInRange(temp) {
