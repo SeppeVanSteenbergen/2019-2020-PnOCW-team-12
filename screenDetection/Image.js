@@ -10,9 +10,11 @@ class Image {
     corners = new Array();
 
     islands;
-    matrix;
+    tmpIslands = [];
     islandID = 2;
     MIN_ISLAND_SIZE = 0;
+
+    matrix;
 
     lowerBoundG = [120 - this.sensitivity, 50, 25];
     upperBoundG = [120 + this.sensitivity, 100, 75];
@@ -87,11 +89,11 @@ class Image {
         context.putImageData(this.getImgData(), 0, 0);
     }
 
-    calcIslandsFloodfill(){
+    calcIslandsFloodfill() {
         var tmpIslands = new Array();
-        for(var y = 0; y < this.getHeight(); y++){
-            for(var x = 0; x < this.getWidth(); x++){
-                if(this.matrix[y][x] == 1){
+        for (var y = 0; y < this.getHeight(); y++) {
+            for (var x = 0; x < this.getWidth(); x++) {
+                if (this.matrix[y][x] == 1) {
                     var newIslandCoo = this.floodfill(x, y);
                     var newIsland = new Island(newIslandCoo[0], newIslandCoo[1], 8);
                     newIsland.add(newIslandCoo[2], newIslandCoo[3]);
@@ -156,7 +158,8 @@ class Image {
 
     calcIslands() {
 
-        var tmpIslands = [];
+        //even naar global var
+        //var tmpIslands = [];
 
         for (var j = 0; j < this.getHeight(); j++) {
             for (var i = 0; i < this.getWidth(); i++) {
@@ -164,8 +167,8 @@ class Image {
                     if (this.isSeperated(i, j) == 0) {
                         var island = new Island(i, j, this.islandID++);;
                         this.matrix[j][i] = island.id;
-                        tmpIslands.push(island);
-                    } else if (this.isSeperated(i, j) > 1){
+                        this.tmpIslands.push(island);
+                    } else if (this.isSeperated(i, j) > 1) {
                         /*
                         var d = Infinity;
                         for (var s = 0; s < tmpIslands.length; s++) {
@@ -174,22 +177,22 @@ class Image {
                                 var joiningIsland = tmpIslands[s];
                             }
                         }
-                        */ 
-                       
-                        var di = this.isSeperated(i,j);
+                        */
+
+                        var di = this.isSeperated(i, j);
                         this.matrix[j][i] = di;
-                        tmpIslands[di - 2].add(i, j);
+                        this.tmpIslands[di - 2].add(i, j);
 
                     }
                 }
             }
         }
 
-        for (var i = 0; i < tmpIslands.length; i++) {
+        for (var i = 0; i < this.tmpIslands.length; i++) {
             //tmpIslands[i].print();
-            if (tmpIslands[i].size() > this.MIN_ISLAND_SIZE) {
-                this.drawFillRect([tmpIslands[i].minx, tmpIslands[i].miny], [tmpIslands[i].maxx, tmpIslands[i].maxy], 0.3);
-                this.islands.push(tmpIslands[i]);
+            if (this.tmpIslands[i].size() > this.MIN_ISLAND_SIZE) {
+                this.drawFillRect([this.tmpIslands[i].minx, this.tmpIslands[i].miny], [this.tmpIslands[i].maxx, this.tmpIslands[i].maxy], 0.3);
+                this.islands.push(this.tmpIslands[i]);
             }
         }
 
@@ -197,17 +200,41 @@ class Image {
     }
 
     isSeperated(x, y) {
-        if(x - 1 < 0 || y - 1 < 0){
-            return 1;
-        }
-        if (this.matrix[y - 1][x] > 1)
-            return this.matrix[y - 1][x];
-        if (this.matrix[y][x - 1] > 1)
-            return this.matrix[y][x - 1];
-        //eventueel nog schuin checken
+        let result = 0;
 
-        return 0;
+        if (y - 1 >= 0) {
+            let up = this.matrix[y - 1][x];
+            if (up > 1) {
+                //console.log("set up");
+                result = up;
+            }
+        }
+
+        if (x - 1 >= 0) {
+            let left = this.matrix[y][x - 1];
+            if (result > 0) {
+                if (left > 1 && left != result) {
+                    //MERGE dit island met island van bovenste pixel
+                    //console.log("merge island " + left + " into " + result);
+                    this.mergeIslands(left, result);
+                }
+            } else {
+                result = left;
+            }
+        }
+        return result;
     }
+
+    mergeIslands(a, b){
+        for (var j = 0; j < this.getHeight(); j++) {
+            for (var i = 0; i < this.getWidth(); i++) {
+                if(this.matrix[j][i] == a){
+                    this.matrix[j][i] = b;
+                    this.tmpIslands[b - 2].add(i, j);
+                }
+            }}
+    }
+
     /*
     toBinary() {
         if (this.colorSpace == "RGBA") {
