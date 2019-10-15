@@ -23,7 +23,7 @@ class Image {
         this.canvas = document.getElementById(canvasName);
         this.canvas.width = imgData.width;
         this.canvas.height = imgData.height;
-        this.colorSpace = colorSpace;
+        this.colorSpace = this.changeColorSpace(colorSpace);
         let context = this.canvas.getContext("2d");
         context.putImageData(imgData, 0, 0);
 
