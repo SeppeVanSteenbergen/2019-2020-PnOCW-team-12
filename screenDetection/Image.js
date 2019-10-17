@@ -109,15 +109,15 @@ class Image {
                 this.drawFillRect([tmpIslands[i].minx, tmpIslands[i].miny], [tmpIslands[i].maxx, tmpIslands[i].maxy], 0.3);
                 tmpIslands[i].setScreenMatrix(this.matrix);
                 var corners = tmpIslands[i].findScreenCorners();
-                for(var j = 0; j < 4; j++) this.drawPoint(corners[j][0] + tmpIslands[i].minx, corners[j][1]+tmpIslands[i].miny, 10);
+                for (var j = 0; j < 4; j++) this.drawPoint(corners[j][0] + tmpIslands[i].minx, corners[j][1] + tmpIslands[i].miny, 10);
                 console.log(tmpIslands[i].findScreenOrientation());
                 this.islands.push(tmpIslands[i]);
             }
         }
     }
 
-    floodfill(x, y){
-        var stack = [[x,y]];
+    floodfill(x, y) {
+        var stack = [[x, y]];
         var pixel;
         var x;
         var y;
@@ -125,7 +125,7 @@ class Image {
         var minY = y;
         var maxX = x;
         var maxY = y;
-        while(stack.length > 0){
+        while (stack.length > 0) {
             pixel = stack.pop();
             x = pixel[0];
             y = pixel[1];
@@ -134,10 +134,10 @@ class Image {
             minY = Math.min(minY, y);
             maxX = Math.max(maxX, x);
             maxY = Math.max(maxY, y);
-            if(this.workMatrix[y][x - 1] >= 1) stack.push([x - 1, y]);
-            if(this.workMatrix[y][x + 1] >= 1) stack.push([x + 1, y]);
-            if(this.workMatrix[y - 1][x] >= 1) stack.push([x, y - 1]);
-            if(this.workMatrix[y + 1][x] >= 1) stack.push([x, y + 1]);
+            if (this.workMatrix[y][x - 1] >= 1) stack.push([x - 1, y]);
+            if (this.workMatrix[y][x + 1] >= 1) stack.push([x + 1, y]);
+            if (this.workMatrix[y - 1][x] >= 1) stack.push([x, y - 1]);
+            if (this.workMatrix[y + 1][x] >= 1) stack.push([x, y + 1]);
         }
 
         return [minX, minY, maxX, maxY];
@@ -198,6 +198,11 @@ class Image {
             //tmpIslands[i].print();
             if (this.tmpIslands[i].size() > this.MIN_ISLAND_SIZE) {
                 this.drawFillRect([this.tmpIslands[i].minx, this.tmpIslands[i].miny], [this.tmpIslands[i].maxx, this.tmpIslands[i].maxy], 0.3);
+
+                this.tmpIslands[i].setScreenMatrix(this.matrix);
+                var corners = this.tmpIslands[i].findScreenCorners();
+                for (var j = 0; j < 4; j++) this.drawPoint(corners[j][0] + this.tmpIslands[i].minx, corners[j][1] + this.tmpIslands[i].miny, 10);
+
                 this.islands.push(this.tmpIslands[i]);
             }
         }
@@ -231,14 +236,15 @@ class Image {
         return result;
     }
 
-    mergeIslands(a, b){
+    mergeIslands(a, b) {
         for (var j = 0; j < this.getHeight(); j++) {
             for (var i = 0; i < this.getWidth(); i++) {
-                if(this.matrix[j][i] == a){
+                if (this.matrix[j][i] == a) {
                     this.matrix[j][i] = b;
                     this.tmpIslands[b - 2].add(i, j);
                 }
-            }}
+            }
+        }
     }
 
 
@@ -571,7 +577,8 @@ class Image {
                 this.pixels[i + 1] = 0;
                 this.pixels[i + 2] = 0;
                 this.matrix[y][x] = 0;
-                this.workMatrix[y][x] = 0;            }
+                this.workMatrix[y][x] = 0;
+            }
         }
     }
 
@@ -629,10 +636,11 @@ class Image {
             this.hslaToRgba();
             var change = true;
         }
+        
         size = Math.round(size);
 
         //verticale lijn
-        for (let j = y - (size / 2); j < y + (size / 2); j++) {
+        for (let j = y - (size / 2); j <= y + (size / 2); j++) {
             let pos = this.pixelToPosition([x, j]);
 
             this.pixels[pos] = 255;
@@ -641,7 +649,7 @@ class Image {
         }
 
         //horizontale lijn
-        for (let i = x - (size / 2); i < x + (size / 2); i++) {
+        for (let i = x - (size / 2); i <= x + (size / 2); i++) {
             let pos = this.pixelToPosition([i, y]);
 
             this.pixels[pos] = 255;
