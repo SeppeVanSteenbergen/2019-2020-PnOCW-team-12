@@ -7,6 +7,8 @@ class Island {
     id;
     screenMatrix = [];
     corners = [];
+    blue = 2;
+    green = 1;
 
     /**
      * Create and Island starting with this pixel
@@ -92,20 +94,24 @@ class Island {
     }
 
     findScreenOrientation(){
-        let radion = Math.atan((this.corners[0][0] - this.corners[3][0])/(this.corners[3][1] - this.corners[0][1]));
-
-        return radion * 180 / Math.PI;
+        let radian = Math.atan((this.corners[0][0] - this.corners[3][0])/(this.corners[3][1] - this.corners[0][1]));
+        let colorUp = this.findUpColor();
+        let colorLeft = this.findLeftColor();
+        if(colorUp == this.blue && colorLeft == this.green)  radian += Math.PI / 2.0;
+        else if(colorUp == this.green && colorLeft == this.green) radian += Math.PI;
+        else if(colorUp == this.green && colorLeft == this.blue) radian += 3 * Math.PI / 2.0;
+        return radian * 180 / Math.PI;
     }
 
     findUpColor(){
-        let x = (this.corners[1][0]+this.corners[0][0]) / 2; 
-        let y = (this.corners[1][1] + this.corners[0][1])/2;
-        return this.matrix[y][x];
+        let x = Math.round((this.corners[1][0] + this.corners[0][0]) / 2); 
+        let y = Math.round((this.corners[1][1] + this.corners[0][1]) / 2);
+        return this.screenMatrix[y][x];
     }
     findLeftColor(){
-        let x = (this.corners[3][0]+this.corners[0][0]) / 2; 
-        let y = (this.corners[3][1] + this.corners[0][1])/2;
-        return this.matrix[y][x];
+        let x = Math.round((this.corners[3][0] + this.corners[0][0]) / 2); 
+        let y = Math.round((this.corners[3][1] + this.corners[0][1])/2);
+        return this.screenMatrix[y][x];
     }
     
     findScreen(){
