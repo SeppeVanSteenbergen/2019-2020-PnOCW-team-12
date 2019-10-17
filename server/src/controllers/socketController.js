@@ -54,11 +54,11 @@ module.exports = io => {
     })
 
     socket.on('disconnect', () => {
-      try{
+      /*try{
         dataHelper.removeUser(dataHelper.getUserIDFromSocketID(socket.id))
       } catch(e) {
         console.log(e)
-      }
+      }*/
       console.log('client disconnected')
       socketHelper.updateAllRoomLists()
     })
