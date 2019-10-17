@@ -39,12 +39,12 @@ class Island {
         this.maxy = Math.max(y, this.maxy);
     }
 
-    print(){
+    print() {
         console.log("starting co: " + this.minx + ", " + this.miny);
         console.log("ending co: " + this.maxx + ", " + this.maxy);
     }
 
-    size(){
+    size() {
         return (this.maxx - this.minx) * (this.maxy - this.miny);
     }
 
@@ -57,36 +57,37 @@ class Island {
 
         return (cx - x) * (cx - x) + (cy - y) * (cy - y);
     }
-    
-    setScreenMatrix(matrix){
+
+    setScreenMatrix(matrix) {
         this.screenMatrix = matrix.slice(this.miny, this.maxy);
-        for(var i = 0; i < this.maxy - this.miny; i++){
+        for (var i = 0; i < this.maxy - this.miny; i++) {
             this.screenMatrix[i] = this.screenMatrix[i].slice(this.minx, this.maxx);
         }
     }
-    findScreenCorners(){
+
+    findScreenCorners() {
         let x = 0;
         let y = 0;
-        while(this.screenMatrix[0][x] == 0) x++;//bovenhoek
-        if(x >= this.screenMatrix[0].length / 2){
-            while(this.screenMatrix[0][x + 1] >= 1) ++x;
+        while (this.screenMatrix[0][x] != this.id) x++;//bovenhoek
+        if (x >= this.screenMatrix[0].length / 2) {
+            while (this.screenMatrix[0][x + 1] >= 1)++x;
         }
         this.corners.push([x, 0, this.screenMatrix[0][x]]);
         x = this.screenMatrix[0].length - 1;
-        while(this.screenMatrix[y][x] == 0) y++; //rechterhoek
-        if(y >= this.screenMatrix.length / 2){
-            while(this.screenMatrix[y + 1][x] >= 1) ++y;
+        while (this.screenMatrix[y][x] != this.id) y++; //rechterhoek
+        if (y >= this.screenMatrix.length / 2) {
+            while (this.screenMatrix[y + 1][x] >= 1)++y;
         }
         this.corners.push([x, y, this.screenMatrix[y][x]]);
         y = this.screenMatrix.length - 1;
-        while(this.screenMatrix[y][x] == 0) x--; // onderhoek
-        if(x <= this.screenMatrix.length / 2){
-            while(this.screenMatrix[y][x - 1] >= 1) --x;
+        while (this.screenMatrix[y][x] != this.id) x--; // onderhoek
+        if (x <= this.screenMatrix.length / 2) {
+            while (this.screenMatrix[y][x - 1] >= 1)--x;
         }
         this.corners.push([x, y, this.screenMatrix[y][x]]);
-        while(this.screenMatrix[y][0] == 0) y--; //linkerhoek
-        if(y <= this.screenMatrix.length / 2){
-            while(this.screenMatrix[y - 1][0] >= 1) --y;
+        while (this.screenMatrix[y][0] != this.id) y--; //linkerhoek
+        if (y <= this.screenMatrix.length / 2) {
+            while (this.screenMatrix[y - 1][0] >= 1)--y;
         }
         this.corners.push([0, y, this.screenMatrix[y][x]]);
         console.log(this.corners);
@@ -113,8 +114,8 @@ class Island {
         let y = Math.round((this.corners[3][1] + this.corners[0][1])/2);
         return this.screenMatrix[y][x];
     }
-    
-    findScreen(){
+
+    findScreen() {
 
     }
 }
