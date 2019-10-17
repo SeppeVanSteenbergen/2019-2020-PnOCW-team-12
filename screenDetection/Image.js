@@ -11,7 +11,7 @@ class Image {
 
     islands;
     tmpIslands = [];
-    islandID = 1; //jumps per two so we can save green and blue within an island.
+    islandID = 2; //jumps per two so we can save green and blue within an island.
     MIN_ISLAND_SIZE = 1000;
 
     matrix;
@@ -86,7 +86,8 @@ class Image {
             for (let x = 0; x < this.getWidth(); x++) {
                 if (this.workMatrix[y][x] === 1 || this.workMatrix[y][x] === 2) {
                     console.log("new island in the making");
-                    let newIslandCoo = this.floodfill(x, y, this.islandID+2);
+                    let newIslandCoo = this.floodfill(x, y, this.islandID+1);
+                    console.log("floodfill");
                     let newIsland = new Island(newIslandCoo[0], newIslandCoo[1], this.islandID);
                     newIsland.add(newIslandCoo[2], newIslandCoo[3]);
                     tmpIslands.push(newIsland);
