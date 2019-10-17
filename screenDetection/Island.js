@@ -92,7 +92,8 @@ class Island {
     }
 
     findScreenOrientation(){
-        
+        let radion = Math.atan((this.corners[0][0] - this.corners[3][0])/(this.corners[3][1] - this.corners[0][1]));
+        return radion * 180 / Math.PI;
     }
     
     findScreen(){

@@ -5,7 +5,7 @@ inputElement.addEventListener('change', (e) => {
   imgElement.src = URL.createObjectURL(e.target.files[0]);
 }, false);
 imgElement.onload = function () {
-  let maxAmountBorderPx = 4000;
+  let maxAmountBorderPx = 2000;
   if (imgElement.width + imgElement.height > maxAmountBorderPx) { 
     let ratio = imgElement.width / imgElement.height;
     imgElement.height = Math.round(maxAmountBorderPx / (ratio + 1.0));
@@ -23,7 +23,7 @@ imgElement.onload = function () {
   
   var imageTest = new Image(inputImage.getImgData(), "imageOutConcatenated", "HSLA");
   imageTest.createGreenBlueMask();
-  imageTest.medianBlurMatrix(5);
+  imageTest.medianBlurMatrix(3);
   imageTest.calcIslandsFloodfill();
   imageTest.hslaToRgba();
   imageTest.show();

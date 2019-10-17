@@ -110,6 +110,7 @@ class Image {
                 tmpIslands[i].setScreenMatrix(this.matrix);
                 var corners = tmpIslands[i].findScreenCorners();
                 for(var j = 0; j < 4; j++) this.drawPoint(corners[j][0] + tmpIslands[i].minx, corners[j][1]+tmpIslands[i].miny, 10);
+                console.log(tmpIslands[i].findScreenOrientation());
                 this.islands.push(tmpIslands[i]);
             }
         }
