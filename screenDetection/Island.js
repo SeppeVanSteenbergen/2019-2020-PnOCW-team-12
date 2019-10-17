@@ -5,6 +5,7 @@ class Island {
     miny;
     maxy;
     id;
+    screenMatrix = [];
 
     /**
      * Create and Island starting with this pixel
@@ -52,5 +53,45 @@ class Island {
         var cy = (this.maxy - this.miny) / 2;
 
         return (cx - x) * (cx - x) + (cy - y) * (cy - y);
+    }
+    
+    setScreenMatrix(matrix){
+        this.screenMatrix = matrix.slice(this.miny, this.maxy);
+        for(var i = 0; i < this.maxy - this.miny; i++){
+            this.screenMatrix[i] = this.screenMatrix[i].slice(this.minx, this.maxx);
+        }
+    }
+    findScreenCorners(){
+        let corners = [];
+        let x = 0;
+        let y = 0;
+        while(this.screenMatrix[0][x] == 0) x++;//bovenhoek
+        if(x >= this.screenMatrix[0].length / 2){
+            while(this.screenMatrix[0][x] >= 1) ++x;
+        }
+        corners.push([x, 0]);
+        x = this.screenMatrix[0].length - 1;
+        while(this.screenMatrix[y][x] == 0) y++; //rechterhoek
+        if(y >= this.screenMatrix.length / 2){
+            while(this.screenMatrix[y][x] >= 1) ++y;
+        }
+        corners.push([x, y]);
+        y = this.screenMatrix.length - 1;
+        while(this.screenMatrix[y][x] == 0) x--; // onderhoek
+        if(x <= this.screenMatrix.length / 2){
+            while(this.screenMatrix[y][x] >= 1) --x;
+        }
+        corners.push([x, y]);
+        while(this.screenMatrix[y][0] == 0) y--; //linkerhoek
+        if(y <= this.screenMatrix.length / 2){
+            while(this.screenMatrix[y][0] >= 1) --y;
+        }
+        corners.push([0, y]);
+        console.log(corners);
+        return corners;
+    }
+    
+    findScreen(){
+
     }
 }

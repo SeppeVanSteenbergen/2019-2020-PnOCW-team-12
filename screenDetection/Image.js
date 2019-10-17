@@ -7,14 +7,15 @@ class Image {
     sensitivity = 30;
     colorSpaces = ["RGBA", "HSLA", "BW"];
 
-    corners = new Array();
+    corners = [];
 
     islands;
     tmpIslands = [];
     islandID = 2;
-    MIN_ISLAND_SIZE = 0;
+    MIN_ISLAND_SIZE = 1000;
 
     matrix;
+    workMatrix;
 
     lowerBoundG = [120 - this.sensitivity, 50, 25];
     upperBoundG = [120 + this.sensitivity, 100, 75];
@@ -30,8 +31,10 @@ class Image {
 
         this.islands = new Array();
         this.matrix = new Array(this.getHeight());
+        this.workMatrix = new Array(this.getHeight());
         for (let i = 0; i < this.getHeight(); i++) {
             this.matrix[i] = new Array(this.getWidth());
+            this.workMatrix[i] = new Array(this.getWidth());
         }
     }
 
@@ -90,10 +93,10 @@ class Image {
     }
 
     calcIslandsFloodfill() {
-        var tmpIslands = new Array();
+        let tmpIslands = new Array();
         for (var y = 0; y < this.getHeight(); y++) {
             for (var x = 0; x < this.getWidth(); x++) {
-                if (this.matrix[y][x] == 1) {
+                if (this.workMatrix[y][x] >= 1) {
                     var newIslandCoo = this.floodfill(x, y);
                     var newIsland = new Island(newIslandCoo[0], newIslandCoo[1], 8);
                     newIsland.add(newIslandCoo[2], newIslandCoo[3]);
@@ -102,9 +105,11 @@ class Image {
             }
         }
         for (var i = 0; i < tmpIslands.length; i++) {
-            tmpIslands[i].print();
             if (tmpIslands[i].size() > this.MIN_ISLAND_SIZE) {
                 this.drawFillRect([tmpIslands[i].minx, tmpIslands[i].miny], [tmpIslands[i].maxx, tmpIslands[i].maxy], 0.3);
+                tmpIslands[i].setScreenMatrix(this.matrix);
+                var corners = tmpIslands[i].findScreenCorners();
+                for(var j = 0; j < 4; j++) this.drawPoint(corners[j][0] + tmpIslands[i].minx, corners[j][1]+tmpIslands[i].miny, 10);
                 this.islands.push(tmpIslands[i]);
             }
         }
@@ -123,15 +128,15 @@ class Image {
             pixel = stack.pop();
             x = pixel[0];
             y = pixel[1];
-            this.matrix[y][x] = 0;
+            this.workMatrix[y][x] = 0;
             minX = Math.min(minX, x);
             minY = Math.min(minY, y);
             maxX = Math.max(maxX, x);
             maxY = Math.max(maxY, y);
-            if(this.matrix[y][x - 1] == 1) stack.push([x - 1, y]);
-            if(this.matrix[y][x + 1] == 1) stack.push([x + 1, y]);
-            if(this.matrix[y - 1][x] == 1) stack.push([x, y - 1]);
-            if(this.matrix[y + 1][x] == 1) stack.push([x, y + 1]);
+            if(this.workMatrix[y][x - 1] >= 1) stack.push([x - 1, y]);
+            if(this.workMatrix[y][x + 1] >= 1) stack.push([x + 1, y]);
+            if(this.workMatrix[y - 1][x] >= 1) stack.push([x, y - 1]);
+            if(this.workMatrix[y + 1][x] >= 1) stack.push([x, y + 1]);
         }
 
         return [minX, minY, maxX, maxY];
@@ -235,25 +240,6 @@ class Image {
             }}
     }
 
-    /*
-    toBinary() {
-        if (this.colorSpace == "RGBA") {
-            this.rgbaToHsla();
-        }
-        if (this.colorSpace == "BW") {
-            return;
-        }
-
-        for (let j = 0; j < this.canvas.height; j++) {
-            for (let i = 0; i < this.canvas.width; i++) {
-                this.matrix[j][i] = this.pixels[this.pixelToPosition(i, j) + 2];
-            }
-        }
-
-        console.log("nu in matrix vorm");
-
-        this.changeColorSpace("BW");
-    }*/
 
     /**
      * 
@@ -573,15 +559,17 @@ class Image {
                 this.pixels[i + 1] = 0;
                 this.pixels[i + 2] = 100;
                 this.matrix[y][x] = 1;
+                this.workMatrix[y][x] = 1;
             } else if (this.inBlueRange(H, S, L)) {
                 this.pixels[i + 1] = 0;
                 this.pixels[i + 2] = 100;
-                this.matrix[y][x] = 1;
+                this.matrix[y][x] = 2;
+                this.workMatrix[y][x] = 2;
             } else {
                 this.pixels[i + 1] = 0;
                 this.pixels[i + 2] = 0;
                 this.matrix[y][x] = 0;
-            }
+                this.workMatrix[y][x] = 0;            }
         }
     }
 
@@ -635,6 +623,10 @@ class Image {
      * @param {int} size size
      */
     drawPoint(x, y, size) {
+        if (this.getColorSpace() == "HSLA") {
+            this.hslaToRgba();
+            var change = true;
+        }
         size = Math.round(size);
 
         //verticale lijn
@@ -642,7 +634,7 @@ class Image {
             let pos = this.pixelToPosition([x, j]);
 
             this.pixels[pos] = 255;
-            this.pixels[pos + 1] = 0;
+            this.pixels[pos + 1] = 255;
             this.pixels[pos + 2] = 0;
         }
 
@@ -651,8 +643,11 @@ class Image {
             let pos = this.pixelToPosition([i, y]);
 
             this.pixels[pos] = 255;
-            this.pixels[pos + 1] = 0;
+            this.pixels[pos + 1] = 255;
             this.pixels[pos + 2] = 0;
+        }
+        if (change) {
+            this.rgbaToHsla();
         }
     }
 
