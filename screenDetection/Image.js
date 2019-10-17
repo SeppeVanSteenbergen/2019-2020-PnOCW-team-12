@@ -168,7 +168,7 @@ class Image {
 
         for (var j = 0; j < this.getHeight(); j++) {
             for (var i = 0; i < this.getWidth(); i++) {
-                if (this.matrix[j][i] == 1) {
+                if (this.matrix[j][i] >= 1) {
                     if (this.isSeperated(i, j) == 0) {
                         var island = new Island(i, j, this.islandID++);;
                         this.matrix[j][i] = island.id;
@@ -474,6 +474,7 @@ class Image {
                 LArray.sort(function (a, b) { return a - b });
                 var half = Math.floor(LArray.length / 2);
                 this.matrix[y][x] = LArray[half];
+                this.workMatrix[y][x] = LArray[half];
             }
         }
     }
