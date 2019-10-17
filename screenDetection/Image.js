@@ -133,13 +133,14 @@ class Image {
     createScreens(){
         this.screens.length = 0;
         this.calcIslandsFloodfill();
+        console.log("check");
         let newScreen;
         for(let i = 0; i < this.islands.length; i++){
             newScreenthis.islands[i].createScreen();
             this.screens.push(newScreen);
         }
         for(let i = 0; i < this.screens.length; i++){
-            console.log(this.screens[i]).corners, this.screens[i].orientation);
+            console.log(this.screens[i].corners, this.screens[i].orientation);
         }
     }
 
