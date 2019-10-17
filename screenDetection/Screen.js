@@ -2,7 +2,7 @@ class Screen {
     corners;
     orientation;
     constructor(corners, orientation) {
-        this.corners = position;
+        this.corners = corners;
         this.orientation = orientation;
     }
 

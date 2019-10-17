@@ -16,6 +16,7 @@ class Image {
 
     matrix;
     workMatrix;
+    screens = [];
 
     lowerBoundG = [120 - this.sensitivity, 50, 25];
     upperBoundG = [120 + this.sensitivity, 100, 75];
@@ -97,7 +98,6 @@ class Image {
                 tmpIslands[i].setScreenMatrix(this.matrix);
                 let corners = tmpIslands[i].findScreenCorners();
                 for(let j = 0; j < 4; j++) this.drawPoint(corners[j][0] + tmpIslands[i].minx, corners[j][1]+tmpIslands[i].miny, 10);
-                console.log(tmpIslands[i].findScreenOrientation());
                 this.islands.push(tmpIslands[i]);
             }
         }
@@ -128,6 +128,19 @@ class Image {
         }
 
         return [minX, minY, maxX, maxY];
+    }
+
+    createScreens(){
+        this.screens.length = 0;
+        this.calcIslandsFloodfill();
+        let newScreen;
+        for(let i = 0; i < this.islands.length; i++){
+            newScreenthis.islands[i].createScreen();
+            this.screens.push(newScreen);
+        }
+        for(let i = 0; i < this.screens.length; i++){
+            console.log(this.screens[i]).corners, this.screens[i].orientation);
+        }
     }
 
     calcIslands() {
@@ -577,10 +590,6 @@ class Image {
             this.pixels[++position] = 100;
             this.pixels[++position] = 50;
         }
-    }
-
-    findLeftColor() {
-
     }
 
     /**
