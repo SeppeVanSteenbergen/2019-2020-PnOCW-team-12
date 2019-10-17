@@ -26,5 +26,6 @@ imgElement.onload = function () {
   //imageTest.medianBlurMatrix(3);
   imageTest.calcIslandsFloodfill();
   imageTest.hslaToRgba();
+  console.log("about to show");
   imageTest.show();
 };
