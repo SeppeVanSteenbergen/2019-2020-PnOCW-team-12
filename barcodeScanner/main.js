@@ -17,24 +17,24 @@ imgElement.onload = function() {
   inputCanvas.width = imgElement.width;
   inputCanvas.height = imgElement.height;
   inputContext.drawImage(imgElement, 0, 0, imgElement.width, imgElement.height);
-  inputImgData = inputContext.getImageData(0, 0, imgElement.width, imgElement.height);
+  let inputImgData = inputContext.getImageData(0, 0, imgElement.width, imgElement.height);
   // var image = inputImgData.data;
-  var image = rgbaToHsla(inputImgData.data);
+  let image = rgbaToHsla(inputImgData.data);
   scanner(image, inputImgData.width, inputImgData.height, 15);
 };
 
 function scanner(image, width, height, sensitivity) {
   //Always searching on the middle line
-  searchHeight = Math.round(height / 2);
-  scanned  = Array();
+  let searchHeight = Math.round(height / 2);
+  let scanned  = Array();
 
-  for (var i = (searchHeight - 1) * width * 4; i < searchHeight * width  * 4; i += 4) {
+  for (let i = (searchHeight - 1) * width * 4; i < searchHeight * width  * 4; i += 4) {
     // Hue color values + code: 180/1;288/2;336/3;24/4;72/5
-    var H = image[i];
-    var S = image[i + 1];
-    var L = image[i + 2];
+    let H = image[i];
+    let S = image[i + 1];
+    let L = image[i + 2];
 
-    // console.log(H, S, L);
+    console.log(H, S, L);
 
     if (H<180+sensitivity && H>180-sensitivity && !scanned.includes(1)){
       scanned.push(1)
@@ -60,29 +60,32 @@ function scanner(image, width, height, sensitivity) {
   console.log(scanned)
 
 }
-function rgbaToHsla(image) {
 
+function rgbaToHsla(image) {
   for (let i = 0; i < image.length; i += 4) {
     //convert rgb spectrum to 0-1
-    let red = image[i] / 255;
-    let green = image[i + 1] / 255;
-    let blue = image[i + 2] / 255;
+    let red = image[i] / 255.0;
+    let green = image[i + 1] / 255.0;
+    let blue = image[i + 2] / 255.0;
+
     let min = Math.min(red, green, blue);
     let max = Math.max(red, green, blue);
     let L = (min + max) / 2;
-    image[i] = this.findHue(red, green, blue, max, min);
+    let H = this.findHue(red, green, blue, max, min);
+    image[i] = H < 0 ? H + 360 : H;
     image[i + 1] = this.findSaturation(min, max, L)*100;
     image[i + 2] = L*100;
   }
   return image
 }
+
 function findHue(red, green, blue, max, min) {
   let hue = 0;
   if (max === min) {
     return 0;
   }
   else if (red === max) {
-    hue = ((green - blue) / (max - min))%6;
+    hue = (green - blue) / (max - min);
   }
   else if (green === max) {
     hue = 2.0 + (blue - red) / (max - min);
@@ -90,8 +93,10 @@ function findHue(red, green, blue, max, min) {
   else if (blue === max) {
     hue = 4.0 + (red - green) / (max - min);
   }
+
   return hue*60;
 }
+
 function findSaturation(min, max, L) {
   if (max-min === 0) {
     return 0;
@@ -99,6 +104,7 @@ function findSaturation(min, max, L) {
     return (max - min) / (1.0 - Math.abs(2*L-1.0));
   }
 }
+
 
 
 //old
