@@ -115,7 +115,13 @@ class Island {
         return this.screenMatrix[y][x];
     }
 
-    findScreen() {
-
+    createScreen() {
+        let corners = this.findScreenCorners();
+        for(let i =  0; i < corners.length; i++){
+            corners[i][0] += this.minx;
+            corners[i][1] += this.miny;
+        }
+        let orientation = this.findScreenOrientation();
+        return new Screen(corners, orientation);
     }
 }
