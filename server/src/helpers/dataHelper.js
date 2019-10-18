@@ -287,5 +287,20 @@ module.exports = {
       }
     }
     return false
+  },
+  isRegisteredSocket(socket_id) {
+    for(let user_id in clientList) {
+      if(clientList[user_id].socket_id === socket_id) {
+        return true
+      }
+    }
+    return false
+  },
+  disableSocket(user_id) {
+    if(typeof clientList[user_id] !== 'undefined') {
+      clientList[user_id].socket_id = -1
+      return 0
+    }
+    return 1
   }
 }

@@ -40,10 +40,20 @@ roomList = {}
 registrationList = []
 
 module.exports = io => {
+
   io.on('connect', socket => {
     console.log('client connected')
 
     socketHelper.updateAllRoomLists()
+
+    socket.use((packet, next) => {
+      if(packet[0] !== 'registerUserSocket' && !dataHelper.isRegisteredSocket(socket.id)) {
+        console.log('socket not registered')
+        next(new Error('socket not registered'))
+      } else {
+        next()
+      }
+    })
 
     io.compress(true).emit('data', {
       message: 'welcome to the server'
@@ -76,8 +86,9 @@ module.exports = io => {
         socketHelper.sendErrorMessageToSocket(socket.id, 'Failed to register socket')
       }*/
       if(dataHelper.registerUserSocket(data.user_id, socket.id)) {
-        dataHelper.removeUser(data.user_id)
-        socketHelper.disconnectSocket(socket.id)
+       // dataHelper.removeUser(data.user_id)
+        dataHelper.disableSocket(data.user_id)
+        // socketHelper.disconnectSocket(socket.id)
         dataHelper.registerUserSocket(data.user_id, socket.id)
       }
     })
