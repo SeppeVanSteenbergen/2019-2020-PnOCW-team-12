@@ -16,21 +16,28 @@ var images = [
 var orientation = [0, 6];
 var size = [7, 8];
 
-var img;
 
-for(let i = 0; i < images.length; i++){
-    img = document.createElement('img');
-    //img.addEventListener('load', imgLoadHandler);
-    img.src = "Images/" + images[i][0];
-    images[i] = img;
-}
+
+loadImagesInList();
+//  var testImage = createImage(images[0]);
+
 
 console.log(images);
 
+function loadImagesInList(){
+    let img;
+    for(let i = 0; i < images.length; i++){
+        img = document.createElement('img');
+        //img.addEventListener('load', imgLoadHandler);
+        img.src = "Images/" , images[i];
+        images[i] = img;
+    }
+}
 
 function createImage(image){
     let canvas = document.createElement('canvas');
     let context = canvas.getContext('2d');
+    context.clearRect(0, 0, image.width, image.height);
     canvas.width = image.width;
     canvas.height = image.height;
     context.drawImage(image, 0, 0, image.width, image.height);
