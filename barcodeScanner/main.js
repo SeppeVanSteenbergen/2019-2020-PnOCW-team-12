@@ -26,7 +26,7 @@ imgElement.onload = function() {
 function scanner(image, width, height, sensitivity) {
   //Always searching on the middle line
   let searchHeight = Math.round(height / 2);
-  let scanned  = Array();
+  let scanned  = [];
 
   for (let i = (searchHeight - 1) * width * 4; i < searchHeight * width  * 4; i += 4) {
     // Hue color values + code: 24/1; 72/2; 180/3; 288/4; 336/5
@@ -34,19 +34,20 @@ function scanner(image, width, height, sensitivity) {
     let S = image[i + 1];
     let L = image[i + 2];
 
-    if (L > 100 - sensitivity && scanned.length === 5) {
-      return scanned;
-    }
-
-    if (H > 24 - sensitivity && H < 24 + sensitivity && !scanned.includes(1)) {
+    if (L > 100 - sensitivity) {
+      if (scanned.length === 5) {
+        return scanned;
+      }
+      scanned = [];
+    } else if (H > 24 - sensitivity && H < 24 + sensitivity && S > 50 && !scanned.includes(1)) {
       scanned.push(1)
-    } else if (H > 72 - sensitivity && H < 72 + sensitivity && !scanned.includes(2)) {
+    } else if (H > 72 - sensitivity && H < 72 + sensitivity && S > 50 && !scanned.includes(2)) {
       scanned.push(2)
-    } else if (H > 180 - sensitivity && H < 180 + sensitivity && !scanned.includes(3)) {
+    } else if (H > 180 - sensitivity && H < 180 + sensitivity && S > 50 && !scanned.includes(3)) {
       scanned.push(3)
-    } else if (H > 288 - sensitivity && H < 288 + sensitivity && !scanned.includes(4)) {
+    } else if (H > 288 - sensitivity && H < 288 + sensitivity && S > 50 && !scanned.includes(4)) {
       scanned.push(4)
-    } else if (H > 336 - sensitivity && H < 336 + sensitivity && !scanned.includes(5)) {
+    } else if (H > 336 - sensitivity && H < 336 + sensitivity && S > 50 && !scanned.includes(5)) {
       scanned.push(5)
     }
   }
