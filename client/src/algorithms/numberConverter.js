@@ -54,7 +54,7 @@ module.exports = class PermutationConverter {
     for (let i = 0; i < permutable.length; i++) {
       this.moveElementInArray(permutable, i + parseInt(factoradicList[i]), i)
     }
-    return parseInt(permutable.toString().replace(/,/g, ''))
+    return permutable.toString().replace(/,/g, '')
   }
 
   static moveElementInArray(array, startIndex, endIndex) {
