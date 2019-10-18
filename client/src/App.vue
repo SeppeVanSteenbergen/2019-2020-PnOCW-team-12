@@ -51,7 +51,8 @@ export default {
   name: 'App',
   data() {
     return {
-      socketMessage: ''
+      socketMessage: '',
+      loggingIn: true
     }
   },
   components: {
@@ -72,7 +73,7 @@ export default {
   },
   sockets: {
     connect: async function() {
-      if (this.$store.state.userLoggedIn) {
+      if (this.$store.state.userLoggedIn && !this.loggingIn) {
         /*let resp = await this.$auth.getSocketRegistrationKey()
         if (resp.success) {
           this.$socket.emit('registerUserSocket', {
@@ -99,7 +100,11 @@ export default {
       this.socketMessage = data.message
     },
     disconnect: function() {
-      this.$router.push('/')
+      try{
+        this.$router.push('/')
+      } catch(e) {
+        console.log(e)
+      }
     }
   },
   computed: {
@@ -118,19 +123,25 @@ export default {
     }
   },
   async mounted() {
+    this.loggingIn = true
     await this.$auth.sessionLogin()
     if (this.$store.state.userLoggedIn)
       this.$socket.emit('registerUserSocket', {
         user_id: this.$store.state.user.uuid
       })
 
-    if (this.getRole().role === 1) {
-      this.$router.push('/master')
-    } else if (this.getRole().role === 0) {
-      this.$router.push('/client')
-    } else {
-      this.$router.push('/')
+    try {
+      if (this.getRole().role === 1) {
+        this.$router.push('/master')
+      } else if (this.getRole().role === 0) {
+        this.$router.push('/client')
+      } else {
+        this.$router.push('/')
+      }
+    } catch(e) {
+      console.log(e)
     }
+    this.loggingIn = false
   }
 }
 </script>
