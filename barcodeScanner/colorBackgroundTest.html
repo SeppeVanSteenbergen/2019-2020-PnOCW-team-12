@@ -1,16 +1,12 @@
+<!DOCTYPE html>
 <html>
-
 <head>
-
+<meta charset="utf-8">
+<title>Color Background</title>
 </head>
-
-
 <body>
-
 <canvas id="canv">
 </canvas>
-
-
 </body>
 
 <footer>
@@ -18,7 +14,7 @@
 	const values = ['#f60', '#cf0', '#0ff', '#c0f', '#f06']
 	const w = screen.width
 	const h = screen.height
-	const borderWidth = w*0.05
+	const borderWidth = w * 0.05
 
 var c = document.getElementById("canv");
 c.width = w;
@@ -36,26 +32,18 @@ ctx.rect(0, h - borderWidth, w, h);
 ctx.fill();
 
 
-    /**
-	 * Draws the stripe code to identify the screen
-     * @param code
-	 * 		  5-digit number with numbers 1 to 5, as string or integer
-     */
-    function barcode(code){
-  	code = code.toString().split('').map(val => parseInt(val-1))
-
-	console.log(values[code[0]]);
-
-	for (let i = 1 ;  i < 18; i += 6){
-
-		for(let j = 0; j < 5; j++) {
+function barcode(code, width) {
+    code = code.toString().split('').map(val => parseInt(val-1))
+    amountOfIterations = Math.floor((w - 2 * borderWidth) / (6 * width));
+    
+    for (var i = 0;  i < amountOfIterations * 6; i += 6) {
+        for(var j = 0; j < 5; j++) {
           ctx.beginPath();
           ctx.fillStyle = values[code[j]];
-          ctx.rect(borderWidth*(i+j), borderWidth, borderWidth, h-2*borderWidth);
+          ctx.rect(borderWidth + width * (i + j), borderWidth, width, h - 2 * borderWidth);
           ctx.fill();
-		}
-	}
-
+        }
+    }
 }
 
 </script>
@@ -76,8 +64,5 @@ html, body {
 }
 	</style>
 	</footer>
-
-
-
 
 </html>
