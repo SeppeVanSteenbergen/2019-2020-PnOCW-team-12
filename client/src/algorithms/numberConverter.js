@@ -1,9 +1,8 @@
-const factLen = 5 // Length of factoradic  (5 allows to encode 120 states)
 
 module.exports = class PermutationConverter {
 
 
-  // Permutable is a string with numbers 0 to 4
+  // Permutable is a string with numbers 1 to 5
 
   // logic http://keithschwarz.com/interesting/code/?dir=factoradic-permutation
 
@@ -11,16 +10,36 @@ module.exports = class PermutationConverter {
 
   // factoradic and permutation must be a string of numbers  -> 0 can't go in front of int
 
-
+  /**
+   * Encode a number to a permuted array number
+   * @param num
+   *        int will always be transformed to modulo 120
+   * @returns number
+   *          A number representing a permuted array
+   */
   static encode(num) {
     let fact = this.numberToFactoradic(num)
-    let perm = this.factoradicToPermutation(fact)
-    return perm
+    return this.factoradicToPermutation(fact)
   }
+
+  /**
+   * Decodes a permuted number to a value
+   * @param permutable
+   *        The numbers 1-5 that are permuted
+   * @returns number
+   *          The value representing the given permutation
+   */
   static decode(permutable) {
     let fact = this.permutationToFactoradic(permutable)
-    let num = this.factoradicToNumber(fact)
-    return num
+    return this.factoradicToNumber(fact)
+  }
+
+  static factoradicLength () {
+    return 5
+  }
+
+  static permutableList() {
+    return [1, 2, 3, 4, 5]
   }
 
 
@@ -39,7 +58,7 @@ module.exports = class PermutationConverter {
   static numberToFactoradic(num) {
     let factoradicList = []
 
-    for (let i = factLen; i > 0; i--) {
+    for (let i = this.factoradicLength(); i > 0; i--) {
       factoradicList.push(num % i)
       num = Math.floor(num / i)
     }
@@ -49,12 +68,12 @@ module.exports = class PermutationConverter {
   }
 
   static factoradicToPermutation(fact) {
-    let permutable = [0, 1, 2, 3, 4]
+    let permutable = this.permutableList()
     let factoradicList = fact.toString().split('')
     for (let i = 0; i < permutable.length; i++) {
       this.moveElementInArray(permutable, i + parseInt(factoradicList[i]), i)
     }
-    return permutable.toString().replace(/,/g, '')
+    return parseInt(permutable.toString().replace(/,/g, ''))
   }
 
   static moveElementInArray(array, startIndex, endIndex) {
