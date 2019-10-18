@@ -15,6 +15,7 @@
 
 <footer>
 <script>
+	const values = {1:'#f60', 2:'#cf0', 3:'#0ff', 4:'#c0f', 5:'#f06'}
 	const w = screen.width
 	const h = screen.height
 	const borderWidth = w*0.05
@@ -35,33 +36,35 @@ ctx.rect(0, h - borderWidth, w, h);
 ctx.fill();
 
 function barcode(code){
+	console.log(values[parseInt(code[0])]);
 
 	for (var i = 1 ;  i < 18; i += 6){
 
+
 		ctx.beginPath();
-		ctx.fillStyle = '#0ff';
-		ctx.rect(borderWidth*(i+parseInt(code[0])-1), borderWidth, borderWidth, h-2*borderWidth);
+		ctx.fillStyle = values[parseInt(code[0])];
+		ctx.rect(borderWidth*(i), borderWidth, borderWidth, h-2*borderWidth);
 		ctx.fill();
 		ctx.beginPath();
-		ctx.fillStyle = '#c0f';
-		ctx.rect(borderWidth*(i+parseInt(code[1])-1), borderWidth, borderWidth, h-2*borderWidth);
+		ctx.fillStyle = values[parseInt(code[1])];
+		ctx.rect(borderWidth*(i+1), borderWidth, borderWidth, h-2*borderWidth);
 		ctx.fill();
 		ctx.beginPath();
-		ctx.fillStyle = '#f06';
-		ctx.rect(borderWidth*(i+parseInt(code[2])-1), borderWidth, borderWidth, h-2*borderWidth);
+		ctx.fillStyle = values[parseInt(code[2])];
+		ctx.rect(borderWidth*(i+2), borderWidth, borderWidth, h-2*borderWidth);
 		ctx.fill();
 		ctx.beginPath();
-		ctx.fillStyle = '#f60';
-		ctx.rect(borderWidth*(i+parseInt(code[3])-1), borderWidth, borderWidth, h-2*borderWidth);
+		ctx.fillStyle = values[parseInt(code[3])];
+		ctx.rect(borderWidth*(i+3), borderWidth, borderWidth, h-2*borderWidth);
 		ctx.fill();
 		ctx.beginPath();
-		ctx.fillStyle = '#cf0';
-		ctx.rect(borderWidth*(i+parseInt(code[4])-1), borderWidth, borderWidth, h-2*borderWidth);
+		ctx.fillStyle = values[parseInt(code[4])];
+		ctx.rect(borderWidth*(i+4), borderWidth, borderWidth, h-2*borderWidth);
 		ctx.fill();
+
 	}
 
 }
-
 
 </script>
 <style>
