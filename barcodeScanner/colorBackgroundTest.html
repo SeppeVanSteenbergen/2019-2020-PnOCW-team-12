@@ -11,40 +11,82 @@
 
 <footer>
 <script>
-	const values = ['#f60', '#cf0', '#0ff', '#c0f', '#f06']
-	const w = screen.width
-	const h = screen.height
-	const borderWidth = w * 0.05
 
-var c = document.getElementById("canv");
-c.width = w;
-c.height = h;
-var ctx = c.getContext("2d");
-ctx.beginPath();
-ctx.fillStyle = '#0000ff';
-ctx.rect(0, 0, w, borderWidth);
-ctx.rect(0, 0, borderWidth, h - borderWidth);
-ctx.fill();
-ctx.beginPath();
-ctx.fillStyle = '#00ff00'
-ctx.rect(w - borderWidth, borderWidth, w, h);
-ctx.rect(0, h - borderWidth, w, h);
-ctx.fill();
+	class DetectionDrawer {
+	  constructor(canvas, screen, borderWidth) {
+	    this.w = screen.width
+		this.h = screen.height
+		this.borderWidth = borderWidth
+		this.c1 = '#0000ff'
+		this.c2 = '#00ff00'
+		this.canvas = canvas
+		this.barcodeColorValues = ['#f60', '#cf0', '#0ff', '#c0f', '#f06']
+	  }
+
+	  drawBorder() {
+        this.canvas.width = this.w;
+        this.canvas.height = this.h;
+        let ctx = this.canvas.getContext("2d");
+        ctx.beginPath();
+        ctx.fillStyle = this.c1;
+        ctx.rect(0, 0, this.w, this.borderWidth);
+        ctx.rect(0, 0, this.borderWidth, this.h - this.borderWidth);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.fillStyle = this.c2
+        ctx.rect(this.w - this.borderWidth, this.borderWidth, this.w, this.h);
+        ctx.rect(0, this.h - this.borderWidth, this.w, this.h);
+        ctx.fill();
+	  }
+
+      clearBarcode() {
+        const ctx = this.canvas.getContext('2d')
+		ctx.fillStyle = '#ffffff'
+		ctx.fillRect(this.borderWidth, this.borderWidth, this.w - 2*this.borderWidth, this.h - 2*this.borderWidth)
+	  }
+
+	  barcode(code, sections) {
+	    this.clearBarcode()
+
+	    const ctx = this.canvas.getContext('2d')
+        code = code.toString().split('').map(val => parseInt(val - 1))
+
+		const netWidth = this.w - 2*this.borderWidth
+
+		const barWidth = netWidth / sections / 6
 
 
-function barcode(code, width) {
-    code = code.toString().split('').map(val => parseInt(val-1))
-    amountOfIterations = Math.floor((w - 2 * borderWidth) / (6 * width));
-    
-    for (var i = 0;  i < amountOfIterations * 6; i += 6) {
-        for(var j = 0; j < 5; j++) {
-          ctx.beginPath();
-          ctx.fillStyle = values[code[j]];
-          ctx.rect(borderWidth + width * (i + j), borderWidth, width, h - 2 * borderWidth);
-          ctx.fill();
+        //const amountOfIterations = Math.floor((this.w - 2 * this.borderWidth) / (6 * width))
+
+        for (let i = 0; i < sections * 6; i += 6) {
+          for (let j = 0; j < 5; j++) {
+            ctx.beginPath();
+            ctx.fillStyle = this.barcodeColorValues[code[j]];
+            ctx.rect(this.borderWidth + barWidth * (i + j), this.borderWidth, barWidth, this.h - 2 * this.borderWidth)
+            ctx.fill();
+          }
         }
-    }
-}
+        return barWidth
+      }
+
+
+	}
+
+    const borderWidth = screen.width * 0.05
+    const c = document.getElementById("canv")
+
+	let drawer = new DetectionDrawer(c, screen, borderWidth)
+	drawer.drawBorder()
+
+	// for console use
+	let barcode = (code,sections) => drawer.barcode(code,sections)
+
+
+
+
+
+
+
 
 </script>
 <style>
