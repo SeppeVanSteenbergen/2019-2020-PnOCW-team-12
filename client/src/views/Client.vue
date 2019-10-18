@@ -90,6 +90,9 @@ export default {
         case 'display-image':
           this.drawImageHandler(message.data)
           break
+        case 'display-detection-screen':
+          this.displayDetectionScreenHandler(message.data)
+          break
         default:
           console.log('command not supported')
           break
@@ -101,6 +104,11 @@ export default {
       console.log('given command:')
       console.log(data.command)
       this.runFloodScreenCommandList(data.command, 0)
+    },
+    displayDetectionScreenHandler(data) {
+      const id = data.id
+
+      //TODO add the barcode displayer
     },
     runFloodScreenCommandList(list, startIndex) {
       for (let i = startIndex; i < list.length; i++) {
