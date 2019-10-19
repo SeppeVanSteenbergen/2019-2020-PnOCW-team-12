@@ -7,4 +7,4 @@ client/node_modules
 server/node_modules
 client/dist
 server/sessions
-server/package-lock.json
+screenDetection/Testing/node_modules
