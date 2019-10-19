@@ -54,15 +54,13 @@
 		const netWidth = this.w - 2*this.borderWidth
 
 		const barWidth = netWidth / sections / 6
-
-
         //const amountOfIterations = Math.floor((this.w - 2 * this.borderWidth) / (6 * width))
 
         for (let i = 0; i < sections * 6; i += 6) {
           for (let j = 0; j < 5; j++) {
             ctx.beginPath();
             ctx.fillStyle = this.barcodeColorValues[code[j]];
-            ctx.rect(this.borderWidth + barWidth * (i + j), this.borderWidth, barWidth, this.h - 2 * this.borderWidth)
+            ctx.rect(this.borderWidth + barWidth * (i + j), this.borderWidth, barWidth, this.h - 2*this.borderWidth)
             ctx.fill();
           }
         }
@@ -72,7 +70,7 @@
 
 	}
 
-    const borderWidth = screen.width * 0.05
+    const borderWidth = screen.width * 0.02
     const c = document.getElementById("canv")
 
 	let drawer = new DetectionDrawer(c, screen, borderWidth)
@@ -80,13 +78,6 @@
 
 	// for console use
 	let barcode = (code,sections) => drawer.barcode(code,sections)
-
-
-
-
-
-
-
 
 </script>
 <style>
