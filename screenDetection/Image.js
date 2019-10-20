@@ -136,7 +136,7 @@ class Image {
         console.log("check");
         let newScreen;
         for(let i = 0; i < this.islands.length; i++){
-            newScreenthis.islands[i].createScreen();
+            newScreen = this.islands[i].createScreen();
             this.screens.push(newScreen);
         }
         for(let i = 0; i < this.screens.length; i++){
