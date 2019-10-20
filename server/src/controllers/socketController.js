@@ -1,6 +1,8 @@
 const dataHelper = require('../helpers/dataHelper')
 const socketHelper = require('../helpers/socketHelper')
 
+// TODO Datastructure problem: Need to give an integer id to a client in a room
+
 /*
 
 the connected clients have a format
@@ -9,7 +11,11 @@ key: user_id
 	socket_id:
 	room:  (-1 not in room, >= 0 in a room)
 	(connected: (possible to know if socket_id exists))
-	disconnect_time: (time/date when the client was last connected, -1 if still connected, time/date if disconnected)
+	disconnect_time: (time/date when the client was last connected, -1 if still connected, time/date if disconnected),
+	screen_size: {
+	                width: (screen width in pixels)
+	                height: (screen height in pixels)
+	              }
 }
 */
 clientList = {}
@@ -21,7 +27,7 @@ key: room_id
 value:
 {
 	master: (user_id of master)
-	clients:[] (user_id list of all clients of rooom)
+	clients:[] (user_id list of all clients of room)
 	name: (name of the room)
 	open: (true if open room, false if closed room)
 }
@@ -40,14 +46,16 @@ roomList = {}
 registrationList = []
 
 module.exports = io => {
-
   io.on('connect', socket => {
     console.log('client connected')
 
     socketHelper.updateAllRoomLists()
 
     socket.use((packet, next) => {
-      if(packet[0] !== 'registerUserSocket' && !dataHelper.isRegisteredSocket(socket.id)) {
+      if (
+        packet[0] !== 'registerUserSocket' &&
+        !dataHelper.isRegisteredSocket(socket.id)
+      ) {
         console.log('socket not registered')
         next(new Error('socket not registered'))
       } else {
@@ -85,8 +93,8 @@ module.exports = io => {
         console.log('failed registration')
         socketHelper.sendErrorMessageToSocket(socket.id, 'Failed to register socket')
       }*/
-      if(dataHelper.registerUserSocket(data.user_id, socket.id)) {
-       // dataHelper.removeUser(data.user_id)
+      if (dataHelper.registerUserSocket(data.user_id, socket.id)) {
+        // dataHelper.removeUser(data.user_id)
         dataHelper.disableSocket(data.user_id)
         // socketHelper.disconnectSocket(socket.id)
         dataHelper.registerUserSocket(data.user_id, socket.id)
@@ -108,7 +116,7 @@ module.exports = io => {
       console.log('exiting room')
       try {
         dataHelper.exitRoom(dataHelper.getUserIDFromSocketID(socket.id))
-      } catch(e) {
+      } catch (e) {
         console.log(e)
       }
 

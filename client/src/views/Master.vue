@@ -59,7 +59,7 @@
           style="height:100%"
           touchless
         >
-          <v-tabs-slider></v-tabs-slider>
+          <!--<v-tabs-slider></v-tabs-slider>-->
           <v-tab v-for="i in tabs" :key="tabs.indexOf(i)" vertical>
             {{ i.title }}
           </v-tab>
@@ -200,6 +200,7 @@
           <br />
           <v-btn @click="startVideo">start video</v-btn>
           <v-btn @click="switchCamera">switch camera</v-btn>
+          <v-btn @click="executeDisplayDetectionScreens">display detection screen</v-btn>
           <canvas ref="canv"></canvas>
         </v-card-text>
         <br />
@@ -343,6 +344,17 @@ export default {
       }
       console.log('executing countdown')
       console.log(object)
+
+      this.$socket.emit('screenCommand', object)
+    },
+    executeDisplayDetectionScreens() {
+      let object = {
+        payload: {
+          type: 'display-detection-screen',
+          data: ''
+        },
+        to: 'all'
+      }
 
       this.$socket.emit('screenCommand', object)
     },

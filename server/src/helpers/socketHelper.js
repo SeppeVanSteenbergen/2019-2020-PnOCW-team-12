@@ -68,8 +68,21 @@ module.exports = {
 		}
 	}
 
+	displayDetectionScreen
+	{
+	  type: 'display-detection-screen',
+	  data: {
+	    id: 4    (positive integer between 0 and 119
+    }
+  }
 
-
+   displayImage
+   {
+      type: 'display-image'
+      data: {
+        image: (image in base64 encoded string)
+        }
+    }
 	*/
 
   // TODO check for message integrity
@@ -121,8 +134,8 @@ module.exports = {
     console.log('CLIENTS IN ROOM')
     console.log(clientList)
 
-    for (let client_id in clientList) {
-      this.sendDataByUserID(name, data, clientList[client_id])
+    for (let i in clientList) {
+      this.sendDataByUserID(name, data, clientList[i])
     }
   },
   sendSuccessMessageToSocket(socket_id, message) {

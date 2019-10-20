@@ -50,6 +50,10 @@
   </v-container>
 </template>
 <script>
+import ScreenCodeDrawer from '../algorithms/screenCodeDrawer'
+
+import NumberConverter from '../algorithms/numberConverter'
+
 export default {
   name: 'client',
   data() {
@@ -106,9 +110,20 @@ export default {
       this.runFloodScreenCommandList(data.command, 0)
     },
     displayDetectionScreenHandler(data) {
-      const id = data.id
+      const id = this.$store.getters.getRole.client_id
+
+      let factor = 0.05
+      const borderWidth =
+        screen.width > screen.height
+          ? screen.width * factor
+          : screen.height * factor
 
       //TODO add the barcode displayer
+      let drawer = new ScreenCodeDrawer(this.canvas, screen, borderWidth)
+
+      drawer.drawBorder()
+
+      drawer.barcode(NumberConverter.encode(id), 6)
     },
     runFloodScreenCommandList(list, startIndex) {
       for (let i = startIndex; i < list.length; i++) {

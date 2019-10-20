@@ -24,7 +24,7 @@
             getRole().role === 1
               ? 'Master'
               : getRole().role === 0
-              ? 'Client'
+              ? 'Client ' + getRole().client_id
               : ''
           }}</span
         >
