@@ -7,6 +7,7 @@
 \usepackage[colorlinks,allcolors=violet]{hyperref}
 \usepackage{url}
 \usepackage{lmodern}
+\usepackage[dutch]{babel}
 
 % https://tex.stackexchange.com/questions/94032/fancy-tables-in-latex
 \usepackage[table]{xcolor}
@@ -25,11 +26,11 @@
 
 \noindent
 \colorbox[HTML]{52BDEC}{\bfseries\parbox{\textwidth}{\centering\large
-  --- Report P\&O CW 2019--2020 Task 3 ---
+  --- Verslag P\&O CW 2019--2020 Taak 3 ---
 }}
 \\[-1mm]
 \colorbox[HTML]{00407A}{\bfseries\color{white}\parbox{\textwidth}{
-  Department of Computer Science -- KU Leuven
+  Department Computerwetenschappen -- KU Leuven
   \hfill
   \today
 }}
@@ -43,10 +44,14 @@
 \toprule
 \multicolumn{2}{l}{\large\textbf{Team 12}} \\
 \midrule
-Toon Sauvillers & 60h \\ % fill in the time spend on this task per team member who worked on it
-Seppe Van Steenbergen & 54h \\
-Bert Van den Bosch & 52h \\
 Frédéric Blondeel & 20h \\
+Martijn Debeuf & 45h \\
+Toon Sauvillers & 60h \\ % fill in the time spend on this task per team member who worked on it
+Dirk Vanbeveren & 12h \\
+Bert Van den Bosch & 52h \\
+Seppe Van Steenbergen & 54h \\
+
+
 \bottomrule
 \hline
 \end{tabular}\\
@@ -54,23 +59,8 @@ Frédéric Blondeel & 20h \\
 \noindent
 {\color[HTML]{52BDEC} \rule{\linewidth}{1mm} }
 
-\section{Introduction}\label{sec:introduction}
-
-\note{(Few sentences.)}
-\exampletext{
-\textit{Clearly state the problem you tackled. The task's assignment defined the functionality you have to offer, not the problem(s) you solved. You have to phrase the exact problem statement, i.e., state the assumptions you made. On top of the problem statement we expect you to state the relevance of the problem and what solution is chosen. Later in \S\ref{sec:technical-analysis} you can go into detail as why this is your preferred solution. Throughout the text we expect you to back up claims with (scientific) references.
-\textbf{This section is best written after the remainder of the report is finished.}}}
-
-\exampletext{
-We are developing a multiscreen casting framework that supports a heterogeneous set of displays. The very first hurdle is the design of a communication protocol that connects all these devices. Devices are connected over the web via a client-server architecture. Clients connect to the server by loading a webpage in their browser. To establish a two-way communication channel, a connection is maintained through sockets~\cite{socketio}.
-
-Based on these principles we developed a basic multiscreen casting framework that offers the following functionality:
-\begin{itemize}
-    \item The ability to transmit complex data such as images.
-    \item Client-side access to the camera.
-    \item Client identification such that clients can receive specific commands.
-    \item Support of two roles, i.e., master and slave.
-\end{itemize}
+\section{Introductie}\label{sec:introductie}
+\input{introduction}
 % The communication protocol should accommodate for:
 % \begin{itemize}
 %     \item The transmission of images from the smartphone camera to the master.
@@ -108,81 +98,43 @@ A socket is assigned a unique identifier by Socketio. This identifier can be use
 \note{($\approx$ 1 page. Depending on necessity)}
 \exampletext{\textit{When you design or use an algorithm you should be able to explain how well it performs and if it satisfies the requirements. Often there will be alternatives or system parameters that need to be chosen. We want to know why you chose a specific set of parameters, or why you chose an approach over another. We supply some example text of last year.}}
 
-\exampletext{
-Correctly identifying players is an important requirement of the game. For this end we adapt a Face Recognition system that builds on the \texttt{facerecognizer.js} framework~\cite{website:facerecognizer}. We show that by carefully selecting hyper parameters we can assure that misidentification will happen in less than 1\% of identifications.
 
 
-\subsection{Description of the face recognition system}
+\subsection{Scherm identificatie met barcodes}
 
-We illustrate the face recognition pipeline in Figure~\ref{fig:identification}. This pipeline is fully offered by the \texttt{facerecognizer.js} framework~\cite{website:facerecognizer}. However, since we have only one enrollment sample, we will only use the core technology of the framework, i.e., DeepFace~\cite{amos2016openface}, the feature extractor method. Deepface represents the face image as a 128 dimensional vector with values in the interval $[-1,1]$. In a second step a similarity score is calculated between the enrollment samples of all known identities and the test sample. For this end, we evaluate the impact of two similarity metrics on the performance: \texttt{profnuyenssimilarity}~\cite{nuyens:2018} and \texttt{profjacobsdistance}~\cite{jacobs:2015} in \S\ref{sec:experimenten}. In a last step the highest score is compared to a threshold. If the highest score is bigger then the threshold we return the identity connected to this score, else we conclude that the test subject is unknown. The two mentioned metrics can both be formulated by
-\[
-  S(a, b)
-  =
-  \sqrt{
-    \int_0^1 \int_0^1
-      \|\mathcal{P}_\nu(a, t_1, t_2) - \mathcal{P}_\nu(b, t_1, t_2)\|_{\mathcal{F}}^2
-      \, \mathrm{d}t_1 \mathrm{d}t_2
-  }
-  ,
-\]
-where $\mathcal{P}$ is a polynomial interpolation operator.
+\subsubsection{Algemene uitleg}
 
-\begin{figure}
-	\centering
-	\includegraphics[width=\textwidth]{figures/identification}
-	\caption{The face recognition pipeline. Face image from \textsf{lfw} data set~\cite{LFWTech}.} 
-	\label{fig:identification}
-\end{figure}
-
-\subsection{Data set}
-
-Representative data is needed to test the performance of a machine learning system. We evaluated our system in a first phase with a standard data set, i.e., labeled face in the wild~\cite{LFWTech}. This data set contains $10340$ identities with approximately 5 images per identity.
-
-\subsection{Experiments}\label{sec:experimenten}
-
-We discuss the influence the performance of our identification system in function of two similarity functions: \texttt{profnuyenssimilarity}~\cite{nuyens:2018} and \texttt{profjacobsdistance}~\cite{jacobs:2015}. The performance is measured in \texttt{adalbertoscore}~\cite{vanhamme:1991}. In order to achieve the requirement of a misidentification probability of $1$\%, \texttt{adalbertoscore} should be less then $-4$.
-
-We calculate the feature vector of all the faces in \textsf{lfw}. Then, we split the data set in a enrollment and test set. We make sure that only for enrollment only one sample is available for each identity. We repeat this split procedure $10$ times and report the average score. For every split we evaluate the performance in function of the threshold. Figure~\ref{fig:performance} shows \texttt{adalbertoscore} for both similarity functions w.r.t.\ the threshold. We chose the \texttt{profnuyenssimilarity} as this clearly satisfies the requirement of a \texttt{adalbertoscore} of $-10$ at a threshold of $0.5$.
-We note however that the \texttt{profnuyenssimilarity} needs a resolution of at least $5$MP which is currently not a problem, but might be a concern in the later development such that we keep the \texttt{profjacobsdistance} implementation as an alternative.
+De identificatie van schermen gebeurt aan de hand van een kleurenbarcode. Het slave-scherm zal binnen zijn rand (gebruikt voor edge detection) een herhalend patroon van 5 kleuren en wit tonen. Aan de hand van de volgorde kan een unieke code per scherm gelezen worden en zo is elk scherm duidelijk gedefinieerd. De 5 kleuren zijn speciaal gekozen om zo ver mogelijk uit elkaar te liggen in het HSL spectrum om fouten lezingen te vermijden. Ze dragen elk een cijfer van 1 tot en met 5 en worden maar één keer gebruikt in de barcode. Dit zorgt ervoor dat in theorie een totaal van $5!$ ($=120$) verschillende schermen een eigen unieke barcode kunnen krijgen. Het herhalend patroon geeft de mogelijkheid om fouten te vermijden. Na het vinden van het scherm zelf (zie sectie 3.2) zal de barcode gelezen worden. Indien een reflectie of een overlap plaatsvind kan een stuk van het scherm bedekt zijn. De scanner() zal het midden van het scherm lezen in rechte lijn (volgens de orientatie), aangezien een stuk bedekt is zal deze blijven gaan tot hij 5 kleuren en wit tegenkomt. Zo niet, zal de lijst met codes leeggemaakt worden en verder gaan. Het herhalend patroon is dus essentieel aan het correct inlezen.
 
 \begin{figure}
 \centering
-\begin{minipage}[b]{.43\textwidth}
-	\includegraphics[width=\linewidth]{figures/performance}
-	\caption{The \texttt{adalbertoscore} for both the \texttt{profnuyenssimilarity} and \texttt{profjacobsdistance} w.r.t.\ the threshold. The number of classes is $10350$.} 
-	\label{fig:performance}
-\end{minipage}
-\hspace{1cm}
-\begin{minipage}[b]{.43\textwidth}
-	\includegraphics[width=\linewidth]{figures/performanceClasses}
-	\caption{The performance w.r.t.\ the number of classes for both the \texttt{profnuyenssimilarity} and \texttt{profjacobsdistance}. The threshold is $0.5$.} 
-	\label{fig:performanceClasses}
-\end{minipage}
+\includegraphics[scale=0.1]{barcode}
+\caption{Voorbeeld van een barcode met 6 herhalingen.} 
+\label{fig:barcode}
 \end{figure}
 
-In a second experiment we vary the number of classes. We fix the threshold to $0.5$. Before make the enrollment and test splits we randomly select a specific number of identities. Afterwards we apply the same procedure as in the first experiment. The results are shown in Figure~\ref{fig:performanceClasses}. From this figure we conclude that, in general the identification performance is better with a lower number of players. On top of that, when the number of players is less then $200$, both similarity functions perform similar.
 
-In a third experiment we investigated the battery consumption\ldots
-}
 
-\section{Conclusion and prospects}\label{sec:conclusion}
+\subsubsection{Data set}
 
-\note{($\approx$ 1/4 page.)}
-\exampletext{\textit{This section contains your evaluation of the development. How well did you succeed to complete this task? What can be improved?}}
+Het scanner algorithme is getest met verschillende foto's vanop verschillende afstanden, met verschillende computers (kleuren kunnen afwijken van scherm tot scherm) en met verschillende aantal barcodes dat op het scherm past. Aangezien een herhalend patroon gebruikt wordt, is er de keuze hoeveel patronen per scherm staan, dit kan van 3 tot 15 gaan (meer heeft niet veel zin want het onderschijden van kleuren wordt lastig).
 
-\exampletext{We designed a basic framework for screen casting. We offer all the functionality demanded in task 2. We achieved our goal by relying on basic socket.io functionality, as well as built-in features of front facing html5 technology such as webrtc. We did not discuss in detail the sending of commands to change background colors etc. We offer all functionality for this problem, the core challenge here was socket identification.
+\subsubsection{Experiments}\label{sec:experimenten}
 
-In the current state of our project multiple masters can coexist. We do not see this as a problem at the moment. From a security perspective this can be problematic depending on the actual usage scenario of the final application.}
+\subsection{Image}
+\subsubsection{Algemene uitleg}
+\subsubsection{Data set}
+\subsubsection{Experiments}
 
+\section{Testen}
+\input{testen}
+\section{Besluit}\label{sec:besluit}
+\input{besluit}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\appendix
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{User licenses}
-
-\exampletext{\textit{For every software package and all images/illustrations/pictures used we want to see that you have looked up its user license and comply with it. Please provide a list here. This may also be a good location to write about what software license you are thinking for your finished project.}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \bibliographystyle{plain}
