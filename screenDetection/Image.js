@@ -117,16 +117,19 @@ class Image {
             pixel = stack.pop();
             x = pixel[0];
             y = pixel[1];
-            this.workMatrix[y][x] += (islandID - 1);
+            if(this.workMatrix[y][x] <= 2){
+                this.workMatrix[y][x] += (islandID - 1);
+                minX = Math.min(minX, x);
+                minY = Math.min(minY, y);
+                maxX = Math.max(maxX, x);
+                maxY = Math.max(maxY, y);
+                if (this.workMatrix[y][x - 1] === 1 || this.workMatrix[y][x - 1] === 2) {stack.push([x - 1, y])}
+                if (this.workMatrix[y][x + 1] === 1 || this.workMatrix[y][x + 1] === 2) {stack.push([x + 1, y])}
+                if (this.workMatrix[y - 1][x] === 1 || this.workMatrix[y - 1][x] === 2) {stack.push([x, y - 1])}
+                if (this.workMatrix[y + 1][x] === 1 || this.workMatrix[y + 1][x] === 2) {stack.push([x, y + 1])}
+            }
 
-            minX = Math.min(minX, x);
-            minY = Math.min(minY, y);
-            maxX = Math.max(maxX, x);
-            maxY = Math.max(maxY, y);
-            if (this.workMatrix[y][x - 1] === 1 || this.workMatrix[y][x - 1] === 2) stack.push([x - 1, y]);
-            if (this.workMatrix[y][x + 1] === 1 || this.workMatrix[y][x + 1] === 2)stack.push([x + 1, y]);
-            if (this.workMatrix[y - 1][x] === 1 || this.workMatrix[y - 1][x] === 2) stack.push([x, y - 1]);
-            if (this.workMatrix[y + 1][x] === 1 || this.workMatrix[y + 1][x] === 2) stack.push([x, y + 1]);
+            
         }
         return [minX, minY, maxX, maxY];
     }

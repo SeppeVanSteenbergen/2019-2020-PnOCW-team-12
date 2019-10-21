@@ -7,8 +7,8 @@ class Island {
     id;
     screenMatrix = [];
     corners = [];
-    blue = this.id + 1;
-    green = this.id;
+    blue;
+    green;
 
     /**
      * Create and Island starting with this pixel
@@ -23,6 +23,8 @@ class Island {
         this.maxy = y;
 
         this.id = id;
+        this.blue = id + 1;
+        this.green = id;
     }
 
     /**
@@ -62,8 +64,7 @@ class Island {
         this.screenMatrix = matrix.slice(this.miny, this.maxy);
         for (var i = 0; i < this.maxy - this.miny; i++) {
             this.screenMatrix[i] = this.screenMatrix[i].slice(this.minx, this.maxx);
-        }
-        console.log(this.maxx);    
+        }  
     }
 
     findScreenCorners() {
