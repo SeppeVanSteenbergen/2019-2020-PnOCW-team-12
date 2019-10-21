@@ -1,10 +1,9 @@
+.idea/
+.vscode/
 
 **/.DS_Store
+**/node_modules
 
-.idea/
-
-client/node_modules
-server/node_modules
 client/dist
 server/sessions
-screenDetection/Testing/node_modules
+server/uploads/images/
