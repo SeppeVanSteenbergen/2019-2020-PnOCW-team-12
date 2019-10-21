@@ -4,14 +4,14 @@ const sourceFolder = '/Images/'
 ['image name', nb screens, [screen size], [orientation screen]]
 */
 var images = [
-  ['orientation1', 1, [400000], [0]], //0
+  ['orientation1', 1, [400000], [0]],
   ['orientation2', 1, [400000], [90]],
   ['orientation3', 1, [400000], [180]],
   ['orientation4', 1, [400000], [270]],
   ['orientation5', 1, [400000], [45]],
   ['orientation6', 1, [400000], [6.5]],
-  ['orientation7', 1, [400000], [347]], // 6
-  ['size1', 1, [900], [0]], // 7
+  ['orientation7', 1, [400000], [347]],
+  ['size1', 0, [900], [0]], // too small
   ['size2', 1, [480000], [0]],
   ['size3', 1, [60000], [0]],
   ['size4', 1, [1000000], [0]],
@@ -70,11 +70,8 @@ function checkNbScreens(i){
       inputImage.medianBlurMatrix(3);
       inputImage.createScreens();
 
-      try {
-        console.assert(inputImage.screens.length == images[i][1]);
-      } catch (error) {
-        console.log("Nb screens in " + images[i][0] + " has to be " + images[i][1] + " but returns " + inputImage.screens.length);
-      }
+      var errorMessage = "Nb screens in " + images[i][0] + " has to be " + images[i][1] + " but returns " + inputImage.screens.length;
+      console.assert(inputImage.screens.length == images[i][1], errorMessage);
       
 
       checkNbScreens(i + 1)
@@ -109,12 +106,8 @@ function checkSize(i){
         for(let k = 0; k < images[i][2].length; k++){
           min = Math.min(min, Math.abs(inputImage.screens[j].size - images[i][2][k]))
         }
-        try {
-          console.assert(min < 5000);
-        } catch (error) {
-          console.log("Screen size in " + images[i][0] + " has to be one of (look below) but returns " + inputImage.screens[j].size);
-          console.log(images[i][2]);
-        }
+        var errorMessage = "Screen size in " + images[i][0] + " has to be "+ images[i][2][0] + " but returns " + inputImage.screens[j].size
+          console.assert(min < 5000, errorMessage);
         
       }
 
@@ -151,12 +144,9 @@ function checkOrientation(i) {
         for(let k = 0; k < images[i][3].length; k++){
           min = Math.min(min, Math.abs(inputImage.screens[j].orientation - images[i][3][k]))
         }
-        try {
-          console.assert(min < 2);
-        } catch (error) {
-          console.log("Screen orientation in " + images[i][0] + " has to be one of (look below) but returns " + inputImage.screens[j].orientation);
-          console.log(images[i][3]);
-        }
+        var errorMessage = "Screen orientation in " + images[i][0] + " has to be "+ images[i][3][0]+" but returns " + inputImage.screens[j].orientation;
+          console.assert(min < 2, errorMessage);
+
         
       }
 
