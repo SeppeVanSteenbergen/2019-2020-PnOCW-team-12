@@ -642,8 +642,8 @@ class Image {
         }
         alpha = alpha * 255;
 
-        for (let j = startCorner[1]; j < endCorner[1]; j++) {
-            for (let i = startCorner[0]; i < endCorner[0]; i++) {
+        for (let j = startCorner[1]; j <= endCorner[1]; j++) {
+            for (let i = startCorner[0]; i <= endCorner[0]; i++) {
                 let pos = this.pixelToPosition([i, j]);
 
                 this.pixels[pos] = Math.min(this.pixels[pos] + alpha, 255);
