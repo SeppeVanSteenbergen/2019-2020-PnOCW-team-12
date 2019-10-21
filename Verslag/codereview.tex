@@ -44,13 +44,13 @@
 \multicolumn{3}{l}{\large\textbf{Team 12}} \\
 \midrule
 Martijn Debeuf & 2.5h & 750 LOC \\ % fill in the time spend on this task per team member who worked on it and the amount of lines of code (LOC) reviewed
-Frédéric Blondeel & 1.5h & 650 LOC \\
+Frédéric Blondeel & 2h & 650 LOC \\
 \bottomrule
 \hline
 \end{tabular}\\
 \\
 Demo: \url{https://penocw.cs.kotnet.kuleuven.be:80##/demo-task-44?0xjwkkslam9} \\
-Files reviewed: barcodeScanner/main.js; screenDetection/image.js
+Files reviewed: barcodeScanner/main.js; screenDetection/main.js; screenDetection/image.js
 
 \noindent
 {\color[HTML]{52BDEC} \rule{\linewidth}{1mm} }
@@ -59,10 +59,14 @@ Files reviewed: barcodeScanner/main.js; screenDetection/image.js
 
 \begin{itemize}
 
-\item Bij de file Image.js is nog geen commentaar toegevoegd, dit maakt het lezen en begrijpen van de code lastig. 
+\item Bij de file Image.js is nog geen commentaar toegevoegd, dit maakt het lezen en begrijpen van de code lastig.
 \item Bij de changeColorspace() methode kan misschien een array bijgehouden worden met de toegelaten colorspaces als soort van veiligheid of indien er effectief maar twee gebruikt worden is het misschien beter om deze als een boolean bij te houden. 
 \item Het verschil tussen de methode getImgData() en show() is niet erg duidelijk, kan ook verholpen worden door commentaar te voorzien.
-\item De main.js code moet nog mooier geordend worden maar dit wordt momenteel nog als test gebruikt. De andere bestanden zijn simpele code waar niet veel over op te merken is.
+\item De screenDetection/main.js code moet nog mooier geordend worden maar dit wordt momenteel nog als test gebruikt. De andere bestanden zijn simpele code waar niet veel over op te merken is.
+\item In cornerDetection() zijn de if-voorwaarden uit de lucht gevallen, er is geen reden dat deze 7 en niet 8 is bijvoorbeeld (zie figuur).
+
+\includegraphics[scale=0.75]{code1}
+\item De floodfill(), calcIslandsFloodfill() en calcIslands() zijn moeilijk te begrijpen. Documentatie is hier essentieel want deze zijn complexe functies. Ook meer uitleg in verband met workMatrix is nodig want deze komt uit het niets tevoorschijn.
 
 
 \end{itemize}
@@ -70,24 +74,5 @@ Files reviewed: barcodeScanner/main.js; screenDetection/image.js
 
 
 
-\exampletext{\textit{Code reviews improve the overall quality of the work. Both from a design perspective and code quality (high cohesion, low coupling perspective). Indicate what improvements you recommended, what bugs you caught, \ldots\ 
-What can be found in a code review:
-\begin{itemize}
-    \item bugs
-    \item bad design (code and architectural)
-    \item indicate insufficient testing
-    \item security problems (relates back to bad design/unwanted functionality *joke: it is not a security bug, it is a feature*)
-    \item ...
-\end{itemize}
-You could list snippets of code or make diagrams to illustrate what you mean.
-}
-
-\begin{enumerate}
-    \item Correct the usage of \texttt{var} to \texttt{const} and \texttt{let}, see ... (good reference).
-    \item The algorithm XYZ in file ZZ.js calculates the wrong answer in case of ...
-    \item ...
-\end{enumerate}
-
-}
 
 \end{document}
