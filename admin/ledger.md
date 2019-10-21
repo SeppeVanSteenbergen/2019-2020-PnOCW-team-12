@@ -46,5 +46,14 @@ Meeting 2 (14/10/2019)
             - rotatie herkennen
             - begin verslag    
             - Martijn verder code reviewen
-        
+
+Meeting 3 (21/10/2019)
+	Task 2 --> finished
+	Task 3, device recognition (iedereen):
+		identificatie met kleurenbarcode, werkt
+		rotatie werkt
+		Vandaag:
+			- verslag
+			- automatische testen schrijven
+	Task 4-5, vanaf morgen aan beginnen
 
