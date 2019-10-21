@@ -7,7 +7,7 @@ class Island {
     id;
     screenMatrix = [];
     corners = [];
-    blue = this.id +1;
+    blue = this.id + 1;
     green = this.id;
 
     /**
@@ -63,29 +63,32 @@ class Island {
         for (var i = 0; i < this.maxy - this.miny; i++) {
             this.screenMatrix[i] = this.screenMatrix[i].slice(this.minx, this.maxx);
         }
+        console.log(this.maxx);    
     }
 
     findScreenCorners() {
         let x = 0;
         let y = 0;
-        while (this.screenMatrix[0][x] != this.id && this.screenMatrix[0][x] != this.id + 1) x++;//bovenhoek
+        while (this.screenMatrix[0][x] != this.blue && this.screenMatrix[0][x] != this.green) x++;//bovenhoek
         if (x >= this.screenMatrix[0].length / 2) {
             while (this.screenMatrix[0][x + 1] >= 1)++x;
         }
         this.corners.push([x, 0, this.screenMatrix[0][x]]);
+
         x = this.screenMatrix[0].length - 1;
-        while (this.screenMatrix[y][x] != this.id && this.screenMatrix[y][x] != this.id + 1) y++; //rechterhoek
+
+        while (this.screenMatrix[y][x] != this.blue && this.screenMatrix[y][x] != this.green) y++; //rechterhoek
         if (y >= this.screenMatrix.length / 2) {
             while (this.screenMatrix[y + 1][x] >= 1)++y;
         }
         this.corners.push([x, y, this.screenMatrix[y][x]]);
         y = this.screenMatrix.length - 1;
-        while (this.screenMatrix[y][x] != this.id && this.screenMatrix[y][x] != this.id + 1) x--; // onderhoek
+        while (this.screenMatrix[y][x] != this.blue && this.screenMatrix[y][x] != this.green) x--; // onderhoek
         if (x <= this.screenMatrix.length / 2) {
             while (this.screenMatrix[y][x - 1] >= 1)--x;
         }
         this.corners.push([x, y, this.screenMatrix[y][x]]);
-        while (this.screenMatrix[y][0] != this.id && this.screenMatrix[y][0] != this.id + 1) y--; //linkerhoek
+        while (this.screenMatrix[y][0] != this.blue && this.screenMatrix[y][0] != this.green) y--; //linkerhoek
         if (y <= this.screenMatrix.length / 2) {
             while (this.screenMatrix[y - 1][0] >= 1)--y;
         }
