@@ -34,21 +34,21 @@ function scanner(image, width, height, sensitivity) {
     let S = image[i + 1];
     let L = image[i + 2];
 
-    if (L > 100 - sensitivity) {
+    if (L > 70 && S < 50) {
       if (scanned.length === 5) {
         return scanned;
       }
       scanned = [];
     } else if (H > 24 - sensitivity && H < 24 + sensitivity && S > 50 && !scanned.includes(1)) {
-      scanned.push(1)
+      scanned.push(1);
     } else if (H > 72 - sensitivity && H < 72 + sensitivity && S > 50 && !scanned.includes(2)) {
-      scanned.push(2)
+      scanned.push(2);
     } else if (H > 180 - sensitivity && H < 180 + sensitivity && S > 50 && !scanned.includes(3)) {
-      scanned.push(3)
+      scanned.push(3);
     } else if (H > 288 - sensitivity && H < 288 + sensitivity && S > 50 && !scanned.includes(4)) {
-      scanned.push(4)
+      scanned.push(4);
     } else if (H > 336 - sensitivity && H < 336 + sensitivity && S > 50 && !scanned.includes(5)) {
-      scanned.push(5)
+      scanned.push(5);
     }
   }
 }
