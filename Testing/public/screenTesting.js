@@ -14,6 +14,7 @@ var images = [
   ['size1', 1, [26000], [0]], // 7
   ['size2', 1, [140000], [0]]
 ]
+var orientation = [0, 6];
 
 function loadImage(imageName) {
   fs.readdir(sourceFolder, (err, files) => {
@@ -32,6 +33,35 @@ function load() {
   for (let i = 0; i < images.length; i++) {
     this.images[i] = loadImage(this.images[i][0])
   }
+}
+
+async function checkOrientation(){
+  
+  for(let i = orientation[0]; i <= orientation[1]; i++){
+    var image = document.createElement('img');
+    var canvas = document.createElement('canvas');
+    var ctx;
+    
+    image.setAttribute('src', sourceFolder + images[i][0] + '.jpg');
+    image.onload = function () {
+      ctx = canvas.getContext('2d');
+      canvas.width = image.width;
+      canvas.height = image.height;     
+      console.log(canvas.width);  
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(image, 0, 0, image.width, image.height);
+      imgData = ctx.getImageData(0, 0, image.width, image.height);
+      var inputImage = new Image(imgData, "", "RGBA");
+
+    }
+      
+  }
+
+}
+
+function getImgData(source){
+  
+  
 }
 
 function runAllTests() {
