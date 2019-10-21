@@ -1,0 +1,80 @@
+\documentclass[a4paper,11pt]{article}
+
+\usepackage[margin=3cm]{geometry}
+
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage[colorlinks,allcolors=violet]{hyperref}
+\usepackage{url}
+\usepackage{lmodern}
+
+% https://tex.stackexchange.com/questions/94032/fancy-tables-in-latex
+\usepackage[table]{xcolor}
+\usepackage{booktabs}
+
+\usepackage[utf8]{inputenc}
+
+% https://tex.stackexchange.com/questions/664/why-should-i-use-usepackaget1fontenc
+\usepackage[T1]{fontenc}
+\usepackage{microtype} % good font tricks
+
+\newcommand{\note}[1]{{\colorbox{yellow!40!white}{#1}}}
+\newcommand{\exampletext}[1]{{\color{blue!60!black}#1}}
+
+\begin{document}
+
+\noindent
+\colorbox[HTML]{52BDEC}{\bfseries\parbox{\textwidth}{\centering\large
+  --- Code review P\&O CW 2019--2020 Task 3 ---
+}}
+\\[-1mm]
+\colorbox[HTML]{00407A}{\bfseries\color{white}\parbox{\textwidth}{
+  Department of Computer Science -- KU Leuven
+  \hfill
+  \today
+}}
+\\
+
+\smallskip
+
+\noindent
+%\mbox{}\hfill
+\begin{tabular}{*4l}
+\toprule
+\multicolumn{3}{l}{\large\textbf{Team 12}} \\
+\midrule
+Martijn Debeuf & 2.5h & 750 LOC \\ % fill in the time spend on this task per team member who worked on it and the amount of lines of code (LOC) reviewed
+Frédéric Blondeel & 1.5h & 30 LOC \\
+\bottomrule
+\hline
+\end{tabular}\\
+\\
+Demo: \url{https://penocw.cs.kotnet.kuleuven.be:80##/demo-task-44?0xjwkkslam9} \\
+Files reviewed: barcodeScanner/main.js; screenDetection/image.js
+
+\noindent
+{\color[HTML]{52BDEC} \rule{\linewidth}{1mm} }
+
+\smallskip
+
+\exampletext{\textit{Code reviews improve the overall quality of the work. Both from a design perspective and code quality (high cohesion, low coupling perspective). Indicate what improvements you recommended, what bugs you caught, \ldots\ 
+What can be found in a code review:
+\begin{itemize}
+    \item bugs
+    \item bad design (code and architectural)
+    \item indicate insufficient testing
+    \item security problems (relates back to bad design/unwanted functionality *joke: it is not a security bug, it is a feature*)
+    \item ...
+\end{itemize}
+You could list snippets of code or make diagrams to illustrate what you mean.
+}
+
+\begin{enumerate}
+    \item Correct the usage of \texttt{var} to \texttt{const} and \texttt{let}, see ... (good reference).
+    \item The algorithm XYZ in file ZZ.js calculates the wrong answer in case of ...
+    \item ...
+\end{enumerate}
+
+}
+
+\end{document}
