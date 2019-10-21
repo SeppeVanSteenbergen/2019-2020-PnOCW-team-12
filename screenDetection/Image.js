@@ -18,15 +18,20 @@ class Image {
     workMatrix;
     screens = [];
 
+    width;
+    height;
+
     lowerBoundG = [120 - this.sensitivity, 50, 25];
     upperBoundG = [120 + this.sensitivity, 100, 75];
     lowerBoundB = [240 - this.sensitivity, 50, 25];
     upperBoundB = [240 + this.sensitivity, 100, 75];
 
-    constructor(imgData, canvasName, colorSpace) {
+    constructor(imgData, canvasName, colorSpace, width, height) {
         this.setPixels(imgData.data);
         this.setCanvas(canvasName, imgData.width, imgData.height);
         this.setColorSpace(colorSpace);
+        this.width = width;
+        this.height = height;
       if(this.canvas !== null) {
         let context = this.canvas.getContext("2d");
         context.putImageData(imgData, 0, 0);
@@ -55,15 +60,11 @@ class Image {
     }
 
     getHeight() {
-      if(this.canvas !== null) {
-        return this.canvas.height;
-      }
+      return this.height;
     }
 
     getWidth() {
-      if(this.canvas !== null) {
-        return this.canvas.width;
-      }
+      return this.width;
     }
 
     setPixels(pixels) {
@@ -97,10 +98,10 @@ class Image {
         for (let y = 0; y < this.getHeight(); y++) {
             for (let x = 0; x < this.getWidth(); x++) {
                 if (this.workMatrix[y][x] === 1 || this.workMatrix[y][x] === 2) {
-                    console.log("got a new island");
                     let newIslandCoo = this.floodfill(x, y, this.islandID);
                     let newIsland = new Island(newIslandCoo[0], newIslandCoo[1], this.islandID);
                     newIsland.add(newIslandCoo[2], newIslandCoo[3]);
+                    newIsland.setScreenMatrix(this.workMatrix);
                     tmpIslands.push(newIsland);
                     this.islandID += 2;
                 }
@@ -109,7 +110,6 @@ class Image {
         for (let i = 0; i < tmpIslands.length; i++) {
             if (tmpIslands[i].size() > this.MIN_ISLAND_SIZE) {
                 this.drawFillRect([tmpIslands[i].minx, tmpIslands[i].miny], [tmpIslands[i].maxx, tmpIslands[i].maxy], 0.3);
-                tmpIslands[i].setScreenMatrix(this.workMatrix);
                 let corners = tmpIslands[i].findScreenCorners();
                 for(let j = 0; j < 4; j++) this.drawPoint(corners[j][0] + tmpIslands[i].minx, corners[j][1]+tmpIslands[i].miny, 10);
                 this.islands.push(tmpIslands[i]);
@@ -150,14 +150,10 @@ class Image {
     createScreens(){
         this.screens.length = 0;
         this.calcIslandsFloodfill();
-        console.log("check");
         let newScreen;
         for(let i = 0; i < this.islands.length; i++){
             newScreen = this.islands[i].createScreen();
             this.screens.push(newScreen);
-        }
-        for(let i = 0; i < this.screens.length; i++){
-            console.log(this.screens[i].corners, this.screens[i].orientation);
         }
     }
 

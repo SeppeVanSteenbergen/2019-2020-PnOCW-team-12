@@ -50,20 +50,43 @@ function checkOrientationHelper(i) {
       ctx = canvas.getContext('2d')
       canvas.width = image.width
       canvas.height = image.height
-      console.log(canvas.width)
       ctx.clearRect(0, 0, canvas.width, canvas.height)
       ctx.drawImage(image, 0, 0, image.width, image.height)
       let imgData = ctx.getImageData(0, 0, image.width, image.height)
-      var inputImage = new Image(imgData, '', 'RGBA')
+      var inputImage = new Image(imgData, '', 'RGBA', image.width, image.height)
+
+      inputImage.rgbaToHsla();
+      inputImage.createGreenBlueMask();
+      inputImage.medianBlurMatrix(3);
+      inputImage.createScreens();
+
+      console.assert(inputImage.screens.length == images[i][1]); //aantal schermen
+      
+      for(let j = 0; j < inputImage.screens.length; j++){ //grootte schermen
+        var min = Infinity;
+        for(let k = 0; k < images[i][3].length; k++){
+          min = Math.min(min, Math.abs(inputImage.screens[j].size - images[i][2][k]))
+        }
+        console.assert(min < 5000);
+      }
+
+      for(let j = 0; j < inputImage.screens.length; j++){ //orientatie schermen
+        var min = 360;
+        for(let k = 0; k < images[i][3].length; k++){
+          min = Math.min(min, Math.abs(inputImage.screens[j].orientation - images[i][3][k]))
+        }
+        console.assert(min < 0.5);
+      }
+
+
 
       checkOrientationHelper(i + 1)
     }
   } else {
-    console.log('orientation checked')
+    console.log('orientation checked') // einde
   }
 }
 
-function getImgData(source) {}
 
 function runAllTests() {
   let results = []

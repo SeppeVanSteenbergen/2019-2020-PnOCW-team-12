@@ -94,7 +94,6 @@ class Island {
             while (this.screenMatrix[y - 1][0] >= 1)--y;
         }
         this.corners.push([0, y, this.screenMatrix[y][x]]);
-        console.log(this.corners);
         return this.corners;
     }
 
@@ -109,23 +108,25 @@ class Island {
     }
 
     findUpColor(){
-        let x = Math.round((this.corners[1][0] + this.corners[0][0]) / 2); 
-        let y = Math.round((this.corners[1][1] + this.corners[0][1]) / 2);
+        let x = Math.floor((this.corners[1][0] + this.corners[0][0]) / 2); 
+        let y = Math.floor((this.corners[1][1] + this.corners[0][1]) / 2);
         return this.screenMatrix[y][x];
     }
     findLeftColor(){
-        let x = Math.round((this.corners[3][0] + this.corners[0][0]) / 2); 
-        let y = Math.round((this.corners[3][1] + this.corners[0][1])/2);
+        let x = Math.floor((this.corners[3][0] + this.corners[0][0]) / 2); 
+        let y = Math.floor((this.corners[3][1] + this.corners[0][1])/2);
         return this.screenMatrix[y][x];
     }
 
     createScreen() {
+        this.corners.length = 0;
         let corners = this.findScreenCorners();
+        let orientation = this.findScreenOrientation();
         for(let i =  0; i < corners.length; i++){
             corners[i][0] += this.minx;
             corners[i][1] += this.miny;
         }
-        let orientation = this.findScreenOrientation();
+        
         return new Screen(corners, orientation);
     }
 }
