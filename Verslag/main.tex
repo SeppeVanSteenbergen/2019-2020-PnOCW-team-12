@@ -61,42 +61,8 @@ Seppe Van Steenbergen & 54h \\
 
 \section{Introductie}\label{sec:introductie}
 \input{introduction}
-% The communication protocol should accommodate for:
-% \begin{itemize}
-%     \item The transmission of images from the smartphone camera to the master.
-%     \item Manipulation of the background color of the client screens.
-% \end{itemize}
-% We are developing a game that requires two players who engage in a confrontation to take a mug shot picture of each other.
-% Our game rules will positively encourage both players to provide clean pictures.
-% This turned out to be essential since the DeepFace neural network \cite{website:facerecognizer} that we use was not accurate enough in the other scenario's we tested.
-% Our analysis of the recognition rate is given in \S\ref{sec:technical-analysis}. Our systematic tests showed we have less than $1\%$~probability of not identifying the correct user out of our test database with $1000$ representative mugshot pictures.
 
-% One unforeseen side effect of the usage of the DeepFace~\cite{amos2016openface} algorithm is the high power consumption.
-% We had to balance the performance of the face recognition with battery life time. This was most significant for our indoor game play. In a test run we estimated that the average mobile phone from the supported types will be capable of playing for about $4$~hours and in that time frame scanning and identifying $60$~pictures per hour, see \S\ref{sec:technical-analysis}.
-
-
-\section{Design schematics and screenshots}\label{sec:schematic}
-
-\note{($\approx$ 1 page. Depending on the need for a design overview.)}
-\exampletext{\textit{Design schematics, deployment diagrams, class diagrams, sequence diagrams, \ldots\ Whatever you think we need to understand your design. You could add a little bit of text here but keep that under half a page. You reference the illustrations here from~\S\ref{sec:technical-analysis} when needed.}}
-
-\exampletext{All communication between clients runs through a nodejs server. We use the Socketio~\cite{socketio} library to set up a bidirectional communication channel between client and server. A deployment diagram can be found in Figure~\ref{fig:deployment}. Clients can take on a specific master or slave role by opening a specific webpage within the browser, i.e., the slaves will surf to \texttt{webaddress/slave}, while a client that wants to be the master loads the webpage found at \texttt{webaddress/master}.}
-
-\begin{figure}[h!]
-	\centering
-	\includegraphics[width=\textwidth]{figures/deployment}
-	\caption{Deployment diagram of the multiscreen casting framework.} 
-	\label{fig:deployment}
-\end{figure}
-
-\exampletext{We rely on webrtc~\cite{website:webrtc} to collect a client-side video stream. This module offers the necessary tools for serialization, i.e., as a base64 encoded string. Serialization is required for transmission~\cite{website:serialization}. Server-side the backend code will process the image. In our demo we broadcast the image by sending it to all slaves. Slaves and masters can be reached by the server, as we use the concept of a namespace~\cite{website:namespaces}. A namespace can be used to group clients with a similar role, and broadcast to them. 
-
-A socket is assigned a unique identifier by Socketio. This identifier can be used to emit messages from the server to a specific client. A list of connected clients is available through the API of Socketio \cite{website:socketio-clients}.}
-
-\section{Algorithms}\label{sec:technical-analysis}
-
-\note{($\approx$ 1 page. Depending on necessity)}
-\exampletext{\textit{When you design or use an algorithm you should be able to explain how well it performs and if it satisfies the requirements. Often there will be alternatives or system parameters that need to be chosen. We want to know why you chose a specific set of parameters, or why you chose an approach over another. We supply some example text of last year.}}
+\section{Algoritmen}\label{sec:technical-analysis}
 
 
 \subsection{Scherm identificatie met barcodes}
@@ -120,51 +86,18 @@ Tijdens de testfase van het algoritme werden een aantal foto's genomen. Deze fot
 
 \subsubsection{Experiments}\label{sec:experimenten}
 
-\subsection{Image}
-\subsubsection{Algemene uitleg}
-\subsubsection{Data set}
-\subsubsection{Experiments}
+\subsection{Schermherkenning}
+Volgende algoritmen zijn toegepast op de input image file volgens uitgeschreven volgorde. Zo worden de schermen herkend.
+\input{schermdetectie}
 
 \section{Testen}
 \input{testen}
 \section{Besluit}\label{sec:besluit}
 \input{besluit}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \bibliographystyle{plain}
 \bibliography{bibliography}
 
-% \bigskip
 
-% \vspace*{\fill}
-
-% %% This is a basic score card
-% %% please fill in your team number and name
-% %% don't touch the rest!
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% \noindent
-% %\mbox{}\hfill
-% \begin{tabular}{*3l}
-% \toprule
-% \multicolumn{3}{l}{\large\textbf{Evaluation card: Team <number> <name>}} \\
-% Criterion & Score (/10) & Remarks \hspace{6cm} \\
-% \midrule
-% References \\
-% Algorithm descriptions \\
-% Correctness \\
-% Clearness \\
-% Writing style \\
-% Conciseness \\
-% Self-evaluation \\
-% Informative figures \\
-% Tests \\
-% \bottomrule
-% \hline
-% \end{tabular}
 
 \end{document}

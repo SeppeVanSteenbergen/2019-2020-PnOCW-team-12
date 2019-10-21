@@ -1,13 +1,9 @@
 \BOOKMARK [1][-]{section.1}{Introductie}{}% 1
-\BOOKMARK [1][-]{section.2}{Design schematics and screenshots}{}% 2
-\BOOKMARK [1][-]{section.3}{Algorithms}{}% 3
-\BOOKMARK [2][-]{subsection.3.1}{Scherm identificatie met barcodes}{section.3}% 4
-\BOOKMARK [3][-]{subsubsection.3.1.1}{Algemene uitleg}{subsection.3.1}% 5
-\BOOKMARK [3][-]{subsubsection.3.1.2}{Data set}{subsection.3.1}% 6
-\BOOKMARK [3][-]{subsubsection.3.1.3}{Experiments}{subsection.3.1}% 7
-\BOOKMARK [2][-]{subsection.3.2}{Image}{section.3}% 8
-\BOOKMARK [3][-]{subsubsection.3.2.1}{Algemene uitleg}{subsection.3.2}% 9
-\BOOKMARK [3][-]{subsubsection.3.2.2}{Data set}{subsection.3.2}% 10
-\BOOKMARK [3][-]{subsubsection.3.2.3}{Experiments}{subsection.3.2}% 11
-\BOOKMARK [1][-]{section.4}{Testen}{}% 12
-\BOOKMARK [1][-]{section.5}{Besluit}{}% 13
+\BOOKMARK [1][-]{section.2}{Algoritmen}{}% 2
+\BOOKMARK [2][-]{subsection.2.1}{Scherm identificatie met barcodes}{section.2}% 3
+\BOOKMARK [3][-]{subsubsection.2.1.1}{Algemene uitleg}{subsection.2.1}% 4
+\BOOKMARK [3][-]{subsubsection.2.1.2}{Data set}{subsection.2.1}% 5
+\BOOKMARK [3][-]{subsubsection.2.1.3}{Experiments}{subsection.2.1}% 6
+\BOOKMARK [2][-]{subsection.2.2}{Schermherkenning}{section.2}% 7
+\BOOKMARK [1][-]{section.3}{Testen}{}% 8
+\BOOKMARK [1][-]{section.4}{Besluit}{}% 9
