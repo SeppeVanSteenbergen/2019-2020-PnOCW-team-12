@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7000 64-bit) (preloaded format=pdflatex 2019.5.22)  21 OCT 2019 23:00
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7000 64-bit) (preloaded format=pdflatex 2019.5.22)  21 OCT 2019 23:09
 entering extended mode
 **./main.tex
 (main.tex
@@ -546,24 +546,24 @@ Underfull \hbox (badness 10000) in paragraph at lines 27--38
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 41--54
+Underfull \hbox (badness 10000) in paragraph at lines 41--58
 
  []
 
 (introduction.tex)
 ! Too many }'s.
-l.72 }
+l.76 }
       
 ? 
 
-Overfull \hbox (3.28944pt too wide) in paragraph at lines 76--78
+Overfull \hbox (3.28944pt too wide) in paragraph at lines 80--82
 [][][][][][] []\T1/lmr/m/it/10.95 (-20) De-sign sche-ma-tics, de-ploy-ment
  []
 
 
-LaTeX Warning: Citation `socketio' on page 1 undefined on input line 79.
+LaTeX Warning: Citation `socketio' on page 1 undefined on input line 83.
 
-LaTeX Font Info:    Try loading font information for T1+lmtt on input line 79.
+LaTeX Font Info:    Try loading font information for T1+lmtt on input line 83.
 ("C:\Users\toons\AppData\Local\Programs\MiKTeX 2.9\tex/latex/lm\t1lmtt.fd"
 File: t1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
@@ -574,64 +574,65 @@ Package microtype Info: Loading generic protrusion settings for font family
 <figures/deployment.pdf, id=57, 669.46106pt x 427.5975pt>
 File: figures/deployment.pdf Graphic file (type pdf)
 <use figures/deployment.pdf>
-Package pdftex.def Info: figures/deployment.pdf  used on input line 83.
+Package pdftex.def Info: figures/deployment.pdf  used on input line 87.
 (pdftex.def)             Requested size: 426.79135pt x 272.60448pt.
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 
-LaTeX Warning: Citation `website:webrtc' on page 1 undefined on input line 90.
+LaTeX Warning: Citation `website:webrtc' on page 1 undefined on input line 94.
 
 
 LaTeX Warning: Citation `website:serialization' on page 1 undefined on input li
-ne 90.
+ne 94.
 
 
 LaTeX Warning: Citation `website:namespaces' on page 1 undefined on input line 
-90.
+94.
 
 
 LaTeX Warning: Citation `website:socketio-clients' on page 1 undefined on input
- line 90.
+ line 94.
 
 [1
 
-{C:/Users/toons/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}]
-<barcode.jpg, id=70, 2228.325pt x 1084.05pt>
-File: barcode.jpg Graphic file (type jpg)
-<use barcode.jpg>
-Package pdftex.def Info: barcode.jpg  used on input line 107.
-(pdftex.def)             Requested size: 222.84555pt x 108.41135pt.
- [2 <./figures/deployment.pdf
+{C:/Users/toons/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}] [2 <./figur
+es/deployment.pdf
 
 pdfTeX warning: miktex-pdftex.exe (file ./figures/deployment.pdf): PDF inclusio
 n: invalid other resource which is no dict (key 'ProcSets', type <array>); igno
 red.
->] (testen.tex) (besluit.tex [3 <./barcode.jpg>])
+>]
+<barcode.jpg, id=89, 2228.325pt x 1084.05pt>
+File: barcode.jpg Graphic file (type jpg)
+<use barcode.jpg>
+Package pdftex.def Info: barcode.jpg  used on input line 111.
+(pdftex.def)             Requested size: 222.84555pt x 108.41135pt.
+ (testen.tex) (besluit.tex [3 <./barcode.jpg>])
 No file main.bbl.
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 167.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 171.
 [4]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 167.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 171.
  (main.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 167.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 167.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 171.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 171.
 Package rerunfilecheck Info: File `main.out' has not changed.
 (rerunfilecheck)             Checksum: 32D7A478FD0577BCF9CD099D5A68B0C1;817.
 
 
 LaTeX Warning: There were undefined references.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 167.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 171.
  ) 
 Here is how much of TeX's memory you used:
- 9698 strings out of 492945
- 153835 string characters out of 3126252
+ 9700 strings out of 492945
+ 153857 string characters out of 3126252
  290130 words of memory out of 3000000
  13387 multiletter control sequences out of 15000+200000
- 40841 words of font info for 60 fonts, out of 3000000 for 9000
+ 40924 words of font info for 61 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 42i,8n,40p,1225b,377s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 42i,8n,40p,1225b,352s stack positions out of 5000i,500n,10000p,200000b,50000s
 {C:/Users/toons/AppData/Local/Programs/MiKTeX 2.9/fonts/enc/dvips/lm/lm-rm.en
 c}{C:/Users/toons/AppData/Local/Programs/MiKTeX 2.9/fonts/enc/dvips/lm/lm-ec.en
 c}{C:/Users/toons/AppData/Local/Programs/MiKTeX 2.9/fonts/enc/dvips/lm/lm-maths
@@ -642,7 +643,7 @@ lic/lm/lmr10.pfb><C:/Users/toons/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/
 public/lm/lmri10.pfb><C:/Users/toons/AppData/Local/Programs/MiKTeX 2.9/fonts/ty
 pe1/public/lm/lmsy10.pfb><C:/Users/toons/AppData/Local/Programs/MiKTeX 2.9/font
 s/type1/public/lm/lmtt10.pfb>
-Output written on main.pdf (4 pages, 250384 bytes).
+Output written on main.pdf (4 pages, 250389 bytes).
 PDF statistics:
  130 PDF objects out of 1000 (max. 8388607)
  21 named destinations out of 1000 (max. 500000)
