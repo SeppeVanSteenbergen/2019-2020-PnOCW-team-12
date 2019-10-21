@@ -11,36 +11,16 @@ var images = [
   ['orientation5', 1, [400000], [45]],
   ['orientation6', 1, [400000], [6.5]],
   ['orientation7', 1, [400000], [347]], // 6
-  ['size1', 1, [26000], [0]], // 7
-  ['size2', 1, [140000], [0]]
+  ['size1', 1, [900], [0]], // 7
+  ['size2', 1, [480000], [0]],
+  ['size3', 1, [60000], [0]],
+  ['size4', 1, [1000000], [0]],
+  ['multiple1', 2, [225150], [0]],
+  ['multiple2', 10, [40000], [0]],
 ]
-var orientation = [0, 7]
 
-function loadImage(imageName) {
-  fs.readdir(sourceFolder, (err, files) => {
-    if (err) {
-      console.error('Could not load the images')
-    }
-
-    files.forEach(file => {
-      if (file.includes(imageName)) return file
-    })
-    console.log(images)
-  })
-}
-
-function load() {
-  for (let i = 0; i < images.length; i++) {
-    this.images[i] = loadImage(this.images[i][0])
-  }
-}
-
-function checkOrientation() {
-  checkOrientationHelper(0)
-}
-
-function checkOrientationHelper(i) {
-  if (i < orientation[1]) {
+function checkScreenCreation(i){
+  if (i < images.length) {
     var image = document.createElement('img')
     var canvas = document.createElement('canvas')
     var ctx
@@ -60,103 +40,138 @@ function checkOrientationHelper(i) {
       inputImage.medianBlurMatrix(3);
       inputImage.createScreens();
 
-      console.assert(inputImage.screens.length == images[i][1]); //aantal schermen
+      //TODO: creation checker
+      //TODO: transfering, mask, creation of screens, id...
+
+      checkScreenCreation(i + 1)
+    }
+  }
+}
+
+function checkNbScreens(i){
+  if (i==0) console.log("Start nb screens check")
+  if (i < images.length) {
+    var image = document.createElement('img')
+    var canvas = document.createElement('canvas')
+    var ctx
+
+    image.setAttribute('src', sourceFolder + images[i][0] + '.jpg')
+    image.onload = function() {
+      ctx = canvas.getContext('2d')
+      canvas.width = image.width
+      canvas.height = image.height
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      ctx.drawImage(image, 0, 0, image.width, image.height)
+      let imgData = ctx.getImageData(0, 0, image.width, image.height)
+      var inputImage = new Image(imgData, '', 'RGBA', image.width, image.height)
+
+      inputImage.rgbaToHsla();
+      inputImage.createGreenBlueMask();
+      inputImage.medianBlurMatrix(3);
+      inputImage.createScreens();
+
+      try {
+        console.assert(inputImage.screens.length == images[i][1]);
+      } catch (error) {
+        console.log("Nb screens in " + images[i][0] + " has to be " + images[i][1] + " but returns " + inputImage.screens.length);
+      }
       
+
+      checkNbScreens(i + 1)
+    }
+  } else console.log("Stop nb screens check")
+}
+
+function checkSize(i){
+  if (i==0) console.log("Start size check")
+  if (i < images.length) {
+    var image = document.createElement('img')
+    var canvas = document.createElement('canvas')
+    var ctx
+
+    image.setAttribute('src', sourceFolder + images[i][0] + '.jpg')
+    image.onload = function() {
+      ctx = canvas.getContext('2d')
+      canvas.width = image.width
+      canvas.height = image.height
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      ctx.drawImage(image, 0, 0, image.width, image.height)
+      let imgData = ctx.getImageData(0, 0, image.width, image.height)
+      var inputImage = new Image(imgData, '', 'RGBA', image.width, image.height)
+
+      inputImage.rgbaToHsla();
+      inputImage.createGreenBlueMask();
+      inputImage.medianBlurMatrix(3);
+      inputImage.createScreens();
+
       for(let j = 0; j < inputImage.screens.length; j++){ //grootte schermen
         var min = Infinity;
-        for(let k = 0; k < images[i][3].length; k++){
+        for(let k = 0; k < images[i][2].length; k++){
           min = Math.min(min, Math.abs(inputImage.screens[j].size - images[i][2][k]))
         }
-        console.assert(min < 5000);
+        try {
+          console.assert(min < 5000);
+        } catch (error) {
+          console.log("Screen size in " + images[i][0] + " has to be one of (look below) but returns " + inputImage.screens[j].size);
+          console.log(images[i][2]);
+        }
+        
       }
+
+      checkSize(i + 1)
+    }
+  } else  console.log("Stop size check")
+}
+
+
+function checkOrientation(i) {
+  if(i == 0) console.log("Start orientation check")
+  if (i < images.length) {
+    var image = document.createElement('img')
+    var canvas = document.createElement('canvas')
+    var ctx
+
+    image.setAttribute('src', sourceFolder + images[i][0] + '.jpg')
+    image.onload = function() {
+      ctx = canvas.getContext('2d')
+      canvas.width = image.width
+      canvas.height = image.height
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      ctx.drawImage(image, 0, 0, image.width, image.height)
+      let imgData = ctx.getImageData(0, 0, image.width, image.height)
+      var inputImage = new Image(imgData, '', 'RGBA', image.width, image.height)
+
+      inputImage.rgbaToHsla();
+      inputImage.createGreenBlueMask();
+      inputImage.medianBlurMatrix(3);
+      inputImage.createScreens();
 
       for(let j = 0; j < inputImage.screens.length; j++){ //orientatie schermen
         var min = 360;
         for(let k = 0; k < images[i][3].length; k++){
           min = Math.min(min, Math.abs(inputImage.screens[j].orientation - images[i][3][k]))
         }
-        console.assert(min < 0.5);
+        try {
+          console.assert(min < 2);
+        } catch (error) {
+          console.log("Screen orientation in " + images[i][0] + " has to be one of (look below) but returns " + inputImage.screens[j].orientation);
+          console.log(images[i][3]);
+        }
+        
       }
 
 
 
-      checkOrientationHelper(i + 1)
+      checkOrientation(i + 1)
     }
-  } else {
-    console.log('orientation checked') // einde
-  }
+  } else   console.log("Stop orientation check")
 }
 
 
 function runAllTests() {
-  let results = []
-  for (let i = 0; i < images.length; i++) {
-    let imageObject = document.getElementById('im')
-    imageObject.setAttribute('src', sourceFolder + images[i][0] + '.jpg')
-    imageObject.onload = () => {
-      let canvas = document.createElement('canvas')
-      let ctx = canvas.getContext('2d')
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
-      canvas.width = imageObject.width
-      canvas.height = imageObject.height
-      ctx.drawImage(imageObject, 0, 0, imageObject.width, imageObject.height)
-      let imgData = ctx.getImageData(
-        0,
-        0,
-        imageObject.width,
-        imageObject.height
-      )
+  console.log("----------Start tests----------")
+  checkNbScreens(0)
+  checkSize(0)
+  checkOrientation(0);
 
-      let inputImage = new Image(imgData, 'canv', 'RGBA')
-      inputImage.rgbaToHsla()
-      let imageOutGreen = new Image(
-        inputImage.getImgData(),
-        'imageOutGreen',
-        'HSLA'
-      )
-      imageOutGreen.createGreenMask()
-      let imageOutBlue = new Image(
-        inputImage.getImgData(),
-        'imageOutBlue',
-        'HSLA'
-      )
-      imageOutBlue.createBlueMask()
-      /*
-      var imageOutConcatenated = new Image(imageOutGreen.getImgData(), "imageOutConcatenated", "HSLA");
-      imageOutConcatenated.addImgData(imageOutBlue.getImgData());
-      */
-
-      let imageOutConcatenated = new Image(
-        inputImage.getImgData(),
-        'imageOutConcatenated',
-        'HSLA'
-      )
-      imageOutConcatenated.createGreenBlueMask()
-      console.log(imageOutConcatenated.getHeight())
-      console.log(imageOutConcatenated.getWidth())
-      console.log(imageOutConcatenated.matrix)
-      //imageOutConcatenated.detectScreens();
-
-      imageOutGreen.hslaToRgba()
-      //imageOutGreen.show()
-      imageOutBlue.hslaToRgba()
-      //imageOutBlue.show()
-      let imageOutSmoothened = new Image(
-        imageOutConcatenated.getImgData(),
-        'imageOutSmoothened',
-        'HSLA'
-      )
-
-      imageOutConcatenated.hslaToRgba()
-
-      imageOutSmoothened.cornerDetection()
-      imageOutConcatenated.medianBlur(7)
-      imageOutConcatenated.calcIslands()
-      //imageOutConcatenated.show()
-      imageOutSmoothened.hslaToRgba()
-      //imageOutSmoothened.show()
-
-      console.log('slsjdflkq')
-    }
-  }
 }

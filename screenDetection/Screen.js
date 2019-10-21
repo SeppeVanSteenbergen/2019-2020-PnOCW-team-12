@@ -6,7 +6,6 @@ class Screen {
         this.corners = corners;
         this.orientation = orientation;
         var area = 0;
-        console.log(corners);
         for(let i = 0; i < corners.length - 1; i++){
             area += (corners[i][0] * corners[i + 1][1] *0.5)
             area -=  (corners[i+ 1][0] * corners[i][1]*0.5)
