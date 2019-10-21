@@ -44,7 +44,7 @@
 \multicolumn{3}{l}{\large\textbf{Team 12}} \\
 \midrule
 Martijn Debeuf & 2.5h & 750 LOC \\ % fill in the time spend on this task per team member who worked on it and the amount of lines of code (LOC) reviewed
-Frédéric Blondeel & 1.5h & 30 LOC \\
+Frédéric Blondeel & 1.5h & 650 LOC \\
 \bottomrule
 \hline
 \end{tabular}\\
@@ -56,6 +56,19 @@ Files reviewed: barcodeScanner/main.js; screenDetection/image.js
 {\color[HTML]{52BDEC} \rule{\linewidth}{1mm} }
 
 \smallskip
+
+\begin{itemize}
+
+\item Bij de file Image.js is nog geen commentaar toegevoegd, dit maakt het lezen en begrijpen van de code lastig. 
+\item Bij de changeColorspace() methode kan misschien een array bijgehouden worden met de toegelaten colorspaces als soort van veiligheid of indien er effectief maar twee gebruikt worden is het misschien beter om deze als een boolean bij te houden. 
+\item Het verschil tussen de methode getImgData() en show() is niet erg duidelijk, kan ook verholpen worden door commentaar te voorzien.
+\item De main.js code moet nog mooier geordend worden maar dit wordt momenteel nog als test gebruikt. De andere bestanden zijn simpele code waar niet veel over op te merken is.
+
+
+\end{itemize}
+
+
+
 
 \exampletext{\textit{Code reviews improve the overall quality of the work. Both from a design perspective and code quality (high cohesion, low coupling perspective). Indicate what improvements you recommended, what bugs you caught, \ldots\ 
 What can be found in a code review:
