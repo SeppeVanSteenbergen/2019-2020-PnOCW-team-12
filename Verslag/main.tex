@@ -54,23 +54,8 @@ Frédéric Blondeel & 20h \\
 \noindent
 {\color[HTML]{52BDEC} \rule{\linewidth}{1mm} }
 
-\section{Introduction}\label{sec:introduction}
-
-\note{(Few sentences.)}
-\exampletext{
-\textit{Clearly state the problem you tackled. The task's assignment defined the functionality you have to offer, not the problem(s) you solved. You have to phrase the exact problem statement, i.e., state the assumptions you made. On top of the problem statement we expect you to state the relevance of the problem and what solution is chosen. Later in \S\ref{sec:technical-analysis} you can go into detail as why this is your preferred solution. Throughout the text we expect you to back up claims with (scientific) references.
-\textbf{This section is best written after the remainder of the report is finished.}}}
-
-\exampletext{
-We are developing a multiscreen casting framework that supports a heterogeneous set of displays. The very first hurdle is the design of a communication protocol that connects all these devices. Devices are connected over the web via a client-server architecture. Clients connect to the server by loading a webpage in their browser. To establish a two-way communication channel, a connection is maintained through sockets~\cite{socketio}.
-
-Based on these principles we developed a basic multiscreen casting framework that offers the following functionality:
-\begin{itemize}
-    \item The ability to transmit complex data such as images.
-    \item Client-side access to the camera.
-    \item Client identification such that clients can receive specific commands.
-    \item Support of two roles, i.e., master and slave.
-\end{itemize}
+\section{Introductie}\label{sec:introductie}
+\input{introduction}
 % The communication protocol should accommodate for:
 % \begin{itemize}
 %     \item The transmission of images from the smartphone camera to the master.
