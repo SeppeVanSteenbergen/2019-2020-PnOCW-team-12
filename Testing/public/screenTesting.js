@@ -14,7 +14,7 @@ var images = [
   ['size1', 1, [26000], [0]], // 7
   ['size2', 1, [140000], [0]]
 ]
-var orientation = [0, 6];
+var orientation = [0, 7]
 
 function loadImage(imageName) {
   fs.readdir(sourceFolder, (err, files) => {
@@ -35,34 +35,35 @@ function load() {
   }
 }
 
-async function checkOrientation(){
-  
-  for(let i = orientation[0]; i <= orientation[1]; i++){
-    var image = document.createElement('img');
-    var canvas = document.createElement('canvas');
-    var ctx;
-    
-    image.setAttribute('src', sourceFolder + images[i][0] + '.jpg');
-    image.onload = function () {
-      ctx = canvas.getContext('2d');
-      canvas.width = image.width;
-      canvas.height = image.height;     
-      console.log(canvas.width);  
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.drawImage(image, 0, 0, image.width, image.height);
-      imgData = ctx.getImageData(0, 0, image.width, image.height);
-      var inputImage = new Image(imgData, "", "RGBA");
+function checkOrientation() {
+  checkOrientationHelper(0)
+}
 
+function checkOrientationHelper(i) {
+  if (i < orientation[1]) {
+    var image = document.createElement('img')
+    var canvas = document.createElement('canvas')
+    var ctx
+
+    image.setAttribute('src', sourceFolder + images[i][0] + '.jpg')
+    image.onload = function() {
+      ctx = canvas.getContext('2d')
+      canvas.width = image.width
+      canvas.height = image.height
+      console.log(canvas.width)
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      ctx.drawImage(image, 0, 0, image.width, image.height)
+      let imgData = ctx.getImageData(0, 0, image.width, image.height)
+      var inputImage = new Image(imgData, '', 'RGBA')
+
+      checkOrientationHelper(i + 1)
     }
-      
+  } else {
+    console.log('orientation checked')
   }
-
 }
 
-function getImgData(source){
-  
-  
-}
+function getImgData(source) {}
 
 function runAllTests() {
   let results = []

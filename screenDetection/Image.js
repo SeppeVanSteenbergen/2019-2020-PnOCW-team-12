@@ -27,8 +27,10 @@ class Image {
         this.setPixels(imgData.data);
         this.setCanvas(canvasName, imgData.width, imgData.height);
         this.setColorSpace(colorSpace);
+      if(this.canvas !== null) {
         let context = this.canvas.getContext("2d");
         context.putImageData(imgData, 0, 0);
+      }
 
         this.islands = [];
         this.matrix = new Array(this.getHeight());
@@ -40,10 +42,12 @@ class Image {
     }
 
     getImgData() {
+      if(this.canvas !== null) {
         let context = this.canvas.getContext("2d");
         let imgData = context.createImageData(this.canvas.width, this.canvas.height);
         imgData.data.set(this.pixels);
         return imgData;
+      }
     }
 
     getColorSpace() {
@@ -51,11 +55,15 @@ class Image {
     }
 
     getHeight() {
+      if(this.canvas !== null) {
         return this.canvas.height;
+      }
     }
 
     getWidth() {
+      if(this.canvas !== null) {
         return this.canvas.width;
+      }
     }
 
     setPixels(pixels) {
@@ -64,8 +72,10 @@ class Image {
 
     setCanvas(canvasName, width, height) {
         this.canvas = document.getElementById(canvasName);
+      if(this.canvas !== null) {
         this.canvas.width = width;
         this.canvas.height = height;
+      }
     }
 
     setColorSpace(newColorSpace) {
@@ -76,8 +86,10 @@ class Image {
     }
 
     show() {
+      if(this.canvas !== null) {
         let context = this.canvas.getContext("2d");
         context.putImageData(this.getImgData(), 0, 0);
+      }
     }
 
     calcIslandsFloodfill() {
@@ -129,7 +141,7 @@ class Image {
                 if (this.workMatrix[y + 1][x] === 1 || this.workMatrix[y + 1][x] === 2) {stack.push([x, y + 1])}
             }
 
-            
+
         }
         return [minX, minY, maxX, maxY];
     }
@@ -248,21 +260,21 @@ class Image {
         let red = this.pixels[i] / 255;
         let green = this.pixels[i + 1] / 255;
         let blue = this.pixels[i + 2] / 255;
-  
+
         let min = Math.min(red, green, blue);
         let max = Math.max(red, green, blue);
-  
+
         let L = (min + max) / 2;
         let S = this.findSaturation(min, max, L);
         let H = this.findHue(red, green, blue, max, min);
-  
+
         this.pixels[i] = H / 2;
         this.pixels[i + 1] = Math.round(S * 100);
         this.pixels[i + 2] = Math.round(L * 100);
     }
     this.setColorSpace("HSLA");
   }
-  
+
   findSaturation(min, max, L) {
     if (L < 0.5) {
         return (max - min) / (max + min);
@@ -270,7 +282,7 @@ class Image {
         return (max - min) / (2.0 - max - min);
     };
   }
-  
+
   findHue(red, green, blue, max, min) {
     let hue = 0;
     if (max == min) {
@@ -285,7 +297,7 @@ class Image {
     else if (blue == max) {
         hue = 4.0 + (red - green) / (max - min);
     }
-  
+
     hue *= 60;
     if (hue < 0) {
         hue += 360
@@ -369,7 +381,7 @@ class Image {
         return tmp2;
     }
 
-    /* 
+    /*
     image as Image
     mask color = white
     not in mask = black
@@ -601,7 +613,7 @@ class Image {
             this.hslaToRgba();
             var change = true;
         }
-        
+
         size = Math.round(size);
 
         //verticale lijn
@@ -628,7 +640,7 @@ class Image {
 
     /**
      * Draw a filled rectangle on top of the image
-     * 
+     *
      * @param {Array} startCorner linkerbovenhoek vector co array
      * @param {Array} endCorner rechteronderhoek vector co array
      * @param {number} alpha getal 0..1
