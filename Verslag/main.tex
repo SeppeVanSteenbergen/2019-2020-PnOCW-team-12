@@ -108,62 +108,34 @@ A socket is assigned a unique identifier by Socketio. This identifier can be use
 \note{($\approx$ 1 page. Depending on necessity)}
 \exampletext{\textit{When you design or use an algorithm you should be able to explain how well it performs and if it satisfies the requirements. Often there will be alternatives or system parameters that need to be chosen. We want to know why you chose a specific set of parameters, or why you chose an approach over another. We supply some example text of last year.}}
 
-\exampletext{
-Correctly identifying players is an important requirement of the game. For this end we adapt a Face Recognition system that builds on the \texttt{facerecognizer.js} framework~\cite{website:facerecognizer}. We show that by carefully selecting hyper parameters we can assure that misidentification will happen in less than 1\% of identifications.
 
 
-\subsection{Description of the face recognition system}
+\subsection{Scherm identificatie met barcodes}
 
-We illustrate the face recognition pipeline in Figure~\ref{fig:identification}. This pipeline is fully offered by the \texttt{facerecognizer.js} framework~\cite{website:facerecognizer}. However, since we have only one enrollment sample, we will only use the core technology of the framework, i.e., DeepFace~\cite{amos2016openface}, the feature extractor method. Deepface represents the face image as a 128 dimensional vector with values in the interval $[-1,1]$. In a second step a similarity score is calculated between the enrollment samples of all known identities and the test sample. For this end, we evaluate the impact of two similarity metrics on the performance: \texttt{profnuyenssimilarity}~\cite{nuyens:2018} and \texttt{profjacobsdistance}~\cite{jacobs:2015} in \S\ref{sec:experimenten}. In a last step the highest score is compared to a threshold. If the highest score is bigger then the threshold we return the identity connected to this score, else we conclude that the test subject is unknown. The two mentioned metrics can both be formulated by
-\[
-  S(a, b)
-  =
-  \sqrt{
-    \int_0^1 \int_0^1
-      \|\mathcal{P}_\nu(a, t_1, t_2) - \mathcal{P}_\nu(b, t_1, t_2)\|_{\mathcal{F}}^2
-      \, \mathrm{d}t_1 \mathrm{d}t_2
-  }
-  ,
-\]
-where $\mathcal{P}$ is a polynomial interpolation operator.
+\subsubsection{Algemene uitleg}
 
-\begin{figure}
-	\centering
-	\includegraphics[width=\textwidth]{figures/identification}
-	\caption{The face recognition pipeline. Face image from \textsf{lfw} data set~\cite{LFWTech}.} 
-	\label{fig:identification}
-\end{figure}
-
-\subsection{Data set}
-
-Representative data is needed to test the performance of a machine learning system. We evaluated our system in a first phase with a standard data set, i.e., labeled face in the wild~\cite{LFWTech}. This data set contains $10340$ identities with approximately 5 images per identity.
-
-\subsection{Experiments}\label{sec:experimenten}
-
-We discuss the influence the performance of our identification system in function of two similarity functions: \texttt{profnuyenssimilarity}~\cite{nuyens:2018} and \texttt{profjacobsdistance}~\cite{jacobs:2015}. The performance is measured in \texttt{adalbertoscore}~\cite{vanhamme:1991}. In order to achieve the requirement of a misidentification probability of $1$\%, \texttt{adalbertoscore} should be less then $-4$.
-
-We calculate the feature vector of all the faces in \textsf{lfw}. Then, we split the data set in a enrollment and test set. We make sure that only for enrollment only one sample is available for each identity. We repeat this split procedure $10$ times and report the average score. For every split we evaluate the performance in function of the threshold. Figure~\ref{fig:performance} shows \texttt{adalbertoscore} for both similarity functions w.r.t.\ the threshold. We chose the \texttt{profnuyenssimilarity} as this clearly satisfies the requirement of a \texttt{adalbertoscore} of $-10$ at a threshold of $0.5$.
-We note however that the \texttt{profnuyenssimilarity} needs a resolution of at least $5$MP which is currently not a problem, but might be a concern in the later development such that we keep the \texttt{profjacobsdistance} implementation as an alternative.
+De identificatie van schermen gebeurt aan de hand van een kleuren barcode. Het slave-scherm zal binnen zijn rand(gebruikt voor edge detection) een herhalend patroon van 5 kleuren en wit tonen. Aan de hand van de volgorde kan een unieke code per scherm gelezen worden en zo is elk scherm duidelijk gedefinieerd. De 5 kleuren zijn speciaal gekozen om zo ver mogelijk uit elkaar te liggen in het HSL spectrum om fouten lezingen te vermijden. Ze dragen elk een cijfer van 1 tot en met 5 en worden maar één keer gebruikt in de barcode. Dit zorgt ervoor dat we in theorie een totaal van $5!$ ($=120$) verschillende schermen op één moment kunnen detecteren. Het herhalend patroon geeft ons de mogelijkheid om fouten te vermijden. Na het vinden van het scherm zelf (zie sectie 3.2) zal de barcode gelezen worden. Indien een reflectie of een overlap plaatsvind kan een stuk van het scherm bedekt zijn. De scanner() zal het midden van het scherm lezen in rechte lijn (volgens de orientatie), aangezien een stuk bedekt is zal deze blijven gaan tot hij 5 kleuren en wit tegenkomt. Zo niet, zal de lijst met codes leeggemaakt worden en verder gaan. Het herhalend patroon is dus essentieel aan het correct inlezen.
 
 \begin{figure}
 \centering
-\begin{minipage}[b]{.43\textwidth}
-	\includegraphics[width=\linewidth]{figures/performance}
-	\caption{The \texttt{adalbertoscore} for both the \texttt{profnuyenssimilarity} and \texttt{profjacobsdistance} w.r.t.\ the threshold. The number of classes is $10350$.} 
-	\label{fig:performance}
-\end{minipage}
-\hspace{1cm}
-\begin{minipage}[b]{.43\textwidth}
-	\includegraphics[width=\linewidth]{figures/performanceClasses}
-	\caption{The performance w.r.t.\ the number of classes for both the \texttt{profnuyenssimilarity} and \texttt{profjacobsdistance}. The threshold is $0.5$.} 
-	\label{fig:performanceClasses}
-\end{minipage}
+\includegraphics[scale=0.1]{barcode}
+\caption{Voorbeeld van een barcode met 6 herhalingen.} 
+\label{fig:barcode}
 \end{figure}
 
-In a second experiment we vary the number of classes. We fix the threshold to $0.5$. Before make the enrollment and test splits we randomly select a specific number of identities. Afterwards we apply the same procedure as in the first experiment. The results are shown in Figure~\ref{fig:performanceClasses}. From this figure we conclude that, in general the identification performance is better with a lower number of players. On top of that, when the number of players is less then $200$, both similarity functions perform similar.
 
-In a third experiment we investigated the battery consumption\ldots
-}
+
+\subsubsection{Data set}
+
+Om het scanner() algorithme te testen hebben we een aantal foto's genomen vanop verschillende afstanden, met verschillende computers (kleuren kunnen afwijken van scherm tot scherm) en met verschillende aantal barcodes dat op het scherm past. Aangezien een herhalend patroon gebruikt wordt kan men kiezen hoeveel er per scherm staan, dit kan van 3 tot 15 gaan (meer heeft niet veel zin want het onderschijden van kleuren wordt lastig).
+
+\subsubsection{Experiments}\label{sec:experimenten}
+
+\subsection{Image}
+\subsubsection{Algemene uitleg}
+\subsubsection{Data set}
+\subsubsection{Experiments}
+
 
 \section{Conclusion and prospects}\label{sec:conclusion}
 
