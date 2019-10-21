@@ -97,6 +97,7 @@ class Image {
         for (let y = 0; y < this.getHeight(); y++) {
             for (let x = 0; x < this.getWidth(); x++) {
                 if (this.workMatrix[y][x] === 1 || this.workMatrix[y][x] === 2) {
+                    console.log("got a new island");
                     let newIslandCoo = this.floodfill(x, y, this.islandID);
                     let newIsland = new Island(newIslandCoo[0], newIslandCoo[1], this.islandID);
                     newIsland.add(newIslandCoo[2], newIslandCoo[3]);
@@ -117,14 +118,14 @@ class Image {
     }
 
     floodfill(xPos, yPos, islandID){
-        let stack = [[xPos,yPos]];
-        let pixel;
-        let x;
-        let y;
-        let minX = xPos;
-        let minY = yPos;
-        let maxX = xPos;
-        let maxY = yPos;
+        var stack = [[xPos,yPos]];
+        var pixel;
+        var x;
+        var y;
+        var minX = xPos;
+        var minY = yPos;
+        var maxX = xPos;
+        var maxY = yPos;
         while(stack.length > 0){
             pixel = stack.pop();
             x = pixel[0];
@@ -653,8 +654,8 @@ class Image {
         }
         alpha = alpha * 255;
 
-        for (let j = startCorner[1]; j < endCorner[1]; j++) {
-            for (let i = startCorner[0]; i < endCorner[0]; i++) {
+        for (let j = startCorner[1]; j <= endCorner[1]; j++) {
+            for (let i = startCorner[0]; i <= endCorner[0]; i++) {
                 let pos = this.pixelToPosition([i, j]);
 
                 this.pixels[pos] = Math.min(this.pixels[pos] + alpha, 255);
