@@ -1,0 +1,15 @@
+{
+  "name": "screendetectiontestserver",
+  "version": "1.0.0",
+  "description": "whith this we can test how good our images are processed",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm start"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "nodemon": "^1.19.4"
+  }
+}
