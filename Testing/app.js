@@ -8,6 +8,7 @@ const fs = require('fs')
 app.use(serveStatic(path.join(__dirname, 'public')))
 
 app.use(serveStatic(path.join(__dirname, '../screenDetection')))
+app.use(serveStatic(path.join(__dirname, '../barcodeScanner')))
 
 app.get('/file-list', (req, res) => {
   fs.readdir('./public/Images', (err, files) => {
