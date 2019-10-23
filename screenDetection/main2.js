@@ -21,7 +21,7 @@ imgElement.onload = function () {
   var inputImage = new Image(inputImgData, "inputImage", "RGBA");
   inputImage.rgbaToHsla();
   
-  var imageTest = new Image(inputImage.getImgData(), "imageOutConcatenated", "HSLA");
+  var imageTest = new Image(inputImage.getImgData(), "imageOutConcatenated", "HSLA", imgElement.width, imgElement.height);
   imageTest.createGreenBlueMask();
   imageTest.medianBlurMatrix(3);
   imageTest.calcIslandsFloodfill();
