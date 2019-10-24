@@ -1,4 +1,4 @@
-testcalcSmallestCircleCenter()
+
 
 function randomPointsGenerator(nbPoints, size){
     let pointList = []
@@ -31,31 +31,48 @@ function testcalcSmallestCircleCenter(){
     console.log(point1, point2, center)
 }
 
+function testCalcRadius(){
+    let point1 = [5.6, 4.644]
+    let point2 = [6.92, 10.312]
+    let point3 = [0.94, 13.211]
+    let radius = calcRadius(point1, point2, point3)
+    let expectedRadius = 5
+    console.assert(Math.abs(radius - expectedRadius) < 0.1)
+}
+
 /*
 math for finding center of 3 points from paulbourke.net/geometry/circlesphere
 */
 function calcSmallestCircleCenter(point1, point2, points){
-    let distance12 = calcDistance(point1, point2)
     let point3
     let minPoint
     let minRadius = Infinity
     let radius
     for(let i = 0; i < points.length; i++){
         point3= points[i]
-        distance23 = calcDistance(point2, point3)
-        distance13 = calcDistance(point1, point3)
-        radius = calcRadius(distance12, distance13, distance23)
+        radius = calcRadius(point1, point2, point3)
         if(radius < minRadius){
             minPoint = point3
             minRadius = radius
         }
     }
+    delete point3 //point3 only for help in the for loop
+    console.log(minPoint)
     //math for finding center of 3 points from paulbourke.net/geometry/circlesphere
     let ma = (point2[1] - point1[1]) / (point2[0] - point1[0])
     let mb = (minPoint[1] - point2[1]) / (minPoint[0] - point2[0])
-
-    centerX = (ma * mb * (point1[1] - minPoint[1]) + mb * (point1[0] + point2[0]) - ma * (point2[0] - minPoint[0])) / (2* (mb - ma))
-    centerY = -(centerX - (point1[0] + point2[0]) / 2) / ma + (point1[1] + point2[1]) / 2
+    let counter = 3
+    while(counter > 0 && (!isFinite(ma) || ! isFinite(mb) || ma == mb)){
+        let helpPoint = point1.slice(0)
+        point1 = point2.slice(0)
+        point2 = minPoint.slice(0)
+        minPoint = helpPoint
+        ma = (point2[1] - point1[1]) / (point2[0] - point1[0])
+        mb = (minPoint[1] - point2[1]) / (minPoint[0] - point2[0])
+        counter--
+    }
+    let centerX = (ma * mb * (point1[1] - minPoint[1]) + mb * (point1[0] + point2[0]) - ma * (point2[0] + minPoint[0])) / (2* (mb - ma))
+    let centerY = -(centerX - (point1[0] + point2[0]) / 2) / ma + (point1[1] + point2[1]) / 2
     return [centerX, centerY]
 
 }
@@ -63,14 +80,17 @@ function calcSmallestCircleCenter(point1, point2, points){
 /*
 math from mathopenref.com/trianglecircumcircle.html
 */
-function calcRadius(dist1, dist2, dist3){
+function calcRadius(point1, point2, point3){
+    let dist1 = calcDistance(point2, point3)
+    let dist2 = calcDistance(point1, point3)
+    let dist3 = calcDistance(point1, point2)
     let numerator = dist1 * dist2 * dist3
     let denumerator = Math.sqrt((dist1 + dist2 + dist3) * (dist2 + dist3 - dist1) * (dist3 + dist1 - dist2) * (dist1 + dist2 - dist3))
     return numerator / denumerator
 }
 
 function calcDistance(point1, point2){
-    return Math.pow(point1[0] - point2[0], 2) + Math.pow(point1[1] - point2[1], 2)
+    return Math.sqrt(Math.pow(point1[0] - point2[0], 2) + Math.pow(point1[1] - point2[1], 2))
 }
 
 
