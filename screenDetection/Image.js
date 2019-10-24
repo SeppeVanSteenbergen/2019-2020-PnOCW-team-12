@@ -221,6 +221,7 @@ class Image {
 
 
 
+
     /**
      * @param {HTMLCanvasElement} canvas canvas om imgdata op te pushen
      */
@@ -442,14 +443,14 @@ class Image {
         }
     }
 
-    medianBlurMatrix(ksize) {
+    medianBlurMatrix(kSize) {
+        let halfKSize = Math.floor(kSize / 2);
         for (let y = 0; y < this.getHeight(); y++) {
             for (let x = 0; x < this.getWidth(); x++) {
                 let LArray = [];
 
-                let halfKsize = Math.floor(ksize / 2);
-                for (let yBox = -halfKsize; yBox <= halfKsize; yBox++) {
-                    for (let xBox = -halfKsize; xBox <= halfKsize; xBox++) {
+                for (let yBox = -halfKSize; yBox <= halfKSize; yBox++) {
+                    for (let xBox = -halfKSize; xBox <= halfKSize; xBox++) {
                         if (y + yBox >= 0 && y + yBox < this.getHeight() && x + xBox >= 0 && x + xBox < this.getWidth()) {
                             let pixel = this.matrix[y + yBox][x + xBox];
                             LArray.push(pixel);
@@ -462,6 +463,8 @@ class Image {
             }
         }
     }
+
+    gaussianBlurMatrix()
 
     cornerDetection() {
         let nbNeigbours = 2;
