@@ -15,7 +15,6 @@ class Image {
     MIN_ISLAND_SIZE = 1000;
 
     matrix;
-    workMatrix;
     screens = [];
 
     width;
@@ -39,10 +38,8 @@ class Image {
 
         this.islands = [];
         this.matrix = new Array(this.getHeight());
-        this.workMatrix = new Array(this.getHeight());
         for (let i = 0; i < this.getHeight(); i++) {
             this.matrix[i] = new Array(this.getWidth());
-            this.workMatrix[i] = new Array(this.getWidth());
         }
     }
 
@@ -97,11 +94,11 @@ class Image {
         let tmpIslands = [];
         for (let y = 0; y < this.getHeight(); y++) {
             for (let x = 0; x < this.getWidth(); x++) {
-                if (this.workMatrix[y][x] === 1 || this.workMatrix[y][x] === 2) {
+                if (this.matrix[y][x] === 1 || this.matrix[y][x] === 2) {
                     let newIslandCoo = this.floodfill(x, y, this.islandID);
                     let newIsland = new Island(newIslandCoo[0], newIslandCoo[1], this.islandID);
                     newIsland.add(newIslandCoo[2], newIslandCoo[3]);
-                    newIsland.setScreenMatrix(this.workMatrix);
+                    newIsland.setScreenMatrix(this.matrix);
                     tmpIslands.push(newIsland);
                     this.islandID += 2;
                 }
@@ -130,16 +127,16 @@ class Image {
             pixel = stack.pop();
             x = pixel[0];
             y = pixel[1];
-            if(this.workMatrix[y][x] <= 2){
-                this.workMatrix[y][x] += (islandID - 1);
+            if(this.matrix[y][x] <= 2){
+                this.matrix[y][x] += (islandID - 1);
                 minX = Math.min(minX, x);
                 minY = Math.min(minY, y);
                 maxX = Math.max(maxX, x);
                 maxY = Math.max(maxY, y);
-                if (this.workMatrix[y][x - 1] === 1 || this.workMatrix[y][x - 1] === 2) {stack.push([x - 1, y])}
-                if (this.workMatrix[y][x + 1] === 1 || this.workMatrix[y][x + 1] === 2) {stack.push([x + 1, y])}
-                if (this.workMatrix[y - 1][x] === 1 || this.workMatrix[y - 1][x] === 2) {stack.push([x, y - 1])}
-                if (this.workMatrix[y + 1][x] === 1 || this.workMatrix[y + 1][x] === 2) {stack.push([x, y + 1])}
+                if (this.matrix[y][x - 1] === 1 || this.matrix[y][x - 1] === 2) {stack.push([x - 1, y])}
+                if (this.matrix[y][x + 1] === 1 || this.matrix[y][x + 1] === 2) {stack.push([x + 1, y])}
+                if (this.matrix[y - 1][x] === 1 || this.matrix[y - 1][x] === 2) {stack.push([x, y - 1])}
+                if (this.matrix[y + 1][x] === 1 || this.matrix[y + 1][x] === 2) {stack.push([x, y + 1])}
             }
 
 
@@ -462,7 +459,6 @@ class Image {
                 LArray.sort(function (a, b) { return a - b });
                 let half = Math.floor(LArray.length / 2);
                 this.matrix[y][x] = LArray[half];
-                this.workMatrix[y][x] = LArray[half];
             }
         }
     }
@@ -547,17 +543,14 @@ class Image {
                 this.pixels[i + 1] = 0;
                 this.pixels[i + 2] = 100;
                 this.matrix[y][x] = 1;
-                this.workMatrix[y][x] = 1;
             } else if (this.inBlueRange(H, S, L)) {
                 this.pixels[i + 1] = 0;
                 this.pixels[i + 2] = 100;
                 this.matrix[y][x] = 2;
-                this.workMatrix[y][x] = 2;
             } else {
                 this.pixels[i + 1] = 0;
                 this.pixels[i + 2] = 0;
                 this.matrix[y][x] = 0;
-                this.workMatrix[y][x] = 0;
             }
         }
     }
