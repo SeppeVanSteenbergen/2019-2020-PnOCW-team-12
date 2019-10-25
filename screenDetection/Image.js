@@ -69,7 +69,13 @@ class Image {
       this.screens[i].findClientCode();
       this.screens[i].calculateScreenImage(this.imgData);
     }
+  }
 
+  /**
+   * Returns all the data from screens and main without images
+   */
+  getAllData() {
+    return true;
   }
 
   getColorSpace() {
