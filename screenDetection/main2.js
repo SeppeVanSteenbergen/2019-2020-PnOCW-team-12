@@ -25,7 +25,7 @@ imgElement.onload = function () {
   imageTest.createGreenBlueMask();
   imageTest.medianBlurMatrix(3);
   //imageTest.calcIslandsFloodfill();
-  imageTest.harrisCorner(100);
+  imageTest.harrisCorner(100, 0);
   imageTest.matrixToImg();
   imageTest.hslaToRgba();
   console.log("about to show");
