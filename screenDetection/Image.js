@@ -185,6 +185,15 @@ class Image {
           stack.push([x, y + 1]);
         }
       }
+        /* for (let i = 0; i < tmpIslands.length; i++) {
+            if (tmpIslands[i].size() > this.MIN_ISLAND_SIZE) {
+                this.drawFillRect([tmpIslands[i].minx, tmpIslands[i].miny], [tmpIslands[i].maxx, tmpIslands[i].maxy], 0.3);               
+                //tmpIslands[i].cornerDetection();
+                //let corners = tmpIslands[i].findScreenCorners();
+                //for(let j = 0; j < 4; j++) this.drawPoint(corners[j][0] + tmpIslands[i].minx, corners[j][1]+tmpIslands[i].miny, 10);
+                this.islands.push(tmpIslands[i]);
+            }
+        } */
     }
     return [minX, minY, maxX, maxY];
   }
@@ -474,10 +483,171 @@ class Image {
     }
   }
 
-  medianBlur(ksize) {
-    for (let y = 0; y < this.getHeight(); y++) {
-      for (let x = 0; x < this.getWidth(); x++) {
-        let LArray = [];
+    /**
+     * Harris corner detection impl (not working yet...)
+     * 
+     * @param {int} windowSize window corner search size
+     * @param {float} threshold corner threshold
+     */
+    harrisCorner(windowSize, threshold) {
+        //calc derivatives v
+        //setup harris matrix 
+        //calc eigenwaarden
+        //process eigenwaarden en bepaal punten?
+
+        let m = this.normalizeMatrix(this.matrix);
+
+        //horizontal and vertical sobel kernels
+        let kx = [[-1, 0, 1], [-2, 0, 2], [-1, 0, 1]];
+        let ky = [[-1, -2, -1], [0, 0, 0], [1, 2, 1]]
+
+        console.log("calc sobel")
+
+        let ix = this.sobel(m, kx);
+        let iy = this.sobel(m, ky);
+
+        //this.matrix = ix;
+
+        let points = []
+
+        //calc window scores
+        for (let j = 0; j < this.getHeight(); j += windowSize) {
+            for (let i = 0; i < this.getWidth(); i += windowSize) {
+                let score = this.calcWindow(m, i, j, windowSize, ix, iy);
+                console.log(score);
+                //todo: threshold
+
+                points.push([i + Math.round(windowSize/2), j + Math.round(windowSize/2)]);
+            }
+        }
+
+        console.log("aantal cornerns: " + points.length);
+
+        /* for (let i = 0; i < points.length; i++) {
+            let pos = points[i];
+
+            this.drawPoint(pos[0], pos[1], 6);
+            
+        } */
+
+        /* this.matrix = this.sobel(m, kx);
+
+        console.log(this.matrix); */
+
+        /* let p = math.matrix(this.matrix);
+        console.log(math.print("show result: $mat", {mat: p})); */
+
+    }
+
+    // op dit moment met een cte window function, maybe eens met een gaussian matrix eens proberen?
+    calcWindow(mat, x, y, size, intensx, intensy){
+
+        this.matrix = intensx;
+
+        let ix = 0;
+        let iy = 0;
+        for (let j = y; j < size; j++){
+            for (let i = x; i < size; i++) {
+                if(j >= 0 && j < mat.length && i >= 0 && i < mat[0].length){
+                    ix += intensx[j][i];
+                    console.log(intensx[j][i]);
+                    iy += intensy[j][i];
+                }
+            }       
+        }
+
+        //console.log(ix);
+
+        let m = math.matrix([[ix*ix, ix*iy], [ix*iy, iy*iy]]);
+
+        let det = math.det(m);
+        let trace = math.trace(m);
+        let k = 0.04 //tussen 0.04 en 0.06
+
+        let score = det - k * (trace * trace);
+
+        return score;
+    }
+
+    sobel(mat, kernel) {
+
+        // new clean matrix 
+        let result = new Array(mat.length);
+
+        for (let i = 0; i < result.length; i++) {
+            result[i] = new Array(mat[0].length);
+            
+        }
+
+        for (let j = 0; j < this.getHeight(); j++) {
+            for (let i = 0; i < this.getWidth(); i++) {
+                let val = this.convolution(mat, kernel, i, j);
+
+                if (val > 2) { // handpicked threshold, max value is 4
+                    result[j][i] = 1;
+                } else {
+                    result[j][i] = 0;
+                }
+            }
+        }
+
+        return result;
+    }
+
+    //img convolution voor 3x3 kernel matrix
+    convolution(mat, kernel, x, y) {
+        let result = 0;
+
+        for (let u = 0; u < 3; u++) {
+            for (let v = 0; v < 3; v++) {
+                let j = u + (y - 1);
+                let i = v + (x - 1);
+
+                if (j >= 0 && j < this.getHeight() && i >= 0 && i < this.getWidth()) {
+                    result += kernel[u][v] * mat[j][i];
+
+                    if (result < 0) {
+                        //console.log("kleiner dan nul --> " + Math.abs(result));
+                    }
+
+                }
+            }
+        }
+
+        return Math.abs(result);
+    }
+
+    //nu om terug een cleane binaire img te krijgen (ipv met ids er bij in)
+    normalizeMatrix(mat){
+
+        let result = mat;
+
+        for (let j = 0; j < mat.length; j++) {
+            for (let i = 0; i < mat.length; i++) {
+                if(mat[j][i] > 0 ){
+                    mat[j][i] = 1;
+                }
+            }
+        }
+
+        return result;
+    }
+
+    //binaire img naar bw hsl matrix
+    matrixToImg(){
+        for (let i = 0; i < this.pixels.length; i += 4){
+            this.pixels[i] = 0;
+            this.pixels[i + 1] = 0;
+
+            let pos = this.positionToPixel(i);
+            this.pixels[i + 2] = this.matrix[pos[1]][pos[0]] * 255;
+        }
+    }
+
+    medianBlur(ksize) {
+        for (let y = 0; y < this.getHeight(); y++) {
+            for (let x = 0; x < this.getWidth(); x++) {
+                let LArray = [];
 
         let halfKsize = Math.floor(ksize / 2);
         for (let yBox = -halfKsize; yBox <= halfKsize; yBox++) {
