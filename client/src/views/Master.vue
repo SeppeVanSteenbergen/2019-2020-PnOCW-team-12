@@ -190,17 +190,89 @@
       </v-card>
     </v-dialog>
 
+    <!-- PICTURE MODE DIALOG -->
+
     <v-dialog v-model="pictureModeDialog" fullscreen>
+      <v-stepper v-model="pictureStepper" class="fullheight">
+        <template>
+          <v-stepper-header>
+            <v-stepper-step :complete="pictureStepper > 1" step="1" editable>
+              Detection Screen
+            </v-stepper-step>
+
+            <v-divider></v-divider>
+
+            <v-stepper-step :complete="pictureStepper > 2" step="2" editable>
+              Take Picture
+            </v-stepper-step>
+
+            <v-divider></v-divider>
+
+            <v-stepper-step :complete="pictureStepper > 3" step="3" editable>
+              Result Display
+            </v-stepper-step>
+          </v-stepper-header>
+
+          <v-stepper-items class="fullheight">
+            <v-stepper-content step="1" class="fullheight">
+              <v-card class="mb-12 fullheight" elevation="0">
+                <v-btn @click="executeDisplayDetectionScreens" color="cyan"
+                  >display detection screen</v-btn
+                >
+              </v-card>
+
+              <v-btn color="primary" @click="nextStep(1)">
+                Continue
+              </v-btn>
+
+              <v-btn text @click="pictureModeDialog = false">Cancel</v-btn>
+            </v-stepper-content>
+
+            <v-stepper-content step="2" class="fullheight">
+              <v-card class="mb-12 fullheight" elevation="0">
+                <video :autoplay="true" id="videoElement" ref="video"></video>
+                <br />
+                <v-btn @click="startVideo">start video</v-btn>
+                <v-btn @click="switchCamera">switch camera</v-btn>
+                <v-btn @click="takePicture">Capture Image</v-btn>
+                <canvas ref="canv"></canvas>
+              </v-card>
+
+              <v-btn color="primary" @click="nextStep(2)">
+                Continue
+              </v-btn>
+
+              <v-btn text @click="pictureModeDialog = false">Cancel</v-btn>
+            </v-stepper-content>
+
+            <v-stepper-content step="3" class="fullheight">
+              <v-card class="mb-12 fullheight" elevation="0">
+                Some text 3
+              </v-card>
+
+              <v-btn color="primary" @click="nextStep(3)">
+                Continue
+              </v-btn>
+
+              <v-btn text @click="pictureModeDialog = false">Cancel</v-btn>
+            </v-stepper-content>
+          </v-stepper-items>
+        </template>
+      </v-stepper>
+      <!--
       <v-card class="pa-4">
         <v-card-title>
           <span class="headline">Picture Mode</span>
         </v-card-title>
+
         <v-card-text>
           <video :autoplay="true" id="videoElement" ref="video"></video>
           <br />
           <v-btn @click="startVideo">start video</v-btn>
           <v-btn @click="switchCamera">switch camera</v-btn>
-          <v-btn @click="executeDisplayDetectionScreens">display detection screen</v-btn>
+          <v-btn @click="executeDisplayDetectionScreens"
+            >display detection screen</v-btn
+          >
           <canvas ref="canv"></canvas>
         </v-card-text>
         <br />
@@ -217,7 +289,7 @@
             close</v-btn
           >
         </v-card-actions>
-      </v-card>
+      </v-card>-->
     </v-dialog>
   </v-container>
 </template>
@@ -248,7 +320,6 @@ export default {
       color: { r: 200, g: 100, b: 0, a: 1 },
       floodFillDialog: false,
       continousFloodMode: false,
-      pictureModeDialog: false,
       videoStream: null,
       angleSlider: 0,
       directionLabel: 'Hello',
@@ -257,7 +328,12 @@ export default {
       continousDrawDirectionMode: false,
       continuousVideoStream: false,
       videoSendInterval: null,
-      facingUser: true
+      facingUser: true,
+
+      // picture mode
+      pictureStepper: 0,
+      steps: 3,
+      pictureModeDialog: false
     }
   },
   components: {
@@ -386,6 +462,26 @@ export default {
     switchCamera() {
       this.facingUser = !this.facingUser
       this.startVideo()
+    },
+    nextStep(n) {
+      if (n === this.steps) {
+        this.pictureStepper = 1
+      } else {
+        this.pictureStepper = n + 1
+      }
+    },
+    takePicture() {
+      this.$refs.canv.width = this.$refs.video.videoWidth
+      this.$refs.canv.height = this.$refs.video.videoHeight
+      this.$refs.canv
+        .getContext('2d')
+        .drawImage(
+          this.$refs.video,
+          0,
+          0,
+          this.$refs.video.width,
+          this.$refs.video.height
+        )
     }
   },
   mounted() {
@@ -445,5 +541,8 @@ export default {
   max-width: 400px;
   height: auto;
   background-color: #666;
+}
+.fullheight {
+  height: 100%;
 }
 </style>
