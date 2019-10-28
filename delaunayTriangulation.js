@@ -20,30 +20,88 @@ function triangulation(points){
     points.pop()
     let x1 = points.pop()
     let C = calcSmallestCircleCenter(seedPoint, x1, points)
-    console.log(seedPoint, x1, C)
+    // console.log(seedPoint, x1, C)
+    return [C, seedPoint]
 }
 
-function testcalcSmallestCircleCenter(){
-    let pointList = randomPointsGenerator(10, 20)
-    let point1 = pointList.pop()
-    let point2 = pointList.pop()
-    let center = calcSmallestCircleCenter(point1, point2, pointList)
-    console.log(point1, point2, center)
+function triangulation2(points, seedPoint){
+    radialSort(points, seedPoint)
+    // points.pop()
+    let x1 = points[points.length-2]
+    let C = calcSmallestCircleCenter(seedPoint, x1, points)
+    let convexHull = C[2]
+    // let vertices = [C[2]]
+    let seedList = [...points]
+    seedList.splice(seedList.length-2,2)
+    seedList.splice(seedList.indexOf(C[1][2]),1)
+    radialSort(seedList, C[0])
+    C.push([seedList])
+    return C
 }
 
-function testCalcRadius(){
-    let point1 = [5.6, 4.644]
-    let point2 = [6.92, 10.312]
-    let point3 = [0.94, 13.211]
-    let radius = calcRadius(point1, point2, point3)
-    let expectedRadius = 5
-    console.assert(Math.abs(radius - expectedRadius) < 0.1)
+/* algorithm from https://www.nayuki.io/res/convex-hull-algorithm/convex-hull.js
+*/
+function addToConvexHull(points){
+    let upperHull = [];
+    for (let i = 0; i < points.length; i++) {
+        let p = points[i];
+        // let p = point
+        while (upperHull.length >= 2) {
+            let q = upperHull[upperHull.length - 1];
+            let r = upperHull[upperHull.length - 2];
+            if ((q[0] - r[0]) * (p[1] - r[1]) >= (q[1] - r[1]) * (p[0] - r[0]))
+                upperHull.pop();
+            else
+                break;
+        }
+        upperHull.push(p);
+    }
+    upperHull.pop();
+
+    let lowerHull = [];
+    for (let i = points.length - 1; i >= 0; i--) {
+        let p = points[i];
+        // let p = point
+        while (lowerHull.length >= 2) {
+            let q = lowerHull[lowerHull.length - 1];
+            let r = lowerHull[lowerHull.length - 2];
+            if ((q[0] - r[0]) * (p[1] - r[1]) >= (q[1] - r[1]) * (p[0] - r[0]))
+                lowerHull.pop();
+            else
+                break;
+        }
+        lowerHull.push(p);
+    }
+    lowerHull.pop();
+    // console.log(upperHull, lowerHull)
+
+    if (upperHull.length === 1 && lowerHull.length === 1 && upperHull[0][0] === lowerHull[0][0] && upperHull[0][1] === lowerHull[0][1])
+        return upperHull;
+    else
+        return upperHull.concat(lowerHull);
+}
+
+function hullSort(points){
+    points.sort(function(a, b) {
+        if (a[1] < b[1])
+            return -1;
+        else if (a[1] > b[1])
+            return +1;
+        else if (a[2] < b[2])
+            return -1;
+        else if (a[2] > b[2])
+            return +1;
+        else
+            return 0;
+    })
+    return points
 }
 
 /*
 math for finding center of 3 points from paulbourke.net/geometry/circlesphere
 */
 function calcSmallestCircleCenter(point1, point2, points){
+    points = points.slice(0,points.length-2)
     let point3
     let minPoint
     let minRadius = Infinity
@@ -57,7 +115,7 @@ function calcSmallestCircleCenter(point1, point2, points){
         }
     }
     delete point3 //point3 only for help in the for loop
-    console.log(minPoint)
+    // console.log("derde punt", minPoint)
     //math for finding center of 3 points from paulbourke.net/geometry/circlesphere
     let ma = (point2[1] - point1[1]) / (point2[0] - point1[0])
     let mb = (minPoint[1] - point2[1]) / (minPoint[0] - point2[0])
@@ -73,7 +131,11 @@ function calcSmallestCircleCenter(point1, point2, points){
     }
     let centerX = (ma * mb * (point1[1] - minPoint[1]) + mb * (point1[0] + point2[0]) - ma * (point2[0] + minPoint[0])) / (2* (mb - ma))
     let centerY = -(centerX - (point1[0] + point2[0]) / 2) / ma + (point1[1] + point2[1]) / 2
-    return [centerX, centerY]
+
+    //let testingpoint = (centerX, centerY)
+    //radius = calcDistance(testingpoint, point1)
+
+    return [[centerX, centerY], [minRadius], [point1, point2, minPoint]]
 
 }
 
@@ -81,6 +143,7 @@ function calcSmallestCircleCenter(point1, point2, points){
 math from mathopenref.com/trianglecircumcircle.html
 */
 function calcRadius(point1, point2, point3){
+    // console.log("3 punten", point1, point2, point3)
     let dist1 = calcDistance(point2, point3)
     let dist2 = calcDistance(point1, point3)
     let dist3 = calcDistance(point1, point2)
@@ -104,6 +167,8 @@ function radialSort(points, point){
         let distanceB = calcDistance(b, point)
         return distanceB - distanceA
     })
+
+    return points
 }
 
 function testRadialSort(){
@@ -118,3 +183,26 @@ function testRadialSort(){
         console.assert(pointList[i][2] >= pointList[i+1][2], "Point " + i + "is smaller than point " + (i + 1))
     }
 }
+
+function testCalcRadius(){
+    let point1 = [5.6, 4.644]
+    let point2 = [6.92, 10.312]
+    let point3 = [0.94, 13.211]
+    let radius = calcRadius(point1, point2, point3)
+    let expectedRadius = 5
+    console.assert(Math.abs(radius - expectedRadius) < 0.1)
+}
+
+function testcalcSmallestCircleCenter(){
+    let pointList = randomPointsGenerator(10, 20)
+    let point1 = pointList.pop()
+    let point2 = pointList.pop()
+    let center = calcSmallestCircleCenter(point1, point2, pointList)
+    console.log(point1, point2, center)
+}
+
+function testHull(points, point){
+    return addToConvexHull(hullSort(points))
+}
+
+testHull([[407,244],[228,273],[534,442],[50,50]])
