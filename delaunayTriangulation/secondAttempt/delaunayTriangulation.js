@@ -1,3 +1,4 @@
+delaunayTriangulation.js
 function randomPointsGenerator(nbPoints, size){
     let pointList = []
     for(let i = 0; i < nbPoints; i++){
@@ -30,17 +31,27 @@ function delaunay(points){
     let maxPoint = calcMaxPoint(points)
 
 }
-
+//TODO: is this correct?
 function superTriangle(points){
     let minMax = calcMinMaxPoint(points)
     let point1 = [minMax[3].x, minMax[1].y]
     let point2 = [minMax[3].x, minMax[0].y]
 
-    let point3 = point1.slice(0)
+    let point3
+    let p1 = [point1.x - point2.x, point1.y - point2.y]
+    let p2
+    //searches leftmost point from the lowest point
     for(let i = 0; i < points.length; i++){
-        
+        point = points[i]
+        p2 = [point.x - point2.x, point.y - point2.y]
+        if(p1.x * p2.y - p2.x * p2.y){
+            point3 = point
+        }
     }
-
+    //this can't be correct
+    let slope = (point3.y-point2.y) / (point3.x - point2.x)
+    let point4 = [(minMax[1].y - point3.y)/slope , minMax[1].y]
+    return new Triangle(point1, point2, point4)
 }
 
 
