@@ -28,8 +28,21 @@ function radialSort(points, point){
 }
 
 function delaunay(points){
-    let maxPoint = calcMaxPoint(points)
+    let triangulation = []
+    triangulation.push(superTriangle(points))
+    for(let i = 0; i < points.length; i++){
+        let badTriangles = []
+        for(let tri = 0; tri < triangulation.length; tri++){
+           // if()
+        }
+    }
 
+}
+/*
+    calculates crossproduct between two points, point3 as basis
+*/
+function crossProduct(p1, p2, p3 = [0,0]){
+    return (p1.x - p3.x) * (p2.y - p3.y) - (p2.x - p3.x) * (p2.y - p3.y)
 }
 //TODO: is this correct?
 function superTriangle(points){
@@ -38,13 +51,12 @@ function superTriangle(points){
     let point2 = [minMax[3].x, minMax[0].y]
 
     let point3
-    let p1 = [point1.x - point2.x, point1.y - point2.y]
+    let p1 = point1.slice(0)
     let p2
     //searches leftmost point from the lowest point
     for(let i = 0; i < points.length; i++){
         point = points[i]
-        p2 = [point.x - point2.x, point.y - point2.y]
-        if(p1.x * p2.y - p2.x * p2.y){
+        if(crossProduct(p1, p2, point2) < 0){
             point3 = point
         }
     }
