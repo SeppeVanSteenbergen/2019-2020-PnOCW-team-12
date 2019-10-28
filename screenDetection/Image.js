@@ -164,34 +164,34 @@ class Image {
   }
 
   floodfill(xPos, yPos, islandID) {
-    var stack = [[xPos, yPos]];
-    var pixel;
-    var x;
-    var y;
-    var minX = xPos;
-    var minY = yPos;
-    var maxX = xPos;
-    var maxY = yPos;
+    let stack = [[xPos, yPos]];
+    let pixel;
+    let x;
+    let y;
+    let minX = xPos;
+    let minY = yPos;
+    let maxX = xPos;
+    let maxY = yPos;
     while (stack.length > 0) {
       pixel = stack.pop();
       x = pixel[0];
       y = pixel[1];
-      if (this.matrix[y][x] <= 2) {
+      if (this.getMatrix(x, y) <= 2) {
         this.matrix[y][x] += islandID - 1;
         minX = Math.min(minX, x);
         minY = Math.min(minY, y);
         maxX = Math.max(maxX, x);
         maxY = Math.max(maxY, y);
-        if (this.matrix[y][x - 1] === 1 || this.matrix[y][x - 1] === 2) {
+        if (this.getMatrix(x-1, y) === 1 || this.getMatrix(x-1, y) === 2) {
           stack.push([x - 1, y]);
         }
-        if (this.matrix[y][x + 1] === 1 || this.matrix[y][x + 1] === 2) {
+        if (this.getMatrix(x+1, y) === 1 || this.getMatrix(x+1, y) === 2) {
           stack.push([x + 1, y]);
         }
-        if (this.matrix[y - 1][x] === 1 || this.matrix[y - 1][x] === 2) {
+        if (this.getMatrix(x,y-1) === 1 || this.getMatrix(x, y-1) === 2) {
           stack.push([x, y - 1]);
         }
-        if (this.matrix[y + 1][x] === 1 || this.matrix[y + 1][x] === 2) {
+        if (this.getMatrix(x, y+1) === 1 || this.getMatrix(x, y+1) === 2) {
           stack.push([x, y + 1]);
         }
       }
@@ -212,7 +212,7 @@ class Image {
   calcIslands() {
     for (let j = 0; j < this.getHeight(); j++) {
       for (let i = 0; i < this.getWidth(); i++) {
-        if (this.matrix[j][i] >= 1) {
+        if (this.getMatrix() >= 1) {
           if (this.isSeperated(i, j) === 0) {
             let island = new Island(i, j, this.islandID++);
             this.matrix[j][i] = island.id;
@@ -688,6 +688,14 @@ class Image {
       S <= this.upperBoundB[1] &&
       L <= this.upperBoundB[2]
     );
+  }
+
+  getMatrix(x, y) {
+    if (x < 0) x = 0;
+    else if (x >= this.width) x = this.width-1;
+    if (y < 0) y = 0;
+    else if (y >= this.height) y = this.height-1;
+    return this.matrix[y][x];
   }
 
   positionToPixel(position) {

@@ -9,6 +9,8 @@ class Island {
     corners = [];
     blue;
     green;
+    width;
+    height;
 
     /**
      * Create and Island starting with this pixel
@@ -64,13 +66,15 @@ class Island {
         this.screenMatrix = matrix.slice(this.miny, this.maxy);
         for (var i = 0; i < this.maxy - this.miny; i++) {
             this.screenMatrix[i] = this.screenMatrix[i].slice(this.minx, this.maxx);
-        }  
+        }
+        this.width = this.screenMatrix[0].length;
+        this.height = this.screenMatrix.length;
     }
 
     findScreenCorners() {
         let x = 0;
         let y = 0;
-        while (this.screenMatrix[0][x] != this.blue && this.screenMatrix[0][x] != this.green) x++;//bovenhoek
+        while (this.getMatrix(x, 0) != this.blue && this.getMatrix(x, 0) != this.green) x++;//bovenhoek
         if (x >= this.screenMatrix[0].length / 2) {
             while (this.screenMatrix[0][x + 1] >= 1)++x;
         }
@@ -86,12 +90,12 @@ class Island {
         y = this.screenMatrix.length - 1;
         while (this.screenMatrix[y][x] != this.blue && this.screenMatrix[y][x] != this.green) x--; // onderhoek
         if (x <= this.screenMatrix.length / 2) {
-            while (this.screenMatrix[y][x - 1] >= 1)--x;
+            while (this.getMatrix(x - 1, y) >= 1)--x;
         }
         this.corners.push([x, y, this.screenMatrix[y][x]]);
         while (this.screenMatrix[y][0] != this.blue && this.screenMatrix[y][0] != this.green) y--; //linkerhoek
         if (y <= this.screenMatrix.length / 2) {
-            while (this.screenMatrix[y - 1][0] >= 1)--y;
+            while (this.getMatrix(0, y - 1) >= 1)--y;
         }
         this.corners.push([0, y, this.screenMatrix[y][x]]);
         return this.corners;
@@ -128,5 +132,13 @@ class Island {
         }
         
         return new Screen(corners, orientation);
+    }
+
+    getMatrix(x, y) {
+        if (x < 0) x = 0;
+        else if (x >= this.width) x = this.width-1;
+        if (y < 0) y = 0;
+        else if (y >= this.height) y = this.height-1;
+        return this.screenMatrix[y][x];
     }
 }
