@@ -3,7 +3,7 @@ class Image {
   canvas;
   colorSpace;
 
-  sensitivity = 30;
+  sensitivity = 10;
   colorSpaces = ["RGBA", "HSLA", "BW"];
 
   corners = [];
@@ -24,6 +24,16 @@ class Image {
   upperBoundG = [120 + this.sensitivity, 100, 75];
   lowerBoundB = [240 - this.sensitivity, 50, 25];
   upperBoundB = [240 + this.sensitivity, 100, 75];
+  lowerBoundBar1 = [24 - this.sensitivity, 50, 25];
+  upperBoundBar1 = [24 + this.sensitivity, 100, 75];
+  lowerBoundBar2 = [72 - this.sensitivity, 50, 25];
+  upperBoundBar2 = [72 + this.sensitivity, 100, 75];
+  lowerBoundBar3 = [180 - this.sensitivity, 50, 25];
+  upperBoundBar3 = [180 + this.sensitivity, 100, 75];
+  lowerBoundBar4 = [288 - this.sensitivity, 50, 25];
+  upperBoundBar4 = [288 + this.sensitivity, 100, 75];
+  lowerBoundBar5 = [336 - this.sensitivity, 50, 25];
+  upperBoundBar5 = [336 + this.sensitivity, 100, 75];
 
   constructor(imgData, canvasName, colorSpace, width, height) {
     this.setPixels(imgData.data);
@@ -613,6 +623,49 @@ class Image {
         this.matrix[y][x] = 0;
       }
     }
+  }
+
+  createBigMask() {
+    if (this.getColorSpace() !== "HSLA") {
+      console.error("createGreenBlueMask only with HSLA as colorspace!");
+    }
+    for (let i = 0; i < this.pixels.length; i += 4) {
+      let H = this.pixels[i] * 2;
+      let S = this.pixels[i + 1];
+      let L = this.pixels[i + 2];
+      let pixel = this.positionToPixel(i);
+      let x = pixel[0];
+      let y = pixel[1];
+      if (this.inGreenRange(H, S, L)) {
+        this.pixels[i + 1] = 0;
+        this.pixels[i + 2] = 100;
+        this.matrix[y][x] = 1;
+      } else if (this.inBlueRange(H, S, L)) {
+        this.pixels[i + 1] = 0;
+        this.pixels[i + 2] = 100;
+        this.matrix[y][x] = 2;
+      } else if (this.inBarcodeRange(H, S, L)) {
+        this.pixels[i + 1] = 0;
+        this.pixels[i + 2] = 100;
+        this.matrix[y][x] = 3;
+      } else {
+        this.pixels[i + 1] = 0;
+        this.pixels[i + 2] = 0;
+        this.matrix[y][x] = 0;
+      }
+    }
+  }
+
+  inBarcodeRange(H, S, L) {
+    return (
+      H >= (this.lowerBoundBar1[0] || this.lowerBoundBar2[0] || this.lowerBoundBar3[0] || this.lowerBoundBar4[0] || this.lowerBoundBar5[0]) &&
+      S >= (this.lowerBoundBar1[1] || this.lowerBoundBar2[1] || this.lowerBoundBar3[1] || this.lowerBoundBar4[1] || this.lowerBoundBar5[1]) &&
+      L >= (this.lowerBoundBar1[2] || this.lowerBoundBar2[2] || this.lowerBoundBar3[2] || this.lowerBoundBar4[2] || this.lowerBoundBar5[2]) &&
+      H <= (this.upperBoundBar1[0] || this.upperBoundBar2[0] || this.upperBoundBar3[0] || this.upperBoundBar4[0] || this.upperBoundBar5[0]) &&
+      S <= (this.upperBoundBar1[0] || this.upperBoundBar2[0] || this.upperBoundBar3[0] || this.upperBoundBar4[0] || this.upperBoundBar5[0]) &&
+      L <= (this.upperBoundBar1[0] || this.upperBoundBar2[0] || this.upperBoundBar3[0] || this.upperBoundBar4[0] || this.upperBoundBar5[0])
+    );
+
   }
 
   inGreenRange(H, S, L) {
