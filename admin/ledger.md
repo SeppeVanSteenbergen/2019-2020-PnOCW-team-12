@@ -57,3 +57,16 @@ Meeting 3 (21/10/2019)
 			- automatische testen schrijven
 	Task 4-5, vanaf morgen aan beginnen
 
+Meeting 4 (28/10/2019)
+    Task 4: (Martijn, Seppe en Bert)
+        - Heel veel werk
+        - Er is nog niet zoveel, moeten even samenzitten en samendenken
+        Tegen volgende week:
+            - zien dat het af is
+            - zelf zodadelijk met 3 deadlines afspreken
+    Task 5: (Dirk, Frédéric, Toon)
+        - Triangulation goed begonnen, lastig maar zal wel lukken
+        - Image beetje aangepast en screen om gemakkelijker te communiceren
+        - Bezig met implementeren client
+        - Triangulation is voor Frédéric en Toon
+        - Dirk houdt zich vooral bezig met implementatie screen detection
