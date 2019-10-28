@@ -106,8 +106,16 @@ class Image {
         if (!this.colorSpaces.includes(newColorSpace)) {
             console.error("colorspace '" + newColorSpace + "' doesn't exist!");
         }
-        this.colorSpace = newColorSpace;
-    }
+        if (this.matrix[y][x + 1] === 1 || this.matrix[y][x + 1] === 2) {
+          stack.push([x + 1, y]);
+        }
+        if (this.matrix[y - 1][x] === 1 || this.matrix[y - 1][x] === 2) {
+          stack.push([x, y - 1]);
+        }
+        if (this.matrix[y + 1][x] === 1 || this.matrix[y + 1][x] === 2) {
+          stack.push([x, y + 1]);
+        }
+      }
       /* for (let i = 0; i < tmpIslands.length; i++) {
           if (tmpIslands[i].size() > this.MIN_ISLAND_SIZE) {
               this.drawFillRect([tmpIslands[i].minx, tmpIslands[i].miny], [tmpIslands[i].maxx, tmpIslands[i].maxy], 0.3);               
@@ -117,7 +125,7 @@ class Image {
               this.islands.push(tmpIslands[i]);
           }
       } */
-
+    }
 
     show() {
         if (this.canvas !== null) {
@@ -151,7 +159,7 @@ class Image {
                     [tmpIslands[i].maxx, tmpIslands[i].maxy],
                     0.3
                 );
-                let corners = tmpIslands[i].findScreenCorners();
+                let corners = tmpIslands[i].Corners();
                 for (let j = 0; j < 4; j++)
                     this.drawPoint(
                         corners[j][0] + tmpIslands[i].minx,
@@ -207,7 +215,6 @@ class Image {
             newScreen = this.islands[i].createScreen();
             this.screens.push(newScreen);
         }
-        console.log(this.screens.length);
     }
 
     filterIslands() {
@@ -617,26 +624,25 @@ class Image {
         }
     }
 
-    medianBlurMatrix(kSize) {
-        let halfKSize = Math.floor(kSize / 2);
-        for (let y = 0; y < this.getHeight(); y++) {
-            for (let x = 0; x < this.getWidth(); x++) {
-                let LArray = [];
-
-                for (let yBox = -halfKSize; yBox <= halfKSize; yBox++) {
-                    for (let xBox = -halfKSize; xBox <= halfKSize; xBox++) {
-                        if (y + yBox >= 0 && y + yBox < this.getHeight() && x + xBox >= 0 && x + xBox < this.getWidth()) {
-                            let pixel = this.matrix[y + yBox][x + xBox];
-                            LArray.push(pixel);
-                        }
-                    }
-                }
-                LArray.sort(function (a, b) { return a - b });
-                let half = Math.floor(LArray.length / 2);
-                this.matrix[y][x] = LArray[half];
+  medianBlurMatrix(kSize) {
+    let halfKSize = Math.floor(kSize / 2);
+    for (let y = 0; y < this.getHeight(); y++) {
+      for (let x = 0; x < this.getWidth(); x++) {
+        let LArray = [];
+        
+        for (let yBox = -halfKSize; yBox <= halfKSize; yBox++) {
+          for (let xBox = -halfKSize; xBox <= halfKSize; xBox++) {
+            if (y + yBox >= 0 && y + yBox < this.getHeight() && x + xBox >= 0 && x + xBox < this.getWidth()) {
+              let pixel = this.matrix[y + yBox][x + xBox];
+              LArray.push(pixel);
             }
         }
+        LArray.sort(function (a, b) { return a - b });
+        let half = Math.floor(LArray.length / 2);
+        this.matrix[y][x] = LArray[half];
+      }
     }
+
 
     cornerDetection() {
         let nbNeigbours = 2;
@@ -842,4 +848,4 @@ class Image {
         }
     }
 }
-
+}
