@@ -23,10 +23,9 @@ imgElement.onload = function () {
   
   var imageTest = new Image(inputImage.getImgData(), "imageOutConcatenated", "HSLA", imgElement.width, imgElement.height);
   imageTest.createGreenBlueMask();
-  console.log("blurring...")
-  imageTest.medianBlurMatrix(5);
-  imageTest.calcIslandsFloodfill();
+  imageTest.medianBlurMatrix(12);
+  imageTest.medianBlur(12);
+  //imageTest.calcIslandsFloodfill();
   imageTest.hslaToRgba();
-  console.log("about to show");
   imageTest.show();
 };

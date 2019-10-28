@@ -151,7 +151,7 @@ class Image {
           [tmpIslands[i].maxx, tmpIslands[i].maxy],
           0.3
         );
-        let corners = tmpIslands[i].findScreenCorners();
+        let corners = tmpIslands[i].findCorners();
         for (let j = 0; j < 4; j++)
           this.drawPoint(
             corners[j][0] + tmpIslands[i].minx,
@@ -161,6 +161,7 @@ class Image {
         this.islands.push(tmpIslands[i]);
       }
     }
+    console.log(this.islands.length);
   }
 
   floodfill(xPos, yPos, islandID) {
