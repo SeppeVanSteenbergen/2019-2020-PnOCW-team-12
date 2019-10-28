@@ -20,13 +20,14 @@
         this.c1 = '#0000ff';
         this.c2 = '#00ff00';
         this.canvas = canvas;
+        this.canvas.width = this.w
+		this.canvas.height = this.h
         this.barcodeColorValues = ['#f60', '#cf0', '#0ff', '#c0f', '#f06'];
+        this.ctx = this.canvas.getContext('2d')
 	  }
 
 	  drawBorder() {
-        this.canvas.width = this.w;
-        this.canvas.height = this.h;
-        let ctx = this.canvas.getContext("2d");
+        let ctx = this.ctx
         ctx.beginPath();
         ctx.fillStyle = this.c1;
         ctx.rect(0, 0, this.w, this.borderWidth);
@@ -43,11 +44,12 @@
         ctx.strokeRect(0 + this.borderWidth / 4, 0 + this.borderWidth / 4, this.w - this.borderWidth / 2, this.h - this.borderWidth / 2);
 	  }
 
-	  drawX() {
-	    let lineWidth = 20
-        this.canvas.width = this.w;
-        this.canvas.height = this.h;
-        let ctx = this.canvas.getContext("2d");
+	  drawX(l) {
+	    let lineWidth = l
+		let circleRadius = lineWidth*1.2
+
+
+        let ctx = this.ctx
         ctx.lineWidth = lineWidth
 		ctx.beginPath()
         ctx.strokeStyle = this.c1
@@ -65,9 +67,7 @@
 		ctx.beginPath()
         ctx.fillStyle = this.c1
 		let w = lineWidth*Math.cos(Math.atan(this.h/this.w))*1.3
-		console.log(w)
 		let h = this.h*w/this.w
-		console.log(h)
 		ctx.moveTo(this.w/2 - w, this.h/2)
 		ctx.lineTo(this.w/2 + w, this.h/2)
 		ctx.lineTo(this.w/2, this.h/2 - h)
@@ -75,22 +75,55 @@
 		ctx.closePath()
 		ctx.fill()
 
-
+		ctx.beginPath()
+		ctx.fillStyle = '#ff00ff'
+		ctx.arc(this.w/2, this.h/2, circleRadius, 0, Math.PI*2)
+		ctx.fill()
 	  }
 	  
 	  clearBarcode() {
-        const ctx = this.canvas.getContext('2d');
+        const ctx = this.ctx
         ctx.fillStyle = '#ffffff';
         ctx.fillRect(this.borderWidth, this.borderWidth, this.w - 2*this.borderWidth, this.h - 2*this.borderWidth);
 	  }
 
 	  barcode(code, sections) {
+
+        //Only integers are allowed because otherwise the barcode is not complete at the end.
+        sections = Math.round(sections);
+
+        const ctx = this.ctx
+        code = code.toString().split('').map(val => parseInt(val - 1));
+
+        const barWidth = this.w / sections / 6;
+        //const amountOfIterations = Math.floor((this.w - 2 * this.borderWidth) / (6 * width))
+
+        for (let i = 0; i < sections * 6; i += 6) {
+          for (let j = 0; j < 5; j++) {
+            ctx.beginPath();
+            ctx.fillStyle = this.barcodeColorValues[code[j]];
+            ctx.rect(barWidth * (i + j), 0, barWidth, this.h);
+            ctx.fill();
+          }
+          ctx.beginPath();
+          ctx.fillStyle = '#ffffff';
+          ctx.rect(barWidth * (i + 5), 0, barWidth, this.h);
+          ctx.fill();
+        }
+
+
+        this.drawX(20);
+
+        return barWidth;
+	  }
+
+	  barcodeOld(code, sections) {
         //Only integers are allowed because otherwise the barcode is not complete at the end.
         sections = Math.round(sections);
 	  
 	    this.clearBarcode();
 
-	    const ctx = this.canvas.getContext('2d');
+	    const ctx = this.ctx
         code = code.toString().split('').map(val => parseInt(val - 1));
 
         const netWidth = this.w - 2*this.borderWidth;
@@ -114,7 +147,7 @@
   const c = document.getElementById("canv");
   
   let drawer = new DetectionDrawer(c, screen, borderWidth);
-  drawer.drawX();
+  drawer.drawX(20);
 
   // for console use
   let barcode = (code,sections) => drawer.barcode(code,sections);
