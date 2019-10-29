@@ -27,8 +27,12 @@ function radialSort(points, point){
 }
 
 function delaunay(points){
+    if(points.length < 3){
+        return
+    }
+    let supTriangle = superTriangle(points)
     let triangulation = []
-    triangulation.push(superTriangle(points))
+    triangulation.push(supTriangle)
     for(let i = 0; i < points.length; i++){
         let badTriangles = []
         for(let tri = 0; tri < triangulation.length; tri++){
@@ -67,11 +71,11 @@ function delaunay(points){
         let triangle = triangulation[i]
         for(let j = 0; j < triangle.edges.length; j++){
             let edges = triangle.edges
-            if(triangle.equalEdges(edges[j], superTriangle.edges[0])){
+            if(triangle.equalEdges(edges[j], supTriangle.edges[0])){
                 arrayRemove(triangulation, triangle)
-            } else if(triangle.equalEdges(edges[j], superTriangle.edges[1])){
+            } else if(triangle.equalEdges(edges[j], supTriangle.edges[1])){
                 arrayRemove(triangulation, triangle)
-            } else if(triangle.equalEdges(edges[j], superTriangle.edges[2])){
+            } else if(triangle.equalEdges(edges[j], supTriangle.edges[2])){
                 arrayRemove(triangulation, triangle)
             }
         }
@@ -87,7 +91,7 @@ function arrayRemove(array, value){
 //math for finding center of 3 points from paulbourke.net/geometry/circlesphere
 function calcCenter(point1, point2, point3){
     let ma = (point2[1] - point1[1]) / (point2[0] - point1[0])
-    let mb = (minPoint[1] - point2[1]) / (minPoint[0] - point2[0])
+    let mb = (point3[1] - point2[1]) / (point3[0] - point2[0])
     let counter = 3
     while(counter > 0 && (!isFinite(ma) || ! isFinite(mb) || ma == mb)){
         let helpPoint = point1.slice(0)

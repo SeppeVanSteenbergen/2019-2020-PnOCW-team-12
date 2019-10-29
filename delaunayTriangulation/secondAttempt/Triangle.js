@@ -16,7 +16,7 @@ class Triangle{
     }
     
     equalEdges(edge1, edge2){
-        if(edge1.contains(edge2[0]) && edge1.contains(edge2[1]))
+        if(edge1.includes(edge2[0]) && edge1.includes(edge2[1]))
             return true
         return false
     }

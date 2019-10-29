@@ -25,7 +25,7 @@
 
         const w = screen.width
         const h = screen.height
-        let points = randomPointsGenerator(0,h-120)
+        var points = [] //= randomPointsGenerator(0,h-120)
         // points.push([407,244],[228,273],[534,442], [50,50], [250,250])
         // console.log(points)
 
@@ -112,9 +112,40 @@
             }
 
         }
+        function addPoint(event){
+            points.push([event.clientX, event.clientY])
+            let ctx = c.getContext("2d");
+            for(let i = 0; i < points.length; i++){
+                ctx.beginPath();
+                ctx.fillStyle = "#000";
+                ctx.rect(points[i][0]-3.5, points[i][1]-3.5, 7, 7);
+                ctx.fill();
+            }
+            let triangulation = delaunay(points)
+            if(triangulation != undefined){
+                for(let i = 0; i < triangulation.length; i++){
+                    drawTriangle(triangulation[i]);
+                }
+            }
+            
+            
+        }
+        function drawTriangle(triangle){
+            let ctx = c.getContext("2d")
+            ctx.beginPath()
+            ctx.moveTo(triangle.point1[0], triangle.point1[1])
+            ctx.lineTo(triangle.point2[0], triangle.point2[1])
+            ctx.lineTo(triangle.point3[0], triangle.point3[1])
+            ctx.lineTo(triangle.point1[0], triangle.point1[1])
+            ctx.closePath()
+            ctx.lineWidth = 5
+            ctx.strokeStyle = '#000'
+            ctx.stroke()
+
+        }
 
         // document.addEventListener("click", selectPoint);
-        document.addEventListener("click", testSuperTriangle)
+        document.addEventListener("click", addPoint)
 
         const borderWidth = screen.width * 0.02;
 
