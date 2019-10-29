@@ -32,21 +32,58 @@ function delaunay(points){
     for(let i = 0; i < points.length; i++){
         let badTriangles = []
         for(let tri = 0; tri < triangulation.length; tri++){
-            let radius = calcRadius(triangulation[tri].points[0], triangulation[tri].points[1], triangulation[tri].points[2])
-            let center = calcCenter(triangulation[tri].points[0], triangulation[tri].points[1], triangulation[tri].points[2])
+            let radius = calcRadius(triangulation[tri].point1, triangulation[tri].point2, triangulation[tri].point3)
+            let center = calcCenter(triangulation[tri].point1, triangulation[tri].point2, triangulation[tri].point3)
            if(inCircle(points[i], radius, center)){
                badTriangles.push(triangulation[tri])
            }
         }
-        let polygon = new Set()
+        let polygon = []
         for(let tri = 0; tri < badTriangles.length; tri++){
-            for(let edg = 0; edg < badTriangles[tri].edges.length; edg++){
-                //zie pseudocode op wikipedia
+            let badTriangle = badTriangles[tri]
+            for(let edg = 0; edg < badTriangle.edges.length; edg++){
+                let badTriangleEdge = badTriangle.edges[edg]
+                for(let tri2 = 0; tri < badTriangles.length; tri++){
+                    badTriangle2 = badTriangles[tri2]
+                    if(badTriangle !== badTriangle2)
+                        for(let edg2 = 0; edg2 < badTriangle2.edges.length; edg2++){
+                            let compareEdge = badTriangle2.edges[edg2]
+                            if(badTriangle.equalEdges(badTriangleEdge, compareEdge)){
+                                polygon.push(compareEdge)
+                            }
+                        }
+                }
+            }
+        }
+        for(let tri = 0; tri < badTriangles.length; tri++){
+            arrayRemove(triangulation, badTriangles[tri]);
+        }
+        for(let edg = 0; edg < polygon.length; edg++){
+            triangulation.push(new Triangle(points[i], polygon[edg][0], polygon[edg][1]))
+        }
+    }
+    //triangulation done, only remove triangles with super-triangle
+    for(let i = 0; i < triangulation.length; i++){
+        let triangle = triangulation[i]
+        for(let j = 0; j < triangle.edges.length; j++){
+            let edges = triangle.edges
+            if(triangle.equalEdges(edges[j], superTriangle.edges[0])){
+                arrayRemove(triangulation, triangle)
+            } else if(triangle.equalEdges(edges[j], superTriangle.edges[1])){
+                arrayRemove(triangulation, triangle)
+            } else if(triangle.equalEdges(edges[j], superTriangle.edges[2])){
+                arrayRemove(triangulation, triangle)
             }
         }
     }
-
+    return triangulation
 }
+function arrayRemove(array, value){
+    return array.filter(function(element){
+        return element != value
+    })
+}
+//correct
 //math for finding center of 3 points from paulbourke.net/geometry/circlesphere
 function calcCenter(point1, point2, point3){
     let ma = (point2[1] - point1[1]) / (point2[0] - point1[0])
@@ -65,7 +102,7 @@ function calcCenter(point1, point2, point3){
     let centerY = -(centerX - (point1[0] + point2[0]) / 2) / ma + (point1[1] + point2[1]) / 2
     return [centerX, centerY]
 }
-
+//correct
 function calcRadius(point1, point2, point3){
     // console.log("3 punten", point1, point2, point3)
     let dist1 = calcDistance(point2, point3)
@@ -75,7 +112,7 @@ function calcRadius(point1, point2, point3){
     let denumerator = Math.sqrt((dist1 + dist2 + dist3) * (dist2 + dist3 - dist1) * (dist3 + dist1 - dist2) * (dist1 + dist2 - dist3))
     return numerator / denumerator
 }
-
+//correct
 /*
     calculates crossproduct between two points, point3 as basis
 */
@@ -83,7 +120,7 @@ function crossProduct(p1, p2, p3){
     let crossProduct = (p1[0] - p3[0]) * (p2[1] - p3[1]) - (p2[0] - p3[0]) * (p2[1] - p3[1])
     return crossProduct
 }
-
+//correct
 /*
     point as Array
     triangle as Triangle
@@ -102,13 +139,13 @@ function inTriangle(point, triangle){
             return true
     return false
 }
-
+//correct
 function inCircle(point, radius, center){
     if(Math.pow(point[0] - center[0],2) + Math.pow(point[1] - center[1], 2) <= Math.pow(radius, 2))
         return true
     return false
 }
-//TODO: is this correct?
+//correct
 function superTriangle(points){
     let minMax = calcMinMaxPoint(points)
     let point1 = [minMax[3][0] + 5 , minMax[1][1] + 5]
@@ -124,14 +161,14 @@ function superTriangle(points){
         }
     }
     //p1 is leftMost point
-    //this can't be correct
+
     let slope = (point2[1] - p1[1]) / (point2[0] - p1[0])
     let y = minMax[1][1]
     let x = ((y - p1[1]) / slope) + p1[0]
     let point3 = [x, y]
     return new Triangle(point1, point2, point3)
 }
-
+//correct
 function calcMinMaxPoint(points){
     let maxY = -Infinity
     let upperPoint
