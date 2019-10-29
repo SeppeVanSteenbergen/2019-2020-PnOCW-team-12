@@ -19,7 +19,7 @@ Week 4
 Week 5
     maandag     |   dinsdag     |   woensdag        |   donderdag       |   vrijdag     |   zaterdag    |   zondag
     ------------|---------------|-------------------|-------------------|---------------|---------------|-----------
-TS              |               |                   |                   |               |               |
+TS  Triang (4,5)|               |                   |                   |               |               |
 SS              |               |                   |                   |               |               |   
 DV              |               |                   |                   |               |               |
 BB              |               |                   |                   |               |               |
