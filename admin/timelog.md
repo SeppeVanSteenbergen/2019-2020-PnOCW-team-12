@@ -6,7 +6,7 @@ Dirk Vanbeveren (TC1) -> DV
 
 Bert Van den Bosch (TC2) -> BB
 
-Martijn Debeuf (Code Reviewer) -> MB
+Martijn Debeuf (Code Reviewer) -> MD
 
 Frédéric Blondeel (Code Reviewer) -> FB
 
@@ -23,7 +23,7 @@ TS  Triang (4,5)|               |                   |                   |       
 SS              |               |                   |                   |               |               |   
 DV              |               |                   |                   |               |               |
 BB              |               |                   |                   |               |               |
-MB              |               |                   |                   |               |               |
+MD              |               |                   |                   |               |               |
 FB              |               |                   |                   |               |               |
 
 Week 6
@@ -33,5 +33,5 @@ TS              |               |                   |                   |       
 SS              |               |                   |                   |               |               |   
 DV              |               |                   |                   |               |               |
 BB              |               |                   |                   |               |               |
-MB              |               |                   |                   |               |               |
+MD      9     |               |                   |                   |               |               |
 FB              |               |                   |                   |               |               |
