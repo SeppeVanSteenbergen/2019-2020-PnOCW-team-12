@@ -47,20 +47,27 @@ function delaunay(points){
             let badTriangle = badTriangles[tri]
             for(let edg = 0; edg < badTriangle.edges.length; edg++){
                 let badTriangleEdge = badTriangle.edges[edg]
-                for(let tri2 = 0; tri < badTriangles.length; tri++){
-                    badTriangle2 = badTriangles[tri2]
-                    if(badTriangle !== badTriangle2)
-                        for(let edg2 = 0; edg2 < badTriangle2.edges.length; edg2++){
-                            let compareEdge = badTriangle2.edges[edg2]
-                            if(badTriangle.equalEdges(badTriangleEdge, compareEdge)){
-                                polygon.push(compareEdge)
+                if(badTriangles.length == 1){
+                    for(let k = 0; k < badTriangles[0].edges){
+                        polygon.push(badTriangles[0][k])
+                    }
+                } else{
+                    for(let tri2 = 0; tri < badTriangles.length; tri++){
+                        badTriangle2 = badTriangles[tri2]
+                        if(badTriangle !== badTriangle2){
+                            for(let edg2 = 0; edg2 < badTriangle2.edges.length; edg2++){
+                                let compareEdge = badTriangle2.edges[edg2]
+                                if(!badTriangle.equalEdges(badTriangleEdge, compareEdge)){
+                                    polygon.push(compareEdge)
+                                }
                             }
                         }
+                    }
                 }
             }
         }
-        for(let tri = 0; tri < badTriangles.length; tri++){
-            arrayRemove(triangulation, badTriangles[tri]);
+        for(let i = 0; i < badTriangles.length; i++){
+            arrayRemove(triangulation, badTriangles[i])
         }
         for(let edg = 0; edg < polygon.length; edg++){
             triangulation.push(new Triangle(points[i], polygon[edg][0], polygon[edg][1]))
@@ -152,8 +159,8 @@ function inCircle(point, radius, center){
 //correct
 function superTriangle(points){
     let minMax = calcMinMaxPoint(points)
-    let point1 = [minMax[3][0] + 5 , minMax[1][1] + 5]
-    let point2 = [minMax[3][0] + 5, minMax[0][1] - 5]
+    let point1 = [minMax[3][0]*2 , minMax[1][1]*2]
+    let point2 = [minMax[3][0]*2,  -minMax[1][1] *2]
 
     let p1 = point1.slice(0)
     let p2
