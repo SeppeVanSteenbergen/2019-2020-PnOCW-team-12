@@ -229,13 +229,13 @@
             </v-stepper-content>
 
             <v-stepper-content step="2" class="fullheight">
-              <v-card class="mb-12 fullheight" elevation="0">
+              <v-card class="mb-12 overflow-y-auto" elevation="0">
                 <video :autoplay="true" id="videoElement" ref="video"></video>
                 <br />
                 <v-btn @click="startVideo">start video</v-btn>
                 <v-btn @click="switchCamera">switch camera</v-btn>
                 <v-btn @click="takePicture">Capture Image</v-btn>
-                <canvas ref="canv"></canvas>
+                <canvas ref="canva"></canvas>
               </v-card>
 
               <v-btn color="primary" @click="nextStep(2); analyseImage">
@@ -475,20 +475,21 @@ export default {
       }
     },
     takePicture() {
-      this.$refs.canv.width = this.$refs.video.videoWidth
-      this.$refs.canv.height = this.$refs.video.videoHeight
-      this.$refs.canv
+      this.$refs.canva.width = this.$refs.video.videoWidth
+      this.$refs.canva.height = this.$refs.video.videoHeight
+      console.log(this.$refs.canva.width)
+      this.$refs.canva
         .getContext('2d')
         .drawImage(
           this.$refs.video,
           0,
           0,
-          this.$refs.video.width,
-          this.$refs.video.height
+          this.$refs.canva.width,
+          this.$refs.canva.height
         )
     },
     analyseImage() {
-      this.analysedImage = AlgorithmService.fullAnalysis(this.$refs.canv.toImage())
+      this.analysedImage = AlgorithmService.fullAnalysis(this.$refs.canva.toImage())
       console.log(this.analysedImage)
     }
   },
