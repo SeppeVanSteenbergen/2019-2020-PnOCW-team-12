@@ -63,29 +63,7 @@ function delaunay(points){
                 polygon.push(edges[e])
             }
         }
-        // if(badTriangles.length == 1){
-        //     for(let k = 0; k < badTriangles[0].edges.length; k++){
-        //         polygon.push(badTriangles[0].edges[k])
-        //     } 
-        // }else {
-        //     for(let tri = 0; tri < badTriangles.length; tri++){
-        //         let badTriangle = badTriangles[tri]
-        //         for(let edg = 0; edg < badTriangle.edges.length; edg++){
-        //             let badTriangleEdge = badTriangle.edges[edg]
-        //             for(let tri2 = 0; tri2 < badTriangles.length; tri++){
-        //                 badTriangle2 = badTriangles[tri2]
-        //                 if(badTriangle !== badTriangle2){
-        //                     for(let edg2 = 0; edg2 < badTriangle2.edges.length; edg2++){
-        //                         let compareEdge = badTriangle2.edges[edg2]
-        //                         if(!badTriangle.equalEdges(badTriangleEdge, compareEdge)){
-        //                             polygon.push(compareEdge)
-        //                         }
-        //                     }
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
+ 
         for(let i = 0; i < badTriangles.length; i++){
             triangulation = arrayRemove(triangulation, badTriangles[i])
         }
@@ -96,8 +74,10 @@ function delaunay(points){
     //triangulation done, only remove triangles with super-triangle
     for(let i = 0; i < triangulation.length; i++){
         let triangle = triangulation[i].getPoints()
-        if(triangle.includes(superTriangle.point1) || triangle.includes(superTriangle.point2) || triangle.includes(superTriangle.point3))
-            triangulation = arrayRemove(triangulation, triangle)
+        if(triangle.includes(supTriangle.point1) || triangle.includes(supTriangle.point2) || triangle.includes(supTriangle.point3)){
+            triangulation = arrayRemove(triangulation, triangulation[i])
+            i--
+        }
     }
     return triangulation
 }

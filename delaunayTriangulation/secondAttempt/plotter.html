@@ -25,7 +25,7 @@
 
         const w = screen.width
         const h = screen.height
-        var points = [] //= randomPointsGenerator(0,h-120)
+        var points = randomPointsGenerator(10, h-120)
         // points.push([407,244],[228,273],[534,442], [50,50], [250,250])
         // console.log(points)
 
@@ -113,8 +113,9 @@
 
         }
         function addPoint(event){
-            points.push([event.clientX, event.clientY])
+            //points.push([event.clientX, event.clientY])
             let ctx = c.getContext("2d");
+            ctx.clearRect(0, 0, c.width, c.height);
             for(let i = 0; i < points.length; i++){
                 ctx.beginPath();
                 ctx.fillStyle = "#000";
