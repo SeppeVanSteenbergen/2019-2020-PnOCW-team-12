@@ -43,31 +43,51 @@ function delaunay(points){
            }
         }
         let polygon = []
-        for(let tri = 0; tri < badTriangles.length; tri++){
-            let badTriangle = badTriangles[tri]
-            for(let edg = 0; edg < badTriangle.edges.length; edg++){
-                let badTriangleEdge = badTriangle.edges[edg]
-                if(badTriangles.length == 1){
-                    for(let k = 0; k < badTriangles[0].edges){
-                        polygon.push(badTriangles[0][k])
-                    }
-                } else{
-                    for(let tri2 = 0; tri < badTriangles.length; tri++){
-                        badTriangle2 = badTriangles[tri2]
-                        if(badTriangle !== badTriangle2){
-                            for(let edg2 = 0; edg2 < badTriangle2.edges.length; edg2++){
-                                let compareEdge = badTriangle2.edges[edg2]
-                                if(!badTriangle.equalEdges(badTriangleEdge, compareEdge)){
-                                    polygon.push(compareEdge)
-                                }
-                            }
-                        }
-                    }
+        let edges = []
+        for(let t = 0; t < badTriangles.length; t++){
+            for(let e = 0; e < badTriangles[t].edges.length; e++){
+                edges.push(badTriangles[t].edges[e])
+            }
+        }
+        for(let e1 = 0; e1 < edges.length - 1; e1++){
+            for(let e2 = e1 + 1; e2 < edges.length; e2++){
+                if(equalEdges(edges[e1], edges[e2])){
+                    edges[e2] = null
+                    edges[e1] = null
+                    break
                 }
             }
         }
+        for(let e = 0; e < edges.length; e++){
+            if(edges[e] != null){
+                polygon.push(edges[e])
+            }
+        }
+        // if(badTriangles.length == 1){
+        //     for(let k = 0; k < badTriangles[0].edges.length; k++){
+        //         polygon.push(badTriangles[0].edges[k])
+        //     } 
+        // }else {
+        //     for(let tri = 0; tri < badTriangles.length; tri++){
+        //         let badTriangle = badTriangles[tri]
+        //         for(let edg = 0; edg < badTriangle.edges.length; edg++){
+        //             let badTriangleEdge = badTriangle.edges[edg]
+        //             for(let tri2 = 0; tri2 < badTriangles.length; tri++){
+        //                 badTriangle2 = badTriangles[tri2]
+        //                 if(badTriangle !== badTriangle2){
+        //                     for(let edg2 = 0; edg2 < badTriangle2.edges.length; edg2++){
+        //                         let compareEdge = badTriangle2.edges[edg2]
+        //                         if(!badTriangle.equalEdges(badTriangleEdge, compareEdge)){
+        //                             polygon.push(compareEdge)
+        //                         }
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
         for(let i = 0; i < badTriangles.length; i++){
-            arrayRemove(triangulation, badTriangles[i])
+            triangulation = arrayRemove(triangulation, badTriangles[i])
         }
         for(let edg = 0; edg < polygon.length; edg++){
             triangulation.push(new Triangle(points[i], polygon[edg][0], polygon[edg][1]))
@@ -75,24 +95,28 @@ function delaunay(points){
     }
     //triangulation done, only remove triangles with super-triangle
     for(let i = 0; i < triangulation.length; i++){
-        let triangle = triangulation[i]
-        for(let j = 0; j < triangle.edges.length; j++){
-            let edges = triangle.edges
-            if(triangle.equalEdges(edges[j], supTriangle.edges[0])){
-                arrayRemove(triangulation, triangle)
-            } else if(triangle.equalEdges(edges[j], supTriangle.edges[1])){
-                arrayRemove(triangulation, triangle)
-            } else if(triangle.equalEdges(edges[j], supTriangle.edges[2])){
-                arrayRemove(triangulation, triangle)
-            }
-        }
+        let triangle = triangulation[i].getPoints()
+        if(triangle.includes(superTriangle.point1) || triangle.includes(superTriangle.point2) || triangle.includes(superTriangle.point3))
+            triangulation = arrayRemove(triangulation, triangle)
     }
     return triangulation
 }
+
+function equalEdges(edge1, edge2){
+    if(edge1 == null || edge2 == null)
+        return false
+    if(edge1.includes(edge2[0]) && edge1.includes(edge2[1]))
+        return true
+    return false
+}
+
 function arrayRemove(array, value){
-    return array.filter(function(element){
-        return element != value
-    })
+    let newArray = []
+    for(let i = 0; i < array.length; i++){
+        if(array[i] != value)
+            newArray.push(array[i])
+    }
+    return newArray
 }
 //correct
 //math for finding center of 3 points from paulbourke.net/geometry/circlesphere
