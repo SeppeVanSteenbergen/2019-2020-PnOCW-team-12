@@ -25,7 +25,7 @@
 
         const w = screen.width
         const h = screen.height
-        var points = randomPointsGenerator(0, h-120)
+        var points = randomPointsGenerator(120, h-120)
         // points.push([407,244],[228,273],[534,442], [50,50], [250,250])
         // console.log(points)
 
@@ -113,20 +113,21 @@
 
         }
         function addPoint(event){
-            points.push([event.clientX, event.clientY])
+            //points.push([event.clientX, event.clientY])
             let ctx = c.getContext("2d");
             ctx.clearRect(0, 0, c.width, c.height);
-            for(let i = 0; i < points.length; i++){
-                ctx.beginPath();
-                ctx.fillStyle = "#000";
-                ctx.rect(points[i][0]-3.5, points[i][1]-3.5, 7, 7);
-                ctx.fill();
-            }
+            
             let triangulation = delaunay(points)
             if(triangulation != undefined){
                 for(let i = 0; i < triangulation.length; i++){
                     drawTriangle(triangulation[i]);
                 }
+            }
+            for(let i = 0; i < points.length; i++){
+                ctx.beginPath();
+                ctx.fillStyle = "#FF0000";
+                ctx.rect(points[i][0]-3.5, points[i][1]-3.5, 7, 7);
+                ctx.fill();
             }
             
             
