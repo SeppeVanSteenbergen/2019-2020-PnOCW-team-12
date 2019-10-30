@@ -228,27 +228,39 @@
               <v-btn text @click="pictureModeDialog = false">Cancel</v-btn>
             </v-stepper-content>
 
-            <v-stepper-content step="2" class="fullheight">
-              <v-card class="mb-12 overflow-y-auto" elevation="0">
-                <video :autoplay="true" id="videoElement" ref="video"></video>
+            <v-stepper-content step="2" class="fullheight overflow-y-auto">
+              <v-card class="mb-12" elevation="0">
+                <video
+                  :autoplay="true"
+                  id="videoElement"
+                  ref="video"
+                  class="flex-wrap"
+                ></video>
+                <canvas ref="canva" class="flex-wrap"></canvas>
                 <br />
                 <v-btn @click="startVideo">start video</v-btn>
                 <v-btn @click="switchCamera">switch camera</v-btn>
                 <v-btn @click="takePicture">Capture Image</v-btn>
-                <canvas ref="canva"></canvas>
+
+                <br />
+
+                <v-btn
+                  color="primary"
+                  @click="
+                    nextStep(2)
+                    analyseImage()
+                  "
+                >
+                  Analyse image
+                </v-btn>
+
+                <v-btn text @click="pictureModeDialog = false">Cancel</v-btn>
               </v-card>
-
-              <v-btn color="primary" @click="nextStep(2); analyseImage">
-                Analyse image
-              </v-btn>
-
-              <v-btn text @click="pictureModeDialog = false">Cancel</v-btn>
             </v-stepper-content>
 
             <v-stepper-content step="3" class="fullheight">
               <v-card class="mb-12 fullheight" elevation="0">
-                Result
-                  <canvas ref="resultCanvas"></canvas>
+                <canvas ref="resultCanvas"></canvas>
               </v-card>
 
               <v-btn color="primary" @click="nextStep(3)">
@@ -489,8 +501,31 @@ export default {
         )
     },
     analyseImage() {
-      this.analysedImage = AlgorithmService.fullAnalysis(this.$refs.canva.toImage())
+      console.log('starting analysis')
+
+      let inC = this.$refs.canva
+      let outC = this.$refs.resultCanvas
+      let inctx = inC.getContext('2d')
+      let outctx = outC.getContext('2d')
+
+      let inputImageData = inctx.getImageData(
+        0,
+        0,
+        this.$refs.canva.width,
+        this.$refs.canva.height
+      )
+
+      let imgCopy = AlgorithmService.copyImageData(inctx, inputImageData)
+
+      this.analysedImage = AlgorithmService.fullAnalysis(inputImageData)
       console.log(this.analysedImage)
+
+      outC.width = inC.width
+      outC.height = inC.height
+
+      outctx.putImageData(imgCopy, 0, 0)
+
+      AlgorithmService.drawScreenOutlines(outC, this.analysedImage)
     }
   },
   mounted() {
