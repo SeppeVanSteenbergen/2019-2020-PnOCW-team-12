@@ -2,13 +2,18 @@ import PermutationConverter from './numberConverter'
 
 import BarcodeScanner from './BarcodeScanner'
 
-module.exports = class Screen {
-  corners
-  orientation
-  size
-  imgData
-  clientCode
+export default class Screen {
   constructor(corners, orientation) {
+
+    this.corners = null
+    this.orientation = null
+    this.size = null
+    this.imgData = null
+    this.clientCode = null
+
+
+
+
     this.corners = corners
     this.orientation = orientation
     var area = 0

@@ -1,7 +1,4 @@
-
-module.exports = class PermutationConverter {
-
-
+export default class PermutationConverter {
   // Permutable is a string with numbers 1 to 5
 
   // logic http://keithschwarz.com/interesting/code/?dir=factoradic-permutation
@@ -34,14 +31,13 @@ module.exports = class PermutationConverter {
     return this.factoradicToNumber(fact)
   }
 
-  static factoradicLength () {
+  static factoradicLength() {
     return 5
   }
 
   static permutableList() {
     return [1, 2, 3, 4, 5]
   }
-
 
   static factoradicToNumber(fact) {
     let numList = fact.toString().split('')
@@ -104,5 +100,4 @@ module.exports = class PermutationConverter {
 
     return factoradicList.toString().replace(/,/g, '')
   }
-
 }

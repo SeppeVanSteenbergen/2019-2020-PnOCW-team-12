@@ -1,40 +1,49 @@
-import PermutationConverter from './numberConverter'
 import Island from './Island'
-import Screen from './Screen'
 
-module.exports = class Image {
-  pixels
-  canvas
-  colorSpace
+export default class Image {
+  constructor(imgData, canvas, colorSpace) {
+    this.pixels = null
+    this.canvas = null
+    this.colorSpace = null
 
-  sensitivity = 30
-  colorSpaces = ['RGBA', 'HSLA', 'BW']
+    this.sensitivity = 10
+    this.colorSpaces = ['RGBA', 'HSLA', 'BW']
 
-  corners = []
+    this.corners = []
 
-  islands
-  tmpIslands = []
-  islandID = 3 //jumps per two so we can save green and blue within an island.
-  MIN_ISLAND_SIZE = 1000
+    this.islands = null
+    this.tmpIslands = []
+    this.islandID = 3 //jumps per two so we can save green and blue within an island.
+    this.MIN_ISLAND_SIZE = 1000
 
-  matrix
-  screens = []
-  imgData
+    this.matrix = null
+    this.screens = []
+    this.imgData = null
 
-  width
-  height
+    this.width = null
+    this.height = null
 
-  lowerBoundG = [120 - this.sensitivity, 50, 25]
-  upperBoundG = [120 + this.sensitivity, 100, 75]
-  lowerBoundB = [240 - this.sensitivity, 50, 25]
-  upperBoundB = [240 + this.sensitivity, 100, 75]
+    this.lowerBoundG = [120 - this.sensitivity, 50, 25]
+    this.upperBoundG = [120 + this.sensitivity, 100, 75]
+    this.lowerBoundB = [240 - this.sensitivity, 50, 25]
+    this.upperBoundB = [240 + this.sensitivity, 100, 75]
+    this.lowerBoundBar1 = [24 - this.sensitivity, 50, 25]
+    this.upperBoundBar1 = [24 + this.sensitivity, 100, 75]
+    this.lowerBoundBar2 = [72 - this.sensitivity, 50, 25]
+    this.upperBoundBar2 = [72 + this.sensitivity, 100, 75]
+    this.lowerBoundBar3 = [180 - this.sensitivity, 50, 25]
+    this.upperBoundBar3 = [180 + this.sensitivity, 100, 75]
+    this.lowerBoundBar4 = [288 - this.sensitivity, 50, 25]
+    this.upperBoundBar4 = [288 + this.sensitivity, 100, 75]
+    this.lowerBoundBar5 = [336 - this.sensitivity, 50, 25]
+    this.upperBoundBar5 = [336 + this.sensitivity, 100, 75]
 
-  constructor(imgData, canvasName, colorSpace, width, height) {
     this.setPixels(imgData.data)
-    this.setCanvas(canvasName, imgData.width, imgData.height)
+    this.setCanvas(canvas, imgData.width, imgData.height)
     this.setColorSpace(colorSpace)
-    this.width = width
-    this.height = height
+    this.width = imgData.width
+    this.height = imgData.height
+    this.imgData = imgData
     if (this.canvas !== null) {
       let context = this.canvas.getContext('2d')
       context.putImageData(imgData, 0, 0)
@@ -98,8 +107,8 @@ module.exports = class Image {
     this.pixels = pixels
   }
 
-  setCanvas(canvasName, width, height) {
-    this.canvas = document.getElementById(canvasName)
+  setCanvas(canvas, width, height) {
+    this.canvas = canvas
     if (this.canvas !== null) {
       this.canvas.width = width
       this.canvas.height = height
@@ -108,27 +117,10 @@ module.exports = class Image {
 
   setColorSpace(newColorSpace) {
     if (!this.colorSpaces.includes(newColorSpace)) {
-      console.error("colorspace '" + newColorSpace + "' doesn't exist!")
+      console.error('colorspace ' + newColorSpace + ' doesn\'t exist!')
     }
-    if (this.matrix[y][x + 1] === 1 || this.matrix[y][x + 1] === 2) {
-      stack.push([x + 1, y])
-    }
-    if (this.matrix[y - 1][x] === 1 || this.matrix[y - 1][x] === 2) {
-      stack.push([x, y - 1])
-    }
-    if (this.matrix[y + 1][x] === 1 || this.matrix[y + 1][x] === 2) {
-      stack.push([x, y + 1])
-    }
+    this.colorSpace = newColorSpace
   }
-  /* for (let i = 0; i < tmpIslands.length; i++) {
-      if (tmpIslands[i].size() > this.MIN_ISLAND_SIZE) {
-          this.drawFillRect([tmpIslands[i].minx, tmpIslands[i].miny], [tmpIslands[i].maxx, tmpIslands[i].maxy], 0.3);
-          //tmpIslands[i].cornerDetection();
-          //let corners = tmpIslands[i].findScreenCorners();
-          //for(let j = 0; j < 4; j++) this.drawPoint(corners[j][0] + tmpIslands[i].minx, corners[j][1]+tmpIslands[i].miny, 10);
-          this.islands.push(tmpIslands[i]);
-      }
-  } */
 
   show() {
     if (this.canvas !== null) {
@@ -162,7 +154,7 @@ module.exports = class Image {
           [tmpIslands[i].maxx, tmpIslands[i].maxy],
           0.3
         )
-        let corners = tmpIslands[i].Corners()
+        let corners = tmpIslands[i].findScreenCorners()
         for (let j = 0; j < 4; j++)
           this.drawPoint(
             corners[j][0] + tmpIslands[i].minx,
@@ -175,34 +167,34 @@ module.exports = class Image {
   }
 
   floodfill(xPos, yPos, islandID) {
-    var stack = [[xPos, yPos]]
-    var pixel
-    var x
-    var y
-    var minX = xPos
-    var minY = yPos
-    var maxX = xPos
-    var maxY = yPos
+    let stack = [[xPos, yPos]]
+    let pixel
+    let x
+    let y
+    let minX = xPos
+    let minY = yPos
+    let maxX = xPos
+    let maxY = yPos
     while (stack.length > 0) {
       pixel = stack.pop()
       x = pixel[0]
       y = pixel[1]
-      if (this.matrix[y][x] <= 2) {
+      if (this.getMatrix(x, y) <= 2) {
         this.matrix[y][x] += islandID - 1
         minX = Math.min(minX, x)
         minY = Math.min(minY, y)
         maxX = Math.max(maxX, x)
         maxY = Math.max(maxY, y)
-        if (this.matrix[y][x - 1] === 1 || this.matrix[y][x - 1] === 2) {
+        if (this.getMatrix(x - 1, y) === 1 || this.getMatrix(x - 1, y) === 2) {
           stack.push([x - 1, y])
         }
-        if (this.matrix[y][x + 1] === 1 || this.matrix[y][x + 1] === 2) {
+        if (this.getMatrix(x + 1, y) === 1 || this.getMatrix(x + 1, y) === 2) {
           stack.push([x + 1, y])
         }
-        if (this.matrix[y - 1][x] === 1 || this.matrix[y - 1][x] === 2) {
+        if (this.getMatrix(x, y - 1) === 1 || this.getMatrix(x, y - 1) === 2) {
           stack.push([x, y - 1])
         }
-        if (this.matrix[y + 1][x] === 1 || this.matrix[y + 1][x] === 2) {
+        if (this.getMatrix(x, y + 1) === 1 || this.getMatrix(x, y + 1) === 2) {
           stack.push([x, y + 1])
         }
       }
@@ -220,44 +212,85 @@ module.exports = class Image {
     }
   }
 
-  filterIslands() {
-    for (let i; i <= this.tmpIslands; i++) {}
+  calcIslands() {
+    for (let j = 0; j < this.getHeight(); j++) {
+      for (let i = 0; i < this.getWidth(); i++) {
+        if (this.getMatrix() >= 1) {
+          if (this.isSeperated(i, j) === 0) {
+            let island = new Island(i, j, this.islandID++)
+            this.matrix[j][i] = island.id
+            this.tmpIslands.push(island)
+          } else if (this.isSeperated(i, j) > 1) {
+            let di = this.isSeperated(i, j)
+            this.matrix[j][i] = di
+            this.tmpIslands[di - 2].add(i, j)
+          }
+        }
+      }
+    }
+
+    for (let i = 0; i < this.tmpIslands.length; i++) {
+      if (this.tmpIslands[i].size() > this.MIN_ISLAND_SIZE) {
+        this.drawFillRect(
+          [this.tmpIslands[i].minx, this.tmpIslands[i].miny],
+          [this.tmpIslands[i].maxx, this.tmpIslands[i].maxy],
+          0.3
+        )
+
+        this.tmpIslands[i].setScreenMatrix(this.matrix)
+        let corners = this.tmpIslands[i].findScreenCorners()
+        for (let j = 0; j < 4; j++)
+          this.drawPoint(
+            corners[j][0] + this.tmpIslands[i].minx,
+            corners[j][1] + this.tmpIslands[i].miny,
+            10
+          )
+        this.islands.push(this.tmpIslands[i])
+      }
+    }
+    console.log('Amount detected islands: ' + this.islands.length)
   }
 
-  countEdges(island) {
-    let count = 0
-    let up = this.matrix[island.getMiny()][
-      Math.floor((island.getMaxx() - island.getMinx()) / 2)
-    ]
-    let down = this.matrix[island.getMaxy()][
-      Math.floor((island.getMaxx() - island.getMinx()) / 2)
-    ]
-    let left = this.matrix[
-      Math.floor((island.getMaxy() - island.getMiny()) / 2)
-    ][island.getMinx()]
-    let right = this.matrix[
-      Math.floor((island.getMaxy() - island.getMiny()) / 2)
-    ][island.getMaxx()]
-    if (up !== 0) {
-      count++
+  isSeperated(x, y) {
+    let result = 0
+
+    if (y - 1 >= 0) {
+      let up = this.matrix[y - 1][x]
+      if (up > 1) {
+        result = up
+      }
     }
-    if (down !== 0) {
-      count++
+
+    if (x - 1 >= 0) {
+      let left = this.matrix[y][x - 1]
+      if (result > 0) {
+        if (left > 1 && left !== result) {
+          //MERGE dit island met island van bovenste pixel
+          this.mergeIslands(left, result)
+        }
+      } else {
+        result = left
+      }
     }
-    if (left !== 0) {
-      count++
+    return result
+  }
+
+  mergeIslands(first, second) {
+    for (let y = 0; y < this.getHeight(); y++) {
+      for (let x = 0; x < this.getWidth(); x++) {
+        if (this.matrix[y][x] === first) {
+          this.matrix[y][x] = second
+          this.tmpIslands[second - 2].add(x, y)
+        }
+      }
     }
-    if (right !== 0) {
-      count++
-    }
-    return count
   }
 
   /**
    * @param {HTMLCanvasElement} canvas canvas om imgdata op te pushen
    */
   /**
- matrixToImg(canvas) {
+   matrixToImg(canvas) {
 
         let data = context.createImageData(this.getWidth(), this.getHeight());
 
@@ -275,11 +308,11 @@ module.exports = class Image {
 
         return img;
     }
- */
+   */
 
   /*
-      math from https://www.rapidtables.com/convert/color/rgb-to-hsl.html
-  */
+        math from https://www.rapidtables.com/convert/color/rgb-to-hsl.html
+    */
   rgbaToHsla() {
     for (let i = 0; i < this.pixels.length; i += 4) {
       //convert rgb spectrum to 0-1
@@ -311,13 +344,13 @@ module.exports = class Image {
 
   findHue(red, green, blue, max, min) {
     let hue = 0
-    if (max == min) {
+    if (max === min) {
       return 0
-    } else if (red == max) {
+    } else if (red === max) {
       hue = (green - blue) / (max - min)
-    } else if (green == max) {
+    } else if (green === max) {
       hue = 2.0 + (blue - red) / (max - min)
-    } else if (blue == max) {
+    } else if (blue === max) {
       hue = 4.0 + (red - green) / (max - min)
     }
 
@@ -329,9 +362,9 @@ module.exports = class Image {
   }
 
   /*
-      image as Image
-      math from: http://www.niwa.nu/2013/05/math-behind-colorspace-conversions-rgb-hsl/
-  */
+        image as Image
+        math from: http://www.niwa.nu/2013/05/math-behind-colorspace-conversions-rgb-hsl/
+    */
   hslaToRgba() {
     let R
     let G
@@ -404,12 +437,12 @@ module.exports = class Image {
   }
 
   /*
-  image as Image
-  mask color = white
-  not in mask = black
-  low = array[low Hue, low Saturation, low Luminance]
-  high = array[""]
-  */
+    image as Image
+    mask color = white
+    not in mask = black
+    low = array[low Hue, low Saturation, low Luminance]
+    high = array[""]
+    */
   createMask(low, high) {
     for (let i = 0; i < this.pixels.length; i += 4) {
       let H = this.pixels[i] * 2
@@ -454,166 +487,6 @@ module.exports = class Image {
     }
   }
 
-  /**
-   * Harris corner detection impl (not working yet...)
-   *
-   * @param {int} windowSize window corner search size
-   * @param {float} threshold corner threshold
-   */
-  harrisCorner(windowSize, threshold) {
-    //calc derivatives v
-    //setup harris matrix
-    //calc eigenwaarden
-    //process eigenwaarden en bepaal punten?
-
-    let m = this.normalizeMatrix(this.matrix)
-
-    //horizontal and vertical sobel kernels
-    let kx = [[-1, 0, 1], [-2, 0, 2], [-1, 0, 1]]
-    let ky = [[-1, -2, -1], [0, 0, 0], [1, 2, 1]]
-
-    console.log('calc sobel')
-
-    let ix = this.sobel(m, kx)
-    let iy = this.sobel(m, ky)
-
-    //this.matrix = ix;
-
-    let points = []
-
-    //calc window scores
-    for (let j = 0; j < this.getHeight(); j += windowSize) {
-      for (let i = 0; i < this.getWidth(); i += windowSize) {
-        let score = this.calcWindow(m, i, j, windowSize, ix, iy)
-        console.log(score)
-
-        if (score >= threshold) {
-          points.push([
-            i + Math.round(windowSize / 2),
-            j + Math.round(windowSize / 2)
-          ])
-        }
-      }
-    }
-
-    console.log('aantal cornerns: ' + points.length)
-
-    /* for (let i = 0; i < points.length; i++) {
-      let pos = points[i];
-
-      this.drawPoint(pos[0], pos[1], 6);
-
-  } */
-
-    /* this.matrix = this.sobel(m, kx);
-
-  console.log(this.matrix); */
-
-    /* let p = math.matrix(this.matrix);
-  console.log(math.print("show result: $mat", {mat: p})); */
-  }
-
-  // op dit moment met een cte window function, maybe eens met een gaussian matrix eens proberen?
-  calcWindow(mat, x, y, size, intensx, intensy) {
-    this.matrix = intensx
-
-    let ix = 0
-    let iy = 0
-    for (let j = y; j < size; j++) {
-      for (let i = x; i < size; i++) {
-        if (j >= 0 && j < mat.length && i >= 0 && i < mat[0].length) {
-          ix += intensx[j][i]
-          console.log(intensx[j][i])
-          iy += intensy[j][i]
-        }
-      }
-    }
-
-    //console.log(ix);
-
-    let m = Math.matrix([[ix * ix, ix * iy], [ix * iy, iy * iy]])
-
-    let det = Math.det(m)
-    let trace = Math.trace(m)
-    let k = 0.04 //tussen 0.04 en 0.06
-
-    let score = det - k * (trace * trace)
-
-    return score
-  }
-
-  sobel(mat, kernel) {
-    // new clean matrix
-    let result = new Array(mat.length)
-
-    for (let i = 0; i < result.length; i++) {
-      result[i] = new Array(mat[0].length)
-    }
-
-    for (let j = 0; j < this.getHeight(); j++) {
-      for (let i = 0; i < this.getWidth(); i++) {
-        let val = this.convolution(mat, kernel, i, j)
-
-        if (val > 2) {
-          // handpicked threshold, max value is 4
-          result[j][i] = 1
-        } else {
-          result[j][i] = 0
-        }
-      }
-    }
-
-    return result
-  }
-
-  //img convolution voor 3x3 kernel matrix
-  convolution(mat, kernel, x, y) {
-    let result = 0
-
-    for (let u = 0; u < 3; u++) {
-      for (let v = 0; v < 3; v++) {
-        let j = u + (y - 1)
-        let i = v + (x - 1)
-
-        if (j >= 0 && j < this.getHeight() && i >= 0 && i < this.getWidth()) {
-          result += kernel[u][v] * mat[j][i]
-
-          if (result < 0) {
-            //console.log("kleiner dan nul --> " + Math.abs(result));
-          }
-        }
-      }
-    }
-
-    return Math.abs(result)
-  }
-
-  //nu om terug een cleane binaire img te krijgen (ipv met ids er bij in)
-  normalizeMatrix(mat) {
-    let result = mat
-
-    for (let j = 0; j < mat.length; j++) {
-      for (let i = 0; i < mat.length; i++) {
-        if (mat[j][i] > 0) {
-          mat[j][i] = 1
-        }
-      }
-    }
-
-    return result
-  }
-
-  //binaire img naar bw hsl matrix
-  matrixToImg() {
-    for (let i = 0; i < this.pixels.length; i += 4) {
-      this.pixels[i] = 0
-      this.pixels[i + 1] = 0
-
-      let pos = this.positionToPixel(i)
-      this.pixels[i + 2] = this.matrix[pos[1]][pos[0]] * 255
-    }
-  }
-
   medianBlur(ksize) {
     for (let y = 0; y < this.getHeight(); y++) {
       for (let x = 0; x < this.getWidth(); x++) {
@@ -637,14 +510,14 @@ module.exports = class Image {
     }
   }
 
-  medianBlurMatrix(kSize) {
-    let halfKSize = Math.floor(kSize / 2)
+  medianBlurMatrix(ksize) {
     for (let y = 0; y < this.getHeight(); y++) {
       for (let x = 0; x < this.getWidth(); x++) {
         let LArray = []
 
-        for (let yBox = -halfKSize; yBox <= halfKSize; yBox++) {
-          for (let xBox = -halfKSize; xBox <= halfKSize; xBox++) {
+        let halfKsize = Math.floor(ksize / 2)
+        for (let yBox = -halfKsize; yBox <= halfKsize; yBox++) {
+          for (let xBox = -halfKsize; xBox <= halfKsize; xBox++) {
             if (
               y + yBox >= 0 &&
               y + yBox < this.getHeight() &&
@@ -655,12 +528,12 @@ module.exports = class Image {
               LArray.push(pixel)
             }
           }
-          LArray.sort(function(a, b) {
-            return a - b
-          })
-          let half = Math.floor(LArray.length / 2)
-          this.matrix[y][x] = LArray[half]
         }
+        LArray.sort(function(a, b) {
+          return a - b
+        })
+        let half = Math.floor(LArray.length / 2)
+        this.matrix[y][x] = LArray[half]
       }
     }
   }
@@ -684,7 +557,7 @@ module.exports = class Image {
             }
           }
           if (white >= 7 && white <= 12 && black >= 13 && black <= 18) {
-            let i = this.pixelToPosition([x, y])
+            //let i = this.pixelToPosition([x, y])
             corners.push([x, y])
           }
         }
@@ -755,6 +628,78 @@ module.exports = class Image {
     }
   }
 
+  createBigMask() {
+    if (this.getColorSpace() !== 'HSLA') {
+      console.error('createGreenBlueMask only with HSLA as colorspace!')
+    }
+    for (let i = 0; i < this.pixels.length; i += 4) {
+      let H = this.pixels[i] * 2
+      let S = this.pixels[i + 1]
+      let L = this.pixels[i + 2]
+      let pixel = this.positionToPixel(i)
+      let x = pixel[0]
+      let y = pixel[1]
+      if (this.inGreenRange(H, S, L)) {
+        this.pixels[i + 1] = 0
+        this.pixels[i + 2] = 100
+        this.matrix[y][x] = 1
+      } else if (this.inBlueRange(H, S, L)) {
+        this.pixels[i + 1] = 0
+        this.pixels[i + 2] = 100
+        this.matrix[y][x] = 2
+      } else if (this.inBarcodeRange(H, S, L)) {
+        this.pixels[i + 1] = 0
+        this.pixels[i + 2] = 100
+        this.matrix[y][x] = 3
+      } else {
+        this.pixels[i + 1] = 0
+        this.pixels[i + 2] = 0
+        this.matrix[y][x] = 0
+      }
+    }
+  }
+
+  inBarcodeRange(H, S, L) {
+    return (
+      H >=
+        (this.lowerBoundBar1[0] ||
+          this.lowerBoundBar2[0] ||
+          this.lowerBoundBar3[0] ||
+          this.lowerBoundBar4[0] ||
+          this.lowerBoundBar5[0]) &&
+      S >=
+        (this.lowerBoundBar1[1] ||
+          this.lowerBoundBar2[1] ||
+          this.lowerBoundBar3[1] ||
+          this.lowerBoundBar4[1] ||
+          this.lowerBoundBar5[1]) &&
+      L >=
+        (this.lowerBoundBar1[2] ||
+          this.lowerBoundBar2[2] ||
+          this.lowerBoundBar3[2] ||
+          this.lowerBoundBar4[2] ||
+          this.lowerBoundBar5[2]) &&
+      H <=
+        (this.upperBoundBar1[0] ||
+          this.upperBoundBar2[0] ||
+          this.upperBoundBar3[0] ||
+          this.upperBoundBar4[0] ||
+          this.upperBoundBar5[0]) &&
+      S <=
+        (this.upperBoundBar1[0] ||
+          this.upperBoundBar2[0] ||
+          this.upperBoundBar3[0] ||
+          this.upperBoundBar4[0] ||
+          this.upperBoundBar5[0]) &&
+      L <=
+        (this.upperBoundBar1[0] ||
+          this.upperBoundBar2[0] ||
+          this.upperBoundBar3[0] ||
+          this.upperBoundBar4[0] ||
+          this.upperBoundBar5[0])
+    )
+  }
+
   inGreenRange(H, S, L) {
     return (
       H >= this.lowerBoundG[0] &&
@@ -775,6 +720,14 @@ module.exports = class Image {
       S <= this.upperBoundB[1] &&
       L <= this.upperBoundB[2]
     )
+  }
+
+  getMatrix(x, y) {
+    if (x < 0) x = 0
+    else if (x >= this.width) x = this.width - 1
+    if (y < 0) y = 0
+    else if (y >= this.height) y = this.height - 1
+    return this.matrix[y][x]
   }
 
   positionToPixel(position) {

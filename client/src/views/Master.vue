@@ -238,8 +238,8 @@
                 <canvas ref="canv"></canvas>
               </v-card>
 
-              <v-btn color="primary" @click="nextStep(2)">
-                Continue
+              <v-btn color="primary" @click="nextStep(2); analyseImage">
+                Analyse image
               </v-btn>
 
               <v-btn text @click="pictureModeDialog = false">Cancel</v-btn>
@@ -247,7 +247,8 @@
 
             <v-stepper-content step="3" class="fullheight">
               <v-card class="mb-12 fullheight" elevation="0">
-                Some text 3
+                Result
+                  <canvas ref="resultCanvas"></canvas>
               </v-card>
 
               <v-btn color="primary" @click="nextStep(3)">
@@ -295,6 +296,8 @@
 </template>
 <script>
 import PictureUpload from '../components/PictureUpload'
+import AlgorithmService from '../services/AlgotithmService'
+
 export default {
   name: 'master',
   data() {
@@ -333,7 +336,8 @@ export default {
       // picture mode
       pictureStepper: 0,
       steps: 3,
-      pictureModeDialog: false
+      pictureModeDialog: false,
+      analysedImage: null
     }
   },
   components: {
@@ -482,6 +486,10 @@ export default {
           this.$refs.video.width,
           this.$refs.video.height
         )
+    },
+    analyseImage() {
+      this.analysedImage = AlgorithmService.fullAnalysis(this.$refs.canv.toImage())
+      console.log(this.analysedImage)
     }
   },
   mounted() {

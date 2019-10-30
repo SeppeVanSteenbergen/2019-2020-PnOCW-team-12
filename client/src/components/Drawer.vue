@@ -47,8 +47,8 @@
     <template v-slot:append>
       <div class="pa-2">
         <p style="color: #4e6686">user id:{{ user.uuid }}</p>
-      <br/>
-        <br/>
+        <br />
+        <br />
         <v-btn
           block
           @click="
@@ -69,7 +69,7 @@ export default {
   data() {
     return {
       items: [
-        { title: 'Home', icon: 'mdi-home', link: '/' },
+        { title: 'Home', icon: 'mdi-home', link: '/' }
         /*{ title: 'Master', icon: 'mdi-account-tie', link: 'master' },
         { title: 'Client', icon: 'mdi-account', link: 'client' }*/
       ],
@@ -94,9 +94,9 @@ export default {
   methods: {
     ...mapMutations(['setDrawer', 'toggleDrawer', 'setDarkMode']),
     goTo(link) {
-      try{
+      try {
         this.$router.push(link)
-      }catch(e){
+      } catch (e) {
         console.log(e)
       }
     }

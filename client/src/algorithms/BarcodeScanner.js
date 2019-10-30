@@ -1,4 +1,4 @@
-module.exports = class BarcodeScanner {
+export default class BarcodeScanner {
   static scan(image, width, height, sensitivity) {
     //Always searching on the middle line
     let searchHeight = Math.round(height / 2)

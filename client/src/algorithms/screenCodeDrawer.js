@@ -1,4 +1,4 @@
-module.exports = class ScreenCodeDrawer {
+export default class ScreenCodeDrawer {
   constructor(canvas, screen, borderWidth) {
     this.w = screen.width
     this.h = screen.height

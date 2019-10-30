@@ -1,23 +1,23 @@
 import Screen from './Screen'
 
-module.exports = class Island {
-  minx
-  maxx
-  miny
-  maxy
-  id
-  screenMatrix = []
-  corners = []
-  blue
-  green
-  margin = 5
-
+export default class Island {
   /**
    * Create and Island starting with this pixel
    * @param {int} x x co
    * @param {int} y y co
    */
   constructor(x, y, id) {
+    this.minx = null
+    this.maxx = null
+    this.miny = null
+    this.maxy = null
+    this.id = null
+    this.screenMatrix = []
+    this.corners = []
+    this.blue = null
+    this.green = null
+    this.margin = 5
+
     this.minx = x
     this.maxx = x
 
