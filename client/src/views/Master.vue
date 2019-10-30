@@ -213,7 +213,7 @@
             </v-stepper-step>
           </v-stepper-header>
 
-          <v-stepper-items class="fullheight">
+          <v-stepper-items class="fullheight overflow-y-auto">
             <v-stepper-content step="1" class="fullheight">
               <v-card class="mb-12 fullheight" elevation="0">
                 <v-btn @click="executeDisplayDetectionScreens" color="cyan"
@@ -258,7 +258,7 @@
               </v-card>
             </v-stepper-content>
 
-            <v-stepper-content step="3" class="fullheight">
+            <v-stepper-content step="3" class="fullheight overflow-y-auto">
               <v-card class="mb-12 fullheight" elevation="0">
                 <canvas ref="resultCanvas"></canvas>
               </v-card>
