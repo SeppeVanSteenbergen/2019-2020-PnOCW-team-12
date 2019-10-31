@@ -1,8 +1,8 @@
-function randomPointsGenerator(nbPoints, size){
+function randomPointsGenerator(nbPoints, canvas){
     let pointList = []
     for(let i = 0; i < nbPoints; i++){
-        let x = Math.floor(Math.random() * size)
-        let y = Math.floor(Math.random() * size)
+        let x = Math.floor(Math.random() * canvas.width)
+        let y = Math.floor(Math.random() * canvas.height)
         pointList.push([x, y])
     }
     return pointList
@@ -26,11 +26,11 @@ function radialSort(points, point){
     return points
 }
 
-function delaunay(points){
+function delaunay(points, width, height){
     if(points.length < 3){
         return
     }
-    let supTriangle = superTriangle(points)
+    let supTriangle = superTriangle(width, height)
     let triangulation = []
     triangulation.push(supTriangle)
     for(let i = 0; i < points.length; i++){
@@ -43,13 +43,28 @@ function delaunay(points){
            }
         }
         let polygon = []
-        let edges = []
+        //let edges = []
         for(let t = 0; t < badTriangles.length; t++){
+
             for(let e = 0; e < badTriangles[t].edges.length; e++){
-                edges.push(badTriangles[t].edges[e])
+              // check if any other triangle in badTriangles also has this edge
+              // t = triangle, ot = other triangle, ote = other triangle edge
+              let edgeShared = false
+              for(let ot = 0; ot < badTriangles.length; ot++) {
+                  if(ot !== t) {
+                      if(badTriangles[ot].hasEdge(badTriangles[t].edges[e])){
+                        edgeShared = true
+                        break
+                      }
+                  }
+              }
+              if(!edgeShared) {
+                polygon.push(badTriangles[t].edges[e])
+              }
+
             }
         }
-        for(let e1 = 0; e1 < edges.length - 1; e1++){
+        /*for(let e1 = 0; e1 < edges.length - 1; e1++){
             for(let e2 = e1 + 1; e2 < edges.length; e2++){
                 if(equalEdges(edges[e1], edges[e2])){
                     edges[e2] = null
@@ -59,10 +74,10 @@ function delaunay(points){
             }
         }
         for(let e = 0; e < edges.length; e++){
-            if(edges[e] != null){
+            if(edges[e] !== null){
                 polygon.push(edges[e])
             }
-        }
+        }*/
  
         for(let i = 0; i < badTriangles.length; i++){
             triangulation = arrayRemove(triangulation, badTriangles[i])
@@ -104,7 +119,7 @@ function calcCenter(point1, point2, point3){
     let ma = (point2[1] - point1[1]) / (point2[0] - point1[0])
     let mb = (point3[1] - point2[1]) / (point3[0] - point2[0])
     let counter = 3
-    while(counter > 0 && (!isFinite(ma) || ! isFinite(mb) || ma == mb)){
+    while(counter > 0 && (!isFinite(ma) || ! isFinite(mb) || ma === mb || ma === 0 || mb === 0)){
         let helpPoint = point1.slice(0)
         point1 = point2.slice(0)
         point2 = point3.slice(0)
@@ -114,6 +129,8 @@ function calcCenter(point1, point2, point3){
         counter--
     }
     let centerX = (ma * mb * (point1[1] - point3[1]) + mb * (point1[0] + point2[0]) - ma * (point2[0] + point3[0])) / (2* (mb - ma))
+
+
     let centerY = -(centerX - (point1[0] + point2[0]) / 2) / ma + (point1[1] + point2[1]) / 2
     return [centerX, centerY]
 }
@@ -161,27 +178,14 @@ function inCircle(point, radius, center){
     return false
 }
 //correct
-function superTriangle(points){
-    let minMax = calcMinMaxPoint(points)
-    let point1 = [minMax[3][0]*2 , minMax[1][1]*2]
-    let point2 = [minMax[3][0]*2,  -minMax[1][1] *2]
+function superTriangle(width, height){
+    let g = width > height?width:height
+    g *= g
+    let p1 = [-500,-500]
+    let p2 = [0,Math.sqrt(g)*2]
+    let p3 = [Math.sqrt(g)*2,0]
 
-    let p1 = point1.slice(0)
-    let p2
-    //searches leftmost point from the lowest point
-    for(let i = 0; i < points.length; i++){
-        p2 = points[i]
-        if(crossProduct(p1, p2, point2) > 0){
-            p1 = p2
-        }
-    }
-    //p1 is leftMost point
-
-    let slope = (point2[1] - p1[1]) / (point2[0] - p1[0])
-    let y = minMax[1][1]
-    let x = ((y - p1[1]) / slope) + p1[0]
-    let point3 = [x, y]
-    return new Triangle(point1, point2, point3)
+  return new Triangle(p1,p2,p3)
 }
 //correct
 function calcMinMaxPoint(points){

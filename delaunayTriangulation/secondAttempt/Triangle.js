@@ -20,4 +20,13 @@ class Triangle{
             return true
         return false
     }
+
+    hasEdge(edge) {
+        for(let i = 0; i < this.edges.length; i++) {
+            if(this.equalEdges(edge, this.edges[i])) {
+                return true
+            }
+        }
+        return false
+    }
 }
