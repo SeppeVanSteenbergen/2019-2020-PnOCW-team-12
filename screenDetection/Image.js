@@ -118,6 +118,34 @@ class Image {
     }
   }
 
+  calcMid() {
+    if (this.getColorSpace() !== "HSLA") {
+      console.error("createGreenBlueMask only with HSLA as colorspace!");
+    }
+
+    let x_values = [];
+    let y_values = [];
+    for (let i = 0; i < this.pixels.length; i += 4) {
+      let H = this.pixels[i] * 2;
+      let S = this.pixels[i + 1];
+      let L = this.pixels[i + 2];
+      if (this.inMidRange(H, S, L)) {
+        let pixel = this.positionToPixel(i);
+        let x = pixel[0];
+        let y = pixel[1];
+        x_values.push(x);
+        y_values.push(y);
+      }
+    }
+    
+    let lengthX = x_values.length;
+    let lengthY = y_values.length;
+    let midX = x_values.reduce((a,b) => a + b, 0) / lengthX;
+    let midY = y_values.reduce((a,b) => a + b, 0) / lengthY;
+
+    return [midX, midY];
+  }
+
   calcIslandsFloodfill() {
     let tmpIslands = [];
     for (let y = 0; y < this.getHeight(); y++) {
@@ -130,7 +158,6 @@ class Image {
             this.islandID
           );
           newIsland.add(newIslandCoo[2], newIslandCoo[3]);
-          console.log(this.matrix);
           newIsland.setScreenMatrix(this.matrix);
           tmpIslands.push(newIsland);
           this.islandID += 2;
@@ -730,24 +757,26 @@ class Image {
       var change = true;
     }
 
+    x = Math.round(x);
+    y = Math.round(y);
     size = Math.round(size);
 
     //verticale lijn
     for (let j = y - size / 2; j <= y + size / 2; j++) {
       let pos = this.pixelToPosition([x, j]);
 
-      this.pixels[pos] = 255;
+      this.pixels[pos] = 0;
       this.pixels[pos + 1] = 255;
-      this.pixels[pos + 2] = 0;
+      this.pixels[pos + 2] = 255;
     }
 
     //horizontale lijn
     for (let i = x - size / 2; i <= x + size / 2; i++) {
       let pos = this.pixelToPosition([i, y]);
 
-      this.pixels[pos] = 255;
+      this.pixels[pos] = 0;
       this.pixels[pos + 1] = 255;
-      this.pixels[pos + 2] = 0;
+      this.pixels[pos + 2] = 255;
     }
     if (change) {
       this.rgbaToHsla();
