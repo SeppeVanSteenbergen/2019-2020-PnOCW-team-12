@@ -24,16 +24,8 @@ class Image {
   upperBoundG = [120 + this.sensitivity, 100, 75];
   lowerBoundB = [240 - this.sensitivity, 50, 25];
   upperBoundB = [240 + this.sensitivity, 100, 75];
-  lowerBoundBar1 = [24 - this.sensitivity, 50, 25];
-  upperBoundBar1 = [24 + this.sensitivity, 100, 75];
-  lowerBoundBar2 = [72 - this.sensitivity, 50, 25];
-  upperBoundBar2 = [72 + this.sensitivity, 100, 75];
-  lowerBoundBar3 = [180 - this.sensitivity, 50, 25];
-  upperBoundBar3 = [180 + this.sensitivity, 100, 75];
-  lowerBoundBar4 = [288 - this.sensitivity, 50, 25];
-  upperBoundBar4 = [288 + this.sensitivity, 100, 75];
-  lowerBoundBar5 = [336 - this.sensitivity, 50, 25];
-  upperBoundBar5 = [336 + this.sensitivity, 100, 75];
+  lowerBoundMid = [180 - this.sensitivity, 50, 25];
+  upperBoundMid = [180 + this.sensitivity, 100, 75];
 
   constructor(imgData, canvasName, colorSpace, width, height) {
     this.setPixels(imgData.data);
@@ -645,7 +637,7 @@ class Image {
         this.pixels[i + 1] = 0;
         this.pixels[i + 2] = 100;
         this.matrix[y][x] = 2;
-      } else if (this.inBarcodeRange(H, S, L)) {
+      } else if (this.inMidRange(H, S, L)) {
         this.pixels[i + 1] = 0;
         this.pixels[i + 2] = 100;
         this.matrix[y][x] = 3;
@@ -657,16 +649,15 @@ class Image {
     }
   }
 
-  inBarcodeRange(H, S, L) {
+  inMidRange(H, S, L) {
     return (
-      H >= (this.lowerBoundBar1[0] || this.lowerBoundBar2[0] || this.lowerBoundBar3[0] || this.lowerBoundBar4[0] || this.lowerBoundBar5[0]) &&
-      S >= (this.lowerBoundBar1[1] || this.lowerBoundBar2[1] || this.lowerBoundBar3[1] || this.lowerBoundBar4[1] || this.lowerBoundBar5[1]) &&
-      L >= (this.lowerBoundBar1[2] || this.lowerBoundBar2[2] || this.lowerBoundBar3[2] || this.lowerBoundBar4[2] || this.lowerBoundBar5[2]) &&
-      H <= (this.upperBoundBar1[0] || this.upperBoundBar2[0] || this.upperBoundBar3[0] || this.upperBoundBar4[0] || this.upperBoundBar5[0]) &&
-      S <= (this.upperBoundBar1[0] || this.upperBoundBar2[0] || this.upperBoundBar3[0] || this.upperBoundBar4[0] || this.upperBoundBar5[0]) &&
-      L <= (this.upperBoundBar1[0] || this.upperBoundBar2[0] || this.upperBoundBar3[0] || this.upperBoundBar4[0] || this.upperBoundBar5[0])
+      H >= this.lowerBoundMid[0] &&
+      S >= this.lowerBoundMid[1] &&
+      L >= this.lowerBoundMid[2] &&
+      H <= this.upperBoundMid[0] &&
+      S <= this.upperBoundMid[0] &&
+      L <= this.upperBoundMid[0]
     );
-
   }
 
   inGreenRange(H, S, L) {

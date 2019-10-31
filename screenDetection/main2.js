@@ -22,7 +22,7 @@ imgElement.onload = function () {
   inputImage.rgbaToHsla();
   
   var imageTest = new Image(inputImage.getImgData(), "imageOutConcatenated", "HSLA", imgElement.width, imgElement.height);
-  imageTest.createGreenBlueMask();
+  imageTest.createBigMask();
   imageTest.medianBlurMatrix(5);
   imageTest.medianBlur(5);
   imageTest.calcIslandsFloodfill();
