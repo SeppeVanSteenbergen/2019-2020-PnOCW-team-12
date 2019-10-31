@@ -23,9 +23,9 @@ imgElement.onload = function () {
   
   var imageTest = new Image(inputImage.getImgData(), "imageOutConcatenated", "HSLA", imgElement.width, imgElement.height);
   imageTest.createGreenBlueMask();
-  imageTest.medianBlurMatrix(12);
-  imageTest.medianBlur(12);
-  //imageTest.calcIslandsFloodfill();
+  imageTest.medianBlurMatrix(5);
+  imageTest.medianBlur(5);
+  imageTest.calcIslandsFloodfill();
   imageTest.hslaToRgba();
   imageTest.show();
 };
