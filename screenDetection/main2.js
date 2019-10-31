@@ -22,12 +22,12 @@ imgElement.onload = function () {
   inputImage.rgbaToHsla();
   
   var imageTest = new Image(inputImage.getImgData(), "imageOutConcatenated", "HSLA", imgElement.width, imgElement.height);
-  const [midX, midY] = imageTest.calcMid();
+  //const [midX, midY] = imageTest.calcMid();
   imageTest.createBigMask();
   imageTest.medianBlurMatrix(5);
   imageTest.medianBlur(5);
-  // imageTest.calcIslandsFloodfill();
+  imageTest.calcIslandsFloodfill();
   imageTest.hslaToRgba();
-  imageTest.drawPoint(midX, midY, 10);
+  //imageTest.drawPoint(midX, midY, 10);
   imageTest.show();
 };
