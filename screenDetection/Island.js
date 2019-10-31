@@ -108,15 +108,76 @@ class Island {
         let halfHor = Math.floor((this.screenMatrix[0].length - 1)/2);
         let halfVer = Math.floor((this.screenMatrix.length - 1)/2);
 
+        // left upper corner
+      for( let k = 0 ; k <= this.width + this.height - 2; k++ ) {
+          let found = false;
+        for( let j = 0 ; j <= k ; j++ ) {
+          let i = k - j;
+          if( i < this.height && j < this.width && this.screenMatrix[i][j] !== 0) {
+            this.corners.push([j,i,this.screenMatrix[i][j]])
+            found = true;
+            break;
+          }
+        }
+        if(found)break;
+      }
 
-        for(x; x < this.screenMatrix[0].length; x++) {
+      // right upper corner
+      for( let k = 0 ; k <= this.width + this.height - 2; k++ ) {
+        let found = false;
+        for( let j = 0 ; j <= k ; j++ ) {
+          let i = k - j;
+          if( i < this.height && j < this.width && this.screenMatrix[i][this.width - j - 1] !== 0) {
+            this.corners.push([this.width - j - 1,i,this.screenMatrix[i][this.width - j - 1]])
+            found = true;
+            break;
+          }
+        }
+        if(found)break;
+      }
+
+      // right lower corner
+      for( let k = 0 ; k <= this.width + this.height - 2; k++ ) {
+        let found = false;
+        for( let j = 0 ; j <= k ; j++ ) {
+          let i = k - j;
+          if( i < this.height && j < this.width && this.screenMatrix[this.height - i - 1][this.width - j - 1] !== 0) {
+            this.corners.push([this.width - j - 1,this.height - i - 1,this.screenMatrix[this.height - i - 1][this.width - j - 1]])
+            found = true;
+            break;
+          }
+        }
+        if(found)break;
+      }
+
+      // left lower corner
+      for( let k = 0 ; k <= this.width + this.height - 2; k++ ) {
+        let found = false;
+        for( let j = 0 ; j <= k ; j++ ) {
+          let i = k - j;
+          if( i < this.height && j < this.width && this.screenMatrix[this.height - i - 1][j] !== 0) {
+            this.corners.push([j,this.height - i - 1,this.screenMatrix[this.height - i - 1][j]])
+            found = true;
+            break;
+          }
+        }
+        if(found)break;
+      }
+
+
+        /*for(x; x < this.screenMatrix[0].length; x++) {
             if(this.screenMatrix[0][x] !== 0) {
                 temp.push(x);
             }
         }
+        // calculating avg of all pixels in above row
         let horAvg = Math.floor(this.calcAverage(temp));
+        // if this avg is before the middle of the screen append first to corners
         if(horAvg <= halfHor) {
+            // corner (X, Y, Color Value)
             this.corners.push([temp[0], 0, this.screenMatrix[0][temp[0]]]);
+
+            // otherwise choose last of the corners
         } else this.corners.push([temp[temp.length - 1], 0, this.screenMatrix[0][temp[temp.length - 1]]]);
 
         x = this.screenMatrix[0].length - 1;
@@ -158,6 +219,7 @@ class Island {
         if(verAvg >= halfVer) {
             this.corners.push([x, temp[0], this.screenMatrix[temp[0]][x]]);
         } else this.corners.push([x, temp[temp.length-1], this.screenMatrix[temp[temp.length-1]][x]]);
+        */
 
         return this.corners;
     }
