@@ -122,7 +122,7 @@ class Image {
     let tmpIslands = [];
     for (let y = 0; y < this.getHeight(); y++) {
       for (let x = 0; x < this.getWidth(); x++) {
-        if (this.matrix[y][x] === 1 || this.matrix[y][x] === 2) {
+        if (this.matrix[y][x] === 1 || this.matrix[y][x] === 2 || this.matrix[y][x] === 3) {
           let newIslandCoo = this.floodfill(x, y, this.islandID);
           let newIsland = new Island(
             newIslandCoo[0],
@@ -130,6 +130,7 @@ class Image {
             this.islandID
           );
           newIsland.add(newIslandCoo[2], newIslandCoo[3]);
+          console.log(this.matrix);
           newIsland.setScreenMatrix(this.matrix);
           tmpIslands.push(newIsland);
           this.islandID += 2;
