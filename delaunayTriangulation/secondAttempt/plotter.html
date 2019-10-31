@@ -3,7 +3,7 @@
 
 <head>
     <script type="text/javascript" src='delaunayTriangulation.js'> </script>
-    <script type="text/javascript" src="Triangle.js"></script></script>
+    <script type="text/javascript" src="Triangle.js"></script>
 
     <meta charset="utf-8">
     <title>Color Background</title>
@@ -40,7 +40,7 @@
         c.width = w;
         c.height = h;
 
-        var points = randomPointsGenerator(15, c)
+        var points = Delaunay.randomPointsGenerator(6, c)
         //points = []
         //points.push([601,197],[671,639],[1444,682],[27,453],[902,197],[687,525])
         //points.push([27,453],[601,197],[671,639],[902,197],[687,525])
@@ -125,11 +125,11 @@
 
         }
         function addPoint(event){
-            //points.push([event.clientX, event.clientY])
+            points.push([event.clientX, event.clientY])
             let ctx = c.getContext("2d");
             ctx.clearRect(0, 0, c.width, c.height);
             
-            let triangulation = delaunay(points, c.width, c.height)
+            let triangulation = Delaunay.triangulation(points, c.width, c.height)
             if(typeof triangulation !== 'undefined'){
                 for(let i = 0; i < triangulation.length; i++){
                     drawTriangle(triangulation[i]);
