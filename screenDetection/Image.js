@@ -7,9 +7,9 @@ class Image {
   colorSpaces = ['RGBA', 'HSLA', 'BW'];
 
   corners = [];
+  midpoint;
 
   islands;
-  tmpIslands = [];
   islandID = 4; //jumps per two so we can save green and blue within an island.
   MIN_ISLAND_SIZE = 1000;
 
@@ -150,7 +150,7 @@ class Image {
     let midX = x_values.reduce((a, b) => a + b, 0) / lengthX;
     let midY = y_values.reduce((a, b) => a + b, 0) / lengthY;
 
-    return [midX, midY];
+    this.midpoint = [midX,midY];
   }
 
   calcIslandsFloodfill() {
