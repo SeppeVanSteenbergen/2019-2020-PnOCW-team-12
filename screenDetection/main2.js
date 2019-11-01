@@ -24,8 +24,9 @@ imgElement.onload = function () {
   var imageTest = new Image(inputImage.getImgData(), "imageOutConcatenated", "HSLA", imgElement.width, imgElement.height);
   //const [midX, midY] = imageTest.calcMid();
   imageTest.createBigMask();
-  imageTest.medianBlurMatrix(7);
-  imageTest.medianBlur(7);
+  imageTest.medianBlurMatrix(5);
+  imageTest.medianBlur(5);
+  imageTest.createOffset(5);
   imageTest.calcIslandsFloodfill();
   imageTest.hslaToRgba();
   //imageTest.drawPoint(midX, midY, 10);

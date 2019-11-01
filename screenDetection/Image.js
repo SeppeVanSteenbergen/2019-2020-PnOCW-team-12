@@ -493,6 +493,36 @@ class Image {
     }
   }
 
+  createOffset(factor) {
+    let whites = [];
+    for (let y = 0; y < this.getHeight(); y++) {
+      for (let x = 0; x < this.getWidth(); x++) {
+        if(this.getMatrix(x,y) > 0) {
+          whites.push([x, y]);
+        }
+      }
+    }
+    console.log(whites.length);
+    for(let i=0; i < whites.length; i++) {
+      for (let yBox = -factor; yBox <= factor; yBox++) {
+        for (let xBox = -factor; xBox <= factor; xBox++) {
+          let x = whites[i][0];
+          let y = whites[i][1];
+          let value = this.getMatrix(x,y);
+          if (
+              y + yBox >= 0 &&
+              y + yBox < this.getHeight() &&
+              x + xBox >= 0 &&
+              x + xBox < this.getWidth() &&
+              this.getMatrix(x + xBox, y + yBox) === 0
+          ) {
+            this.matrix[y + yBox][x + xBox] = value;
+          }
+        }
+      }
+    }
+  }
+
   cornerDetection() {
     let nbNeigbours = 2;
     let corners = [];
