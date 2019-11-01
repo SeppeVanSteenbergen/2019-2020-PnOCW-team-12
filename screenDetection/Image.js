@@ -10,7 +10,7 @@ class Image {
 
   islands;
   tmpIslands = [];
-  islandID = 3; //jumps per two so we can save green and blue within an island.
+  islandID = 4; //jumps per two so we can save green and blue within an island.
   MIN_ISLAND_SIZE = 1000;
 
   matrix;
@@ -150,8 +150,12 @@ class Image {
     let tmpIslands = [];
     for (let y = 0; y < this.getHeight(); y++) {
       for (let x = 0; x < this.getWidth(); x++) {
-        if (this.matrix[y][x] === 1 || this.matrix[y][x] === 2) {
+        if (this.matrix[y][x] === 1 || this.matrix[y][x] === 2 || this.matrix[y][x] === 3) {
+          console.log("new island started");
           let newIslandCoo = this.floodfill(x, y, this.islandID);
+          this.printMatrix();
+          console.log(this.countRemaining());
+          console.log(newIslandCoo);
           let newIsland = new Island(
             newIslandCoo[0],
             newIslandCoo[1],
@@ -160,10 +164,11 @@ class Image {
           newIsland.add(newIslandCoo[2], newIslandCoo[3]);
           newIsland.setScreenMatrix(this.matrix);
           tmpIslands.push(newIsland);
-          this.islandID += 2;
+          this.islandID += 3;
         }
       }
     }
+    console.log("islandscalculated");
     for (let i = 0; i < tmpIslands.length; i++) {
       if (tmpIslands[i].size() > this.MIN_ISLAND_SIZE) {
         this.drawFillRect(
@@ -197,22 +202,22 @@ class Image {
       pixel = stack.pop();
       x = pixel[0];
       y = pixel[1];
-      if (this.getMatrix(x, y) <= 2) {
+      if (this.getMatrix(x, y) <= 3) {
         this.matrix[y][x] += islandID - 1;
         minX = Math.min(minX, x);
         minY = Math.min(minY, y);
         maxX = Math.max(maxX, x);
         maxY = Math.max(maxY, y);
-        if (this.getMatrix(x-1, y) === 1 || this.getMatrix(x-1, y) === 2) {
+        if (this.getMatrix(x-1, y) === 1 || this.getMatrix(x-1, y) === 2 || this.getMatrix(x-1, y) === 3) {
           stack.push([x - 1, y]);
         }
-        if (this.getMatrix(x+1, y) === 1 || this.getMatrix(x+1, y) === 2) {
+        if (this.getMatrix(x+1, y) === 1 || this.getMatrix(x+1, y) === 2 || this.getMatrix(x+1, y) === 3) {
           stack.push([x + 1, y]);
         }
-        if (this.getMatrix(x,y-1) === 1 || this.getMatrix(x, y-1) === 2) {
+        if (this.getMatrix(x,y-1) === 1 || this.getMatrix(x, y-1) === 2 || this.getMatrix(x, y-1) === 3) {
           stack.push([x, y - 1]);
         }
-        if (this.getMatrix(x, y+1) === 1 || this.getMatrix(x, y+1) === 2) {
+        if (this.getMatrix(x, y+1) === 1 || this.getMatrix(x, y+1) === 2 || this.getMatrix(x, y+1) === 3) {
           stack.push([x, y + 1]);
         }
       }
@@ -227,80 +232,6 @@ class Image {
     for (let i = 0; i < this.islands.length; i++) {
       newScreen = this.islands[i].createScreen();
       this.screens.push(newScreen);
-    }
-  }
-
-  calcIslands() {
-    for (let j = 0; j < this.getHeight(); j++) {
-      for (let i = 0; i < this.getWidth(); i++) {
-        if (this.getMatrix() >= 1) {
-          if (this.isSeperated(i, j) === 0) {
-            let island = new Island(i, j, this.islandID++);
-            this.matrix[j][i] = island.id;
-            this.tmpIslands.push(island);
-          } else if (this.isSeperated(i, j) > 1) {
-            let di = this.isSeperated(i, j);
-            this.matrix[j][i] = di;
-            this.tmpIslands[di - 2].add(i, j);
-          }
-        }
-      }
-    }
-
-    for (let i = 0; i < this.tmpIslands.length; i++) {
-      if (this.tmpIslands[i].size() > this.MIN_ISLAND_SIZE) {
-        this.drawFillRect(
-          [this.tmpIslands[i].minx, this.tmpIslands[i].miny],
-          [this.tmpIslands[i].maxx, this.tmpIslands[i].maxy],
-          0.3
-        );
-
-        this.tmpIslands[i].setScreenMatrix(this.matrix);
-        let corners = this.tmpIslands[i].findScreenCorners();
-        for (let j = 0; j < 4; j++)
-          this.drawPoint(
-            corners[j][0] + this.tmpIslands[i].minx,
-            corners[j][1] + this.tmpIslands[i].miny,
-            10
-          );
-        this.islands.push(this.tmpIslands[i]);
-      }
-    }
-    console.log("Amount detected islands: " + this.islands.length);
-  }
-
-  isSeperated(x, y) {
-    let result = 0;
-
-    if (y - 1 >= 0) {
-      let up = this.matrix[y - 1][x];
-      if (up > 1) {
-        result = up;
-      }
-    }
-
-    if (x - 1 >= 0) {
-      let left = this.matrix[y][x - 1];
-      if (result > 0) {
-        if (left > 1 && left !== result) {
-          //MERGE dit island met island van bovenste pixel
-          this.mergeIslands(left, result);
-        }
-      } else {
-        result = left;
-      }
-    }
-    return result;
-  }
-
-  mergeIslands(first, second) {
-    for (let y = 0; y < this.getHeight(); y++) {
-      for (let x = 0; x < this.getWidth(); x++) {
-        if (this.matrix[y][x] === first) {
-          this.matrix[y][x] = second;
-          this.tmpIslands[second - 2].add(x, y);
-        }
-      }
     }
   }
 
@@ -712,9 +643,9 @@ class Image {
 
   getMatrix(x, y) {
     if (x < 0) x = 0;
-    else if (x >= this.width) x = this.width-1;
+    else if (x >= this.getWidth()) x = this.getWidth()-1;
     if (y < 0) y = 0;
-    else if (y >= this.height) y = this.height-1;
+    else if (y >= this.getHeight()) y = this.getHeight()-1;
     return this.matrix[y][x];
   }
 
@@ -810,5 +741,21 @@ class Image {
     if (change) {
       this.rgbaToHsla();
     }
+  }
+
+  printMatrix() {
+    console.table(this.matrix);
+  }
+
+  countRemaining() {
+    let counter = 0;
+    for (let y = 0; y < this.getHeight(); y++) {
+      for (let x = 0; x < this.getWidth(); x++) {
+        if(this.getMatrix(x,y) !== 0 && this.getMatrix(x,y) <= 3) {
+          counter++;
+        }
+      }
+    }
+    return counter;
   }
 }

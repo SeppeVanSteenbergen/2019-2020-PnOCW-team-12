@@ -9,13 +9,14 @@ class Island {
     corners = [];
     blue;
     green;
+    circle; /** midpoint of the cross*/
     width;
     height;
 
     /**
      * Create and Island starting with this pixel
-     * @param {int} x x co
-     * @param {int} y y co
+     * @param {int} x: x co
+     * @param {int} y: y co
      */
     constructor(x, y, id) {
         this.minx = x;
@@ -25,8 +26,9 @@ class Island {
         this.maxy = y;
 
         this.id = id;
-        this.blue = id + 1;
         this.green = id;
+        this.blue = id + 1;
+        this.circle = id + 2;
     }
 
     /**
