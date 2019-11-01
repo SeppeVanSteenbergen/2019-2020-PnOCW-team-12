@@ -117,20 +117,37 @@ class Island {
   }
 
   findCorners() {
-    let diagonalSearch = true;
+    // choosing diagonal or straight corner detection
+    let diagonalSearch = false;
 
     // Find which corner search to use: perpendicular or diagonal.
 
     const ratio = 0.07;
     const minPixels = 10;
+    const sd_threshold = 0.15;
 
     const testOffsetX = Math.max(Math.floor(ratio * this.width), minPixels);
     const testOffsetY = Math.max(Math.floor(ratio * this.height), minPixels);
 
     // Left variance
+    let yValuesLeft = [];
     for (let y = 0; y < this.height; y++) {
-      
+      for (let x = 0; x < testOffsetX; x++) {
+        if (this.screenMatrix[y][x] !== 0) yValuesLeft.push(y / this.height);
+      }
     }
+    let yValuesLeftAvg =
+      yValuesLeft.reduce((t, n) => t + n) / yValuesLeft.length;
+
+    let yValuesLeftVariance = Math.sqrt(
+      yValuesLeft.reduce((t, n) => t + Math.pow(yValuesLeftAvg - n, 2)) /
+        yValuesLeft.length
+    );
+
+    console.log('Left Variance: ' + yValuesLeftVariance);
+    console.log(yValuesLeftVariance > 0.15 ? 'Straight' : 'Inclined');
+
+    if (yValuesLeftVariance > sd_threshold) diagonalSearch = true;
 
     if (diagonalSearch) {
       // Diagonal search
@@ -220,39 +237,79 @@ class Island {
       }
     } else {
       // Perpendicular search
-
       // left
-      for (let y = 0; y < this.height; y++) {
-        if (this.screenMatrix[y][0] !== 0) {
-          this.corners.push([0, y, this.screenMatrix[y][0]]);
+
+      for (let x = 0; x < this.width; x++) {
+        let found = false;
+        let tempY = [];
+        for (let y = 0; y < this.height; y++) {
+          if (this.screenMatrix[y][x] !== 0) {
+            tempY.push(y);
+            found = true;
+          }
+        }
+        if (found) {
+          let medianY = tempY[Math.floor(tempY.length / 2)];
+          this.corners.push([x, medianY, this.screenMatrix[medianY][x]]);
+          break;
         }
       }
 
       // top
-      for (let x = 0; x < this.width; x++) {
-        if (this.screenMatrix[0][x] !== 0) {
-          this.corners.push([x, 0, this.screenMatrix[0][x]]);
+      for (let y = 0; y < this.height; y++) {
+        let found = false;
+        let tempX = [];
+        for (let x = 0; x < this.width; x++) {
+          if (this.screenMatrix[y][x] !== 0) {
+            tempX.push(x);
+            found = true;
+          }
+        }
+        if (found) {
+          let medianX = tempX[Math.floor(tempX.length / 2)];
+          this.corners.push([medianX, y, this.screenMatrix[y][medianX]]);
+          break;
         }
       }
 
       // right
-      for (let y = 0; y < this.height; y++) {
-        if (this.screenMatrix[y][this.width - 1] !== 0) {
+      for (let x = 0; x < this.width; x++) {
+        let found = false;
+        let tempY = [];
+        for (let y = 0; y < this.height; y++) {
+          if (this.screenMatrix[y][this.width - x - 1] !== 0) {
+            tempY.push(y);
+            found = true;
+          }
+        }
+        if (found) {
+          let medianY = tempY[Math.floor(tempY.length / 2)];
           this.corners.push([
-            this.height - 1,
-            y,
-            this.screenMatrix[y][this.width - 1]
+            this.width - x - 1,
+            medianY,
+            this.screenMatrix[medianY][this.width - x - 1]
           ]);
+          break;
         }
       }
       // bottom
-      for (let x = 0; x < this.width; x++) {
-        if (this.screenMatrix[this.height - 1][x] !== 0) {
+      for (let y = 0; y < this.height; y++) {
+        let found = false;
+        let tempX = [];
+        for (let x = 0; x < this.width; x++) {
+          if (this.screenMatrix[this.height - y - 1][x] !== 0) {
+            tempX.push(x);
+            found = true;
+          }
+        }
+        if (found) {
+          let medianX = tempX[Math.floor(tempX.length / 2)];
           this.corners.push([
-            x,
-            this.height - 1,
-            this.screenMatrix[this.height - 1][x]
+            medianX,
+            this.height - y - 1,
+            this.screenMatrix[this.height - y - 1][medianX]
           ]);
+          break;
         }
       }
     }
