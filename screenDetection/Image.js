@@ -3,8 +3,8 @@ class Image {
   canvas;
   colorSpace;
 
-  sensitivity = 10;
-  colorSpaces = ["RGBA", "HSLA", "BW"];
+  sensitivity = 12;
+  colorSpaces = ['RGBA', 'HSLA', 'BW'];
 
   corners = [];
 
@@ -20,10 +20,17 @@ class Image {
   width;
   height;
 
-  lowerBoundG = [120 - this.sensitivity, 50, 25];
+  /*lowerBoundG = [120 - this.sensitivity, 50, 25];
   upperBoundG = [120 + this.sensitivity, 100, 75];
   lowerBoundB = [240 - this.sensitivity, 50, 25];
   upperBoundB = [240 + this.sensitivity, 100, 75];
+  lowerBoundMid = [180 - this.sensitivity, 50, 25];
+  upperBoundMid = [180 + this.sensitivity, 100, 75];*/
+
+  lowerBoundG = [120 - this.sensitivity, 50, 25];
+  upperBoundG = [120 + this.sensitivity, 100, 75];
+  lowerBoundB = [217, 50, 25];
+  upperBoundB = [250, 100, 75];
   lowerBoundMid = [180 - this.sensitivity, 50, 25];
   upperBoundMid = [180 + this.sensitivity, 100, 75];
 
@@ -34,7 +41,7 @@ class Image {
     this.width = width;
     this.height = height;
     if (this.canvas !== null) {
-      let context = this.canvas.getContext("2d");
+      let context = this.canvas.getContext('2d');
       context.putImageData(imgData, 0, 0);
     }
 
@@ -47,7 +54,7 @@ class Image {
 
   getImgData() {
     if (this.canvas !== null) {
-      let context = this.canvas.getContext("2d");
+      let context = this.canvas.getContext('2d');
       let imgData = context.createImageData(
         this.canvas.width,
         this.canvas.height
@@ -113,14 +120,14 @@ class Image {
 
   show() {
     if (this.canvas !== null) {
-      let context = this.canvas.getContext("2d");
+      let context = this.canvas.getContext('2d');
       context.putImageData(this.getImgData(), 0, 0);
     }
   }
 
   calcMid() {
-    if (this.getColorSpace() !== "HSLA") {
-      console.error("createGreenBlueMask only with HSLA as colorspace!");
+    if (this.getColorSpace() !== 'HSLA') {
+      console.error('createGreenBlueMask only with HSLA as colorspace!');
     }
 
     let x_values = [];
@@ -137,11 +144,11 @@ class Image {
         y_values.push(y);
       }
     }
-    
+
     let lengthX = x_values.length;
     let lengthY = y_values.length;
-    let midX = x_values.reduce((a,b) => a + b, 0) / lengthX;
-    let midY = y_values.reduce((a,b) => a + b, 0) / lengthY;
+    let midX = x_values.reduce((a, b) => a + b, 0) / lengthX;
+    let midY = y_values.reduce((a, b) => a + b, 0) / lengthY;
 
     return [midX, midY];
   }
@@ -150,12 +157,13 @@ class Image {
     let tmpIslands = [];
     for (let y = 0; y < this.getHeight(); y++) {
       for (let x = 0; x < this.getWidth(); x++) {
-        if (this.checkId(x,y)) {
+        if (this.checkId(x, y)) {
           let newIslandCoo = this.floodfill(x, y, this.islandID);
           let newIsland = new Island(
-              newIslandCoo[0],
-              newIslandCoo[1],
-              this.islandID);
+            newIslandCoo[0],
+            newIslandCoo[1],
+            this.islandID
+          );
           newIsland.add(newIslandCoo[2], newIslandCoo[3]);
           newIsland.setScreenMatrix(this.matrix);
           tmpIslands.push(newIsland);
@@ -202,16 +210,16 @@ class Image {
         minY = Math.min(minY, y);
         maxX = Math.max(maxX, x);
         maxY = Math.max(maxY, y);
-        if (this.checkId(x-1,y)) {
+        if (this.checkId(x - 1, y)) {
           stack.push([x - 1, y]);
         }
-        if (this.checkId(x+1,y)) {
+        if (this.checkId(x + 1, y)) {
           stack.push([x + 1, y]);
         }
-        if (this.checkId(x, y-1)) {
+        if (this.checkId(x, y - 1)) {
           stack.push([x, y - 1]);
         }
-        if (this.checkId(x, y+1)) {
+        if (this.checkId(x, y + 1)) {
           stack.push([x, y + 1]);
         }
       }
@@ -226,8 +234,12 @@ class Image {
    * @returns {boolean}
    */
 
-  checkId(x,y) {
-    return this.getMatrix(x, y) === 1 || this.getMatrix(x, y) === 2 || this.getMatrix(x, y) === 3;
+  checkId(x, y) {
+    return (
+      this.getMatrix(x, y) === 1 ||
+      this.getMatrix(x, y) === 2 ||
+      this.getMatrix(x, y) === 3
+    );
   }
 
   createScreens() {
@@ -285,7 +297,7 @@ class Image {
       this.pixels[i + 1] = Math.round(S * 100);
       this.pixels[i + 2] = Math.round(L * 100);
     }
-    this.setColorSpace("HSLA");
+    this.setColorSpace('HSLA');
   }
 
   findSaturation(min, max, L) {
@@ -329,8 +341,8 @@ class Image {
     let tmpG;
     let tmpB;
 
-    if (this.colorSpace !== "HSLA") {
-      console.error("Image has to be in HSLA to convert from HSLA to RGBA!");
+    if (this.colorSpace !== 'HSLA') {
+      console.error('Image has to be in HSLA to convert from HSLA to RGBA!');
     }
     for (let i = 0; i < this.pixels.length; i += 4) {
       let H = (this.pixels[i] * 2) / 360.0;
@@ -367,7 +379,7 @@ class Image {
       this.pixels[i + 1] = Math.round(G * 255);
       this.pixels[i + 2] = Math.round(B * 255);
     }
-    this.setColorSpace("RGBA");
+    this.setColorSpace('RGBA');
   }
 
   setTemporaryInRange(temp) {
@@ -556,8 +568,8 @@ class Image {
   }
 
   createGreenBlueMask() {
-    if (this.getColorSpace() !== "HSLA") {
-      console.error("createGreenBlueMask only with HSLA as colorspace!");
+    if (this.getColorSpace() !== 'HSLA') {
+      console.error('createGreenBlueMask only with HSLA as colorspace!');
     }
     for (let i = 0; i < this.pixels.length; i += 4) {
       let H = this.pixels[i] * 2;
@@ -583,8 +595,8 @@ class Image {
   }
 
   createBigMask() {
-    if (this.getColorSpace() !== "HSLA") {
-      console.error("createGreenBlueMask only with HSLA as colorspace!");
+    if (this.getColorSpace() !== 'HSLA') {
+      console.error('createGreenBlueMask only with HSLA as colorspace!');
     }
     for (let i = 0; i < this.pixels.length; i += 4) {
       let H = this.pixels[i] * 2;
@@ -648,9 +660,9 @@ class Image {
 
   getMatrix(x, y) {
     if (x < 0) x = 0;
-    else if (x >= this.getWidth()) x = this.getWidth()-1;
+    else if (x >= this.getWidth()) x = this.getWidth() - 1;
     if (y < 0) y = 0;
-    else if (y >= this.getHeight()) y = this.getHeight()-1;
+    else if (y >= this.getHeight()) y = this.getHeight() - 1;
     return this.matrix[y][x];
   }
 
@@ -666,11 +678,11 @@ class Image {
   }
 
   makeRed(position) {
-    if (this.getColorSpace() === "RGBA") {
+    if (this.getColorSpace() === 'RGBA') {
       this.pixels[position] = 255;
       this.pixels[++position] = 0;
       this.pixels[++position] = 0;
-    } else if (this.getColorSpace() === "HSLA") {
+    } else if (this.getColorSpace() === 'HSLA') {
       this.pixels[position] = 0;
       this.pixels[++position] = 100;
       this.pixels[++position] = 50;
@@ -688,7 +700,7 @@ class Image {
    * @param {int} size size
    */
   drawPoint(x, y, size) {
-    if (this.getColorSpace() === "HSLA") {
+    if (this.getColorSpace() === 'HSLA') {
       this.hslaToRgba();
       var change = true;
     }
@@ -728,7 +740,7 @@ class Image {
    */
   drawFillRect(startCorner, endCorner, alpha) {
     let change = true;
-    if (this.getColorSpace() == "HSLA") {
+    if (this.getColorSpace() == 'HSLA') {
       this.hslaToRgba();
       change = true;
     }
@@ -747,5 +759,4 @@ class Image {
       this.rgbaToHsla();
     }
   }
-
 }
