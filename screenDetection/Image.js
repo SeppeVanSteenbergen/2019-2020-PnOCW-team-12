@@ -150,12 +150,12 @@ class Image {
     let tmpIslands = [];
     for (let y = 0; y < this.getHeight(); y++) {
       for (let x = 0; x < this.getWidth(); x++) {
-        if (this.checkId(x,y)) {
+        if (this.matrix[y][x] === 1 || this.matrix[y][x] === 2 || this.matrix[y][x] === 3) {
           let newIslandCoo = this.floodfill(x, y, this.islandID);
           let newIsland = new Island(
-              newIslandCoo[0],
-              newIslandCoo[1],
-              this.islandID
+            newIslandCoo[0],
+            newIslandCoo[1],
+            this.islandID
           );
           newIsland.add(newIslandCoo[2], newIslandCoo[3]);
           newIsland.setScreenMatrix(this.matrix);
@@ -203,32 +203,21 @@ class Image {
         minY = Math.min(minY, y);
         maxX = Math.max(maxX, x);
         maxY = Math.max(maxY, y);
-        if (this.checkId(x-1,y)) {
+        if (this.getMatrix(x-1, y) === 1 || this.getMatrix(x-1, y) === 2 || this.getMatrix(x-1, y) === 3) {
           stack.push([x - 1, y]);
         }
-        if (this.checkId(x+1,y)) {
+        if (this.getMatrix(x+1, y) === 1 || this.getMatrix(x+1, y) === 2 || this.getMatrix(x+1, y) === 3) {
           stack.push([x + 1, y]);
         }
-        if (this.checkId(x, y-1)) {
+        if (this.getMatrix(x,y-1) === 1 || this.getMatrix(x, y-1) === 2 || this.getMatrix(x, y-1) === 3) {
           stack.push([x, y - 1]);
         }
-        if (this.checkId(x, y+1)) {
+        if (this.getMatrix(x, y+1) === 1 || this.getMatrix(x, y+1) === 2 || this.getMatrix(x, y+1) === 3) {
           stack.push([x, y + 1]);
         }
       }
     }
     return [minX, minY, maxX, maxY];
-  }
-
-  /**
-   * Check if the position belongs to the formed island.
-   * @param x
-   * @param y
-   * @returns {boolean}
-   */
-
-  checkId(x,y) {
-    return this.getMatrix(x, y) === 1 || this.getMatrix(x, y) === 2 || this.getMatrix(x, y) === 3;
   }
 
   createScreens() {
