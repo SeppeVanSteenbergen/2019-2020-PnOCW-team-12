@@ -179,6 +179,7 @@ class Image {
           0.3
         );
         let corners = tmpIslands[i].findCorners();
+        console.log(corners)
         for (let j = 0; j < 4; j++)
           this.drawPoint(
             corners[j][0] + tmpIslands[i].minx,
