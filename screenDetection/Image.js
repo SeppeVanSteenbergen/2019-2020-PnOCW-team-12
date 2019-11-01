@@ -151,11 +151,7 @@ class Image {
     for (let y = 0; y < this.getHeight(); y++) {
       for (let x = 0; x < this.getWidth(); x++) {
         if (this.matrix[y][x] === 1 || this.matrix[y][x] === 2 || this.matrix[y][x] === 3) {
-          console.log("new island started");
           let newIslandCoo = this.floodfill(x, y, this.islandID);
-          this.printMatrix();
-          console.log(this.countRemaining());
-          console.log(newIslandCoo);
           let newIsland = new Island(
             newIslandCoo[0],
             newIslandCoo[1],
@@ -168,7 +164,6 @@ class Image {
         }
       }
     }
-    console.log("islandscalculated");
     for (let i = 0; i < tmpIslands.length; i++) {
       if (tmpIslands[i].size() > this.MIN_ISLAND_SIZE) {
         this.drawFillRect(
@@ -743,19 +738,4 @@ class Image {
     }
   }
 
-  printMatrix() {
-    console.table(this.matrix);
-  }
-
-  countRemaining() {
-    let counter = 0;
-    for (let y = 0; y < this.getHeight(); y++) {
-      for (let x = 0; x < this.getWidth(); x++) {
-        if(this.getMatrix(x,y) !== 0 && this.getMatrix(x,y) <= 3) {
-          counter++;
-        }
-      }
-    }
-    return counter;
-  }
 }
