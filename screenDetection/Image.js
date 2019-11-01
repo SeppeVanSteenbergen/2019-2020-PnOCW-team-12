@@ -6,9 +6,6 @@ class Image {
   sensitivity = 12;
   colorSpaces = ['RGBA', 'HSLA', 'BW'];
 
-  corners = [];
-  midpoint;
-
   islands;
   islandID = 4; //jumps per two so we can save green and blue within an island.
   MIN_ISLAND_SIZE = 1000;
@@ -125,34 +122,6 @@ class Image {
     }
   }
 
-  calcMid() {
-    if (this.getColorSpace() !== 'HSLA') {
-      console.error('createGreenBlueMask only with HSLA as colorspace!');
-    }
-
-    let x_values = [];
-    let y_values = [];
-    for (let i = 0; i < this.pixels.length; i += 4) {
-      let H = this.pixels[i] * 2;
-      let S = this.pixels[i + 1];
-      let L = this.pixels[i + 2];
-      if (this.inMidRange(H, S, L)) {
-        let pixel = this.positionToPixel(i);
-        let x = pixel[0];
-        let y = pixel[1];
-        x_values.push(x);
-        y_values.push(y);
-      }
-    }
-
-    let lengthX = x_values.length;
-    let lengthY = y_values.length;
-    let midX = x_values.reduce((a, b) => a + b, 0) / lengthX;
-    let midY = y_values.reduce((a, b) => a + b, 0) / lengthY;
-
-    this.midpoint = [midX,midY];
-  }
-
   calcIslandsFloodfill() {
     let tmpIslands = [];
     for (let y = 0; y < this.getHeight(); y++) {
@@ -160,6 +129,7 @@ class Image {
         if (this.checkId(x, y)) {
           let newIslandCoo = this.floodfill(x, y, this.islandID);
           let newIsland = new Island(
+            this,
             newIslandCoo[0],
             newIslandCoo[1],
             this.islandID
@@ -178,15 +148,9 @@ class Image {
           [tmpIslands[i].maxx, tmpIslands[i].maxy],
           0.3
         );
-        let corners = tmpIslands[i].findCorners();
-        console.log(corners)
-        for (let j = 0; j < 4; j++)
-          this.drawPoint(
-            corners[j][0] + tmpIslands[i].minx,
-            corners[j][1] + tmpIslands[i].miny,
-            10
-          );
         this.islands.push(tmpIslands[i]);
+
+
       }
     }
     console.log(this.islands.length);
@@ -311,13 +275,13 @@ class Image {
 
   findHue(red, green, blue, max, min) {
     let hue = 0;
-    if (max == min) {
+    if (max === min) {
       return 0;
-    } else if (red == max) {
+    } else if (red === max) {
       hue = (green - blue) / (max - min);
-    } else if (green == max) {
+    } else if (green === max) {
       hue = 2.0 + (blue - red) / (max - min);
-    } else if (blue == max) {
+    } else if (blue === max) {
       hue = 4.0 + (red - green) / (max - min);
     }
 
@@ -401,48 +365,6 @@ class Image {
       return tmp2 + (tmp1 - tmp2) * (0.666 - tmpColor) * 6;
     }
     return tmp2;
-  }
-
-  /*
-    image as Image
-    mask color = white
-    not in mask = black
-    low = array[low Hue, low Saturation, low Luminance]
-    high = array[""]
-    */
-  createMask(low, high) {
-    for (let i = 0; i < this.pixels.length; i += 4) {
-      let H = this.pixels[i] * 2;
-      let S = this.pixels[i + 1];
-      let L = this.pixels[i + 2];
-
-      if (
-        H >= low[0] &&
-        S >= low[1] &&
-        L >= low[2] &&
-        H <= high[0] &&
-        S <= high[1] &&
-        L <= high[2]
-      ) {
-        this.pixels[i + 1] = 0;
-        this.pixels[i + 2] = 100;
-      } else {
-        this.pixels[i + 1] = 0;
-        this.pixels[i + 2] = 0;
-      }
-    }
-  }
-
-  createGreenMask() {
-    let lowerBound = [120 - this.sensitivity, 50, 25];
-    let upperBound = [120 + this.sensitivity, 100, 75];
-    this.createMask(lowerBound, upperBound);
-  }
-
-  createBlueMask() {
-    let lowerBound = [240 - this.sensitivity, 50, 25];
-    let upperBound = [240 + this.sensitivity, 100, 75];
-    this.createMask(lowerBound, upperBound);
   }
 
   addImgData(imgData) {
@@ -535,53 +457,6 @@ class Image {
     }
   }
 
-  cornerDetection() {
-    let nbNeigbours = 2;
-    let corners = [];
-    for (let y = 0; y < this.getHeight(); y++) {
-      for (let x = 0; x < this.getWidth(); x++) {
-        let white = 0;
-        let black = 0;
-        if (this.getPixel(x, y)[2] === 100) {
-          for (let yBox = -nbNeigbours; yBox <= nbNeigbours; yBox++) {
-            for (let xBox = -nbNeigbours; xBox <= nbNeigbours; xBox++) {
-              let pixel = this.getPixel(x + xBox, y + yBox);
-              if (pixel[2] === 100) {
-                white += 1;
-              } else if (pixel[2] === 0) {
-                black += 1;
-              }
-            }
-          }
-          if (white >= 7 && white <= 12 && black >= 13 && black <= 18) {
-            let i = this.pixelToPosition([x, y]);
-            corners.push([x, y]);
-          }
-        }
-      }
-    }
-    this.corners = this.cornerFilter(corners);
-  }
-
-  cornerFilter(corners) {
-    let newCorners = [];
-    corners.sort(function(a, b) {
-      if (a[0] === b[0]) return a[1] - b[1];
-      return a[0] - b[0];
-    });
-    for (let i = 0; i < corners.length - 1; i++) {
-      if (corners[i + 1][0] - corners[i][0] <= 10) {
-        if (corners[i + 1][1] - corners[i][1] <= 10) {
-          let newX = (corners[i][0] + corners[i + 1][0]) / 2;
-          let newY = (corners[i][1] + corners[i + 1][1]) / 2;
-          newCorners.push([newX, newY]);
-          corners[i + 1] = [newX, newY];
-        }
-      }
-    }
-    return newCorners;
-  }
-
   getPixel(xPixel, yPixel) {
     if (xPixel < 0) {
       xPixel = 0;
@@ -596,33 +471,6 @@ class Image {
     }
     let i = (yPixel * this.getWidth() + xPixel) * 4;
     return [this.pixels[i], this.pixels[i + 1], this.pixels[i + 2]];
-  }
-
-  createGreenBlueMask() {
-    if (this.getColorSpace() !== 'HSLA') {
-      console.error('createGreenBlueMask only with HSLA as colorspace!');
-    }
-    for (let i = 0; i < this.pixels.length; i += 4) {
-      let H = this.pixels[i] * 2;
-      let S = this.pixels[i + 1];
-      let L = this.pixels[i + 2];
-      let pixel = this.positionToPixel(i);
-      let x = pixel[0];
-      let y = pixel[1];
-      if (this.inGreenRange(H, S, L)) {
-        this.pixels[i + 1] = 0;
-        this.pixels[i + 2] = 100;
-        this.matrix[y][x] = 1;
-      } else if (this.inBlueRange(H, S, L)) {
-        this.pixels[i + 1] = 0;
-        this.pixels[i + 2] = 100;
-        this.matrix[y][x] = 2;
-      } else {
-        this.pixels[i + 1] = 0;
-        this.pixels[i + 2] = 0;
-        this.matrix[y][x] = 0;
-      }
-    }
   }
 
   createBigMask() {
@@ -733,7 +581,7 @@ class Image {
   drawPoint(x, y, size) {
     if (this.getColorSpace() === 'HSLA') {
       this.hslaToRgba();
-      var change = true;
+      let change = true;
     }
 
     x = Math.round(x);

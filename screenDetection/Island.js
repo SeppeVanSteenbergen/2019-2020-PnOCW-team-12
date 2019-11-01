@@ -1,22 +1,32 @@
 class Island {
+  Image;
   minx;
   maxx;
   miny;
   maxy;
   id;
   screenMatrix = [];
+
   corners = [];
+  midPoint;
+  orientation;
+
   blue;
   green;
+  circle;
+
   width;
   height;
 
   /**
    * Create and Island starting with this pixel
+   * @param {Image} image
    * @param {int} x x co
    * @param {int} y y co
+   * @param {int} id
    */
-  constructor(x, y, id) {
+  constructor(Image, x, y, id) {
+    this.Image = Image;
     this.minx = x;
     this.maxx = x;
 
@@ -24,8 +34,11 @@ class Island {
     this.maxy = y;
 
     this.id = id;
-    this.blue = id + 1;
     this.green = id;
+    this.blue = id + 1;
+    this.circle = id + 2;
+    this.midpoint = this.calcMid();
+
   }
 
   /**
@@ -55,65 +68,19 @@ class Island {
    * Get the square distance from the given pixel position relative to the center of the island
    */
   sqDist(x, y) {
-    var cx = (this.maxx - this.minx) / 2;
-    var cy = (this.maxy - this.miny) / 2;
+    let cx = (this.maxx - this.minx) / 2;
+    let cy = (this.maxy - this.miny) / 2;
 
     return (cx - x) * (cx - x) + (cy - y) * (cy - y);
   }
 
   setScreenMatrix(matrix) {
     this.screenMatrix = matrix.slice(this.miny, this.maxy);
-    for (var i = 0; i < this.maxy - this.miny; i++) {
+    for (let i = 0; i < this.maxy - this.miny; i++) {
       this.screenMatrix[i] = this.screenMatrix[i].slice(this.minx, this.maxx);
     }
     this.width = this.screenMatrix[0].length;
     this.height = this.screenMatrix.length;
-  }
-
-  findScreenCorners() {
-    let x = 0;
-    let y = 0;
-    while (
-      this.getMatrix(x, 0) !== this.blue &&
-      this.getMatrix(x, 0) !== this.green
-    )
-      x++; //bovenhoek
-    if (x >= this.screenMatrix[0].length / 2) {
-      while (this.screenMatrix[0][x + 1] >= 1) ++x;
-    }
-    this.corners.push([x, 0, this.screenMatrix[0][x]]);
-
-    x = this.screenMatrix[0].length - 1;
-
-    while (
-      this.screenMatrix[y][x] !== this.blue &&
-      this.screenMatrix[y][x] !== this.green
-    )
-      y++; //rechterhoek
-    if (y >= this.screenMatrix.length / 2) {
-      while (this.screenMatrix[y + 1][x] >= 1) ++y;
-    }
-    this.corners.push([x, y, this.screenMatrix[y][x]]);
-    y = this.screenMatrix.length - 1;
-    while (
-      this.screenMatrix[y][x] !== this.blue &&
-      this.screenMatrix[y][x] !== this.green
-    )
-      x--; // onderhoek
-    if (x <= this.screenMatrix.length / 2) {
-      while (this.getMatrix(x - 1, y) >= 1) --x;
-    }
-    this.corners.push([x, y, this.screenMatrix[y][x]]);
-    while (
-      this.screenMatrix[y][0] !== this.blue &&
-      this.screenMatrix[y][0] !== this.green
-    )
-      y--; //linkerhoek
-    if (y <= this.screenMatrix.length / 2) {
-      while (this.getMatrix(0, y - 1) >= 1) --y;
-    }
-    this.corners.push([0, y, this.screenMatrix[y][x]]);
-    return this.corners;
   }
 
   findCorners() {
@@ -315,16 +282,29 @@ class Island {
     }
 
     // Order the corners the right way
-
+    this.orientation = this.findScreenOrientation(); //TODO: maybe change the way of setting this variable!!
     return this.corners;
   }
 
-  calcAverage(list) {
-    let sum = 0;
-    for (let i = 0; i < list.length; i++) {
-      sum += list[i];
+  calcMid() {
+    let x_values = [];
+    let y_values = [];
+
+    for(let y = 0; y < this.height; y++) {
+      for(let x = 0; x < this.width; x++) {
+        if(this.getMatrix(x,y) === this.circle) {
+          x_values.push(x);
+          y_values.push(y);
+        }
+      }
     }
-    return sum / list.length;
+
+    let lengthX = x_values.length;
+    let lengthY = y_values.length;
+    let midX = x_values.reduce((a, b) => a + b, 0) / lengthX;
+    let midY = y_values.reduce((a, b) => a + b, 0) / lengthY;
+
+    return [midX,midY];
   }
 
   findScreenOrientation() {
@@ -355,8 +335,7 @@ class Island {
   }
 
   createScreen() {
-    this.corners.length = 0;
-    let corners = this.findScreenCorners();
+    let corners = this.corners;
     let orientation = this.findScreenOrientation();
     for (let i = 0; i < corners.length; i++) {
       corners[i][0] += this.minx;
@@ -372,5 +351,49 @@ class Island {
     if (y < 0) y = 0;
     else if (y >= this.height) y = this.height - 1;
     return this.screenMatrix[y][x];
+  }
+
+  /**
+   * DEBUG METHODS
+   */
+
+  /**
+   * Draw a cross at the given pixel location of the given pixel size
+   * @param {int} x x co
+   * @param {int} y y co
+   * @param {int} size size
+   */
+  drawPoint(x, y, size) {
+    x = Math.round(x);
+    y = Math.round(y);
+    size = Math.round(size);
+
+    //verticale lijn
+    for (let j = y - size / 2; j <= y + size / 2; j++) {
+      let pos = this.Image.pixelToPosition([x, j]);
+
+      this.Image.pixels[pos] = 0;
+      this.Image.pixels[pos + 1] = 255;
+      this.Image.pixels[pos + 2] = 255;
+    }
+
+    //horizontale lijn
+    for (let i = x - size / 2; i <= x + size / 2; i++) {
+      let pos = this.Image.pixelToPosition([i, y]);
+
+      this.Image.pixels[pos] = 0;
+      this.Image.pixels[pos + 1] = 255;
+      this.Image.pixels[pos + 2] = 255;
+    }
+  }
+
+  drawCorners() {
+    for (let j = 0; j < 4; j++) {
+      this.drawPoint(
+          this.corners[j][0] + this.minx,
+          this.corners[j][1] + this.miny,
+          10
+      );
+    }
   }
 }
