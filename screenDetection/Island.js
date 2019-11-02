@@ -281,6 +281,24 @@ class Island {
       }
     }
 
+    let distances = [];
+    for(let i = 0; i < this.corners.length; i++) {
+      let midX = this.midPoint[0];
+      let midY = this.midPoint[1];
+      let cornerX = this.corners[i][0];
+      let cornerY = this.corners[i][1];
+
+      console.log(cornerX, cornerY, midX, midY);
+
+      let dX = cornerX - midX;
+      let dY = cornerY - midY;
+
+      distances.push(Math.sqrt(dX * dX + dY * dY));
+    }
+    console.log(this.corners);
+    let maxDistance = Math.max(...distances);
+    console.log(distances, maxDistance);
+
     //TODO Order the corners the right way
     return this.corners;
   }
@@ -307,9 +325,9 @@ class Island {
   }
 
   finishIsland() {
+    this.midPoint = this.calcMid();
     this.corners = this.findCorners();
     this.orientation = this.findScreenOrientation();
-    this.midPoint = this.calcMid();
   }
 
   findScreenOrientation() {
