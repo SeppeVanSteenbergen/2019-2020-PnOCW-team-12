@@ -406,7 +406,16 @@ class Screen {
   }
 }
 
-// let newScreen = new Screen([1,2,5,4], 180)
+// let newScreen = new Screen([1,2,5,4], 0)
+// let srcCorners = [[158, 64], [494, 69], [495, 404], [158, 404]];
+// let dstCorners =  [[150, 64], [494, 69], [495, 404], [158, 404]];
+// // let dstCorners = [[100, 500], [152, 564], [148, 604], [100, 560]];
+// // console.log(newScreen.findMapMatrix(dstCorners))
+// console.log(newScreen.transformationMatrix(srcCorners, dstCorners))
+// let matrix = newScreen.transformationMatrix(srcCorners, dstCorners)
+// console.log(newScreen.dotMMsmall(matrix, [[117], [530],[1]]))
+
+
 // let matrix = [12,14,15,36,12,54,78,9,63,21,45,21,45,99,87,42,26,74,65,66,26,36,14,25,36,24,15,14,12,36,25,47,85,96,78,96]
 // let corners = [[1,1],[2,1],[2,2],[1,2]]
 // let destination = [[0,0],[2,0],[2,2],[0,2]]

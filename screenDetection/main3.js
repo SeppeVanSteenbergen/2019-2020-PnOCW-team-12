@@ -27,38 +27,52 @@ imgElement.onload = function() {
     imgElement.width,
     imgElement.height
   );
-  window.inp = inputImgData;
-  /*var inputImage = new Image(inputImgData, 'inputImage', 'RGBA');
-  inputImage.rgbaToHsla();
-  var imageTest = new Image(
-    inputImage.getImgData(),
-    'remapped',
-    'HSLA',
-    imgElement.width,
-    imgElement.height
-  );*/
-  //let data = imageTest.getImgData().data;
-  //console.log(data);
-  let corners = [[268, 299], [607, 300], [610, 469], [268, 472]];
-  let newImg = (new Screen(corners, 0, 0)).map(
-    inputImgData.data,
-    corners,
-    inputImgData.width,
-    inputImgData.height
-  );
 
-  //let newImg = document.createElement('canvas').getContext('2d').createImageData(250,250);
-  //newImg.data = newData;
+  let corners = [];
+  let destination = [];
 
-  console.log(newImg);
+  function selectPoint(event) {
+    // console.log(event.clientX, event.clientY)
+    if (corners.length < 4) {
+      corners.push([event.clientX, event.clientY]);
+      let newPoint = [
+        event.clientX - 7,
+        event.clientY - 7
+      ];
+      inputContext.beginPath();
+      inputContext.fillStyle = '#000';
+      inputContext.rect(newPoint[0] - 3.5, newPoint[1] - 3.5, 7, 7);
+      inputContext.fill();
+      /*} else if (destination.length < 4) {
+      destination.push([event.clientX, event.clientY]);
+      let newPoint = [event.clientX - 7, event.clientY - 7];
+      inputContext.beginPath();
+      inputContext.fillStyle = '#00f';
+      inputContext.rect(newPoint[0] - 3.5, newPoint[1] - 3.5, 7, 7);
+      inputContext.fill();*/
+    } else {
+      // let corners = [[0,0],[250,50],[250,100],[0,150]]
+      // let destination = [[0,0],[250,0],[250,150],[0,150]]
+      let outImg = new Screen(corners, 0, 0).map(
+        inputImgData.data,
+        corners,
+        inputImgData.width,
+        inputImgData.height
+      );
+      let canv = document.getElementById('remapped');
+      canv.width = outImg.width;
+      canv.height = outImg.height;
+      canv.getContext('2d').putImageData(outImg, 0, 0);
+    }
+  }
 
-  let canvOut = document.getElementById('output');
-  canvOut.width = newImg.width;
-  canvOut.height = newImg.height;
-  let ctxOut = canvOut.getContext('2d');
-  ctxOut.putImageData(newImg, 0, 0);
+  inputCanvas.addEventListener('click', selectPoint);
 
-  /*console.log(imageTest.pixels);
-  imageTest.hslaToRgba();
-  imageTest.show();*/
+  // console.log(data)
+  // // let corners = [[0,0],[250,50],[250,100],[0,150]]
+  // // let destination = [[0,0],[250,0],[250,150],[0,150]]
+  // imageTest.pixels = new Screen(corners, 0,0).map(data, corners, destination, 250,150)
+  // console.log(imageTest.pixels)
+  // imageTest.hslaToRgba()
+  // imageTest.show()
 };

@@ -107,12 +107,12 @@ class Island {
         yValuesLeft.length
     );
 
-    console.log('Left Variance: ' + yValuesLeftVariance);
-    console.log(yValuesLeftVariance > 0.15 ? 'Straight' : 'Inclined');
+    //console.log('Left Variance: ' + yValuesLeftVariance);
+    //console.log(yValuesLeftVariance > 0.15 ? 'Straight' : 'Inclined');
 
     if (yValuesLeftVariance > sd_threshold) diagonalSearch = true;
 
-    console.log("diag: " + diagonalSearch);
+    //console.log("diag: " + diagonalSearch);
 
     if (diagonalSearch) {
       // Diagonal search
