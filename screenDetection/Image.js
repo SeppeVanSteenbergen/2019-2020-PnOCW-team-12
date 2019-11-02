@@ -33,6 +33,7 @@ class Image {
 
   constructor(imgData, canvasName, colorSpace, width, height) {
     this.setPixels(imgData.data);
+    this.qualityCheck();
     this.setCanvas(canvasName, imgData.width, imgData.height);
     this.setColorSpace(colorSpace);
     this.width = width;
@@ -60,6 +61,23 @@ class Image {
       return imgData;
     } else {
       return this.imgData;
+    }
+  }
+
+  qualityCheck() {
+    if(this.calcLuminance() < 40 || 80 < this.calcLuminance()) {
+      console.log("Take a better picture");
+    }
+  }
+
+  calcLuminance() {
+    if(this.colorSpace === "HSLa") {
+      let lum = 0;
+      let size = this.pixels.length/4;
+      for(let i = 2; i < this.pixels.length; i+4) {
+        lum += this.pixels[i];
+      }
+      return lum/size;
     }
   }
 
@@ -206,7 +224,6 @@ class Image {
     let newScreen;
     for (let i = 0; i < this.islands.length; i++) {
       this.drawIsland(this.islands[i]);
-      console.log(this.islands[i].midPoint);
       newScreen = this.islands[i].createScreen();
       this.screens.push(newScreen);
     }
@@ -262,6 +279,9 @@ class Image {
 
   findSaturation(min, max, L) {
     if (L < 0.5) {
+      if(min + max === 0) {
+        return 0;
+      }
       return (max - min) / (max + min);
     } else {
       return (max - min) / (2.0 - max - min);
@@ -431,7 +451,6 @@ class Image {
         }
       }
     }
-    console.log(whites.length);
     for(let i=0; i < whites.length; i++) {
       for (let yBox = -factor; yBox <= factor; yBox++) {
         for (let xBox = -factor; xBox <= factor; xBox++) {
