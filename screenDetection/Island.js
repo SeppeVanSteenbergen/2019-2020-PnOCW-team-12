@@ -112,6 +112,8 @@ class Island {
 
     if (yValuesLeftVariance > sd_threshold) diagonalSearch = true;
 
+    console.log("diag: " + diagonalSearch);
+
     if (diagonalSearch) {
       // Diagonal search
 
@@ -202,6 +204,8 @@ class Island {
       // Perpendicular search
       // left
 
+      let MIN_CORNER_DIST = 50; // in pixels
+
       for (let x = 0; x < this.width; x++) {
         let found = false;
         let tempY = [];
@@ -277,7 +281,7 @@ class Island {
       }
     }
 
-    // Order the corners the right way
+    //TODO Order the corners the right way
     return this.corners;
   }
 
@@ -309,7 +313,9 @@ class Island {
   }
 
   findScreenOrientation() {
-    let radian = Math.atan(
+    //NOG LATER OP TERUG KOMEN, EERST RECONSTRUCTIE!!!
+
+    /* let radian = Math.atan(
       (this.corners[0][0] - this.corners[3][0]) /
         (this.corners[3][1] - this.corners[0][1])
     );
@@ -321,7 +327,46 @@ class Island {
       radian += Math.PI;
     else if (colorUp === this.green && colorLeft === this.blue)
       radian += (3 * Math.PI) / 2.0;
-    return (radian * 180) / Math.PI;
+    return (radian * 180) / Math.PI; */
+
+    switch (this.corners.length) {
+      case 4:
+        //no reconstruction needed
+        console.log("alle 4 al gevonden");
+        break;
+
+      case 3:
+        this.reconstructTripleCorners()
+        break;
+    
+      default:
+        break;
+    }
+  }
+
+  reconstructTripleCorners(){
+    //sort de 3 punten volgens x-co om inwendige hoek te bepalen
+    this.corners = this.corners.sort(function(a, b){return a[0] >= b[0]});
+
+    let vec1 = [this.corners[1], this.corners[0]];
+    let vec2 = [this.corners[1], this.corners[2]];
+
+    //loodrechte rico op vec1
+    //https://gamedev.stackexchange.com/questions/70075/how-can-i-find-the-perpendicular-to-a-2d-vector
+    let m = ((-vec1[1][0]) - vec1[0][0]) / (vec1[1][1] - vec1[0][1]);
+
+    //spiegelmatrix over loodrechte
+    //https://yutsumura.com/the-matrix-for-the-linear-transformation-of-the-reflection-across-a-line-in-the-plane/
+    let A = math.matrix([[1 - (m * m), 2 * m], [2 * m, (m * m) - 1]]);
+    A = math.multiply((1 / (1 + (m * m))), A);
+
+    let mirror = math.multiply([vec2[1][0] - vec2[0][0], vec2[1][1] - vec2[0][1]], A).add(vec2[0]); //gespiegelde vec2 over loodrechte aan vec1
+
+    let corner = math.add(vec1, mirror)[1]; //reconstructie van 4de punt
+
+    console.log(corner);
+
+    this.corners.push(corner);
   }
 
   findUpColor() {
@@ -342,7 +387,7 @@ class Island {
       corners[i][0] += this.minx;
       corners[i][1] += this.miny;
     }
-    return new Screen(corners, orientation, midPoint);
+    return new Screen(corners, orientation, this.midPoint);
   }
 
   getMatrix(x, y) {

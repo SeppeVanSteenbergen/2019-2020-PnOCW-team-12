@@ -200,7 +200,8 @@ class Image {
   }
 
   createScreens() {
-    this.screens.length = 0;
+    //this.screens.length = 0;
+    this.screens = [];
     this.calcIslandsFloodfill();
     let newScreen;
     for (let i = 0; i < this.islands.length; i++) {
