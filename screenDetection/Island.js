@@ -80,6 +80,8 @@ class Island {
   }
 
   findCorners() {
+    let corners = [];
+
     // choosing diagonal or straight corner detection
     let diagonalSearch = false;
 
@@ -127,7 +129,7 @@ class Island {
             j < this.width &&
             this.screenMatrix[i][j] !== 0
           ) {
-            this.corners.push([j, i, this.screenMatrix[i][j]]);
+            corners.push([j, i, this.screenMatrix[i][j]]);
             found = true;
             break;
           }
@@ -145,7 +147,7 @@ class Island {
             j < this.width &&
             this.screenMatrix[i][this.width - j - 1] !== 0
           ) {
-            this.corners.push([
+            corners.push([
               this.width - j - 1,
               i,
               this.screenMatrix[i][this.width - j - 1]
@@ -167,7 +169,7 @@ class Island {
             j < this.width &&
             this.screenMatrix[this.height - i - 1][this.width - j - 1] !== 0
           ) {
-            this.corners.push([
+            corners.push([
               this.width - j - 1,
               this.height - i - 1,
               this.screenMatrix[this.height - i - 1][this.width - j - 1]
@@ -189,7 +191,7 @@ class Island {
             j < this.width &&
             this.screenMatrix[this.height - i - 1][j] !== 0
           ) {
-            this.corners.push([
+            corners.push([
               j,
               this.height - i - 1,
               this.screenMatrix[this.height - i - 1][j]
@@ -217,7 +219,7 @@ class Island {
         }
         if (found) {
           let medianY = tempY[Math.floor(tempY.length / 2)];
-          this.corners.push([x, medianY, this.screenMatrix[medianY][x]]);
+          corners.push([x, medianY, this.screenMatrix[medianY][x]]);
           break;
         }
       }
@@ -234,7 +236,7 @@ class Island {
         }
         if (found) {
           let medianX = tempX[Math.floor(tempX.length / 2)];
-          this.corners.push([medianX, y, this.screenMatrix[y][medianX]]);
+          corners.push([medianX, y, this.screenMatrix[y][medianX]]);
           break;
         }
       }
@@ -251,7 +253,7 @@ class Island {
         }
         if (found) {
           let medianY = tempY[Math.floor(tempY.length / 2)];
-          this.corners.push([
+          corners.push([
             this.width - x - 1,
             medianY,
             this.screenMatrix[medianY][this.width - x - 1]
@@ -271,7 +273,7 @@ class Island {
         }
         if (found) {
           let medianX = tempX[Math.floor(tempX.length / 2)];
-          this.corners.push([
+          corners.push([
             medianX,
             this.height - y - 1,
             this.screenMatrix[this.height - y - 1][medianX]
@@ -281,26 +283,29 @@ class Island {
       }
     }
 
-    let distances = [];
-    for(let i = 0; i < this.corners.length; i++) {
-      let midX = this.midPoint[0];
-      let midY = this.midPoint[1];
-      let cornerX = this.corners[i][0];
-      let cornerY = this.corners[i][1];
+    console.log(corners);
+    console.log(corners[0])
 
-      console.log(cornerX, cornerY, midX, midY);
+    let distances = [];
+    let midX = this.midPoint[0];
+    let midY = this.midPoint[1];
+    corners.forEach(function(corner) {
+      let cornerX = corner[0];
+      let cornerY = corner[1];
+      console.log(cornerX, cornerY);
 
       let dX = cornerX - midX;
       let dY = cornerY - midY;
 
       distances.push(Math.sqrt(dX * dX + dY * dY));
-    }
-    console.log(this.corners);
+    });
+
     let maxDistance = Math.max(...distances);
     console.log(distances, maxDistance);
 
     //TODO Order the corners the right way
-    return this.corners;
+    this.corners = corners;
+    return corners;
   }
 
   calcMid() {
