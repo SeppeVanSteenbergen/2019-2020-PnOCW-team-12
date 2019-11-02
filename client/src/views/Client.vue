@@ -101,6 +101,14 @@ export default {
           console.log('command not supported')
           break
       }
+    },
+    updateScreenSize() {
+      this.$socket.emit('setScreenSize', {
+        size: {
+          width: screen.width,
+          height: screen.height
+        }
+      })
     }
   },
   methods: {

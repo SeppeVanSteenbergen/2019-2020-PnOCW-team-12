@@ -106,6 +106,7 @@ export default {
         console.log(e)
       }
     }
+
   },
   computed: {
     drawer: {

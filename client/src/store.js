@@ -14,7 +14,8 @@ export default new Vuex.Store({
       uuid: null
     },
     userLoggedIn: false,
-    roomList: {}
+    roomList: {},
+    roomClientInfo:[]
   },
   mutations: {
     SOCKET_CONNECT(state) {
@@ -31,6 +32,9 @@ export default new Vuex.Store({
       console.log('room list updated')
       console.log(roomList)
       state.roomList = roomList
+    },
+    SOCKET_roomClientInfo(state, roomClientInfo){
+      state.roomClientInfo = roomClientInfo
     },
     drawerOpen(state) {
       state.drawer = true

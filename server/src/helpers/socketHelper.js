@@ -120,7 +120,11 @@ module.exports = {
     )
   },
   sendDataBySocketID(name, data, socket_id) {
-    io.to(socket_id).emit(name, data)
+    if (data === null) {
+      io.to(socket_id).emit(name)
+    } else {
+      io.to(socket_id).emit(name, data)
+    }
   },
 
   sendDataToRoomOfMaster(name, data, master_user_id) {
@@ -138,6 +142,35 @@ module.exports = {
       this.sendDataByUserID(name, data, clientList[i])
     }
   },
+  sendClientInfo(master_user_id) {
+    if (!dataHelper.isMasterUser(master_user_id)) {
+      console.log('The given user is not a master user')
+      return 1
+    }
+
+    const clientList = dataHelper.getClientsOfRoom(
+      dataHelper.getUserRoom(master_user_id)
+    )
+
+    const clientInfo = clientList.map(user_id =>
+      dataHelper.getUserInfo(user_id)
+    )
+
+    this.sendDataByUserID('roomClientInfo', clientInfo, master_user_id)
+  },
+  updateRoomClientInfo(master_user_id) {
+    if (!dataHelper.isMasterUser(master_user_id)) {
+      console.log('The given user is not a master user')
+      return 1
+    }
+
+    const clientList = dataHelper.getClientsOfRoom(
+      dataHelper.getUserRoom(master_user_id)
+    )
+    for (let i = 0; i < clientList.length; i++) {
+      this.sendDataByUserID('updateScreenSize', null, clientList[i])
+    }
+  },
   sendSuccessMessageToSocket(socket_id, message) {
     this.sendDataBySocketID('successMessage', message, socket_id)
   },
@@ -147,5 +180,4 @@ module.exports = {
   disconnectSocket(socket_id) {
     io.sockets.connected[socket_id].disconnect()
   }
-
 }

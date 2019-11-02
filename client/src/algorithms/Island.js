@@ -89,8 +89,8 @@ export default class Island {
     let x = 0
     let y = 0
     while (
-      this.screenMatrix[0][x] != this.blue &&
-      this.screenMatrix[0][x] != this.green
+      this.screenMatrix[0][x] !== this.blue &&
+      this.screenMatrix[0][x] !== this.green
     )
       x++ //bovenhoek
     if (x >= this.screenMatrix[0].length / 2) {
@@ -101,8 +101,8 @@ export default class Island {
     x = this.screenMatrix[0].length - 1
 
     while (
-      this.screenMatrix[y][x] != this.blue &&
-      this.screenMatrix[y][x] != this.green
+      this.screenMatrix[y][x] !== this.blue &&
+      this.screenMatrix[y][x] !== this.green
     )
       y++ //rechterhoek
     if (y >= this.screenMatrix.length / 2) {
@@ -113,8 +113,8 @@ export default class Island {
     y = this.screenMatrix.length - 1
 
     while (
-      this.screenMatrix[y][x] != this.blue &&
-      this.screenMatrix[y][x] != this.green
+      this.screenMatrix[y][x] !== this.blue &&
+      this.screenMatrix[y][x] !== this.green
     )
       x-- // onderhoek
     if (x <= this.screenMatrix.length / 2) {
@@ -123,8 +123,8 @@ export default class Island {
 
     this.corners.push([x, y, this.screenMatrix[y][x]])
     while (
-      this.screenMatrix[y][0] != this.blue &&
-      this.screenMatrix[y][0] != this.green
+      this.screenMatrix[y][0] !== this.blue &&
+      this.screenMatrix[y][0] !== this.green
     )
       y-- //linkerhoek
 

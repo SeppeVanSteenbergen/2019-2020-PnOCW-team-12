@@ -1,8 +1,8 @@
 import Image from '../algorithms/Image'
 
 export default {
-  fullAnalysis(imgData) {
-    let inputImage = new Image(imgData, null, 'RGBA')
+  fullAnalysis(imgData, clientInfo) {
+    let inputImage = new Image(imgData, null, 'RGBA', clientInfo)
 
     console.log('input image:')
     console.log(inputImage)

@@ -1,10 +1,11 @@
 import Island from './Island'
 
 export default class Image {
-  constructor(imgData, canvas, colorSpace) {
+  constructor(imgData, canvas, colorSpace, clientInfo) {
     this.pixels = null
     this.canvas = null
     this.colorSpace = null
+    this.clientInfo = clientInfo
 
     this.sensitivity = 10
     this.colorSpaces = ['RGBA', 'HSLA', 'BW']

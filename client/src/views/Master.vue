@@ -439,6 +439,9 @@ export default {
 
       this.$socket.emit('screenCommand', object)
     },
+    getClientInfo() {
+      this.$socket.emit('getClientInfo')
+    },
     executeDisplayDetectionScreens() {
       let object = {
         payload: {
@@ -447,6 +450,10 @@ export default {
         },
         to: 'all'
       }
+
+      this.$socket.emit('updateRoomClientInfo')
+
+      setTimeout(this.getClientInfo, 1000)
 
       this.$socket.emit('screenCommand', object)
     },
@@ -517,7 +524,12 @@ export default {
 
       let imgCopy = AlgorithmService.copyImageData(inctx, inputImageData)
 
-      this.analysedImage = AlgorithmService.fullAnalysis(inputImageData)
+      let clientInfo = this.$store.state.roomClientInfo
+
+      this.analysedImage = AlgorithmService.fullAnalysis(
+        inputImageData,
+        clientInfo
+      )
       console.log(this.analysedImage)
 
       outC.width = inC.width

@@ -12,7 +12,7 @@ key: user_id
 	room:  (-1 not in room, >= 0 in a room)
 	(connected: (possible to know if socket_id exists))
 	disconnect_time: (time/date when the client was last connected, -1 if still connected, time/date if disconnected),
-	screen_size: {
+	size: {
 	                width: (screen width in pixels)
 	                height: (screen height in pixels)
 	              }
@@ -150,6 +150,24 @@ module.exports = io => {
       console.log(roomList)
       socketHelper.toggleRoom(dataHelper.getUserIDFromSocketID(socket.id))
       console.log(roomList)
+    })
+
+    /**
+     * Get the information related to the clients connected to the room
+     */
+    socket.on('getClientInfo', () => {
+      socketHelper.sendClientInfo(dataHelper.getUserIDFromSocketID(socket.id))
+    })
+
+    /**
+     * Set the screen size of a connected device
+     */
+    socket.on('setScreenSize', (data) => {
+      dataHelper.setSize(dataHelper.getUserIDFromSocketID(socket.id), data.size)
+    })
+
+    socket.on('updateRoomClientInfo', () => {
+      socketHelper.updateRoomClientInfo(dataHelper.getUserIDFromSocketID(socket.id))
     })
   })
 }
