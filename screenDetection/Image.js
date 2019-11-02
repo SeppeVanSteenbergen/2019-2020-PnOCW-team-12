@@ -26,7 +26,7 @@ class Image {
 
   lowerBoundG = [120 - this.sensitivity, 50, 25];
   upperBoundG = [120 + this.sensitivity, 100, 75];
-  lowerBoundB = [217, 50, 25];
+  lowerBoundB = [210, 50, 25];
   upperBoundB = [250, 100, 75];
   lowerBoundMid = [180 - this.sensitivity, 50, 25];
   upperBoundMid = [180 + this.sensitivity, 100, 75];

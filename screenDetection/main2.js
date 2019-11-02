@@ -27,11 +27,12 @@ imgElement.onload = function () {
   imageTest.createBigMask();
   imageTest.medianBlurMatrix(5);
   imageTest.medianBlur(5);
-  imageTest.createOffset(5);
+  imageTest.createOffset(1);
   imageTest.createScreens();
   imageTest.hslaToRgba();
 
   // //imageTest.drawPoint(midX, midY, 10);
 
   imageTest.show();
+  console.log(imageTest)
 };
