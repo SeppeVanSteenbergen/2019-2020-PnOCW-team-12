@@ -21,10 +21,10 @@ imgElement.onload = function () {
     var inputImage = new Image(inputImgData, "inputImage", "RGBA");
     inputImage.rgbaToHsla();
     var imageTest = new Image(inputImage.getImgData(), "remapped", "HSLA", imgElement.width, imgElement.height);
-    let data = imageTest.pixels.slice(0)
+    let data = imageTest.pixels.slice()
     console.log(data)
     let corners = [[127,0],[250,0],[250,150],[0,250]]
-    let destination = [[0,0],[250,0],[250,250],[0,250]]
+    let destination = [[150,0],[250,0],[250,150],[0,250]]
     imageTest.pixels = new Screen(corners, 0,0).map(data, corners, destination, 250,150)
     console.log(imageTest.pixels)
     imageTest.hslaToRgba()

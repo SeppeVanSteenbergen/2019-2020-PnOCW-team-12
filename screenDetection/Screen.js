@@ -261,17 +261,21 @@ class Screen {
      */
   map(data, corners, destination, width, height){
       let matrix = this.transformationMatrix(corners, destination);
-      let newData = data.slice(0);
+      console.log(matrix)
+      let newData = Array();
       for (let i =0; i<data.length; i+=4){
-          let x = Math.floor(i/4 / height);
-          let y = i/4 % width;
+          let y = Math.floor(i/4 / width);
+          let x = (i/4) % width;
           let newCoord = this.dotMMsmall(matrix,[[x],[y],[1]]);
-          let newX = newCoord[0]/newCoord[2];
-          let newY = newCoord[1]/newCoord[2];
-          let newIndex = Math.floor(Math.round(newX+newY*width)/4)*16;
-          newData[newIndex] = data[i];
-          newData[newIndex+1] = data[i+1];
-          newData[newIndex+2] = data[i+2];
+          let newX = Math.round(newCoord[0]/newCoord[2]);
+          let newY = Math.round(newCoord[1]/newCoord[2]);
+          let newIndex = (newX+newY*width)*4;
+          // console.log(x,y,newX, newY, newIndex,i, data[newIndex+2], data[i+2]);
+          // console.log(newIndex, data[newIndex])
+          newData.push(data[newIndex]);
+          newData.push(data[newIndex+1]);
+          newData.push(data[newIndex+2]);
+          newData.push(data[newIndex+3]);
 
 
           // console.log(newX, newY);
@@ -281,7 +285,16 @@ class Screen {
     }
 }
 
-// let newScreen = new Screen([1,2,5,4], 180)
+// let newScreen = new Screen([1,2,5,4], 0)
+// let srcCorners = [[158, 64], [494, 69], [495, 404], [158, 404]];
+// let dstCorners =  [[150, 64], [494, 69], [495, 404], [158, 404]];
+// // let dstCorners = [[100, 500], [152, 564], [148, 604], [100, 560]];
+// // console.log(newScreen.findMapMatrix(dstCorners))
+// console.log(newScreen.transformationMatrix(srcCorners, dstCorners))
+// let matrix = newScreen.transformationMatrix(srcCorners, dstCorners)
+// console.log(newScreen.dotMMsmall(matrix, [[117], [530],[1]]))
+
+
 // let matrix = [12,14,15,36,12,54,78,9,63,21,45,21,45,99,87,42,26,74,65,66,26,36,14,25,36,24,15,14,12,36,25,47,85,96,78,96]
 // let corners = [[1,1],[2,1],[2,2],[1,2]]
 // let destination = [[0,0],[2,0],[2,2],[0,2]]
