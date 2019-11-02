@@ -4,13 +4,15 @@ class Screen {
   size;
   imgData;
   clientCode;
+  midPoint;
 
   width;
   height;
 
-  constructor(corners, orientation) {
+  constructor(corners, orientation, midPoint) {
     this.corners = corners;
     this.orientation = orientation;
+    this.midPoint = midPoint;
     var area = 0;
     for (let i = 0; i < corners.length - 1; i++) {
       area += corners[i][0] * corners[i + 1][1] * 0.5;
