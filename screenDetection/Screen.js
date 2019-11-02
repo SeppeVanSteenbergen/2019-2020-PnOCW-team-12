@@ -259,16 +259,16 @@ class Screen {
      * Maps the old image data to new destination corners, see above for transformation matrix
      * data is an array with 4 values per pixel, for every pixel of the image, going from top to bottom, left to right
      */
-  map(data, corners, destination){
+  map(data, corners, destination, width, height){
       let matrix = this.transformationMatrix(corners, destination);
       let newData = data.slice(0);
       for (let i =0; i<data.length; i+=4){
-          let x = Math.floor(i/4 / this.height);
-          let y = i/4 % this.width;
+          let x = Math.floor(i/4 / height);
+          let y = i/4 % width;
           let newCoord = this.dotMMsmall(matrix,[[x],[y],[1]]);
           let newX = newCoord[0]/newCoord[2];
           let newY = newCoord[1]/newCoord[2];
-          let newIndex = (Math.round(newX+newY*this.width)%4)*16;
+          let newIndex = Math.floor(Math.round(newX+newY*width)/4)*16;
           newData[newIndex] = data[i];
           newData[newIndex+1] = data[i+1];
           newData[newIndex+2] = data[i+2];
