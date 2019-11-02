@@ -259,7 +259,7 @@ class Screen {
      * Maps the old image data to new destination corners, see above for transformation matrix
      * data is an array with 4 values per pixel, for every pixel of the image, going from top to bottom, left to right
      */
-  map(data, corners, destination, width, height){
+  map(data, corners, destination, width){
       let matrix = this.transformationMatrix(corners, destination);
       console.log(matrix)
       let newData = Array();

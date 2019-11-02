@@ -22,12 +22,52 @@ imgElement.onload = function () {
     inputImage.rgbaToHsla();
     var imageTest = new Image(inputImage.getImgData(), "remapped", "HSLA", imgElement.width, imgElement.height);
     let data = imageTest.pixels.slice()
-    console.log(data)
-    let corners = [[127,0],[250,0],[250,150],[0,250]]
-    let destination = [[150,0],[250,0],[250,150],[0,250]]
-    imageTest.pixels = new Screen(corners, 0,0).map(data, corners, destination, 250,150)
-    console.log(imageTest.pixels)
-    imageTest.hslaToRgba()
-    imageTest.show()
+
+    let corners = Array();
+    let destination = Array();
+
+    function selectPoint(event) {
+        // console.log(event.clientX, event.clientY)
+        if (corners.length<4){
+            corners.push([event.clientX, event.clientY])
+            let newPoint = [event.clientX-7, event.clientY-7]
+            inputContext.beginPath();
+            inputContext.fillStyle = "#000";
+            inputContext.rect(newPoint[0]-3.5, newPoint[1]-3.5, 7, 7);
+            inputContext.fill();
+
+        }
+        else if (destination.length<4){
+            destination.push([event.clientX, event.clientY])
+            let newPoint = [event.clientX-7, event.clientY-7]
+            inputContext.beginPath();
+            inputContext.fillStyle = "#00f";
+            inputContext.rect(newPoint[0]-3.5, newPoint[1]-3.5, 7, 7);
+            inputContext.fill();
+
+        }
+        else{
+            console.log(data)
+            // let corners = [[0,0],[250,50],[250,100],[0,150]]
+            // let destination = [[0,0],[250,0],[250,150],[0,150]]
+            imageTest.pixels = new Screen(corners, 0,0).map(data, corners, destination, 250,150)
+            console.log(imageTest.pixels)
+            imageTest.hslaToRgba()
+            imageTest.show()
+
+        }
+
+    }
+
+
+    document.addEventListener("click", selectPoint)
+
+    // console.log(data)
+    // // let corners = [[0,0],[250,50],[250,100],[0,150]]
+    // // let destination = [[0,0],[250,0],[250,150],[0,150]]
+    // imageTest.pixels = new Screen(corners, 0,0).map(data, corners, destination, 250,150)
+    // console.log(imageTest.pixels)
+    // imageTest.hslaToRgba()
+    // imageTest.show()
 
 };
