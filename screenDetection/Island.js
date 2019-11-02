@@ -342,7 +342,7 @@ class Island {
       corners[i][0] += this.minx;
       corners[i][1] += this.miny;
     }
-    return new Screen(corners, orientation, midPoint);
+    return new Screen(corners, orientation, this.midPoint);
   }
 
   getMatrix(x, y) {
