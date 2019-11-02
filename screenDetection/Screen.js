@@ -8,10 +8,8 @@ class Screen {
   width;
   height;
 
-  constructor(corners, orientation, width, height) {
+  constructor(corners, orientation) {
     this.corners = corners;
-    this.width = width;
-    this.height = height;
     this.orientation = orientation;
     var area = 0;
     for (let i = 0; i < corners.length - 1; i++) {
