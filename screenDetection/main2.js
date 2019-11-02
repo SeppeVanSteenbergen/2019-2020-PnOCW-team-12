@@ -18,12 +18,12 @@ imgElement.onload = function () {
   inputCanvas.height = imgElement.height;
   inputContext.drawImage(imgElement, 0, 0, imgElement.width, imgElement.height);
   inputImgData = inputContext.getImageData(0, 0, imgElement.width, imgElement.height);
-  var inputImage = new Image(inputImgData, "inputImage", "RGBA");
+  let inputImage = new Image(inputImgData, "inputImage", "RGBA", imgElement.width, imgElement.height);
+  console.log(inputImage.pixels);
   inputImage.rgbaToHsla();
 
-  var imageTest = new Image(inputImage.getImgData(), "imageOutConcatenated", "HSLA", imgElement.width, imgElement.height);
-  //const [midX, midY] = imageTest.calcMid();
-
+  let imageTest = new Image(inputImage.getImgData(), "imageOutConcatenated", "HSLA", imgElement.width, imgElement.height);
+  console.log(imageTest.pixels);
   imageTest.createBigMask();
   imageTest.medianBlurMatrix(5);
   imageTest.medianBlur(5);
@@ -33,5 +33,5 @@ imgElement.onload = function () {
 
   // //imageTest.drawPoint(midX, midY, 10);
 
-  imageTest.show();
+ // imageTest.show();
 };

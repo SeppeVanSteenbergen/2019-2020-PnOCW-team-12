@@ -81,6 +81,9 @@ function rgbaToHsla(image) {
 
 function findSaturation(min, max, L) {
   if (L < 0.5) {
+    if(min+max === 0) {
+      return 0;
+    }
     return (max - min) / (max + min);
   } else {
     return (max - min) / (2.0 - max - min);
