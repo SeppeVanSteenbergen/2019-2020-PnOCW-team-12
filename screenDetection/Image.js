@@ -205,6 +205,7 @@ class Image {
     let newScreen;
     for (let i = 0; i < this.islands.length; i++) {
       this.drawIsland(this.islands[i]);
+      console.log(this.islands[i].midPoint);
       newScreen = this.islands[i].createScreen();
       this.screens.push(newScreen);
     }
@@ -566,6 +567,7 @@ class Image {
         0.3
     );
     this.drawCorners(island);
+    this.drawMid(island);
   }
 
   drawCorners(island) {
@@ -576,6 +578,10 @@ class Image {
           10
       );
     }
+  }
+
+  drawMid(island) {
+    this.drawPoint(island.midPoint[0],island.midPoint[1],10);
   }
 
   drawPoint(x, y, size) {
