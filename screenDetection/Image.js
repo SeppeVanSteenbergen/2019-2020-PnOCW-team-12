@@ -129,13 +129,13 @@ class Image {
         if (this.checkId(x, y)) {
           let newIslandCoo = this.floodfill(x, y, this.islandID);
           let newIsland = new Island(
-            this,
             newIslandCoo[0],
             newIslandCoo[1],
             this.islandID
           );
           newIsland.add(newIslandCoo[2], newIslandCoo[3]);
           newIsland.setScreenMatrix(this.matrix);
+          newIsland.finishIsland();
           tmpIslands.push(newIsland);
           this.islandID += 3;
         }
@@ -143,17 +143,9 @@ class Image {
     }
     for (let i = 0; i < tmpIslands.length; i++) {
       if (tmpIslands[i].size() > this.MIN_ISLAND_SIZE) {
-        this.drawFillRect(
-          [tmpIslands[i].minx, tmpIslands[i].miny],
-          [tmpIslands[i].maxx, tmpIslands[i].maxy],
-          0.3
-        );
         this.islands.push(tmpIslands[i]);
-
-
       }
     }
-    console.log(this.islands.length);
   }
 
   floodfill(xPos, yPos, islandID) {
@@ -212,6 +204,7 @@ class Image {
     this.calcIslandsFloodfill();
     let newScreen;
     for (let i = 0; i < this.islands.length; i++) {
+      this.drawIsland(this.islands[i]);
       newScreen = this.islands[i].createScreen();
       this.screens.push(newScreen);
     }
@@ -556,18 +549,6 @@ class Image {
     return (pixel[1] * this.getWidth() + pixel[0]) * 4;
   }
 
-  makeRed(position) {
-    if (this.getColorSpace() === 'RGBA') {
-      this.pixels[position] = 255;
-      this.pixels[++position] = 0;
-      this.pixels[++position] = 0;
-    } else if (this.getColorSpace() === 'HSLA') {
-      this.pixels[position] = 0;
-      this.pixels[++position] = 100;
-      this.pixels[++position] = 50;
-    }
-  }
-
   /**
    * DEBUG METHODS
    */
@@ -578,7 +559,27 @@ class Image {
    * @param {int} y y co
    * @param {int} size size
    */
+  drawIsland(island) {
+    this.drawFillRect(
+        [island.minx, island.miny],
+        [island.maxx, island.maxy],
+        0.3
+    );
+    this.drawCorners(island);
+  }
+
+  drawCorners(island) {
+    for (let j = 0; j < 4; j++) {
+      this.drawPoint(
+          island.corners[j][0] + island.minx,
+          island.corners[j][1] + island.miny,
+          10
+      );
+    }
+  }
+
   drawPoint(x, y, size) {
+    let change = true;
     if (this.getColorSpace() === 'HSLA') {
       this.hslaToRgba();
       let change = true;
@@ -618,7 +619,7 @@ class Image {
    * @param {number} alpha getal 0..1
    */
   drawFillRect(startCorner, endCorner, alpha) {
-    let change = true;
+    let change = false;
     if (this.getColorSpace() == 'HSLA') {
       this.hslaToRgba();
       change = true;
@@ -636,6 +637,18 @@ class Image {
     }
     if (change) {
       this.rgbaToHsla();
+    }
+  }
+
+  makeRed(position) {
+    if (this.getColorSpace() === 'RGBA') {
+      this.pixels[position] = 255;
+      this.pixels[++position] = 0;
+      this.pixels[++position] = 0;
+    } else if (this.getColorSpace() === 'HSLA') {
+      this.pixels[position] = 0;
+      this.pixels[++position] = 100;
+      this.pixels[++position] = 50;
     }
   }
 }

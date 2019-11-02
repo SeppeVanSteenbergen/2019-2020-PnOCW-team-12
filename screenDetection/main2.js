@@ -27,7 +27,7 @@ imgElement.onload = function () {
   imageTest.medianBlurMatrix(5);
   imageTest.medianBlur(5);
   imageTest.createOffset(5);
-  imageTest.calcIslandsFloodfill();
+  imageTest.createScreens();
   imageTest.hslaToRgba();
   //imageTest.drawPoint(midX, midY, 10);
   imageTest.show();

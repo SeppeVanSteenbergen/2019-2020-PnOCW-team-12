@@ -1,5 +1,4 @@
 class Island {
-  Image;
   minx;
   maxx;
   miny;
@@ -25,8 +24,7 @@ class Island {
    * @param {int} y y co
    * @param {int} id
    */
-  constructor(Image, x, y, id) {
-    this.Image = Image;
+  constructor(x, y, id) {
     this.minx = x;
     this.maxx = x;
 
@@ -37,8 +35,6 @@ class Island {
     this.green = id;
     this.blue = id + 1;
     this.circle = id + 2;
-    this.midpoint = this.calcMid();
-
   }
 
   /**
@@ -282,7 +278,6 @@ class Island {
     }
 
     // Order the corners the right way
-    this.orientation = this.findScreenOrientation(); //TODO: maybe change the way of setting this variable!!
     return this.corners;
   }
 
@@ -305,6 +300,11 @@ class Island {
     let midY = y_values.reduce((a, b) => a + b, 0) / lengthY;
 
     return [midX,midY];
+  }
+
+  finishIsland() {
+    this.corners = this.findCorners();
+    this.orientation = this.findScreenOrientation();
   }
 
   findScreenOrientation() {
@@ -336,12 +336,11 @@ class Island {
 
   createScreen() {
     let corners = this.corners;
-    let orientation = this.findScreenOrientation();
+    let orientation = this.orientation;
     for (let i = 0; i < corners.length; i++) {
       corners[i][0] += this.minx;
       corners[i][1] += this.miny;
     }
-
     return new Screen(corners, orientation);
   }
 
@@ -351,49 +350,5 @@ class Island {
     if (y < 0) y = 0;
     else if (y >= this.height) y = this.height - 1;
     return this.screenMatrix[y][x];
-  }
-
-  /**
-   * DEBUG METHODS
-   */
-
-  /**
-   * Draw a cross at the given pixel location of the given pixel size
-   * @param {int} x x co
-   * @param {int} y y co
-   * @param {int} size size
-   */
-  drawPoint(x, y, size) {
-    x = Math.round(x);
-    y = Math.round(y);
-    size = Math.round(size);
-
-    //verticale lijn
-    for (let j = y - size / 2; j <= y + size / 2; j++) {
-      let pos = this.Image.pixelToPosition([x, j]);
-
-      this.Image.pixels[pos] = 0;
-      this.Image.pixels[pos + 1] = 255;
-      this.Image.pixels[pos + 2] = 255;
-    }
-
-    //horizontale lijn
-    for (let i = x - size / 2; i <= x + size / 2; i++) {
-      let pos = this.Image.pixelToPosition([i, y]);
-
-      this.Image.pixels[pos] = 0;
-      this.Image.pixels[pos + 1] = 255;
-      this.Image.pixels[pos + 2] = 255;
-    }
-  }
-
-  drawCorners() {
-    for (let j = 0; j < 4; j++) {
-      this.drawPoint(
-          this.corners[j][0] + this.minx,
-          this.corners[j][1] + this.miny,
-          10
-      );
-    }
   }
 }
