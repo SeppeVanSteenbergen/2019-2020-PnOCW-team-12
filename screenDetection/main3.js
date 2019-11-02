@@ -35,10 +35,7 @@ imgElement.onload = function() {
     // console.log(event.clientX, event.clientY)
     if (corners.length < 4) {
       corners.push([event.clientX, event.clientY]);
-      let newPoint = [
-        event.clientX - 7,
-        event.clientY - 7
-      ];
+      let newPoint = [event.clientX - 7, event.clientY - 7];
       inputContext.beginPath();
       inputContext.fillStyle = '#000';
       inputContext.rect(newPoint[0] - 3.5, newPoint[1] - 3.5, 7, 7);
@@ -54,7 +51,7 @@ imgElement.onload = function() {
       // let corners = [[0,0],[250,50],[250,100],[0,150]]
       // let destination = [[0,0],[250,0],[250,150],[0,150]]
       let outImg = new Screen(corners, 0, 0).map(
-        inputImgData.data,
+        inputImgData,
         corners,
         inputImgData.width,
         inputImgData.height

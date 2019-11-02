@@ -310,8 +310,8 @@ class Screen {
    * math from https://stackoverflow.com/questions/14244032/redraw-image-from-3d-perspective-to-2d
    */
   transformationMatrix(source, destination) {
-    let matrixA = this.findMapMatrix(source);
-    let matrixB = this.findMapMatrix(destination);
+    let matrixA = this.findMapMatrix(destination);
+    let matrixB = this.findMapMatrix(source);
     let matrixC = this.dotMMsmall(matrixA, this.inv(matrixB));
     this.transMatrix = matrixC;
     return matrixC;
@@ -323,17 +323,7 @@ class Screen {
     let subMatrix1 = [row1, row2, row3];
     let subMatrix2 = [[corners[3][0]], [corners[3][1]], [1]]; // x4, y4, 1
 
-    let resultMatrix = this.dotMMsmall(
-      this.dotMMsmall(
-        this.inv(this.dotMMsmall(this.transpose(subMatrix1), subMatrix1)),
-        this.transpose(subMatrix1)
-      ),
-      subMatrix2
-    );
-
-    let res = this.dotMMsmall(this.inv(subMatrix1), subMatrix2);
-    console.log(resultMatrix);
-    console.log(res);
+    let resultMatrix = this.dotMMsmall(this.inv(subMatrix1), subMatrix2);
     for (let i = 0; i < 3; i++) {
       for (let j = 0; j < 3; j++) {
         subMatrix1[i][j] *= resultMatrix[j];
@@ -342,33 +332,37 @@ class Screen {
     return subMatrix1;
   }
 
-  /**
-   * Maps the old image data to new destination corners, see above for transformation matrix
-   * data is an array with 4 values per pixel, for every pixel of the image, going from top to bottom, left to right
-   */
-  map(data, corners, width, height) {
+  calcTranformationMatrix() {
     let destination = [
       [0, 0],
-      [width, 0],
-      [width, height],
-      [0, height]
+      [this.width, 0],
+      [this.width, this.height],
+      [0, this.height]
     ];
+    this.transformationMatrix(destination, this.corners);
+  }
 
-    this.transformationMatrix(corners, destination);
-    /*for (let i = 0; i < data.length; i += 4) {
-      let x = (i / 4) % width;
-      let y = Math.floor(i / 4 / width);
-      let newCoord = this.dotMMsmall(matrix, [[x], [y], [1]]);
-      let newX = newCoord[0] / newCoord[2];
-      let newY = newCoord[1] / newCoord[2];
-      let newIndex = Math.floor(Math.round(newX + newY * width) / 4) * 16;
-      newData[newIndex] = data[i];
-      newData[newIndex + 1] = data[i + 1];
-      newData[newIndex + 2] = data[i + 2];
+  /**
+   * Cut and transform the part of the screen from the given image
+   * @param fullImage
+   *        ImageData object containing the image to be cut
+   * @returns {ImageData}
+   *          Object containing the transformed screen cutout from the input image
+   */
+  mapToScreen(fullImage) {
+    return this.map(fullImage, this.corners, this.width, this.height);
+  }
 
-      // console.log(newX, newY);
-    }*/
+  /**
+   * Maps the old image data to new destination corners, see above for transformation matrix
+   * The fullImage object has a data key.
+   * data is an array with 4 values per pixel, for every pixel of the image, going from top to bottom, left to right
+   */
+  map(fullImage, srcCorners, width, height) {
+    let data = fullImage.data;
+    let destination = [[0, 0], [width, 0], [width, height], [0, height]];
 
+    this.transformationMatrix(destination, srcCorners);
     let img = document
       .createElement('canvas')
       .getContext('2d')
@@ -376,9 +370,9 @@ class Screen {
 
     for (let ys = 0; ys < height; ys++) {
       for (let xs = 0; xs < width; xs++) {
-        let newCoord = this.transform([xs, ys]);
-        let x = newCoord[0];
-        let y = newCoord[1];
+        let srcCoord = this.transform([xs, ys]);
+        let x = srcCoord[0];
+        let y = srcCoord[1];
 
         let indexDest = (xs + ys * width) * 4;
         let index = (x + y * width) * 4;
@@ -414,7 +408,6 @@ class Screen {
 // console.log(newScreen.transformationMatrix(srcCorners, dstCorners))
 // let matrix = newScreen.transformationMatrix(srcCorners, dstCorners)
 // console.log(newScreen.dotMMsmall(matrix, [[117], [530],[1]]))
-
 
 // let matrix = [12,14,15,36,12,54,78,9,63,21,45,21,45,99,87,42,26,74,65,66,26,36,14,25,36,24,15,14,12,36,25,47,85,96,78,96]
 // let corners = [[1,1],[2,1],[2,2],[1,2]]
