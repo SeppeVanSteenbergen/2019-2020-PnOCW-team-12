@@ -20,15 +20,18 @@ imgElement.onload = function () {
   inputImgData = inputContext.getImageData(0, 0, imgElement.width, imgElement.height);
   var inputImage = new Image(inputImgData, "inputImage", "RGBA");
   inputImage.rgbaToHsla();
-  
+
   var imageTest = new Image(inputImage.getImgData(), "imageOutConcatenated", "HSLA", imgElement.width, imgElement.height);
   //const [midX, midY] = imageTest.calcMid();
+
   imageTest.createBigMask();
   imageTest.medianBlurMatrix(5);
   imageTest.medianBlur(5);
   imageTest.createOffset(5);
   imageTest.createScreens();
   imageTest.hslaToRgba();
-  //imageTest.drawPoint(midX, midY, 10);
+
+  // //imageTest.drawPoint(midX, midY, 10);
+
   imageTest.show();
 };

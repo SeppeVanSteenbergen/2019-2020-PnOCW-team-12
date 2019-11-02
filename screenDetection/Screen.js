@@ -5,8 +5,13 @@ class Screen {
   imgData;
   clientCode;
 
-  constructor(corners, orientation) {
+  width;
+  height;
+
+  constructor(corners, orientation, width, height) {
     this.corners = corners;
+    this.width = width;
+    this.height = height;
     this.orientation = orientation;
     var area = 0;
     for (let i = 0; i < corners.length - 1; i++) {
@@ -249,7 +254,36 @@ class Screen {
     }
     return subMatrix1
   }
+
+    /**
+     * Maps the old image data to new destination corners, see above for transformation matrix
+     * data is an array with 4 values per pixel, for every pixel of the image, going from top to bottom, left to right
+     */
+  map(data, corners, destination){
+      let matrix = this.transformationMatrix(corners, destination);
+      let newData = data.slice(0);
+      for (let i =0; i<data.length; i+=4){
+          let x = Math.floor(i/4 / this.height);
+          let y = i/4 % this.width;
+          let newCoord = this.dotMMsmall(matrix,[[x],[y],[1]]);
+          let newX = newCoord[0]/newCoord[2];
+          let newY = newCoord[1]/newCoord[2];
+          let newIndex = (Math.round(newX+newY*this.width)%4)*16;
+          newData[newIndex] = data[i];
+          newData[newIndex+1] = data[i+1];
+          newData[newIndex+2] = data[i+2];
+
+
+          // console.log(newX, newY);
+
+      }
+      return newData
+    }
 }
 
 // let newScreen = new Screen([1,2,5,4], 180)
-// console.log(newScreen.findMapMatrix([[1,1],[2,1],[2,2],[1,2]]))
+// let matrix = [12,14,15,36,12,54,78,9,63,21,45,21,45,99,87,42,26,74,65,66,26,36,14,25,36,24,15,14,12,36,25,47,85,96,78,96]
+// let corners = [[1,1],[2,1],[2,2],[1,2]]
+// let destination = [[0,0],[2,0],[2,2],[0,2]]
+// newScreen.map(matrix, corners, destination)
+
