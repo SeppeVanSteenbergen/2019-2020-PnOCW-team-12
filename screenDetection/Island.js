@@ -296,15 +296,16 @@ class Island {
 
     let lengthX = x_values.length;
     let lengthY = y_values.length;
-    let midX = x_values.reduce((a, b) => a + b, 0) / lengthX;
-    let midY = y_values.reduce((a, b) => a + b, 0) / lengthY;
+    let midX = Math.floor(x_values.reduce((a, b) => a + b, 0) / lengthX);
+    let midY = Math.floor(y_values.reduce((a, b) => a + b, 0) / lengthY);
 
-    return [midX,midY];
+    return [midX + this.minx, midY + this.miny];
   }
 
   finishIsland() {
     this.corners = this.findCorners();
     this.orientation = this.findScreenOrientation();
+    this.midPoint = this.calcMid();
   }
 
   findScreenOrientation() {
