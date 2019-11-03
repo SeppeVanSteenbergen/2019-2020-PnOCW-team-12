@@ -20,7 +20,7 @@ Week 5
     maandag     |   dinsdag     |   woensdag        |   donderdag       |   vrijdag     |   zaterdag    |   zondag
     ------------|---------------|-------------------|-------------------|---------------|---------------|-----------
 TS  Triang (4,5)| Triang (4)    | Triang (2)        |                   |               |               |
-SS              |               |                   |                   |               |               |   
+SS              |               |                   |                   |               |               | 
 DV              |               |                   |                   |               |               |
 BB              |               |                   |                   |               |               |
 MD              |               |                   |                   |               |               |
@@ -30,8 +30,8 @@ Week 6
     maandag     |   dinsdag     |   woensdag        |   donderdag       |   vrijdag     |   zaterdag    |   zondag
     ------------|---------------|-------------------|-------------------|---------------|---------------|-----------
 TS              |               |                   |                   |               |               |
-SS              |               |                   |                   |               |               |   
+SS   adv(6)     |   adv(4)      |   adv(2)          |    adv(2)         |               |    adv(6)     |
 DV   FrameW(7)  |   FrameW(1)   |   FrameW(9)       |    cornerDet(4)   |   adv(8)      |    adv(7)     |
 BB              |               |                   |                   |               |               |
-MD   adv( 9)    |               |   adv(2)          |                   |   adv(9)      |      adv(8)   |
+MD   adv(9)     |               |   adv(2)          |                   |   adv(9)      |    adv(8)     |
 FB              |               |                   |                   |               |               |
