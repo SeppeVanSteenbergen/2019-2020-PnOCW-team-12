@@ -595,8 +595,8 @@ class Image {
     for (let j = 0; j < corners.length; j++) {
       if(corners[j] !== null) {
         this.drawPoint(
-            corners[j][0] + island.minx,
-            corners[j][1] + island.miny,
+            corners[j][0],
+            corners[j][1],
             10
         );
       }
