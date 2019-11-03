@@ -7,10 +7,10 @@ class Island {
   screenMatrix = [];
 
   corners = {
-    LB: null,
-    RB: null,
-    LO: null,
-    RO: null,
+    LU: null,
+    RU: null,
+    LD: null,
+    RD: null,
   };
   midPoint;
   orientation;
@@ -133,7 +133,7 @@ class Island {
             j < this.width &&
             this.screenMatrix[i][j] !== 0
           ) {
-            this.corners.LB = [j, i, this.screenMatrix[i][j]];
+            this.corners.LU = [j, i, this.screenMatrix[i][j]];
             found = true;
             break;
           }
@@ -151,7 +151,7 @@ class Island {
             j < this.width &&
             this.screenMatrix[i][this.width - j - 1] !== 0
           ) {
-            this.corners.RB = [
+            this.corners.RU = [
               this.width - j - 1,
               i,
               this.screenMatrix[i][this.width - j - 1]
@@ -173,7 +173,7 @@ class Island {
             j < this.width &&
             this.screenMatrix[this.height - i - 1][this.width - j - 1] !== 0
           ) {
-            this.corners.RO = [
+            this.corners.RD = [
               this.width - j - 1,
               this.height - i - 1,
               this.screenMatrix[this.height - i - 1][this.width - j - 1]
@@ -195,7 +195,7 @@ class Island {
             j < this.width &&
             this.screenMatrix[this.height - i - 1][j] !== 0
           ) {
-            this.corners.LO = [
+            this.corners.LD = [
               j,
               this.height - i - 1,
               this.screenMatrix[this.height - i - 1][j]
@@ -223,7 +223,7 @@ class Island {
         }
         if (found) {
           let medianY = tempY[Math.floor(tempY.length / 2)];
-          this.corners.LO = [x, medianY, this.screenMatrix[medianY][x]];
+          this.corners.LD = [x, medianY, this.screenMatrix[medianY][x]];
           break;
         }
       }
@@ -240,7 +240,7 @@ class Island {
         }
         if (found) {
           let medianX = tempX[Math.floor(tempX.length / 2)];
-          this.corners.LB = [medianX, y, this.screenMatrix[y][medianX]];
+          this.corners.LU = [medianX, y, this.screenMatrix[y][medianX]];
           break;
         }
       }
@@ -257,7 +257,7 @@ class Island {
         }
         if (found) {
           let medianY = tempY[Math.floor(tempY.length / 2)];
-          this.corners.RB = [
+          this.corners.RU = [
             this.width - x - 1,
             medianY,
             this.screenMatrix[medianY][this.width - x - 1]
@@ -277,7 +277,7 @@ class Island {
         }
         if (found) {
           let medianX = tempX[Math.floor(tempX.length / 2)];
-          this.corners.RO = [
+          this.corners.RD = [
             medianX,
             this.height - y - 1,
             this.screenMatrix[this.height - y - 1][medianX]
@@ -287,42 +287,49 @@ class Island {
       }
     }
 
-    console.log(this.corners);
-    let corners = Object.values(this.corners);
 
-   this.checkCorners(corners, 30);
+    this.cleanCorners(30);
+    let corners = Object.values(this.corners);
 
     let distances = [];
     let midX = this.midPoint[0] - this.minx;
     let midY = this.midPoint[1] - this.miny;
     corners.forEach(function(corner) {
-      let cornerX = corner[0];
-      let cornerY = corner[1];
+      if(corner !== null) {
+        let cornerX = corner[0];
+        let cornerY = corner[1];
 
-      let dX = cornerX - midX;
-      let dY = cornerY - midY;
+        let dX = cornerX - midX;
+        let dY = cornerY - midY;
 
-      distances.push(Math.sqrt(dX * dX + dY * dY));
+        distances.push(Math.sqrt(dX * dX + dY * dY));
+      }
     });
 
     let maxDistance = Math.max(...distances);
-    console.log(distances, maxDistance);
+    console.log(distances);
+    console.log("test")
 
     //TODO Order the corners the right way
   }
 
-  checkCorners(corners, radius) {
-    for(let i = 0; i < corners.length; i++) {
-      for(let j = i+1; j < corners.length; j++) {
-        if(this.calcDist(corners[i],corners[j]) <= radius) {
-          corners[i] = [(corners[i][0]+corners[j][0])/2, (corners[i][1]+corners[j][1])/2];
-          corners.splice(j,1);
-        }
-      }
+  cleanCorners(radius) {
+    if(this.calcDist(this.corners.LU, this.corners.RU) <= radius) {
+      this.corners.RU = null;
+    }
+    if(this.calcDist(this.corners.LU, this.corners.LD) <= radius) {
+      this.corners.LD = null;
+    }
+    if(this.calcDist(this.corners.RD, this.corners.RU) <= radius) {
+      this.corners.RU = null;
+    }
+    if(this.calcDist(this.corners.RD, this.corners.LD) <= radius) {
+      this.corners.LD = null;
     }
   }
 
   calcDist(a,b) {
+    if(b === null) return;
     let dx = a[0] - b[0];
     let dy = a[1] - b[1];
     return Math.sqrt(dx * dx + dy * dy);
@@ -406,8 +413,6 @@ class Island {
     let mirror = math.multiply([vec2[1][0] - vec2[0][0], vec2[1][1] - vec2[0][1]], A).add(vec2[0]); //gespiegelde vec2 over loodrechte aan vec1
 
     let corner = math.add(vec1, mirror)[1]; //reconstructie van 4de punt
-
-    console.log(corner);
 
     this.corners.push(corner);
   }
