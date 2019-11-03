@@ -6,7 +6,12 @@ class Island {
   id;
   screenMatrix = [];
 
-  corners = [];
+  corners = {
+    LB: null,
+    RB: null,
+    LO: null,
+    RO: null,
+  };
   midPoint;
   orientation;
 
@@ -80,8 +85,6 @@ class Island {
   }
 
   findCorners() {
-    let corners = [];
-
     // choosing diagonal or straight corner detection
     let diagonalSearch = false;
 
@@ -129,7 +132,7 @@ class Island {
             j < this.width &&
             this.screenMatrix[i][j] !== 0
           ) {
-            corners.push([j, i, this.screenMatrix[i][j]]);
+            this.corners.LB = [j, i, this.screenMatrix[i][j]];
             found = true;
             break;
           }
@@ -147,11 +150,11 @@ class Island {
             j < this.width &&
             this.screenMatrix[i][this.width - j - 1] !== 0
           ) {
-            corners.push([
+            this.corners.RB = [
               this.width - j - 1,
               i,
               this.screenMatrix[i][this.width - j - 1]
-            ]);
+            ];
             found = true;
             break;
           }
@@ -169,11 +172,11 @@ class Island {
             j < this.width &&
             this.screenMatrix[this.height - i - 1][this.width - j - 1] !== 0
           ) {
-            corners.push([
+            this.corners.RO = [
               this.width - j - 1,
               this.height - i - 1,
               this.screenMatrix[this.height - i - 1][this.width - j - 1]
-            ]);
+            ];
             found = true;
             break;
           }
@@ -191,11 +194,11 @@ class Island {
             j < this.width &&
             this.screenMatrix[this.height - i - 1][j] !== 0
           ) {
-            corners.push([
+            this.corners.LO = [
               j,
               this.height - i - 1,
               this.screenMatrix[this.height - i - 1][j]
-            ]);
+            ];
             found = true;
             break;
           }
@@ -219,7 +222,7 @@ class Island {
         }
         if (found) {
           let medianY = tempY[Math.floor(tempY.length / 2)];
-          corners.push([x, medianY, this.screenMatrix[medianY][x]]);
+          this.corners.LO = [x, medianY, this.screenMatrix[medianY][x]];
           break;
         }
       }
@@ -236,7 +239,7 @@ class Island {
         }
         if (found) {
           let medianX = tempX[Math.floor(tempX.length / 2)];
-          corners.push([medianX, y, this.screenMatrix[y][medianX]]);
+          this.corners.LB = [medianX, y, this.screenMatrix[y][medianX]];
           break;
         }
       }
@@ -253,11 +256,11 @@ class Island {
         }
         if (found) {
           let medianY = tempY[Math.floor(tempY.length / 2)];
-          corners.push([
+          this.corners.RB = [
             this.width - x - 1,
             medianY,
             this.screenMatrix[medianY][this.width - x - 1]
-          ]);
+          ];
           break;
         }
       }
@@ -273,18 +276,18 @@ class Island {
         }
         if (found) {
           let medianX = tempX[Math.floor(tempX.length / 2)];
-          corners.push([
+          this.corners.RO = [
             medianX,
             this.height - y - 1,
             this.screenMatrix[this.height - y - 1][medianX]
-          ]);
+          ];
           break;
         }
       }
     }
 
-    console.log(corners);
-    console.log(corners[0]);
+    console.log(this.corners);
+    let corners = Object.values(this.corners);
 
    this.checkCorners(corners, 30);
 
@@ -294,7 +297,6 @@ class Island {
     corners.forEach(function(corner) {
       let cornerX = corner[0];
       let cornerY = corner[1];
-      console.log(cornerX, cornerY);
 
       let dX = cornerX - midX;
       let dY = cornerY - midY;
@@ -306,8 +308,6 @@ class Island {
     console.log(distances, maxDistance);
 
     //TODO Order the corners the right way
-    this.corners = corners;
-    return corners;
   }
 
   checkCorners(corners, radius) {
@@ -350,7 +350,7 @@ class Island {
 
   finishIsland() {
     this.midPoint = this.calcMid();
-    this.corners = this.findCorners();
+    this.findCorners();
     //this.orientation = this.findScreenOrientation();
   }
 
