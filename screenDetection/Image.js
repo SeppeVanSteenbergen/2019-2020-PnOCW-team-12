@@ -224,7 +224,7 @@ class Image {
     let newScreen;
     for (let i = 0; i < this.islands.length; i++) {
       this.drawIsland(this.islands[i]);
-      newScreen = this.islands[i].createScreen();
+      //newScreen = this.islands[i].createScreen(); //TODO left out for debugging
       this.screens.push(newScreen);
     }
   }
@@ -591,7 +591,7 @@ class Image {
   }
 
   drawCorners(island) {
-    for (let j = 0; j < 4; j++) {
+    for (let j = 0; j < island.corners.length; j++) {
       this.drawPoint(
           island.corners[j][0] + island.minx,
           island.corners[j][1] + island.miny,

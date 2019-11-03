@@ -92,7 +92,7 @@ class Island {
     const sd_threshold = 0.15;
 
     const testOffsetX = Math.max(Math.floor(ratio * this.width), minPixels);
-    const testOffsetY = Math.max(Math.floor(ratio * this.height), minPixels); //never used?
+    const testOffsetY = Math.max(Math.floor(ratio * this.height), minPixels);
 
     // Left variance
     let yValuesLeft = [];
@@ -106,7 +106,7 @@ class Island {
 
     let yValuesLeftVariance = Math.sqrt(
       yValuesLeft.reduce((t, n) => t + Math.pow(yValuesLeftAvg - n, 2)) /
-      yValuesLeft.length
+        yValuesLeft.length
     );
 
     //console.log('Left Variance: ' + yValuesLeftVariance);
@@ -204,9 +204,25 @@ class Island {
       }
     } else {
       // Perpendicular search
+      // left
 
-      let MIN_CORNER_DIST = 20; // in pixels
-      let dist = 0; //counter
+      let MIN_CORNER_DIST = 50; // in pixels
+
+      for (let x = 0; x < this.width; x++) {
+        let found = false;
+        let tempY = [];
+        for (let y = 0; y < this.height; y++) {
+          if (this.screenMatrix[y][x] !== 0) {
+            tempY.push(y);
+            found = true;
+          }
+        }
+        if (found) {
+          let medianY = tempY[Math.floor(tempY.length / 2)];
+          corners.push([x, medianY, this.screenMatrix[medianY][x]]);
+          break;
+        }
+      }
 
       // top
       for (let y = 0; y < this.height; y++) {
@@ -220,7 +236,6 @@ class Island {
         }
         if (found) {
           let medianX = tempX[Math.floor(tempX.length / 2)];
-          dist += this.width - medianX - 1;
           corners.push([medianX, y, this.screenMatrix[y][medianX]]);
           break;
         }
@@ -238,110 +253,87 @@ class Island {
         }
         if (found) {
           let medianY = tempY[Math.floor(tempY.length / 2)];
-
-          if (dist + medianY > MIN_CORNER_DIST) {
-            corners.push([
-              this.width - x - 1,
-              medianY,
-              this.screenMatrix[medianY][this.width - x - 1]
-            ]);
-            dist += this.height - medianY - 1;
-          } else {
-            dist = 0;
-          }
-
+          corners.push([
+            this.width - x - 1,
+            medianY,
+            this.screenMatrix[medianY][this.width - x - 1]
+          ]);
           break;
         }
       }
-
       // bottom
       for (let y = 0; y < this.height; y++) {
         let found = false;
         let tempX = [];
         for (let x = 0; x < this.width; x++) {
-          if (this.screenMatrix[this.height - y - 1][this.width - x - 1] !== 0) {
+          if (this.screenMatrix[this.height - y - 1][x] !== 0) {
             tempX.push(x);
             found = true;
           }
         }
         if (found) {
           let medianX = tempX[Math.floor(tempX.length / 2)];
-
-          if (dist + medianX > MIN_CORNER_DIST) {
-            corners.push([
-              medianX,
-              this.height - y - 1, this.screenMatrix[this.height - y - 1][medianX]]);
-            dist = this.width - medianX - 1;
-          } else {
-            dist = 0;
-          }
-
+          corners.push([
+            medianX,
+            this.height - y - 1,
+            this.screenMatrix[this.height - y - 1][medianX]
+          ]);
           break;
         }
       }
-
-      // left
-      for (let x = 0; x < this.width; x++) {
-        let found = false;
-        let tempY = [];
-        for (let y = 0; y < this.height; y++) {
-          if (this.screenMatrix[this.height - y - 1][x] !== 0) {
-            tempY.push(this.height - y - 1);
-            found = true;
-          }
-        }
-        if (found) {
-          let medianY = tempY[Math.floor(tempY.length / 2)];
-          if (dist + (this.height - medianY - 1) > MIN_CORNER_DIST) {
-            corners.push([x, medianY, this.screenMatrix[medianY][x]]);
-          }
-          break;
-        }
-      }
-
-      //temp
-      let cnt = 0;
-      for (let i = corners.length; i < 4; i++) {
-        corners.push([35, 35]);
-        cnt++;
-      }
-      console.log(cnt + " corners niet gevonden");
-
     }
 
-    //COMMENTED CODE DEPRECATED?
-    // console.log(corners);
-    // console.log(corners[0])
+    console.log(corners);
+    console.log(corners[0]);
 
-    // let distances = [];
-    // let midX = this.midPoint[0];
-    // let midY = this.midPoint[1];
-    // corners.forEach(function(corner) {
-    //   let cornerX = corner[0];
-    //   let cornerY = corner[1];
-    //   console.log(cornerX, cornerY);
+   this.checkCorners(corners, 30);
 
-    //   let dX = cornerX - midX;
-    //   let dY = cornerY - midY;
+    let distances = [];
+    let midX = this.midPoint[0] - this.minx;
+    let midY = this.midPoint[1] - this.miny;
+    corners.forEach(function(corner) {
+      let cornerX = corner[0];
+      let cornerY = corner[1];
+      console.log(cornerX, cornerY);
 
-    //   distances.push(Math.sqrt(dX * dX + dY * dY));
-    // });
+      let dX = cornerX - midX;
+      let dY = cornerY - midY;
 
-    // let maxDistance = Math.max(...distances);
-    // console.log(distances, maxDistance);
+      distances.push(Math.sqrt(dX * dX + dY * dY));
+    });
+
+    let maxDistance = Math.max(...distances);
+    console.log(distances, maxDistance);
 
     //TODO Order the corners the right way
     this.corners = corners;
     return corners;
   }
 
+  checkCorners(corners, radius) {
+    for(let i = 0; i < corners.length; i++) {
+      for(let j = i+1; j < corners.length; j++) {
+        if(this.calcDist(corners[i],corners[j]) <= radius) {
+          corners[i] = [(corners[i][0]+corners[j][0])/2, (corners[i][1]+corners[j][1])/2];
+          corners.splice(j,1);
+        }
+      }
+    }
+  }
+
+  calcDist(a,b) {
+    let dx = a[0] - b[0];
+    let dy = a[1] - b[1];
+    return Math.sqrt(dx * dx + dy * dy);
+  }
+
   calcMid() {
     let x_values = [];
     let y_values = [];
 
-    for (let y = 0; y < this.height; y++) {
-      for (let x = 0; x < this.width; x++) {
-        if (this.getMatrix(x, y) === this.circle) {
+    for(let y = 0; y < this.height; y++) {
+      for(let x = 0; x < this.width; x++) {
+        if(this.getMatrix(x,y) === this.circle) {
           x_values.push(x);
           y_values.push(y);
         }
@@ -359,7 +351,7 @@ class Island {
   finishIsland() {
     this.midPoint = this.calcMid();
     this.corners = this.findCorners();
-    this.orientation = this.findScreenOrientation();
+    //this.orientation = this.findScreenOrientation();
   }
 
   findScreenOrientation() {
@@ -388,15 +380,15 @@ class Island {
       case 3:
         this.reconstructTripleCorners()
         break;
-
+    
       default:
         break;
     }
   }
 
-  reconstructTripleCorners() {
+  reconstructTripleCorners(){
     //sort de 3 punten volgens x-co om inwendige hoek te bepalen
-    this.corners = this.corners.sort(function (a, b) { return a[0] >= b[0] });
+    this.corners = this.corners.sort(function(a, b){return a[0] >= b[0]});
 
     let vec1 = [this.corners[1], this.corners[0]];
     let vec2 = [this.corners[1], this.corners[2]];
@@ -414,7 +406,7 @@ class Island {
 
     let corner = math.add(vec1, mirror)[1]; //reconstructie van 4de punt
 
-    //console.log(corner);
+    console.log(corner);
 
     this.corners.push(corner);
   }
