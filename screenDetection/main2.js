@@ -23,7 +23,7 @@ imgElement.onload = function () {
 
   let imageTest = new Image(inputImage.getImgData(), "imageOutConcatenated", "HSLA", imgElement.width, imgElement.height);
   imageTest.createBigMask();
-  imageTest.medianBlurMatrix(5);
+  imageTest.medianBlurMatrix(3);
   imageTest.medianBlur(5);
   imageTest.createOffset(1);
   imageTest.createScreens();

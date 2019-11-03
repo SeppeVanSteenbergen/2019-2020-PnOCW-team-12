@@ -119,6 +119,7 @@ class Island {
 
     //console.log("diag: " + diagonalSearch);
 
+    diagonalSearch = false;
     if (diagonalSearch) {
       // Diagonal search
 
