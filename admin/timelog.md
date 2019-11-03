@@ -31,7 +31,7 @@ Week 6
     ------------|---------------|-------------------|-------------------|---------------|---------------|-----------
 TS              |               |                   |                   |               |               |
 SS              |               |                   |                   |               |               |   
-DV   FrameW(7)  |   FrameW(1)   |   FrameW(9)       |    cornerDet(4)   |   adv(8)      |               |
+DV   FrameW(7)  |   FrameW(1)   |   FrameW(9)       |    cornerDet(4)   |   adv(8)      |    adv(7)     |
 BB              |               |                   |                   |               |               |
-MD   adv( 9) |              |   adv(2)      |                   |   adv(9)  |   adv(8)   |
+MD   adv( 9)    |               |   adv(2)          |                   |   adv(9)      |      adv(8)   |
 FB              |               |                   |                   |               |               |
