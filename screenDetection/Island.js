@@ -414,7 +414,7 @@ class Island {
 
     let corner = math.add(vec1, mirror)[1]; //reconstructie van 4de punt
 
-    console.log(corner);
+    //console.log(corner);
 
     this.corners.push(corner);
   }
