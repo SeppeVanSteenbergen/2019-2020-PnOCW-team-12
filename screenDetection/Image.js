@@ -503,20 +503,20 @@ class Image {
       let x = pixel[0];
       let y = pixel[1];
       if (this.inGreenRange(H, S, L)) {
-        // this.pixels[i + 1] = 0;
-        // this.pixels[i + 2] = 100;
+         this.pixels[i + 1] = 0;
+        this.pixels[i + 2] = 100;
         this.matrix[y][x] = 1;
       } else if (this.inBlueRange(H, S, L)) {
-        // this.pixels[i + 1] = 0;
-        // this.pixels[i + 2] = 100;
+        this.pixels[i + 1] = 0;
+        this.pixels[i + 2] = 100;
         this.matrix[y][x] = 2;
       } else if (this.inMidRange(H, S, L)) {
-        // this.pixels[i + 1] = 0;
-        // this.pixels[i + 2] = 100;
+        this.pixels[i + 1] = 0;
+        this.pixels[i + 2] = 100;
         this.matrix[y][x] = 3;
       } else {
-        // this.pixels[i + 1] = 0;
-        // this.pixels[i + 2] = 0;
+        this.pixels[i + 1] = 0;
+        this.pixels[i + 2] = 0;
         this.matrix[y][x] = 0;
       }
     }
@@ -649,7 +649,7 @@ class Image {
    */
   drawFillRect(startCorner, endCorner, alpha) {
     let change = false;
-    if (this.getColorSpace() == 'HSLA') {
+    if (this.getColorSpace() === 'HSLA') {
       this.hslaToRgba();
       change = true;
     }

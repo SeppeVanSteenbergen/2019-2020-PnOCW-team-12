@@ -47,8 +47,8 @@ imgElement.onload = function() {
   );
   imageTest.createBigMask();
   imageTest.medianBlurMatrix(3);
-  imageTest.medianBlur(5);
-  imageTest.createOffset(1);
+  imageTest.medianBlur(3);
+  imageTest.createOffset(3);
   imageTest.createScreens();
   imageTest.hslaToRgba();
   imageTest.show();
