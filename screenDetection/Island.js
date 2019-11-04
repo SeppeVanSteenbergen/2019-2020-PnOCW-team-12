@@ -469,7 +469,7 @@ class Island {
   }
 
   recoScreen(distances) {
-    let lengthThresh = 0.8;
+    let lengthThresh = 0.7;
     // check LU and RD
     if (distances[0] !== null) {
       if (distances[2] !== null) {
