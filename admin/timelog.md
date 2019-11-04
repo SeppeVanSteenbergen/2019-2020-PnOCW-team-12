@@ -46,7 +46,7 @@ Week 5:
 
 Week 6:
 
-| Names              | Maandag              | Dinsdag              | Woensdag             | Donderdag            | Vrijdag              | Zaterdag             | Zondag               |
+| Names &nbsp; &nbsp; &nbsp; &nbsp;| Maandag &nbsp; &nbsp; &nbsp; &nbsp;| Dinsdag &nbsp; &nbsp; &nbsp; &nbsp;| Woensdag &nbsp; &nbsp; &nbsp; &nbsp;| Donderdag &nbsp; &nbsp; &nbsp; &nbsp;| Vrijdag &nbsp; &nbsp; &nbsp; &nbsp;| Zaterdag &nbsp; &nbsp; &nbsp; &nbsp;| Zondag &nbsp; &nbsp; &nbsp; &nbsp;|
 |--------------------|----------------------|----------------------|----------------------|----------------------|----------------------|----------------------|----------------------|
 |**TS**              |                      |                      |                      |                      |                      |                      |                      |
 |**SVS**             | adv (7)              |                      |                      |                      |                      |                      |                      |
