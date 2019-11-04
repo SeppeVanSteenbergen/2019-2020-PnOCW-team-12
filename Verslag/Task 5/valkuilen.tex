@@ -1,3 +1,15 @@
 \section{Valkuilen}
-Een Delaunay triangulatie werkt in vele gevallen. Enkel wanneer alle schermen colinear zijn, zal er geen triangulatie gevonden worden. Ook wanneer er minder dan drie schermen zijn, is een triangulatie niet mogelijk. Er kan dan geen driehoek gevormd worden.
-De gevonden triangulatie zal in de meeste gevallen uniek zijn. Enkel wanneer er meer dan drie punten op één cirkel liggen, kunnen er meerdere Delaunay triangulaties gevonden worden, dit zal echter geen valkuil vormen.
+In theorie kan er van elke opstelling waarbij de punten niet allemaal colineair zijn een triangulatie worden gevonden, zie figuur \ref{colineair}. Echter door afronding bij de berekeningen zal er bij bijna colineaire punten geen juiste delaunay triangulatie gevonden worden, zie figuur \ref{almost_colineair}. 
+
+\begin{figure}
+	\center
+	\includegraphics[width=0.4\textwidth]{colineair}
+	\caption{Van colineaire punten kan geen triangulatie gevonden worden.}
+	\label{colineair}
+\end{figure}
+\begin{figure}
+	\center
+	\includegraphics[width=0.4\textwidth]{almost_colinair}
+	\caption{Van bijna colineaire punten kan geen triangulatie gevonden worden door afrondingsfouten bij berekeningen.}
+	\label{almost_colineair}
+\end{figure}
