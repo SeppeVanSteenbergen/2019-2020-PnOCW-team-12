@@ -44,14 +44,14 @@
 \toprule
 \multicolumn{3}{l}{\large\textbf{Team 12}} \\
 \midrule
-Martijn Debeuf &  &  \\ % fill in the time spend on this task per team member who worked on it and the amount of lines of code (LOC) reviewed
-Frédéric Blondeel &  &  \\
+Martijn Debeuf & (1h) & (270 LOC) \\ % fill in the time spend on this task per team member who worked on it and the amount of lines of code (LOC) reviewed
+Frédéric Blondeel & (1.5h) & (600 LOC) \\
 \bottomrule
 \hline
 \end{tabular}\\
 \\
 Demo: \url{https://penocw.cs.kotnet.kuleuven.be:8012} \\
-Files reviewed: delaunayTriangulation.js/Triangle.js
+Files reviewed: delaunayTriangulation.js/Triangle.js ; Island.js
 
 \noindent
 {\color[HTML]{52BDEC} \rule{\linewidth}{1mm} }
@@ -83,7 +83,10 @@ is de oude syntax nog gehanteerd.
 \section{Advanced Screendetection}
 
 \begin{itemize}
-\item
+\item De findCorners() functie is zeer lang (ongeveer 200 lijnen code) en zou best opgesplitst worden in kleinere meer leesbare delen. De functie is ook redelijk complexe en zonder extra uitleg is deze lastig te begrijpen.
+\item Net zoals findCorners() is cleanCorners() moeilijk te snappen. Documentatie is bij deze 2 functies essentieel.
+\item Er is geen geschreven of geteste reden waarom in inRangeOf() de waarde "10" gebruikt.
+\item Elke functie heeft een grote nood aan extra uitleg in de vorm van documentatie. De code is zeer abstract en lang dus een korte uitleg is vereist. 
 \end{itemize}
 
 
