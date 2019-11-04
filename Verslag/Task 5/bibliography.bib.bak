@@ -1,3 +1,44 @@
 % Encoding: UTF-8
 
+@Misc{s-hull,
+  author = {David Sinclair},
+  title  = {S-hull: a fast sweep-hull routine for Delaunay triangulation},
+  year   = {2010},
+  url    = {s-hull.org},
+}
+
+@MastersThesis{high-perform delaunay,
+  author = {Erik Thune Lund},
+  title  = {Implementing High-Performance Delaunay Triangulation In Java},
+  school = {Department of Informatics, University of Oslo},
+  year   = {2014},
+  type   = {mathesis},
+  url    = {https://www.duo.uio.no/bitstream/handle/10852/43535/delaunay_alg_performance.pdf?sequence=1},
+}
+
+@Misc{delaunaywiki,
+  title = {Delaunay Triangulation},
+  url   = {https://en.wikipedia.org/wiki/Delaunay_triangulation},
+}
+
+@Book{toepMeetkunde,
+  title     = {Toepassingen van meetkunde in de informatica},
+  publisher = {Scientica Cursusdienst},
+  year      = {2007},
+  author    = {Dirk Roose},
+  editor    = {Dirk Roose},
+}
+
+@Misc{Bowyer-WatsonWiki,
+  title = {Bowyer-Watson algorithm},
+  url   = {https://en.wikipedia.org/wiki/Bowyer%E2%80%93Watson_algorithm},
+}
+
+@TechReport{boyler-watsonImplementation,
+  author      = {Sloan, S.W. and Houlsby, G.T.},
+  title       = {An implementation of Watson's algorithm for computing 2-dimensional Delaunay triangulations},
+  institution = {Department of Civil Engineering, University of Newcastle and Department of Engineering Science, University of Oxford},
+  year        = {1984},
+}
+
 @Comment{jabref-meta: databaseType:bibtex;}
