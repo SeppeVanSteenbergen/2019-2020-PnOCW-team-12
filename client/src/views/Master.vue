@@ -472,6 +472,29 @@ export default {
 
       this.$socket.emit('screenCommand', object)
     },
+    sendImageToUser(imgData, user_id = null) {
+      let base64 = this.imgDataToBase64(imgData)
+      console.log(base64)
+      let object = {
+        payload: {
+          type: 'display-image',
+          data: {
+            image: base64 // base64 image
+          }
+        },
+        to: user_id === null ? 'all' : user_id
+      }
+
+      this.$socket.emit('screenCommand', object)
+    },
+    imgDataToBase64(img) {
+      const c = document.createElement('canvas')
+      c.width = img.width
+      c.height = img.height
+      let ctx = c.getContext('2d')
+      ctx.putImageData(img, 0, 0)
+      return c.toDataURL('image/jpeg')
+    },
     getBase64Image() {
       console.log(this.$refs.video)
       console.log(this.$refs.video.videoWidth)
@@ -526,10 +549,14 @@ export default {
 
       let clientInfo = this.$store.state.roomClientInfo
 
-      this.analysedImage = AlgorithmService.fullAnalysis(
-        inputImageData,
-        clientInfo
-      )
+      try {
+        this.analysedImage = AlgorithmService.fullAnalysis(
+          inputImageData,
+          clientInfo
+        )
+      } catch (e) {
+        console.log(e)
+      }
       console.log(this.analysedImage)
 
       outC.width = inC.width
@@ -538,6 +565,32 @@ export default {
       outctx.putImageData(imgCopy, 0, 0)
 
       AlgorithmService.drawScreenOutlines(outC, this.analysedImage)
+
+      let midList = []
+
+      for (let i = 0; i < this.analysedImage.screens.length; i++) {
+        midList.push(this.analysedImage.screens[i].midPoint)
+      }
+
+      let triangulation = AlgorithmService.delaunay(midList)
+
+      let delaunayImgObject = AlgorithmService.delaunayImage(
+        triangulation,
+        outC
+      )
+
+      let imgList = {}
+      for (let i = 0; i < this.analysedImage.screens.length; i++) {
+        let code = this.analysedImage.screens[i].clientCode
+        imgList[code] = {
+          user_id: this.myRoom.clients[code],
+          imgData: this.analysedImage.screens[i].mapToScreen(delaunayImgObject)
+        }
+      }
+
+      for (let i = 0; i < Object.keys(imgList).length; i++) {
+        this.sendImageToUser(imgList[i].imgData, imgList[i].user_id)
+      }
     }
   },
   mounted() {

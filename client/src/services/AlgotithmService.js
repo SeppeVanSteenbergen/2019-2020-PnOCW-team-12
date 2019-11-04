@@ -1,4 +1,5 @@
 import Image from '../algorithms/Image'
+import Delaunay from '../algorithms/Delaunay'
 
 export default {
   fullAnalysis(imgData, clientInfo) {
@@ -38,5 +39,36 @@ export default {
     let dst = ctx.createImageData(src.width, src.height)
     dst.data.set(src.data)
     return dst
+  },
+
+  delaunay(points) {
+    return Delaunay.triangulation(points)
+  },
+
+  delaunayImage(triangulation, canv) {
+    let c = document.createElement('canvas')
+    c.width = canv.width
+    c.height = canv.height
+    let ctx = c.getContext('2d')
+    ctx.fillStyle = '#ffffff'
+    ctx.fillRect(0, 0, c.width, c.height)
+
+    for (let i = 0; i < triangulation.length; i++) {
+      this.drawTriangle(triangulation[i], ctx)
+    }
+
+    return ctx.getImageData(0,0,c.width, c.height)
+  },
+
+  drawTriangle(triangle, ctx) {
+    ctx.beginPath()
+    ctx.moveTo(triangle.point1[0], triangle.point1[1])
+    ctx.lineTo(triangle.point2[0], triangle.point2[1])
+    ctx.lineTo(triangle.point3[0], triangle.point3[1])
+    ctx.lineTo(triangle.point1[0], triangle.point1[1])
+    ctx.closePath()
+    ctx.lineWidth = 5
+    ctx.strokeStyle = '#000'
+    ctx.stroke()
   }
 }
