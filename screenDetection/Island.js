@@ -438,46 +438,77 @@ class Island {
     if(distances[0] !== null) {
       if(distances[2] !== null) {
         if(!this.inRangeOf(distances[0],distances[2]) && distances[0] > distances[2]) {
-          this.corners.RD = [this.midPoint[0] + (this.midPoint[0] - this.corners.LU[0]),
-            this.midPoint[1] + (this.midPoint[1] - this.corners.LU[1]), 0];
+          this.corners.RD = [
+            this.midPoint[0] + (this.midPoint[0] - this.corners.LU[0]),
+            this.midPoint[1] + (this.midPoint[1] - this.corners.LU[1]),
+            this.corners.RD[2]
+          ];
         } else if(!this.inRangeOf(distances[0],distances[2])) {
-          this.corners.LU = [this.midPoint[0] - (this.corners.RD[0] - this.midPoint[0]),
-            this.midPoint[1] - (this.corners.RD[1] - this.midPoint[1]), 0];
+          this.corners.LU = [
+            this.midPoint[0] - (this.corners.RD[0] - this.midPoint[0]),
+            this.midPoint[1] - (this.corners.RD[1] - this.midPoint[1]),
+            this.corners.LU[2]
+          ];
         }
       }
       //distances[2](RD) equals null
       if(distances[2] === null) {
-        this.corners.RD = [this.midPoint[0] + (this.midPoint[0] - this.corners.LU[0]),
-          this.midPoint[1] + (this.midPoint[1] - this.corners.LU[1]), 0];
+        this.corners.RD = [
+          this.midPoint[0] + (this.midPoint[0] - this.corners.LU[0]),
+          this.midPoint[1] + (this.midPoint[1] - this.corners.LU[1]),
+          this.switchColor(this.corners.LU)
+        ];
       }
     } else if(distances[0] === null) {
       //distances[0](LU) equals null
-      this.corners.LU = [this.midPoint[0] - (this.corners.RD[0] - this.midPoint[0]),
-        this.midPoint[1] - (this.corners.RD[1] - this.midPoint[1]), 0];
+      this.corners.LU = [
+        this.midPoint[0] - (this.corners.RD[0] - this.midPoint[0]),
+        this.midPoint[1] - (this.corners.RD[1] - this.midPoint[1]),
+        this.switchColor(this.corners.RD)
+      ];
     }
 
     //check RU and LD
     if(distances[1] !== null) {
       if(distances[3] !== null) {
         if(!this.inRangeOf(distances[1],distances[3]) && distances[1] > distances[3]) {
-          this.corners.LD = [this.midPoint[0] - (this.corners.RU[0] - this.midPoint[0]),
-            this.midPoint[1] + (this.midPoint[1] - this.corners.RU[1]), 0];
+          this.corners.LD = [
+            this.midPoint[0] - (this.corners.RU[0] - this.midPoint[0]),
+            this.midPoint[1] + (this.midPoint[1] - this.corners.RU[1]),
+            this.corners.LD[2]
+          ];
         } else if(!this.inRangeOf(distances[1],distances[3])){
-          this.corners.RU = [this.midPoint[0] + (this.midPoint[0] - this.corners.LD[0]),
-            this.midPoint[1] - (this.corners.LD[1] - this.midPoint[1]), 0];
+          this.corners.RU = [
+            this.midPoint[0] + (this.midPoint[0] - this.corners.LD[0]),
+            this.midPoint[1] - (this.corners.LD[1] - this.midPoint[1]),
+            this.corners.RU[2]
+          ];
         }
       }
       //distances[3](LD) equals null
       if(distances[3] === null) {
-        this.corners.LD = [this.midPoint[0] - (this.corners.RU[0] - this.midPoint[0]),
-        this.midPoint[1] + (this.midPoint[1] - this.corners.RU[1]), 0];
+        this.corners.LD = [
+          this.midPoint[0] - (this.corners.RU[0] - this.midPoint[0]),
+          this.midPoint[1] + (this.midPoint[1] - this.corners.RU[1]),
+          this.switchColor(this.corners.RD)
+        ];
       }
     } else if(distances[1] === null) {
       //distances[1](RU) equals null
-      this.corners.RU = [this.midPoint[0] + (this.midPoint[0] - this.corners.LD[0]),
-        this.midPoint[1] - (this.corners.LD[1] - this.midPoint[1]), 0];
+      this.corners.RU = [
+        this.midPoint[0] + (this.midPoint[0] - this.corners.LD[0]),
+        this.midPoint[1] - (this.corners.LD[1] - this.midPoint[1]),
+        this.switchColor(this.corners.LD)
+      ];
     }
   }
+
+  switchColor(corner) {
+    if(corner[2] === this.blue)
+      return this.green;
+    else return this.blue;
+  }
+
   finishIsland() {
     this.midPoint = this.calcMid();
     this.findCorners();
