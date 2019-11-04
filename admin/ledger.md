@@ -70,3 +70,21 @@ Meeting 4 (28/10/2019)
         - Bezig met implementeren client
         - Triangulation is voor Frédéric en Toon
         - Dirk houdt zich vooral bezig met implementatie screen detection
+
+Meeting 5 (04/11/2019)
+    Task 4: (Martijn, Seppe en Bert)
+        - Overlap hoeken zoeken werkt
+        - nu
+            - testen maken
+            - verslag schrijven
+    Task 5: (Dirk, Frédéric, Toon)
+        - Delaunay triangulatie is perfect
+        - nu
+            - triangulatie displayen (Dirk)
+            - verslag schrijven
+    Algemeen:
+        - 21u verslagen klaar om na te lezen
+        - Tegen volgende week:
+            - task 6 (Dirk, Seppe)
+            - task 7 (Martijn, Bert)
+            - Opruimen en optimaliseren (Toon, Frédéric)
