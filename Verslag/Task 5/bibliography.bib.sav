@@ -3,7 +3,7 @@
 @Misc{s-hull,
   author       = {David Sinclair},
   title        = {S-hull: a fast sweep-hull routine for Delaunay triangulation},
-  howpublished = {\url{s-hull.org}},
+  howpublished = {\},
   year         = {2010},
   url          = {s-hull.org},
 }
@@ -32,9 +32,8 @@
 }
 
 @Misc{Bowyer-WatsonWiki,
-  title        = {Bowyer-Watson algorithm},
-  howpublished = {\url{https://en.wikipedia.org/wiki/Bowyer%E2%80%93Watson_algorithm}},
-  url          = {https://en.wikipedia.org/wiki/Bowyer%E2%80%93Watson_algorithm},
+  title = {Bowyer-Watson algorithm},
+  url   = {https://en.wikipedia.org/wiki/Bowyer%E2%80%93Watson_algorithm},
 }
 
 @TechReport{boyler-watsonImplementation,
