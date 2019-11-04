@@ -1,46 +1,56 @@
+Team members:
+
 Toon Sauvillers (CEO) -> TS
 
-Seppe Van Steenbergen (CTO) -> SS
+Seppe Van Steenbergen (CTO) -> SVS
 
 Dirk Vanbeveren (TC1) -> DV
 
-Bert Van den Bosch (TC2) -> BB
+Bert Van den Bosch (TC2) -> BVDB
 
 Martijn Debeuf (Code Reviewer) -> MD
 
 Frédéric Blondeel (Code Reviewer) -> FB
 
 Timelog:
+
 --> Schrijf aan welke taak/feature met (aantal uren)
+
+| Names &nbsp; &nbsp; &nbsp; &nbsp;| Maandag &nbsp; &nbsp; &nbsp; &nbsp;| Dinsdag &nbsp; &nbsp; &nbsp; &nbsp;| Woensdag &nbsp; &nbsp; &nbsp; &nbsp;| Donderdag &nbsp; &nbsp; &nbsp; &nbsp;| Vrijdag &nbsp; &nbsp; &nbsp; &nbsp;| Zaterdag &nbsp; &nbsp; &nbsp; &nbsp;| Zondag &nbsp; &nbsp; &nbsp; &nbsp;|
+|--------------------|----------------------|----------------------|----------------------|----------------------|----------------------|----------------------|----------------------|
+|**TS**              |                      |                      |                      |                      |                      |                      |                      |
+|**SVS**             |                      |                      |                      |                      |                      |                      |                      |
+|**DV**              |                      |                      |                      |                      |                      |                      |                      |
+|**BVDB**            |                      |                      |                      |                      |                      |                      |                      |
+|**MD**              |                      |                      |                      |                      |                      |                      |                      |
+|**FB**              |                      |                      |                      |                      |                      |                      |                      |
+
 Week 1
+
 Week 2
+
 Week 3
+
 Week 4
-    maandag     |   dinsdag     |   woensdag        |   donderdag       |   vrijdag     |   zaterdag    |   zondag
-    ------------|---------------|-------------------|-------------------|---------------|---------------|-----------
-TS              |               |                   |                   |               |               |
-SS              |               |                   |                   |               |               | 
-DV              |               |                   |                   |               |               |
-BB              |               |                   |                   |               |               |
-MD              |               |                   |                   |               |               |
-FB              |               |                   |                   |               |               |
 
-Week 5
-    maandag     |   dinsdag     |   woensdag        |   donderdag       |   vrijdag     |   zaterdag    |   zondag
-    ------------|---------------|-------------------|-------------------|---------------|---------------|-----------
-TS  Triang (4,5)| Triang (4)    | Triang (4)        |                   |               |               |
-SS   adv(6)     |   adv(4)      |   adv(2)          |    adv(2)         |               |    adv(6)     |
-DV   FrameW(7)  |   FrameW(1)   |   FrameW(9)       |    cornerDet(4)   |   adv(8)      |    adv(7)     |  adv(1)
-BB              |               |                   |                   |               |               |
-MD   adv(9)     |               |   adv(2)          |                   |   adv(9)      |    adv(8)     |
-FB   triang(2.5)|               |                   |    adv(2)         |   adv(13)     |               |
+Week 5:
 
-Week 6
-    maandag     |   dinsdag     |   woensdag        |   donderdag       |   vrijdag     |   zaterdag    |   zondag
-    ------------|---------------|-------------------|-------------------|---------------|---------------|-----------
-TS  Task 5 (7)  |               |                   |                   |               |               |
-SS              |               |                   |                   |               |               | 
-DV   Task4-5(9) |               |                   |                   |               |               |
-BB              |               |                   |                   |               |               |
-MD              |               |                   |                   |               |               |
-FB              |               |                   |                   |               |               |
+| Names &nbsp; &nbsp; &nbsp; &nbsp;| Maandag &nbsp; &nbsp; &nbsp; &nbsp;| Dinsdag &nbsp; &nbsp; &nbsp; &nbsp;| Woensdag &nbsp; &nbsp; &nbsp; &nbsp;| Donderdag &nbsp; &nbsp; &nbsp; &nbsp;| Vrijdag &nbsp; &nbsp; &nbsp; &nbsp;| Zaterdag &nbsp; &nbsp; &nbsp; &nbsp;| Zondag &nbsp; &nbsp; &nbsp; &nbsp;|
+|--------------------|----------------------|----------------------|----------------------|----------------------|----------------------|----------------------|----------------------|
+|**TS**              | Triang (4,5)         | Triang (4)           | Triang (4)           |                      |                      |                      |                      |
+|**SVS**             | adv (6)              | adv (4)              | adv (2)              | adv (2)              |                      | adv (7)              | adv (9)              |
+|**DV**              | FrameW (7)           | FrameW (1)           | FrameW (9)           | cornerDet (4)        | adv (8)              | adv (7)              | adv (1)              |
+|**BVDB**            |                      |                      |                      |                      |                      |                      |                      |
+|**MD**              | adv (9)              |                      | adv (2)              |                      | adv (9)              | adv (8)              |                      |
+|**FB**              | triang (2,5)         |                      |                      | adv (2)              | adv (13)             |                      |                      |
+
+Week 6:
+
+| Names              | Maandag              | Dinsdag              | Woensdag             | Donderdag            | Vrijdag              | Zaterdag             | Zondag               |
+|--------------------|----------------------|----------------------|----------------------|----------------------|----------------------|----------------------|----------------------|
+|**TS**              |                      |                      |                      |                      |                      |                      |                      |
+|**SVS**             | adv (7)              |                      |                      |                      |                      |                      |                      |
+|**DV**              |                      |                      |                      |                      |                      |                      |                      |
+|**BVDB**            |                      |                      |                      |                      |                      |                      |                      |
+|**MD**              |                      |                      |                      |                      |                      |                      |                      |
+|**FB**              |                      |                      |                      |                      |                      |                      |                      |
