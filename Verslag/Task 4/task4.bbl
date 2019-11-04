@@ -1,3 +1,7 @@
-\begin{thebibliography}{}
+\begin{thebibliography}{1}
+
+\bibitem{floodfill}
+Wikipedia floodfill.
+\newblock \url{https://nl.wikipedia.org/wiki/Floodfill-algoritme}.
 
 \end{thebibliography}

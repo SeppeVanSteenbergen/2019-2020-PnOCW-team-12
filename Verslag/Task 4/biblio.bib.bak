@@ -1,6 +1,7 @@
 % Encoding: UTF-8
 
 @Misc{floodfill,
+  title        = {Wikipedia Floodfill},
   howpublished = {/url{https://nl.wikipedia.org/wiki/Floodfill-algoritme}},
   url          = {https://nl.wikipedia.org/wiki/Floodfill-algoritme},
 }
