@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7000 64-bit) (preloaded format=pdflatex 2019.5.22)  4 NOV 2019 21:51
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7000 64-bit) (preloaded format=pdflatex 2019.5.22)  4 NOV 2019 21:57
 entering extended mode
 **./task4.tex
 (task4.tex
@@ -569,7 +569,19 @@ File: island.jpeg Graphic file (type jpg)
 Package pdftex.def Info: island.jpeg  used on input line 21.
 (pdftex.def)             Requested size: 426.79135pt x 294.81367pt.
  [3 <./island.jpeg>]
-(testen.tex)) [4] (besluit.tex) [5] (task4.bbl
+(testen.tex
+<correct-resultaat.png, id=92, 1284.8pt x 722.7pt>
+File: correct-resultaat.png Graphic file (type png)
+<use correct-resultaat.png>
+Package pdftex.def Info: correct-resultaat.png  used on input line 8.
+(pdftex.def)             Requested size: 0.0pt x 0.0pt.
+<fout-resultaat.png, id=93, 1284.8pt x 722.7pt>
+File: fout-resultaat.png Graphic file (type png)
+<use fout-resultaat.png>
+Package pdftex.def Info: fout-resultaat.png  used on input line 16.
+(pdftex.def)             Requested size: 0.0pt x 0.0pt.
+)) [4] (besluit.tex) [5 <./correct-resultaat.png> <./fout-resultaat.png>] (task
+4.bbl
 LaTeX Font Info:    Try loading font information for T1+lmtt on input line 5.
 
 ("C:\Users\toons\AppData\Local\Programs\MiKTeX 2.9\tex/latex/lm\t1lmtt.fd"
@@ -589,29 +601,25 @@ Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 79.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 79.
 Package rerunfilecheck Info: File `task4.out' has not changed.
 (rerunfilecheck)             Checksum: 4DC0962408657F038D744477AF4981C4;674.
-
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 79.
  ) 
 Here is how much of TeX's memory you used:
- 9723 strings out of 492945
- 154203 string characters out of 3126252
- 290048 words of memory out of 3000000
- 13395 multiletter control sequences out of 15000+200000
+ 9737 strings out of 492945
+ 154480 string characters out of 3126252
+ 291146 words of memory out of 3000000
+ 13405 multiletter control sequences out of 15000+200000
  36451 words of font info for 62 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 42i,8n,40p,1020b,348s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 42i,8n,40p,1020b,352s stack positions out of 5000i,500n,10000p,200000b,50000s
 {C:/Users/toons/AppData/Local/Programs/MiKTeX 2.9/fonts/enc/dvips/lm/lm-ec.en
 c}<C:/Users/toons/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/lm/lmbx1
 0.pfb><C:/Users/toons/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/lm/l
 mbx12.pfb><C:/Users/toons/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/public/
 lm/lmr10.pfb><C:/Users/toons/AppData/Local/Programs/MiKTeX 2.9/fonts/type1/publ
 ic/lm/lmtt10.pfb>
-Output written on task4.pdf (6 pages, 383454 bytes).
+Output written on task4.pdf (6 pages, 397129 bytes).
 PDF statistics:
- 128 PDF objects out of 1000 (max. 8388607)
- 24 named destinations out of 1000 (max. 500000)
- 9835 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 135 PDF objects out of 1000 (max. 8388607)
+ 26 named destinations out of 1000 (max. 500000)
+ 9845 words of extra memory for PDF output out of 10000 (max. 10000000)
 
