@@ -289,10 +289,10 @@ class Island {
       this.cleanCorners(corners, 30);
     }
 
-    // if (Object.values(this.corners).includes(null)) {
-    //   let distances = this.distToMid();
-    //   this.recoScreen(distances);
-    // }
+    if (Object.values(this.corners).includes(null)) {
+      let distances = this.distToMid();
+      this.recoScreen(distances);
+    }
 
     //TODO Order the corners the right way
     console.log(this.corners);
@@ -373,7 +373,7 @@ class Island {
           this.corners.LU = T;
         } else this.corners.RU = T;
       }
-    }
+    } else this.corners = corners;
   }
 
   OldcleanCorners(radius) {
