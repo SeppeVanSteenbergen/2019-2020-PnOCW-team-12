@@ -288,11 +288,9 @@ class Island {
 
       this.cleanCorners(corners, 30);
     }
-
-    if (Object.values(this.corners).includes(null)) {
-      let distances = this.distToMid();
-      this.recoScreen(distances);
-    }
+    
+    let distances = this.distToMid();
+    this.recoScreen(distances);
   }
 
   cleanCorners(corners, radius) {

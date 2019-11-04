@@ -112,7 +112,7 @@
         }
 
 
-        this.drawX(20);
+        this.drawX(40);
 
         return barWidth;
 	  }
@@ -143,11 +143,11 @@
       }
 	}
 
-  const borderWidth = screen.width * 0.02;
+  const borderWidth = screen.width * 0.1;
   const c = document.getElementById("canv");
   
   let drawer = new DetectionDrawer(c, screen, borderWidth);
-  drawer.drawX(20);
+  drawer.drawX(40);
 
   // for console use
   let barcode = (code,sections) => drawer.barcode(code,sections);
