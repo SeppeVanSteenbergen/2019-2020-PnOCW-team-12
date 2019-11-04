@@ -20,7 +20,6 @@ class Image {
     this.sensitivity = 12;
     this.colorSpaces = ['RGBA', 'HSLA', 'BW'];
     this.islandID = 4; //jumps per two so we can save green and blue within an island.
-    this.MIN_ISLAND_SIZE = 1000;
     this.screens = [];
 
     /*lowerBoundG = [120 - this.sensitivity, 50, 25];
@@ -157,15 +156,15 @@ class Image {
             this.islandID
           );
           newIsland.add(newIslandCoo[2], newIslandCoo[3]);
-          newIsland.setScreenMatrix(this.matrix);
-          newIsland.finishIsland();
           tmpIslands.push(newIsland);
           this.islandID += 3;
         }
       }
     }
     for (let i = 0; i < tmpIslands.length; i++) {
-      if (tmpIslands[i].size() > this.MIN_ISLAND_SIZE) {
+      if (tmpIslands[i].isValidIsland()) {
+        tmpIslands[i].setScreenMatrix(this.matrix);
+        tmpIslands[i].finishIsland();
         this.islands.push(tmpIslands[i]);
       }
     }
