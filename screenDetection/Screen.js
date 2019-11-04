@@ -41,7 +41,7 @@ class Screen {
       this.clientCode = this.findClientCode(transformedTempImage);
       console.log('clientCode: ' + this.clientCode);
 
-      if (typeof this.clientInfo !== 'undefined') {
+      if (typeof this.clientInfo !== 'undefined' && this.clientCode !== null) {
         this.width = this.clientInfo[this.clientCode].size.width;
         this.height = this.clientInfo[this.clientCode].size.height;
 
@@ -63,7 +63,11 @@ class Screen {
   findClientCode(img) {
     let barcode = BarcodeScanner.scan(img, 0.15);
     console.log('barcode: ' + barcode);
-    return PermutationConverter.decode(barcode);
+    if(barcode !== null) {
+      return PermutationConverter.decode(barcode);
+    }
+    return null;
+
   }
 
   /**
