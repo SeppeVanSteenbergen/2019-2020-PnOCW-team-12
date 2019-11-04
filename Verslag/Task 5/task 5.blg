@@ -1,5 +1,55 @@
+<<<<<<< HEAD
 This is BibTeX, Version 0.99dThe top-level auxiliary file: task 5.aux
 The style file: unsrt.bst
 Database file #1: bibliography.bib
 Warning--can't use both author and editor fields in toepMeetkunde
+=======
+This is BibTeX, Version 0.99d (TeX Live 2019)
+Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
+The top-level auxiliary file: task 5.aux
+The style file: unsrt.bst
+Database file #1: bibliography.bib
+Warning--can't use both author and editor fields in toepMeetkunde
+You've used 6 entries,
+            1791 wiz_defined-function locations,
+            476 strings with 4386 characters,
+and the built_in function-call counts, 759 in all, are:
+= -- 64
+> -- 22
+< -- 0
++ -- 11
+- -- 5
+* -- 15
+:= -- 123
+add.period$ -- 16
+call.type$ -- 6
+change.case$ -- 7
+chr.to.int$ -- 0
+cite$ -- 7
+duplicate$ -- 37
+empty$ -- 97
+format.name$ -- 5
+if$ -- 176
+int.to.chr$ -- 0
+int.to.str$ -- 6
+missing$ -- 2
+newline$ -- 31
+num.names$ -- 4
+pop$ -- 29
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 0
+skip$ -- 20
+stack$ -- 0
+substring$ -- 0
+swap$ -- 5
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 0
+warning$ -- 1
+while$ -- 4
+width$ -- 7
+write$ -- 58
+>>>>>>> master
 (There was 1 warning)
