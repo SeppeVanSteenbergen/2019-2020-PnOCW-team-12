@@ -9,5 +9,5 @@
 \contentsline {subsection}{\numberline {2.6}Clean Corners}{3}{subsection.2.6}% 
 \contentsline {subsection}{\numberline {2.7}Reconstructie}{4}{subsection.2.7}% 
 \contentsline {section}{\numberline {3}Testen}{4}{section.3}% 
-\contentsline {section}{\numberline {4}Valkuilen}{4}{section.4}% 
-\contentsline {section}{\numberline {5}Besluit}{4}{section.5}% 
+\contentsline {section}{\numberline {4}Valkuilen}{5}{section.4}% 
+\contentsline {section}{\numberline {5}Besluit}{5}{section.5}% 
