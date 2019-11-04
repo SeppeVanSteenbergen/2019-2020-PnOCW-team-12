@@ -1,34 +1,5 @@
 class Delaunay {
 
-  static randomPointsGenerator(nbPoints, canvas) {
-    let pointList = []
-    for (let i = 0; i < nbPoints; i++) {
-      let x = Math.floor(Math.random() * canvas.width)
-      let y = Math.floor(Math.random() * canvas.height)
-      pointList.push([x, y])
-    }
-    return pointList
-  }
-
-
-  static calcDistance(point1, point2) {
-    return Math.sqrt(Math.pow(point1[0] - point2[0], 2) + Math.pow(point1[1] - point2[1], 2))
-  }
-
-  /*
-  input points = array of all points
-  sorts all points in points in function of distance to seedPoint in descending order to seedPoint
-  */
-  radialSort(points, point) {
-    points.sort(function (a, b) {
-      let distanceA = calcDistance(a, point)
-      let distanceB = calcDistance(b, point)
-      return distanceB - distanceA
-    })
-
-    return points
-  }
-
   static triangulation(points, width, height) {
     if (points.length < 3) {
       return
@@ -39,19 +10,17 @@ class Delaunay {
     for (let i = 0; i < points.length; i++) {
       let badTriangles = []
       for (let tri = 0; tri < triangulation.length; tri++) {
-        let radius = this.calcRadius(triangulation[tri].point1, triangulation[tri].point2, triangulation[tri].point3)
-        let center = this.calcCenter(triangulation[tri].point1, triangulation[tri].point2, triangulation[tri].point3)
-        if (this.inCircle(points[i], radius, center)) {
+        if (triangulation[tri].inCircle(points[i])) {
           badTriangles.push(triangulation[tri])
         }
       }
-      let polygon = []
-      //let edges = []
+      /* 
+        check if any other triangle in badTriangles also has this edge
+        t = triangle, ot = other triangle, ote = other triangle edge
+      */
+     let polygon = []
       for (let t = 0; t < badTriangles.length; t++) {
-
         for (let e = 0; e < badTriangles[t].edges.length; e++) {
-          // check if any other triangle in badTriangles also has this edge
-          // t = triangle, ot = other triangle, ote = other triangle edge
           let edgeShared = false
           for (let ot = 0; ot < badTriangles.length; ot++) {
             if (ot !== t) {
@@ -67,20 +36,6 @@ class Delaunay {
 
         }
       }
-      /*for(let e1 = 0; e1 < edges.length - 1; e1++){
-          for(let e2 = e1 + 1; e2 < edges.length; e2++){
-              if(equalEdges(edges[e1], edges[e2])){
-                  edges[e2] = null
-                  edges[e1] = null
-                  break
-              }
-          }
-      }
-      for(let e = 0; e < edges.length; e++){
-          if(edges[e] !== null){
-              polygon.push(edges[e])
-          }
-      }*/
 
       for (let i = 0; i < badTriangles.length; i++) {
         triangulation = this.arrayRemove(triangulation, badTriangles[i])
@@ -109,75 +64,6 @@ class Delaunay {
     return newArray
   }
 
-//correct
-//math for finding center of 3 points from paulbourke.net/geometry/circlesphere
-  static calcCenter(point1, point2, point3) {
-    let ma = (point2[1] - point1[1]) / (point2[0] - point1[0])
-    let mb = (point3[1] - point2[1]) / (point3[0] - point2[0])
-    let counter = 3
-    while (counter > 0 && (!isFinite(ma) || !isFinite(mb) || ma === mb || ma === 0 || mb === 0)) {
-      let helpPoint = point1.slice(0)
-      point1 = point2.slice(0)
-      point2 = point3.slice(0)
-      point3 = helpPoint
-      ma = (point2[1] - point1[1]) / (point2[0] - point1[0])
-      mb = (point3[1] - point2[1]) / (point3[0] - point2[0])
-      counter--
-    }
-    let centerX = (ma * mb * (point1[1] - point3[1]) + mb * (point1[0] + point2[0]) - ma * (point2[0] + point3[0])) / (2 * (mb - ma))
-
-
-    let centerY = -(centerX - (point1[0] + point2[0]) / 2) / ma + (point1[1] + point2[1]) / 2
-    return [centerX, centerY]
-  }
-
-//correct
-  static calcRadius(point1, point2, point3) {
-    // console.log("3 punten", point1, point2, point3)
-    let dist1 = this.calcDistance(point2, point3)
-    let dist2 = this.calcDistance(point1, point3)
-    let dist3 = this.calcDistance(point1, point2)
-    let numerator = dist1 * dist2 * dist3
-    let denumerator = Math.sqrt((dist1 + dist2 + dist3) * (dist2 + dist3 - dist1) * (dist3 + dist1 - dist2) * (dist1 + dist2 - dist3))
-    return numerator / denumerator
-  }
-
-//correct
-  /*
-      calculates crossproduct between two points, point3 as basis
-  */
-  static crossProduct(p1, p2, p3) {
-    let crossProduct = (p1[0] - p3[0]) * (p2[1] - p3[1]) - (p2[0] - p3[0]) * (p2[1] - p3[1])
-    return crossProduct
-  }
-
-//correct
-  /*
-      point as Array
-      triangle as Triangle
-      Returns true if point is in triangle, otherwise false
-  */
-  static inTriangle(point, triangle) {
-    let edge1 = [triangle.point1, triangle.point2]
-    let edge2 = [triangle.point2, triangle.point3]
-    let edge3 = [triangle.point3, triangle.point1]
-    //point is in triangle if it lies at same side of the 3 edges
-    //Same side of edge1 and edge2
-    //crossProdcut is positive if point lays at same side of edgex and edgey
-    if (this.crossProduct(edge1[1], point, edge1[0]) * this.crossProduct(edge2[1], point, edge2[0]) >= 0)
-    //Same side of edge2 and edge3
-      if (this.crossProduct(edge2[1], point, edge2[0]) * this.crossProduct(edge3[1], point, edge3[0]) >= 0)
-        return true
-    return false
-  }
-
-//correct
-  static inCircle(point, radius, center) {
-    return Math.pow(point[0] - center[0], 2) + Math.pow(point[1] - center[1], 2) <= Math.pow(radius, 2);
-
-  }
-
-//correct
   static superTriangle(width, height) {
     let g = width > height ? width : height
     g *= g
@@ -189,7 +75,50 @@ class Delaunay {
   }
 
 
-//Testfunctions
+  /////////////Testfunctions////////////////
+  /*
+     calculates crossproduct between two points, point3 as basis
+  */
+  static crossProduct(p1, p2, p3) {
+    let crossProduct = (p1[0] - p3[0]) * (p2[1] - p3[1]) - (p2[0] - p3[0]) * (p2[1] - p3[1])
+    return crossProduct
+  }
+
+  static inCircle(point, radius, center) {
+    return Math.pow(point[0] - center[0], 2) + Math.pow(point[1] - center[1], 2) <= Math.pow(radius, 2);
+
+  }
+  /*
+    point as Array
+    triangle as Triangle
+    Returns true if point is in triangle, otherwise false
+  */
+  static inTriangle(point, triangle) {
+    let edge1 = [triangle.point1, triangle.point2]
+    let edge2 = [triangle.point2, triangle.point3]
+    let edge3 = [triangle.point3, triangle.point1]
+    /*
+      point is in triangle if it lies at same side of the 3 edges
+      Product of crossProducts is positive if point lays at same side of edgex and edgey
+    */
+    //Same side of edge1 and edge2
+    if (this.crossProduct(edge1[1], point, edge1[0]) * this.crossProduct(edge2[1], point, edge2[0]) >= 0)
+      //Same side of edge2 and edge3
+      if (this.crossProduct(edge2[1], point, edge2[0]) * this.crossProduct(edge3[1], point, edge3[0]) >= 0)
+        return true
+    return false
+  }
+
+  static randomPointsGenerator(nbPoints, canvas) {
+    let pointList = []
+    for (let i = 0; i < nbPoints; i++) {
+      let x = Math.floor(Math.random() * canvas.width)
+      let y = Math.floor(Math.random() * canvas.height)
+      pointList.push([x, y])
+    }
+    return pointList
+  }
+
   static testInTriangle() {
     let point1 = [0, 0]
     let point2 = [0, 2]
@@ -232,7 +161,7 @@ class Delaunay {
     let superTriangle = this.superTriangle(points)
     console.log("check")
     for (let i = 0; i < points.length; i++) {
-      console.assert(this.inTriangle(points[i], this.superTriangle), "Point " + points[i] + " should be in triangle")
+      console.assert(this.inTriangle(points[i], superTriangle), "Point " + points[i] + " should be in triangle")
     }
     console.log("end check")
   }
