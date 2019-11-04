@@ -1,21 +1,22 @@
 class Screen {
 
 
-  constructor(corners, orientation, midPoint) {
-    /*this.corners;
-    this.orientation;
-    this.size;
-    this.imgData;
-    this.clientCode;
-    this.midPoint;
+  constructor(corners, orientation, midPoint, clientInfo) {
+    this.corners = null;
+    this.orientation = null;
+    this.size = null;
+    this.imgData = null;
+    this.clientCode = null;
+    this.midPoint = null;
 
-    this.width;
-    this.height;*/
+    this.width = null;
+    this.height = null;
 
 
     this.corners = corners;
     this.orientation = orientation;
     this.midPoint = midPoint;
+    this.clientInfo = clientInfo;
     var area = 0;
     for (let i = 0; i < corners.length - 1; i++) {
       area += corners[i][0] * corners[i + 1][1] * 0.5;
@@ -38,7 +39,6 @@ class Screen {
    */
   calculateScreenImage(inputCanvasImgData) {
     let screenImage;
-
     return screenImage;
   }
 

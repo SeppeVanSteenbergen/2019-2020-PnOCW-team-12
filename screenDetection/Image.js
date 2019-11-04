@@ -1,20 +1,21 @@
 class Image {
-  constructor(imgData, canvasName, colorSpace, width, height) {
-    /*this.pixels;
-    this.canvas;
-    this.colorSpace;
+  constructor(imgData, canvasName, colorSpace, width, height, clientInfo) {
+    this.pixels = null;
+    this.canvas = null;
+    this.colorSpace = null;
 
 
 
-    this.islands;
+    this.islands = null;
 
 
-    this.matrix;
+    this.matrix = null;
 
-    this.imgData;
+    this.imgData = null;
 
     this.width;
-    this.height;*/
+    this.height;
+    this.clientInfo = clientInfo;
 
     this.sensitivity = 12;
     this.colorSpaces = ['RGBA', 'HSLA', 'BW'];
@@ -225,10 +226,9 @@ class Image {
     //this.screens.length = 0;
     this.screens = [];
     this.calcIslandsFloodfill();
-    let newScreen;
     for (let i = 0; i < this.islands.length; i++) {
       this.drawIsland(this.islands[i]);
-      //newScreen = this.islands[i].createScreen(); TODO left out for debugging
+      let newScreen = this.islands[i].createScreen(this.clientInfo);
       this.screens.push(newScreen);
     }
   }
