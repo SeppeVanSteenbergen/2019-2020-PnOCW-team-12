@@ -14,7 +14,7 @@ export default class Image {
 
     this.clientInfo = clientInfo
 
-    this.sensitivity = 12
+    this.sensitivity = 18
     this.colorSpaces = ['RGBA', 'HSLA', 'BW']
     this.islandID = 4 //jumps per two so we can save green and blue within an island.
     this.screens = []

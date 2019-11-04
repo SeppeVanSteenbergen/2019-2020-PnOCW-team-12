@@ -65,7 +65,7 @@ export default class Screen {
    * Find the client code from the encoded barcode in the screen
    */
   findClientCode(img) {
-    let barcode = BarcodeScanner.scan(img, 0.15)
+    let barcode = BarcodeScanner.scan(img, 23)
     console.log('barcode: ' + barcode)
     return PermutationConverter.decode(barcode)
   }

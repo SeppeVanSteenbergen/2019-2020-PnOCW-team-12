@@ -13,8 +13,10 @@ export default class BarcodeScanner {
       let S = image[i + 1]
       let L = image[i + 2]
 
-      if (S < 10 || L > 70) {
-        if (scanned.length === 5) {
+      if (S < 10 || L > 70) { // if the next color is white
+        if (scanned.length >= 5) {
+          // select last 5
+          scanned = scanned.slice(-5)
           if (barcodes[scanned] === undefined) {
             barcodes[scanned] = 1
           } else {
