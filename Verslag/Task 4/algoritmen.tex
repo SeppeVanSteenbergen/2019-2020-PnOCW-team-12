@@ -10,7 +10,7 @@ Een offset werd toegevoegd tijdens het vormen van de islands omdat zo de ruis ve
 	\label{fig:screen}
 \end{figure}
 
-\subsection{kleuren masker}
+\subsection{Kleuren masker}
 Deze methode werkt nog steeds hetzelfde als bij de vorige taak. Wel werd een extra threshold toegevoegd voor de kleur van het middelpunt. Groene pixels krijgen een waarde 1, blauwe 2 en lichtblauwe 3 in de matrix. Tijdscomplexiteit van de methode blijft door deze aanpassing onveranderd, nog steeds moeten alle pixels overlopen worden.
 
 \subsection{Find Islands}
@@ -34,7 +34,7 @@ De vorige methode zal vier hoeken teruggeven. De mogelijkheid bestaat dat wannee
 
 \subsection{Reconstructie} \label{reconstructie}
 Indien we na het controleren van de hoeken nog steeds vier hoeken worden overgehouden, wordt nagekeken of de afstand van overstaande hoeken tot het middelpunt ongeveer gelijk is. Indien dit niet het geval is, dit betekend dat het scherm niet volledig zichtbaar is maar het kruis toch mooi op de rand van het kader liggen, wordt het punt waarvan de afstand tot het middelpunt het grootst is gepuntspiegeld rond de oorsprong.
-In het geval dat er minder dan vier punten gevonden zijn (2 is het minium, zie onze \hyperref[voorwaarde]{voorwaarde}). Wordt in de dictionary gekeken welke hoek "null" is en wat  de overstaande hoek van deze is zodanig dat net zoals hiervoor gezegd, deze hoek kan gepuntspiegeld worden. Deze methode is dus ook in staat om te melden wanneer niet aan onze voorwaarde voldaan is geweest. De reconstructie zal volgens de meetkunde slechte resultaten geven wanneer de hoek waaronder de foto getrokken wordt te groot is. Hiervoor is al een oplossing maar deze is nog niet geïmplementeerd (zie \ref{Testen} en \ref{Valkuilen} voor meer).
+In het geval dat er minder dan vier punten gevonden zijn (2 is het minium, zie onze \hyperref[voorwaarde]{voorwaarde}). Wordt in de dictionary gekeken welke hoek null is en wat  de overstaande hoek van deze is zodanig dat net zoals hiervoor gezegd, deze hoek kan gepuntspiegeld worden. Deze methode is dus ook in staat om te melden wanneer niet aan onze voorwaarde voldaan is geweest. De reconstructie zal volgens de meetkunde slechte resultaten geven wanneer de hoek waaronder de foto getrokken wordt te groot is. Hiervoor is al een oplossing maar deze is nog niet geïmplementeerd (zie \ref{Testen} en \ref{Valkuilen} voor meer).
 
 \section{Testen} \label{Testen}
 
