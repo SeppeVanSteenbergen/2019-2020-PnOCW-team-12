@@ -460,10 +460,11 @@ class Island {
     if(distances[1] !== null) {
       if(distances[3] !== null) {
         if(!this.inRangeOf(distances[1],distances[3]) && distances[1] > distances[3]) {
-          this.corners.LD = [this.midPoint[0] + this.corners.RU[0], this.midPoint[1] + this.corners.RU[1], this.corners.LD[2]]
+          this.corners.LD = [this.midPoint[0] - (this.corners.RU[0] - this.midPoint[0]),
+            this.midPoint[1] + (this.midPoint[1] - this.corners.RU[1]), 0];
         } else if(!this.inRangeOf(distances[1],distances[3])){
           this.corners.RU = [this.midPoint[0] + (this.midPoint[0] - this.corners.LD[0]),
-            this.midPoint[1] + (this.midPoint[1] - this.corners.LD[1]), 0];
+            this.midPoint[1] - (this.corners.LD[1] - this.midPoint[1]), 0];
         }
       }
       //distances[3](LD) equals null
