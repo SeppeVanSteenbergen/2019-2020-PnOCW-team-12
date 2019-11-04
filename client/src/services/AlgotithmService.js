@@ -8,8 +8,11 @@ export default {
     console.log(inputImage)
 
     inputImage.rgbaToHsla()
-    inputImage.createGreenBlueMask()
+
+    inputImage.createBigMask()
     inputImage.medianBlurMatrix(3)
+    inputImage.medianBlur(3)
+    inputImage.createOffset(2)
     inputImage.createScreens()
 
     return inputImage

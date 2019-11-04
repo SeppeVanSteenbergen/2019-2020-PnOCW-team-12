@@ -50,9 +50,9 @@
   </v-container>
 </template>
 <script>
-import ScreenCodeDrawer from '../algorithms/screenCodeDrawer'
+import DetectionDrawer from '../algorithms/DetectionDrawer'
 
-import NumberConverter from '../algorithms/numberConverter'
+import NumberConverter from '../algorithms/PermutationConverter'
 
 export default {
   name: 'client',
@@ -126,10 +126,9 @@ export default {
           ? screen.width * factor
           : screen.height * factor
 
-      //TODO add the barcode displayer
-      let drawer = new ScreenCodeDrawer(this.canvas, screen, borderWidth)
+      let drawer = new DetectionDrawer(this.canvas, screen, borderWidth)
 
-      drawer.drawBorder()
+      //drawer.drawBorder()
 
       drawer.barcode(NumberConverter.encode(id), 6)
     },
