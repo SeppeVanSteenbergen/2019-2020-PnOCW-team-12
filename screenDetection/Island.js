@@ -6,7 +6,7 @@ class Island {
    * @param {int} y y co
    * @param {int} id
    */
-  constructor(x, y, id) {
+  constructor(x, y, id, imgOriginal) {
     /*this.minx;
     this.maxx;
     this.miny;
@@ -43,6 +43,8 @@ class Island {
     this.blue = id + 1;
     this.circle = id + 2;
     this.MIN_ISLAND_SIZE = 1000;
+
+    this.imgOriginal = imgOriginal;
   }
 
   isValidIsland() {
@@ -631,7 +633,13 @@ class Island {
       corners[i][0] += this.minx;
       corners[i][1] += this.miny;
     }
-    return new Screen(corners, orientation, this.midPoint, clientInfo);
+    return new Screen(
+      corners,
+      orientation,
+      this.midPoint,
+      clientInfo,
+      this.imgOriginal
+    );
   }
 
   getMatrix(x, y) {

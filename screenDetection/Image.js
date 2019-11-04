@@ -10,8 +10,6 @@ class Image {
 
     this.imgData = null;
 
-    this.width;
-    this.height;
     this.clientInfo = clientInfo;
 
     this.sensitivity = 12;
@@ -32,6 +30,10 @@ class Image {
     this.upperBoundB = [250, 100, 75];
     this.lowerBoundMid = [180 - this.sensitivity, 50, 25];
     this.upperBoundMid = [180 + this.sensitivity, 100, 75];
+
+    if (colorSpace === 'RGBA'){
+      this.imgOriginal = Image.copyImageData(imgData);
+    }
 
     this.setPixels(imgData.data);
     this.qualityCheck();
@@ -150,7 +152,8 @@ class Image {
           let newIsland = new Island(
             newIslandCoo[0],
             newIslandCoo[1],
-            this.islandID
+            this.islandID,
+            this.imgOriginal
           );
           newIsland.add(newIslandCoo[2], newIslandCoo[3]);
           tmpIslands.push(newIsland);
@@ -675,5 +678,20 @@ class Image {
       this.pixels[++position] = 100;
       this.pixels[++position] = 50;
     }
+  }
+
+  /**
+   * Clone a ImageData Object
+   * @param src
+   *        Source ImageData object
+   * @returns {ImageData}
+   *        Copy of given ImageData object
+   */
+  static copyImageData(src) {
+    return new ImageData(
+      new Uint8ClampedArray(src.data),
+      src.width,
+      src.height
+    );
   }
 }

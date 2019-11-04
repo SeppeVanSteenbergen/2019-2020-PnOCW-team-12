@@ -50,7 +50,7 @@ imgElement.onload = function() {
     } else {
       // let corners = [[0,0],[250,50],[250,100],[0,150]]
       // let destination = [[0,0],[250,0],[250,150],[0,150]]
-      let outImg = new Screen(corners, 0, 0).map(
+      let outImg = new Screen(corners, 0, 0, null, null).map(
         inputImgData,
         corners,
         inputImgData.width,

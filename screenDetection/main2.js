@@ -21,30 +21,43 @@ imgElement.onload = function() {
   inputCanvas.width = imgElement.width;
   inputCanvas.height = imgElement.height;
   inputContext.drawImage(imgElement, 0, 0, imgElement.width, imgElement.height);
-  inputImgData = inputContext.getImageData(
+  let inputImgData = inputContext.getImageData(
     0,
     0,
     imgElement.width,
     imgElement.height
   );
-  let inputImage = new Image(
+  let imageTest = new Image(
     inputImgData,
-    'inputImage',
+    'imageOutConcatenated',
     'RGBA',
     imgElement.width,
     imgElement.height,
-    null
+    {
+      68: {
+        size: {
+          width: 1000,
+          height: 700
+        }
+      },
+      67: {
+        size: {
+          width: 1000,
+          height: 700
+        }
+      }
+    }
   );
-  inputImage.rgbaToHsla();
+  imageTest.rgbaToHsla();
 
-  let imageTest = new Image(
+  /*let imageTest = new Image(
     inputImage.getImgData(),
     'imageOutConcatenated',
     'HSLA',
     imgElement.width,
     imgElement.height,
     null
-  );
+  );*/
   imageTest.createBigMask();
   imageTest.medianBlurMatrix(3);
   imageTest.medianBlur(3);

@@ -10,18 +10,14 @@ function scanner(image, width, height, sensitivity) {
 
     if (S < 10 || L > 70) {
       if (scanned.length === 5) {
-        if(barcodes[scanned] === undefined){
+        if (barcodes[scanned] === undefined) {
           barcodes[scanned] = 1;
-        }else{
+        } else {
           barcodes[scanned] += 1;
         }
       }
       scanned = [];
-    } else if (
-      H < sensitivity &&
-      S > 50 &&
-      !scanned.includes(1)
-    ) {
+    } else if (H < sensitivity && S > 50 && !scanned.includes(1)) {
       scanned.push(1);
     } else if (
       H > 60 - sensitivity &&
@@ -56,7 +52,7 @@ function scanner(image, width, height, sensitivity) {
 
   let amounts = Object.values(barcodes);
   let maxAmount = Math.max(...amounts);
-  let detectedAmount = amounts.reduce((a,b) => a + b, 0);
+  let detectedAmount = amounts.reduce((a, b) => a + b, 0);
 
   let detectRatio = maxAmount / detectedAmount;
   //TODO: Needs to be updated with the right amount of barcodes on screen.
@@ -93,7 +89,7 @@ function rgbaToHsla(image) {
 
 function findSaturation(min, max, L) {
   if (L < 0.5) {
-    if(min+max === 0) {
+    if (min + max === 0) {
       return 0;
     }
     return (max - min) / (max + min);
@@ -104,13 +100,13 @@ function findSaturation(min, max, L) {
 
 function findHue(red, green, blue, max, min) {
   let hue = 0;
-  if (max == min) {
+  if (max === min) {
     return 0;
-  } else if (red == max) {
+  } else if (red === max) {
     hue = (green - blue) / (max - min);
-  } else if (green == max) {
+  } else if (green === max) {
     hue = 2.0 + (blue - red) / (max - min);
-  } else if (blue == max) {
+  } else if (blue === max) {
     hue = 4.0 + (red - green) / (max - min);
   }
 

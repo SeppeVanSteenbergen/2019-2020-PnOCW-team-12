@@ -1,8 +1,6 @@
 class Screen {
-
-
-  constructor(corners, orientation, midPoint, clientInfo) {
-    this.corners = null;
+  constructor(corners, orientation, midPoint, clientInfo, screenImgOriginal) {
+    /*this.corners = null;
     this.orientation = null;
     this.size = null;
     this.imgData = null;
@@ -10,8 +8,7 @@ class Screen {
     this.midPoint = null;
 
     this.width = null;
-    this.height = null;
-
+    this.height = null;*/
 
     this.corners = corners;
     this.orientation = orientation;
@@ -25,6 +22,32 @@ class Screen {
     area += corners[3][0] * corners[0][1] * 0.5;
     area -= corners[0][0] * corners[3][1] * 0.5;
     this.size = Math.abs(area);
+
+    // create temporary screen img for detection
+
+    console.log(this.corners);
+    console.log(screenImgOriginal);
+
+    if (screenImgOriginal !== null) {
+      let transformedTempImage = this.map(
+        screenImgOriginal,
+        this.corners,
+        600,
+        600
+      );
+
+      console.log('tranformed image');
+      console.log(transformedTempImage);
+      this.clientCode = this.findClientCode(transformedTempImage);
+      console.log('clientCode: ' + this.clientCode);
+
+      if (typeof this.clientInfo !== 'undefined') {
+        this.width = this.clientInfo[this.clientCode].size.width;
+        this.height = this.clientInfo[this.clientCode].size.height;
+
+        this.calcTranformationMatrix();
+      }
+    }
   }
 
   orientationMatrix() {
@@ -35,25 +58,12 @@ class Screen {
   }
 
   /**
-   * Calculates the imgData of the screen by cutting the given image using the screen corners
-   */
-  calculateScreenImage(inputCanvasImgData) {
-    let screenImage;
-    return screenImage;
-  }
-
-  /**
    * Find the client code from the encoded barcode in the screen
    */
-  findClientCode() {
-    let barcode = BarcodeScanner.scan(
-      this.imgData,
-      this.imgData.width,
-      this.imgData.height,
-      0.15
-    );
-    this.clientCode = PermutationConverter.decode(barcode);
-    return barcode;
+  findClientCode(img) {
+    let barcode = BarcodeScanner.scan(img, 0.15);
+    console.log('barcode: ' + barcode);
+    return PermutationConverter.decode(barcode);
   }
 
   /**

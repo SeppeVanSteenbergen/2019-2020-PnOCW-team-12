@@ -1,5 +1,9 @@
 class BarcodeScanner {
-  static scan(image, width, height, sensitivity) {
+  static scan(imageObject, sensitivity) {
+    //let width = imageObject.width; // not used
+    let height = imageObject.height;
+    let image = this.rgbaToHsla(imageObject.data);
+
     let scanned = [];
     let barcodes = {};
 
@@ -63,7 +67,7 @@ class BarcodeScanner {
       console.error('Picture is not good enough to detect barcode');
     }
 
-    return Object.keys(barcodes).find(key => barcodes[key] === maxAmount);
+    return parseInt(Object.keys(barcodes).find(key => barcodes[key] === maxAmount).toString().replace(/,/g, ''));
   }
 
   static rgbaToHsla(image) {
