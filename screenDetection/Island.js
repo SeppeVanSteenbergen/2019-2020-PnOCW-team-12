@@ -380,7 +380,19 @@ class Island {
           this.corners.LU = T;
         } else this.corners.RU = T;
       }
-    } else this.corners = corners;
+    } else {
+      if (T[0] >= this.midPoint[0]) {
+        this.corners.LU = L;
+        this.corners.RU = T;
+        this.corners.RD = R;
+        this.corners.LD = B;
+      } else {
+        this.corners.LU = T;
+        this.corners.RU = R;
+        this.corners.RD = B;
+        this.corners.LD = L;
+      }     
+    }
   }
 
   OldcleanCorners(radius) {
