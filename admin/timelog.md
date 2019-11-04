@@ -41,7 +41,7 @@ Week 5:
 |**SVS**             | adv (6)              | adv (4)              | adv (2)              | adv (2)              |                      | adv (7)              | adv (9)              |
 |**DV**              | FrameW (7)           | FrameW (1)           | FrameW (9)           | cornerDet (4)        | adv (8)              | adv (7)              | adv (1)              |
 |**BVDB**            |                      |                      |                      |                      |                      |                      |                      |
-|**MD**              | adv (9)              |                      | adv (2)              |                      | adv (9)              | adv (8)              | adv(9)               |
+|**MD**              | adv (9)              |                      | adv (2)              |                      | adv (9)              | adv (8)              | adv(10)               |
 |**FB**              | triang (2,5)         |                      |                      | adv (2)              | adv (13)             |                      |                      |
 
 Week 6:
