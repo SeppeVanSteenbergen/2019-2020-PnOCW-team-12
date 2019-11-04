@@ -38,7 +38,7 @@ FB   triang(2.5)|               |                   |    adv(2)         |   adv(
 Week 6
     maandag     |   dinsdag     |   woensdag        |   donderdag       |   vrijdag     |   zaterdag    |   zondag
     ------------|---------------|-------------------|-------------------|---------------|---------------|-----------
-TS              |               |                   |                   |               |               |
+TS  Task 5 (7)  |               |                   |                   |               |               |
 SS              |               |                   |                   |               |               | 
 DV              |               |                   |                   |               |               |
 BB              |               |                   |                   |               |               |
