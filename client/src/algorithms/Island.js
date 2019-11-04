@@ -1,3 +1,5 @@
+import Screen from './Screen'
+
 export default class Island {
   /**
    * Create and Island starting with this pixel
