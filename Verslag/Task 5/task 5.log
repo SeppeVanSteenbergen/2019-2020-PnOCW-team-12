@@ -1,13 +1,23 @@
+<<<<<<< Updated upstream
 This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2019/dev/Debian) (preloaded format=pdflatex 2019.8.2)  4 NOV 2019 21:33
+=======
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019) (preloaded format=pdflatex 2019.10.14)  4 NOV 2019 22:15
+>>>>>>> Stashed changes
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
 **"task 5.tex"
 (./task 5.tex
 LaTeX2e <2018-12-01>
+<<<<<<< Updated upstream
 (/usr/share/texlive/texmf-dist/tex/latex/base/article.cls
 Document Class: article 2018/09/03 v1.4i Standard LaTeX document class
 (/usr/share/texlive/texmf-dist/tex/latex/base/size11.clo
+=======
+(/usr/local/texlive/2019/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2018/09/03 v1.4i Standard LaTeX document class
+(/usr/local/texlive/2019/texmf-dist/tex/latex/base/size11.clo
+>>>>>>> Stashed changes
 File: size11.clo 2018/09/03 v1.4i Standard LaTeX file (size option)
 )
 \c@part=\count80
@@ -22,6 +32,7 @@ File: size11.clo 2018/09/03 v1.4i Standard LaTeX file (size option)
 \belowcaptionskip=\skip42
 \bibindent=\dimen102
 )
+<<<<<<< Updated upstream
 (/usr/share/texlive/texmf-dist/tex/latex/geometry/geometry.sty
 Package: geometry 2018/04/16 v5.8 Page Geometry
 
@@ -37,6 +48,23 @@ Package: ifvtex 2016/05/16 v1.6 Detect VTeX and its facilities (HO)
 Package ifvtex Info: VTeX not detected.
 )
 (/usr/share/texlive/texmf-dist/tex/generic/ifxetex/ifxetex.sty
+=======
+(/usr/local/texlive/2019/texmf-dist/tex/latex/geometry/geometry.sty
+Package: geometry 2018/04/16 v5.8 Page Geometry
+
+(/usr/local/texlive/2019/texmf-dist/tex/latex/graphics/keyval.sty
+Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
+\KV@toks@=\toks14
+)
+(/usr/local/texlive/2019/texmf-dist/tex/generic/oberdiek/ifpdf.sty
+Package: ifpdf 2018/09/07 v3.3 Provides the ifpdf switch
+)
+(/usr/local/texlive/2019/texmf-dist/tex/generic/oberdiek/ifvtex.sty
+Package: ifvtex 2016/05/16 v1.6 Detect VTeX and its facilities (HO)
+Package ifvtex Info: VTeX not detected.
+)
+(/usr/local/texlive/2019/texmf-dist/tex/generic/ifxetex/ifxetex.sty
+>>>>>>> Stashed changes
 Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
 )
 \Gm@cnth=\count88
@@ -52,6 +80,7 @@ Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
 \Gm@layoutvoffset=\dimen110
 \Gm@dimlist=\toks15
 )
+<<<<<<< Updated upstream
 (/usr/share/texlive/texmf-dist/tex/latex/graphics/graphicx.sty
 Package: graphicx 2017/06/01 v1.1a Enhanced LaTeX Graphics (DPC,SPQR)
 
@@ -62,16 +91,33 @@ Package: graphics 2017/06/25 v1.2c Standard LaTeX Graphics (DPC,SPQR)
 Package: trig 2016/01/03 v1.10 sin cos tan (DPC)
 )
 (/usr/share/texlive/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
+=======
+(/usr/local/texlive/2019/texmf-dist/tex/latex/graphics/graphicx.sty
+Package: graphicx 2017/06/01 v1.1a Enhanced LaTeX Graphics (DPC,SPQR)
+
+(/usr/local/texlive/2019/texmf-dist/tex/latex/graphics/graphics.sty
+Package: graphics 2017/06/25 v1.2c Standard LaTeX Graphics (DPC,SPQR)
+
+(/usr/local/texlive/2019/texmf-dist/tex/latex/graphics/trig.sty
+Package: trig 2016/01/03 v1.10 sin cos tan (DPC)
+)
+(/usr/local/texlive/2019/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
+>>>>>>> Stashed changes
 File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
 )
 Package graphics Info: Driver file: pdftex.def on input line 99.
 
+<<<<<<< Updated upstream
 (/usr/share/texlive/texmf-dist/tex/latex/graphics-def/pdftex.def
+=======
+(/usr/local/texlive/2019/texmf-dist/tex/latex/graphics-def/pdftex.def
+>>>>>>> Stashed changes
 File: pdftex.def 2018/01/08 v1.0l Graphics/color driver for pdftex
 ))
 \Gin@req@height=\dimen111
 \Gin@req@width=\dimen112
 )
+<<<<<<< Updated upstream
 (/usr/share/texlive/texmf-dist/tex/latex/caption/subcaption.sty
 Package: subcaption 2018/05/01 v1.1-162 Sub-captions (AR)
 
@@ -79,6 +125,15 @@ Package: subcaption 2018/05/01 v1.1-162 Sub-captions (AR)
 Package: caption 2018/10/06 v3.3-154 Customizing captions (AR)
 
 (/usr/share/texlive/texmf-dist/tex/latex/caption/caption3.sty
+=======
+(/usr/local/texlive/2019/texmf-dist/tex/latex/caption/subcaption.sty
+Package: subcaption 2018/05/01 v1.1-162 Sub-captions (AR)
+
+(/usr/local/texlive/2019/texmf-dist/tex/latex/caption/caption.sty
+Package: caption 2018/10/06 v3.3-154 Customizing captions (AR)
+
+(/usr/local/texlive/2019/texmf-dist/tex/latex/caption/caption3.sty
+>>>>>>> Stashed changes
 Package: caption3 2018/09/12 v1.8c caption3 kernel (AR)
 Package caption3 Info: TeX engine: e-TeX on input line 64.
 \captionmargin=\dimen113
@@ -95,6 +150,7 @@ Package caption3 Info: TeX engine: e-TeX on input line 64.
 \c@subfigure=\count93
 \c@subtable=\count94
 )
+<<<<<<< Updated upstream
 (/usr/share/texlive/texmf-dist/tex/latex/hyperref/hyperref.sty
 Package: hyperref 2018/11/30 v6.88e Hypertext links for LaTeX
 
@@ -103,6 +159,16 @@ Package: hobsub-hyperref 2016/05/16 v1.14 Bundle oberdiek, subset hyperref (HO)
 
 
 (/usr/share/texlive/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty
+=======
+(/usr/local/texlive/2019/texmf-dist/tex/latex/hyperref/hyperref.sty
+Package: hyperref 2018/11/30 v6.88e Hypertext links for LaTeX
+
+(/usr/local/texlive/2019/texmf-dist/tex/generic/oberdiek/hobsub-hyperref.sty
+Package: hobsub-hyperref 2016/05/16 v1.14 Bundle oberdiek, subset hyperref (HO)
+
+
+(/usr/local/texlive/2019/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty
+>>>>>>> Stashed changes
 Package: hobsub-generic 2016/05/16 v1.14 Bundle oberdiek, subset generic (HO)
 Package: hobsub 2016/05/16 v1.14 Construct package bundles (HO)
 Package: infwarerr 2016/05/16 v1.4 Providing info/warning/error messages (HO)
@@ -137,24 +203,39 @@ Package: atbegshi 2016/06/09 v1.18 At begin shipout hook (HO)
 Package: refcount 2016/05/16 v3.5 Data extraction from label references (HO)
 Package: hycolor 2016/05/16 v1.8 Color options for hyperref/bookmark (HO)
 )
+<<<<<<< Updated upstream
 (/usr/share/texlive/texmf-dist/tex/latex/oberdiek/auxhook.sty
 Package: auxhook 2016/05/16 v1.4 Hooks for auxiliary files (HO)
 )
 (/usr/share/texlive/texmf-dist/tex/latex/oberdiek/kvoptions.sty
+=======
+(/usr/local/texlive/2019/texmf-dist/tex/latex/oberdiek/auxhook.sty
+Package: auxhook 2016/05/16 v1.4 Hooks for auxiliary files (HO)
+)
+(/usr/local/texlive/2019/texmf-dist/tex/latex/oberdiek/kvoptions.sty
+>>>>>>> Stashed changes
 Package: kvoptions 2016/05/16 v3.12 Key value format for package options (HO)
 )
 \@linkdim=\dimen120
 \Hy@linkcounter=\count95
 \Hy@pagecounter=\count96
 
+<<<<<<< Updated upstream
 (/usr/share/texlive/texmf-dist/tex/latex/hyperref/pd1enc.def
+=======
+(/usr/local/texlive/2019/texmf-dist/tex/latex/hyperref/pd1enc.def
+>>>>>>> Stashed changes
 File: pd1enc.def 2018/11/30 v6.88e Hyperref: PDFDocEncoding definition (HO)
 Now handling font encoding PD1 ...
 ... no UTF-8 mapping file for font encoding PD1
 )
 \Hy@SavedSpaceFactor=\count97
 
+<<<<<<< Updated upstream
 (/usr/share/texlive/texmf-dist/tex/latex/latexconfig/hyperref.cfg
+=======
+(/usr/local/texlive/2019/texmf-dist/tex/latex/latexconfig/hyperref.cfg
+>>>>>>> Stashed changes
 File: hyperref.cfg 2002/06/06 v1.2 hyperref configuration of TeXLive
 )
 Package hyperref Info: Option `colorlinks' set `true' on input line 4393.
@@ -167,7 +248,11 @@ Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
 Package hyperref Info: Bookmarks ON on input line 4772.
 \c@Hy@tempcnt=\count98
 
+<<<<<<< Updated upstream
 (/usr/share/texlive/texmf-dist/tex/latex/url/url.sty
+=======
+(/usr/local/texlive/2019/texmf-dist/tex/latex/url/url.sty
+>>>>>>> Stashed changes
 \Urlmuskip=\muskip10
 Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
 )
@@ -191,19 +276,31 @@ LaTeX Info: Redefining \pageref on input line 6454.
 )
 Package hyperref Info: Driver (autodetected): hpdftex.
 
+<<<<<<< Updated upstream
 (/usr/share/texlive/texmf-dist/tex/latex/hyperref/hpdftex.def
+=======
+(/usr/local/texlive/2019/texmf-dist/tex/latex/hyperref/hpdftex.def
+>>>>>>> Stashed changes
 File: hpdftex.def 2018/11/30 v6.88e Hyperref driver for pdfTeX
 \Fld@listcount=\count103
 \c@bookmark@seq@number=\count104
 
+<<<<<<< Updated upstream
 (/usr/share/texlive/texmf-dist/tex/latex/oberdiek/rerunfilecheck.sty
+=======
+(/usr/local/texlive/2019/texmf-dist/tex/latex/oberdiek/rerunfilecheck.sty
+>>>>>>> Stashed changes
 Package: rerunfilecheck 2016/05/16 v1.8 Rerun checks for auxiliary files (HO)
 Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
 82.
 )
 \Hy@SectionHShift=\skip43
 )
+<<<<<<< Updated upstream
 (/usr/share/texmf/tex/latex/lm/lmodern.sty
+=======
+(/usr/local/texlive/2019/texmf-dist/tex/latex/lm/lmodern.sty
+>>>>>>> Stashed changes
 Package: lmodern 2009/10/30 v1.6 Latin Modern Fonts
 LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
 (Font)                  OT1/cmr/m/n --> OT1/lmr/m/n on input line 22.
@@ -238,6 +335,7 @@ LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `bold'
 LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
 (Font)                  OT1/cmtt/m/n --> OT1/lmtt/m/n on input line 38.
 )
+<<<<<<< Updated upstream
 (/usr/share/texlive/texmf-dist/tex/generic/babel/babel.sty
 Package: babel 2018/11/13 3.27 The Babel package
 
@@ -253,22 +351,53 @@ File: babel.def 2018/11/13 3.27 Babel common definitions
 \U@D=\dimen124
 
 (/usr/share/texlive/texmf-dist/tex/generic/babel/txtbabel.def)
+=======
+(/usr/local/texlive/2019/texmf-dist/tex/generic/babel/babel.sty
+Package: babel 2019/05/04 3.31 The Babel package
+
+(/usr/local/texlive/2019/texmf-dist/tex/generic/babel/switch.def
+File: switch.def 2019/05/04 3.31 Babel switching mechanism
+)
+(/usr/local/texlive/2019/texmf-dist/tex/generic/babel-dutch/dutch.ldf
+Language: dutch 2005/03/30 v3.8i Dutch support from the babel system
+
+(/usr/local/texlive/2019/texmf-dist/tex/generic/babel/babel.def
+File: babel.def 2019/05/04 3.31 Babel common definitions
+\babel@savecnt=\count105
+\U@D=\dimen124
+
+(/usr/local/texlive/2019/texmf-dist/tex/generic/babel/txtbabel.def)
+>>>>>>> Stashed changes
 \bbl@dirlevel=\count106
 )
 Package babel Info: Making " an active character on input line 132.
 ))
+<<<<<<< Updated upstream
 (/usr/share/texlive/texmf-dist/tex/latex/xcolor/xcolor.sty
 Package: xcolor 2016/05/11 v2.12 LaTeX color extensions (UK)
 
 (/usr/share/texlive/texmf-dist/tex/latex/graphics-cfg/color.cfg
+=======
+(/usr/local/texlive/2019/texmf-dist/tex/latex/xcolor/xcolor.sty
+Package: xcolor 2016/05/11 v2.12 LaTeX color extensions (UK)
+
+(/usr/local/texlive/2019/texmf-dist/tex/latex/graphics-cfg/color.cfg
+>>>>>>> Stashed changes
 File: color.cfg 2016/01/02 v1.6 sample color configuration
 )
 Package xcolor Info: Driver file: pdftex.def on input line 225.
 
+<<<<<<< Updated upstream
 (/usr/share/texlive/texmf-dist/tex/latex/colortbl/colortbl.sty
 Package: colortbl 2018/12/12 v1.0d Color table columns (DPC)
 
 (/usr/share/texlive/texmf-dist/tex/latex/tools/array.sty
+=======
+(/usr/local/texlive/2019/texmf-dist/tex/latex/colortbl/colortbl.sty
+Package: colortbl 2018/12/12 v1.0d Color table columns (DPC)
+
+(/usr/local/texlive/2019/texmf-dist/tex/latex/tools/array.sty
+>>>>>>> Stashed changes
 Package: array 2018/12/30 v2.4k Tabular extension package (FMi)
 \col@sep=\dimen125
 \ar@mcellbox=\box27
@@ -292,7 +421,11 @@ Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1369.
 Package xcolor Info: Model `Gray' substituted by `gray' on input line 1370.
 Package xcolor Info: Model `wave' substituted by `hsb' on input line 1371.
 )
+<<<<<<< Updated upstream
 (/usr/share/texlive/texmf-dist/tex/latex/booktabs/booktabs.sty
+=======
+(/usr/local/texlive/2019/texmf-dist/tex/latex/booktabs/booktabs.sty
+>>>>>>> Stashed changes
 Package: booktabs 2016/04/27 v1.618033 publication quality tables
 \heavyrulewidth=\dimen127
 \lightrulewidth=\dimen128
@@ -312,11 +445,16 @@ Package: booktabs 2016/04/27 v1.618033 publication quality tables
 \@lastruleclass=\count111
 \@thisrulewidth=\dimen139
 )
+<<<<<<< Updated upstream
 (/usr/share/texlive/texmf-dist/tex/latex/base/inputenc.sty
+=======
+(/usr/local/texlive/2019/texmf-dist/tex/latex/base/inputenc.sty
+>>>>>>> Stashed changes
 Package: inputenc 2018/08/11 v1.3c Input encoding file
 \inpenc@prehook=\toks18
 \inpenc@posthook=\toks19
 )
+<<<<<<< Updated upstream
 (/usr/share/texlive/texmf-dist/tex/latex/base/fontenc.sty
 Package: fontenc 2018/08/11 v2.0j Standard LaTeX package
 
@@ -335,6 +473,26 @@ LaTeX Info: Redefining \textmicrotypecontext on input line 1339.
 
 (/usr/share/texlive/texmf-dist/tex/latex/microtype/microtype-pdftex.def
 File: microtype-pdftex.def 2018/01/14 v2.7a Definitions specific to pdftex (RS)
+=======
+(/usr/local/texlive/2019/texmf-dist/tex/latex/base/fontenc.sty
+Package: fontenc 2018/08/11 v2.0j Standard LaTeX package
+
+(/usr/local/texlive/2019/texmf-dist/tex/latex/base/t1enc.def
+File: t1enc.def 2018/08/11 v2.0j Standard LaTeX file
+LaTeX Font Info:    Redeclaring font encoding T1 on input line 48.
+))
+(/usr/local/texlive/2019/texmf-dist/tex/latex/microtype/microtype.sty
+Package: microtype 2019/02/28 v2.7b Micro-typographical refinements (RS)
+\MT@toks=\toks20
+\MT@count=\count112
+LaTeX Info: Redefining \textls on input line 790.
+\MT@outer@kern=\dimen140
+LaTeX Info: Redefining \textmicrotypecontext on input line 1336.
+\MT@listname@count=\count113
+
+(/usr/local/texlive/2019/texmf-dist/tex/latex/microtype/microtype-pdftex.def
+File: microtype-pdftex.def 2019/02/28 v2.7b Definitions specific to pdftex (RS)
+>>>>>>> Stashed changes
 
 LaTeX Info: Redefining \lsstyle on input line 913.
 LaTeX Info: Redefining \lslig on input line 913.
@@ -342,8 +500,13 @@ LaTeX Info: Redefining \lslig on input line 913.
 )
 Package microtype Info: Loading configuration file microtype.cfg.
 
+<<<<<<< Updated upstream
 (/usr/share/texlive/texmf-dist/tex/latex/microtype/microtype.cfg
 File: microtype.cfg 2018/01/14 v2.7a microtype main configuration file (RS)
+=======
+(/usr/local/texlive/2019/texmf-dist/tex/latex/microtype/microtype.cfg
+File: microtype.cfg 2019/02/28 v2.7b microtype main configuration file (RS)
+>>>>>>> Stashed changes
 ))
 (./task 5.aux)
 \openout1 = `"task 5.aux"'.
@@ -363,7 +526,11 @@ LaTeX Font Info:    ... okay on input line 26.
 LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 26.
 LaTeX Font Info:    ... okay on input line 26.
 LaTeX Font Info:    Try loading font information for T1+lmr on input line 26.
+<<<<<<< Updated upstream
  (/usr/share/texmf/tex/latex/lm/t1lmr.fd
+=======
+ (/usr/local/texlive/2019/texmf-dist/tex/latex/lm/t1lmr.fd
+>>>>>>> Stashed changes
 File: t1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 *geometry* driver: auto-detecting
@@ -400,7 +567,11 @@ File: t1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
+<<<<<<< Updated upstream
 (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+=======
+(/usr/local/texlive/2019/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+>>>>>>> Stashed changes
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count114
 \scratchdimen=\dimen141
@@ -413,10 +584,17 @@ File: t1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 \MPnumerator=\count118
 \makeMPintoPDFobject=\count119
 \everyMPtoPDFconversion=\toks22
+<<<<<<< Updated upstream
 ) (/usr/share/texlive/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
 Package: epstopdf-base 2016/05/15 v2.6 Base part for package epstopdf
 
 (/usr/share/texlive/texmf-dist/tex/latex/oberdiek/grfext.sty
+=======
+) (/usr/local/texlive/2019/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
+Package: epstopdf-base 2016/05/15 v2.6 Base part for package epstopdf
+
+(/usr/local/texlive/2019/texmf-dist/tex/latex/oberdiek/grfext.sty
+>>>>>>> Stashed changes
 Package: grfext 2016/05/16 v1.2 Manage graphics extensions (HO)
 )
 Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
@@ -426,7 +604,11 @@ Package grfext Info: Graphics extension search list:
 G,.JBIG2,.JB2,.eps]
 (grfext)             \AppendGraphicsExtensions on input line 456.
 
+<<<<<<< Updated upstream
 (/usr/share/texlive/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
+=======
+(/usr/local/texlive/2019/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
+>>>>>>> Stashed changes
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
@@ -436,10 +618,17 @@ Package caption Info: End \AtBeginDocument code.
 \AtBeginShipoutBox=\box30
 Package hyperref Info: Link coloring ON on input line 26.
 
+<<<<<<< Updated upstream
 (/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2016/05/21 v2.44 Cross-referencing by name of section
 
 (/usr/share/texlive/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
+=======
+(/usr/local/texlive/2019/texmf-dist/tex/latex/hyperref/nameref.sty
+Package: nameref 2016/05/21 v2.44 Cross-referencing by name of section
+
+(/usr/local/texlive/2019/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
+>>>>>>> Stashed changes
 Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 )
 \c@section@level=\count120
@@ -463,30 +652,50 @@ Package microtype Info: No adjustment of tracking.
 Package microtype Info: No adjustment of interword spacing.
 Package microtype Info: No adjustment of character kerning.
 
+<<<<<<< Updated upstream
 (/usr/share/texlive/texmf-dist/tex/latex/microtype/mt-cmr.cfg
+=======
+(/usr/local/texlive/2019/texmf-dist/tex/latex/microtype/mt-cmr.cfg
+>>>>>>> Stashed changes
 File: mt-cmr.cfg 2013/05/19 v2.2 microtype config. file: Computer Modern Roman 
 (RS)
 )
 LaTeX Font Info:    Try loading font information for OT1+lmr on input line 31.
 
+<<<<<<< Updated upstream
 (/usr/share/texmf/tex/latex/lm/ot1lmr.fd
+=======
+(/usr/local/texlive/2019/texmf-dist/tex/latex/lm/ot1lmr.fd
+>>>>>>> Stashed changes
 File: ot1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    Try loading font information for OML+lmm on input line 31.
 
+<<<<<<< Updated upstream
 (/usr/share/texmf/tex/latex/lm/omllmm.fd
+=======
+(/usr/local/texlive/2019/texmf-dist/tex/latex/lm/omllmm.fd
+>>>>>>> Stashed changes
 File: omllmm.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    Try loading font information for OMS+lmsy on input line 31.
 
 
+<<<<<<< Updated upstream
 (/usr/share/texmf/tex/latex/lm/omslmsy.fd
+=======
+(/usr/local/texlive/2019/texmf-dist/tex/latex/lm/omslmsy.fd
+>>>>>>> Stashed changes
 File: omslmsy.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    Try loading font information for OMX+lmex on input line 31.
 
 
+<<<<<<< Updated upstream
 (/usr/share/texmf/tex/latex/lm/omxlmex.fd
+=======
+(/usr/local/texlive/2019/texmf-dist/tex/latex/lm/omxlmex.fd
+>>>>>>> Stashed changes
 File: omxlmex.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
@@ -521,38 +730,68 @@ Underfull \hbox (badness 10000) in paragraph at lines 44--59
 
  [1
 
+<<<<<<< Updated upstream
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
 (./introductie.tex) (./delaunay.tex
 <slechte_driehoek.png, id=51, 1027.84pt x 1027.84pt>
 File: slechte_driehoek.png Graphic file (type png)
 <use slechte_driehoek.png>
 Package pdftex.def Info: slechte_driehoek.png  used on input line 14.
+=======
+{/usr/local/texlive/2019/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] (./intr
+oductie.tex) (./delaunay.tex
+<slechte_driehoek.png, id=51, 1027.84pt x 1027.84pt>
+File: slechte_driehoek.png Graphic file (type png)
+<use slechte_driehoek.png>
+Package pdftex.def Info: slechte_driehoek.png  used on input line 15.
+>>>>>>> Stashed changes
 (pdftex.def)             Requested size: 170.71393pt x 170.69981pt.
 <goede_driehoek.png, id=53, 1027.84pt x 1027.84pt>
 File: goede_driehoek.png Graphic file (type png)
 <use goede_driehoek.png>
+<<<<<<< Updated upstream
 Package pdftex.def Info: goede_driehoek.png  used on input line 18.
+=======
+Package pdftex.def Info: goede_driehoek.png  used on input line 19.
+>>>>>>> Stashed changes
 (pdftex.def)             Requested size: 170.71393pt x 170.69981pt.
  [2]
 <bowyer-watson_superdriehoek.png, id=75, 578.16pt x 433.62pt>
 File: bowyer-watson_superdriehoek.png Graphic file (type png)
 <use bowyer-watson_superdriehoek.png>
+<<<<<<< Updated upstream
 Package pdftex.def Info: bowyer-watson_superdriehoek.png  used on input line 40
+=======
+Package pdftex.def Info: bowyer-watson_superdriehoek.png  used on input line 41
+>>>>>>> Stashed changes
 .
 (pdftex.def)             Requested size: 170.71393pt x 128.03589pt.
 <bowyer-watson_nieuwpunt.png, id=76, 578.16pt x 433.62pt>
 File: bowyer-watson_nieuwpunt.png Graphic file (type png)
 <use bowyer-watson_nieuwpunt.png>
+<<<<<<< Updated upstream
 Package pdftex.def Info: bowyer-watson_nieuwpunt.png  used on input line 45.
+=======
+Package pdftex.def Info: bowyer-watson_nieuwpunt.png  used on input line 46.
+>>>>>>> Stashed changes
 (pdftex.def)             Requested size: 170.71393pt x 128.03589pt.
 <bowyer-watson_verwijderen.png, id=77, 578.16pt x 433.62pt>
 File: bowyer-watson_verwijderen.png Graphic file (type png)
 <use bowyer-watson_verwijderen.png>
+<<<<<<< Updated upstream
 Package pdftex.def Info: bowyer-watson_verwijderen.png  used on input line 50.
 (pdftex.def)             Requested size: 170.71393pt x 128.03589pt.
 ) (./testen.tex) (./valkuilen.tex
 [3 <./slechte_driehoek.png> <./goede_driehoek.png>] [4 <./bowyer-watson_superdr
 iehoek.png> <./Bowyer-Watson_nieuwpunt.png> <./Bowyer-Watson_verwijderen.png>]
+=======
+Package pdftex.def Info: bowyer-watson_verwijderen.png  used on input line 51.
+(pdftex.def)             Requested size: 170.71393pt x 128.03589pt.
+) (./testen.tex)
+(./valkuilen.tex [3 <./slechte_driehoek.png> <./goede_driehoek.png>] [4 <./bowy
+er-watson_superdriehoek.png> <./bowyer-watson_nieuwpunt.png> <./bowyer-watson_v
+erwijderen.png>]
+>>>>>>> Stashed changes
 <colineair.jpg, id=100, 472.76625pt x 176.45924pt>
 File: colineair.jpg Graphic file (type jpg)
 <use colineair.jpg>
@@ -563,10 +802,16 @@ File: almost_colinair.jpg Graphic file (type jpg)
 <use almost_colinair.jpg>
 Package pdftex.def Info: almost_colinair.jpg  used on input line 12.
 (pdftex.def)             Requested size: 170.71393pt x 43.81587pt.
+<<<<<<< Updated upstream
 ) (./besluit.tex) [5 <./colineair.JPG> <./almost_colinair.JPG>] (./task 5.bbl
 LaTeX Font Info:    Try loading font information for T1+lmtt on input line 5.
 
 (/usr/share/texmf/tex/latex/lm/t1lmtt.fd
+=======
+) (./besluit.tex) [5 <./colineair.jpg> <./almost_colinair.jpg>] (./task 5.bbl
+LaTeX Font Info:    Try loading font information for T1+lmtt on input line 5.
+ (/usr/local/texlive/2019/texmf-dist/tex/latex/lm/t1lmtt.fd
+>>>>>>> Stashed changes
 File: t1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 Package microtype Info: Loading generic protrusion settings for font family
@@ -597,6 +842,7 @@ Package rerunfilecheck Info: File `"task 5".out' has not changed.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 80.
  ) 
 Here is how much of TeX's memory you used:
+<<<<<<< Updated upstream
  9736 strings out of 492615
  151093 string characters out of 6131391
  291992 words of memory out of 5000000
@@ -612,6 +858,25 @@ f/fonts/type1/public/lm/lmr10.pfb></usr/share/texmf/fonts/type1/public/lm/lmr8.
 pfb></usr/share/texmf/fonts/type1/public/lm/lmri10.pfb></usr/share/texmf/fonts/
 type1/public/lm/lmtt10.pfb>
 Output written on "task 5.pdf" (6 pages, 463572 bytes).
+=======
+ 9734 strings out of 492616
+ 151968 string characters out of 6129480
+ 293519 words of memory out of 5000000
+ 13422 multiletter control sequences out of 15000+600000
+ 43798 words of font info for 64 fonts, out of 8000000 for 9000
+ 1141 hyphenation exceptions out of 8191
+ 42i,9n,45p,658b,549s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/local/texlive/2019/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}{/usr/local/
+texlive/2019/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{/usr/local/texlive/2019/t
+exmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}</usr/local/texlive/2019/texmf-dist/
+fonts/type1/public/lm/lmbx10.pfb></usr/local/texlive/2019/texmf-dist/fonts/type
+1/public/lm/lmbx12.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/public/l
+m/lmmi10.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/public/lm/lmr10.pf
+b></usr/local/texlive/2019/texmf-dist/fonts/type1/public/lm/lmr8.pfb></usr/loca
+l/texlive/2019/texmf-dist/fonts/type1/public/lm/lmri10.pfb></usr/local/texlive/
+2019/texmf-dist/fonts/type1/public/lm/lmtt10.pfb>
+Output written on "task 5.pdf" (6 pages, 463977 bytes).
+>>>>>>> Stashed changes
 PDF statistics:
  156 PDF objects out of 1000 (max. 8388607)
  125 compressed objects within 2 object streams
