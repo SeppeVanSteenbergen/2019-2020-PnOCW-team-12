@@ -290,17 +290,26 @@ class Island {
       }
     }
 
-
     // corners to absolute position
     for (let i = 0; i < corners.length; i++) {
       corners[i][0] += this.minx;
       corners[i][1] += this.miny;
     }
 
+    console.log('corners');
+
     this.cleanCorners(corners, 30); // TODO shouldn't be hardcoded
 
     let distances = this.distToMid();
     this.recoScreen(distances);
+
+    // corners to list
+    let temp = this.corners;
+    this.corners = [];
+    this.corners.push(temp.LU);
+    this.corners.push(temp.RU);
+    this.corners.push(temp.RD);
+    this.corners.push(temp.LD);
   }
 
   cleanCorners(corners, radius) {
@@ -389,7 +398,7 @@ class Island {
         this.corners.RU = R;
         this.corners.RD = B;
         this.corners.LD = L;
-      }     
+      }
     }
   }
 
@@ -428,8 +437,8 @@ class Island {
     return Math.sqrt(dx * dx + dy * dy);
   }
 
-  inRangeOf(dist, value, threshold) {
-    return dist - value < threshold && dist - value > -threshold;
+  inRangeOf(dist, value, ratio) {
+    return Math.min(dist, value) / Math.max(dist, value) > ratio;
   }
 
   calcMid() {
@@ -458,11 +467,12 @@ class Island {
   }
 
   recoScreen(distances) {
+    let lengthThresh = 0.8;
     // check LU and RD
     if (distances[0] !== null) {
       if (distances[2] !== null) {
         if (
-          !this.inRangeOf(distances[0], distances[2], 10) &&
+          !this.inRangeOf(distances[0], distances[2], lengthThresh) &&
           distances[0] > distances[2]
         ) {
           this.corners.RD = [
@@ -470,7 +480,7 @@ class Island {
             this.midPoint[1] + (this.midPoint[1] - this.corners.LU[1]),
             this.corners.RD[2]
           ];
-        } else if (!this.inRangeOf(distances[0], distances[2], 10)) {
+        } else if (!this.inRangeOf(distances[0], distances[2], lengthThresh)) {
           this.corners.LU = [
             this.midPoint[0] - (this.corners.RD[0] - this.midPoint[0]),
             this.midPoint[1] - (this.corners.RD[1] - this.midPoint[1]),
@@ -499,7 +509,7 @@ class Island {
     if (distances[1] !== null) {
       if (distances[3] !== null) {
         if (
-          !this.inRangeOf(distances[1], distances[3], 10) &&
+          !this.inRangeOf(distances[1], distances[3], lengthThresh) &&
           distances[1] > distances[3]
         ) {
           this.corners.LD = [
@@ -507,7 +517,7 @@ class Island {
             this.midPoint[1] + (this.midPoint[1] - this.corners.RU[1]),
             this.corners.LD[2]
           ];
-        } else if (!this.inRangeOf(distances[1], distances[3], 10)) {
+        } else if (!this.inRangeOf(distances[1], distances[3], lengthThresh)) {
           this.corners.RU = [
             this.midPoint[0] + (this.midPoint[0] - this.corners.LD[0]),
             this.midPoint[1] - (this.corners.LD[1] - this.midPoint[1]),

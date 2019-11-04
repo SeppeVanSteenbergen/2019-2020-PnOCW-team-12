@@ -4,10 +4,7 @@ class Image {
     this.canvas = null;
     this.colorSpace = null;
 
-
-
     this.islands = null;
-
 
     this.matrix = null;
 
@@ -162,8 +159,8 @@ class Image {
       }
     }
     for (let i = 0; i < tmpIslands.length; i++) {
+      tmpIslands[i].setScreenMatrix(this.matrix);
       if (tmpIslands[i].isValidIsland()) {
-        tmpIslands[i].setScreenMatrix(this.matrix);
         tmpIslands[i].finishIsland();
         this.islands.push(tmpIslands[i]);
       }
@@ -502,7 +499,7 @@ class Image {
       let x = pixel[0];
       let y = pixel[1];
       if (this.inGreenRange(H, S, L)) {
-         this.pixels[i + 1] = 0;
+        this.pixels[i + 1] = 0;
         this.pixels[i + 2] = 100;
         this.matrix[y][x] = 1;
       } else if (this.inBlueRange(H, S, L)) {
