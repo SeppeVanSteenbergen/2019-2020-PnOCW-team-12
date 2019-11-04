@@ -208,10 +208,10 @@ class Island {
       }
     } else {
       // Perpendicular search
-      // left
-
+      let corners = [];
       let MIN_CORNER_DIST = 50; // in pixels
 
+      // left
       for (let x = 0; x < this.width; x++) {
         let found = false;
         let tempY = [];
@@ -223,7 +223,7 @@ class Island {
         }
         if (found) {
           let medianY = tempY[Math.floor(tempY.length / 2)];
-          this.corners.LD = [x + this.minx, medianY + this.miny, this.screenMatrix[medianY][x]];
+          corners.push([x + this.minx, medianY + this.miny, this.screenMatrix[medianY][x]]);
           break;
         }
       }
@@ -240,7 +240,7 @@ class Island {
         }
         if (found) {
           let medianX = tempX[Math.floor(tempX.length / 2)];
-          this.corners.LU = [medianX + this.minx, y + this.miny, this.screenMatrix[y][medianX]];
+          corners.push([medianX + this.minx, y + this.miny, this.screenMatrix[y][medianX]]);
           break;
         }
       }
@@ -257,11 +257,11 @@ class Island {
         }
         if (found) {
           let medianY = tempY[Math.floor(tempY.length / 2)];
-          this.corners.RU = [
+          corners.push([
             this.width - x - 1 + this.minx,
             medianY + this.miny,
             this.screenMatrix[medianY][this.width - x - 1]
-          ];
+          ]);
           break;
         }
       }
@@ -277,36 +277,116 @@ class Island {
         }
         if (found) {
           let medianX = tempX[Math.floor(tempX.length / 2)];
-          this.corners.RD = [
+          corners.push([
             medianX + this.minx,
             this.height - y - 1 + this.miny,
             this.screenMatrix[this.height - y - 1][medianX]
-          ];
+          ]);
           break;
         }
       }
+
+      this.cleanCorners(corners, 30);
     }
 
-    console.log(this.corners)
-    this.cleanCorners(30);
-
-    let distances = this.distToMid();
-    this.recoScreen(distances);
+    // if (Object.values(this.corners).includes(null)) {
+    //   let distances = this.distToMid();
+    //   this.recoScreen(distances);
+    // }
 
     //TODO Order the corners the right way
+    console.log(this.corners);
   }
 
-  cleanCorners(radius) {
-    if(this.calcDist(this.corners.LU, this.corners.RU) <= radius) {
+  cleanCorners(corners, radius) {
+    let L = corners[0];
+    let T = corners[1];
+    let R = corners[2];
+    let B = corners[3];
+
+    if (Island.calcDist(L, T) <= radius) {
+      if (Island.calcDist(R, B) <= radius) {
+        console.error("Bad picture!");
+      } else {
+        // corners.splice(0, 2);
+        // corners.splice(0, 0, [(L[0] + T[0]) / 2, (L[1] + T[1]) / 2, L[2]]);
+        this.corners.LU = [(L[0] + T[0]) / 2, (L[1] + T[1]) / 2, L[2]];
+
+        if (R[1] >= this.midPoint[1]) {
+          this.corners.RD = R;
+          this.corners.LD = B;
+        } else {
+          this.corners.RU = R;
+
+          if (B[0] >= this.midPoint[0]) {
+            this.corners.RD = B;
+          } else this.corners.LD = B;
+        }
+      }
+    } else if (Island.calcDist(T, R) <= radius) {
+      if (Island.calcDist(L, B) <= radius) {
+        console.error("Bad picture!");
+      } else {
+        // corners.splice(1, 2);
+        // corners.splice(1, 0, [(T[0] + R[0]) / 2, (T[1] + R[1]) / 2, T[2]]);
+        this.corners.RU = [(T[0] + R[0]) / 2, (T[1] + R[1]) / 2, T[2]];
+
+        if (L[1] >= this.midPoint[1]) {
+          this.corners.LD = L;
+          this.corners.RD = B;
+        } else {
+          this.corners.LU = L;
+
+          if (B[0] >= this.midPoint[0]) {
+            this.corners.RD = B;
+          } else this.corners.LD = B;
+        }
+      }
+    } else if (Island.calcDist(R, B) <= radius) {
+      // corners.splice(2, 2);
+      // corners.splice(2, 0, [(R[0] + B[0]) / 2, (R[1] + B[1]) / 2, R[2]]);
+      this.corners.RD = [(R[0] + B[0]) / 2, (R[1] + B[1]) / 2, R[2]];
+
+      if (L[1] <= this.midPoint[1]) {
+        this.corners.LU = L;
+        this.corners.RU = T;
+      } else {
+        this.corners.LD = L;
+
+        if (T[0] <= this.midPoint[0]) {
+          this.corners.LU = T;
+        } else this.corners.RU = T;
+      }
+    } else if (Island.calcDist(L, B) <= radius) {
+      // corners.shift();
+      // corners.pop();
+      // corners.push([(L[0] + B[0]) / 2, (L[1] + B[1]) / 2, L[2]]);
+      this.corners.LD = [(L[0] + B[0]) / 2, (L[1] + B[1]) / 2, L[2]];
+
+      if (R[1] <= this.midPoint[1]) {
+        this.corners.RU = R;
+        this.corners.LU = T;
+      } else {
+        this.corners.RD = R;
+
+        if (T[0] <= this.midPoint[0]) {
+          this.corners.LU = T;
+        } else this.corners.RU = T;
+      }
+    }
+  }
+
+  OldcleanCorners(radius) {
+    if(Island.calcDist(this.corners.LU, this.corners.RU) <= radius) {
       this.corners.RU = null;
     }
-    if(this.calcDist(this.corners.LU, this.corners.LD) <= radius) {
+    if(Island.calcDist(this.corners.LU, this.corners.LD) <= radius) {
       this.corners.LD = null;
     }
-    if(this.calcDist(this.corners.RD, this.corners.RU) <= radius) {
+    if(Island.calcDist(this.corners.RD, this.corners.RU) <= radius) {
       this.corners.RU = null;
     }
-    if(this.calcDist(this.corners.RD, this.corners.LD) <= radius) {
+    if(Island.calcDist(this.corners.RD, this.corners.LD) <= radius) {
       this.corners.LD = null;
     }
   }
@@ -315,23 +395,16 @@ class Island {
     let corners = Object.values(this.corners);
 
     let distances = [];
-    let midX = this.midPoint[0];
-    let midY = this.midPoint[1];
+    let midPoint = this.midPoint;
     corners.forEach(function(corner) {
       if(corner !== null) {
-        let cornerX = corner[0];
-        let cornerY = corner[1];
-
-        let dX = cornerX - midX;
-        let dY = cornerY - midY;
-
-        distances.push(Math.sqrt(dX * dX + dY * dY));
+        distances.push(Island.calcDist(corner, midPoint))
       } else distances.push(null)
     });
     return distances;
   }
 
-  calcDist(a,b) {
+  static calcDist(a,b) {
     if(b === null) return;
     let dx = a[0] - b[0];
     let dy = a[1] - b[1];
