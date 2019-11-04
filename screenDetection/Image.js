@@ -1,37 +1,41 @@
 class Image {
-  pixels;
-  canvas;
-  colorSpace;
-
-  sensitivity = 12;
-  colorSpaces = ['RGBA', 'HSLA', 'BW'];
-
-  islands;
-  islandID = 4; //jumps per two so we can save green and blue within an island.
-  MIN_ISLAND_SIZE = 1000;
-
-  matrix;
-  screens = [];
-  imgData;
-
-  width;
-  height;
-
-  /*lowerBoundG = [120 - this.sensitivity, 50, 25];
-  upperBoundG = [120 + this.sensitivity, 100, 75];
-  lowerBoundB = [240 - this.sensitivity, 50, 25];
-  upperBoundB = [240 + this.sensitivity, 100, 75];
-  lowerBoundMid = [180 - this.sensitivity, 50, 25];
-  upperBoundMid = [180 + this.sensitivity, 100, 75];*/
-
-  lowerBoundG = [120 - this.sensitivity, 50, 25];
-  upperBoundG = [120 + this.sensitivity, 100, 75];
-  lowerBoundB = [210, 50, 25];
-  upperBoundB = [250, 100, 75];
-  lowerBoundMid = [180 - this.sensitivity, 50, 25];
-  upperBoundMid = [180 + this.sensitivity, 100, 75];
-
   constructor(imgData, canvasName, colorSpace, width, height) {
+    /*this.pixels;
+    this.canvas;
+    this.colorSpace;
+
+
+
+    this.islands;
+
+
+    this.matrix;
+
+    this.imgData;
+
+    this.width;
+    this.height;*/
+
+    this.sensitivity = 12;
+    this.colorSpaces = ['RGBA', 'HSLA', 'BW'];
+    this.islandID = 4; //jumps per two so we can save green and blue within an island.
+    this.MIN_ISLAND_SIZE = 1000;
+    this.screens = [];
+
+    /*lowerBoundG = [120 - this.sensitivity, 50, 25];
+    upperBoundG = [120 + this.sensitivity, 100, 75];
+    lowerBoundB = [240 - this.sensitivity, 50, 25];
+    upperBoundB = [240 + this.sensitivity, 100, 75];
+    lowerBoundMid = [180 - this.sensitivity, 50, 25];
+    upperBoundMid = [180 + this.sensitivity, 100, 75];*/
+
+    this.lowerBoundG = [120 - this.sensitivity, 50, 25];
+    this.upperBoundG = [120 + this.sensitivity, 100, 75];
+    this.lowerBoundB = [210, 50, 25];
+    this.upperBoundB = [250, 100, 75];
+    this.lowerBoundMid = [180 - this.sensitivity, 50, 25];
+    this.upperBoundMid = [180 + this.sensitivity, 100, 75];
+
     this.setPixels(imgData.data);
     this.qualityCheck();
     this.setCanvas(canvasName, imgData.width, imgData.height);
@@ -65,19 +69,19 @@ class Image {
   }
 
   qualityCheck() {
-    if(this.calcLuminance() < 40 || 80 < this.calcLuminance()) {
-      console.log("Take a better picture");
+    if (this.calcLuminance() < 40 || 80 < this.calcLuminance()) {
+      console.log('Take a better picture');
     }
   }
 
   calcLuminance() {
-    if(this.colorSpace === "HSLa") {
+    if (this.colorSpace === 'HSLa') {
       let lum = 0;
-      let size = this.pixels.length/4;
-      for(let i = 2; i < this.pixels.length; i+4) {
+      let size = this.pixels.length / 4;
+      for (let i = 2; i < this.pixels.length; i + 4) {
         lum += this.pixels[i];
       }
-      return lum/size;
+      return lum / size;
     }
   }
 
@@ -279,7 +283,7 @@ class Image {
 
   findSaturation(min, max, L) {
     if (L < 0.5) {
-      if(min + max === 0) {
+      if (min + max === 0) {
         return 0;
       }
       return (max - min) / (max + min);
@@ -446,23 +450,23 @@ class Image {
     let whites = [];
     for (let y = 0; y < this.getHeight(); y++) {
       for (let x = 0; x < this.getWidth(); x++) {
-        if(this.getMatrix(x,y) > 0) {
+        if (this.getMatrix(x, y) > 0) {
           whites.push([x, y]);
         }
       }
     }
-    for(let i=0; i < whites.length; i++) {
+    for (let i = 0; i < whites.length; i++) {
       for (let yBox = -factor; yBox <= factor; yBox++) {
         for (let xBox = -factor; xBox <= factor; xBox++) {
           let x = whites[i][0];
           let y = whites[i][1];
-          let value = this.getMatrix(x,y);
+          let value = this.getMatrix(x, y);
           if (
-              y + yBox >= 0 &&
-              y + yBox < this.getHeight() &&
-              x + xBox >= 0 &&
-              x + xBox < this.getWidth() &&
-              this.getMatrix(x + xBox, y + yBox) === 0
+            y + yBox >= 0 &&
+            y + yBox < this.getHeight() &&
+            x + xBox >= 0 &&
+            x + xBox < this.getWidth() &&
+            this.getMatrix(x + xBox, y + yBox) === 0
           ) {
             this.matrix[y + yBox][x + xBox] = value;
           }
@@ -582,9 +586,9 @@ class Image {
    */
   drawIsland(island) {
     this.drawFillRect(
-        [island.minx, island.miny],
-        [island.maxx, island.maxy],
-        0.3
+      [island.minx, island.miny],
+      [island.maxx, island.maxy],
+      0.3
     );
     this.drawCorners(island);
     this.drawMid(island);
@@ -593,18 +597,14 @@ class Image {
   drawCorners(island) {
     let corners = Object.values(island.corners);
     for (let j = 0; j < corners.length; j++) {
-      if(corners[j] !== null) {
-        this.drawPoint(
-            corners[j][0],
-            corners[j][1],
-            10
-        );
+      if (corners[j] !== null) {
+        this.drawPoint(corners[j][0], corners[j][1], 10);
       }
     }
   }
 
   drawMid(island) {
-    this.drawPoint(island.midPoint[0],island.midPoint[1],10);
+    this.drawPoint(island.midPoint[0], island.midPoint[1], 10);
   }
 
   drawPoint(x, y, size) {
