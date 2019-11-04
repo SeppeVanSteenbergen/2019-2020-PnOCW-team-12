@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 <<<<<<< HEAD
 \select@language {dutch}
 \contentsline {section}{\numberline {1}Introductie}{2}{section.1}
@@ -9,6 +10,8 @@
 \contentsline {section}{\numberline {4}Valkuilen}{5}{section.4}
 \contentsline {section}{\numberline {5}Besluit}{5}{section.5}
 =======
+=======
+>>>>>>> Stashed changes
 \babel@toc {dutch}{}
 \contentsline {section}{\numberline {1}Introductie}{2}{section.1}% 
 \contentsline {section}{\numberline {2}Delaunay triangulatie}{2}{section.2}% 
@@ -18,4 +21,7 @@
 \contentsline {section}{\numberline {3}Testen}{3}{section.3}% 
 \contentsline {section}{\numberline {4}Valkuilen}{5}{section.4}% 
 \contentsline {section}{\numberline {5}Besluit}{5}{section.5}% 
+<<<<<<< Updated upstream
 >>>>>>> master
+=======
+>>>>>>> Stashed changes
