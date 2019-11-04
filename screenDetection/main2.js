@@ -24,8 +24,8 @@ imgElement.onload = function () {
   let imageTest = new Image(inputImage.getImgData(), "imageOutConcatenated", "HSLA", imgElement.width, imgElement.height);
   imageTest.createBigMask();
   imageTest.medianBlurMatrix(3);
-  imageTest.medianBlur(5);
-  imageTest.createOffset(1);
+  imageTest.medianBlur(3);
+  imageTest.createOffset(3);
   imageTest.createScreens();
   imageTest.hslaToRgba();
   imageTest.show();
