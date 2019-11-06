@@ -248,7 +248,7 @@
                   color="primary"
                   @click="
                     nextStep(2)
-                    analyseImage()
+                    analyseImageAsync()
                   "
                 >
                   Analyse image
@@ -261,6 +261,8 @@
             <v-stepper-content step="3" class="fullheight overflow-y-auto">
               <v-card class="mb-12 fullheight" elevation="0">
                 <canvas ref="resultCanvas"></canvas>
+                <canvas ref="delaunay"></canvas>
+                <canvas ref="delaunay2"></canvas>
               </v-card>
 
               <v-btn color="primary" @click="nextStep(3)">
@@ -474,7 +476,6 @@ export default {
     },
     sendImageToUser(imgData, user_id = null) {
       let base64 = this.imgDataToBase64(imgData)
-      console.log(base64)
       let object = {
         payload: {
           type: 'display-image',
@@ -530,6 +531,9 @@ export default {
           this.$refs.canva.height
         )
     },
+    async analyseImageAsync() {
+      setTimeout(this.analyseImage, 0)
+    },
     analyseImage() {
       console.log('starting analysis')
 
@@ -576,20 +580,28 @@ export default {
 
       let delaunayImgObject = AlgorithmService.delaunayImage(
         triangulation,
+        midList,
         outC
       )
+      this.$refs.delaunay2.width = delaunayImgObject.width
+      this.$refs.delaunay2.height = delaunayImgObject.height
+      this.$refs.delaunay2
+        .getContext('2d')
+        .putImageData(delaunayImgObject, 0, 0)
 
-      let imgList = {}
       for (let i = 0; i < this.analysedImage.screens.length; i++) {
         let code = this.analysedImage.screens[i].clientCode
-        imgList[code] = {
-          user_id: this.myRoom.clients[code],
-          imgData: this.analysedImage.screens[i].mapToScreen(delaunayImgObject)
-        }
-      }
+        let img = this.analysedImage.screens[i].mapToScreen(delaunayImgObject)
+        this.sendImageToUser(
+          img, // image
+          this.myRoom.clients[code] // user ID
+        )
 
-      for (let i = 0; i < Object.keys(imgList).length; i++) {
-        this.sendImageToUser(imgList[i].imgData, imgList[i].user_id)
+        if (i === 0) {
+          this.$refs.delaunay.width = img.width
+          this.$refs.delaunay.height = img.height
+          this.$refs.delaunay.getContext('2d').putImageData(img, 0, 0)
+        }
       }
     }
   },

@@ -247,7 +247,7 @@ export default {
 
       this.canvas = this.$refs['canvas']
       this.openFullscreen(this.canvas)
-      const width = window.screen.width
+      /*const width = window.screen.width
       const height = window.screen.height
 
       this.canvas.height = height
@@ -259,7 +259,7 @@ export default {
       ctx.fillStyle = 'black'
       ctx.beginPath()
       ctx.arc(width / 2, height / 2, width / 4, 0, 2 * Math.PI)
-      ctx.stroke()
+      ctx.stroke()*/
 
       this.canvas.style.display = 'block'
     },

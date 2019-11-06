@@ -45,7 +45,7 @@ export default {
     return Delaunay.triangulation(points)
   },
 
-  delaunayImage(triangulation, canv) {
+  delaunayImage(triangulation, midPoints, canv) {
     let c = document.createElement('canvas')
     c.width = canv.width
     c.height = canv.height
@@ -56,8 +56,18 @@ export default {
     for (let i = 0; i < triangulation.length; i++) {
       this.drawTriangle(triangulation[i], ctx)
     }
+    for (let i = 0; i < midPoints.length; i++) {
+      this.drawStar(
+        ctx,
+        midPoints[i][0],
+        midPoints[i][1],
+        5,
+        c.width / 60,
+        (c.width / 60) * 0.6
+      )
+    }
 
-    return ctx.getImageData(0,0,c.width, c.height)
+    return ctx.getImageData(0, 0, c.width, c.height)
   },
 
   drawTriangle(triangle, ctx) {
@@ -70,5 +80,32 @@ export default {
     ctx.lineWidth = 5
     ctx.strokeStyle = '#000'
     ctx.stroke()
+  },
+  drawStar(ctx, cx, cy, spikes, outerRadius, innerRadius) {
+    let rot = (Math.PI / 2) * 3
+    let x = cx
+    let y = cy
+    let step = Math.PI / spikes
+
+    ctx.beginPath()
+    ctx.moveTo(cx, cy - outerRadius)
+    for (let i = 0; i < spikes; i++) {
+      x = cx + Math.cos(rot) * outerRadius
+      y = cy + Math.sin(rot) * outerRadius
+      ctx.lineTo(x, y)
+      rot += step
+
+      x = cx + Math.cos(rot) * innerRadius
+      y = cy + Math.sin(rot) * innerRadius
+      ctx.lineTo(x, y)
+      rot += step
+    }
+    ctx.lineTo(cx, cy - outerRadius)
+    ctx.closePath()
+    ctx.lineWidth = 3
+    ctx.strokeStyle = 'blue'
+    ctx.stroke()
+    ctx.fillStyle = 'skyblue'
+    ctx.fill()
   }
 }

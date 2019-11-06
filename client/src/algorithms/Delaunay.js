@@ -33,7 +33,7 @@ export default class Delaunay {
 
   static triangulation(points, width, height) {
     if (points.length < 3) {
-      return
+      return []
     }
     let supTriangle = this.superTriangle(width, height)
     let triangulation = []

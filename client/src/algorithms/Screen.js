@@ -117,6 +117,8 @@ export default class Screen {
    *          Object containing the transformed screen cutout from the input image
    */
   mapToScreen(fullImage) {
+    console.log('mapping to screen')
+    console.log(this.corners, this.width, this.height)
     return this.map(fullImage, this.corners, this.width, this.height)
   }
 
@@ -129,7 +131,10 @@ export default class Screen {
     let data = fullImage.data
     let destination = [[0, 0], [width, 0], [width, height], [0, height]]
 
-    this.transformationMatrix(destination, srcCorners)
+    if (this.corners !== srcCorners || this.width !== width || this.height !== height) {
+      this.transformationMatrix(destination, srcCorners)
+    }
+
     let img = document
       .createElement('canvas')
       .getContext('2d')
