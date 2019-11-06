@@ -65,7 +65,6 @@ class BarcodeScanner {
     console.log(detectRatio, ratio);
     if (ratio < 0.1 || detectRatio < 0.5) {
       console.error('Picture is not good enough to detect barcode');
-      return null;
     }
 
     return parseInt(Object.keys(barcodes).find(key => barcodes[key] === maxAmount).toString().replace(/,/g, ''));

@@ -61,7 +61,7 @@ class Screen {
    * Find the client code from the encoded barcode in the screen
    */
   findClientCode(img) {
-    let barcode = BarcodeScanner.scan(img, 0.15);
+    let barcode = BarcodeScanner.scan(img, 30);
     console.log('barcode: ' + barcode);
     if(barcode !== null) {
       return PermutationConverter.decode(barcode);

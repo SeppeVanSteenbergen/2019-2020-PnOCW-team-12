@@ -50,12 +50,47 @@ imgElement.onload = function() {
     } else {
       // let corners = [[0,0],[250,50],[250,100],[0,150]]
       // let destination = [[0,0],[250,0],[250,150],[0,150]]
-      let outImg = new Screen(corners, 0, 0, null, null).map(
+      let screen = new Screen(
+        corners,
+        0,
+        0,
+        {
+          68: {
+            size: {
+              height: 857,
+              width: 1143
+            }
+          },
+          67: {
+            size: {
+              height: 857,
+              width: 1143
+            }
+          }
+        },
+        inputImgData
+      );
+
+      let cv = document.createElement('canvas');
+      cv.width = 1143;
+      cv.height = 857;
+      let ctxs = cv.getContext('2d');
+      ctxs.fillStyle = 'red';
+      ctxs.fillRect(100, 100, 400, 200);
+      ctxs.fillStyle = 'blue';
+      ctxs.fillRect(500, 500, 500, 500);
+      ctxs.fillStyle = 'green';
+      ctxs.fillText('Hello there', 300, 300, 1000);
+      let newImg = ctxs.getImageData(0, 0, cv.width, cv.height);
+
+      let outImg = screen.mapToScreen(newImg);
+
+      /*let outImg2 = screen.map(
         inputImgData,
         corners,
         inputImgData.width,
         inputImgData.height
-      );
+      );*/
       let canv = document.getElementById('remapped');
       canv.width = outImg.width;
       canv.height = outImg.height;
