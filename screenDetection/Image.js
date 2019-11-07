@@ -17,12 +17,6 @@ class Image {
     this.islandID = 4; //jumps per two so we can save green and blue within an island.
     this.screens = [];
 
-    /*lowerBoundG = [120 - this.sensitivity, 50, 25];
-    upperBoundG = [120 + this.sensitivity, 100, 75];
-    lowerBoundB = [240 - this.sensitivity, 50, 25];
-    upperBoundB = [240 + this.sensitivity, 100, 75];
-    lowerBoundMid = [180 - this.sensitivity, 50, 25];
-    upperBoundMid = [180 + this.sensitivity, 100, 75];*/
 
     this.lowerBoundG = [120 - this.sensitivity, 50, 25];
     this.upperBoundG = [120 + this.sensitivity, 100, 75];
@@ -51,8 +45,17 @@ class Image {
     for (let i = 0; i < this.getHeight(); i++) {
       this.matrix[i] = new Array(this.getWidth());
     }
+    this.analyse()
   }
 
+  analyse(){
+    this.createBigMask();
+    this.medianBlurMatrix(3);
+    this.medianBlur(3);
+    this.createOffset(3);
+    this.createScreens();
+    return this.screens;
+  }
   getImgData() {
     if (this.canvas !== null) {
       let context = this.canvas.getContext('2d');
@@ -66,7 +69,7 @@ class Image {
       return this.imgData;
     }
   }
-
+//TODO check resolution ook
   qualityCheck() {
     if (this.calcLuminance() < 40 || 80 < this.calcLuminance()) {
       console.log('Take a better picture');
@@ -149,13 +152,7 @@ class Image {
       for (let x = 0; x < this.getWidth(); x++) {
         if (this.checkId(x, y)) {
           let newIslandCoo = this.floodfill(x, y, this.islandID);
-          let newIsland = new Island(
-            newIslandCoo[0],
-            newIslandCoo[1],
-            this.islandID,
-            this.imgOriginal
-          );
-          newIsland.add(newIslandCoo[2], newIslandCoo[3]);
+          let newIsland = new Island([newIslandCoo[0], newIslandCoo[1]], [newIslandCoo[2], newIslandCoo[3]], this.islandID, this.imgOriginal);
           tmpIslands.push(newIsland);
           this.islandID += 3;
         }
@@ -231,30 +228,6 @@ class Image {
       this.screens.push(newScreen);
     }
   }
-
-  /**
-   * @param {HTMLCanvasElement} canvas canvas om imgdata op te pushen
-   */
-  /**
-    matrixToImg(canvas) {
-
-        let data = context.createImageData(this.getWidth(), this.getHeight());
-
-        for (let j = 0; j < this.canvas.height; j++) {
-            for (let i = 0; i < this.canvas.width; i++) {
-                let pos = this.positionToPixel(i, j);
-                newData[pos], newData[pos + 1] = 0;
-                newData[pos + 2] = this.matrix[j][i];
-            }
-        }
-
-        let img = new Image(newData, canvas, "HSL");
-
-        img.hslaToRgba();
-
-        return img;
-    }
-    */
 
   /*
         math from https://www.rapidtables.com/convert/color/rgb-to-hsl.html
@@ -383,15 +356,6 @@ class Image {
       return tmp2 + (tmp1 - tmp2) * (0.666 - tmpColor) * 6;
     }
     return tmp2;
-  }
-
-  addImgData(imgData) {
-    let pixelsToAdd = imgData.data;
-    for (let i = 0; i < this.pixels.length; i += 4) {
-      this.pixels[i] += pixelsToAdd[i];
-      this.pixels[i + 1] += pixelsToAdd[i + 1];
-      this.pixels[i + 2] += pixelsToAdd[i + 2];
-    }
   }
 
   medianBlur(ksize) {

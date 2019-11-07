@@ -28,7 +28,7 @@ class Screen {
     console.log(this.corners);
     console.log(screenImgOriginal);
 
-    if (screenImgOriginal !== null) {
+    if (screenImgOriginal !== null && clientInfo !== null) {
       let transformedTempImage = this.map(
         screenImgOriginal,
         this.corners,

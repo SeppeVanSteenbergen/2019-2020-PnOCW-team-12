@@ -6,7 +6,7 @@ class Island {
    * @param {int} y y co
    * @param {int} id
    */
-  constructor(x, y, id, imgOriginal) {
+  constructor(leftUpperCoo, rightBottomCoo, id, imgOriginal) {
     /*this.minx;
     this.maxx;
     this.miny;
@@ -32,11 +32,11 @@ class Island {
       LD: null
     };
 
-    this.minx = x;
-    this.maxx = x;
+    this.minx = leftUpperCoo[0]
+    this.maxx = rightBottomCoo[0]
 
-    this.miny = y;
-    this.maxy = y;
+    this.miny = leftUpperCoo[1]
+    this.maxy = rightBottomCoo[1]
 
     this.id = id;
     this.green = id;
@@ -56,7 +56,7 @@ class Island {
    *
    * @param {int} x x co
    * @param {int} y y co
-   */
+
   add(x, y) {
     this.minx = Math.min(x, this.minx);
     this.miny = Math.min(y, this.miny);
@@ -64,6 +64,7 @@ class Island {
     this.maxx = Math.max(x, this.maxx);
     this.maxy = Math.max(y, this.maxy);
   }
+   */
 
   print() {
     console.log('starting co: ' + this.minx + ', ' + this.miny);

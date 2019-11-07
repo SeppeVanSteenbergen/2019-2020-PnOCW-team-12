@@ -33,20 +33,7 @@ imgElement.onload = function() {
     'RGBA',
     imgElement.width,
     imgElement.height,
-    {
-      68: {
-        size: {
-          width: 1000,
-          height: 700
-        }
-      },
-      67: {
-        size: {
-          width: 1000,
-          height: 700
-        }
-      }
-    }
+    null
   );
   imageTest.rgbaToHsla();
 
