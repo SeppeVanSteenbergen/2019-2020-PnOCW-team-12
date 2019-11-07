@@ -96,7 +96,7 @@ class Island {
   findCorners() {
     // choosing diagonal or straight corner detection
     let diagonalSearch = false;
-    let corners = [];
+    // let corners = [];
 
     // Find which corner search to use: perpendicular or diagonal.
 
@@ -129,167 +129,11 @@ class Island {
 
     if (diagonalSearch) {
       // Diagonal search
+      var corners = this.diagonalSearch()
 
-      // left upper corner
-      for (let k = 0; k <= this.width + this.height - 2; k++) {
-        let found = false;
-        for (let j = 0; j <= k; j++) {
-          let i = k - j;
-          if (
-            i < this.height &&
-            j < this.width &&
-            this.screenMatrix[i][j] !== 0
-          ) {
-            corners.push([j, i, this.screenMatrix[i][j]]);
-            found = true;
-            break;
-          }
-        }
-        if (found) break;
-      }
-
-      // right upper corner
-      for (let k = 0; k <= this.width + this.height - 2; k++) {
-        let found = false;
-        for (let j = 0; j <= k; j++) {
-          let i = k - j;
-          if (
-            i < this.height &&
-            j < this.width &&
-            this.screenMatrix[i][this.width - j - 1] !== 0
-          ) {
-            corners.push([
-              this.width - j - 1,
-              i,
-              this.screenMatrix[i][this.width - j - 1]
-            ]);
-            found = true;
-            break;
-          }
-        }
-        if (found) break;
-      }
-
-      // right lower corner
-      for (let k = 0; k <= this.width + this.height - 2; k++) {
-        let found = false;
-        for (let j = 0; j <= k; j++) {
-          let i = k - j;
-          if (
-            i < this.height &&
-            j < this.width &&
-            this.screenMatrix[this.height - i - 1][this.width - j - 1] !== 0
-          ) {
-            corners.push([
-              this.width - j - 1,
-              this.height - i - 1,
-              this.screenMatrix[this.height - i - 1][this.width - j - 1]
-            ]);
-            found = true;
-            break;
-          }
-        }
-        if (found) break;
-      }
-
-      // left lower corner
-      for (let k = 0; k <= this.width + this.height - 2; k++) {
-        let found = false;
-        for (let j = 0; j <= k; j++) {
-          let i = k - j;
-          if (
-            i < this.height &&
-            j < this.width &&
-            this.screenMatrix[this.height - i - 1][j] !== 0
-          ) {
-            corners.push([
-              j,
-              this.height - i - 1,
-              this.screenMatrix[this.height - i - 1][j]
-            ]);
-            found = true;
-            break;
-          }
-        }
-        if (found) break;
-      }
     } else {
       // Perpendicular search
-
-      // left
-      for (let x = 0; x < this.width; x++) {
-        let found = false;
-        let tempY = [];
-        for (let y = 0; y < this.height; y++) {
-          if (this.screenMatrix[y][x] !== 0) {
-            tempY.push(y);
-            found = true;
-          }
-        }
-        if (found) {
-          let medianY = tempY[Math.floor(tempY.length / 2)];
-          corners.push([x, medianY, this.screenMatrix[medianY][x]]);
-          break;
-        }
-      }
-
-      // top
-      for (let y = 0; y < this.height; y++) {
-        let found = false;
-        let tempX = [];
-        for (let x = 0; x < this.width; x++) {
-          if (this.screenMatrix[y][x] !== 0) {
-            tempX.push(x);
-            found = true;
-          }
-        }
-        if (found) {
-          let medianX = tempX[Math.floor(tempX.length / 2)];
-          corners.push([medianX, y, this.screenMatrix[y][medianX]]);
-          break;
-        }
-      }
-
-      // right
-      for (let x = 0; x < this.width; x++) {
-        let found = false;
-        let tempY = [];
-        for (let y = 0; y < this.height; y++) {
-          if (this.screenMatrix[y][this.width - x - 1] !== 0) {
-            tempY.push(y);
-            found = true;
-          }
-        }
-        if (found) {
-          let medianY = tempY[Math.floor(tempY.length / 2)];
-          corners.push([
-            this.width - x - 1,
-            medianY,
-            this.screenMatrix[medianY][this.width - x - 1]
-          ]);
-          break;
-        }
-      }
-      // bottom
-      for (let y = 0; y < this.height; y++) {
-        let found = false;
-        let tempX = [];
-        for (let x = 0; x < this.width; x++) {
-          if (this.screenMatrix[this.height - y - 1][x] !== 0) {
-            tempX.push(x);
-            found = true;
-          }
-        }
-        if (found) {
-          let medianX = tempX[Math.floor(tempX.length / 2)];
-          corners.push([
-            medianX,
-            this.height - y - 1,
-            this.screenMatrix[this.height - y - 1][medianX]
-          ]);
-          break;
-        }
-      }
+      var corners = this.perpendicularSearch()
     }
 
     // corners to absolute position
@@ -312,6 +156,173 @@ class Island {
     this.corners.push(temp.RU);
     this.corners.push(temp.RD);
     this.corners.push(temp.LD);
+  }
+
+  perpendicularSearch(){
+    let corners = []
+    // left
+    for (let x = 0; x < this.width; x++) {
+      let found = false;
+      let tempY = [];
+      for (let y = 0; y < this.height; y++) {
+        if (this.screenMatrix[y][x] !== 0) {
+          tempY.push(y);
+          found = true;
+        }
+      }
+      if (found) {
+        let medianY = tempY[Math.floor(tempY.length / 2)];
+        corners.push([x, medianY, this.screenMatrix[medianY][x]]);
+        break;
+      }
+    }
+
+    // top
+    for (let y = 0; y < this.height; y++) {
+      let found = false;
+      let tempX = [];
+      for (let x = 0; x < this.width; x++) {
+        if (this.screenMatrix[y][x] !== 0) {
+          tempX.push(x);
+          found = true;
+        }
+      }
+      if (found) {
+        let medianX = tempX[Math.floor(tempX.length / 2)];
+        corners.push([medianX, y, this.screenMatrix[y][medianX]]);
+        break;
+      }
+    }
+
+    // right
+    for (let x = 0; x < this.width; x++) {
+      let found = false;
+      let tempY = [];
+      for (let y = 0; y < this.height; y++) {
+        if (this.screenMatrix[y][this.width - x - 1] !== 0) {
+          tempY.push(y);
+          found = true;
+        }
+      }
+      if (found) {
+        let medianY = tempY[Math.floor(tempY.length / 2)];
+        corners.push([
+          this.width - x - 1,
+          medianY,
+          this.screenMatrix[medianY][this.width - x - 1]
+        ]);
+        break;
+      }
+    }
+    // bottom
+    for (let y = 0; y < this.height; y++) {
+      let found = false;
+      let tempX = [];
+      for (let x = 0; x < this.width; x++) {
+        if (this.screenMatrix[this.height - y - 1][x] !== 0) {
+          tempX.push(x);
+          found = true;
+        }
+      }
+      if (found) {
+        let medianX = tempX[Math.floor(tempX.length / 2)];
+        corners.push([
+          medianX,
+          this.height - y - 1,
+          this.screenMatrix[this.height - y - 1][medianX]
+        ]);
+        break;
+      }
+    }
+    return corners
+  }
+
+  diagonalSearch(){
+    let corners = []
+    // left upper corner
+    for (let k = 0; k <= this.width + this.height - 2; k++) {
+      let found = false;
+      for (let j = 0; j <= k; j++) {
+        let i = k - j;
+        if (
+            i < this.height &&
+            j < this.width &&
+            this.screenMatrix[i][j] !== 0
+        ) {
+          corners.push([j, i, this.screenMatrix[i][j]]);
+          found = true;
+          break;
+        }
+      }
+      if (found) break;
+    }
+
+    // right upper corner
+    for (let k = 0; k <= this.width + this.height - 2; k++) {
+      let found = false;
+      for (let j = 0; j <= k; j++) {
+        let i = k - j;
+        if (
+            i < this.height &&
+            j < this.width &&
+            this.screenMatrix[i][this.width - j - 1] !== 0
+        ) {
+          corners.push([
+            this.width - j - 1,
+            i,
+            this.screenMatrix[i][this.width - j - 1]
+          ]);
+          found = true;
+          break;
+        }
+      }
+      if (found) break;
+    }
+
+    // right lower corner
+    for (let k = 0; k <= this.width + this.height - 2; k++) {
+      let found = false;
+      for (let j = 0; j <= k; j++) {
+        let i = k - j;
+        if (
+            i < this.height &&
+            j < this.width &&
+            this.screenMatrix[this.height - i - 1][this.width - j - 1] !== 0
+        ) {
+          corners.push([
+            this.width - j - 1,
+            this.height - i - 1,
+            this.screenMatrix[this.height - i - 1][this.width - j - 1]
+          ]);
+          found = true;
+          break;
+        }
+      }
+      if (found) break;
+    }
+
+    // left lower corner
+    for (let k = 0; k <= this.width + this.height - 2; k++) {
+      let found = false;
+      for (let j = 0; j <= k; j++) {
+        let i = k - j;
+        if (
+            i < this.height &&
+            j < this.width &&
+            this.screenMatrix[this.height - i - 1][j] !== 0
+        ) {
+          corners.push([
+            j,
+            this.height - i - 1,
+            this.screenMatrix[this.height - i - 1][j]
+          ]);
+          found = true;
+          break;
+        }
+      }
+      if (found) break;
+    }
+    return corners
   }
 
   cleanCorners(corners, radius) {
