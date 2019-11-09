@@ -16,6 +16,7 @@ class Image {
     this.colorSpaces = ['RGBA', 'HSLA', 'BW'];
     this.islandID = 4; //jumps per two so we can save green and blue within an island.
     this.screens = [];
+    this.pictureCanvas = null;
 
 
     this.lowerBoundG = [120 - this.sensitivity, 50, 25];
@@ -49,13 +50,17 @@ class Image {
   }
 
   analyse(){
+    this.rgbaToHsla();
     this.createBigMask();
     this.medianBlurMatrix(3);
     this.medianBlur(3);
     this.createOffset(3);
     this.createScreens();
+    this.createPictureCanvas();
+    //console.log("picture canvas: " + Object.values(this.pictureCanvas));
     return this.screens;
   }
+
   getImgData() {
     if (this.canvas !== null) {
       let context = this.canvas.getContext('2d');
@@ -227,6 +232,40 @@ class Image {
       let newScreen = this.islands[i].createScreen(this.clientInfo);
       this.screens.push(newScreen);
     }
+  }
+
+  createPictureCanvas(){
+    this.pictureCanvas = {
+      minx : null,
+      maxx : null,
+      miny : null,
+      maxy : null
+    };
+
+    let allCorners = [];
+
+    this.screens.forEach(function(e){
+      for(let key in e.corners){
+        allCorners.push(e.corners[key]);
+      }
+    });
+
+    //sort on x co
+    allCorners.sort(function(a, b){
+      return a[0] >= b[0];
+    });
+
+    this.pictureCanvas["minx"] = allCorners[0][0];
+    this.pictureCanvas["maxx"] = allCorners[allCorners.length - 1][0];
+
+    //sort on y co
+    allCorners.sort(function(a, b){
+      return a[1] >= b[1];
+    });
+
+    this.pictureCanvas["miny"] = allCorners[0][1];
+    this.pictureCanvas["maxy"] = allCorners[allCorners.length - 1][1];
+
   }
 
   /*
