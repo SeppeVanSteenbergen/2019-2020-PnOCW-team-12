@@ -14,7 +14,8 @@ class Screen {
     this.orientation = orientation;
     this.midPoint = midPoint;
     this.clientInfo = clientInfo;
-    var area = 0;
+    /**
+     var area = 0;
     for (let i = 0; i < corners.length - 1; i++) {
       area += corners[i][0] * corners[i + 1][1] * 0.5;
       area -= corners[i + 1][0] * corners[i][1] * 0.5;
@@ -22,11 +23,12 @@ class Screen {
     area += corners[3][0] * corners[0][1] * 0.5;
     area -= corners[0][0] * corners[3][1] * 0.5;
     this.size = Math.abs(area);
+     */
 
     // create temporary screen img for detection
 
-    console.log(this.corners);
-    console.log(screenImgOriginal);
+    //console.log(this.corners);
+    //console.log(screenImgOriginal);
 
     if (screenImgOriginal !== null && clientInfo !== null) {
       let transformedTempImage = this.map(
@@ -36,7 +38,7 @@ class Screen {
         600
       );
 
-      console.log('tranformed image');
+      console.log('transformed image');
       console.log(transformedTempImage);
       this.clientCode = this.findClientCode(transformedTempImage);
       console.log('clientCode: ' + this.clientCode);
@@ -83,6 +85,7 @@ class Screen {
     this.transMatrix = matrixC;
     return matrixC;
   }
+
   findMapMatrix(corners) {
     let row1 = [corners[0][0], corners[1][0], corners[2][0]]; // x1,x2,x3
     let row2 = [corners[0][1], corners[1][1], corners[2][1]]; // y1,y2,y3

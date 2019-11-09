@@ -45,6 +45,7 @@ class Island {
     this.MIN_ISLAND_SIZE = 1000;
 
     this.imgOriginal = imgOriginal;
+    this.destinationMatrix = [[-200,-200],[-200,200]];
   }
 
   isValidIsland() {
@@ -69,6 +70,13 @@ class Island {
   print() {
     console.log('starting co: ' + this.minx + ', ' + this.miny);
     console.log('ending co: ' + this.maxx + ', ' + this.maxy);
+  }
+
+  add(x,y) {
+    if(x > this.maxx) this.maxx = x;
+    if(x < this.minx) this.minx = x;
+    if(y > this.maxy) this.maxy = y;
+    if(y < this.miny) this.miny = y;
   }
 
   size() {
@@ -143,12 +151,11 @@ class Island {
       corners[i][1] += this.miny;
     }
 
-    console.log('corners');
-
     this.cleanCorners(corners, 30); // TODO shouldn't be hardcoded
 
     let distances = this.distToMid();
-    this.recoScreen(distances);
+    this.adjacentCorners(distances);
+    this.calcScreen();
 
     // corners to list
     let temp = this.corners;
@@ -480,6 +487,153 @@ class Island {
     return [midX + this.minx, midY + this.miny];
   }
 
+  //searches the two corners that arent the right adjacent ones and sets them to null; TODO: efficiënter!
+
+  adjacentCorners(distances) {
+    let lengthThresh = 0.9;
+    // check LU and RD
+    if (distances[0] !== null) {
+      if (distances[2] !== null) {
+        if (
+            !this.inRangeOf(distances[0], distances[2], lengthThresh) &&
+            distances[0] > distances[2]
+        ) {
+          this.corners.RD = null
+        } else if (!this.inRangeOf(distances[0], distances[2], lengthThresh)) {
+          this.corners.LU = null
+        }
+      }
+      //distances[2](RD) equals null
+      if (distances[2] === null) {
+        this.corners.RD = null
+      }
+    } else if (distances[0] === null) {
+      //distances[0](LU) equals null
+      this.corners.LU = null
+    }
+
+    //check RU and LD
+    if (distances[1] !== null) {
+      if (distances[3] !== null) {
+        if (
+            !this.inRangeOf(distances[1], distances[3], lengthThresh) &&
+            distances[1] > distances[3]
+        ) {
+          this.corners.LD = null
+        } else if (!this.inRangeOf(distances[1], distances[3], lengthThresh)) {
+          this.corners.RU = null
+        }
+      }
+      //distances[3](LD) equals null
+      if (distances[3] === null) {
+        this.corners.LD = null
+      }
+    } else if (distances[1] === null) {
+      //distances[1](RU) equals null
+      this.corners.RU = null
+    }
+    let consoleCorners = this.corners;
+    console.log("corners after cleaning")
+    console.log(consoleCorners);
+  }
+
+  // seen from the midpoint as origin
+  makeSourceMatrix() {
+    let sourceMatrix = [[0,0],[0,0]];
+    if(this.corners.LU !== null && this.corners.RU !== null) {
+      sourceMatrix[0][0] = Math.floor(this.corners.LU[0] - this.midPoint[0]);
+      sourceMatrix[1][0] = Math.floor(this.corners.LU[1] - this.midPoint[1]);
+      sourceMatrix[0][1] = Math.floor(this.corners.RU[0] - this.midPoint[0]);
+      sourceMatrix[1][1] = Math.floor(this.corners.RU[1] - this.midPoint[1]);
+    }
+    else if(this.corners.RU !== null && this.corners.RD !== null) {
+      sourceMatrix[0][0] = Math.floor(this.corners.RU[0] - this.midPoint[0]);
+      sourceMatrix[1][0] = Math.floor(this.corners.RU[1] - this.midPoint[1]);
+      sourceMatrix[0][1] = Math.floor(this.corners.RD[0] - this.midPoint[0]);
+      sourceMatrix[1][1] = Math.floor(this.corners.RD[1] - this.midPoint[1]);
+    }
+    else if(this.corners.RD !== null && this.corners.LD !== null) {
+      sourceMatrix[0][0] = Math.floor(this.corners.RD[0] - this.midPoint[0]);
+      sourceMatrix[1][0] = Math.floor(this.corners.RD[1] - this.midPoint[1]);
+      sourceMatrix[0][1] = Math.floor(this.corners.LD[0] - this.midPoint[0]);
+      sourceMatrix[1][1] = Math.floor(this.corners.LD[1] - this.midPoint[1]);
+    }
+    else if(this.corners.LD !== null && this.corners.LU !== null) {
+      sourceMatrix[0][0] = Math.floor(this.corners.LD[0] - this.midPoint[0]);
+      sourceMatrix[1][0] = Math.floor(this.corners.LD[1] - this.midPoint[1]);
+      sourceMatrix[0][1] = Math.floor(this.corners.LU[0] - this.midPoint[0]);
+      sourceMatrix[1][1] = Math.floor(this.corners.LU[1] - this.midPoint[1]);
+    }
+    return sourceMatrix;
+  }
+
+  getDestinationMatrix() {
+    return this.destinationMatrix;
+  }
+
+  //https://math.stackexchange.com/questions/557507/how-to-find-a-transformation-matrix-given-coordinates-of-two-triangles-in-r2
+  calcTransMatrix() {
+    let source = this.makeSourceMatrix();
+    let destination = this.getDestinationMatrix();
+    return Algebra.dotMMsmall(destination, Algebra.inv(source))
+  }
+
+  //reconstruct the unfound corners starting from the square corners
+  calcScreen() {
+    let transMatrix = this.calcTransMatrix();
+    let sourceCorners = [[200,200],[200,-200]];
+    let destinationCorners = Algebra.dotMMsmall(transMatrix,sourceCorners);
+    //transform coordinates back to original
+    destinationCorners[0][0] += this.midPoint[0];
+    destinationCorners[0][1] += this.midPoint[0];
+    destinationCorners[1][0] += this.midPoint[1];
+    destinationCorners[1][1] += this.midPoint[1];
+    this.add(destinationCorners[0][0], destinationCorners[1][0]);
+    this.add(destinationCorners[0][1], destinationCorners[1][1]);
+    console.log("calculated corners");
+    console.log(destinationCorners);
+    this.relocateCorners(destinationCorners);
+  }
+
+  relocateCorners(destinationCorners) {
+     if(this.corners.LU !== null && this.corners.RU !== null) {
+       if(destinationCorners[0][0] > destinationCorners[0][1]) {
+         this.corners.RD = [destinationCorners[0][0], destinationCorners[1][0], this.switchColor(this.corners.LU)];
+         this.corners.LD = [destinationCorners[0][1], destinationCorners[1][1], this.switchColor(this.corners.RU)];
+       } else {
+         this.corners.LD = [destinationCorners[0][0],destinationCorners[1][0], this.switchColor(this.corners.RU)];
+         this.corners.RD = [destinationCorners[0][1],destinationCorners[1][1], this.switchColor(this.corners.LU)];
+       }
+     }
+    else if(this.corners.RU !== null && this.corners.RD !== null) {
+      if(destinationCorners[1][0] > destinationCorners[1][1]) {
+        this.corners.LD = [destinationCorners[0][0],destinationCorners[1][0], this.switchColor(this.corners.RU)];
+        this.corners.LU = [destinationCorners[0][1],destinationCorners[1][1], this.switchColor(this.corners.RD)];
+      } else {
+        this.corners.LU = [destinationCorners[0][0],destinationCorners[1][0], this.switchColor(this.corners.RD)];
+        this.corners.LD = [destinationCorners[0][1],destinationCorners[1][1], this.switchColor(this.corners.RU)];
+      }
+    }
+    else if(this.corners.RD !== null && this.corners.LD !== null) {
+      if(destinationCorners[0][0] > destinationCorners[0][1]) {
+        this.corners.RU = [destinationCorners[0][0],destinationCorners[1][0], this.switchColor(this.corners.LD)];
+        this.corners.LU = [destinationCorners[0][1],destinationCorners[1][1], this.switchColor(this.corners.RD)];
+      } else {
+        this.corners.LU = [destinationCorners[0][0],destinationCorners[1][0], this.switchColor(this.corners.RD)];
+        this.corners.RU = [destinationCorners[0][1],destinationCorners[1][1], this.switchColor(this.corners.LD)];
+      }
+    }
+    else if(this.corners.LD !== null && this.corners.LU !== null) {
+      if(destinationCorners[1][0] > destinationCorners[1][1]) {
+        this.corners.RD = [destinationCorners[0][0],destinationCorners[1][0], this.switchColor(this.corners.LU)];
+        this.corners.RU = [destinationCorners[0][1],destinationCorners[1][1], this.switchColor(this.corners.LD)];
+      } else {
+        this.corners.RU = [destinationCorners[0][0],destinationCorners[1][0], this.switchColor(this.corners.LD)];
+        this.corners.RD = [destinationCorners[0][1],destinationCorners[1][1], this.switchColor(this.corners.LU)];
+      }
+    }
+  }
+
   recoScreen(distances) {
     let lengthThresh = 0.7;
     // check LU and RD
@@ -588,7 +742,7 @@ class Island {
     switch (this.corners.length) {
       case 4:
         //no reconstruction needed
-        console.log('alle 4 al gevonden');
+        //console.log('alle 4 al gevonden');
         break;
 
       case 3:
@@ -660,5 +814,15 @@ class Island {
     if (y < 0) y = 0;
     else if (y >= this.height) y = this.height - 1;
     return this.screenMatrix[y][x];
+  }
+
+  countNulls(list) {
+    let counter = 0;
+    for(let i = 0; i < list.length; i++) {
+      if(list[i] == null) {
+        counter++;
+      }
+    }
+    return counter;
   }
 }

@@ -14,7 +14,7 @@ class Image {
 
     this.sensitivity = 12;
     this.colorSpaces = ['RGBA', 'HSLA', 'BW'];
-    this.islandID = 4; //jumps per two so we can save green and blue within an island.
+    this.islandID = 4; //jumps per three so we can save green and blue within an island.
     this.screens = [];
     this.pictureCanvas = null;
 
@@ -77,7 +77,7 @@ class Image {
 //TODO check resolution ook
   qualityCheck() {
     if (this.calcLuminance() < 40 || 80 < this.calcLuminance()) {
-      console.log('Take a better picture');
+      console.error('Take a better picture');
     }
   }
 
@@ -505,20 +505,20 @@ class Image {
       let x = pixel[0];
       let y = pixel[1];
       if (this.inGreenRange(H, S, L)) {
-        this.pixels[i + 1] = 0;
-        this.pixels[i + 2] = 100;
+        //this.pixels[i + 1] = 0;
+        //this.pixels[i + 2] = 100;
         this.matrix[y][x] = 1;
       } else if (this.inBlueRange(H, S, L)) {
-        this.pixels[i + 1] = 0;
-        this.pixels[i + 2] = 100;
+        //this.pixels[i + 1] = 0;
+        //this.pixels[i + 2] = 100;
         this.matrix[y][x] = 2;
       } else if (this.inMidRange(H, S, L)) {
-        this.pixels[i + 1] = 0;
-        this.pixels[i + 2] = 100;
+        //this.pixels[i + 1] = 0;
+        //this.pixels[i + 2] = 100;
         this.matrix[y][x] = 3;
       } else {
-        this.pixels[i + 1] = 0;
-        this.pixels[i + 2] = 0;
+        //this.pixels[i + 1] = 0;
+        //this.pixels[i + 2] = 0;
         this.matrix[y][x] = 0;
       }
     }
