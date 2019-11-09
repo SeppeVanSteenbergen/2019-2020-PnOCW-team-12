@@ -11,6 +11,8 @@ class Screen {
     this.height = null;*/
 
     this.corners = corners;
+    this.relativeCorners = corners;
+    
     this.orientation = orientation;
     this.midPoint = midPoint;
     this.clientInfo = clientInfo;

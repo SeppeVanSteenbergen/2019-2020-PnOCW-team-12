@@ -56,7 +56,8 @@ class Image {
     this.medianBlur(3);
     this.createOffset(3);
     this.createScreens();
-    this.createPictureCanvas();
+    this.createPictureCanvas(300, 500); //TODO: param meegeven
+    this.calcRelativeScreens(); //untested
     //console.log("picture canvas: " + Object.values(this.pictureCanvas));
     return this.screens;
   }
@@ -234,24 +235,31 @@ class Image {
     }
   }
 
-  createPictureCanvas(){
+  /**
+   * map the the given image size around the found screens
+   * 
+   * @param {int} w image width
+   * @param {int} h image height
+   */
+  createPictureCanvas(w, h){
     this.pictureCanvas = {
-      minx : null,
-      maxx : null,
-      miny : null,
-      maxy : null
+      minx: null,
+      maxx: null,
+      miny: null,
+      maxy: null,
+      scale: 1
     };
 
     let allCorners = [];
 
-    this.screens.forEach(function(e){
-      for(let key in e.corners){
+    this.screens.forEach(function (e) {
+      for (let key in e.corners) {
         allCorners.push(e.corners[key]);
       }
     });
 
     //sort on x co
-    allCorners.sort(function(a, b){
+    allCorners.sort(function (a, b) {
       return a[0] >= b[0];
     });
 
@@ -259,13 +267,45 @@ class Image {
     this.pictureCanvas["maxx"] = allCorners[allCorners.length - 1][0];
 
     //sort on y co
-    allCorners.sort(function(a, b){
+    allCorners.sort(function (a, b) {
       return a[1] >= b[1];
     });
 
     this.pictureCanvas["miny"] = allCorners[0][1];
     this.pictureCanvas["maxy"] = allCorners[allCorners.length - 1][1];
 
+    //scale image to min size containing all screens
+    let pc = this.pictureCanvas;
+    if (pc.minx + w < pc.maxx) {
+      let fac = (pc.maxx - pc.minx) / w;
+      w = w * fac;
+      h = h * fac;
+    }
+    if (pc.miny + h < pc.maxy) {
+      let fac = (pc.maxy - pc.miny) / h;
+      w = w * fac;
+      h = h * fac;
+    }
+
+    this.pictureCanvas.maxx = pc.minx + w;
+    this.pictureCanvas.maxy = pc.miny + h;
+    this.pictureCanvas.scale = (this.pictureCanvas.maxx - this.pictureCanvas.minx) / w;
+
+    return w, h;
+  }
+
+  /**
+   * Recalculate every screen's corner to match up with the mapped image pixels
+   */
+  calcRelativeScreens(){
+    let originX = this.pictureCanvas.minx;
+    let originY = this.pictureCanvas.miny;
+    this.screens.forEach(function(s){
+      for(let key in s.corners){
+        s.relativeCorners[key][0] = s.corners[key][0] - originX;
+        s.relativeCorners[key][1] = s.corners[key][1] - originY;
+      }
+    })
   }
 
   /*
