@@ -188,11 +188,11 @@ module.exports = {
    */
 
   pong(user_id, data) {
-    let currentTime = new Date().getTime()
+    let currentTime = Date.now()
     let ping = currentTime - data.startTime
     // time to add to server time to get client time
     let timeDelta = data.clientTime - ping / 2 - currentTime
-
+    if(typeof pingList[data.room_id] === 'undefined') pingList[data.room_id] = {}
     pingList[data.room_id][user_id] = {
       ping: ping,
       timeDelta: timeDelta
@@ -202,13 +202,14 @@ module.exports = {
       Object.keys(pingList[data.room_id]).length ===
       dataHelper.getClientsOfRoom(data.room_id).length
     ) {
-      this.sendCountDown(room_id, data)
+      this.sendCountDown(data.room_id, data)
     }
   },
   pingRoom(room_id, data) {
     let clients = dataHelper.getClientsOfRoom(room_id)
 
-    for (let i = 0; i < clients.length; i++) {
+    for (let i in clients) {
+      console.log(clients[i], room_id)
       this.pingUser(clients[i], data)
     }
   },
@@ -216,11 +217,11 @@ module.exports = {
     let payload = {
       command: data.command,
       startOffset: data.startOffset,
-      startTime: new Date().getTime(),
+      startTime: Date.now(),
       room_id: data.room_id
     }
 
-    this.sendDataByUserID('ping', user_id, payload)
+    this.sendDataByUserID('pings', payload, user_id)
   },
   /**
    * Steps
@@ -236,6 +237,7 @@ module.exports = {
   handleCountDown(master_id, data) {
     let startOffset = 200 // ms
     let room_id = dataHelper.getUserRoom(master_id)
+    pingList[room_id] = {}
 
     this.pingRoom(room_id, {
       command: data,
@@ -244,6 +246,7 @@ module.exports = {
     })
   },
   sendCountDown(room_id, data) {
+    console.log('send countDown')
     let clients = dataHelper.getClientsOfRoom(room_id)
 
     let clientPings = pingList[room_id]
@@ -255,8 +258,8 @@ module.exports = {
       data: data.command
     }
 
-    for (let i = 0; i < clients.length; i++) {
-      payload.startTime =
+    for (let i in clients) {
+      payload.data.startTime =
         new Date().getTime() + clientPings[clients[i]].timeDelta + startOffset
 
       this.sendDataByUserID('screenCommand', payload, clients[i])

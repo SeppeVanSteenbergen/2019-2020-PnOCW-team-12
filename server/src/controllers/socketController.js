@@ -188,7 +188,9 @@ module.exports = io => {
       )
     })
 
-    socket.on('pong', data => {
+    socket.on('pongs', data => {
+      console.log('received PONG !!')
+      console.log(pingList)
       socketHelper.pong(dataHelper.getUserIDFromSocketID(socket.id), data)
     })
   })
