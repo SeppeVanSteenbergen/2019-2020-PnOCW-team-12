@@ -11,8 +11,7 @@ export default class Triangle {
   }
 
   equalEdges(edge1, edge2) {
-    if (edge1.includes(edge2[0]) && edge1.includes(edge2[1])) return true
-    return false
+    return !!(edge1.includes(edge2[0]) && edge1.includes(edge2[1]))
   }
 
   hasEdge(edge) {

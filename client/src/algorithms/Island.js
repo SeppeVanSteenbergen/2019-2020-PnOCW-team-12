@@ -630,15 +630,13 @@ export default class Island {
   }
 
   createScreen(clientInfo) {
-    let corners = this.corners
-    let orientation = this.orientation
     /*for (let i = 0; i < corners.length; i++) {
       corners[i][0] += this.minx
       corners[i][1] += this.miny
     }*/
     return new Screen(
-      corners,
-      orientation,
+      this.corners,
+      this.orientation,
       this.midPoint,
       clientInfo,
       this.imgOriginal

@@ -101,7 +101,7 @@ export default {
     },
     disconnect: function() {
       try{
-        this.$router.push('/')
+        //this.$router.push('/')
       } catch(e) {
         console.log(e)
       }

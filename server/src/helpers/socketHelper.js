@@ -94,7 +94,9 @@ module.exports = {
       return 1
     }
 
-    if (message.to !== 'all') {
+    if (message.payload.type === 'count-down') {
+      this.handleCountDown(user_id, message.payload.data)
+    } else if (message.to !== 'all') {
       this.sendDataByUserID('screenCommand', message.payload, message.to)
     } else {
       this.sendDataToRoomOfMaster('screenCommand', message.payload, user_id)
@@ -179,5 +181,85 @@ module.exports = {
   },
   disconnectSocket(socket_id) {
     io.sockets.connected[socket_id].disconnect()
+  },
+
+  /*
+    on receiving pong data,
+   */
+
+  pong(user_id, data) {
+    let currentTime = new Date().getTime()
+    let ping = currentTime - data.startTime
+    // time to add to server time to get client time
+    let timeDelta = data.clientTime - ping / 2 - currentTime
+
+    pingList[data.room_id][user_id] = {
+      ping: ping,
+      timeDelta: timeDelta
+    }
+
+    if (
+      Object.keys(pingList[data.room_id]).length ===
+      dataHelper.getClientsOfRoom(data.room_id).length
+    ) {
+      this.sendCountDown(room_id, data)
+    }
+  },
+  pingRoom(room_id, data) {
+    let clients = dataHelper.getClientsOfRoom(room_id)
+
+    for (let i = 0; i < clients.length; i++) {
+      this.pingUser(clients[i], data)
+    }
+  },
+  pingUser(user_id, data) {
+    let payload = {
+      command: data.command,
+      startOffset: data.startOffset,
+      startTime: new Date().getTime(),
+      room_id: data.room_id
+    }
+
+    this.sendDataByUserID('ping', user_id, payload)
+  },
+  /**
+   * Steps
+   * 1) Save all the client latencies
+   * 2) Calculate all the client start times
+   * 3) Send all the start times with the data
+   * @param data
+   *        data.start
+   *        data.interval
+   * @param master_id
+   *        the user_id of a master in a room
+   */
+  handleCountDown(master_id, data) {
+    let startOffset = 200 // ms
+    let room_id = dataHelper.getUserRoom(master_id)
+
+    this.pingRoom(room_id, {
+      command: data,
+      startOffset: startOffset,
+      room_id: room_id
+    })
+  },
+  sendCountDown(room_id, data) {
+    let clients = dataHelper.getClientsOfRoom(room_id)
+
+    let clientPings = pingList[room_id]
+
+    let startOffset = 200 // ms
+
+    let payload = {
+      type: 'count-down',
+      data: data.command
+    }
+
+    for (let i = 0; i < clients.length; i++) {
+      payload.startTime =
+        new Date().getTime() + clientPings[clients[i]].timeDelta + startOffset
+
+      this.sendDataByUserID('screenCommand', payload, clients[i])
+    }
   }
 }

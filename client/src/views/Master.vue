@@ -591,7 +591,14 @@ export default {
 
       for (let i = 0; i < this.analysedImage.screens.length; i++) {
         let code = this.analysedImage.screens[i].clientCode
-        let img = this.analysedImage.screens[i].mapToScreen(delaunayImgObject)
+        //let img = this.analysedImage.screens[i].mapToScreen(delaunayImgObject)
+        let screen = this.analysedImage.screens[i]
+        let img = screen.map(
+          delaunayImgObject,
+          screen.corners,
+          screen.width,
+          screen.height
+        )
         this.sendImageToUser(
           img, // image
           this.myRoom.clients[code] // user ID

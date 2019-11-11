@@ -59,7 +59,8 @@ export default {
   data() {
     return {
       fullscreen: false,
-      canvas: null
+      canvas: null,
+      intervalObj: null
     }
   },
   mounted() {
@@ -109,6 +110,10 @@ export default {
           height: screen.height
         }
       })
+    },
+    ping(data) {
+      data.clientTime = new Date().getTime()
+      this.$socket.emit('pong', data)
     }
   },
   methods: {
@@ -147,7 +152,7 @@ export default {
       }
     },
     countDownHandler(data) {
-      this.countdownRecursive(data.start, data.interval)
+      this.countDownIntervalHandler(data.start, data.interval, data.startTime)
     },
     countdownRecursive(number, interval) {
       console.log(
@@ -163,6 +168,27 @@ export default {
           number - 1,
           interval
         )
+      }
+    },
+    countDownIntervalHandler(start, interval, startTime) {
+      this.intervalObj = setInterval(
+        this.countDownInterval,
+        Math.floor(interval / 2),
+        start,
+        interval,
+        startTime
+      )
+    },
+    countDownInterval(start, interval, startTime) {
+      let time = new Date().getTime()
+      if (time < startTime) return
+      let number = start - Math.floor((time - startTime) / interval)
+
+      if (number > 0) {
+        this.drawNumberOnCanvas(number)
+      } else {
+        this.drawCounterFinish()
+        clearInterval(this.intervalObj)
       }
     },
     drawNumberOnCanvas(num) {

@@ -18,7 +18,7 @@ export default class Screen {
     this.orientation = orientation
     this.midPoint = midPoint
     this.clientInfo = clientInfo
-    var area = 0
+    let area = 0
     for (let i = 0; i < corners.length - 1; i++) {
       area += corners[i][0] * corners[i + 1][1] * 0.5
       area -= corners[i + 1][0] * corners[i][1] * 0.5
@@ -40,8 +40,8 @@ export default class Screen {
         600
       )
 
-      console.log('tranformed image')
-      console.log(transformedTempImage)
+      // console.log('tranformed image')
+      // console.log(transformedTempImage)
       this.clientCode = this.findClientCode(transformedTempImage)
       console.log('clientCode: ' + this.clientCode)
 
@@ -131,14 +131,17 @@ export default class Screen {
     let data = fullImage.data
     let destination = [[0, 0], [width, 0], [width, height], [0, height]]
 
-    if (this.corners !== srcCorners || this.width !== width || this.height !== height) {
+    if (
+      this.corners !== srcCorners ||
+      this.width !== width ||
+      this.height !== height
+    ) {
       this.transformationMatrix(destination, srcCorners)
     }
 
-    let img = document
-      .createElement('canvas')
-      .getContext('2d')
-      .createImageData(width, height)
+    let c = document.createElement('canvas')
+    let ctx = c.getContext('2d')
+    let img = ctx.createImageData(width, height)
 
     for (let ys = 0; ys < height; ys++) {
       for (let xs = 0; xs < width; xs++) {

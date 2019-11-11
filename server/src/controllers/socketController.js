@@ -45,6 +45,22 @@ roomList = {}
  */
 registrationList = []
 
+/*
+  dictionary containing all the client pings
+
+  Dict
+  {
+    room_id: {
+      user_id: {
+        ping: [ping in ms],
+        timeDelta: [time in ms]
+        }
+      user_id2: {..}
+    }
+   }
+ */
+pingList = {}
+
 module.exports = io => {
   io.on('connect', socket => {
     console.log('client connected')
@@ -162,12 +178,18 @@ module.exports = io => {
     /**
      * Set the screen size of a connected device
      */
-    socket.on('setScreenSize', (data) => {
+    socket.on('setScreenSize', data => {
       dataHelper.setSize(dataHelper.getUserIDFromSocketID(socket.id), data.size)
     })
 
     socket.on('updateRoomClientInfo', () => {
-      socketHelper.updateRoomClientInfo(dataHelper.getUserIDFromSocketID(socket.id))
+      socketHelper.updateRoomClientInfo(
+        dataHelper.getUserIDFromSocketID(socket.id)
+      )
+    })
+
+    socket.on('pong', data => {
+      socketHelper.pong(dataHelper.getUserIDFromSocketID(socket.id), data)
     })
   })
 }
