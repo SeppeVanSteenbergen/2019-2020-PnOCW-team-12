@@ -96,7 +96,7 @@ class Image {
   /**
    * Execute all the calulations to analyse the whole image
    */
-  doCalulations() {
+  doCalculations() {
     this.rgbaToHsla();
     this.createGreenBlueMask();
     this.medianBlurMatrix(3);
