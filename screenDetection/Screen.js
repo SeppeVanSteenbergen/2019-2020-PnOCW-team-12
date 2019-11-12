@@ -1,36 +1,11 @@
 class Screen {
   constructor(corners, transMatrix, midPoint, clientInfo, screenImgOriginal) {
-    /*this.corners = null;
-    this.orientation = null;
-    this.size = null;
-    this.imgData = null;
-    this.clientCode = null;
-    this.midPoint = null;
-
-    this.width = null;
-    this.height = null;*/
-
     this.corners = corners;
     this.relativeCorners = corners;
     
     this.transMatrix = transMatrix;
     this.midPoint = midPoint;
     this.clientInfo = clientInfo;
-    /**
-     var area = 0;
-    for (let i = 0; i < corners.length - 1; i++) {
-      area += corners[i][0] * corners[i + 1][1] * 0.5;
-      area -= corners[i + 1][0] * corners[i][1] * 0.5;
-    }
-    area += corners[3][0] * corners[0][1] * 0.5;
-    area -= corners[0][0] * corners[3][1] * 0.5;
-    this.size = Math.abs(area);
-     */
-
-    // create temporary screen img for detection
-
-    //console.log(this.corners);
-    //console.log(screenImgOriginal);
 
     if (screenImgOriginal !== null && clientInfo !== null) {
       let transformedTempImage = screenImgOriginal/*this.map(
@@ -180,17 +155,3 @@ class Screen {
     return [x, y];
   }
 }
-
-// let newScreen = new Screen([1,2,5,4], 0)
-// let srcCorners = [[158, 64], [494, 69], [495, 404], [158, 404]];
-// let dstCorners =  [[150, 64], [494, 69], [495, 404], [158, 404]];
-// // let dstCorners = [[100, 500], [152, 564], [148, 604], [100, 560]];
-// // console.log(newScreen.findMapMatrix(dstCorners))
-// console.log(newScreen.transformationMatrix(srcCorners, dstCorners))
-// let matrix = newScreen.transformationMatrix(srcCorners, dstCorners)
-// console.log(newScreen.dotMMsmall(matrix, [[117], [530],[1]]))
-
-// let matrix = [12,14,15,36,12,54,78,9,63,21,45,21,45,99,87,42,26,74,65,66,26,36,14,25,36,24,15,14,12,36,25,47,85,96,78,96]
-// let corners = [[1,1],[2,1],[2,2],[1,2]]
-// let destination = [[0,0],[2,0],[2,2],[0,2]]
-// newScreen.map(matrix, corners, destination)

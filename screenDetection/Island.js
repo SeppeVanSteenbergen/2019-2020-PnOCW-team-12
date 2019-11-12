@@ -29,8 +29,8 @@ class Island {
 
     this.imgOriginal = imgOriginal;
     this.destinationMatrix = [[-1280,-1280],[-800,800]];
-    //this.barcode = BarcodeScanner.scan2(this.getScreenImg(), 30)
-    //console.log(BarcodeScanner.scan2(this.getScreenImg(), 30))
+    this.barcode = BarcodeScanner.scan2(this.getScreenImg(), 30)
+    console.log(BarcodeScanner.scan2(this.getScreenImg(), 30))
   }
 
   isValid() {
