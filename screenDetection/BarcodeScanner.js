@@ -121,4 +121,164 @@ class BarcodeScanner {
     }
     return hue;
   }
+
+  static scan2(imageObject, sensitivity) {
+    let hor = scanHorizontal(imageObject, sensitivity)
+    let ver = scanVertical(imageObject, sensitivity)
+    for(let i = 0; i < hor.length; i++){
+      ver[i] += hor[i]
+    }
+    return parseInt(Object.keys(ver).find(key => ver[key] === maxAmount).toString().replace(/,/g, ''))
+  }
+
+  scanHorizontal(imageObject, sensitivity) {
+    let height = imageObject.height;
+    let image = this.rgbaToHsla(imageObject.data);
+
+    let scanned = [];
+    let barcodes = {};
+
+    for (let i = 0; i < image.length; i += 4) {
+      // Hue color values + code: 0/1; 60/2; 120/3; 240/4; 300/5
+      let H = image[i] * 2;
+      let S = image[i + 1];
+      let L = image[i + 2];
+
+      if (S < 10 || L > 70) {
+        if (scanned.length === 5) {
+          if (barcodes[scanned] === undefined) {
+            barcodes[scanned] = 1;
+          } else {
+            barcodes[scanned] += 1;
+          }
+        }
+        scanned = [];
+      } else if (H < sensitivity && S > 50 && !scanned.includes(1)) {
+        scanned.push(1);
+      } else if (
+        H > 60 - sensitivity &&
+        H < 60 + sensitivity &&
+        S > 50 &&
+        !scanned.includes(2)
+      ) {
+        scanned.push(2);
+      } else if (
+        H > 120 - sensitivity &&
+        H < 120 + sensitivity &&
+        S > 50 &&
+        !scanned.includes(3)
+      ) {
+        scanned.push(3);
+      } else if (
+        H > 240 - sensitivity &&
+        H < 240 + sensitivity &&
+        S > 50 &&
+        !scanned.includes(4)
+      ) {
+        scanned.push(4);
+      } else if (
+        H > 300 - sensitivity &&
+        H < 300 + sensitivity &&
+        S > 50 &&
+        !scanned.includes(5)
+      ) {
+        scanned.push(5);
+      }
+    }
+
+    let amounts = Object.values(barcodes);
+    let maxAmount = Math.max(...amounts);
+    let detectedAmount = amounts.reduce((a, b) => a + b, 0);
+
+    let detectRatio = maxAmount / detectedAmount;
+    //TODO: Needs to be updated with the right amount of barcodes on screen.
+    let ratio = maxAmount / height / 10;
+    console.log(detectRatio, ratio);
+    if (ratio < 0.1 || detectRatio < 0.5) {
+      console.error('Picture is not good enough to detect barcode');
+    }
+
+    return barcodes;
+  }
+
+  pixelToPosition(pixel, width) {
+    return (pixel[1] * width + pixel[0]) * 4;
+  }
+
+  scanVertical(imageObject, sensitivity) {
+    let height = imageObject.height;
+    let image = this.rgbaToHsla(imageObject.data);
+
+    let scanned = [];
+    let barcodes = {};
+
+    for (let x = 0; x < imageObject.width; x++) {
+      {
+        for (let y = 0; y < imageObject.height; y++) {
+          let i = this.pixelToPosition([x, y], imageObject.width)
+          // Hue color values + code: 0/1; 60/2; 120/3; 240/4; 300/5
+          let H = image[i] * 2;
+          let S = image[i + 1];
+          let L = image[i + 2];
+
+          if (S < 10 || L > 70) {
+            if (scanned.length === 5) {
+              if (barcodes[scanned] === undefined) {
+                barcodes[scanned] = 1;
+              } else {
+                barcodes[scanned] += 1;
+              }
+            }
+            scanned = [];
+          } else if (H < sensitivity && S > 50 && !scanned.includes(1)) {
+            scanned.push(1);
+          } else if (
+            H > 60 - sensitivity &&
+            H < 60 + sensitivity &&
+            S > 50 &&
+            !scanned.includes(2)
+          ) {
+            scanned.push(2);
+          } else if (
+            H > 120 - sensitivity &&
+            H < 120 + sensitivity &&
+            S > 50 &&
+            !scanned.includes(3)
+          ) {
+            scanned.push(3);
+          } else if (
+            H > 240 - sensitivity &&
+            H < 240 + sensitivity &&
+            S > 50 &&
+            !scanned.includes(4)
+          ) {
+            scanned.push(4);
+          } else if (
+            H > 300 - sensitivity &&
+            H < 300 + sensitivity &&
+            S > 50 &&
+            !scanned.includes(5)
+          ) {
+            scanned.push(5);
+          }
+        }
+      }
+    }
+
+
+
+    let amounts = Object.values(barcodes);
+    let maxAmount = Math.max(...amounts);
+    let detectedAmount = amounts.reduce((a, b) => a + b, 0);
+
+    let detectRatio = maxAmount / detectedAmount;
+    //TODO: Needs to be updated with the right amount of barcodes on screen.
+    let ratio = maxAmount / height / 10;
+    console.log(detectRatio, ratio);
+    if (ratio < 0.1 || detectRatio < 0.5) {
+      console.error('Picture is not good enough to detect barcode');
+    }
+
+    return barcodes
+  }
 }
