@@ -41,7 +41,8 @@ class Image {
   }
 
   analyse(){
-    colorSpace.rgbaToHsla(this.pixels)
+    ColorSpace.rgbaToHsla(this.pixels)
+    this.setColorSpace("HSLA")
     this.createBigMask();
     this.createOffset(3);
     this.createScreens();
@@ -86,7 +87,8 @@ class Image {
    * Execute all the calulations to analyse the whole image
    */
   doCalculations() {
-    colorSpace.rgbaToHsla(this.pixels);
+    ColorSpace.rgbaToHsla(this.pixels);
+    this.setColorSpace("HSLA")
     this.createGreenBlueMask();
     this.medianBlurMatrix(3);
     this.createScreens();

@@ -1,13 +1,13 @@
-class colorSpace {
+class ColorSpace {
     /*
         math from https://www.rapidtables.com/convert/color/rgb-to-hsl.html
     */
-    rgbaToHsla(pixels) {
+    static rgbaToHsla(pixels) {
         for (let i = 0; i < pixels.length; i += 4) {
             //convert rgb spectrum to 0-1
             let red = pixels[i] / 255;
             let green = pixels[i + 1] / 255;
-            let blue = tpixels[i + 2] / 255;
+            let blue = pixels[i + 2] / 255;
 
             let min = Math.min(red, green, blue);
             let max = Math.max(red, green, blue);
@@ -16,13 +16,13 @@ class colorSpace {
             let S = this.findSaturation(min, max, L);
             let H = this.findHue(red, green, blue, max, min);
 
-            this.pixels[i] = H / 2;
-            this.pixels[i + 1] = Math.round(S * 100);
-            this.pixels[i + 2] = Math.round(L * 100);
+            pixels[i] = H / 2;
+            pixels[i + 1] = Math.round(S * 100);
+            pixels[i + 2] = Math.round(L * 100);
         }
     }
 
-    findSaturation(min, max, L) {
+    static findSaturation(min, max, L) {
         if (L < 0.5) {
             if (min + max === 0) {
                 return 0;
@@ -33,7 +33,7 @@ class colorSpace {
         }
     }
 
-    findHue(red, green, blue, max, min) {
+    static findHue(red, green, blue, max, min) {
         let hue = 0;
         if (max === min) {
             return 0;
@@ -56,7 +56,7 @@ class colorSpace {
      * pixels as array in hsla colorspace
      * math from: http://www.niwa.nu/2013/05/math-behind-colorspace-conversions-rgb-hsl/
      */
-    hslaToRgba(pixels) {
+    static hslaToRgba(pixels) {
         let R;
         let G;
         let B;
@@ -96,13 +96,13 @@ class colorSpace {
                 B = this.hslaToRgbaCalculateColor(tmp1, tmp2, tmpB);
             }
 
-            this.pixels[i] = Math.round(R * 255);
-            this.pixels[i + 1] = Math.round(G * 255);
-            this.pixels[i + 2] = Math.round(B * 255);
+            pixels[i] = Math.round(R * 255);
+            pixels[i + 1] = Math.round(G * 255);
+            pixels[i + 2] = Math.round(B * 255);
         }
     }
 
-    setTemporaryInRange(temp) {
+    static setTemporaryInRange(temp) {
         if (temp > 1) {
             return temp - 1;
         } else if (temp < 0) {
@@ -111,7 +111,7 @@ class colorSpace {
         return temp;
     }
 
-    hslaToRgbaCalculateColor(tmp1, tmp2, tmpColor) {
+    static hslaToRgbaCalculateColor(tmp1, tmp2, tmpColor) {
         if (6 * tmpColor < 1) {
             return tmp2 + (tmp1 - tmp2) * 6 * tmpColor;
         } else if (2 * tmpColor < 1) {

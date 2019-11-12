@@ -2,7 +2,7 @@ class BarcodeScanner {
   static scan(imageObject, sensitivity) {
     //let width = imageObject.width; // not used
     let height = imageObject.height;
-    let image = this.rgbaToHsla(imageObject.data);
+    let image = colorSpace.rgbaToHsla(imageObject.data);
 
     let scanned = [];
     let barcodes = {};
@@ -70,59 +70,6 @@ class BarcodeScanner {
     return parseInt(Object.keys(barcodes).find(key => barcodes[key] === maxAmount).toString().replace(/,/g, ''));
   }
 
-  static rgbaToHsla(image2) {
-    let image = image2.slice(0)
-    for (let i = 0; i < image.length; i += 4) {
-      //convert rgb spectrum to 0-1
-      let red = image[i] / 255;
-      let green = image[i + 1] / 255;
-      let blue = image[i + 2] / 255;
-
-      let min = Math.min(red, green, blue);
-      let max = Math.max(red, green, blue);
-
-      let L = (min + max) / 2;
-      let S = this.findSaturation(min, max, L);
-      let H = this.findHue(red, green, blue, max, min);
-
-      image[i] = H / 2;
-      image[i + 1] = Math.round(S * 100);
-      image[i + 2] = Math.round(L * 100);
-    }
-
-    return image;
-  }
-
-  static findSaturation(min, max, L) {
-    if (L < 0.5) {
-      if (min + max === 0) {
-        return 0;
-      }
-      return (max - min) / (max + min);
-    } else {
-      return (max - min) / (2.0 - max - min);
-    }
-  }
-
-  static findHue(red, green, blue, max, min) {
-    let hue = 0;
-    if (max === min) {
-      return 0;
-    } else if (red === max) {
-      hue = (green - blue) / (max - min);
-    } else if (green === max) {
-      hue = 2.0 + (blue - red) / (max - min);
-    } else if (blue === max) {
-      hue = 4.0 + (red - green) / (max - min);
-    }
-
-    hue *= 60;
-    if (hue < 0) {
-      hue += 360;
-    }
-    return hue;
-  }
-
   static scan2(imageObject, sensitivity) {
     let hor = this.scanHorizontal(imageObject, sensitivity)
     let ver = this.scanVertical(imageObject, sensitivity)
@@ -134,7 +81,7 @@ class BarcodeScanner {
 
   static scanHorizontal(imageObject, sensitivity) {
     let height = imageObject.height;
-    let image = imageObject.data//this.rgbaToHsla(imageObject.data);
+    let image = imageObject.data
 
     let scanned = [];
     let barcodes = {};
@@ -209,7 +156,7 @@ class BarcodeScanner {
 
   static scanVertical(imageObject, sensitivity) {
     let height = imageObject.height;
-    let image = imageObject.data//this.rgbaToHsla(imageObject.data);
+    let image = imageObject.data
 
     let scanned = [];
     let barcodes = {};
