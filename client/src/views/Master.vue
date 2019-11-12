@@ -292,12 +292,13 @@
                   @change="loadFile"
                 >
                 </v-file-input>
+                <v-btn color="primary" @click="sendCustomImage">
+                  Send Image
+                </v-btn>
                 <canvas ref="drawCanvas"></canvas>
               </v-card>
 
-              <v-btn color="primary" @click="sendCustomImage">
-                Send Image
-              </v-btn>
+
 
               <v-btn text @click="pictureModeDialog = false">Cancel</v-btn>
             </v-stepper-content>
