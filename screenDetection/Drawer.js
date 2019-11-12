@@ -78,15 +78,14 @@ s
      * @param sat
      */
     makeRed(position, sat) {
-        this.getPixels()[position] = 0;
-        if(sat) {this.getPixels()[++position] = 50;}
+        this.getPixels()[position] = 30;
+        if(sat) {this.getPixels()[++position] = 10;}
             else this.getPixels()[++position] = 100;
         this.getPixels()[++position] = 50;
-
     }
 
     makeBlue(position) {
-        this.getPixels()[position] = 180;
+        this.getPixels()[position] = 0;
         this.getPixels()[++position] = 100;
         this.getPixels()[++position] = 50;
     }

@@ -428,7 +428,6 @@ class Image {
 
   drawIsland(island) {
     this.drawer.drawFillRect(
-        this.pixels,
         [island.minx, island.miny],
         [island.maxx, island.maxy]
     );
