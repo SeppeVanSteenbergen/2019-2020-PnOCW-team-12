@@ -30,6 +30,7 @@ class Island {
 
     this.imgOriginal = imgOriginal;
     this.destinationMatrix = [[-200,-200],[-200,200]];
+    this.barcode = BarcodeScanner.scan2(this.getScreenImg(), 30)
     console.log(BarcodeScanner.scan2(this.getScreenImg(), 30))
   }
 
