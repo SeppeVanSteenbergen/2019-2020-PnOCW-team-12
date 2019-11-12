@@ -52,6 +52,6 @@ imgElement.onload = function() {
   imageTest.createOffset(3);
   imageTest.createScreens();
   */
-  imageTest.hslaToRgba();
+  ColorSpace.hslaToRgba(imageTest.pixels);
   imageTest.show();
 };
