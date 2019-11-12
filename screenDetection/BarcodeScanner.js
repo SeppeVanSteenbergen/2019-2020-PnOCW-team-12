@@ -70,7 +70,8 @@ class BarcodeScanner {
     return parseInt(Object.keys(barcodes).find(key => barcodes[key] === maxAmount).toString().replace(/,/g, ''));
   }
 
-  static rgbaToHsla(image) {
+  static rgbaToHsla(image2) {
+    let image = image2.slice(0)
     for (let i = 0; i < image.length; i += 4) {
       //convert rgb spectrum to 0-1
       let red = image[i] / 255;
@@ -123,15 +124,15 @@ class BarcodeScanner {
   }
 
   static scan2(imageObject, sensitivity) {
-    let hor = scanHorizontal(imageObject, sensitivity)
-    let ver = scanVertical(imageObject, sensitivity)
-    for(let i = 0; i < hor.length; i++){
-      ver[i] += hor[i]
-    }
-    return parseInt(Object.keys(ver).find(key => ver[key] === maxAmount).toString().replace(/,/g, ''))
+    let hor = this.scanHorizontal(imageObject, sensitivity)
+    let ver = this.scanVertical(imageObject, sensitivity)
+    let maxRatio = Math.max(hor[2], ver[2])
+    if(hor[2] == maxRatio && maxRatio >= 0){
+      return hor[0]
+    }else if (maxRatio >= 0) return ver[0]
   }
 
-  scanHorizontal(imageObject, sensitivity) {
+  static scanHorizontal(imageObject, sensitivity) {
     let height = imageObject.height;
     let image = this.rgbaToHsla(imageObject.data);
 
@@ -185,7 +186,6 @@ class BarcodeScanner {
         scanned.push(5);
       }
     }
-
     let amounts = Object.values(barcodes);
     let maxAmount = Math.max(...amounts);
     let detectedAmount = amounts.reduce((a, b) => a + b, 0);
@@ -195,17 +195,17 @@ class BarcodeScanner {
     let ratio = maxAmount / height / 10;
     console.log(detectRatio, ratio);
     if (ratio < 0.1 || detectRatio < 0.5) {
-      console.error('Picture is not good enough to detect barcode');
+      console.log('Picture is not good enough to detect barcode horizontal');
     }
-
-    return barcodes;
+    let barcode = parseInt(Object.keys(barcodes).find(key => barcodes[key] === maxAmount).toString().replace(/,/g, ''))
+    return [barcode, ratio, detectRatio]
   }
 
-  pixelToPosition(pixel, width) {
+  static pixelToPosition(pixel, width) {
     return (pixel[1] * width + pixel[0]) * 4;
   }
 
-  scanVertical(imageObject, sensitivity) {
+  static scanVertical(imageObject, sensitivity) {
     let height = imageObject.height;
     let image = this.rgbaToHsla(imageObject.data);
 
@@ -264,9 +264,6 @@ class BarcodeScanner {
         }
       }
     }
-
-
-
     let amounts = Object.values(barcodes);
     let maxAmount = Math.max(...amounts);
     let detectedAmount = amounts.reduce((a, b) => a + b, 0);
@@ -276,9 +273,10 @@ class BarcodeScanner {
     let ratio = maxAmount / height / 10;
     console.log(detectRatio, ratio);
     if (ratio < 0.1 || detectRatio < 0.5) {
-      console.error('Picture is not good enough to detect barcode');
+      console.log('Picture is not good enough to detect barcode vertical');
     }
-
-    return barcodes
+    let barcode = parseInt(Object.keys(barcodes).find(key => barcodes[key] === maxAmount).toString().replace(/,/g, ''))
+    return [barcode, ratio, detectRatio]
   }
+  
 }

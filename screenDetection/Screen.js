@@ -33,12 +33,12 @@ class Screen {
     //console.log(screenImgOriginal);
 
     if (screenImgOriginal !== null && clientInfo !== null) {
-      let transformedTempImage = this.map(
+      let transformedTempImage = screenImgOriginal/*this.map(
         screenImgOriginal,
         this.corners,
         600,
         600
-      );
+      );*/
 
       console.log('transformed image');
       console.log(transformedTempImage);
@@ -66,7 +66,9 @@ class Screen {
    */
   findClientCode(img) {
     let barcode = BarcodeScanner.scan(img, 30);
-    console.log('barcode: ' + barcode);
+    let barcode2 = BarcodeScanner.scan2(img, 30)
+    console.log('barcode 1: ' + barcode);
+    console.log('barcode 2: ' + barcode2)
     if(barcode !== null) {
       return PermutationConverter.decode(barcode);
     }

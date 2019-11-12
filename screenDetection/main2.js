@@ -33,9 +33,9 @@ imgElement.onload = function() {
     'RGBA',
     imgElement.width,
     imgElement.height,
-    null
+    1
   );
-  imageTest.rgbaToHsla();
+  //imageTest.rgbaToHsla();
 
   /*let imageTest = new Image(
     inputImage.getImgData(),
@@ -45,11 +45,12 @@ imgElement.onload = function() {
     imgElement.height,
     null
   );*/
+  /*
   imageTest.createBigMask();
   imageTest.medianBlurMatrix(3);
   imageTest.medianBlur(3);
   imageTest.createOffset(3);
   imageTest.createScreens();
   imageTest.hslaToRgba();
-  imageTest.show();
+  imageTest.show();*/
 };
