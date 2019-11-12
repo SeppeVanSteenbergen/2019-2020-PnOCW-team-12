@@ -26,7 +26,6 @@ class Island {
     this.green = id;
     this.blue = id + 1;
     this.circle = id + 2;
-    this.MIN_ISLAND_SIZE = 1000;
 
     this.imgOriginal = imgOriginal;
     this.destinationMatrix = [[-200,-200],[-200,200]];
@@ -34,8 +33,8 @@ class Island {
     console.log(BarcodeScanner.scan2(this.getScreenImg(), 30))
   }
 
-  isValidIsland() {
-    return this.size() > this.MIN_ISLAND_SIZE && this.calcMid() !== null;
+  isValid() {
+    return this.calcMid() !== null && this.barcode !== null;
   }
 
   getScreenImg(){
@@ -44,7 +43,7 @@ class Island {
     canvas.height = this.imgOriginal.height
     let context = canvas.getContext("2d")
     context.putImageData(this.imgOriginal, 0, 0)
-    return context.getImageData(this.minx,this.miny, this.maxx, this.maxy)
+    return context.getImageData(this.minx,this.miny, this.maxx - this.minx, this.maxy-this.miny)
   }
 
   /**

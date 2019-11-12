@@ -196,9 +196,11 @@ class BarcodeScanner {
     console.log(detectRatio, ratio);
     if (ratio < 0.1 || detectRatio < 0.5) {
       console.log('Picture is not good enough to detect barcode horizontal');
-    }
+      return [0, 0, 0]
+    }else{
     let barcode = parseInt(Object.keys(barcodes).find(key => barcodes[key] === maxAmount).toString().replace(/,/g, ''))
-    return [barcode, ratio, detectRatio]
+    return [barcode, ratio, detectRatio] 
+  }
   }
 
   static pixelToPosition(pixel, width) {
@@ -273,10 +275,12 @@ class BarcodeScanner {
     let ratio = maxAmount / height / 10;
     console.log(detectRatio, ratio);
     if (ratio < 0.1 || detectRatio < 0.5) {
-      console.log('Picture is not good enough to detect barcode vertical');
-    }
+      console.log('Picture is not good enough to detect barcode horizontal');
+      return [0, 0, 0]
+    }else{
     let barcode = parseInt(Object.keys(barcodes).find(key => barcodes[key] === maxAmount).toString().replace(/,/g, ''))
-    return [barcode, ratio, detectRatio]
+    return [barcode, ratio, detectRatio] 
+  }
   }
   
 }

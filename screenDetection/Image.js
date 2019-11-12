@@ -157,7 +157,7 @@ class Image {
     }
     for (let i = 0; i < tmpIslands.length; i++) {
       tmpIslands[i].setScreenMatrix(this.matrix);
-      if (tmpIslands[i].isValidIsland()) {
+      if (tmpIslands[i].isValid()) {
         tmpIslands[i].finishIsland();
         this.islands.push(tmpIslands[i]);
       }
