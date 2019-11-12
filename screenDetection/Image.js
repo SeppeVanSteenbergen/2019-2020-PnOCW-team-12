@@ -427,13 +427,13 @@ class Image {
   }
 
   drawIsland(island) {
-    drawer.drawFillRect(
+    this.drawer.drawFillRect(
         this.pixels,
         [island.minx, island.miny],
         [island.maxx, island.maxy]
     );
-    drawer.drawCorners(island);
-    drawer.drawMid(island);
+    this.drawer.drawCorners(island);
+    this.drawer.drawMid(island);
   }
 
   /**
