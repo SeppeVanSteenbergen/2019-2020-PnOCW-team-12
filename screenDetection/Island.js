@@ -16,11 +16,11 @@ class Island {
       LD: null
     };
 
-    this.minx = leftUpperCoo[0]
-    this.maxx = rightBottomCoo[0]
+    this.minx = leftUpperCoo[0];
+    this.maxx = rightBottomCoo[0];
 
-    this.miny = leftUpperCoo[1]
-    this.maxy = rightBottomCoo[1]
+    this.miny = leftUpperCoo[1];
+    this.maxy = rightBottomCoo[1];
 
     this.id = id;
     this.green = id;
@@ -28,8 +28,7 @@ class Island {
     this.circle = id + 2;
 
     this.imgOriginal = imgOriginal;
-    this.destinationMatrix = [[-1280,-1280],[-800,800]];
-    this.barcode = BarcodeScanner.scan2(this.getScreenImg(), 30)
+    this.barcode = BarcodeScanner.scan2(this.getScreenImg(), 30);
     console.log(BarcodeScanner.scan2(this.getScreenImg(), 30))
   }
 
@@ -37,13 +36,13 @@ class Island {
     return this.calcMid() !== null && this.barcode !== null;
   }
 
-  getScreenImg(){
-    let canvas = document.createElement('canvas')
-    canvas.width = this.imgOriginal.width
-    canvas.height = this.imgOriginal.height
-    let context = canvas.getContext("2d")
-    context.putImageData(this.imgOriginal, 0, 0)
-    return context.getImageData(this.minx,this.miny, this.maxx - this.minx, this.maxy-this.miny)
+  getScreenImg() {
+    let canvas = document.createElement('canvas');
+    canvas.width = this.imgOriginal.width;
+    canvas.height = this.imgOriginal.height;
+    let context = canvas.getContext("2d");
+    context.putImageData(this.imgOriginal, 0, 0);
+    return context.getImageData(this.minx, this.miny, this.maxx - this.minx, this.maxy - this.miny)
   }
 
   /**
@@ -52,7 +51,7 @@ class Island {
    * @param {int} x x co
    * @param {int} y y co
 
-  add(x, y) {
+   add(x, y) {
     this.minx = Math.min(x, this.minx);
     this.miny = Math.min(y, this.miny);
 
@@ -66,11 +65,11 @@ class Island {
     console.log('ending co: ' + this.maxx + ', ' + this.maxy);
   }
 
-  add(x,y) {
-    if(x > this.maxx) this.maxx = x;
-    if(x < this.minx) this.minx = x;
-    if(y > this.maxy) this.maxy = y;
-    if(y < this.miny) this.miny = y;
+  add(x, y) {
+    if (x > this.maxx) this.maxx = x;
+    if (x < this.minx) this.minx = x;
+    if (y > this.maxy) this.maxy = y;
+    if (y < this.miny) this.miny = y;
   }
 
   size() {
@@ -99,7 +98,6 @@ class Island {
   findCorners() {
     // choosing diagonal or straight corner detection
     let diagonalSearch = false;
-    // let corners = [];
 
     // Find which corner search to use: perpendicular or diagonal.
 
@@ -118,10 +116,10 @@ class Island {
       }
     }
     let yValuesLeftAvg =
-      yValuesLeft.reduce((t, n) => t + n) / yValuesLeft.length;
+        yValuesLeft.reduce((t, n) => t + n) / yValuesLeft.length;
 
     let yValuesLeftVariance = Math.sqrt(
-      yValuesLeft.reduce((t, n) => t + Math.pow(yValuesLeftAvg - n, 2)) /
+        yValuesLeft.reduce((t, n) => t + Math.pow(yValuesLeftAvg - n, 2)) /
         yValuesLeft.length
     );
 
@@ -130,13 +128,14 @@ class Island {
 
     if (yValuesLeftVariance > sd_threshold) diagonalSearch = true;
 
+    let corners = [];
     if (diagonalSearch) {
       // Diagonal search
-      var corners = this.diagonalSearch()
+      corners = this.diagonalSearch()
 
     } else {
       // Perpendicular search
-      var corners = this.perpendicularSearch()
+      corners = this.perpendicularSearch()
     }
 
     // corners to absolute position
@@ -151,7 +150,7 @@ class Island {
     this.recoScreen(distances);
   }
 
-  perpendicularSearch(){
+  perpendicularSearch() {
     let corners = []
     // left
     for (let x = 0; x < this.width; x++) {
@@ -230,7 +229,7 @@ class Island {
     return corners
   }
 
-  diagonalSearch(){
+  diagonalSearch() {
     let corners = []
     // left upper corner
     for (let k = 0; k <= this.width + this.height - 2; k++) {
@@ -413,7 +412,7 @@ class Island {
 
     let distances = [];
     let midPoint = this.midPoint;
-    corners.forEach(function(corner) {
+    corners.forEach(function (corner) {
       if (corner !== null) {
         distances.push(Island.calcDist(corner, midPoint));
       } else distances.push(null);
@@ -461,11 +460,11 @@ class Island {
   //searches the two corners that arent the right adjacent ones and sets them to null; TODO: efficiënter!
 
 
-  cssTransMatrix(transMatrix){
-    return [transMatrix[1][1], transMatrix[2][1], 0 , transMatrix[3][1],
-  transMatrix[1][2], transMatrix[2][2], 0, transMatrix[3][2],
-  0, 0, 1, 0,
-  transMatrix[1][3], transMatrix[2][3], 0, [transMatrix[3][3]]]
+  cssTransMatrix(transMatrix) {
+    return [transMatrix[1][1], transMatrix[2][1], 0, transMatrix[3][1],
+      transMatrix[1][2], transMatrix[2][2], 0, transMatrix[3][2],
+      0, 0, 1, 0,
+      transMatrix[1][3], transMatrix[2][3], 0, [transMatrix[3][3]]]
   }
 
   recoScreen(distances) {
@@ -474,8 +473,8 @@ class Island {
     if (distances[0] !== null) {
       if (distances[2] !== null) {
         if (
-          !this.inRangeOf(distances[0], distances[2], lengthThresh) &&
-          distances[0] > distances[2]
+            !this.inRangeOf(distances[0], distances[2], lengthThresh) &&
+            distances[0] > distances[2]
         ) {
           this.corners.RD = [
             this.midPoint[0] + (this.midPoint[0] - this.corners.LU[0]),
@@ -511,8 +510,8 @@ class Island {
     if (distances[1] !== null) {
       if (distances[3] !== null) {
         if (
-          !this.inRangeOf(distances[1], distances[3], lengthThresh) &&
-          distances[1] > distances[3]
+            !this.inRangeOf(distances[1], distances[3], lengthThresh) &&
+            distances[1] > distances[3]
         ) {
           this.corners.LD = [
             this.midPoint[0] - (this.corners.RU[0] - this.midPoint[0]),
@@ -590,7 +589,7 @@ class Island {
 
   reconstructTripleCorners() {
     //sort de 3 punten volgens x-co om inwendige hoek te bepalen
-    this.corners = this.corners.sort(function(a, b) {
+    this.corners = this.corners.sort(function (a, b) {
       return a[0] >= b[0];
     });
 
@@ -607,38 +606,27 @@ class Island {
     A = math.multiply(1 / (1 + m * m), A);
 
     let mirror = math
-      .multiply([vec2[1][0] - vec2[0][0], vec2[1][1] - vec2[0][1]], A)
-      .add(vec2[0]); //gespiegelde vec2 over loodrechte aan vec1
+        .multiply([vec2[1][0] - vec2[0][0], vec2[1][1] - vec2[0][1]], A)
+        .add(vec2[0]); //gespiegelde vec2 over loodrechte aan vec1
 
     let corner = math.add(vec1, mirror)[1]; //reconstructie van 4de punt
 
     this.corners.push(corner);
   }
 
-  findUpColor() {
-    let x = Math.floor((this.corners[1][0] + this.corners[0][0]) / 2);
-    let y = Math.floor((this.corners[1][1] + this.corners[0][1]) / 2);
-    return this.screenMatrix[y][x];
-  }
-  findLeftColor() {
-    let x = Math.floor((this.corners[3][0] + this.corners[0][0]) / 2);
-    let y = Math.floor((this.corners[3][1] + this.corners[0][1]) / 2);
-    return this.screenMatrix[y][x];
-  }
-
   createScreen(clientInfo) {
     let corners = this.corners;
-    let orientation = this.orientation;
+    let orientation = null;
     /*for (let i = 0; i < corners.length; i++) {
       corners[i][0] += this.minx;
       corners[i][1] += this.miny;
     }*/
     return new Screen(
-      corners,
-      orientation,
-      this.midPoint,
-      clientInfo,
-      this.imgOriginal
+        corners,
+        orientation,
+        this.midPoint,
+        clientInfo,
+        this.imgOriginal
     );
   }
 
@@ -648,15 +636,5 @@ class Island {
     if (y < 0) y = 0;
     else if (y >= this.height) y = this.height - 1;
     return this.screenMatrix[y][x];
-  }
-
-  countNulls(list) {
-    let counter = 0;
-    for(let i = 0; i < list.length; i++) {
-      if(list[i] == null) {
-        counter++;
-      }
-    }
-    return counter;
   }
 }

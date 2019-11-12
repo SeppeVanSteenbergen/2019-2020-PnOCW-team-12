@@ -34,10 +34,10 @@ class DetectionDrawer {
     ctx.lineWidth = this.borderWidth / 2;
     ctx.strokeStyle = this.c1;
     ctx.strokeRect(
-      0 + this.borderWidth / 4,
-      0 + this.borderWidth / 4,
-      this.w - this.borderWidth / 2,
-      this.h - this.borderWidth / 2
+        0 + this.borderWidth / 4,
+        0 + this.borderWidth / 4,
+        this.w - this.borderWidth / 2,
+        this.h - this.borderWidth / 2
     );
   }
 
@@ -81,10 +81,10 @@ class DetectionDrawer {
     const ctx = this.ctx;
     ctx.fillStyle = '#ffffff';
     ctx.fillRect(
-      this.borderWidth,
-      this.borderWidth,
-      this.w - 2 * this.borderWidth,
-      this.h - 2 * this.borderWidth
+        this.borderWidth,
+        this.borderWidth,
+        this.w - 2 * this.borderWidth,
+        this.h - 2 * this.borderWidth
     );
   }
 
@@ -94,9 +94,9 @@ class DetectionDrawer {
 
     const ctx = this.ctx;
     code = code
-      .toString()
-      .split('')
-      .map(val => parseInt(val - 1));
+        .toString()
+        .split('')
+        .map(val => parseInt(val - 1));
 
     const barWidth = this.w / sections / 6;
     //const amountOfIterations = Math.floor((this.w - 2 * this.borderWidth) / (6 * width))
@@ -127,9 +127,9 @@ class DetectionDrawer {
 
     const ctx = this.ctx;
     code = code
-      .toString()
-      .split('')
-      .map(val => parseInt(val - 1));
+        .toString()
+        .split('')
+        .map(val => parseInt(val - 1));
 
     const netWidth = this.w - 2 * this.borderWidth;
     const barWidth = netWidth / sections / 6;
@@ -140,10 +140,10 @@ class DetectionDrawer {
         ctx.beginPath();
         ctx.fillStyle = this.barcodeColorValues[code[j]];
         ctx.rect(
-          this.borderWidth + barWidth * (i + j),
-          this.borderWidth,
-          barWidth,
-          this.h - 2 * this.borderWidth
+            this.borderWidth + barWidth * (i + j),
+            this.borderWidth,
+            barWidth,
+            this.h - 2 * this.borderWidth
         );
         ctx.fill();
       }

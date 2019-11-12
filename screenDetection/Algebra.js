@@ -4,7 +4,7 @@ class Algebra {
    */
 
   static dim(x) {
-    var y, z;
+    let y, z;
     if (typeof x === 'object') {
       y = x[0];
       if (typeof y === 'object') {
@@ -23,7 +23,7 @@ class Algebra {
     if (k === s.length - 1) {
       return f(x);
     }
-    var i,
+    let i,
         n = s[k],
         ret = Array(n);
     for (i = n - 1; i >= 0; i--) {
@@ -33,8 +33,8 @@ class Algebra {
   }
 
   static cloneV(x) {
-    var _n = x.length;
-    var i,
+    let _n = x.length;
+    let i,
         ret = Array(_n);
 
     for (i = _n - 1; i !== -1; --i) {
@@ -45,13 +45,13 @@ class Algebra {
 
   static clone(x) {
     if (typeof x !== 'object') return x;
-    var V = this.cloneV;
-    var s = this.dim(x);
+    let V = this.cloneV;
+    let s = this.dim(x);
     return this._foreach2(x, s, 0, V);
   }
 
   static diag(d) {
-    var i,
+    let i,
         i1,
         j,
         n = d.length,
@@ -84,7 +84,7 @@ class Algebra {
     if (typeof k === 'undefined') {
       k = 0;
     }
-    var n = s[k],
+    let n = s[k],
         ret = Array(n),
         i;
     if (k === s.length - 1) {
@@ -108,20 +108,20 @@ class Algebra {
   }
 
   static inv(a) {
-    var s = this.dim(a),
+    let s = this.dim(a),
         abs = Math.abs,
         m = s[0],
         n = s[1];
-    var A = this.clone(a),
+    let A = this.clone(a),
         Ai,
         Aj;
-    var I = this.identity(m),
+    let I = this.identity(m),
         Ii,
         Ij;
-    var i, j, k, x;
+    let i, j, k, x;
     for (j = 0; j < n; ++j) {
-      var i0 = -1;
-      var v0 = -1;
+      let i0 = -1;
+      let v0 = -1;
       for (i = j; i !== m; ++i) {
         k = abs(A[i][j]);
         if (k > v0) {
@@ -157,7 +157,7 @@ class Algebra {
   }
 
   static dotMMsmall(x, y) {
-    var i, j, k, p, q, r, ret, foo, bar, woo, i0;
+    let i, j, k, p, q, r, ret, foo, bar, woo, i0;
     p = x.length;
     q = y.length;
     r = y[0].length;
@@ -182,9 +182,9 @@ class Algebra {
   }
 
   static dotMV(x, y) {
-    var p = x.length,
+    let p = x.length,
         i;
-    var ret = Array(p),
+    let ret = Array(p),
         dotVV = this.dotVV;
     for (i = p - 1; i >= 0; i--) {
       ret[i] = dotVV(x[i], y);
@@ -193,7 +193,7 @@ class Algebra {
   }
 
   static dotVV(x, y) {
-    var i,
+    let i,
         n = x.length,
         i1,
         ret = x[n - 1] * y[n - 1];
@@ -208,7 +208,7 @@ class Algebra {
   }
 
   static transpose(x) {
-    var i,
+    let i,
         j,
         m = x.length,
         n = x[0].length,

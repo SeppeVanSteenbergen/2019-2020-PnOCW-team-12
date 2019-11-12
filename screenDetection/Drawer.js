@@ -42,17 +42,14 @@ s
         x = Math.round(x);
         y = Math.round(y);
         size = Math.round(size);
+        let i = x - size / 2;
 
-        //verticale lijn
         for (let j = y - size / 2; j <= y + size / 2; j++) {
-            let pos = this.pixelToPosition([x, j]);
-            this.makeBlue(pos);
-        }
-
-        //horizontale lijn
-        for (let i = x - size / 2; i <= x + size / 2; i++) {
-            let pos = this.pixelToPosition([i, y]);
-            this.makeBlue(pos);
+            let posx = this.pixelToPosition([x, j]);
+            let posy = this.pixelToPosition([i, y]);
+            this.makeBlue(posx);
+            this.makeBlue(posy);
+            i++;
         }
     }
 
