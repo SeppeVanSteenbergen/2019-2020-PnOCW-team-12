@@ -13,9 +13,9 @@ class Drawer {
     getHeight() {
         return this.height;
     }
-
+s
     getPixels() {
-        return this.getPixels();
+        return this.pixels;
     }
 
     drawCorners(island) {
