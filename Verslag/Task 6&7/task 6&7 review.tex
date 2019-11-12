@@ -1,0 +1,71 @@
+\documentclass[a4paper,11pt]{article}
+
+\usepackage[margin=3cm]{geometry}
+
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage[colorlinks,allcolors=violet]{hyperref}
+\usepackage{url}
+\usepackage{lmodern}
+
+
+% https://tex.stackexchange.com/questions/94032/fancy-tables-in-latex
+\usepackage[table]{xcolor}
+\usepackage{booktabs}
+
+\usepackage[utf8]{inputenc}
+
+% https://tex.stackexchange.com/questions/664/why-should-i-use-usepackaget1fontenc
+\usepackage[T1]{fontenc}
+\usepackage{microtype} % good font tricks
+
+\newcommand{\note}[1]{{\colorbox{yellow!40!white}{#1}}}
+\newcommand{\exampletext}[1]{{\color{blue!60!black}#1}}
+
+\begin{document}
+
+\noindent
+\colorbox[HTML]{52BDEC}{\bfseries\parbox{\textwidth}{\centering\large
+  --- Code review P\&O CW 2019--2020 Task 6\&7 ---
+}}
+\\[-1mm]
+\colorbox[HTML]{00407A}{\bfseries\color{white}\parbox{\textwidth}{
+  Department of Computer Science -- KU Leuven
+  \hfill
+  \today
+}}
+\\
+
+\smallskip
+
+\noindent
+%\mbox{}\hfill
+\begin{tabular}{*4l}
+\toprule
+\multicolumn{3}{l}{\large\textbf{Team 12}} \\
+\midrule
+Martijn Debeuf & (h) &  (LOC) \\ % fill in the time spend on this task per team member who worked on it and the amount of lines of code (LOC) reviewed
+Frédéric Blondeel & (h) & ( LOC) \\
+\bottomrule
+\hline
+\end{tabular}\\
+\\
+Demo: \url{https://penocw.cs.kotnet.kuleuven.be:8012} \\
+Files reviewed: 
+
+\noindent
+{\color[HTML]{52BDEC} \rule{\linewidth}{1mm} }
+
+\smallskip
+
+\section{Countdown}
+
+
+\section{Image show off}
+
+
+
+
+
+
+\end{document}
