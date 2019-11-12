@@ -41,7 +41,7 @@ class Image {
   }
 
   analyse(){
-    this.rgbaToHsla();
+    colorSpace.rgbaToHsla(this.pixels)
     this.createBigMask();
     this.createOffset(3);
     this.createScreens();
@@ -86,7 +86,7 @@ class Image {
    * Execute all the calulations to analyse the whole image
    */
   doCalculations() {
-    this.rgbaToHsla();
+    colorSpace.rgbaToHsla(this.pixels);
     this.createGreenBlueMask();
     this.medianBlurMatrix(3);
     this.createScreens();
@@ -297,135 +297,7 @@ class Image {
     })
   }
 
-  /*
-        math from https://www.rapidtables.com/convert/color/rgb-to-hsl.html
-    */
-  rgbaToHsla() {
-    for (let i = 0; i < this.pixels.length; i += 4) {
-      //convert rgb spectrum to 0-1
-      let red = this.pixels[i] / 255;
-      let green = this.pixels[i + 1] / 255;
-      let blue = this.pixels[i + 2] / 255;
-
-      let min = Math.min(red, green, blue);
-      let max = Math.max(red, green, blue);
-
-      let L = (min + max) / 2;
-      let S = this.findSaturation(min, max, L);
-      let H = this.findHue(red, green, blue, max, min);
-
-      this.pixels[i] = H / 2;
-      this.pixels[i + 1] = Math.round(S * 100);
-      this.pixels[i + 2] = Math.round(L * 100);
-    }
-    this.setColorSpace('HSLA');
-  }
-
-  findSaturation(min, max, L) {
-    if (L < 0.5) {
-      if (min + max === 0) {
-        return 0;
-      }
-      return (max - min) / (max + min);
-    } else {
-      return (max - min) / (2.0 - max - min);
-    }
-  }
-
-  findHue(red, green, blue, max, min) {
-    let hue = 0;
-    if (max === min) {
-      return 0;
-    } else if (red === max) {
-      hue = (green - blue) / (max - min);
-    } else if (green === max) {
-      hue = 2.0 + (blue - red) / (max - min);
-    } else if (blue === max) {
-      hue = 4.0 + (red - green) / (max - min);
-    }
-
-    hue *= 60;
-    if (hue < 0) {
-      hue += 360;
-    }
-    return hue;
-  }
-
-  /*
-        image as Image
-        math from: http://www.niwa.nu/2013/05/math-behind-colorspace-conversions-rgb-hsl/
-    */
-  hslaToRgba() {
-    let R;
-    let G;
-    let B;
-    let tmp1;
-    let tmp2;
-    let tmpR;
-    let tmpG;
-    let tmpB;
-
-    if (this.colorSpace !== 'HSLA') {
-      console.error('Image has to be in HSLA to convert from HSLA to RGBA!');
-    }
-    for (let i = 0; i < this.pixels.length; i += 4) {
-      let H = (this.pixels[i] * 2) / 360.0;
-      let S = this.pixels[i + 1] / 100.0;
-      let L = this.pixels[i + 2] / 100.0;
-
-      if (S === 0) {
-        R = L;
-        G = L;
-        B = L;
-      } else {
-        if (L < 0.5) {
-          tmp1 = L * (1.0 + S);
-        } else {
-          tmp1 = L + S - L * S;
-        }
-        tmp2 = 2 * L - tmp1;
-
-        tmpR = H + 1 / 3;
-        tmpR = this.setTemporaryInRange(tmpR);
-
-        tmpG = H;
-        tmpG = this.setTemporaryInRange(tmpG);
-
-        tmpB = H - 1 / 3;
-        tmpB = this.setTemporaryInRange(tmpB);
-
-        R = this.hslaToRgbaCalculateColor(tmp1, tmp2, tmpR);
-        G = this.hslaToRgbaCalculateColor(tmp1, tmp2, tmpG);
-        B = this.hslaToRgbaCalculateColor(tmp1, tmp2, tmpB);
-      }
-
-      this.pixels[i] = Math.round(R * 255);
-      this.pixels[i + 1] = Math.round(G * 255);
-      this.pixels[i + 2] = Math.round(B * 255);
-    }
-    this.setColorSpace('RGBA');
-  }
-
-  setTemporaryInRange(temp) {
-    if (temp > 1) {
-      return temp - 1;
-    } else if (temp < 0) {
-      return temp + 1;
-    }
-    return temp;
-  }
-
-  hslaToRgbaCalculateColor(tmp1, tmp2, tmpColor) {
-    if (6 * tmpColor < 1) {
-      return tmp2 + (tmp1 - tmp2) * 6 * tmpColor;
-    } else if (2 * tmpColor < 1) {
-      return tmp1;
-    } else if (3 * tmpColor < 2) {
-      return tmp2 + (tmp1 - tmp2) * (0.666 - tmpColor) * 6;
-    }
-    return tmp2;
-  }
-
+  
   medianBlur(ksize) {
     for (let y = 0; y < this.getHeight(); y++) {
       for (let x = 0; x < this.getWidth(); x++) {
