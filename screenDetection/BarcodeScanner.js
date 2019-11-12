@@ -134,7 +134,7 @@ class BarcodeScanner {
 
   static scanHorizontal(imageObject, sensitivity) {
     let height = imageObject.height;
-    let image = this.rgbaToHsla(imageObject.data);
+    let image = imageObject.data//this.rgbaToHsla(imageObject.data);
 
     let scanned = [];
     let barcodes = {};
@@ -207,7 +207,7 @@ class BarcodeScanner {
 
   static scanVertical(imageObject, sensitivity) {
     let height = imageObject.height;
-    let image = this.rgbaToHsla(imageObject.data);
+    let image = imageObject.data//this.rgbaToHsla(imageObject.data);
 
     let scanned = [];
     let barcodes = {};

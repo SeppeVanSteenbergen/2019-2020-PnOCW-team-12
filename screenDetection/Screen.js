@@ -1,5 +1,5 @@
 class Screen {
-  constructor(corners, orientation, midPoint, clientInfo, screenImgOriginal) {
+  constructor(corners, transMatrix, midPoint, clientInfo, screenImgOriginal) {
     /*this.corners = null;
     this.orientation = null;
     this.size = null;
@@ -13,7 +13,7 @@ class Screen {
     this.corners = corners;
     this.relativeCorners = corners;
     
-    this.orientation = orientation;
+    this.transMatrix = transMatrix;
     this.midPoint = midPoint;
     this.clientInfo = clientInfo;
     /**
@@ -88,6 +88,13 @@ class Screen {
     let matrixC = Algebra.dotMMsmall(matrixA, Algebra.inv(matrixB));
     this.transMatrix = matrixC;
     return matrixC;
+  }
+
+  cssTransMatrix(transMatrix){
+    return [transMatrix[1][1], transMatrix[2][1], 0 , transMatrix[3][1],
+  transMatrix[1][2], transMatrix[2][2], 0, transMatrix[3][2],
+  0, 0, 1, 0,
+  transMatrix[1][3], transMatrix[2][3], 0, [transMatrix[3][3]]]
   }
 
   findMapMatrix(corners) {

@@ -7,22 +7,6 @@ class Island {
    * @param {int} id
    */
   constructor(leftUpperCoo, rightBottomCoo, id, imgOriginal) {
-    /*this.minx;
-    this.maxx;
-    this.miny;
-    this.maxy;
-    this.id;
-    this.midPoint;
-    this.orientation;
-
-    this.blue;
-    this.green;
-    this.circle;
-
-    this.width;
-    this.height;
-    */
-
     this.screenMatrix = [];
 
     this.corners = {
@@ -46,10 +30,20 @@ class Island {
 
     this.imgOriginal = imgOriginal;
     this.destinationMatrix = [[-200,-200],[-200,200]];
+    console.log(BarcodeScanner.scan2(this.getScreenImg(), 30))
   }
 
   isValidIsland() {
     return this.size() > this.MIN_ISLAND_SIZE && this.calcMid() !== null;
+  }
+
+  getScreenImg(){
+    let canvas = document.createElement('canvas')
+    canvas.width = this.imgOriginal.width
+    canvas.height = this.imgOriginal.height
+    let context = canvas.getContext("2d")
+    context.putImageData(this.imgOriginal, 0, 0)
+    return context.getImageData(this.minx,this.miny, this.maxx, this.maxy)
   }
 
   /**
@@ -576,6 +570,13 @@ class Island {
     let source = this.makeSourceMatrix();
     let destination = this.getDestinationMatrix();
     return Algebra.dotMMsmall(destination, Algebra.inv(source))
+  }
+
+  cssTransMatrix(transMatrix){
+    return [transMatrix[1][1], transMatrix[2][1], 0 , transMatrix[3][1],
+  transMatrix[1][2], transMatrix[2][2], 0, transMatrix[3][2],
+  0, 0, 1, 0,
+  transMatrix[1][3], transMatrix[2][3], 0, [transMatrix[3][3]]]
   }
 
   //reconstruct the unfound corners starting from the square corners

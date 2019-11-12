@@ -33,7 +33,7 @@ imgElement.onload = function() {
     'RGBA',
     imgElement.width,
     imgElement.height,
-    1
+    null
   );
   //imageTest.rgbaToHsla();
 

@@ -1,14 +1,5 @@
 class Image {
   constructor(imgData, canvasName, colorSpace, width, height, clientInfo) {
-    this.pixels = null;
-    this.canvas = null;
-    this.colorSpace = null;
-
-    this.islands = null;
-
-    this.matrix = null;
-
-    this.imgData = null;
 
     this.clientInfo = clientInfo;
 
@@ -27,7 +18,7 @@ class Image {
     this.upperBoundMid = [180 + this.sensitivity, 100, 75];
 
     if (colorSpace === 'RGBA'){
-      this.imgOriginal = Image.copyImageData(imgData);
+      this.imgOriginal = imgData
     }
 
     this.setPixels(imgData.data);
