@@ -51,6 +51,7 @@ imgElement.onload = function() {
   imageTest.medianBlur(3);
   imageTest.createOffset(3);
   imageTest.createScreens();
+  */
   imageTest.hslaToRgba();
-  imageTest.show();*/
+  imageTest.show();
 };

@@ -43,14 +43,12 @@ class Image {
   analyse(){
     this.rgbaToHsla();
     this.createBigMask();
-    this.medianBlurMatrix(3);
-    this.medianBlur(3);
     this.createOffset(3);
     this.createScreens();
-    this.createPictureCanvas(300, 500); //TODO: param meegeven
-    this.calcRelativeScreens(); //untested
+    //this.createPictureCanvas(300, 500); //TODO: param meegeven
+    //this.calcRelativeScreens(); //untested
     //console.log("picture canvas: " + Object.values(this.pictureCanvas));
-    return this.screens;
+    //return this.screens;
   }
 
   getImgData() {
