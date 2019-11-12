@@ -174,6 +174,7 @@ export default {
       }
     },
     countDownIntervalHandler(start, interval, startTime) {
+      clearInterval(this.intervalObj)
       this.intervalObj = setInterval(
         this.countDownInterval,
         Math.floor(interval / 2),
@@ -276,12 +277,12 @@ export default {
 
       this.canvas = this.$refs['canvas']
       this.openFullscreen(this.canvas)
-      /*const width = window.screen.width
+      const width = window.screen.width
       const height = window.screen.height
 
       this.canvas.height = height
       this.canvas.width = width
-
+/*
       let ctx = this.canvas.getContext('2d')
       ctx.fillStyle = 'white'
       ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
@@ -344,6 +345,9 @@ export default {
         )
       }
       image.src = base64Image
+    },
+    stopRunning() {
+      clearInterval(this.intervalObj)
     }
   }
 }

@@ -1,6 +1,7 @@
 import BarcodeScanner from './BarcodeScanner'
 import PermutationConverter from './PermutationConverter'
 import Algebra from './Algebra'
+//import * as cv from 'opencv.js'
 
 export default class Screen {
   constructor(corners, orientation, midPoint, clientInfo, screenImgOriginal) {
@@ -77,6 +78,7 @@ export default class Screen {
    * math from https://stackoverflow.com/questions/14244032/redraw-image-from-3d-perspective-to-2d
    */
   transformationMatrix(source, destination) {
+    this.transMatrix = null
     let matrixA = this.findMapMatrix(destination)
     let matrixB = this.findMapMatrix(source)
     let matrixC = Algebra.dotMMsmall(matrixA, Algebra.inv(matrixB))
@@ -120,6 +122,53 @@ export default class Screen {
     console.log('mapping to screen')
     console.log(this.corners, this.width, this.height)
     return this.map(fullImage, this.corners, this.width, this.height)
+  }
+
+  mapToScreenCV(image) {
+    let src = cv.matFromImageData(image)
+    let dst = new cv.Mat()
+    let dsize = new cv.Size(this.width, this.height)
+
+    let destination = [
+      [0, 0],
+      [this.width, 0],
+      [this.width, this.height],
+      [0, this.height]
+    ]
+    let srcCorners = []
+
+    for (let i = 0; i < this.corners.length; i++) {
+      srcCorners.push(this.corners[i][0])
+      srcCorners.push(this.corners[i][1])
+    }
+
+    let dstCorners = JSON.parse('[' + destination.toString() + ']')
+
+    let srcTri = cv.matFromArray(4, 1, cv.CV_32FC2, srcCorners)
+    let dstTri = cv.matFromArray(4, 1, cv.CV_32FC2, dstCorners)
+    let M = cv.getPerspectiveTransform(srcTri, dstTri)
+    // You can try more different parameters
+    cv.warpPerspective(
+      src,
+      dst,
+      M,
+      dsize,
+      cv.INTER_LINEAR,
+      cv.BORDER_CONSTANT,
+      new cv.Scalar()
+    )
+    src.delete()
+    M.delete()
+    srcTri.delete()
+    dstTri.delete()
+    let dat = dst.data
+    dst.delete()
+
+    return new ImageData(
+      new Uint8ClampedArray(dat),
+      this.width,
+      this.height
+    )
   }
 
   /**

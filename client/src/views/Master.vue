@@ -211,6 +211,12 @@
             <v-stepper-step :complete="pictureStepper > 3" step="3" editable>
               Result Display
             </v-stepper-step>
+
+            <v-divider></v-divider>
+
+            <v-stepper-step :complete="pictureStepper > 4" step="4" editable>
+              Usage
+            </v-stepper-step>
           </v-stepper-header>
 
           <v-stepper-items class="fullheight overflow-y-auto">
@@ -267,6 +273,30 @@
 
               <v-btn color="primary" @click="nextStep(3)">
                 Continue
+              </v-btn>
+
+              <v-btn text @click="pictureModeDialog = false">Cancel</v-btn>
+            </v-stepper-content>
+            <v-stepper-content step="4" class="fullheight overflow-y-auto">
+              <v-card class="mb-12 fullheight" elevation="0">
+                <v-file-input
+                  v-model="displayFile"
+                  color="deep-purple accent-4"
+                  counter
+                  label="Image input"
+                  placeholder="Select your files"
+                  prepend-icon="mdi-paperclip"
+                  outlined
+                  :show-size="1000"
+                  accept="image/*"
+                  @change="loadFile"
+                >
+                </v-file-input>
+                <canvas ref="drawCanvas"></canvas>
+              </v-card>
+
+              <v-btn color="primary" @click="sendCustomImage">
+                Send Image
               </v-btn>
 
               <v-btn text @click="pictureModeDialog = false">Cancel</v-btn>
@@ -349,9 +379,16 @@ export default {
 
       // picture mode
       pictureStepper: 0,
-      steps: 3,
+      steps: 4,
       pictureModeDialog: false,
-      analysedImage: null
+      analysedImage: null,
+      displayFile: null,
+      drawingImg: null,
+      drawingImgScale: 1,
+      x: 0,
+      y: 0,
+      Xpos: 0,
+      Ypos: 0
     }
   },
   components: {
@@ -534,6 +571,147 @@ export default {
     async analyseImageAsync() {
       setTimeout(this.analyseImage, 0)
     },
+    loadFile(file) {
+      let vue = this
+      let reader = new FileReader()
+      vue.drawingImg = new Image()
+      reader.onload = function(event) {
+        vue.drawingImg.onload = function() {
+          let c = vue.$refs.drawCanvas
+
+          let ctx = c.getContext('2d')
+          c.width = vue.analysedImage.imgOriginal.width
+          c.height = vue.analysedImage.imgOriginal.height
+          console.log('canv', c.width, c.height)
+
+          c.removeEventListener('mousedown', vue.mouseDownHandler, false)
+          document.removeEventListener('mouseup', vue.mouseUpHandler, false)
+          c.removeEventListener('mousemove', vue.mouseMoveHandler, false)
+
+          vue.mouseDown = false
+          vue.Xpos = null
+          vue.Ypos = null
+          vue.x = 0
+          vue.y = 0
+
+          c.addEventListener('mousedown', vue.mouseDownHandler, false)
+          c.addEventListener('mouseup', vue.mouseUpHandler, false)
+          c.addEventListener('mousemove', vue.mouseMoveHandler, false)
+
+          c.addEventListener('touchstart', vue.mouseDownHandler, false)
+          c.addEventListener('touchend', vue.mouseUpHandler, false)
+          //el.addEventListener("touchcancel", handleCancel, false)
+          //el.addEventListener("touchleave", handleEnd, false)
+          c.addEventListener('touchmove', vue.mouseMoveHandler, false)
+
+          ctx.drawImage(
+            vue.drawingImg,
+            0,
+            0,
+            vue.drawingImg.width,
+            vue.drawingImg.height,
+            0,
+            0,
+            vue.drawingImgScale * vue.drawingImg.width,
+            vue.drawingImgScale * vue.drawingImg.height
+          )
+        }
+
+        vue.drawingImg.src = event.target.result
+      }
+
+      reader.readAsDataURL(file)
+    },
+    mouseDownHandler(event) {
+      let clientX = null
+      let clientY = null
+      if (typeof event.clientX === 'undefined') {
+        clientX = event.targetTouches[0].clientX
+        clientY = event.targetTouches[0].clientY
+      } else {
+        clientX = event.clientX
+        clientY = event.clientY
+      }
+
+      this.mouseDown = true
+      this.Xpos = clientX
+      this.Ypos = clientY
+    },
+    mouseUpHandler(event) {
+      let clientX = null
+      let clientY = null
+      if (typeof event.clientX === 'undefined') {
+        clientX = event.changedTouches[0].clientX
+        clientY = event.changedTouches[0].clientY
+      } else {
+        clientX = event.clientX
+        clientY = event.clientY
+      }
+
+      this.mouseDown = false
+      this.x = this.x + clientX - this.Xpos
+      this.y = this.y + clientY - this.Ypos
+    },
+    mouseMoveHandler(event) {
+      let clientX = null
+      let clientY = null
+      if (typeof event.clientX === 'undefined') {
+        clientX = event.targetTouches[0].clientX
+        clientY = event.targetTouches[0].clientY
+      } else {
+        clientX = event.clientX
+        clientY = event.clientY
+      }
+      console.log(event.clientX, clientY)
+      let c = this.$refs.drawCanvas
+      let ctx = c.getContext('2d')
+      if (this.mouseDown) {
+        ctx.clearRect(0, 0, c.width, c.height)
+        ctx.drawImage(
+          this.drawingImg,
+          this.x + clientX - this.Xpos,
+          this.y + clientY - this.Ypos,
+          this.drawingImg.width,
+          this.drawingImg.height,
+          0,
+          0,
+          this.drawingImgScale * this.drawingImg.width,
+          this.drawingImgScale * this.drawingImg.height
+        )
+        AlgorithmService.drawScreenOutlines(
+          this.$refs.drawCanvas,
+          this.analysedImage
+        )
+      }
+    },
+    sendCustomImage() {
+      // create new image
+      let c = document.createElement('canvas')
+      c.width = this.$refs.drawCanvas.width
+      c.height = this.$refs.drawCanvas.height
+      let ctx = c.getContext('2d')
+
+      ctx.drawImage(
+        this.drawingImg,
+        this.x,
+        this.y,
+        this.drawingImg.width,
+        this.drawingImg.height,
+        0,
+        0,
+        this.drawingImgScale * this.drawingImg.width,
+        this.drawingImgScale * this.drawingImg.height
+      )
+      let img = ctx.getImageData(0, 0, c.width, c.height)
+
+      for (let i = 0; i < this.analysedImage.screens.length; i++) {
+        let s = this.analysedImage.screens[i].mapToScreenCV(img)
+        let user_id = this.myRoom.clients[
+          this.analysedImage.screens[i].clientCode
+        ]
+        this.sendImageToUser(s, user_id)
+      }
+    },
     analyseImage() {
       console.log('starting analysis')
 
@@ -591,14 +769,14 @@ export default {
 
       for (let i = 0; i < this.analysedImage.screens.length; i++) {
         let code = this.analysedImage.screens[i].clientCode
-        //let img = this.analysedImage.screens[i].mapToScreen(delaunayImgObject)
-        let screen = this.analysedImage.screens[i]
+        let img = this.analysedImage.screens[i].mapToScreenCV(delaunayImgObject)
+        /*let screen = this.analysedImage.screens[i]
         let img = screen.map(
           delaunayImgObject,
           screen.corners,
           screen.width,
           screen.height
-        )
+        )*/
         this.sendImageToUser(
           img, // image
           this.myRoom.clients[code] // user ID
@@ -658,6 +836,9 @@ export default {
       } else {
         clearInterval(this.videoSendInterval)
       }
+    },
+    drawingImage(n) {
+      this.drawingImageLoaded
     }
   }
 }
