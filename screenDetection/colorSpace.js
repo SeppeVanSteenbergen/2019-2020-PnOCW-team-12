@@ -122,4 +122,13 @@ class ColorSpace {
         return tmp2;
     }
 
+    static calcLuminance(pixels) {
+        let lum = 0;
+        let size = pixels.length / 4;
+        for (let i = 2; i < pixels.length; i + 4) {
+            lum += pixels[i];
+        }
+        return lum / size;
+    }
+
 }

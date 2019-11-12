@@ -67,21 +67,12 @@ class Image {
   }
 //TODO check resolution ook
   qualityCheck() {
-    if (this.calcLuminance() < 40 || 80 < this.calcLuminance()) {
+    if (ColorSpace.calcLuminance(this.pixels) < 40 || 80 < ColorSpace.calcLuminance(this.pixels)) {
       console.error('Take a better picture');
     }
   }
 
-  calcLuminance() {
-    if (this.colorSpace === 'HSLa') {
-      let lum = 0;
-      let size = this.pixels.length / 4;
-      for (let i = 2; i < this.pixels.length; i + 4) {
-        lum += this.pixels[i];
-      }
-      return lum / size;
-    }
-  }
+
 
   /**
    * Execute all the calulations to analyse the whole image
