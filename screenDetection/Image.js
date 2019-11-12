@@ -1,4 +1,5 @@
 class Image {
+
   constructor(imgData, canvasName, colorSpace, width, height, clientInfo) {
 
     this.clientInfo = clientInfo;
@@ -8,7 +9,9 @@ class Image {
     this.islandID = 4; //jumps per three so we can save green and blue within an island.
     this.screens = [];
     this.pictureCanvas = null;
-
+    this.width = width;
+    this.height = height;
+    this.islands = [];
 
     this.lowerBoundG = [120 - this.sensitivity, 50, 25];
     this.upperBoundG = [120 + this.sensitivity, 100, 75];
@@ -25,18 +28,17 @@ class Image {
     this.qualityCheck();
     this.setCanvas(canvasName, imgData.width, imgData.height);
     this.setColorSpace(colorSpace);
-    this.width = width;
-    this.height = height;
     if (this.canvas !== null) {
       let context = this.canvas.getContext('2d');
       context.putImageData(imgData, 0, 0);
     }
+    this.drawer = new Drawer(this.getPixels(), this.getWidth(), this.getHeight());
 
-    this.islands = [];
     this.matrix = new Array(this.getHeight());
     for (let i = 0; i < this.getHeight(); i++) {
       this.matrix[i] = new Array(this.getWidth());
     }
+
     this.analyse()
   }
 
@@ -45,10 +47,10 @@ class Image {
     this.createBigMask();
     this.createOffset(3);
     this.createScreens();
-    //this.createPictureCanvas(300, 500); //TODO: param meegeven
-    //this.calcRelativeScreens(); //untested
+    this.createPictureCanvas(300, 500); //TODO: param meegeven
+    this.calcRelativeScreens(); //untested
     //console.log("picture canvas: " + Object.values(this.pictureCanvas));
-    //return this.screens;
+    return this.screens;
   }
 
   getImgData() {
@@ -82,19 +84,6 @@ class Image {
     }
   }
 
-  /**
-   * Execute all the calulations to analyse the whole image
-   */
-  doCalculations() {
-    this.rgbaToHsla();
-    this.createGreenBlueMask();
-    this.medianBlurMatrix(3);
-    this.createScreens();
-    for (let i = 0; i < this.screens.length; i++) {
-      this.screens[i].findClientCode();
-      this.screens[i].calculateScreenImage(this.imgData);
-    }
-  }
 
   /**
    * Returns all the data from screens and main without images
@@ -117,6 +106,10 @@ class Image {
 
   setPixels(pixels) {
     this.pixels = pixels;
+  }
+
+  getPixels() {
+    return this.pixels;
   }
 
   setCanvas(canvasName, width, height) {
@@ -605,111 +598,14 @@ class Image {
     return (pixel[1] * this.getWidth() + pixel[0]) * 4;
   }
 
-  /**
-   * DEBUG METHODS
-   */
-
-  /**
-   * Draw a cross at the given pixel location of the given pixel size
-   * @param {int} x x co
-   * @param {int} y y co
-   * @param {int} size size
-   */
   drawIsland(island) {
-    this.drawFillRect(
-      [island.minx, island.miny],
-      [island.maxx, island.maxy],
-      0.3
+    drawer.drawFillRect(
+        this.pixels,
+        [island.minx, island.miny],
+        [island.maxx, island.maxy]
     );
-    this.drawCorners(island);
-    this.drawMid(island);
-  }
-
-  drawCorners(island) {
-    let corners = Object.values(island.corners);
-    for (let j = 0; j < corners.length; j++) {
-      if (corners[j] !== null) {
-        this.drawPoint(corners[j][0], corners[j][1], 10);
-      }
-    }
-  }
-
-  drawMid(island) {
-    this.drawPoint(island.midPoint[0], island.midPoint[1], 10);
-  }
-
-  drawPoint(x, y, size) {
-    let change = true;
-    if (this.getColorSpace() === 'HSLA') {
-      this.hslaToRgba();
-      let change = true;
-    }
-
-    x = Math.round(x);
-    y = Math.round(y);
-    size = Math.round(size);
-
-    //verticale lijn
-    for (let j = y - size / 2; j <= y + size / 2; j++) {
-      let pos = this.pixelToPosition([x, j]);
-
-      this.pixels[pos] = 0;
-      this.pixels[pos + 1] = 255;
-      this.pixels[pos + 2] = 255;
-    }
-
-    //horizontale lijn
-    for (let i = x - size / 2; i <= x + size / 2; i++) {
-      let pos = this.pixelToPosition([i, y]);
-
-      this.pixels[pos] = 0;
-      this.pixels[pos + 1] = 255;
-      this.pixels[pos + 2] = 255;
-    }
-    if (change) {
-      this.rgbaToHsla();
-    }
-  }
-
-  /**
-   * Draw a filled rectangle on top of the image
-   *
-   * @param {Array} startCorner linkerbovenhoek vector co array
-   * @param {Array} endCorner rechteronderhoek vector co array
-   * @param {number} alpha getal 0..1
-   */
-  drawFillRect(startCorner, endCorner, alpha) {
-    let change = false;
-    if (this.getColorSpace() === 'HSLA') {
-      this.hslaToRgba();
-      change = true;
-    }
-    alpha = alpha * 255;
-
-    for (let j = startCorner[1]; j <= endCorner[1]; j++) {
-      for (let i = startCorner[0]; i <= endCorner[0]; i++) {
-        let pos = this.pixelToPosition([i, j]);
-
-        this.pixels[pos] = Math.min(this.pixels[pos] + alpha, 255);
-        this.pixels[pos + 1] = 0;
-        this.pixels[pos + 2] = 0;
-      }
-    }
-    if (change) {
-      this.rgbaToHsla();
-    }
-  }
-
-  makeRed(position) {
-    if (this.getColorSpace() === 'RGBA') {
-      this.pixels[position] = 255;
-      this.pixels[++position] = 0;
-      this.pixels[++position] = 0;
-    } else if (this.getColorSpace() === 'HSLA') {
-      this.pixels[position] = 0;
-      this.pixels[++position] = 100;
-      this.pixels[++position] = 50;
-    }
+    drawer.drawCorners(island);
+    drawer.drawMid(island);
   }
 
   /**
