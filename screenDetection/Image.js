@@ -67,8 +67,18 @@ class Image {
   }
 //TODO check resolution ook
   qualityCheck() {
-    if (ColorSpace.calcLuminance(this.pixels) < 40 || 80 < ColorSpace.calcLuminance(this.pixels)) {
+    let RGBA = false
+    if(this.getColorSpace == "RGBA"){
+      ColorSpace.rgbaToHsla(this.pixels)
+      RGBA = true;
+    }
+    if(this.getColorSpace !== "HSLA"){
+      console.error("Picture has to be in HSLA to do a quality check!")
+    } else if (ColorSpace.calcLuminance(this.pixels) < 40 || 80 < ColorSpace.calcLuminance(this.pixels)) {
       console.error('Take a better picture');
+    }
+    if(RGBA){
+      ColorSpace.hslaToRgba(this.pixels)
     }
   }
 
