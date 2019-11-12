@@ -1,0 +1,5 @@
+\section{Remap}
+Doordat schermen in 3d gedraaid zijn is er nood aan een correctie van het perspectief. Dit is onder meer nodig voor het lezen van de barcode en het displayen van foto's. Het basis algorithme die hiervoor gebruikt wordt zal source en destination corners gebruiken. Deze corners zijn de start en eind hoeken, de foto zal dus naar de destination corners worden gerokken. Er zal per corner array een matrix worden berekent. De 2 bekomen matrices zijn vormen de transformatie matrix die elke destination pixel een kleur uit de source geeft.\cite{map} Een simpel algorithme zal over alle pixels (dit zijn width $ * $ height pixels) gaan en de correct kleur toevoegen.
+
+
+

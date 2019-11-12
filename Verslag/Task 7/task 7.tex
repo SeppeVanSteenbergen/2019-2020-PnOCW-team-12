@@ -1,0 +1,80 @@
+\documentclass[a4paper,11pt]{article}
+
+\usepackage[margin=3cm]{geometry}
+
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage[colorlinks,allcolors=violet]{hyperref}
+\usepackage{url}
+\usepackage{lmodern}
+\usepackage[dutch]{babel}
+\usepackage{hyperref}
+
+% https://tex.stackexchange.com/questions/94032/fancy-tables-in-latex
+\usepackage[table]{xcolor}
+\usepackage{booktabs}
+
+\usepackage[utf8]{inputenc}
+
+% https://tex.stackexchange.com/questions/664/why-should-i-use-usepackaget1fontenc
+\usepackage[T1]{fontenc}
+\usepackage{microtype} % good font tricks
+
+\newcommand{\note}[1]{{\colorbox{yellow!40!white}{#1}}}
+\newcommand{\exampletext}[1]{{\color{blue!60!black}#1}}
+
+\begin{document}
+
+\noindent
+\colorbox[HTML]{52BDEC}{\bfseries\parbox{\textwidth}{\centering\large
+  --- Verslag P\&O CW 2019--2020 Taak 7 ---
+}}
+\\[-1mm]
+\colorbox[HTML]{00407A}{\bfseries\color{white}\parbox{\textwidth}{
+  Department Computerwetenschappen -- KU Leuven
+  \hfill
+  \today
+}}
+\\
+
+\smallskip
+
+\noindent
+
+\begin{tabular}{*4l}
+\toprule
+\multicolumn{2}{l}{\large\textbf{Team 12}} \\
+\midrule
+Frédéric Blondeel & 26h \\
+Martijn Debeuf & 35h \\
+Toon Sauvillers & h \\ % fill in the time spend on this task per team member who worked on it
+Dirk Vanbeveren & 21h \\
+Bert Van den Bosch & h \\
+Seppe Van Steenbergen & 1h \\
+
+
+\bottomrule
+\hline
+\end{tabular}\\
+
+\noindent
+{\color[HTML]{52BDEC} \rule{\linewidth}{1mm} }
+\tableofcontents
+\newpage
+\section{Introductie}\label{sec:introductie}
+\input{introductie}
+
+\input{Remap}
+\input{testen}
+\input{valkuilen}
+\section{Besluit}\label{sec:besluit}
+\input{besluit}
+
+\newpage
+
+\bibliographystyle{unsrt}
+\bibliography{bibliography}
+
+
+
+\end{document}
