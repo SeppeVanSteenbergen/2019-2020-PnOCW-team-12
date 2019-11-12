@@ -49,7 +49,18 @@ Week 6:
 | Names &nbsp; &nbsp; &nbsp; &nbsp;| Maandag &nbsp; &nbsp; &nbsp; &nbsp;| Dinsdag &nbsp; &nbsp; &nbsp; &nbsp;| Woensdag &nbsp; &nbsp; &nbsp; &nbsp;| Donderdag &nbsp; &nbsp; &nbsp; &nbsp;| Vrijdag &nbsp; &nbsp; &nbsp; &nbsp;| Zaterdag &nbsp; &nbsp; &nbsp; &nbsp;| Zondag &nbsp; &nbsp; &nbsp; &nbsp;|
 |--------------------|----------------------|----------------------|----------------------|----------------------|----------------------|----------------------|----------------------|
 |**TS**              |                      |                      |                      |                      |                      |                      |                      |
-|**SVS**             | adv (7)              |                      |                      |                      |                      |                      |                      |
+|**SVS**             | adv (7)              | color (9)            | color (7)            | color (4)            |                      |                      |                      |
+|**DV**              |                      |                      |                      |                      |                      |                      |                      |
+|**BVDB**            |                      |                      |                      |                      |                      |                      |                      |
+|**MD**              |                      |                      |                      |                      |                      |                      |                      |
+|**FB**              |                      |                      |                      |                      |                      |                      |                      |
+
+Week 7:
+
+| Names &nbsp; &nbsp; &nbsp; &nbsp;| Maandag &nbsp; &nbsp; &nbsp; &nbsp;| Dinsdag &nbsp; &nbsp; &nbsp; &nbsp;| Woensdag &nbsp; &nbsp; &nbsp; &nbsp;| Donderdag &nbsp; &nbsp; &nbsp; &nbsp;| Vrijdag &nbsp; &nbsp; &nbsp; &nbsp;| Zaterdag &nbsp; &nbsp; &nbsp; &nbsp;| Zondag &nbsp; &nbsp; &nbsp; &nbsp;|
+|--------------------|----------------------|----------------------|----------------------|----------------------|----------------------|----------------------|----------------------|
+|**TS**              |                      |                      |                      |                      |                      |                      |                      |
+|**SVS**             | color (8)            |                      |                      |                      |                      |                      |                      |
 |**DV**              |                      |                      |                      |                      |                      |                      |                      |
 |**BVDB**            |                      |                      |                      |                      |                      |                      |                      |
 |**MD**              |                      |                      |                      |                      |                      |                      |                      |
