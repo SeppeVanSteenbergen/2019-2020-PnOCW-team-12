@@ -1,19 +1,22 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<meta charset="utf-8">
-<title>Color Background</title>
+  <meta charset="utf-8">
+  <title>Color Background</title>
 </head>
+
 <body>
-<canvas id="canv">
-</canvas>
+  <canvas id="canv">
+    <div id="rand"></div>
+  </canvas>
 </body>
 
 <footer>
-<script>
+  <script>
 
-	class DetectionDrawer {
-	  constructor(canvas, screen, borderWidth) {
+    class DetectionDrawer {
+      constructor(canvas, screen, borderWidth) {
         this.w = screen.width;
         this.h = screen.height;
         this.borderWidth = borderWidth;
@@ -21,73 +24,112 @@
         this.c2 = '#0000ff';
         this.canvas = canvas;
         this.canvas.width = this.w
-		this.canvas.height = this.h
+        this.canvas.height = this.h
         this.barcodeColorValues = ['#ff0000', '#ffff00', '#00ff00', '#0000ff', '#ff00ff'];
         this.ctx = this.canvas.getContext('2d')
-	  }
+      }
 
-	  drawBorder() {
+      drawBorder(l) {  
         let ctx = this.ctx
+        let cornersize = this.w * 0.1;
+        let h = this.h *0.1;
+
         ctx.beginPath();
         ctx.fillStyle = this.c1;
-        ctx.rect(0, 0, this.w, this.borderWidth);
-        ctx.rect(0, 0, this.borderWidth, this.h - this.borderWidth);
+        ctx.rect(0, 0, this.w, l);
+        ctx.rect(0, 0, l, this.h / 2);
+        ctx.rect(this.w - l, 0, l, this.h / 2);
         ctx.fill();
+
         ctx.beginPath();
         ctx.fillStyle = this.c2;
-        ctx.rect(this.w - this.borderWidth, this.borderWidth, this.w, this.h);
-        ctx.rect(0, this.h - this.borderWidth, this.w, this.h);
+        ctx.rect(0, this.h - l, this.w, l);
+        ctx.rect(0, this.h / 2, l, this.h / 2);
+        ctx.rect(this.w - l, this.h / 2, l, this.h / 2);
         ctx.fill();
-        ctx.beginPath();
-        ctx.lineWidth = this.borderWidth / 2;
-        ctx.strokeStyle = this.c1;
-        ctx.strokeRect(0 + this.borderWidth / 4, 0 + this.borderWidth / 4, this.w - this.borderWidth / 2, this.h - this.borderWidth / 2);
-	  }
 
-	  drawX(l) {
-	    let lineWidth = l
-		let circleRadius = lineWidth*1.2
+
+        // ctx.beginPath();
+        // ctx.fillStyle = this.c1;
+        // ctx.rect(0, 0, cornersize, l);
+        // ctx.rect(this.w - cornersize, 0, cornersize, l);
+        // ctx.rect(0, 0, l, cornersize);
+        // ctx.rect(this.w - l, 0, l, cornersize);
+        // ctx.fill();
+
+        // ctx.beginPath();
+        // ctx.fillStyle = this.c2;
+        // ctx.rect(0, this.h - l, cornersize, l);
+        // ctx.rect(this.w - cornersize, this.h - l, cornersize, l);
+        // ctx.rect(0, this.h - h, l, h);
+        // ctx.rect(this.w - l, this.h - cornersize, this.w - l, cornersize);
+        // ctx.fill();
+
+        // ctx.beginPath();
+        // ctx.fillStyle = this.c1;
+        // ctx.rect(0, 0, this.w, this.borderWidth);
+        // ctx.rect(0, 0, this.borderWidth, this.h - this.borderWidth);
+        // ctx.fill();
+        // ctx.beginPath();
+        // ctx.fillStyle = this.c2;
+        // ctx.rect(this.w - this.borderWidth, this.borderWidth, this.w, this.h);
+        // ctx.rect(0, this.h - this.borderWidth, this.w, this.h);
+        // ctx.fill();
+        // ctx.beginPath();
+        // ctx.lineWidth = this.borderWidth / 2;
+        // ctx.strokeStyle = this.c1;
+        // ctx.strokeRect(0 + this.borderWidth / 4, 0 + this.borderWidth / 4, this.w - this.borderWidth / 2, this.h - this.borderWidth / 2);
+      }
+
+      drawX(l) {
+
+        //this.canvas.style.zIndex = 15;
+
+        this.drawBorder(l);
+
+        let lineWidth = l
+        let circleRadius = lineWidth * 1.2
 
 
         let ctx = this.ctx
         ctx.lineWidth = lineWidth
-		ctx.beginPath()
+        ctx.beginPath()
         ctx.strokeStyle = this.c1
-        ctx.moveTo(0,0)
-		ctx.lineTo(this.w/2, this.h/2)
-		ctx.lineTo(this.w, 0)
-		ctx.stroke()
-		ctx.beginPath()
+        ctx.moveTo(0, 0)
+        ctx.lineTo(this.w / 2, this.h / 2)
+        ctx.lineTo(this.w, 0)
+        ctx.stroke()
+        ctx.beginPath()
         ctx.strokeStyle = this.c2
-		ctx.moveTo(0, this.h)
-        ctx.lineTo(this.w/2, this.h/2)
+        ctx.moveTo(0, this.h)
+        ctx.lineTo(this.w / 2, this.h / 2)
         ctx.lineTo(this.w, this.h)
-		ctx.stroke()
+        ctx.stroke()
 
-		ctx.beginPath()
+        ctx.beginPath()
         ctx.fillStyle = this.c1
-		let w = lineWidth*Math.cos(Math.atan(this.h/this.w))*1.3
-		let h = this.h*w/this.w
-		ctx.moveTo(this.w/2 - w, this.h/2)
-		ctx.lineTo(this.w/2 + w, this.h/2)
-		ctx.lineTo(this.w/2, this.h/2 - h)
-		ctx.lineTo(this.w/2 - w, this.h/2)
-		ctx.closePath()
-		ctx.fill()
+        let w = lineWidth * Math.cos(Math.atan(this.h / this.w)) * 1.3
+        let h = this.h * w / this.w
+        ctx.moveTo(this.w / 2 - w, this.h / 2)
+        ctx.lineTo(this.w / 2 + w, this.h / 2)
+        ctx.lineTo(this.w / 2, this.h / 2 - h)
+        ctx.lineTo(this.w / 2 - w, this.h / 2)
+        ctx.closePath()
+        ctx.fill()
 
-		ctx.beginPath()
-		ctx.fillStyle = '#00ffff'
-		ctx.arc(this.w/2, this.h/2, circleRadius, 0, Math.PI*2)
-		ctx.fill()
-	  }
-	  
-	  clearBarcode() {
+        ctx.beginPath()
+        ctx.fillStyle = '#00ffff'
+        ctx.arc(this.w / 2, this.h / 2, circleRadius, 0, Math.PI * 2)
+        ctx.fill()
+      }
+
+      clearBarcode() {
         const ctx = this.ctx
         ctx.fillStyle = '#ffffff';
-        ctx.fillRect(this.borderWidth, this.borderWidth, this.w - 2*this.borderWidth, this.h - 2*this.borderWidth);
-	  }
+        ctx.fillRect(this.borderWidth, this.borderWidth, this.w - 2 * this.borderWidth, this.h - 2 * this.borderWidth);
+      }
 
-	  barcode(code, sections) {
+      barcode(code, sections) {
 
         //Only integers are allowed because otherwise the barcode is not complete at the end.
         sections = Math.round(sections);
@@ -115,60 +157,74 @@
         this.drawX(40);
 
         return barWidth;
-	  }
+      }
 
-	  barcodeOld(code, sections) {
+      barcodeOld(code, sections) {
         //Only integers are allowed because otherwise the barcode is not complete at the end.
         sections = Math.round(sections);
-	  
-	    this.clearBarcode();
 
-	    const ctx = this.ctx
+        this.clearBarcode();
+
+        const ctx = this.ctx
         code = code.toString().split('').map(val => parseInt(val - 1));
 
-        const netWidth = this.w - 2*this.borderWidth;
+        const netWidth = this.w - 2 * this.borderWidth;
         const barWidth = netWidth / sections / 6;
         //const amountOfIterations = Math.floor((this.w - 2 * this.borderWidth) / (6 * width))
 
         for (let i = 0; i < sections * 6; i += 6) {
-            for (let j = 0; j < 5; j++) {
+          for (let j = 0; j < 5; j++) {
             ctx.beginPath();
             ctx.fillStyle = this.barcodeColorValues[code[j]];
-            ctx.rect(this.borderWidth + barWidth * (i + j), this.borderWidth, barWidth, this.h - 2*this.borderWidth);
+            ctx.rect(this.borderWidth + barWidth * (i + j), this.borderWidth, barWidth, this.h - 2 * this.borderWidth);
             ctx.fill();
-            }
+          }
         }
-        
-      return barWidth;
+
+        return barWidth;
       }
-	}
+    }
 
-  const borderWidth = screen.width * 0.1;
-  const c = document.getElementById("canv");
-  
-  let drawer = new DetectionDrawer(c, screen, borderWidth);
-  drawer.drawX(40);
+    const borderWidth = screen.width * 0.1;
+    const c = document.getElementById("canv");
 
-  // for console use
-  let barcode = (code,sections) => drawer.barcode(code,sections);
+    let drawer = new DetectionDrawer(c, screen, borderWidth);
+    drawer.drawX(40);
 
-</script>
-<style>
-.canv {
-	width: 100%;
-	height: 100%;
-}
+    // for console use
+    let barcode = (code, sections) => drawer.barcode(code, sections);
+    let clearBarcode = () => drawer.clearBarcode();
 
-html, body {
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    display: block;
-    box-sizing: border-box;
-}
-	</style>
-	</footer>
+  </script>
+  <style>
+    .canv {
+      z-index: 5;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+    }
+
+    div{
+      z-index: 10;
+      width: 96%;
+      height: 100%;
+      border: 2vw solid #0000ff;
+      border-bottom: none;
+      position: absolute;
+      fill: olive;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      display: block;
+      box-sizing: border-box;
+    }
+  </style>
+</footer>
 
 </html>
