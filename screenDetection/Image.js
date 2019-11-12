@@ -9,14 +9,6 @@ class Image {
     this.screens = [];
     this.pictureCanvas = null;
 
-
-    this.lowerBoundG = [120 - this.sensitivity, 50, 25];
-    this.upperBoundG = [120 + this.sensitivity, 100, 75];
-    this.lowerBoundB = [210, 50, 25];
-    this.upperBoundB = [250, 100, 75];
-    this.lowerBoundMid = [180 - this.sensitivity, 50, 25];
-    this.upperBoundMid = [180 + this.sensitivity, 100, 75];
-
     if (colorSpace === 'RGBA'){
       this.imgOriginal = imgData
     }
@@ -46,10 +38,10 @@ class Image {
     this.createBigMask();
     this.createOffset(3);
     this.createScreens();
-    //this.createPictureCanvas(300, 500); //TODO: param meegeven
-    //this.calcRelativeScreens(); //untested
-    //console.log("picture canvas: " + Object.values(this.pictureCanvas));
-    //return this.screens;
+    this.createPictureCanvas(300, 500); //TODO: param meegeven
+    this.calcRelativeScreens(); //untested
+    console.log("picture canvas: " + Object.values(this.pictureCanvas));
+    return this.screens;
   }
 
   getImgData() {
@@ -65,7 +57,8 @@ class Image {
       return this.imgData;
     }
   }
-//TODO check resolution ook
+
+//TODO: check resolution ook
   qualityCheck() {
     let RGBA = false
     if(this.getColorSpace == "RGBA"){
@@ -79,23 +72,6 @@ class Image {
     }
     if(RGBA){
       ColorSpace.hslaToRgba(this.pixels)
-    }
-  }
-
-
-
-  /**
-   * Execute all the calulations to analyse the whole image
-   */
-  doCalculations() {
-    ColorSpace.rgbaToHsla(this.pixels);
-    this.setColorSpace("HSLA")
-    this.createGreenBlueMask();
-    this.medianBlurMatrix(3);
-    this.createScreens();
-    for (let i = 0; i < this.screens.length; i++) {
-      this.screens[i].findClientCode();
-      this.screens[i].calculateScreenImage(this.imgData);
     }
   }
 
@@ -300,7 +276,7 @@ class Image {
     })
   }
 
-  
+  /*
   medianBlur(ksize) {
     for (let y = 0; y < this.getHeight(); y++) {
       for (let x = 0; x < this.getWidth(); x++) {
@@ -323,7 +299,8 @@ class Image {
       }
     }
   }
-
+  */
+  /*
   medianBlurMatrix(ksize) {
     for (let y = 0; y < this.getHeight(); y++) {
       for (let x = 0; x < this.getWidth(); x++) {
@@ -351,6 +328,7 @@ class Image {
       }
     }
   }
+  */
 
   createOffset(factor) {
     let whites = [];
@@ -408,57 +386,16 @@ class Image {
       let pixel = this.positionToPixel(i);
       let x = pixel[0];
       let y = pixel[1];
-      if (this.inGreenRange(H, S, L)) {
-        //this.pixels[i + 1] = 0;
-        //this.pixels[i + 2] = 100;
+      if (ColorRange.inGreenRange(H, S, L)) {
         this.matrix[y][x] = 1;
-      } else if (this.inBlueRange(H, S, L)) {
-        //this.pixels[i + 1] = 0;
-        //this.pixels[i + 2] = 100;
+      } else if (ColorRange.inBlueRange(H, S, L)) {
         this.matrix[y][x] = 2;
-      } else if (this.inMidRange(H, S, L)) {
-        //this.pixels[i + 1] = 0;
-        //this.pixels[i + 2] = 100;
+      } else if (ColorRange.inMidRange(H, S, L)) {
         this.matrix[y][x] = 3;
       } else {
-        //this.pixels[i + 1] = 0;
-        //this.pixels[i + 2] = 0;
         this.matrix[y][x] = 0;
       }
     }
-  }
-
-  inMidRange(H, S, L) {
-    return (
-      H >= this.lowerBoundMid[0] &&
-      S >= this.lowerBoundMid[1] &&
-      L >= this.lowerBoundMid[2] &&
-      H <= this.upperBoundMid[0] &&
-      S <= this.upperBoundMid[0] &&
-      L <= this.upperBoundMid[0]
-    );
-  }
-
-  inGreenRange(H, S, L) {
-    return (
-      H >= this.lowerBoundG[0] &&
-      S >= this.lowerBoundG[1] &&
-      L >= this.lowerBoundG[2] &&
-      H <= this.upperBoundG[0] &&
-      S <= this.upperBoundG[1] &&
-      L <= this.upperBoundG[2]
-    );
-  }
-
-  inBlueRange(H, S, L) {
-    return (
-      H >= this.lowerBoundB[0] &&
-      S >= this.lowerBoundB[1] &&
-      L >= this.lowerBoundB[2] &&
-      H <= this.upperBoundB[0] &&
-      S <= this.upperBoundB[1] &&
-      L <= this.upperBoundB[2]
-    );
   }
 
   getMatrix(x, y) {
