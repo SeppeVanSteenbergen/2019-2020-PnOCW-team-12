@@ -4,27 +4,27 @@
 \colorlet{numb}{magenta!60!black}
 
 \lstdefinelanguage{json}{
-    basicstyle=\normalfont\ttfamily,
-    showstringspaces=false,
-    breaklines=true,
-    frame=lines,
-    backgroundcolor=\color{background},
-    literate=
-      {:}{{{\color{punct}{:}}}}{1}
-      {,}{{{\color{punct}{,}}}}{1}
-      {\{}{{{\color{delim}{\{}}}}{1}
-      {\}}{{{\color{delim}{\}}}}}{1}
-      {[}{{{\color{delim}{[}}}}{1}
-      {]}{{{\color{delim}{]}}}}{1},
+basicstyle=\normalfont\ttfamily,
+showstringspaces=false,
+breaklines=true,
+frame=lines,
+backgroundcolor=\color{background},
+literate=
+{:}{{{\color{punct}{:}}}}{1}
+{,}{{{\color{punct}{,}}}}{1}
+{\{}{{{\color{delim}{\{}}}}{1}
+{\}}{{{\color{delim}{\}}}}}{1}
+{[}{{{\color{delim}{[}}}}{1}
+{]}{{{\color{delim}{]}}}}{1},
 }
 
 
 
-In de klasse Screen , is er een functie die van een canvas in de grootte van de originele foto van de opstelling het gedeelte van zijn eigen scherm kan knippen en transformeren met een perspectief transformatie. zie \ref{remapDiagram}.
+In de klasse Screen , is er een functie die van een canvas in de grootte van de originele foto van de opstelling het gedeelte van zijn eigen scherm kan knippen en transformeren met een perspectief transformatie, zie figuur \ref{remapDiagram}.
 
 Er is dus een canvas met de juiste grootte van het scherm waarop een gekozen foto op geplaatst kan worden. Deze foto kan verschoven worden met de muis. Eens de foto op de gewenste plaats staat wordt elke scherm er uitgeknipt, getransformeerd.
 
-Eens de transformatie klaar is wordt de foto naar een base64 string geconverteerd en verzonden in json formaat via de socket met endpoint 'screenCommand'. Zie \ref{json}
+Eens de transformatie klaar is wordt de foto naar een base64 string geconverteerd en verzonden in json formaat via de socket met endpoint 'screenCommand', zie figuur \ref{json}
 
 \vspace{30px}
 
@@ -53,13 +53,13 @@ Eens de transformatie klaar is wordt de foto naar een base64 string geconverteer
 \begin{figure}
 \begin{lstlisting}[language=json,firstnumber=1]
 {
-  payload: {
-    type: "display-image",
-      data: {
-        image: [Base64 Image]
-      }
-    },
-  to: [user_id]
+payload: {
+type: "display-image",
+data: {
+image: [Base64 Image]
+}
+},
+to: [user_id]
 }
 \end{lstlisting}
 \caption{Image background command json} \label{json}
