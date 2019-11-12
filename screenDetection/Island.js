@@ -481,10 +481,11 @@ class Island {
       return null;
     }
 
-    let midX = Math.floor(x_values.reduce((a, b) => a + b, 0) / lengthX);
-    let midY = Math.floor(y_values.reduce((a, b) => a + b, 0) / lengthY);
+    //mediaan van gevonden circle pixels
+    let midx = x_values.sort()[Math.floor(lengthX / 2)];
+    let midy = y_values.sort()[Math.floor(lengthY / 2)];
 
-    return [midX + this.minx, midY + this.miny];
+    return [midx + this.minx, midy + this.miny];
   }
 
   //searches the two corners that arent the right adjacent ones and sets them to null; TODO: efficiënter!
