@@ -90,7 +90,7 @@ module.exports = {
     console.log('SCREEN COMMAND')
     console.log(message)
     if (!dataHelper.isMasterUser(user_id)) {
-      console.log('The user is not allow to send this command')
+      console.log('The user is not allowed to send this command')
       return 1
     }
 
@@ -102,18 +102,22 @@ module.exports = {
       this.sendDataToRoomOfMaster('screenCommand', message.payload, user_id)
     }
   },
+
   closeRoom(user_id) {
     dataHelper.closeRoom(user_id)
     this.updateAllRoomLists() // TODO only update the clients from the room
   },
+
   openRoom(user_id) {
     dataHelper.openRoom(user_id)
     this.updateAllRoomLists() // TODO only update the clients from the room
   },
+
   toggleRoom(user_id) {
     dataHelper.toggleRoom(user_id)
     this.updateAllRoomLists() // TODO only update the clients from the room
   },
+
   sendDataByUserID(name, data, user_id) {
     this.sendDataBySocketID(
       name,
@@ -121,6 +125,7 @@ module.exports = {
       dataHelper.getSocketIDFromUserID(user_id)
     )
   },
+
   sendDataBySocketID(name, data, socket_id) {
     if (data === null) {
       io.to(socket_id).emit(name)
