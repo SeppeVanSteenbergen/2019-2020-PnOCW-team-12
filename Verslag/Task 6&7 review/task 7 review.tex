@@ -44,23 +44,35 @@
 \toprule
 \multicolumn{3}{l}{\large\textbf{Team 12}} \\
 \midrule
-Frédéric Blondeel & (h) &  (LOC) \\ % fill in the time spend on this task per team member who worked on it and the amount of lines of code (LOC) reviewed
+Frédéric Blondeel & (1.5h) &  (750 LOC) \\ % fill in the time spend on this task per team member who worked on it and the amount of lines of code (LOC) reviewed
 \bottomrule
 \hline
 \end{tabular}\\
 \\
 Demo: \url{https://penocw.cs.kotnet.kuleuven.be:8012} \\
-Files reviewed: 
+Files reviewed: Island.js ; Drawer.js ; BarcodeScanner.js
 
 \noindent
 {\color[HTML]{52BDEC} \rule{\linewidth}{1mm} }
 
 \smallskip
 
-\section{Countdown}
-
-
 \section{Image show off}
+\subsection{Island.js}
+\begin{itemize}
+\item findCorners() is een lange functie, deze kan beter begrepen worden door hulpfuncties te introduceren. Zelfs met 2 is de functie nog steeds 130 lijnen lang en onoverzichtelijk.
+\item distToMid(), er is geen nut om midpoint te initialiseren, gebruik gewoon this.midpoint.
+\item recoScreen(), lengthThresh krijgt waarde 0.7 maar is hier ook een reden voor?
+\item In het algemeen is documentatie nodig, vooral bij de langere complexe functies.
+\end{itemize}
+\subsection{Drawer.js}
+\begin{itemize}
+\item drawpoint(), posx zou posX of pos\_x moeten zijn voor samenhang.
+\end{itemize}
+\subsection{BarcodeScanner.js}
+\begin{itemize}
+\item Scan wordt verticaal en horizontaal gelezen maar als het scherm een veelvoud van 90 graden gedraaid is zou de barcode mogelijks foutief worden gelezen. (12345 kan als 54321 geinterpreteert worden). 
+\end{itemize}
 
 
 
