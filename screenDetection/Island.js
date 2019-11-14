@@ -1,4 +1,4 @@
- class Island {
+class Island {
   /**
    * Create and Island starting with this pixel
    * @param {Image} image
@@ -117,11 +117,11 @@
       }
     }
     let yValuesLeftAvg =
-        yValuesLeft.reduce((t, n) => t + n) / yValuesLeft.length;
+      yValuesLeft.reduce((t, n) => t + n) / yValuesLeft.length;
 
     let yValuesLeftVariance = Math.sqrt(
-        yValuesLeft.reduce((t, n) => t + Math.pow(yValuesLeftAvg - n, 2)) /
-        yValuesLeft.length
+      yValuesLeft.reduce((t, n) => t + Math.pow(yValuesLeftAvg - n, 2)) /
+      yValuesLeft.length
     );
 
     //console.log('Left Variance: ' + yValuesLeftVariance);
@@ -148,22 +148,37 @@
     this.cleanCorners(corners, 30); // TODO shouldn't be hardcoded
     let drawer = new Drawer(this.imgOriginal.data, this.imgOriginal.width, this.imgOriginal.height)
     let distances = this.distToMid();
-    for(let i = 0; i < corners.length; i++){
-      let reco = Reconstructor.reconstructCircle([corners[i][0]-this.minx, corners[i][1]-this.miny], this.screenMatrix, this.id)
+    /////////////////////////////////////////////////////////////////
+    let lines = []
+    let linesCenter = []
+    for (let i = 0; i < corners.length; i++) {
+      let reco = Reconstructor.reconstructCircle([corners[i][0] - this.minx, corners[i][1] - this.miny], this.screenMatrix, this.id)
       let recoVal = Object.values(reco)
-      for(let j = 0; j < recoVal.length; j++){
-        if(recoVal[j] != null)
+      for (let j = 0; j < recoVal.length; j++) {
+        if (recoVal[j] != null){
+          lines.push(new Line([recoVal[j][0] + this.minx, recoVal[j][1] + this.miny], corners[i]))
+          //drawer.drawLine(new Line([recoVal[j][0] + this.minx, recoVal[j][1] + this.miny], corners[i]), false)
           drawer.drawPoint(recoVal[j][0] + this.minx, recoVal[j][1] + this.miny, 10)
+        }
       }
     }
     let reco = Reconstructor.reconstructCircle([this.midPoint[0] - this.minx, this.midPoint[1] - this.miny], this.screenMatrix, this.id)
     let recoVal = Object.values(reco)
-    for(let j = 0; j < recoVal.length; j++){
-      if(recoVal[j] != null)
+    for (let j = 0; j < recoVal.length; j++) {
+      if (recoVal[j] != null){
+        linesCenter.push(new Line([recoVal[j][0] + this.minx, recoVal[j][1] + this.miny], this.midPoint))
         drawer.drawPoint(recoVal[j][0] + this.minx, recoVal[j][1] + this.miny, 10)
+      }
     }
-
-    
+    for(let i = 0; i < lines.length - 1; i++){
+      for(let j = i+1; j < lines.length; j++){
+        let intersect = lines[i].calcIntersection(lines[j], this.imgOriginal.width, this.imgOriginal.height)
+        if(intersect != null){
+          //drawer.drawPoint(intersect[0],intersect[1], 10)
+        }
+      }
+    }
+    /////////////////////////////////////////////////////////////////////
     this.recoScreen(distances);
   }
 
@@ -254,9 +269,9 @@
       for (let j = 0; j <= k; j++) {
         let i = k - j;
         if (
-            i < this.height &&
-            j < this.width &&
-            this.screenMatrix[i][j] !== 0
+          i < this.height &&
+          j < this.width &&
+          this.screenMatrix[i][j] !== 0
         ) {
           corners.push([j, i, this.screenMatrix[i][j]]);
           found = true;
@@ -272,9 +287,9 @@
       for (let j = 0; j <= k; j++) {
         let i = k - j;
         if (
-            i < this.height &&
-            j < this.width &&
-            this.screenMatrix[i][this.width - j - 1] !== 0
+          i < this.height &&
+          j < this.width &&
+          this.screenMatrix[i][this.width - j - 1] !== 0
         ) {
           corners.push([
             this.width - j - 1,
@@ -294,9 +309,9 @@
       for (let j = 0; j <= k; j++) {
         let i = k - j;
         if (
-            i < this.height &&
-            j < this.width &&
-            this.screenMatrix[this.height - i - 1][this.width - j - 1] !== 0
+          i < this.height &&
+          j < this.width &&
+          this.screenMatrix[this.height - i - 1][this.width - j - 1] !== 0
         ) {
           corners.push([
             this.width - j - 1,
@@ -316,9 +331,9 @@
       for (let j = 0; j <= k; j++) {
         let i = k - j;
         if (
-            i < this.height &&
-            j < this.width &&
-            this.screenMatrix[this.height - i - 1][j] !== 0
+          i < this.height &&
+          j < this.width &&
+          this.screenMatrix[this.height - i - 1][j] !== 0
         ) {
           corners.push([
             j,
@@ -479,9 +494,9 @@
 
   cssTransMatrix(transMatrix) {
     return [transMatrix[1][1], transMatrix[2][1], 0, transMatrix[3][1],
-      transMatrix[1][2], transMatrix[2][2], 0, transMatrix[3][2],
+    transMatrix[1][2], transMatrix[2][2], 0, transMatrix[3][2],
       0, 0, 1, 0,
-      transMatrix[1][3], transMatrix[2][3], 0, [transMatrix[3][3]]]
+    transMatrix[1][3], transMatrix[2][3], 0, [transMatrix[3][3]]]
   }
 
   recoScreen(distances) {
@@ -490,8 +505,8 @@
     if (distances[0] !== null) {
       if (distances[2] !== null) {
         if (
-            !this.inRangeOf(distances[0], distances[2], lengthThresh) &&
-            distances[0] > distances[2]
+          !this.inRangeOf(distances[0], distances[2], lengthThresh) &&
+          distances[0] > distances[2]
         ) {
           this.corners.RD = [
             this.midPoint[0] + (this.midPoint[0] - this.corners.LU[0]),
@@ -527,8 +542,8 @@
     if (distances[1] !== null) {
       if (distances[3] !== null) {
         if (
-            !this.inRangeOf(distances[1], distances[3], lengthThresh) &&
-            distances[1] > distances[3]
+          !this.inRangeOf(distances[1], distances[3], lengthThresh) &&
+          distances[1] > distances[3]
         ) {
           this.corners.LD = [
             this.midPoint[0] - (this.corners.RU[0] - this.midPoint[0]),
@@ -623,8 +638,8 @@
     A = math.multiply(1 / (1 + m * m), A);
 
     let mirror = math
-        .multiply([vec2[1][0] - vec2[0][0], vec2[1][1] - vec2[0][1]], A)
-        .add(vec2[0]); //gespiegelde vec2 over loodrechte aan vec1
+      .multiply([vec2[1][0] - vec2[0][0], vec2[1][1] - vec2[0][1]], A)
+      .add(vec2[0]); //gespiegelde vec2 over loodrechte aan vec1
 
     let corner = math.add(vec1, mirror)[1]; //reconstructie van 4de punt
 
@@ -639,11 +654,11 @@
       corners[i][1] += this.miny;
     }*/
     return new Screen(
-        corners,
-        orientation,
-        this.midPoint,
-        clientInfo,
-        this.imgOriginal
+      corners,
+      orientation,
+      this.midPoint,
+      clientInfo,
+      this.imgOriginal
     );
   }
 

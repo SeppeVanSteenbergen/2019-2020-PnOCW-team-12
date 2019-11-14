@@ -1,6 +1,6 @@
 class Drawer {
 
-    constructor(pixels, width, height, ctx = null) {
+    constructor(pixels, width, height) {
         this.pixels = pixels;
         this.width = width;
         this.height = height;

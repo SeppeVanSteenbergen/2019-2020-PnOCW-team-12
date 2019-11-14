@@ -66,7 +66,7 @@ class Line{
      * @param {int} width canvas width (optional)
      * @param {int} height canvas height (optional)
      */
-    calcIntersection(line, width = 0, height = 0){
+    calcIntersection(line, width, height){
         let intersection = null;
 
         //calc intersection
