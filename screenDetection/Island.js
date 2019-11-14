@@ -174,7 +174,7 @@ class Island {
         }
       }
     }
-    let reco = Reconstructor.reconstructCircle([this.midPoint[0] - this.minx, this.midPoint[1] - this.miny], this.screenMatrix, this.id, radius)
+    let reco = Reconstructor.reconstructCircleMidPoint([this.midPoint[0] - this.minx, this.midPoint[1] - this.miny], this.screenMatrix, this.id, radius)
     let recoVal = Object.values(reco)
     for (let j = 0; j < recoVal.length; j++) {
       if (recoVal[j] != null){

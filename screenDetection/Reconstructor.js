@@ -41,7 +41,7 @@ class Reconstructor {
     }
 
     static reconstructCircle(cornerCoo, matrix, id, radius) {
-        let lines = this.calcLinesCirc(cornerCoo, matrix, id)
+        let lines = this.calcLinesCirc(cornerCoo, matrix, id, radius)
         let reco = []
         let furthestPoints = this.calcTwoFurthestPoints(lines)
         reco.push(furthestPoints[0], furthestPoints[1])
@@ -61,8 +61,8 @@ class Reconstructor {
         return reco
     }
 
-    static reconstructCircleMidPoint(midPointCoo, matrix, id){
-        let lines = this.calcLinesCirc(midPointCoo, matrix, id)
+    static reconstructCircleMidPoint(midPointCoo, matrix, id, radius){
+        let lines = this.calcLinesCirc(midPointCoo, matrix, id, radius)
         let reco = []
         for(let i = 0; i < lines.length; i++){
             reco.push(lines[i][Math.floor(lines[i].length / 2)])
