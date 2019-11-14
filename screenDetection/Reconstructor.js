@@ -71,8 +71,8 @@ class Reconstructor {
 
 
     static calcLinesCirc(cornerCoo, matrix, id) {
-        let radius = 100
-        let dtheta = 0.01
+        const radius = 100
+        const dtheta = 0.01
 
         let white = false;
         let lines = []

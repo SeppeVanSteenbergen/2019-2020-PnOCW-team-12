@@ -1,15 +1,15 @@
 class CornerDetection {
-    static cornerDetection(pixels) {
+    static cornerDetection(pixels, id) {
         let width = pixels[0].length
         let height = pixels.length
-        findCorners(pixels)
+        findCorners(pixels, id)
         //cleanCorners()
 
         //returns 4 corners in relative position
         return corners
     }
 
-    static findCorners(pixels) {
+    static findCorners(pixels, id) {
         let heigth = pixels.length
         let width = pixels[0].length
         // choosing diagonal or straight corner detection
@@ -28,7 +28,7 @@ class CornerDetection {
         let yValuesLeft = [];
         for (let y = 0; y < height; y++) {
             for (let x = 0; x < testOffsetX; x++) {
-                if (pixels[y][x] !== 0) yValuesLeft.push(y / height);
+                if (this.isFromIsland(x, y, pixels, id)) yValuesLeft.push(y / height);
             }
         }
         let yValuesLeftAvg =
@@ -44,11 +44,11 @@ class CornerDetection {
         let corners = [];
         if (diagonalSearch) {
             // Diagonal search
-            corners = this.diagonalSearch()
+            corners = this.diagonalSearch(pixels, id)
 
         } else {
             // Perpendicular search
-            corners = this.perpendicularSearch()
+            corners = this.perpendicularSearch(pixels, id)
         }
         return corners
     }
@@ -102,7 +102,7 @@ class CornerDetection {
                 if (
                     i < height &&
                     j < width &&
-                    pixels[i][j] !== 0
+                    this.isFromIsland(j, i, pixels, id)
                 ) {
                     corners.push([j, i, pixels[i][j]]);
                     found = true;
@@ -120,7 +120,7 @@ class CornerDetection {
                 if (
                     i < height &&
                     j < width &&
-                    pixels[i][width - j - 1] !== 0
+                    this.isFromIsland(width - j - 1, i, pixels, id)
                 ) {
                     corners.push([
                         width - j - 1,
@@ -142,7 +142,7 @@ class CornerDetection {
                 if (
                     i < height &&
                     j < width &&
-                    pixels[height - i - 1][width - j - 1] !== 0
+                    this.isFromIsland(width- j - 1, height - i - 1, pixels, id)
                 ) {
                     corners.push([
                         width - j - 1,
@@ -164,7 +164,7 @@ class CornerDetection {
                 if (
                     i < height &&
                     j < width &&
-                    pixels[height - i - 1][j] !== 0
+                    this.isFromIsland(j, height - i - 1, pixels, id)
                 ) {
                     corners.push([
                         j,
@@ -189,7 +189,7 @@ class CornerDetection {
           let found = false;
           let tempY = [];
           for (let y = 0; y < height; y++) {
-            if (pixels[y][x] !== 0) {
+            if (this.isFromIsland(x, y, pixels, id)) {
               tempY.push(y);
               found = true;
             }
@@ -206,7 +206,7 @@ class CornerDetection {
           let found = false;
           let tempX = [];
           for (let x = 0; x < width; x++) {
-            if (pixels[y][x] !== 0) {
+            if (this.isFromIsland(x, y, pixels, id)) {
               tempX.push(x);
               found = true;
             }
@@ -223,7 +223,7 @@ class CornerDetection {
           let found = false;
           let tempY = [];
           for (let y = 0; y < height; y++) {
-            if (pixels[y][width - x - 1] !== 0) {
+            if (this.isFromIsland(width - x - 1, y, pixels, id)) {
               tempY.push(y);
               found = true;
             }
@@ -243,7 +243,7 @@ class CornerDetection {
           let found = false;
           let tempX = [];
           for (let x = 0; x < width; x++) {
-            if (pixels[height - y - 1][x] !== 0) {
+            if (this.isFromIsland(x, height - y - 1, pixels, id)) {
               tempX.push(x);
               found = true;
             }
@@ -348,6 +348,20 @@ class CornerDetection {
                 this.corners.LD = L;
             }
         }
+    }
+
+    static isFromIsland(x, y, matrix, id) {
+        let pixel = this.getMatrix(x, y, matrix)
+        if (pixel >= id && pixel <= id + 2)
+            return true
+        return false
+    }
+    static getMatrix(x, y, matrix) {
+        if (x < 0) return 0;
+        else if (x >= matrix[0].length) return 0;
+        if (y < 0) return 0;
+        else if (y >= matrix.length) return 0;
+        return matrix[y][x];
     }
 
 }
