@@ -54,7 +54,20 @@ class Line{
      * Get the start and end points to draw the line over the full canvas
      */
     calcInfinitePoints(width , height){
+        let result = [];
 
+        let edges = [new Line([0,0], [0, height]), new Line([0,0], [width, 0]), new Line([0, height], [width, height]), new Line([width, 0], [width, height])];
+
+        for (let i = 0; i < edges.length; i++) {
+            const edge = edges[i];
+            let point = this.calcIntersection(edge, width, height);
+
+            if(point != null){
+                result.push(point);
+            }
+        }
+
+        return result;
     }
 
     /**
@@ -89,7 +102,7 @@ class Line{
         }
 
         if(intersection != null && (width != 0 || height != 0)){
-            if(intersection[0] < 0 || intersection[0] >= width || intersection[1] < 0 || intersection[1] >= height){
+            if(intersection[0] < 0 || intersection[0] > width || intersection[1] < 0 || intersection[1] > height){
                 intersection = null;
             }
         }
