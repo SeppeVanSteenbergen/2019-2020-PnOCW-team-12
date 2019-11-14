@@ -138,10 +138,12 @@ class Island {
 
     } else {
       // Perpendicular search
-      corners = this.perpendicularSearch()
+      corners = this.perpendicularSearch();
     }
 
-    //console.log(CornerDetector.cornerDetection(this.screenMatrix, this.id))
+    let cornerDetector = new CornerDetector(this.screenMatrix, this.id)
+
+    console.log(cornerDetector.cornerDetection())
 
     // corners to absolute position
     for (let i = 0; i < corners.length; i++) {

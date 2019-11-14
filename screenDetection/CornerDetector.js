@@ -1,14 +1,14 @@
 class CornerDetector {
-    Constructor(pixels, matrix, id) {
-        this.matrix = matrix
-        this.pixels = pixels
+
+    constructor(screenMatrix, id) {
+        this.matrix = screenMatrix
         this.corners = {}
         this.id = id
-        this.height = this.pixels.length
-        this.width = this.pixels[0].length
+        this.height = this.matrix.length
+        this.width = this.matrix[0].length
     }
 
-    cornerDetection(id) {
+    cornerDetection() {
         let tmpCorners = this.findCorners()
         //returns 4 corners in relative position
         this.corners = this.validateCorners(tmpCorners)
@@ -25,14 +25,14 @@ class CornerDetector {
         const minPixels = 10;
         const sd_threshold = 0.15;
 
-        const testOffsetX = Math.max(Math.floor(ratio * width), minPixels);
-        const testOffsetY = Math.max(Math.floor(ratio * height), minPixels);
+        const testOffsetX = Math.max(Math.floor(ratio * this.width), minPixels);
+        const testOffsetY = Math.max(Math.floor(ratio * this.height), minPixels);
 
         // Left variance
         let yValuesLeft = [];
-        for (let y = 0; y < height; y++) {
+        for (let y = 0; y < this.height; y++) {
             for (let x = 0; x < testOffsetX; x++) {
-                if (this.isFromIsland(x, y)) yValuesLeft.push(y / height);
+                if (this.isFromIsland(x, y)) yValuesLeft.push(y / this.height);
             }
         }
         let yValuesLeftAvg =
@@ -56,43 +56,7 @@ class CornerDetector {
         }
         return corners
     }
-    /*
-        let drawer = new Drawer(this.imgOriginal.data, this.imgOriginal.width, this.imgOriginal.height)
-        let distances = this.distToMid();
-        /////////////////////////////////////////////////////////////////
-        let lines = []
-        let linesCenter = []
-        for (let i = 0; i < corners.length; i++) {
-          let reco = Reconstructor.reconstructCircle([corners[i][0] - this.minx, corners[i][1] - this.miny], this.screenMatrix, this.id)
-          let recoVal = Object.values(reco)
-          for (let j = 0; j < recoVal.length; j++) {
-            if (recoVal[j] != null){
-              lines.push(new Line([recoVal[j][0] + this.minx, recoVal[j][1] + this.miny], corners[i]))
-              //drawer.drawLine(new Line([recoVal[j][0] + this.minx, recoVal[j][1] + this.miny], corners[i]), false)
-              drawer.drawPoint(recoVal[j][0] + this.minx, recoVal[j][1] + this.miny, 10)
-            }
-          }
-        }
-        let reco = Reconstructor.reconstructCircle([this.midPoint[0] - this.minx, this.midPoint[1] - this.miny], this.screenMatrix, this.id)
-        let recoVal = Object.values(reco)
-        for (let j = 0; j < recoVal.length; j++) {
-          if (recoVal[j] != null){
-            linesCenter.push(new Line([recoVal[j][0] + this.minx, recoVal[j][1] + this.miny], this.midPoint))
-            drawer.drawPoint(recoVal[j][0] + this.minx, recoVal[j][1] + this.miny, 10)
-          }
-        }
-        for(let i = 0; i < lines.length - 1; i++){
-          for(let j = i+1; j < lines.length; j++){
-            let intersect = lines[i].calcIntersection(lines[j], this.imgOriginal.width, this.imgOriginal.height)
-            if(intersect != null){
-              //drawer.drawPoint(intersect[0],intersect[1], 10)
-            }
-          }
-        }
-        /////////////////////////////////////////////////////////////////////
-        this.recoScreen(distances);
-      }
-      */
+
     diagonalSearch() {
         let corners = []
         // left upper corner
@@ -105,7 +69,7 @@ class CornerDetector {
                     j < this.width &&
                     this.isFromIsland(j, i)
                 ) {
-                    corners.push([j, i, this.pixels[i][j]]);
+                    corners.push([j, i, this.matrix[i][j]]);
                     found = true;
                     break;
                 }
@@ -126,7 +90,7 @@ class CornerDetector {
                     corners.push([
                         this.width - j - 1,
                         i,
-                        this.pixels[i][this.width - j - 1]
+                        this.matrix[i][this.width - j - 1]
                     ]);
                     found = true;
                     break;
@@ -148,7 +112,7 @@ class CornerDetector {
                     corners.push([
                         this.width - j - 1,
                         this.height - i - 1,
-                        this.pixels[this.height - i - 1][this.width - j - 1]
+                        this.matrix[this.height - i - 1][this.width - j - 1]
                     ]);
                     found = true;
                     break;
@@ -170,7 +134,7 @@ class CornerDetector {
                     corners.push([
                         j,
                         this.height - i - 1,
-                        this.pixels[this.height - i - 1][j]
+                        this.matrix[this.height - i - 1][j]
                     ]);
                     found = true;
                     break;
@@ -195,7 +159,7 @@ class CornerDetector {
             }
             if (found) {
                 let medianY = tempY[Math.floor(tempY.length / 2)];
-                corners.push([x, medianY, this.pixels[medianY][x]]);
+                corners.push([x, medianY, this.matrix[medianY][x]]);
                 break;
             }
         }
@@ -212,7 +176,7 @@ class CornerDetector {
             }
             if (found) {
                 let medianX = tempX[Math.floor(tempX.length / 2)];
-                corners.push([medianX, y, this.pixels[y][medianX]]);
+                corners.push([medianX, y, this.matrix[y][medianX]]);
                 break;
             }
         }
@@ -232,7 +196,7 @@ class CornerDetector {
                 corners.push([
                     this.width - x - 1,
                     medianY,
-                    this.pixels[medianY][this.width - x - 1]
+                    this.matrix[medianY][this.width - x - 1]
                 ]);
                 break;
             }
@@ -252,7 +216,7 @@ class CornerDetector {
                 corners.push([
                     medianX,
                     this.height - y - 1,
-                    this.pixels[height - y - 1][medianX]
+                    this.matrix[height - y - 1][medianX]
                 ]);
                 break;
             }
