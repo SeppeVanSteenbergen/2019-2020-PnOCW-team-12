@@ -25,7 +25,7 @@ class Image {
       let context = this.canvas.getContext('2d');
       context.putImageData(imgData, 0, 0);
     }
-    this.drawer = new Drawer(this.getPixels(), this.getWidth(), this.getHeight());
+    this.drawer = new Drawer(this.getPixels(), this.getWidth(), this.getHeight(), this.canvas.getContext("2d"));
 
     this.matrix = new Array(this.getHeight());
     for (let i = 0; i < this.getHeight(); i++) {

@@ -74,13 +74,13 @@ class Line{
             let y3 = line.a[1];
             let y4 = line.b[1];
 
-            let x = ((x1 * y2 - y1 * x2) * (x3 - x4) - (x1 - x2) * (x3 * y4 - y3 * x4)) / ((x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - xy));
-            let y = ((x1 * y2 - y1 * x2) * (y3 - y4) - (y1 - y2)(x3 * y4 - y3 * x4)) / ((x1 - x2) * (y3 - y4) - (y1 - y2)(x3 - x4));
+            let x = ((x1 * y2 - y1 * x2) * (x3 - x4) - (x1 - x2) * (x3 * y4 - y3 * x4)) / ((x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4));
+            let y = ((x1 * y2 - y1 * x2) * (y3 - y4) - (y1 - y2) * (x3 * y4 - y3 * x4)) / ((x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4));
 
-            intersection = [x, y];
+            intersection = [Math.floor(x), Math.floor(y)];
         }
 
-        if(intersection != null){
+        if(intersection != null && (width != 0 || height != 0)){
             if(intersection[0] < 0 || intersection[0] >= width || intersection[1] < 0 || intersection[1] >= height){
                 intersection = null;
             }

@@ -1,9 +1,11 @@
 class Drawer {
 
-    constructor(pixels, width, height) {
+    constructor(pixels, width, height, ctx = null) {
         this.pixels = pixels;
         this.width = width;
         this.height = height;
+
+        this.ctx = ctx;
     }
 
     getWidth() {
@@ -89,5 +91,14 @@ s
 
     pixelToPosition(pixel) {
         return (pixel[1] * this.getWidth() + pixel[0]) * 4;
+    }
+
+    
+    drawLine(line, infinite=false){
+        this.ctx.beginPath();
+        this.ctx.strokeStyle = "#FF0000";
+        this.ctx.moveTo(line.a[0], line.a[1]);
+        this.ctx.lineTo(line.b[0], line.b[1]);
+        this.ctx.stroke();
     }
 }
