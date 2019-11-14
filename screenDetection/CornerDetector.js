@@ -28,36 +28,55 @@ class CornerDetector {
         //missing LU
         if(this.corners.LU == null){
             if(this.corners.RU != null){
-
+                let helpPoint = this.mostLeftPoint(Reconstructor.reconstructCircle(this.corners.RU), this.matrix, this. id, this.radius)
             } else if(this.corners.LD != null){
-
+                let helpPoint = this.mostUpPoint(Reconstructor.reconstructCircle(this.corners.LD), this.matrix, this. id, this.radius)
             }
         }
         //missing RU
-        if(this.corners.RU == null){
+        else if(this.corners.RU == null){
             if(this.corners.LU != null){
-
+                let helpPoint = this.mostRightPoint(Reconstructor.reconstructCircle(this.corners.LU), this.matrix, this. id, this.radius)
             } else if(this.corners.RD != null){
-                
+                let helpPoint = this.mostUpPoint(Reconstructor.reconstructCircle(this.corners.RD), this.matrix, this. id, this.radius)
             }
         }
         //missing RD
-        if(this.corners.RD == null){
+        else if(this.corners.RD == null){
             if(this.corners.RU != null){
-
+                let helpPoint = this.mostDownPoint(Reconstructor.reconstructCircle(this.corners.RU), this.matrix, this. id, this.radius)
             } else if(this.corners.LD != null){
-                
+                let helpPoint = this.mostRightPoint(Reconstructor.reconstructCircle(this.corners.LD), this.matrix, this. id, this.radius)
             }
         }
         //missing LD
-        if(this.corners.LD == null){
+        else if(this.corners.LD == null){
             if(this.corners.RD != null){
-
+                let helpPoint = this.mostLeftPoint(Reconstructor.reconstructCircle(this.corners.RD), this.matrix, this. id, this.radius)
             } else if(this.corners.LU != null){
-                
+                let helpPoint = this.mostDownPoint(Reconstructor.reconstructCircle(this.corners.LU), this.matrix, this. id, this.radius)
             }
         }
     }
+
+    mostRightPoint(pointList){
+        pointList.sort(function(a, b){return b[0] - a[0]})
+        return pointList[0]
+    }
+
+    mostLeftPoint(pointList){
+        pointList.sort(function(a, b){return a[0] - b[0]})
+        return pointList[0]
+    }
+    mostUpPoint(pointList){
+        pointList.sort(function(a, b){return a[1] - b[1]})
+        return pointList[0]
+    }
+    mostDownPoint(pointList){
+        pointList.sort(function(a, b){return b[1] - a[1]})
+        return pointList[0]
+    }
+
 
     positionCorners(nPCorners){
         for(let i = 0; i < nPCorners.length; i++){
