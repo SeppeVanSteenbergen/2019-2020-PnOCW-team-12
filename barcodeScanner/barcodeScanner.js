@@ -1,60 +1,68 @@
 function scanner(image, width, height, sensitivity) {
-  //Always searching on the middle line
-  let searchHeight = Math.round(height / 2);
   let scanned = [];
+  let barcodes = {};
 
-  for (
-    let i = (searchHeight - 1) * width * 4;
-    i < searchHeight * width * 4;
-    i += 4
-  ) {
-    // Hue color values + code: 24/1; 72/2; 180/3; 288/4; 336/5
+  for (let i = 0; i < image.length; i += 4) {
+    // Hue color values + code: 0/1; 60/2; 120/3; 240/4; 300/5
     let H = image[i] * 2;
     let S = image[i + 1];
     let L = image[i + 2];
 
-    if (L > 70 && S < 50) {
+    if (S < 10 || L > 70) {
       if (scanned.length === 5) {
-        return scanned;
+        if (barcodes[scanned] === undefined) {
+          barcodes[scanned] = 1;
+        } else {
+          barcodes[scanned] += 1;
+        }
       }
       scanned = [];
-    } else if (
-      H > 24 - sensitivity &&
-      H < 24 + sensitivity &&
-      S > 50 &&
-      !scanned.includes(1)
-    ) {
+    } else if (H < sensitivity && S > 50 && !scanned.includes(1)) {
       scanned.push(1);
     } else if (
-      H > 72 - sensitivity &&
-      H < 72 + sensitivity &&
+      H > 60 - sensitivity &&
+      H < 60 + sensitivity &&
       S > 50 &&
       !scanned.includes(2)
     ) {
       scanned.push(2);
     } else if (
-      H > 180 - sensitivity &&
-      H < 180 + sensitivity &&
+      H > 120 - sensitivity &&
+      H < 120 + sensitivity &&
       S > 50 &&
       !scanned.includes(3)
     ) {
       scanned.push(3);
     } else if (
-      H > 288 - sensitivity &&
-      H < 288 + sensitivity &&
+      H > 240 - sensitivity &&
+      H < 240 + sensitivity &&
       S > 50 &&
       !scanned.includes(4)
     ) {
       scanned.push(4);
     } else if (
-      H > 336 - sensitivity &&
-      H < 336 + sensitivity &&
+      H > 300 - sensitivity &&
+      H < 300 + sensitivity &&
       S > 50 &&
       !scanned.includes(5)
     ) {
       scanned.push(5);
     }
   }
+
+  let amounts = Object.values(barcodes);
+  let maxAmount = Math.max(...amounts);
+  let detectedAmount = amounts.reduce((a, b) => a + b, 0);
+
+  let detectRatio = maxAmount / detectedAmount;
+  //TODO: Needs to be updated with the right amount of barcodes on screen.
+  let ratio = maxAmount / height / 10;
+  console.log(detectRatio, ratio);
+  if (ratio < 0.1 || detectRatio < 0.5) {
+    console.error('Picture is not good enough to detect barcode');
+  }
+
+  return Object.keys(barcodes).find(key => barcodes[key] === maxAmount);
 }
 
 function rgbaToHsla(image) {
@@ -81,6 +89,9 @@ function rgbaToHsla(image) {
 
 function findSaturation(min, max, L) {
   if (L < 0.5) {
+    if (min + max === 0) {
+      return 0;
+    }
     return (max - min) / (max + min);
   } else {
     return (max - min) / (2.0 - max - min);
@@ -89,13 +100,13 @@ function findSaturation(min, max, L) {
 
 function findHue(red, green, blue, max, min) {
   let hue = 0;
-  if (max == min) {
+  if (max === min) {
     return 0;
-  } else if (red == max) {
+  } else if (red === max) {
     hue = (green - blue) / (max - min);
-  } else if (green == max) {
+  } else if (green === max) {
     hue = 2.0 + (blue - red) / (max - min);
-  } else if (blue == max) {
+  } else if (blue === max) {
     hue = 4.0 + (red - green) / (max - min);
   }
 
