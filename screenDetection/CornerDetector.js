@@ -231,7 +231,7 @@ class CornerDetector {
         for(let c = 0; c < tmpCorners.length; c++){
             let tmpCorner = tmpCorners[c]
             let radius = this.calcRadius(this.radiusFactor)
-            if(Reconstructor.reconstructCircle([tmpCorner[0], tmpCorner[1]]).length >= 3, this.id, radius)
+            if(Reconstructor.reconstructCircle([tmpCorner[0], tmpCorner[1]], this.id, radius).length >= 3)
                 validCorners.push(tmpCorner)
         }
         return validCorners
