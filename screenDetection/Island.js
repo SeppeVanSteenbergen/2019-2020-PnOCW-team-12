@@ -160,7 +160,7 @@ class Island {
         if (recoVal[j] != null){
           //lines.push(new Line([recoVal[j][0] + this.minx, recoVal[j][1] + this.miny], corners[i]))
           //drawer.drawLine(new Line([recoVal[j][0] + this.minx, recoVal[j][1] + this.miny], corners[i]), false)
-          //drawer.drawPoint(recoVal[j][0] + this.minx, recoVal[j][1] + this.miny, 10)
+          drawer.drawPoint(recoVal[j][0] + this.minx, recoVal[j][1] + this.miny, 10)
         }
       }
     }
@@ -169,14 +169,14 @@ class Island {
     for (let j = 0; j < recoVal.length; j++) {
       if (recoVal[j] != null){
         //linesCenter.push(new Line([recoVal[j][0] + this.minx, recoVal[j][1] + this.miny], this.midPoint))
-        //drawer.drawPoint(recoVal[j][0] + this.minx, recoVal[j][1] + this.miny, 10)
+        drawer.drawPoint(recoVal[j][0] + this.minx, recoVal[j][1] + this.miny, 10)
       }
     }
     for(let i = 0; i < lines.length - 1; i++){
       for(let j = i+1; j < lines.length; j++){
         let intersect = lines[i].calcIntersection(lines[j], this.imgOriginal.width, this.imgOriginal.height)
         if(intersect != null){
-          //drawer.drawPoint(intersect[0],intersect[1], 10)
+          drawer.drawPoint(intersect[0],intersect[1], 10)
         }
       }
     }

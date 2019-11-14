@@ -71,7 +71,7 @@ class Reconstructor {
 
 
     static calcLinesCirc(cornerCoo, matrix, id) {
-        const radius = 100
+        const radius = 150
         const dtheta = 0.01
 
         let white = false;
@@ -83,6 +83,7 @@ class Reconstructor {
             let y = cornerCoo[1] + Math.floor(radius * Math.sin(theta))
             if (this.isFromIsland(x, y, matrix, id)) {
                 white = true
+                blackCount = 0
                 newLine.push([x, y])
             } else if (white && blackCount++ >= 3) {
                 blackCount = 0

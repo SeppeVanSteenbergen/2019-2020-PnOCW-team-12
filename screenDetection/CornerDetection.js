@@ -1,13 +1,11 @@
 class CornerDetection {
     static cornerDetection(pixels, id) {
-        let width = pixels[0].length
-        let height = pixels.length
         let corners = this.findCorners(pixels, id)
         let validCorners = this.validateCorners(corners, pixels, id)
         //cleanCorners()
 
         //returns 4 corners in relative position
-        return corners
+        return validCorners
     }
 
     static findCorners(pixels, id) {
@@ -356,7 +354,7 @@ class CornerDetection {
         let validCorners = []
         for(let c = 0; c < corners.length; c++){
             let corner = corners[c]
-            if(Reconstructor.reconstruct([corner[0], corner[1]], pixels, id).length >= 3)
+            if(Reconstructor.reconstructCircle([corner[0], corner[1]], pixels, id).length >= 3)
                 validCorners.push(corner)
         }
         return validCorners
