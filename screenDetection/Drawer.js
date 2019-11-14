@@ -98,7 +98,12 @@ s
 
     //TODO: infinite draw
     drawLine(line, infinite=false){
-        this.lineQ.push(line);
+        if (infinite) {
+            let points = line.calcInfinitePoints(this.width, this.height);
+            this.lineQ.push(new Line(points[0], points[1]));
+        } else {
+            this.lineQ.push(line);
+        }
     }
 
     _finishLines(){
