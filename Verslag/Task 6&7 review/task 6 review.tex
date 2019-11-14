@@ -44,13 +44,13 @@
 \toprule
 \multicolumn{3}{l}{\large\textbf{Team 12}} \\
 \midrule
-Martijn Debeuf & (h) &  (LOC) \\ % fill in the time spend on this task per team member who worked on it and the amount of lines of code (LOC) reviewed
+Martijn Debeuf & (3h) &  (LOC) \\ % fill in the time spend on this task per team member who worked on it and the amount of lines of code (LOC) reviewed
 \bottomrule
 \hline
 \end{tabular}\\
 \\
 Demo: \url{https://penocw12.student.cs.kuleuven.be} \\
-Files reviewed: 
+Files reviewed: SocketHelper.js, SocketController.js, Master.vue, Client.vue, App.vue
 
 \noindent
 {\color[HTML]{52BDEC} \rule{\linewidth}{1mm} }
@@ -58,7 +58,9 @@ Files reviewed:
 \smallskip
 
 Voor deze code review is samengewerkt met de code reviewer Edward Vandercruysse van team 15.
-De code is vergeleken geweest met hun oplossing.
+De code is vergeleken geweest met hun oplossing. Hieruit bleek dat de algoritmes redelijk gelijklopend zijn.
+Een eerste opmerking is dat in beide programma's slechts één keer het tijdsinterval tussen client en server wordt bepaald. Misschien zou het beter zijn om dit een aantal keer te herhalen en dan het gemiddelde hiervan te nemen. Zo worden toevalligheden uitgesloten. Bij team 12 wordt gebruik gemaakt van "SocketHelper" en "SocketController" wat de code net houdt en het lezen bevorderd. Om de leesbaarheid optimaal te krijgen zou er best nog documentatie voorzien worden. Zeker bij sommige functies is het soms moeilijk om te begrijpen welke informatie een variabele bevat. In de "framework" code wordt consistent met de nieuwere javascript syntax gewerkt waarbij ";" achterwege gelaten wordt. Bij het testen van het programma bleek dat bij een korte intervaltijd (bijvoorbeeld 10ms) dat na een bepaalde tijd de schermen toch niet meer synchroon lopen en dat de sprongen tussen de getallen heel groot wordt (bijvoorbeeld van 70 naar 62).Nu kan ofwel het algoritme verbeterd worden, maar deze zou volgens de theorie moeten werken. Dus zouden er beter beperkingen opgelegd worden van het minimum interval dat gebruikt moet worden. Het is best mogelijk dat hiervoor geen bronnen gebruikt zijn maar zou toch geen kwaad kunnen om iets van verwijzing te gebruiken als soort van controle.
+
 
 
 
