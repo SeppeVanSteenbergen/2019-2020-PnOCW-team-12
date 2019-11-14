@@ -45,7 +45,7 @@ class Line{
     /**
      * Get the start and end points to draw the line over the full canvas
      */
-    get infinitePoints(width , height){
+    calcInfinitePoints(width , height){
 
     }
 
@@ -56,5 +56,16 @@ class Line{
      */
     calcIntersection(line){
 
+    }
+
+    /**
+     * Math floor this result to get the y pixel index
+     * 
+     * @param {float} x get the y value of this line equation
+     */
+    evaluate(x){
+        let cte = this.a[1] / (this.slope * this.a[0]);
+
+        return (this.slope * x) + cte;
     }
 }
