@@ -42,31 +42,31 @@ class Reconstructor {
 
     static reconstructCircle(cornerCoo, matrix, id, radius) {
         let lines = this.calcLinesCirc(cornerCoo, matrix, id)
-        let range = this.calcRange(lines)
         let reco = []
-        if (lines.length <= 3) {
-            let diagonal = null
-            if (range.rangeX > range.rangeY) {
-                reco.push(range.minXCoo)
-                reco.push(range.maxXCoo)
-            } else {
-                reco.push(range.minYCoo)
-                reco.push(range.maxYCoo)
-            }
-            for (let i = 0; i < lines.length; i++) {
-                for (let line = 0; line < lines[i].length; line++)
-                    if (!lines[i].includes(reco[0]) && !lines[i].includes(reco[1]))
-                        diagonal = lines[i]
-            }
-            if (diagonal != null) {
-                reco.push(diagonal[Math.floor((diagonal.length) / 2)])
-            }
-        } else if (lines.length >= 4) {
-            for (let i = 0; i < lines.length; i++) {
-                reco.push(lines[i][Math.floor((lines[i].length) / 2)])
+        let furthestPoints = this.calcTwoFurthestPoints(lines)
+        reco.push(furthestPoints[0], furthestPoints[1])
+        let biggest
+        let biggestNb = -Infinity
+        for (let i = 0; i < lines.length; i++) {
+            if (!lines[i].includes(furthestPoints[0]) && !lines[i].includes(furthestPoints[1])) {
+                if (biggestNb < lines[i].length) {
+                    biggest = lines[i]
+                    biggestNb = lines[i].length
+                }
             }
         }
+        if (biggest != null)
+            reco.push(biggest[Math.floor(biggest.length / 2)])
 
+        return reco
+    }
+
+    static reconstructCircleMidPoint(midPointCoo, matrix, id){
+        let lines = this.calcLinesCirc(midPointCoo, matrix, id)
+        let reco = []
+        for(let i = 0; i < lines.length; i++){
+            reco.push(lines[i][Math.floor(lines[i].length / 2)])
+        }
         return reco
     }
 
@@ -99,6 +99,45 @@ class Reconstructor {
             lines.push(newLine.slice(0))
         }
         return lines
+    }
+
+    static calcTwoFurthestPoints(lines) {
+        let furthestPoints = [null, null, -Infinity]
+        for (let i = 0; i < lines.length - 1; i++) {
+            for (let j = i + 1; j < lines.length; j++) {
+                let possibleFurthestPoints = this.calcFurthestPoints2Lines(lines[i], lines[j])
+                if (furthestPoints[2] < possibleFurthestPoints[2])
+                    furthestPoints = possibleFurthestPoints.slice(0)
+            }
+        }
+        return furthestPoints
+    }
+
+    static calcFurthestPoints2Lines(line1, line2) {
+        let startPoint1 = line1[0]
+        let furthestPoint2 = null
+        let furthestDistance = -Infinity
+        for (let i = 0; i < line2.length; i++) {
+            let distance = this.calcDistance(startPoint1, line2[i])
+            if (distance > furthestDistance) {
+                furthestDistance = distance
+                furthestPoint2 = line2[i]
+            }
+        }
+        let furthestPoint1 = null
+        furthestDistance = -Infinity
+        for (let i = 0; i < line1.length; i++) {
+            let distance = this.calcDistance(furthestPoint2, line1[i])
+            if (distance > furthestDistance) {
+                furthestDistance = distance
+                furthestPoint1 = line1[i]
+            }
+        }
+        return [furthestPoint1, furthestPoint2, furthestDistance]
+    }
+
+    static calcDistance(point1, point2) {
+        return Math.sqrt(Math.pow(point1[0] - point2[0], 2) + Math.pow(point1[1] - point2[1], 2))
     }
 
     static calcRange(lines) {
