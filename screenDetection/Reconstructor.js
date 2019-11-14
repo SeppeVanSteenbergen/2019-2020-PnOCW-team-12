@@ -174,6 +174,6 @@ class Reconstructor {
     static getMatrix(x, y, matrix) {
         if (x < 0 || x >= matrix[0].length) return 0;
         if (y < 0 || y >= matrix.length) return 0;
-        return matrix[y][x]
+        if(!isNaN(x) && !isNaN(y)) return matrix[y][x]
     }
 }

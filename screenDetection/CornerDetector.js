@@ -24,6 +24,7 @@ class CornerDetector {
         this.positionCorners(nonPositionCorners)
         if (nonPositionCorners.length < 4)
             this.reconstructCorners()
+        return this.corners
     }
 
     reconstructCorners(missingCornersCount) {

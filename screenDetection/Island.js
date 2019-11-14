@@ -99,49 +99,9 @@ class Island {
   }
 
   findCorners() {
-    // choosing diagonal or straight corner detection
-    let diagonalSearch = false;
 
-    // Find which corner search to use: perpendicular or diagonal.
-
-    const ratio = 0.07;
-    const minPixels = 10;
-    const sd_threshold = 0.15;
-
-    const testOffsetX = Math.max(Math.floor(ratio * this.width), minPixels);
-    const testOffsetY = Math.max(Math.floor(ratio * this.height), minPixels);
-
-    // Left variance
-    let yValuesLeft = [];
-    for (let y = 0; y < this.height; y++) {
-      for (let x = 0; x < testOffsetX; x++) {
-        if (this.screenMatrix[y][x] !== 0) yValuesLeft.push(y / this.height);
-      }
-    }
-    let yValuesLeftAvg =
-      yValuesLeft.reduce((t, n) => t + n) / yValuesLeft.length;
-
-    let yValuesLeftVariance = Math.sqrt(
-      yValuesLeft.reduce((t, n) => t + Math.pow(yValuesLeftAvg - n, 2)) /
-      yValuesLeft.length
-    );
-
-    //console.log('Left Variance: ' + yValuesLeftVariance);
-    //console.log(yValuesLeftVariance > 0.15 ? 'Straight' : 'Inclined');
-
-    if (yValuesLeftVariance > sd_threshold) diagonalSearch = true;
-
-    let corners = [];
-    if (diagonalSearch) {
-      // Diagonal search
-      corners = this.diagonalSearch()
-
-    } else {
-      // Perpendicular search
-      corners = this.perpendicularSearch()
-    }
-
-    //console.log(CornerDetector.cornerDetection(this.screenMatrix, this.id))
+    let cornerDetector = new CornerDetector(this.screenMatrix, this.midPoint, this.id)
+    let corners = cornerDetector.cornerDetection()
 
     // corners to absolute position
     for (let i = 0; i < corners.length; i++) {
@@ -149,13 +109,11 @@ class Island {
       corners[i][1] += this.miny;
     }
 
-    this.cleanCorners(corners, 30); // TODO shouldn't be hardcoded
     let drawer = new Drawer(this.imgOriginal.data, this.imgOriginal.width, this.imgOriginal.height)
     let distances = this.distToMid();
     /////////////////////////////////////////////////////////////////
     let lines = []
     let linesCenter = []
-    let radius = this.calcRadius(this.radiusFactor)
     for (let i = 0; i < corners.length; i++) {
       ///Alle punten
       let circleLines = Reconstructor.calcLinesCirc(corners[i], this.screenMatrix, this.id)
@@ -190,8 +148,6 @@ class Island {
         }
       }
     }
-    /////////////////////////////////////////////////////////////////////
-    this.recoScreen(distances);
   }
 
   calcRadius(factor) {
@@ -204,262 +160,6 @@ class Island {
 
   }
 
-  perpendicularSearch() {
-    let corners = []
-    // left
-    for (let x = 0; x < this.width; x++) {
-      let found = false;
-      let tempY = [];
-      for (let y = 0; y < this.height; y++) {
-        if (this.screenMatrix[y][x] !== 0) {
-          tempY.push(y);
-          found = true;
-        }
-      }
-      if (found) {
-        let medianY = tempY[Math.floor(tempY.length / 2)];
-        corners.push([x, medianY, this.screenMatrix[medianY][x]]);
-        break;
-      }
-    }
-
-    // top
-    for (let y = 0; y < this.height; y++) {
-      let found = false;
-      let tempX = [];
-      for (let x = 0; x < this.width; x++) {
-        if (this.screenMatrix[y][x] !== 0) {
-          tempX.push(x);
-          found = true;
-        }
-      }
-      if (found) {
-        let medianX = tempX[Math.floor(tempX.length / 2)];
-        corners.push([medianX, y, this.screenMatrix[y][medianX]]);
-        break;
-      }
-    }
-
-    // right
-    for (let x = 0; x < this.width; x++) {
-      let found = false;
-      let tempY = [];
-      for (let y = 0; y < this.height; y++) {
-        if (this.screenMatrix[y][this.width - x - 1] !== 0) {
-          tempY.push(y);
-          found = true;
-        }
-      }
-      if (found) {
-        let medianY = tempY[Math.floor(tempY.length / 2)];
-        corners.push([
-          this.width - x - 1,
-          medianY,
-          this.screenMatrix[medianY][this.width - x - 1]
-        ]);
-        break;
-      }
-    }
-    // bottom
-    for (let y = 0; y < this.height; y++) {
-      let found = false;
-      let tempX = [];
-      for (let x = 0; x < this.width; x++) {
-        if (this.screenMatrix[this.height - y - 1][x] !== 0) {
-          tempX.push(x);
-          found = true;
-        }
-      }
-      if (found) {
-        let medianX = tempX[Math.floor(tempX.length / 2)];
-        corners.push([
-          medianX,
-          this.height - y - 1,
-          this.screenMatrix[this.height - y - 1][medianX]
-        ]);
-        break;
-      }
-    }
-    return corners
-  }
-
-  diagonalSearch() {
-    let corners = []
-    // left upper corner
-    for (let k = 0; k <= this.width + this.height - 2; k++) {
-      let found = false;
-      for (let j = 0; j <= k; j++) {
-        let i = k - j;
-        if (
-          i < this.height &&
-          j < this.width &&
-          this.screenMatrix[i][j] !== 0
-        ) {
-          corners.push([j, i, this.screenMatrix[i][j]]);
-          found = true;
-          break;
-        }
-      }
-      if (found) break;
-    }
-
-    // right upper corner
-    for (let k = 0; k <= this.width + this.height - 2; k++) {
-      let found = false;
-      for (let j = 0; j <= k; j++) {
-        let i = k - j;
-        if (
-          i < this.height &&
-          j < this.width &&
-          this.screenMatrix[i][this.width - j - 1] !== 0
-        ) {
-          corners.push([
-            this.width - j - 1,
-            i,
-            this.screenMatrix[i][this.width - j - 1]
-          ]);
-          found = true;
-          break;
-        }
-      }
-      if (found) break;
-    }
-
-    // right lower corner
-    for (let k = 0; k <= this.width + this.height - 2; k++) {
-      let found = false;
-      for (let j = 0; j <= k; j++) {
-        let i = k - j;
-        if (
-          i < this.height &&
-          j < this.width &&
-          this.screenMatrix[this.height - i - 1][this.width - j - 1] !== 0
-        ) {
-          corners.push([
-            this.width - j - 1,
-            this.height - i - 1,
-            this.screenMatrix[this.height - i - 1][this.width - j - 1]
-          ]);
-          found = true;
-          break;
-        }
-      }
-      if (found) break;
-    }
-
-    // left lower corner
-    for (let k = 0; k <= this.width + this.height - 2; k++) {
-      let found = false;
-      for (let j = 0; j <= k; j++) {
-        let i = k - j;
-        if (
-          i < this.height &&
-          j < this.width &&
-          this.screenMatrix[this.height - i - 1][j] !== 0
-        ) {
-          corners.push([
-            j,
-            this.height - i - 1,
-            this.screenMatrix[this.height - i - 1][j]
-          ]);
-          found = true;
-          break;
-        }
-      }
-      if (found) break;
-    }
-    return corners
-  }
-
-  cleanCorners(corners, radius) {
-    let L = corners[0];
-    let T = corners[1];
-    let R = corners[2];
-    let B = corners[3];
-
-    if (Island.calcDist(L, T) <= radius) {
-      if (Island.calcDist(R, B) <= radius) {
-        console.error('Bad picture!');
-      } else {
-        // corners.splice(0, 2);
-        // corners.splice(0, 0, [(L[0] + T[0]) / 2, (L[1] + T[1]) / 2, L[2]]);
-        this.corners.LU = [(L[0] + T[0]) / 2, (L[1] + T[1]) / 2, L[2]];
-
-        if (R[1] >= this.midPoint[1]) {
-          this.corners.RD = R;
-          this.corners.LD = B;
-        } else {
-          this.corners.RU = R;
-
-          if (B[0] >= this.midPoint[0]) {
-            this.corners.RD = B;
-          } else this.corners.LD = B;
-        }
-      }
-    } else if (Island.calcDist(T, R) <= radius) {
-      if (Island.calcDist(L, B) <= radius) {
-        console.error('Bad picture!');
-      } else {
-        // corners.splice(1, 2);
-        // corners.splice(1, 0, [(T[0] + R[0]) / 2, (T[1] + R[1]) / 2, T[2]]);
-        this.corners.RU = [(T[0] + R[0]) / 2, (T[1] + R[1]) / 2, T[2]];
-
-        if (L[1] >= this.midPoint[1]) {
-          this.corners.LD = L;
-          this.corners.RD = B;
-        } else {
-          this.corners.LU = L;
-
-          if (B[0] >= this.midPoint[0]) {
-            this.corners.RD = B;
-          } else this.corners.LD = B;
-        }
-      }
-    } else if (Island.calcDist(R, B) <= radius) {
-      // corners.splice(2, 2);
-      // corners.splice(2, 0, [(R[0] + B[0]) / 2, (R[1] + B[1]) / 2, R[2]]);
-      this.corners.RD = [(R[0] + B[0]) / 2, (R[1] + B[1]) / 2, R[2]];
-
-      if (L[1] <= this.midPoint[1]) {
-        this.corners.LU = L;
-        this.corners.RU = T;
-      } else {
-        this.corners.LD = L;
-
-        if (T[0] <= this.midPoint[0]) {
-          this.corners.LU = T;
-        } else this.corners.RU = T;
-      }
-    } else if (Island.calcDist(L, B) <= radius) {
-      // corners.shift();
-      // corners.pop();
-      // corners.push([(L[0] + B[0]) / 2, (L[1] + B[1]) / 2, L[2]]);
-      this.corners.LD = [(L[0] + B[0]) / 2, (L[1] + B[1]) / 2, L[2]];
-
-      if (R[1] <= this.midPoint[1]) {
-        this.corners.RU = R;
-        this.corners.LU = T;
-      } else {
-        this.corners.RD = R;
-
-        if (T[0] <= this.midPoint[0]) {
-          this.corners.LU = T;
-        } else this.corners.RU = T;
-      }
-    } else {
-      if (T[0] >= this.midPoint[0]) {
-        this.corners.LU = L;
-        this.corners.RU = T;
-        this.corners.RD = R;
-        this.corners.LD = B;
-      } else {
-        this.corners.LU = T;
-        this.corners.RU = R;
-        this.corners.RD = B;
-        this.corners.LD = L;
-      }
-    }
-  }
 
   distToMid() {
     let corners = Object.values(this.corners);
@@ -519,83 +219,6 @@ class Island {
     transMatrix[1][2], transMatrix[2][2], 0, transMatrix[3][2],
       0, 0, 1, 0,
     transMatrix[1][3], transMatrix[2][3], 0, [transMatrix[3][3]]]
-  }
-
-  recoScreen(distances) {
-    let lengthThresh = 0.7;
-    // check LU and RD
-    if (distances[0] !== null) {
-      if (distances[2] !== null) {
-        if (
-          !this.inRangeOf(distances[0], distances[2], lengthThresh) &&
-          distances[0] > distances[2]
-        ) {
-          this.corners.RD = [
-            this.midPoint[0] + (this.midPoint[0] - this.corners.LU[0]),
-            this.midPoint[1] + (this.midPoint[1] - this.corners.LU[1]),
-            this.corners.RD[2]
-          ];
-        } else if (!this.inRangeOf(distances[0], distances[2], lengthThresh)) {
-          this.corners.LU = [
-            this.midPoint[0] - (this.corners.RD[0] - this.midPoint[0]),
-            this.midPoint[1] - (this.corners.RD[1] - this.midPoint[1]),
-            this.corners.LU[2]
-          ];
-        }
-      }
-      //distances[2](RD) equals null
-      if (distances[2] === null) {
-        this.corners.RD = [
-          this.midPoint[0] + (this.midPoint[0] - this.corners.LU[0]),
-          this.midPoint[1] + (this.midPoint[1] - this.corners.LU[1]),
-          this.switchColor(this.corners.LU)
-        ];
-      }
-    } else if (distances[0] === null) {
-      //distances[0](LU) equals null
-      this.corners.LU = [
-        this.midPoint[0] - (this.corners.RD[0] - this.midPoint[0]),
-        this.midPoint[1] - (this.corners.RD[1] - this.midPoint[1]),
-        this.switchColor(this.corners.RD)
-      ];
-    }
-
-    //check RU and LD
-    if (distances[1] !== null) {
-      if (distances[3] !== null) {
-        if (
-          !this.inRangeOf(distances[1], distances[3], lengthThresh) &&
-          distances[1] > distances[3]
-        ) {
-          this.corners.LD = [
-            this.midPoint[0] - (this.corners.RU[0] - this.midPoint[0]),
-            this.midPoint[1] + (this.midPoint[1] - this.corners.RU[1]),
-            this.corners.LD[2]
-          ];
-        } else if (!this.inRangeOf(distances[1], distances[3], lengthThresh)) {
-          this.corners.RU = [
-            this.midPoint[0] + (this.midPoint[0] - this.corners.LD[0]),
-            this.midPoint[1] - (this.corners.LD[1] - this.midPoint[1]),
-            this.corners.RU[2]
-          ];
-        }
-      }
-      //distances[3](LD) equals null
-      if (distances[3] === null) {
-        this.corners.LD = [
-          this.midPoint[0] - (this.corners.RU[0] - this.midPoint[0]),
-          this.midPoint[1] + (this.midPoint[1] - this.corners.RU[1]),
-          this.switchColor(this.corners.RD)
-        ];
-      }
-    } else if (distances[1] === null) {
-      //distances[1](RU) equals null
-      this.corners.RU = [
-        this.midPoint[0] + (this.midPoint[0] - this.corners.LD[0]),
-        this.midPoint[1] - (this.corners.LD[1] - this.midPoint[1]),
-        this.switchColor(this.corners.LD)
-      ];
-    }
   }
 
   switchColor(corner) {
