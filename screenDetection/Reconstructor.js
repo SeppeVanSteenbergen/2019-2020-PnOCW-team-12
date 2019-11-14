@@ -17,7 +17,7 @@ class Reconstructor {
         let blackCount = 0
         let lines = []
         let newLine = []
-        for (let side = 0; let < 4; side++) {
+        for (let side = 0; side < 4; side++) {
             for (let i = 0; i < sideLenght; i++) {
                 if(matrix[y][x] > 0){
                     white = true

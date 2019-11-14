@@ -1,4 +1,4 @@
-class Island {
+ class Island {
   /**
    * Create and Island starting with this pixel
    * @param {Image} image
@@ -9,6 +9,7 @@ class Island {
   constructor(leftUpperCoo, rightBottomCoo, id, imgOriginal) {
     this.screenMatrix = [];
 
+    // coordinates seen from original matrix
     this.corners = {
       LU: null,
       RU: null,
