@@ -60,8 +60,8 @@ class Reconstructor {
             if (diagonal != null) {
                 reco.push(diagonal[Math.floor((diagonal.length) / 2)])
             }
-        } else if(lines.length >= 4){
-            for(let i = 0; i < lines.length; i++){
+        } else if (lines.length >= 4) {
+            for (let i = 0; i < lines.length; i++) {
                 reco.push(lines[i][Math.floor((lines[i].length) / 2)])
             }
         }
@@ -81,15 +81,17 @@ class Reconstructor {
         for (let theta = 0; theta < 2 * Math.PI; theta += dtheta) {
             let x = cornerCoo[0] + Math.floor(radius * Math.cos(theta))
             let y = cornerCoo[1] + Math.floor(radius * Math.sin(theta))
-            if (this.isFromIsland(x, y, matrix, id)) {
-                white = true
-                blackCount = 0
-                newLine.push([x, y])
-            } else if (white && blackCount++ >= 3) {
-                blackCount = 0
-                white = false
-                lines.push(newLine.slice(0))
-                newLine.length = 0
+            if (newLine[newLine.length - 1] != [x, y]) {
+                if (this.isFromIsland(x, y, matrix, id)) {
+                    white = true
+                    blackCount = 0
+                    newLine.push([x, y])
+                } else if (white && ++blackCount >= 5) {
+                    blackCount = 0
+                    white = false
+                    lines.push(newLine.slice(0))
+                    newLine.length = 0
+                }
             }
         }
         if (newLine.length > 0) {
