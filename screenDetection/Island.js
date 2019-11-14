@@ -139,6 +139,8 @@ class Island {
       corners = this.perpendicularSearch()
     }
 
+    console.log(CornerDetection.cornerDetection(this.screenMatrix, this.id))
+
     // corners to absolute position
     for (let i = 0; i < corners.length; i++) {
       corners[i][0] += this.minx;
@@ -156,9 +158,9 @@ class Island {
       let recoVal = Object.values(reco)
       for (let j = 0; j < recoVal.length; j++) {
         if (recoVal[j] != null){
-          lines.push(new Line([recoVal[j][0] + this.minx, recoVal[j][1] + this.miny], corners[i]))
+          //lines.push(new Line([recoVal[j][0] + this.minx, recoVal[j][1] + this.miny], corners[i]))
           //drawer.drawLine(new Line([recoVal[j][0] + this.minx, recoVal[j][1] + this.miny], corners[i]), false)
-          drawer.drawPoint(recoVal[j][0] + this.minx, recoVal[j][1] + this.miny, 10)
+          //drawer.drawPoint(recoVal[j][0] + this.minx, recoVal[j][1] + this.miny, 10)
         }
       }
     }
@@ -166,8 +168,8 @@ class Island {
     let recoVal = Object.values(reco)
     for (let j = 0; j < recoVal.length; j++) {
       if (recoVal[j] != null){
-        linesCenter.push(new Line([recoVal[j][0] + this.minx, recoVal[j][1] + this.miny], this.midPoint))
-        drawer.drawPoint(recoVal[j][0] + this.minx, recoVal[j][1] + this.miny, 10)
+        //linesCenter.push(new Line([recoVal[j][0] + this.minx, recoVal[j][1] + this.miny], this.midPoint))
+        //drawer.drawPoint(recoVal[j][0] + this.minx, recoVal[j][1] + this.miny, 10)
       }
     }
     for(let i = 0; i < lines.length - 1; i++){

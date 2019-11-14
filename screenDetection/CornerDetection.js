@@ -2,7 +2,8 @@ class CornerDetection {
     static cornerDetection(pixels, id) {
         let width = pixels[0].length
         let height = pixels.length
-        findCorners(pixels, id)
+        let corners = this.findCorners(pixels, id)
+        let validCorners = this.validateCorners(corners, pixels, id)
         //cleanCorners()
 
         //returns 4 corners in relative position
@@ -10,7 +11,7 @@ class CornerDetection {
     }
 
     static findCorners(pixels, id) {
-        let heigth = pixels.length
+        let height = pixels.length
         let width = pixels[0].length
         // choosing diagonal or straight corner detection
         let diagonalSearch = false;
@@ -22,7 +23,7 @@ class CornerDetection {
         const sd_threshold = 0.15;
 
         const testOffsetX = Math.max(Math.floor(ratio * width), minPixels);
-        const testOffsetY = Math.max(Math.floor(ratio * heigth), minPixels);
+        const testOffsetY = Math.max(Math.floor(ratio * height), minPixels);
 
         // Left variance
         let yValuesLeft = [];
@@ -90,7 +91,7 @@ class CornerDetection {
       }
       */
 
-    static diagonalSearch(pixels) {
+    static diagonalSearch(pixels, id) {
         let height = pixels.length
         let width = pixels[0].length
         let corners = []
@@ -142,7 +143,7 @@ class CornerDetection {
                 if (
                     i < height &&
                     j < width &&
-                    this.isFromIsland(width- j - 1, height - i - 1, pixels, id)
+                    this.isFromIsland(width - j - 1, height - i - 1, pixels, id)
                 ) {
                     corners.push([
                         width - j - 1,
@@ -180,86 +181,87 @@ class CornerDetection {
         return corners
     }
 
-    static perpendicularSearch(pixels) {
+    static perpendicularSearch(pixels, id) {
         let height = pixels.length
         let width = pixels[0].length
         let corners = []
         // left
         for (let x = 0; x < width; x++) {
-          let found = false;
-          let tempY = [];
-          for (let y = 0; y < height; y++) {
-            if (this.isFromIsland(x, y, pixels, id)) {
-              tempY.push(y);
-              found = true;
+            let found = false;
+            let tempY = [];
+            for (let y = 0; y < height; y++) {
+                if (this.isFromIsland(x, y, pixels, id)) {
+                    tempY.push(y);
+                    found = true;
+                }
             }
-          }
-          if (found) {
-            let medianY = tempY[Math.floor(tempY.length / 2)];
-            corners.push([x, medianY, pixels[medianY][x]]);
-            break;
-          }
+            if (found) {
+                let medianY = tempY[Math.floor(tempY.length / 2)];
+                corners.push([x, medianY, pixels[medianY][x]]);
+                break;
+            }
         }
-    
+
         // top
         for (let y = 0; y < height; y++) {
-          let found = false;
-          let tempX = [];
-          for (let x = 0; x < width; x++) {
-            if (this.isFromIsland(x, y, pixels, id)) {
-              tempX.push(x);
-              found = true;
+            let found = false;
+            let tempX = [];
+            for (let x = 0; x < width; x++) {
+                if (this.isFromIsland(x, y, pixels, id)) {
+                    tempX.push(x);
+                    found = true;
+                }
             }
-          }
-          if (found) {
-            let medianX = tempX[Math.floor(tempX.length / 2)];
-            corners.push([medianX, y, pixels[y][medianX]]);
-            break;
-          }
+            if (found) {
+                let medianX = tempX[Math.floor(tempX.length / 2)];
+                corners.push([medianX, y, pixels[y][medianX]]);
+                break;
+            }
         }
-    
+
         // right
         for (let x = 0; x < width; x++) {
-          let found = false;
-          let tempY = [];
-          for (let y = 0; y < height; y++) {
-            if (this.isFromIsland(width - x - 1, y, pixels, id)) {
-              tempY.push(y);
-              found = true;
+            let found = false;
+            let tempY = [];
+            for (let y = 0; y < height; y++) {
+                if (this.isFromIsland(width - x - 1, y, pixels, id)) {
+                    tempY.push(y);
+                    found = true;
+                }
             }
-          }
-          if (found) {
-            let medianY = tempY[Math.floor(tempY.length / 2)];
-            corners.push([
-              width - x - 1,
-              medianY,
-              pixels[medianY][width - x - 1]
-            ]);
-            break;
-          }
+            if (found) {
+                let medianY = tempY[Math.floor(tempY.length / 2)];
+                corners.push([
+                    width - x - 1,
+                    medianY,
+                    pixels[medianY][width - x - 1]
+                ]);
+                break;
+            }
         }
         // bottom
         for (let y = 0; y < height; y++) {
-          let found = false;
-          let tempX = [];
-          for (let x = 0; x < width; x++) {
-            if (this.isFromIsland(x, height - y - 1, pixels, id)) {
-              tempX.push(x);
-              found = true;
+            let found = false;
+            let tempX = [];
+            for (let x = 0; x < width; x++) {
+                if (this.isFromIsland(x, height - y - 1, pixels, id)) {
+                    tempX.push(x);
+                    found = true;
+                }
             }
-          }
-          if (found) {
-            let medianX = tempX[Math.floor(tempX.length / 2)];
-            corners.push([
-              medianX,
-              height - y - 1,
-              pixels[height - y - 1][medianX]
-            ]);
-            break;
-          }
+            if (found) {
+                let medianX = tempX[Math.floor(tempX.length / 2)];
+                corners.push([
+                    medianX,
+                    height - y - 1,
+                    pixels[height - y - 1][medianX]
+                ]);
+                break;
+            }
         }
         return corners
-      }
+    }
+
     static cleanCorners(corners, radius) {
         let L = corners[0];
         let T = corners[1];
@@ -348,6 +350,16 @@ class CornerDetection {
                 this.corners.LD = L;
             }
         }
+    }
+
+    static validateCorners(corners, pixels, id){
+        let validCorners = []
+        for(let c = 0; c < corners.length; c++){
+            let corner = corners[c]
+            if(Reconstructor.reconstruct([corner[0], corner[1]], pixels, id).length >= 3)
+                validCorners.push(corner)
+        }
+        return validCorners
     }
 
     static isFromIsland(x, y, matrix, id) {
