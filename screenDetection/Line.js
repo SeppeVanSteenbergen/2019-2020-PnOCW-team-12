@@ -52,10 +52,41 @@ class Line{
     /**
      * Get the intersection point between this line and the given line, null if no intersection point
      * 
+     * intersection math from: https://en.wikipedia.org/wiki/Line%E2%80%93line_intersection
+     * 
      * @param {Line} Line line to intersect with
+     * @param {int} width canvas width (optional)
+     * @param {int} height canvas height (optional)
      */
-    calcIntersection(line){
+    calcIntersection(line, width = 0, height = 0){
+        let intersection = null;
 
+        //calc intersection
+
+        if (this.slope !== line.slope) {
+
+            let x1 = this.a[0];
+            let x2 = this.b[0];
+            let x3 = line.a[0];
+            let x4 = line.b[0];
+            let y1 = this.a[1];
+            let y2 = this.b[1];
+            let y3 = line.a[1];
+            let y4 = line.b[1];
+
+            let x = ((x1 * y2 - y1 * x2) * (x3 - x4) - (x1 - x2) * (x3 * y4 - y3 * x4)) / ((x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - xy));
+            let y = ((x1 * y2 - y1 * x2) * (y3 - y4) - (y1 - y2)(x3 * y4 - y3 * x4)) / ((x1 - x2) * (y3 - y4) - (y1 - y2)(x3 - x4));
+
+            intersection = [x, y];
+        }
+
+        if(intersection != null){
+            if(intersection[0] < 0 || intersection[0] >= width || intersection[1] < 0 || intersection[1] >= height){
+                intersection = null;
+            }
+        }
+
+        return intersection;
     }
 
     /**
