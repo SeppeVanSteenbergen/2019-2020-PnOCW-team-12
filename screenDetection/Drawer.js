@@ -6,6 +6,8 @@ class Drawer {
         this.height = height;
 
         this.ctx = ctx;
+
+        this.lineQ = [];
     }
 
     getWidth() {
@@ -94,8 +96,19 @@ s
         return (pixel[1] * this.getWidth() + pixel[0]) * 4;
     }
 
-    
+    //TODO: infinite draw
     drawLine(line, infinite=false){
+        this.lineQ.push(line);
+    }
+
+    _finishLines(){
+        for (let i = 0; i < this.lineQ.length; i++) {
+            const line = this.lineQ[i];
+            this._contextDrawLine(line);
+        }
+    }
+
+    _contextDrawLine(line) {
         this.ctx.beginPath();
         this.ctx.strokeStyle = "#FF0000";
         this.ctx.moveTo(line.a[0], line.a[1]);
