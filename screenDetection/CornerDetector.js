@@ -104,14 +104,14 @@ class CornerDetector {
 
     positionCorners(nPCorners) {
         for (let i = 0; i < nPCorners.length; i++) {
-            if (npCorners[i][0] < this.midPoint[0] && npCorners[i][1] < this.midPoint[0])
-                this.corners.LU = npCorners[i]
-            else if (npCorners[i][0] < this.midPoint[0] && npCorners[i][1] > this.midPoint[0])
-                this.corners.LD = npCorners[i]
-            else if (npCorners[i][0] > this.midPoint[0] && npCorners[i][1] < this.midPoint[0])
-                this.corners.RU = npCorners[i]
-            else if (npCorners[i][0] > this.midPoint[0] && npCorners[i][1] > this.midPoint[0])
-                this.corners.RD = npCorners[i]
+            if (nPCorners[i][0] < this.midPoint[0] && nPCorners[i][1] < this.midPoint[0])
+                this.corners.LU = nPCorners[i]
+            else if (nPCorners[i][0] < this.midPoint[0] && nPCorners[i][1] > this.midPoint[0])
+                this.corners.LD = nPCorners[i]
+            else if (nPCorners[i][0] > this.midPoint[0] && nPCorners[i][1] < this.midPoint[0])
+                this.corners.RU = nPCorners[i]
+            else if (nPCorners[i][0] > this.midPoint[0] && nPCorners[i][1] > this.midPoint[0])
+                this.corners.RD = nPCorners[i]
         }
     }
 
