@@ -248,4 +248,11 @@ class Algebra {
     }
     return ret;
   }
+
+  static calcDist(a, b) {
+    if (b === null) return;
+    let dx = a[0] - b[0];
+    let dy = a[1] - b[1];
+    return Math.sqrt(dx * dx + dy * dy);
+  }
 }

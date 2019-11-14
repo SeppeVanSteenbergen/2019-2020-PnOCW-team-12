@@ -141,7 +141,7 @@ class Island {
       corners = this.perpendicularSearch();
     }
 
-    let cornerDetector = new CornerDetector(this.screenMatrix, this.id)
+    let cornerDetector = new CornerDetector(this.screenMatrix, this.midPoint, this.id)
 
     console.log(cornerDetector.cornerDetection())
 
@@ -470,18 +470,13 @@ class Island {
     let midPoint = this.midPoint;
     corners.forEach(function (corner) {
       if (corner !== null) {
-        distances.push(Island.calcDist(corner, midPoint));
+        distances.push(Algebra.calcDist(corner, midPoint));
       } else distances.push(null);
     });
     return distances;
   }
 
-  static calcDist(a, b) {
-    if (b === null) return;
-    let dx = a[0] - b[0];
-    let dy = a[1] - b[1];
-    return Math.sqrt(dx * dx + dy * dy);
-  }
+
 
   inRangeOf(dist, value, ratio) {
     return Math.min(dist, value) / Math.max(dist, value) > ratio;

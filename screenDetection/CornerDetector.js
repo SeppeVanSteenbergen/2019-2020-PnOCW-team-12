@@ -1,11 +1,13 @@
 class CornerDetector {
 
-    constructor(screenMatrix, id) {
+    constructor(screenMatrix, midPoint, id) {
         this.matrix = screenMatrix
-        this.corners = []
+        this.midPoint = midPoint
         this.id = id
+        this.corners = []
         this.height = this.matrix.length
         this.width = this.matrix[0].length
+        this.radiusFactor = 0.25;
     }
 
     cornerDetection() {
@@ -228,7 +230,8 @@ class CornerDetector {
         let validCorners = []
         for(let c = 0; c < tmpCorners.length; c++){
             let tmpCorner = tmpCorners[c]
-            if(Reconstructor.reconstructCircle([tmpCorner[0], tmpCorner[1]]).length >= 3)
+            let radius = this.calcRadius(this.radiusFactor)
+            if(Reconstructor.reconstructCircle([tmpCorner[0], tmpCorner[1]]).length >= 3, this.id, radius)
                 validCorners.push(tmpCorner)
         }
         return validCorners
@@ -237,6 +240,15 @@ class CornerDetector {
     isFromIsland(x, y) {
         let pixel = this.getMatrix(x, y)
         return pixel >= this.id && pixel <= this.id + 2;
+    }
+
+    calcRadius(factor) {
+        this.corners.forEach(function (corner) {
+            if (corner !== null) {
+                let distance = Algebra.calcDist(corner, this.midPoint)
+                return distance * factor
+            }
+        })
     }
 
     getMatrix(x, y) {
