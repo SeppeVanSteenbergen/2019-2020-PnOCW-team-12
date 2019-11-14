@@ -151,7 +151,7 @@ class Island {
       corners[i][1] += this.miny;
     }
 
-    this.cleanCorners(corners, 30); // TODO shouldn't be hardcoded
+    //this.cleanCorners(corners, 30); // TODO shouldn't be hardcoded
     let drawer = new Drawer(this.imgOriginal.data, this.imgOriginal.width, this.imgOriginal.height)
     let distances = this.distToMid();
     /////////////////////////////////////////////////////////////////
@@ -373,95 +373,6 @@ class Island {
     return corners
   }
 
-  cleanCorners(corners, radius) {
-    let L = corners[0];
-    let T = corners[1];
-    let R = corners[2];
-    let B = corners[3];
-
-    if (Island.calcDist(L, T) <= radius) {
-      if (Island.calcDist(R, B) <= radius) {
-        console.error('Bad picture!');
-      } else {
-        // corners.splice(0, 2);
-        // corners.splice(0, 0, [(L[0] + T[0]) / 2, (L[1] + T[1]) / 2, L[2]]);
-        this.corners.LU = [(L[0] + T[0]) / 2, (L[1] + T[1]) / 2, L[2]];
-
-        if (R[1] >= this.midPoint[1]) {
-          this.corners.RD = R;
-          this.corners.LD = B;
-        } else {
-          this.corners.RU = R;
-
-          if (B[0] >= this.midPoint[0]) {
-            this.corners.RD = B;
-          } else this.corners.LD = B;
-        }
-      }
-    } else if (Island.calcDist(T, R) <= radius) {
-      if (Island.calcDist(L, B) <= radius) {
-        console.error('Bad picture!');
-      } else {
-        // corners.splice(1, 2);
-        // corners.splice(1, 0, [(T[0] + R[0]) / 2, (T[1] + R[1]) / 2, T[2]]);
-        this.corners.RU = [(T[0] + R[0]) / 2, (T[1] + R[1]) / 2, T[2]];
-
-        if (L[1] >= this.midPoint[1]) {
-          this.corners.LD = L;
-          this.corners.RD = B;
-        } else {
-          this.corners.LU = L;
-
-          if (B[0] >= this.midPoint[0]) {
-            this.corners.RD = B;
-          } else this.corners.LD = B;
-        }
-      }
-    } else if (Island.calcDist(R, B) <= radius) {
-      // corners.splice(2, 2);
-      // corners.splice(2, 0, [(R[0] + B[0]) / 2, (R[1] + B[1]) / 2, R[2]]);
-      this.corners.RD = [(R[0] + B[0]) / 2, (R[1] + B[1]) / 2, R[2]];
-
-      if (L[1] <= this.midPoint[1]) {
-        this.corners.LU = L;
-        this.corners.RU = T;
-      } else {
-        this.corners.LD = L;
-
-        if (T[0] <= this.midPoint[0]) {
-          this.corners.LU = T;
-        } else this.corners.RU = T;
-      }
-    } else if (Island.calcDist(L, B) <= radius) {
-      // corners.shift();
-      // corners.pop();
-      // corners.push([(L[0] + B[0]) / 2, (L[1] + B[1]) / 2, L[2]]);
-      this.corners.LD = [(L[0] + B[0]) / 2, (L[1] + B[1]) / 2, L[2]];
-
-      if (R[1] <= this.midPoint[1]) {
-        this.corners.RU = R;
-        this.corners.LU = T;
-      } else {
-        this.corners.RD = R;
-
-        if (T[0] <= this.midPoint[0]) {
-          this.corners.LU = T;
-        } else this.corners.RU = T;
-      }
-    } else {
-      if (T[0] >= this.midPoint[0]) {
-        this.corners.LU = L;
-        this.corners.RU = T;
-        this.corners.RD = R;
-        this.corners.LD = B;
-      } else {
-        this.corners.LU = T;
-        this.corners.RU = R;
-        this.corners.RD = B;
-        this.corners.LD = L;
-      }
-    }
-  }
 
   distToMid() {
     let corners = Object.values(this.corners);

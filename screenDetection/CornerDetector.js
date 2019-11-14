@@ -13,10 +13,12 @@ class CornerDetector {
         this.height = this.matrix.length
         this.width = this.matrix[0].length
         this.radiusFactor = 0.25;
+        this.radius = 0 //will be set later
     }
 
     cornerDetection() {
         let tmpCorners = this.findCorners()
+        this.radius = this.calcRadius(this.radiusFactor,tmpCorners)
         //returns 4 corners in relative position
         let nonPositionCorners = this.validateCorners(tmpCorners)
         this.positionCorners(nonPositionCorners)
@@ -326,8 +328,7 @@ class CornerDetector {
         let validCorners = []
         for (let c = 0; c < tmpCorners.length; c++) {
             let tmpCorner = tmpCorners[c]
-            let radius = this.calcRadius(this.radiusFactor)
-            if (Reconstructor.reconstructCircle([tmpCorner[0], tmpCorner[1]], this.id, radius).length >= 3)
+            if(Reconstructor.reconstructCircle([tmpCorner[0], tmpCorner[1]],this.matrix, this.id, this.radius).length >= 3)
                 validCorners.push(tmpCorner)
         }
         return validCorners
@@ -338,13 +339,21 @@ class CornerDetector {
         return pixel >= this.id && pixel <= this.id + 2;
     }
 
-    calcRadius(factor) {
-        this.corners.forEach(function (corner) {
+    //calculates it based on the point with the longest distance from the temporary corners to the midpoint.
+    calcRadius(factor, corners) {
+        let distance = this.farestToMid(corners)
+        return Math.floor(distance*factor)
+    }
+
+    farestToMid(corners) {
+        let distances = [];
+        let midPoint = this.midPoint
+        corners.forEach(function (corner) {
             if (corner !== null) {
-                let distance = Algebra.calcDist(corner, this.midPoint)
-                return distance * factor
-            }
-        })
+                distances.push(Algebra.calcDist(corner, midPoint));
+            } else distances.push(null);
+        });
+        return Math.max(...distances);
     }
 
     getMatrix(x, y) {

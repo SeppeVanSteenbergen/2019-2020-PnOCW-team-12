@@ -168,13 +168,12 @@ class Reconstructor {
 
     static isFromIsland(x, y, matrix, id) {
         let pixel = this.getMatrix(x, y, matrix)
-        if (pixel >= id && pixel <= id + 2)
-            return true
-        return false
+        return pixel >= id && pixel <= id + 2;
+
     }
     static getMatrix(x, y, matrix) {
         if (x < 0 || x >= matrix[0].length) return 0;
         if (y < 0 || y >= matrix.length) return 0;
-        return matrix[y][x];
+        return matrix[y][x]
     }
 }
