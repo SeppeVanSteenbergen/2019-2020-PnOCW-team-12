@@ -665,10 +665,8 @@ class Island {
   }
 
   getMatrix(x, y) {
-    if (x < 0) x = 0;
-    else if (x >= this.width) x = this.width - 1;
-    if (y < 0) y = 0;
-    else if (y >= this.height) y = this.height - 1;
+    if (x < 0 || x >= this.width) return 0;
+    if (y < 0 || y >= this.height) return 0;
     return this.screenMatrix[y][x];
   }
 }

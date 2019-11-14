@@ -131,10 +131,8 @@ class Reconstructor {
         return false
     }
     static getMatrix(x, y, matrix) {
-        if (x < 0) return 0;
-        else if (x >= matrix[0].length) return 0;
-        if (y < 0) return 0;
-        else if (y >= matrix.length) return 0;
+        if (x < 0 || x >= matrix[0].length) return 0;
+        if (y < 0 || y >= matrix.length) return 0;
         return matrix[y][x];
     }
 }
