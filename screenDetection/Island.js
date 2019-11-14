@@ -149,11 +149,11 @@
     let drawer = new Drawer(this.imgOriginal.data, this.imgOriginal.width, this.imgOriginal.height)
     let distances = this.distToMid();
     for(let i = 0; i < corners.length; i++){
-      let lines = Reconstructor.reconstruct(corners[i], this.screenMatrix)
-      for(let line = 0; line < lines.length; line++){
-        for(let segLine = 0; segLine < line.length; segLine++){
-          drawer.drawPoint(lines[line][segLine][0] + this.minx, lines[line][segLine][1]+ this.miny,2)
-        }
+      let reco = Reconstructor.reconstructCircle([corners[i][0]-this.minx, corners[i][1]-this.miny], this.screenMatrix, this.id)
+      let recoVal = Object.values(reco)
+      for(let j = 0; j < recoVal.length; j++){
+        if(recoVal[j] != null)
+          drawer.drawPoint(recoVal[j][0] + this.minx, recoVal[j][1] + this.miny, 10)
       }
     }
     

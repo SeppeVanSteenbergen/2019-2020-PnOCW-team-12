@@ -65,8 +65,8 @@ s
         for (let j = startCorner[1]; j <= endCorner[1]; j++) {
             for (let i = startCorner[0]; i <= endCorner[0]; i++) {
                 let pos = this.pixelToPosition([i, j]);
-
-                this.makeRed(pos, true)
+                
+                this.makeRed(pos, false)
             }
         }
     }
@@ -81,6 +81,7 @@ s
         if(sat) {this.getPixels()[++position] = 10;}
             else this.getPixels()[++position] = 100;
         this.getPixels()[++position] = 50;
+        this.getPixels()[++position] = 2;
     }
 
     makeBlue(position) {

@@ -5,31 +5,26 @@ class Reconstructor {
      * @param {Array[Array[]]} matrix screenmatrix (B&W)
      */
     //https://stackoverflow.com/questions/53432767/how-to-iterate-over-pixels-on-edge-of-a-square-in-1-iteration
-    
-    static reconstruct(cornerCoo, matrix) {
-        let sideLength = 14
-        let x = cornerCoo[0] - sideLength/2
-        let y = cornerCoo[1] - sideLength/2
+
+    static reconstruct(cornerCoo, matrix, id) {
+        let sideLength = 200
+        let x = cornerCoo[0] - sideLength / 2
+        let y = cornerCoo[1] - sideLength / 2
 
         let dx = 1;
         let dy = 0;
         let white = false;
-        let blackCount = 0
         let lines = []
         let newLine = []
         for (let side = 0; side < 4; side++) {
-            for (let i = 0; i < sideLenght; i++) {
-                if(matrix[y][x] > 0){
+            for (let i = 0; i < sideLength; i++) {
+                if (this.isFromIsland(x, y, matrix, id)) {
                     white = true
-                    newLine.push([x,y])
-                } else if(white){
-                    blackCount++
-                    if(blackCount >= 2){
-                        blackCount = 0
-                        white = false
-                        lines.push(newLine.slice(0))
-                        newLine.length = 0
-                    }
+                    newLine.push([x, y])
+                } else if (white) {
+                    white = false
+                    lines.push(newLine.slice(0))
+                    newLine.length = 0
                 }
                 x += dx;
                 y += dy;
@@ -39,6 +34,95 @@ class Reconstructor {
             dx = -dy;
             dy = t;
         }
+        if (newLine.length > 0) {
+            lines.push(newLine.slice(0))
+        }
         return lines
+    }
+    static reconstructCircle(cornerCoo, matrix, id) {
+        let lines = this.calcLinesCirc(cornerCoo, matrix, id)
+        let range = this.calcRange(lines)
+        let reco = {left: null, diag: null, right: null}
+        let diagonal = null
+        if(range.rangeX > range.rangeY){
+            reco.left = range.minXCoo
+            reco.right = range.maxXCoo
+        }else{
+            reco.left = range.minYCoo
+            reco.right = range.maxYCoo
+        }
+        for(let i = 0; i < lines.length; i++){
+            for(let line = 0; line < lines[i].length; line++)
+                if(!lines[i][line].includes(reco.left) && !lines[i][line].includes(reco.right))
+                    diagonal = lines[i][line]
+        }
+        if(diagonal != null){
+            reco.diag = diagonal[Math.floor((diagonal.length - 1)/2)]
+        }
+        return reco
+    }
+
+
+    static calcLinesCirc(cornerCoo, matrix, id){
+        let radius = 100
+        let dtheta = 0.05
+
+        let white = false;
+        let lines = []
+        let newLine = []
+        for (let theta = 0; theta < 2 * Math.PI; theta += dtheta) {
+            let x = cornerCoo[0] + Math.floor(radius * Math.cos(theta))
+            let y = cornerCoo[1] + Math.floor(radius * Math.sin(theta))
+            if (this.isFromIsland(x, y, matrix, id)) {
+                white = true
+                newLine.push([x, y])
+            } else if (white) {
+                white = false
+                lines.push(newLine.slice(0))
+                newLine.length = 0
+            }
+        }
+        if (newLine.length > 0) {
+            lines.push(newLine.slice(0))
+        }
+        return lines
+    }
+
+    static calcRange(lines){
+        let minX = Infinity
+        let minXCoo
+        let minY = Infinity
+        let minYCoo
+        let maxX = -Infinity
+        let maxXCoo
+        let maxY = -Infinity
+        let maxYCoo
+        for(let line = 0; line < lines.length; line++){
+            let currLine = lines[line]
+            for(let pix = 0; pix < currLine.length; pix++){
+                let currPix = currLine[pix]
+                if(currPix[0] < minX){minX = currPix[0]; minXCoo = currPix}
+                else if(currPix[0] > maxX) {maxX = currPix[0]; maxXCoo = currPix}
+                if(currPix[1] < minY){minY = currPix[1]; minYCoo = currPix}
+                else if(currPix[1] > maxY) {maxY = currPix[1]; maxYCoo = currPix}
+            }
+        }
+        
+        return {minXCoo: minXCoo, maxXCoo: maxXCoo, rangeX: maxX - minX, 
+                minYCoo: minYCoo, maxYCoo: maxYCoo, rangeY: maxY - minY}
+    }
+
+    static isFromIsland(x, y, matrix, id) {
+        let pixel = this.getMatrix(x, y, matrix)
+        if (pixel >= id && pixel <= id + 2)
+            return true
+        return false
+    }
+    static getMatrix(x, y, matrix) {
+        if (x < 0) return 0;
+        else if (x >= matrix[0].length) return 0;
+        if (y < 0) return 0;
+        else if (y >= matrix.length) return 0;
+        return matrix[y][x];
     }
 }
