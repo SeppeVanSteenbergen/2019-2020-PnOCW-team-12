@@ -156,6 +156,13 @@
           drawer.drawPoint(recoVal[j][0] + this.minx, recoVal[j][1] + this.miny, 10)
       }
     }
+    let reco = Reconstructor.reconstructCircle([this.midPoint[0] - this.minx, this.midPoint[1] - this.miny], this.screenMatrix, this.id)
+    let recoVal = Object.values(reco)
+    for(let j = 0; j < recoVal.length; j++){
+      if(recoVal[j] != null)
+        drawer.drawPoint(recoVal[j][0] + this.minx, recoVal[j][1] + this.miny, 10)
+    }
+
     
     this.recoScreen(distances);
   }

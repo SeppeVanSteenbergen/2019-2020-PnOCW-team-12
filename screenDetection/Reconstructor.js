@@ -42,41 +42,50 @@ class Reconstructor {
     static reconstructCircle(cornerCoo, matrix, id) {
         let lines = this.calcLinesCirc(cornerCoo, matrix, id)
         let range = this.calcRange(lines)
-        let reco = {left: null, diag: null, right: null}
-        let diagonal = null
-        if(range.rangeX > range.rangeY){
-            reco.left = range.minXCoo
-            reco.right = range.maxXCoo
-        }else{
-            reco.left = range.minYCoo
-            reco.right = range.maxYCoo
+        let reco = []
+        if (lines.length <= 3) {
+            let diagonal = null
+            if (range.rangeX > range.rangeY) {
+                reco.push(range.minXCoo)
+                reco.push(range.maxXCoo)
+            } else {
+                reco.push(range.minYCoo)
+                reco.push(range.maxYCoo)
+            }
+            for (let i = 0; i < lines.length; i++) {
+                for (let line = 0; line < lines[i].length; line++)
+                    if (!lines[i].includes(reco[0]) && !lines[i].includes(reco[1]))
+                        diagonal = lines[i]
+            }
+            if (diagonal != null) {
+                reco.push(diagonal[Math.floor((diagonal.length) / 2)])
+            }
+        } else if(lines.length >= 4){
+            for(let i = 0; i < lines.length; i++){
+                reco.push(lines[i][Math.floor((lines[i].length) / 2)])
+            }
         }
-        for(let i = 0; i < lines.length; i++){
-            for(let line = 0; line < lines[i].length; line++)
-                if(!lines[i][line].includes(reco.left) && !lines[i][line].includes(reco.right))
-                    diagonal = lines[i][line]
-        }
-        if(diagonal != null){
-            reco.diag = diagonal[Math.floor((diagonal.length - 1)/2)]
-        }
+
         return reco
     }
 
 
-    static calcLinesCirc(cornerCoo, matrix, id){
+    static calcLinesCirc(cornerCoo, matrix, id) {
         let radius = 100
-        let dtheta = 0.05
+        let dtheta = 0.01
 
         let white = false;
         let lines = []
         let newLine = []
+        let blackCount = 0
         for (let theta = 0; theta < 2 * Math.PI; theta += dtheta) {
             let x = cornerCoo[0] + Math.floor(radius * Math.cos(theta))
             let y = cornerCoo[1] + Math.floor(radius * Math.sin(theta))
             if (this.isFromIsland(x, y, matrix, id)) {
                 white = true
                 newLine.push([x, y])
-            } else if (white) {
+            } else if (white && blackCount++ >= 3) {
+                blackCount = 0
                 white = false
                 lines.push(newLine.slice(0))
                 newLine.length = 0
@@ -88,7 +97,7 @@ class Reconstructor {
         return lines
     }
 
-    static calcRange(lines){
+    static calcRange(lines) {
         let minX = Infinity
         let minXCoo
         let minY = Infinity
@@ -97,19 +106,21 @@ class Reconstructor {
         let maxXCoo
         let maxY = -Infinity
         let maxYCoo
-        for(let line = 0; line < lines.length; line++){
+        for (let line = 0; line < lines.length; line++) {
             let currLine = lines[line]
-            for(let pix = 0; pix < currLine.length; pix++){
+            for (let pix = 0; pix < currLine.length; pix++) {
                 let currPix = currLine[pix]
-                if(currPix[0] < minX){minX = currPix[0]; minXCoo = currPix}
-                else if(currPix[0] > maxX) {maxX = currPix[0]; maxXCoo = currPix}
-                if(currPix[1] < minY){minY = currPix[1]; minYCoo = currPix}
-                else if(currPix[1] > maxY) {maxY = currPix[1]; maxYCoo = currPix}
+                if (currPix[0] < minX) { minX = currPix[0]; minXCoo = currPix }
+                else if (currPix[0] > maxX) { maxX = currPix[0]; maxXCoo = currPix }
+                if (currPix[1] < minY) { minY = currPix[1]; minYCoo = currPix }
+                else if (currPix[1] > maxY) { maxY = currPix[1]; maxYCoo = currPix }
             }
         }
-        
-        return {minXCoo: minXCoo, maxXCoo: maxXCoo, rangeX: maxX - minX, 
-                minYCoo: minYCoo, maxYCoo: maxYCoo, rangeY: maxY - minY}
+
+        return {
+            minXCoo: minXCoo, maxXCoo: maxXCoo, rangeX: maxX - minX,
+            minYCoo: minYCoo, maxYCoo: maxYCoo, rangeY: maxY - minY
+        }
     }
 
     static isFromIsland(x, y, matrix, id) {

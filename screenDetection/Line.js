@@ -16,12 +16,20 @@ class Line{
             b = tmp;
         }
 
-        this.a = a;
-        this.b = b;
+        this._a = a;
+        this._b = b;
 
         this.dx = b[0] - a[0];
         this.dy = b[1] - a[1];
 
+    }
+
+    get a(){
+        return this._a;
+    }
+
+    get b(){
+        return this._b;
     }
 
     /**
@@ -39,7 +47,7 @@ class Line{
      * Get the original reconstruction points
      */
     get points(){
-        return [this.a, this.b];
+        return [this._a, this._b];
     }
 
     /**
@@ -65,12 +73,12 @@ class Line{
 
         if (this.slope !== line.slope) {
 
-            let x1 = this.a[0];
-            let x2 = this.b[0];
+            let x1 = this._a[0];
+            let x2 = this._b[0];
             let x3 = line.a[0];
             let x4 = line.b[0];
-            let y1 = this.a[1];
-            let y2 = this.b[1];
+            let y1 = this._a[1];
+            let y2 = this._b[1];
             let y3 = line.a[1];
             let y4 = line.b[1];
 
@@ -95,7 +103,7 @@ class Line{
      * @param {float} x get the y value of this line equation
      */
     evaluate(x){
-        let cte = this.a[1] / (this.slope * this.a[0]);
+        let cte = this._a[1] / (this.slope * this._a[0]);
 
         return (this.slope * x) + cte;
     }

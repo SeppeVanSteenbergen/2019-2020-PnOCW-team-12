@@ -43,6 +43,10 @@ class Image {
     this.createScreens();
     this.createPictureCanvas(300, 500); //TODO: param meegeven
     this.calcRelativeScreens(); //untested
+
+    let l = new Line([10,20], [200, 220])
+    this.drawer.drawLine(l)
+
     console.log("picture canvas: " + Object.values(this.pictureCanvas));
     return this.screens;
   }
@@ -126,6 +130,8 @@ class Image {
     if (this.canvas !== null) {
       let context = this.canvas.getContext('2d');
       context.putImageData(this.getImgData(), 0, 0);
+
+      this.drawer._finishLines();
     }
   }
 
