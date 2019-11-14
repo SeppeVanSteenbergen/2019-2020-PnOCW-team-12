@@ -73,6 +73,7 @@ class Reconstructor {
     static calcLinesCirc(cornerCoo, matrix, id) {
         const radius = 150
         const dtheta = 0.01
+        const maxWrongPixel = 5
 
         let white = false;
         let lines = []
@@ -86,7 +87,7 @@ class Reconstructor {
                     white = true
                     blackCount = 0
                     newLine.push([x, y])
-                } else if (white && ++blackCount >= 5) {
+                } else if (white && ++blackCount >= maxWrongPixel) {
                     blackCount = 0
                     white = false
                     lines.push(newLine.slice(0))

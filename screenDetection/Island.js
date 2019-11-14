@@ -154,6 +154,13 @@ class Island {
     let lines = []
     let linesCenter = []
     for (let i = 0; i < corners.length; i++) {
+      ///Alle punten
+      let circleLines = Reconstructor.calcLinesCirc(corners[i], this.screenMatrix, this.id)
+      for(let i = 0; i < circleLines.length; i++){
+        for(let j = 0; j < circleLines[i].length; j++){
+            drawer.drawPoint(circleLines[i][j][0] + this.minx, circleLines[i][j][1] + this.miny, 1)
+        }
+      }
       let reco = Reconstructor.reconstructCircle([corners[i][0] - this.minx, corners[i][1] - this.miny], this.screenMatrix, this.id)
       let recoVal = Object.values(reco)
       for (let j = 0; j < recoVal.length; j++) {
