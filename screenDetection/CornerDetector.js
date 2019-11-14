@@ -2,7 +2,7 @@ class CornerDetector {
 
     constructor(screenMatrix, id) {
         this.matrix = screenMatrix
-        this.corners = {}
+        this.corners = []
         this.id = id
         this.height = this.matrix.length
         this.width = this.matrix[0].length
@@ -234,9 +234,9 @@ class CornerDetector {
         return validCorners
     }
 
-    isFromIsland(x, y, id) {
+    isFromIsland(x, y) {
         let pixel = this.getMatrix(x, y)
-        return pixel >= id && pixel <= id + 2;
+        return pixel >= this.id && pixel <= this.id + 2;
     }
 
     getMatrix(x, y) {
