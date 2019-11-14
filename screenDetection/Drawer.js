@@ -1,6 +1,6 @@
 class Drawer {
 
-    constructor(pixels, width, height) {
+    constructor(pixels, width, height, ctx) {
         this.pixels = pixels;
         this.width = width;
         this.height = height;
@@ -107,7 +107,7 @@ s
             this._contextDrawLine(line);
         }
     }
-
+    
     _contextDrawLine(line) {
         this.ctx.beginPath();
         this.ctx.strokeStyle = "#FF0000";
