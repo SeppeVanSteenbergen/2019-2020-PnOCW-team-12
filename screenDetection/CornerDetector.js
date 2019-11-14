@@ -4,7 +4,12 @@ class CornerDetector {
         this.matrix = screenMatrix
         this.midPoint = midPoint
         this.id = id
-        this.corners = []
+        this.corners = {
+            LU: null,
+            RU: null,
+            RD: null,
+            LD: null
+          };
         this.height = this.matrix.length
         this.width = this.matrix[0].length
         this.radiusFactor = 0.25;
@@ -13,8 +18,27 @@ class CornerDetector {
     cornerDetection() {
         let tmpCorners = this.findCorners()
         //returns 4 corners in relative position
-        this.corners = this.validateCorners(tmpCorners)
-        //cleanCorners()
+        let nonPositionCorners = this.validateCorners(tmpCorners)
+        this.positionCorners(nonPositionCorners)
+        if(nonPositionCorners.length < 4)
+            this.reconstructCorners()
+    }
+    
+    reconstructCorners(){
+        
+    }
+
+    positionCorners(nPCorners){
+        for(let i = 0; i < nPCorners.length; i++){
+            if(npCorners[i][0] < this.midPoint[0] && npCorners[i][1] < this.midPoint[0]) 
+                this.corners.LU = npCorners[i]
+            else if(npCorners[i][0] < this.midPoint[0] && npCorners[i][1] > this.midPoint[0]) 
+                this.corners.LD = npCorners[i]
+            else if (npCorners[i][0] > this.midPoint[0] && npCorners[i][1] < this.midPoint[0]) 
+                this.corners.RU = npCorners[i]
+            else if(npCorners[i][0] > this.midPoint[0] && npCorners[i][1] > this.midPoint[0]) 
+                this.corners.RD = npCorners[i]
+        }
     }
 
     findCorners() {
