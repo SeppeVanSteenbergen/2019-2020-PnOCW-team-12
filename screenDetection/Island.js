@@ -145,8 +145,17 @@ class Island {
     }
 
     this.cleanCorners(corners, 30); // TODO shouldn't be hardcoded
+    let drawer = new Drawer(this.imgOriginal.data, this.imgOriginal.width, this.imgOriginal.height)
     let distances = this.distToMid();
-
+    for(let i = 0; i < corners.length; i++){
+      let lines = Reconstructor.reconstruct(corners[i], this.screenMatrix)
+      for(let line = 0; line < lines.length; line++){
+        for(let segLine = 0; segLine < line.length; segLine++){
+          drawer.drawPoint(lines[line][segLine][0] + this.minx, lines[line][segLine][1]+ this.miny,2)
+        }
+      }
+    }
+    
     this.recoScreen(distances);
   }
 
