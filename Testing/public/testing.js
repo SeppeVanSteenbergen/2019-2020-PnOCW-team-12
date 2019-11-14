@@ -1,4 +1,4 @@
-const sourceFolder = '/Images/'
+const sourceFolder = 'Images/'
 
 function runAllTests() {
   console.log("----------Start tests----------")

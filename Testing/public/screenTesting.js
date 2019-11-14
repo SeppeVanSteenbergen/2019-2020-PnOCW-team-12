@@ -153,4 +153,78 @@ function checkOrientation(i) {
       checkOrientation(i + 1)
     }
   } else   console.log("Stop orientation check")
+
+}
+
+/**
+ * 
+ * @param {int} fl focal length: 20..40
+ */
+function TestCrossFolder(fl){
+
+  let folder = "Cross-" + fl.toString();
+  
+  // for (let i = 1; i <= 18; i++) {
+  //   let src = "/" + folder + "/" + GenCrossFilename(i);
+  //   console.log("filename: " + folder + "/" + GenCrossFilename(i));
+
+  //   TestCross(src);
+
+
+  // }  
+  
+  TestCross(1, folder);
+
+}
+
+function GenCrossFilename(i){
+  if(i.toString().length > 1){
+    return "00" + i.toString() + ".png";
+  }else{
+    return "000" + i.toString() + ".png";
+  }
+}
+
+function TestCross(i, folder){
+  if (i < 18) {
+    var image = document.createElement('img')
+    var canvas = document.createElement('canvas')
+    var ctx;
+
+    let file = "/" + folder + "/" + GenCrossFilename(i);
+
+    document.getElementById("bert").setAttribute('src', sourceFolder + "CrossTest" + file)
+
+    image.setAttribute('src', sourceFolder + "CrossTest" + file);
+    console.log(image.src);
+    image.onload = function () {
+      console.log("exec: " + file);
+      ctx = canvas.getContext('2d')
+      canvas.width = image.width
+      canvas.height = image.height
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      ctx.drawImage(image, 0, 0, image.width, image.height)
+      let imgData = ctx.getImageData(0, 0, image.width, image.height)
+      var inputImage = new Image(imgData, '', 'RGBA', image.width, image.height, null)
+
+      // inputImage.rgbaToHsla();
+      // inputImage.createGreenBlueMask();
+      // inputImage.medianBlurMatrix(3);
+      // inputImage.createScreens();
+
+      console.log("exec: " + file);
+
+      inputImage.rgbaToHsla();
+      inputImage.createBigMask();
+      inputImage.medianBlurMatrix(3);
+      inputImage.medianBlur(3);
+      inputImage.createOffset(3);
+      inputImage.createScreens();
+      inputImage.hslaToRgba();
+      //inputImage.show();
+    }
+
+    i++;
+    TestCross(i, folder);
+  }
 }
