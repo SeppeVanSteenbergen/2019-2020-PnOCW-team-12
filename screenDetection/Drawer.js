@@ -17,7 +17,7 @@ class Drawer {
     getHeight() {
         return this.height;
     }
-s
+
     getPixels() {
         return this.pixels;
     }

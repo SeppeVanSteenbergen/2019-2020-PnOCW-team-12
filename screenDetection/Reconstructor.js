@@ -39,7 +39,8 @@ class Reconstructor {
         }
         return lines
     }
-    static reconstructCircle(cornerCoo, matrix, id) {
+
+    static reconstructCircle(cornerCoo, matrix, id, radius) {
         let lines = this.calcLinesCirc(cornerCoo, matrix, id)
         let range = this.calcRange(lines)
         let reco = []
@@ -70,8 +71,7 @@ class Reconstructor {
     }
 
 
-    static calcLinesCirc(cornerCoo, matrix, id) {
-        const radius = 150
+    static calcLinesCirc(cornerCoo, matrix, id, radius) {
         const dtheta = 0.01
         const maxWrongPixel = 5
 

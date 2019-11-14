@@ -28,6 +28,8 @@ class Island {
     this.blue = id + 1;
     this.circle = id + 2;
 
+    this.radiusFactor = 0.25;
+
     this.imgOriginal = imgOriginal;
     this.barcode = BarcodeScanner.scan2(this.getScreenImg(), 30);
     console.log(BarcodeScanner.scan2(this.getScreenImg(), 30))
@@ -139,7 +141,7 @@ class Island {
       corners = this.perpendicularSearch()
     }
 
-    console.log(CornerDetection.cornerDetection(this.screenMatrix, this.id))
+    //console.log(CornerDetection.cornerDetection(this.screenMatrix, this.id))
 
     // corners to absolute position
     for (let i = 0; i < corners.length; i++) {
@@ -153,6 +155,7 @@ class Island {
     /////////////////////////////////////////////////////////////////
     let lines = []
     let linesCenter = []
+    let radius = this.calcRadius(this.radiusFactor)
     for (let i = 0; i < corners.length; i++) {
       ///Alle punten
       let circleLines = Reconstructor.calcLinesCirc(corners[i], this.screenMatrix, this.id)
@@ -171,7 +174,7 @@ class Island {
         }
       }
     }
-    let reco = Reconstructor.reconstructCircle([this.midPoint[0] - this.minx, this.midPoint[1] - this.miny], this.screenMatrix, this.id)
+    let reco = Reconstructor.reconstructCircle([this.midPoint[0] - this.minx, this.midPoint[1] - this.miny], this.screenMatrix, this.id, radius)
     let recoVal = Object.values(reco)
     for (let j = 0; j < recoVal.length; j++) {
       if (recoVal[j] != null){
@@ -189,6 +192,16 @@ class Island {
     }
     /////////////////////////////////////////////////////////////////////
     this.recoScreen(distances);
+  }
+
+  calcRadius(factor) {
+    let distances = this.distToMid()
+    let i = 0;
+    while(distances[i] === null) {
+      i++
+    }
+    return distances[i]*factor;
+
   }
 
   perpendicularSearch() {
