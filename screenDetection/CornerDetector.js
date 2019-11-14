@@ -23,9 +23,40 @@ class CornerDetector {
         if(nonPositionCorners.length < 4)
             this.reconstructCorners()
     }
-    
+
     reconstructCorners(){
-        
+        //missing LU
+        if(this.corners.LU == null){
+            if(this.corners.RU != null){
+
+            } else if(this.corners.LD != null){
+
+            }
+        }
+        //missing RU
+        if(this.corners.RU == null){
+            if(this.corners.LU != null){
+
+            } else if(this.corners.RD != null){
+                
+            }
+        }
+        //missing RD
+        if(this.corners.RD == null){
+            if(this.corners.RU != null){
+
+            } else if(this.corners.LD != null){
+                
+            }
+        }
+        //missing LD
+        if(this.corners.LD == null){
+            if(this.corners.RD != null){
+
+            } else if(this.corners.LU != null){
+                
+            }
+        }
     }
 
     positionCorners(nPCorners){
