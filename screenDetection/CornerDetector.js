@@ -14,6 +14,8 @@ class CornerDetector {
         this.width = this.matrix[0].length;
         this.radiusFactor = 0.25;
         this.radius = 0 //will be set later
+        this.yellow = id
+        this.pink = id + 1
     }
 
     cornerDetection() {
@@ -105,15 +107,20 @@ class CornerDetector {
 
     positionCorners(nPCorners) {
         for (let i = 0; i < nPCorners.length; i++) {
-            if (nPCorners[i][0] < this.midPoint[0] && nPCorners[i][1] < this.midPoint[1])
-                this.corners.LU = nPCorners[i]
-            else if (nPCorners[i][0] < this.midPoint[0] && nPCorners[i][1] > this.midPoint[1])
-                this.corners.LD = nPCorners[i]
-            else if (nPCorners[i][0] > this.midPoint[0] && nPCorners[i][1] < this.midPoint[1])
-                this.corners.RU = nPCorners[i]
-            else if (nPCorners[i][0] > this.midPoint[0] && nPCorners[i][1] > this.midPoint[1])
-                this.corners.RD = nPCorners[i]
+            let corner = nPCorners[i]
+            if(this.matrix[corner[1]][corner[0]] == this.yellow){
+                if(corner[0] < this.midPoint[0])
+                    this.corners.LU = corner
+                else
+                    this.corners.RU = corner
+            } else {
+                if(corner[0] < this.midPoint[0])
+                    this.corners.LD = corner
+                else
+                    this.corners.RD = corner
+            }
         }
+        //TODO: als roos vanboven is moeten left en right nog worden omgewisseld!
     }
 
     findCorners() {
