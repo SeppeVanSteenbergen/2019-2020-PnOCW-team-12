@@ -29,12 +29,12 @@ class Island {
     this.circle = id + 2;
 
     this.imgOriginal = imgOriginal;
-    this.barcode = BarcodeScanner.scan2(this.getScreenImg(), 30);
-    console.log(BarcodeScanner.scan2(this.getScreenImg(), 30))
+    this.barcode = BarcodeScanner.scan(this.getScreenImg());
+    console.log(this.barcode)
   }
 
   isValid() {
-    return this.calcMid() !== null && this.barcode !== null;
+    return this.calcMid() !== null && this.barcode !== 0;
   }
 
   getScreenImg() {
@@ -74,10 +74,10 @@ class Island {
   findCorners() {
     let cornerDetector = new CornerDetector(this.screenMatrix, this.midPoint, this.id)
     let detectedCorners = cornerDetector.cornerDetection()
-    this.corners.LU = [detectedCorners.LU[0]+this.minx, detectedCorners.LU[1]+this.miny]
-    this.corners.LD = [detectedCorners.LD[0]+this.minx, detectedCorners.LD[1]+this.miny]
-    this.corners.RU = [detectedCorners.RU[0]+this.minx, detectedCorners.RU[1]+this.miny]
-    this.corners.RD = [detectedCorners.RD[0]+this.minx, detectedCorners.RD[1]+this.miny]
+    this.corners.LU = [detectedCorners.LU[0], detectedCorners.LU[1]]
+    this.corners.LD = [detectedCorners.LD[0], detectedCorners.LD[1]]
+    this.corners.RU = [detectedCorners.RU[0], detectedCorners.RU[1]]
+    this.corners.RD = [detectedCorners.RD[0], detectedCorners.RD[1]]
   }
 
   calcMid() {
@@ -100,10 +100,10 @@ class Island {
     }
 
     //mediaan van gevonden circle pixels
-    let midx = x_values.sort()[Math.floor(lengthX / 2)];
-    let midy = y_values.sort()[Math.floor(lengthY / 2)];
+    let midx = x_values.sort(function(a, b){return a-b})[Math.floor(lengthX / 2)];
+    let midy = y_values.sort(function(a, b){return a-b})[Math.floor(lengthY / 2)];
 
-    return [midx + this.minx, midy + this.miny];
+    return [midx, midy];
   }
 
   cssTransMatrix(transMatrix) {
@@ -122,6 +122,15 @@ class Island {
     this.midPoint = this.calcMid();
     this.findCorners();
     //this.orientation = this.findScreenOrientation();
+    this.localToWorld();
+  }
+
+  localToWorld() {
+    this.midPoint = [this.midPoint[0] + this.minx, this.midPoint[1] + this.miny];
+    this.corners.LU = [this.corners.LU[0] + this.minx, this.corners.LU[1] + this.miny];
+    this.corners.LD = [this.corners.LD[0] + this.minx, this.corners.LD[1] + this.miny];
+    this.corners.RU = [this.corners.RU[0] + this.minx, this.corners.RU[1] + this.miny];
+    this.corners.RD = [this.corners.RD[0] + this.minx, this.corners.RD[1] + this.miny];
   }
 
   createScreen(clientInfo) {

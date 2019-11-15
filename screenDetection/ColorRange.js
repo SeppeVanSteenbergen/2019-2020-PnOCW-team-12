@@ -369,4 +369,43 @@ class ColorRange {
     );
   }
 
+  static inWhiteRange(H, S, L) {
+    return (
+      (
+        this.inWhiteBoxA1(H, S) &&
+        this.inWhiteBoxB1(H, L)
+      ) ||
+      (
+        this.inWhiteBoxB2(H, L)
+      )
+    );
+  }
+
+  static inWhiteBoxA1(H, S) {
+    return (
+      H >= 0 &&
+      H <= 360 &&
+      S >= 0 &&
+      S <= 35
+    );
+  }
+
+  static inWhiteBoxB1(H, L) {
+    return (
+      H >= 0 &&
+      H <= 360 &&
+      L >= 25 &&
+      L <= 100
+    );
+  }
+
+  static inWhiteBoxB2(H, L) {
+    return (
+      H >= 0 &&
+      H <= 360 &&
+      L >= 70 &&
+      L <= 100
+    );
+  }
+
 }

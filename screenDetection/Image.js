@@ -400,9 +400,9 @@ class Image {
       let pixel = this.positionToPixel(i);
       let x = pixel[0];
       let y = pixel[1];
-      if (ColorRange.inGreenRange(H, S, L)) {
+      if (ColorRange.inYellowRange(H, S, L)) {
         this.matrix[y][x] = 1;
-      } else if (ColorRange.inBlueRange(H, S, L)) {
+      } else if (ColorRange.inPinkRange(H, S, L)) {
         this.matrix[y][x] = 2;
       } else if (ColorRange.inMidRange(H, S, L)) {
         this.matrix[y][x] = 3;
