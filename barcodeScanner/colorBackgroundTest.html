@@ -29,7 +29,7 @@
         this.ctx = this.canvas.getContext('2d')
       }
 
-      drawBorder(l) {  
+      drawBorder(l, space) {  
         let ctx = this.ctx
         let cornersize = this.w * 0.1;
         let h = this.h *0.1;
@@ -69,17 +69,6 @@
         ctx.stroke()
 
         ctx.beginPath()
-        ctx.fillStyle = this.c1
-        let w = lineWidth * Math.cos(Math.atan(this.h / this.w)) * 1.3
-        let h = this.h * w / this.w
-        ctx.moveTo(this.w / 2 - w, this.h / 2)
-        ctx.lineTo(this.w / 2 + w, this.h / 2)
-        ctx.lineTo(this.w / 2, this.h / 2 - h)
-        ctx.lineTo(this.w / 2 - w, this.h / 2)
-        ctx.closePath()
-        ctx.fill()
-
-        ctx.beginPath()
         ctx.fillStyle = '#00ffff'
         ctx.arc(this.w / 2, this.h / 2, circleRadius, 0, Math.PI * 2)
         ctx.fill()
@@ -107,8 +96,8 @@
           for (let j = 0; j < 5; j++) {
             ctx.beginPath();
             ctx.fillStyle = this.barcodeColorValues[code[j]];
-            ctx.rect(barWidth * (i + j) + this.borderWidth + barWidth, this.borderWidth, barWidth,
-                this.h - 2*this.borderWidth);
+            ctx.rect(barWidth * (i + j) + this.borderWidth + barWidth, this.borderWidth + barWidth, barWidth,
+                this.h - 2*this.borderWidth - 2*barWidth);
             ctx.fill();
           }
           ctx.beginPath();
@@ -118,7 +107,8 @@
           ctx.fill();
         }
 
-        this.drawX(this.borderWidth);
+        this.drawX(this.borderWidth, barWidth);
+        this.drawBorder(this.borderWidth);
 
         return barWidth;
       }
@@ -128,8 +118,8 @@
     const c = document.getElementById("canv");
 
     let drawer = new DetectionDrawer(c, screen, borderWidth);
+    drawer.drawX(borderWidth, 0);
     drawer.drawBorder(borderWidth);
-    drawer.drawX(borderWidth);
 
     // for console use
     let barcode = (code, sections) => drawer.barcode(code, sections);
