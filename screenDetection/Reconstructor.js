@@ -42,8 +42,12 @@ class Reconstructor {
 
     static reconstructCircle(cornerCoo, matrix, id, radius) {
         let lines = this.calcLinesCirc(cornerCoo, matrix, id, radius)
+        console.log(lines)
         let reco = []
         let furthestPoints = this.calcTwoFurthestPoints(lines)
+        console.log(furthestPoints)
+        let validatedFurthestPoints = this.validateTwoFurthestPoints(matrix, cornerCoo, furthestPoints)
+        console.log(validatedFurthestPoints)
         reco.push(furthestPoints[0], furthestPoints[1])
         let biggest
         let biggestNb = -Infinity
@@ -111,6 +115,55 @@ class Reconstructor {
             }
         }
         return furthestPoints
+    }
+
+    static validateTwoFurthestPoints(matrix, cornerCoo, points) {
+        let validatedPoints = points.slice(0, 2)
+        if (this.crossesWhite(matrix, cornerCoo, points[0])) {
+            validatedPoints.shift()
+        }
+        if (this.crossesWhite(matrix, cornerCoo, points[1])) {
+            validatedPoints.pop()
+        }
+
+        return validatedPoints
+    }
+
+    static crossesWhite(matrix, cornerCoo, point) {
+        let point1 = cornerCoo
+        let point2 = point
+
+        console.log(point1, point2)
+
+        if (point2[0] <= point1[0]) {
+            [point1, point2] = [point2, point1]
+        }
+
+        let a = (point2[1] - point1[1]) / (point2[0] - point1[0])
+        let b = point1[1] - a * point1[0]
+
+        if (isFinite(a)) {
+            for (let x = point1[0]; x <= point2[0]; x++) {
+                let y = a * x + b
+                let id = this.getMatrix(x, y, matrix)
+                if (id === 0) {
+                    return true
+                }
+            }
+        } else {
+            if (point2[1] < point1[1]) {
+                [point1, point2] = [point2, point1]
+            }
+            let x = point1[0]
+            for (let y = point1[1]; y <= point2[1]; y++) {
+                let id = this.getMatrix(x, y, matrix)
+                if (id === 0) {
+                    return true
+                }
+            }
+        }
+
+        return false
     }
 
     static calcFurthestPoints2Lines(line1, line2) {

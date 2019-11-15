@@ -24,8 +24,8 @@ class Island {
     this.maxy = rightBottomCoo[1];
 
     this.id = id;
-    this.green = id;
-    this.blue = id + 1;
+    this.yellow = id;
+    this.pink = id + 1;
     this.circle = id + 2;
 
     this.imgOriginal = imgOriginal;
@@ -81,29 +81,28 @@ class Island {
   }
 
   calcMid() {
-    let x_values = [];
-    let y_values = [];
+    let xValues = [];
+    let yValues = [];
 
     for (let y = 0; y < this.height; y++) {
       for (let x = 0; x < this.width; x++) {
         if (this.getMatrix(x, y) === this.circle) {
-          x_values.push(x);
-          y_values.push(y);
+          xValues.push(x);
+          yValues.push(y);
         }
       }
     }
 
-    let lengthX = x_values.length;
-    let lengthY = y_values.length;
+    let lengthX = xValues.length;
+    let lengthY = yValues.length;
     if (lengthX === 0 || lengthY === 0) {
       return null;
     }
 
-    //mediaan van gevonden circle pixels
-    let midx = x_values.sort(function(a, b){return a-b})[Math.floor(lengthX / 2)];
-    let midy = y_values.sort(function(a, b){return a-b})[Math.floor(lengthY / 2)];
+    let sumX = xValues.reduce((previous, current) => current += previous);
+    let sumY = yValues.reduce((previous, current) => current += previous);
 
-    return [midx, midy];
+    return [sumX / lengthX, sumY / lengthY];
   }
 
   cssTransMatrix(transMatrix) {
@@ -114,13 +113,17 @@ class Island {
   }
 
   switchColor(corner) {
-    if (corner[2] === this.blue) return this.green;
-    else return this.blue;
+    if (corner[2] === this.pink) return this.yellow;
+    else return this.pink;
   }
 
   finishIsland() {
+    // console.log(this.barcode);
     this.midPoint = this.calcMid();
     this.findCorners();
+    // console.log(this.circle);
+    // console.log(this.midPoint);
+    // console.log(this.screenMatrix);
     //this.orientation = this.findScreenOrientation();
     this.localToWorld();
   }

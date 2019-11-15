@@ -67,9 +67,7 @@ class ColorRange {
       L <= 52
     );
   }
-  static inMidRange(H, S, L){
-    return this.inBlueGreenRange(H,S,L)
-  }
+
   static inBlueGreenRange(H, S, L) {
     return (
       (
@@ -406,6 +404,10 @@ class ColorRange {
       L >= 70 &&
       L <= 100
     );
+  }
+
+  static inMidRange(H, S, L){
+    return this.inBlueGreenRange(H,S,L)
   }
 
 }
