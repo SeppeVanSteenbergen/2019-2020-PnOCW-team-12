@@ -1,10 +1,10 @@
 class Island {
   /**
    * Create and Island starting with this pixel
-   * @param {Image} image
-   * @param {int} x x co
-   * @param {int} y y co
+   * @param leftUpperCoo
+   * @param rightBottomCoo
    * @param {int} id
+   * @param imgOriginal
    */
   constructor(leftUpperCoo, rightBottomCoo, id, imgOriginal) {
     this.screenMatrix = [];
@@ -28,8 +28,6 @@ class Island {
     this.blue = id + 1;
     this.circle = id + 2;
 
-    this.radiusFactor = 0.25;
-
     this.imgOriginal = imgOriginal;
     this.barcode = BarcodeScanner.scan2(this.getScreenImg(), 30);
     console.log(BarcodeScanner.scan2(this.getScreenImg(), 30))
@@ -48,21 +46,6 @@ class Island {
     return context.getImageData(this.minx, this.miny, this.maxx - this.minx, this.maxy - this.miny)
   }
 
-  /**
-   * Add a pixel to the Island
-   *
-   * @param {int} x x co
-   * @param {int} y y co
-
-   add(x, y) {
-    this.minx = Math.min(x, this.minx);
-    this.miny = Math.min(y, this.miny);
-
-    this.maxx = Math.max(x, this.maxx);
-    this.maxy = Math.max(y, this.maxy);
-  }
-   */
-
   print() {
     console.log('starting co: ' + this.minx + ', ' + this.miny);
     console.log('ending co: ' + this.maxx + ', ' + this.maxy);
@@ -77,16 +60,6 @@ class Island {
 
   size() {
     return (this.maxx - this.minx) * (this.maxy - this.miny);
-  }
-
-  /**
-   * Get the square distance from the given pixel position relative to the center of the island
-   */
-  sqDist(x, y) {
-    let cx = (this.maxx - this.minx) / 2;
-    let cy = (this.maxy - this.miny) / 2;
-
-    return (cx - x) * (cx - x) + (cy - y) * (cy - y);
   }
 
   setScreenMatrix(matrix) {
