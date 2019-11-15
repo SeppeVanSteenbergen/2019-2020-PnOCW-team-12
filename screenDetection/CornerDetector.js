@@ -108,7 +108,7 @@ class CornerDetector {
     positionCorners(nPCorners) {
         for (let i = 0; i < nPCorners.length; i++) {
             let corner = nPCorners[i]
-            if(this.matrix[corner[1]][corner[0]] == this.yellow){
+            if(this.matrix[corner[1]][corner[0]] === this.yellow){
                 if(corner[0] < this.midPoint[0])
                     this.corners.LU = corner
                 else
