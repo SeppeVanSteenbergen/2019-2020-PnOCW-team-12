@@ -20,9 +20,11 @@ class CornerDetector {
 
     cornerDetection() {
         let tmpCorners = this.findCorners();
+        console.log(tmpCorners)
         this.radius = this.calcRadius(this.radiusFactor,tmpCorners);
         //returns 4 corners in relative position
         let nonPositionCorners = this.validateCorners(tmpCorners);
+        console.log(nonPositionCorners)
         this.positionCorners(nonPositionCorners);
         if (nonPositionCorners.length < 4)
             this.reconstructCorners(4 - nonPositionCorners.length);
@@ -35,9 +37,10 @@ class CornerDetector {
             let helpPoint;
             let helpCorner;
             let helpMid;
+
             //missing LU
             if (this.corners.LU == null) {
-                helpMid = this.LeftUpPoint(Reconstructor.reconstructCircleMidPoint(this.corners.RU, this.matrix, this.id, this.radius));
+                helpMid = this.LeftUpPoint(Reconstructor.reconstructCircleMidPoint(this.midPoint, this.matrix, this.id, this.radius));
                 if (this.corners.RU != null) {
                     helpPoint = this.LeftUpPoint(Reconstructor.reconstructCircle(this.corners.RU, this.matrix, this.id, this.radius));
                     helpCorner = this.corners.RU
@@ -48,7 +51,7 @@ class CornerDetector {
             }
             //missing RU
             else if (this.corners.RU == null) {
-                helpMid = this.RightUpPoint(Reconstructor.reconstructCircleMidPoint(this.corners.RU, this.matrix, this.id, this.radius));
+                helpMid = this.RightUpPoint(Reconstructor.reconstructCircleMidPoint(this.midPoint, this.matrix, this.id, this.radius));
                 if (this.corners.LU != null) {
                     helpPoint = this.RightUpPoint(Reconstructor.reconstructCircle(this.corners.LU, this.matrix, this.id, this.radius));
                     helpCorner = this.corners.LU
@@ -59,7 +62,7 @@ class CornerDetector {
             }
             //missing RD
             else if (this.corners.RD == null) {
-                helpMid = this.RightDownPoint(Reconstructor.reconstructCircleMidPoint(this.corners.RU, this.matrix, this.id, this.radius));
+                helpMid = this.RightDownPoint(Reconstructor.reconstructCircleMidPoint(this.midPoint, this.matrix, this.id, this.radius));
                 if (this.corners.RU != null) {
                     helpPoint = this.RightDownPoint(Reconstructor.reconstructCircle(this.corners.RU, this.matrix, this.id, this.radius));
                     helpCorner = this.corners.RU
@@ -70,7 +73,7 @@ class CornerDetector {
             }
             //missing LD
             else if (this.corners.LD == null) {
-                helpMid = this.LeftDownPoint(Reconstructor.reconstructCircleMidPoint(this.corners.RU, this.matrix, this.id, this.radius));
+                helpMid = this.LeftDownPoint(Reconstructor.reconstructCircleMidPoint(this.midPoint, this.matrix, this.id, this.radius));
                 if (this.corners.RD != null) {
                     helpPoint = this.LeftDownPoint(Reconstructor.reconstructCircle(this.corners.RD), this.matrix, this.id, this.radius);
                     helpCorner = this.corners.RD
@@ -79,11 +82,15 @@ class CornerDetector {
                     helpCorner = this.corners.LU
                 }
             }
+
             let helpLine1 = new Line(helpPoint, helpCorner);
             let helpLine2 = new Line(this.midPoint, helpMid);
+            console.log(helpLine1, helpLine2)
             missingPoints.push(helpLine1.calcIntersection(helpLine2, this.width, this.height))
+            console.log(missingPoints)
+
+            this.positionCorners(missingPoints)
         }
-        this.positionCorners(missingPoints)
     }
 
     LeftUpPoint(pointList) {

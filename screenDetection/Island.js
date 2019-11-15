@@ -102,7 +102,7 @@ class Island {
     let sumX = xValues.reduce((previous, current) => current += previous);
     let sumY = yValues.reduce((previous, current) => current += previous);
 
-    return [sumX / lengthX, sumY / lengthY];
+    return [Math.round(sumX / lengthX), Math.round(sumY / lengthY)];
   }
 
   cssTransMatrix(transMatrix) {

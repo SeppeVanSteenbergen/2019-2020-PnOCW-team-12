@@ -42,11 +42,10 @@ class Reconstructor {
 
     static reconstructCircle(cornerCoo, matrix, id, radius) {
         let lines = this.calcLinesCirc(cornerCoo, matrix, id, radius);
-        console.log(lines);
         let reco = [];
         let furthestPoints = this.calcTwoFurthestPoints(lines);
-        console.log(furthestPoints);
-        reco.push(furthestPoints[0], furthestPoints[1]);
+        let validatedFurthestPoints = this.validateTwoFurthestPoints(matrix, cornerCoo, furthestPoints);
+        validatedFurthestPoints.forEach(point => reco.push(point));
         let biggest;
         let biggestNb = -Infinity;
         for (let i = 0; i < lines.length; i++) {
@@ -85,7 +84,7 @@ class Reconstructor {
             let x = cornerCoo[0] + Math.floor(radius * Math.cos(theta));
             let y = cornerCoo[1] + Math.floor(radius * Math.sin(theta));
             if (newLine[newLine.length - 1] !== [x, y]) {
-                if (this.isFromIsland(x, y, matrix, id) && !this.crossesBlack(matrix, cornerCoo, [x,y])) {
+                if (this.isFromIsland(x, y, matrix, id)) {
                     white = true;
                     blackCount = 0;
                     newLine.push([x, y])
@@ -115,11 +114,21 @@ class Reconstructor {
         return furthestPoints
     }
 
-    static crossesBlack(matrix, cornerCoo, point) {
+    static validateTwoFurthestPoints(matrix, cornerCoo, points) {
+        let validatedPoints = points.slice(0, 2);
+        if (this.crossesWhite(matrix, cornerCoo, points[0])) {
+            validatedPoints.shift();
+        }
+        if (this.crossesWhite(matrix, cornerCoo, points[1])) {
+            validatedPoints.pop();
+        }
+
+        return validatedPoints;
+    }
+
+    static crossesWhite(matrix, cornerCoo, point) {
         let point1 = cornerCoo;
         let point2 = point;
-
-        console.log(point1, point2);
 
         if (point2[0] <= point1[0]) {
             [point1, point2] = [point2, point1]
