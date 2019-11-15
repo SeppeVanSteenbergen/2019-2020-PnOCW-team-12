@@ -40,7 +40,7 @@ class CornerDetector {
                     helpPoint = this.LeftUpPoint(Reconstructor.reconstructCircle(this.corners.RU, this.matrix, this.id, this.radius));
                     helpCorner = this.corners.RU
                 } else if (this.corners.LD != null) {
-                    helpPoint = this.LeftUpPoint(Reconstructor.reconstructCircle(this.mid, this.matrix, this.id, this.radius));
+                    helpPoint = this.LeftUpPoint(Reconstructor.reconstructCircle(this.midPoint, this.matrix, this.id, this.radius));
                     helpCorner = this.corners.LD
                 }
             }
