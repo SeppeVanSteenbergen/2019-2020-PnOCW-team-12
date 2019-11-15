@@ -252,7 +252,7 @@ class CornerDetector {
         for (let x = 0; x < this.width; x++) {
             let found = false;
             let tempY = [];
-            for (let y = 0; y < height; y++) {
+            for (let y = 0; y < this.height; y++) {
                 if (this.isFromIsland(x, y)) {
                     tempY.push(y);
                     found = true;
@@ -317,7 +317,7 @@ class CornerDetector {
                 corners.push([
                     medianX,
                     this.height - y - 1,
-                    this.matrix[height - y - 1][medianX]
+                    this.matrix[this.height - y - 1][medianX]
                 ]);
                 break;
             }

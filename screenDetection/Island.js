@@ -30,7 +30,7 @@ class Island {
 
     this.imgOriginal = imgOriginal;
     this.barcode = BarcodeScanner.scan(this.getScreenImg());
-    console.log(this.barcode)
+    //console.log(this.barcode)
   }
 
   isValid() {
