@@ -29,7 +29,7 @@
         this.ctx = this.canvas.getContext('2d')
       }
 
-      drawBorder(l, space) {  
+      drawBorder(l) {  
         let ctx = this.ctx
         let cornersize = this.w * 0.1;
         let h = this.h *0.1;
@@ -49,11 +49,24 @@
         ctx.fill();
       }
 
-      drawX(l) {
+      drawX(l, space) {
         let lineWidth = l
         let circleRadius = lineWidth * 1.2
 
         let ctx = this.ctx
+        ctx.lineWidth = lineWidth + 2*space
+        ctx.beginPath()
+        ctx.strokeStyle = '#ffffff'
+        ctx.moveTo(0, 0)
+        ctx.lineTo(this.w / 2, this.h / 2)
+        ctx.lineTo(this.w, 0)
+        ctx.stroke()
+        ctx.beginPath()
+        ctx.strokeStyle = '#ffffff'
+        ctx.moveTo(0, this.h)
+        ctx.lineTo(this.w / 2, this.h / 2)
+        ctx.lineTo(this.w, this.h)
+        ctx.stroke()
         ctx.lineWidth = lineWidth
         ctx.beginPath()
         ctx.strokeStyle = this.c1
