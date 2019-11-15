@@ -103,41 +103,6 @@ class Island {
     return cornerDetector.cornerDetection()
   }
 
-  calcRadius(factor) {
-    let distances = this.distToMid()
-    let i = 0;
-    while(distances[i] === null) {
-      i++
-    }
-    return distances[i]*factor;
-
-  }
-
-
-  distToMid() {
-    let corners = Object.values(this.corners);
-
-    let distances = [];
-    let midPoint = this.midPoint;
-    corners.forEach(function (corner) {
-      if (corner !== null) {
-        distances.push(Island.calcDist(corner, midPoint));
-      } else distances.push(null);
-    });
-    return distances;
-  }
-
-  static calcDist(a, b) {
-    if (b === null) return;
-    let dx = a[0] - b[0];
-    let dy = a[1] - b[1];
-    return Math.sqrt(dx * dx + dy * dy);
-  }
-
-  inRangeOf(dist, value, ratio) {
-    return Math.min(dist, value) / Math.max(dist, value) > ratio;
-  }
-
   calcMid() {
     let x_values = [];
     let y_values = [];
@@ -164,9 +129,6 @@ class Island {
     return [midx + this.minx, midy + this.miny];
   }
 
-  //searches the two corners that arent the right adjacent ones and sets them to null; TODO: efficiënter!
-
-
   cssTransMatrix(transMatrix) {
     return [transMatrix[1][1], transMatrix[2][1], 0, transMatrix[3][1],
     transMatrix[1][2], transMatrix[2][2], 0, transMatrix[3][2],
@@ -183,65 +145,6 @@ class Island {
     this.midPoint = this.calcMid();
     this.findCorners();
     //this.orientation = this.findScreenOrientation();
-  }
-
-  findScreenOrientation() {
-    //NOG LATER OP TERUG KOMEN, EERST RECONSTRUCTIE!!!
-
-    /* let radian = Math.atan(
-      (this.corners[0][0] - this.corners[3][0]) /
-        (this.corners[3][1] - this.corners[0][1])
-    );
-    let colorUp = this.findUpColor();
-    let colorLeft = this.findLeftColor();
-    if (colorUp === this.blue && colorLeft === this.green)
-      radian += Math.PI / 2.0;
-    else if (colorUp === this.green && colorLeft === this.green)
-      radian += Math.PI;
-    else if (colorUp === this.green && colorLeft === this.blue)
-      radian += (3 * Math.PI) / 2.0;
-    return (radian * 180) / Math.PI; */
-
-    switch (this.corners.length) {
-      case 4:
-        //no reconstruction needed
-        //console.log('alle 4 al gevonden');
-        break;
-
-      case 3:
-        this.reconstructTripleCorners();
-        break;
-
-      default:
-        break;
-    }
-  }
-
-  reconstructTripleCorners() {
-    //sort de 3 punten volgens x-co om inwendige hoek te bepalen
-    this.corners = this.corners.sort(function (a, b) {
-      return a[0] >= b[0];
-    });
-
-    let vec1 = [this.corners[1], this.corners[0]];
-    let vec2 = [this.corners[1], this.corners[2]];
-
-    //loodrechte rico op vec1
-    //https://gamedev.stackexchange.com/questions/70075/how-can-i-find-the-perpendicular-to-a-2d-vector
-    let m = (-vec1[1][0] - vec1[0][0]) / (vec1[1][1] - vec1[0][1]);
-
-    //spiegelmatrix over loodrechte
-    //https://yutsumura.com/the-matrix-for-the-linear-transformation-of-the-reflection-across-a-line-in-the-plane/
-    let A = math.matrix([[1 - m * m, 2 * m], [2 * m, m * m - 1]]);
-    A = math.multiply(1 / (1 + m * m), A);
-
-    let mirror = math
-      .multiply([vec2[1][0] - vec2[0][0], vec2[1][1] - vec2[0][1]], A)
-      .add(vec2[0]); //gespiegelde vec2 over loodrechte aan vec1
-
-    let corner = math.add(vec1, mirror)[1]; //reconstructie van 4de punt
-
-    this.corners.push(corner);
   }
 
   createScreen(clientInfo) {
