@@ -18,9 +18,10 @@ class Image {
     }
 
     this.setPixels(imgData.data);
-    this.qualityCheck();
     this.setCanvas(canvasName, imgData.width, imgData.height);
     this.setColorSpace(colorSpace);
+    // this.qualityCheck();
+
     if (this.canvas !== null) {
       let context = this.canvas.getContext('2d');
       context.putImageData(imgData, 0, 0);
@@ -70,8 +71,11 @@ class Image {
     }
     if(this.getColorSpace() !== 'HSLA'){
       console.error("Picture has to be in HSLA to do a quality check!")
-    } else if (ColorSpace.calcLuminance(this.pixels) < 40 || 80 < ColorSpace.calcLuminance(this.pixels)) {
-      console.error('Take a better picture');
+    } else {
+      let luminance = ColorSpace.calcLuminance(this.pixels)
+      if (luminance < 40 || luminance > 80) {
+        console.error('Take a better picture');
+      }
     }
     if(RGBA){
       ColorSpace.hslaToRgba(this.pixels)
