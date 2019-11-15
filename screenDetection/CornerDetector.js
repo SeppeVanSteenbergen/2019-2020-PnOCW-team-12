@@ -23,7 +23,7 @@ class CornerDetector {
         let nonPositionCorners = this.validateCorners(tmpCorners);
         this.positionCorners(nonPositionCorners);
         if (nonPositionCorners.length < 4)
-            this.reconstructCorners();
+            this.reconstructCorners(4 - nonPositionCorners.length);
         return this.corners
     }
 
