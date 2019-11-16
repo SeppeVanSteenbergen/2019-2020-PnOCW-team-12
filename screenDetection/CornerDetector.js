@@ -30,6 +30,8 @@ class CornerDetector {
     }
 
     reconstructCorners(missingCornersCount) {
+        console.log(missingCornersCount)
+        console.log(this.corners)
         let helpMids = Reconstructor.reconstructCircleMidPoint(this.midPoint, this.matrix, this.id, this.radius);
         for (let i = 0; i < missingCornersCount; i++) {
             let helpPoint = null;
@@ -205,6 +207,7 @@ class CornerDetector {
             // Perpendicular search
             corners = this.perpendicularSearch()
         }
+        console.log(corners)
         return corners
     }
 
