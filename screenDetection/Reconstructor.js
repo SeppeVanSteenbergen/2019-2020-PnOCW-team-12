@@ -120,18 +120,6 @@ class Reconstructor {
         return lines
     }
 
-    static oldcalcTwoFurthestPoints(lines) {
-        let furthestPoints = [null, null, -Infinity];
-        for (let i = 0; i < lines.length - 1; i++) {
-            for (let j = i + 1; j < lines.length; j++) {
-                let possibleFurthestPoints = this.calcFurthestPoints2Lines(lines[i], lines[j]);
-                if (furthestPoints[2] < possibleFurthestPoints[2])
-                    furthestPoints = possibleFurthestPoints.slice(0)
-            }
-        }
-        return furthestPoints
-    }
-
     static calcTwoFurthestPoints(lines) {
         let points = [];
         for(let i = 0; i < lines.length; i++) {
@@ -217,30 +205,7 @@ class Reconstructor {
 
         return false
     }
-
-    static calcFurthestPoints2Lines(line1, line2) {
-        let startPoint1 = line1[0];
-        let furthestPoint2 = null;
-        let furthestDistance = -Infinity;
-        for (let i = 0; i < line2.length; i++) {
-            let distance = Algebra.calcDist(startPoint1, line2[i]);
-            if (distance > furthestDistance) {
-                furthestDistance = distance;
-                furthestPoint2 = line2[i]
-            }
-        }
-        let furthestPoint1 = null;
-        furthestDistance = -Infinity;
-        for (let i = 0; i < line1.length; i++) {
-            let distance = Algebra.calcDist(furthestPoint2, line1[i]);
-            if (distance > furthestDistance) {
-                furthestDistance = distance;
-                furthestPoint1 = line1[i]
-            }
-        }
-        return [furthestPoint1, furthestPoint2, furthestDistance]
-    }
-
+    
     static calcRange(lines) {
         let minX = Infinity;
         let minXCoo;
