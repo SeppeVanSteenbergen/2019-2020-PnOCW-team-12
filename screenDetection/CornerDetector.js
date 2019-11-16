@@ -160,12 +160,38 @@ class CornerDetector {
             let corner = nPCorners[i];
             if (corner[0] <= this.midPoint[0]) {
                 if (corner[1] <= this.midPoint[1]) {
-                    this.corners.LU = corner;
-                } else this.corners.LD = corner;
+                    if (this.corners.LU === null) {
+                        this.corners.LU = corner;
+                    } else {
+                        if (this.corners.LU[0] <= corner[0]) {
+                            this.corners.RU = corner;
+                        } else [this.corners.LU, this.corners.RU] = [corner, this.corners.LU];
+                            
+                    }
+                } else if (this.corners.LD === null) {
+                    this.corners.LD = corner;
+                } else {
+                    if (this.corners.LD[1] >= corner[1]) {
+                        this.corners.LU = corner;
+                    } else [this.corners.LD, this.corners.LU] = [corner, this.corners.LD];
+                }
             } else {
                 if (corner[1] <= this.midPoint[1]) {
-                    this.corners.RU = corner;
-                } else this.corners.RD = corner;
+                    if (this.corners.RU === null) {
+                        this.corners.RU = corner;
+                    } else {
+                        if (this.corners.RU[0] >= corner[0]) {
+                            this.corners.LU = corner;
+                        } else [this.corners.RU, this.corners.LU] = [corner, this.corners.RU];
+                            
+                    }
+                } else if (this.corners.RD === null) {
+                    this.corners.RD = corner;
+                } else {
+                    if (this.corners.RD[0] >= corner[0]) {
+                        this.corners.LD = corner;
+                    } else [this.corners.RD, this.corners.LD] = [corner, this.corners.RD];
+                }
             }
         }
     }
@@ -209,7 +235,7 @@ class CornerDetector {
             // Perpendicular search
             corners = this.perpendicularSearch()
         }
-        
+
         return corners
     }
 
