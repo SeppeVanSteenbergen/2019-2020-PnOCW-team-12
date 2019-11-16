@@ -120,13 +120,34 @@ class Reconstructor {
         return lines
     }
 
-    static calcTwoFurthestPoints(lines) {
+    static oldcalcTwoFurthestPoints(lines) {
         let furthestPoints = [null, null, -Infinity];
         for (let i = 0; i < lines.length - 1; i++) {
             for (let j = i + 1; j < lines.length; j++) {
                 let possibleFurthestPoints = this.calcFurthestPoints2Lines(lines[i], lines[j]);
                 if (furthestPoints[2] < possibleFurthestPoints[2])
                     furthestPoints = possibleFurthestPoints.slice(0)
+            }
+        }
+        return furthestPoints
+    }
+
+    static calcTwoFurthestPoints(lines) {
+        let points = [];
+        for(let i = 0; i < lines.length; i++) {
+            points.push(lines[i][0]);
+            points.push(lines[i][lines[i].length-1]);
+        }
+        let furthestDist = 0;
+        let furthestPoints = [];
+        for(let i = 0; i < points.length; i++) {
+            for(let j = i+1; j < points.length; j++) {
+                let point1 = points[i];
+                let point2 = points[j];
+                let dist = Algebra.calcDist(point1,point2);
+                if(dist > furthestDist) {
+                    furthestPoints = [point1, point2, dist]
+                }
             }
         }
         return furthestPoints
