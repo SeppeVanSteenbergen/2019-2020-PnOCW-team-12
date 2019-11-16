@@ -66,9 +66,13 @@ class Reconstructor {
         let lines = this.calcLinesCirc(midPointCoo, matrix, id, radius);
         let reco = [];
         for(let i = 0; i < lines.length; i++){
-            reco.push(lines[i][Math.floor(lines[i].length / 2)])
+            let midPoint = lines[i][Math.floor(lines[i].length / 2)];
+            if (!this.crossesWhite(matrix, midPointCoo, midPoint)) {
+                reco.push(midPoint);
+            }
         }
-        return reco
+
+        return reco;
     }
 
 
