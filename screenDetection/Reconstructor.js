@@ -71,6 +71,7 @@ class Reconstructor {
         for(let i = 0; i < lines.length; i++){
             let midPoint = lines[i][Math.floor(lines[i].length / 2)];
             if (!this.crossesWhite(matrix, midPointCoo, midPoint)) {
+                console.log(midPoint)
                 reco.push(midPoint);
             }
         }
@@ -86,7 +87,19 @@ class Reconstructor {
         let lines = [];
         let newLine = [];
         let blackCount = 0;
-        for (let theta = 0; theta < 2 * Math.PI; theta += dTheta) {
+
+        // Calculate start theta
+        let theta = 0;
+        let x = cornerCoo[0] + Math.floor(radius * Math.cos(theta));
+        let y = cornerCoo[1] + Math.floor(radius * Math.sin(theta));
+        while(this.isFromIsland(x, y, matrix, id)) {
+            theta += dTheta;
+            console.log(theta)
+            x = cornerCoo[0] + Math.floor(radius * Math.cos(theta));
+            y = cornerCoo[1] + Math.floor(radius * Math.sin(theta));
+        }
+
+        for (theta; theta < theta + 2 * Math.PI; theta += dTheta) {
             let x = cornerCoo[0] + Math.floor(radius * Math.cos(theta));
             let y = cornerCoo[1] + Math.floor(radius * Math.sin(theta));
             if (newLine[newLine.length - 1] !== [x, y]) {
