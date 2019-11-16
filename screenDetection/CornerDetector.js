@@ -34,53 +34,81 @@ class CornerDetector {
     reconstructCorners(missingCornersCount) {
         let helpMids = Reconstructor.reconstructCircleMidPoint(this.midPoint, this.matrix, this.id, this.radius);
         for (let i = 0; i < missingCornersCount; i++) {
-            let helpPoint;
-            let helpCorner;
-            let helpMid;
+            let helpPoint = null;
+            let helpCorner = null;
+            let helpMid = null;
 
             //missing LU
             if (this.corners.LU == null) {
                 helpMid = this.LeftUpPoint(helpMids);
-                if (this.corners.RU != null) {
-                    helpPoint = this.LeftUpPoint(Reconstructor.reconstructCircle(this.corners.RU, this.matrix, this.id, this.radius));
-                    helpCorner = this.corners.RU
-                } else if (this.corners.LD != null) {
-                    helpPoint = this.LeftUpPoint(Reconstructor.reconstructCircle(this.midPoint, this.matrix, this.id, this.radius));
-                    helpCorner = this.corners.LD
+                if (this.corners.RU != null && helpPoint === null) {
+                    let helpPoints = Reconstructor.reconstructCircle(this.corners.RU, this.matrix, this.id, this.radius);
+                    if (helpPoints.length >= 3) {
+                        helpPoint = this.LeftUpPoint(helpPoints);
+                        helpCorner = this.corners.RU
+                    }
+                } 
+                if (this.corners.LD != null && helpPoint === null) {
+                    let helpPoints = Reconstructor.reconstructCircle(this.corners.LD, this.matrix, this.id, this.radius);
+                    if (helpPoints.length >= 3) {
+                        helpPoint = this.LeftUpPoint(helpPoints);
+                        helpCorner = this.corners.LD
+                    }
                 }
             }
             //missing RU
             else if (this.corners.RU == null) {
                 helpMid = this.RightUpPoint(helpMids);
-                if (this.corners.LU != null) {
-                    helpPoint = this.RightUpPoint(Reconstructor.reconstructCircle(this.corners.LU, this.matrix, this.id, this.radius));
-                    helpCorner = this.corners.LU
-                } else if (this.corners.RD != null) {
-                    helpPoint = this.RightUpPoint(Reconstructor.reconstructCircle(this.corners.RD, this.matrix, this.id, this.radius));
-                    helpCorner = this.corners.RD
+                if (this.corners.LU != null && helpPoint === null) {
+                    let helpPoints = Reconstructor.reconstructCircle(this.corners.LU, this.matrix, this.id, this.radius);
+                    if (helpPoints.length >= 3) {
+                        helpPoint = this.RightUpPoint(helpPoints);
+                        helpCorner = this.corners.LU
+                    }
+                } 
+                if (this.corners.RD != null && helpPoint === null) {
+                    let helpPoints = Reconstructor.reconstructCircle(this.corners.RD, this.matrix, this.id, this.radius);
+                    if (helpPoints.length >= 3) {
+                        helpPoint = this.RightUpPoint(helpPoints);
+                        helpCorner = this.corners.RD
+                    }
                 }
             }
             //missing RD
             else if (this.corners.RD == null) {
                 helpMid = this.RightDownPoint(helpMids);
-                if (this.corners.RU != null) {
-                    helpPoint = this.RightDownPoint(Reconstructor.reconstructCircle(this.corners.RU, this.matrix, this.id, this.radius));
-                    helpCorner = this.corners.RU
-                } else if (this.corners.LD != null) {
-                    helpPoint = this.RightDownPoint(Reconstructor.reconstructCircle(this.corners.LD, this.matrix, this.id, this.radius));
-                    helpCorner = this.corners.LD
+                if (this.corners.RU != null && helpPoint === null) {
+                    let helpPoints = Reconstructor.reconstructCircle(this.corners.RU, this.matrix, this.id, this.radius);
+                    if (helpPoints.length >= 3) {
+                        helpPoint = this.RightDownPoint(helpPoints);
+                        helpCorner = this.corners.RU
+                    }
+                } 
+                if (this.corners.LD != null && helpPoint === null) {
+                    let helpPoints = Reconstructor.reconstructCircle(this.corners.LD, this.matrix, this.id, this.radius);
+                    if (helpPoints.length >= 3) {
+                        helpPoint = this.RightDownPoint(helpPoints);
+                        helpCorner = this.corners.LD
+                    }
                 }
             }
             //missing LD
             else if (this.corners.LD == null) {
                 helpMid = this.LeftDownPoint(helpMids);
-                if (this.corners.RD != null) {
-                    helpPoint = this.LeftDownPoint(Reconstructor.reconstructCircle(this.corners.RD), this.matrix, this.id, this.radius);
-                    helpCorner = this.corners.RD
-                } else if (this.corners.LU != null) {
-                    helpPoint = this.LeftDownPoint(Reconstructor.reconstructCircle(this.corners.LU), this.matrix, this.id, this.radius);
-                    helpCorner = this.corners.LU
+                if (this.corners.RD != null && helpPoint === null) {
+                    let helpPoints = Reconstructor.reconstructCircle(this.corners.RD, this.matrix, this.id, this.radius);
+                    if (helpPoints.length >= 3) {
+                        helpPoint = this.LeftDownPoint(helpPoints);
+                        helpCorner = this.corners.RD
+                    }
                 }
+                if (this.corners.LU != null && helpPoint === null) {
+                    let helpPoints = Reconstructor.reconstructCircle(this.corners.LU, this.matrix, this.id, this.radius);
+                    if (helpPoints.length >= 3) {
+                        helpPoint = this.LeftDownPoint(helpPoints);
+                        helpCorner = this.corners.LU
+                    }
+                } 
             }
 
             let helpLine1 = new Line(helpPoint, helpCorner);

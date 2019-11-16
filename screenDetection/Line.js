@@ -24,8 +24,8 @@ class Line{
             b = tmp;
         }
 
-        this._a = a;
-        this._b = b;
+        this._a = a.slice(0, 2);
+        this._b = b.slice(0, 2);
 
         this.dx = b[0] - a[0];
         this.dy = b[1] - a[1];

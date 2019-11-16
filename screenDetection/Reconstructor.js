@@ -77,7 +77,6 @@ class Reconstructor {
         return reco;
     }
 
-
     static calcLinesCirc(cornerCoo, matrix, id, radius) {
         const dTheta = 0.01;
         const maxWrongPixel = 5;
