@@ -89,17 +89,16 @@ class Reconstructor {
         let blackCount = 0;
 
         // Calculate start theta
-        let theta = 0;
-        let x = cornerCoo[0] + Math.floor(radius * Math.cos(theta));
-        let y = cornerCoo[1] + Math.floor(radius * Math.sin(theta));
+        let startTheta = 0;
+        let x = cornerCoo[0] + Math.floor(radius * Math.cos(startTheta));
+        let y = cornerCoo[1] + Math.floor(radius * Math.sin(startTheta));
         while(this.isFromIsland(x, y, matrix, id)) {
-            theta += dTheta;
-            console.log(theta)
-            x = cornerCoo[0] + Math.floor(radius * Math.cos(theta));
-            y = cornerCoo[1] + Math.floor(radius * Math.sin(theta));
+            startTheta += dTheta;
+            x = cornerCoo[0] + Math.floor(radius * Math.cos(startTheta));
+            y = cornerCoo[1] + Math.floor(radius * Math.sin(startTheta));
         }
 
-        for (theta; theta < theta + 2 * Math.PI; theta += dTheta) {
+        for (let theta = startTheta; theta < startTheta + 2 * Math.PI; theta += dTheta) {
             let x = cornerCoo[0] + Math.floor(radius * Math.cos(theta));
             let y = cornerCoo[1] + Math.floor(radius * Math.sin(theta));
             if (newLine[newLine.length - 1] !== [x, y]) {
@@ -263,9 +262,11 @@ class Reconstructor {
 
     static isFromIsland(x, y, matrix, id) {
         let pixel = this.getMatrix(x, y, matrix);
+        console.log(pixel);
         return pixel >= id && pixel <= id + 2;
 
     }
+
     static getMatrix(x, y, matrix) {
         if (x < 0 || x >= matrix[0].length) return 0;
         if (y < 0 || y >= matrix.length) return 0;
