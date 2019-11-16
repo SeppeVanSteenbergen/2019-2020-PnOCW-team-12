@@ -72,8 +72,7 @@ class Reconstructor {
                 reco.push(midPoint);
             }
         }
-        console.log("reconstructCircleMidpoint");
-        console.log(reco);
+        
         return reco;
     }
 
