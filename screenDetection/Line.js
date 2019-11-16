@@ -9,6 +9,14 @@ class Line{
      * @param {array} b point b
      */
     constructor(a, b){
+
+        if(a === null){
+            console.error("point a is null")
+        }
+        if(b === null){
+            console.error("point b is null")
+        }
+
         let tmp = null;
         if(a[0] > b[0]){
             tmp = a;
