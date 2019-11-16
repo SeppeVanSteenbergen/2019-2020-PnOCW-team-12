@@ -119,34 +119,34 @@ class CornerDetector {
 
     LeftUpPoint(pointList) {
         pointList.sort(function(a,b) {
-            if (a[0] - b[0] <= 0 && a[1] - b[1] <= 0) {
-                return -1;
-            } else return 1;
+            let diffs = [a[0] - b[0], a[1] - b[1]];
+            diffs.sort(function(a,b) {return Math.abs(b) - Math.abs(a)});
+            return diffs[0] <= 0 ? -1 : 1;
         });
         return pointList[0];
     }
 
     RightUpPoint(pointList) {
         pointList.sort(function(a,b) {
-            if (b[0] - a[0] <= 0 && a[1] - b[1] <= 0) {
-                return -1;
-            } else return 1;
+            let diffs = [b[0] - a[0], a[1] - b[1]];
+            diffs.sort(function(a,b) {return Math.abs(b) - Math.abs(a)});
+            return diffs[0] <= 0 ? -1 : 1;
         });
         return pointList[0]
     }
     LeftDownPoint(pointList) {
         pointList.sort(function(a,b) {
-            if (a[0] - b[0] <= 0 && b[1] - a[1] <= 0) {
-                return -1;
-            } else return 1;
+            let diffs = [a[0] - b[0], b[1] - a[1]];
+            diffs.sort(function(a,b) {return Math.abs(b) - Math.abs(a)});
+            return diffs[0] <= 0 ? -1 : 1;
         });
         return pointList[0]
     }
     RightDownPoint(pointList) {
         pointList.sort(function(a,b) {
-            if (b[0] - a[0] <= 0 && b[1] - a[1] <= 0) {
-                return -1;
-            } else return 1;
+            let diffs = [b[0] - a[0], b[1] - a[1]];
+            diffs.sort(function(a,b) {return Math.abs(b) - Math.abs(a)});
+            return diffs[0] <= 0 ? -1 : 1;
         });
         return pointList[0]
     }
