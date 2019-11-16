@@ -1,7 +1,5 @@
 class Image {
 
-  static offSet = 3;
-
   constructor(imgData, canvasName, colorSpace, width, height, clientInfo) {
 
     this.clientInfo = clientInfo;
@@ -14,6 +12,7 @@ class Image {
     this.width = width;
     this.height = height;
     this.islands = [];
+    this.offSet = 3;
 
     if (colorSpace === 'RGBA'){
       this.imgOriginal = imgData
@@ -42,7 +41,7 @@ class Image {
     ColorSpace.rgbaToHsla(this.pixels)
     this.setColorSpace("HSLA")
     this.createBigMask();
-    this.createOffset(Image.offSet);
+    this.createOffset(this.offSet);
     this.createScreens();
     this.createPictureCanvas(300, 500); //TODO: param meegeven
     this.calcRelativeScreens(); //untested

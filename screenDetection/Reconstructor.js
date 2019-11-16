@@ -139,12 +139,12 @@ class Reconstructor {
             }
         }
 
-        let validatedPoints = [];
-        if (!this.crossesWhite(matrix, cornerCoo, point1)) {
-            validatedPoints.push(point1);
+        let validatedPoints = points.slice(0, 2);
+        if (this.crossesWhite(matrix, cornerCoo, point1)) {
+            validatedPoints.shift();
         }
-        if (!this.crossesWhite(matrix, cornerCoo, point2)) {
-            validatedPoints.push(point2);
+        if (this.crossesWhite(matrix, cornerCoo, point2)) {
+            validatedPoints.pop();
         }
 
         return validatedPoints;
