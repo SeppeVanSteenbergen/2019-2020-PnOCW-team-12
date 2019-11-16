@@ -41,9 +41,9 @@ class Screen {
    */
   findClientCode(img) {
     let barcode = BarcodeScanner.scan(img, 30);
-    let barcode2 = BarcodeScanner.scan2(img, 30)
+    // let barcode2 = BarcodeScanner.scan2(img, 30)
     console.log('barcode 1: ' + barcode);
-    console.log('barcode 2: ' + barcode2)
+    // console.log('barcode 2: ' + barcode2)
     if(barcode !== null) {
       return PermutationConverter.decode(barcode);
     }
@@ -144,11 +144,7 @@ class Screen {
   }
 
   transform(srcPX) {
-    let newCoord = Algebra.dotMMsmall(this.transMatrix, [
-      [srcPX[0]],
-      [srcPX[1]],
-      [1]
-    ]);
+    let newCoord = Algebra.dotMMsmall(this.transMatrix, [[srcPX[0]], [srcPX[1]], [1]]);
     let x = Math.round(newCoord[0] / newCoord[2]);
     let y = Math.round(newCoord[1] / newCoord[2]);
 
