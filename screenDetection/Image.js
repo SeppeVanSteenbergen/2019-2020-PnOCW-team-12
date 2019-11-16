@@ -1,10 +1,12 @@
 class Image {
 
+  static offSet = 3;
+
   constructor(imgData, canvasName, colorSpace, width, height, clientInfo) {
 
     this.clientInfo = clientInfo;
 
-    this.sensitivity = 12;
+
     this.colorSpaces = ['RGBA', 'HSLA', 'BW'];
     this.islandID = 4; //jumps per three so we can save green and blue within an island.
     this.screens = [];
@@ -40,7 +42,7 @@ class Image {
     ColorSpace.rgbaToHsla(this.pixels)
     this.setColorSpace("HSLA")
     this.createBigMask();
-    this.createOffset(3);
+    this.createOffset(Image.offSet);
     this.createScreens();
     this.createPictureCanvas(300, 500); //TODO: param meegeven
     this.calcRelativeScreens(); //untested
