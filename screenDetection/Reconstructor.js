@@ -149,24 +149,38 @@ class Reconstructor {
 
         let point1 = points[0];
         let point2 = points[1];
+        let line1;
+        let line2;
 
-        for(let i = 0; i < lines.length; i++) {
+        for (let i = 0; i < lines.length; i++) {
             if(lines[i].includes(point1)) {
-                point1 = lines[i][Math.floor(lines[i].length / 2)];
+                if (lines[i][0] === point1) {
+                    line1 = lines[i];
+                } else line1 = lines[i].reverse();
             }
         }
-        for(let i = 0; i < lines.length; i++) {
+        for (let i = 0; i < lines.length; i++) {
             if(lines[i].includes(point2)) {
-                point2 = lines[i][Math.floor(lines[i].length / 2)];
+                if (lines[i][0] === point1) {
+                    line2 = lines[i];
+                } else line2 = lines[i].reverse();
             }
         }
-
-        let validatedPoints = points.slice(0, 2);
-        if (this.crossesWhite(matrix, cornerCoo, point1)) {
-            validatedPoints.shift();
+        
+        let validatedPoints = [];
+        for (let i = 0; i < line1.length; i++) {
+            point1 = line1[i];
+            if (!this.crossesWhite(matrix, cornerCoo, point1)) {
+                validatedPoints.push(point1);
+                break;
+            }
         }
-        if (this.crossesWhite(matrix, cornerCoo, point2)) {
-            validatedPoints.pop();
+        for (let i = 0; i < line2.length; i++) {
+            point2 = line2[i];
+            if (!this.crossesWhite(matrix, cornerCoo, point2)) {
+                validatedPoints.push(point2);
+                break;
+            }
         }
 
         return validatedPoints;
@@ -249,7 +263,6 @@ class Reconstructor {
 
     static isFromIsland(x, y, matrix, id) {
         let pixel = this.getMatrix(x, y, matrix);
-        console.log(pixel);
         return pixel >= id && pixel <= id + 2;
 
     }
