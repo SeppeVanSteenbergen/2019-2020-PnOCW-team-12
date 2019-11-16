@@ -13,18 +13,18 @@ class CornerDetector {
         this.height = this.matrix.length;
         this.width = this.matrix[0].length;
         this.radiusFactor = 0.25;
-        this.radius = 0 //will be set later
-        this.yellow = id
+        this.radius = 0; //will be set later
+        this.yellow = id;
         this.pink = id + 1
     }
 
     cornerDetection() {
         let tmpCorners = this.findCorners();
-        console.log(tmpCorners)
+        console.log(tmpCorners);
         this.radius = this.calcRadius(this.radiusFactor,tmpCorners);
         //returns 4 corners in relative position
         let nonPositionCorners = this.validateCorners(tmpCorners);
-        console.log(nonPositionCorners)
+        console.log(nonPositionCorners);
         this.positionCorners(nonPositionCorners);
         if (nonPositionCorners.length < 4)
             this.reconstructCorners(4 - nonPositionCorners.length);
@@ -85,44 +85,44 @@ class CornerDetector {
 
             let helpLine1 = new Line(helpPoint, helpCorner);
             let helpLine2 = new Line(this.midPoint, helpMid);
-            console.log(helpLine1, helpLine2)
-            missingPoints.push(helpLine1.calcIntersection(helpLine2, this.width, this.height))
-            console.log(missingPoints)
+            console.log(helpLine1, helpLine2);
+            missingPoints.push(helpLine1.calcIntersection(helpLine2, this.width, this.height));
+            console.log(missingPoints);
 
             this.positionCorners(missingPoints)
         }
     }
 
     LeftUpPoint(pointList) {
-        pointList.sort(function(a, b){if(a[0]-b[0] == 0){return a[1]-b[1]} return a[0] - b[0]});
+        pointList.sort(function(a, b){if(a[0]-b[0] === 0){return a[1]-b[1]} return a[0] - b[0]});
         return pointList[0]
     }
 
     RightUpPoint(pointList) {
-        pointList.sort(function(a, b){if(a[0]-b[0] == 0){return a[1]-b[1]} return b[0] - a[0]});
+        pointList.sort(function(a, b){if(a[0]-b[0] === 0){return a[1]-b[1]} return b[0] - a[0]});
         return pointList[0]
     }
     LeftDownPoint(pointList) {
-        pointList.sort(function(a, b){if(a[0]-b[0] == 0){return b[1]-a[1]} return a[0] - b[0]});
+        pointList.sort(function(a, b){if(a[0]-b[0] === 0){return b[1]-a[1]} return a[0] - b[0]});
         return pointList[0]
     }
     RightDownPoint(pointList) {
-        pointList.sort(function(a, b){if(a[0]-b[0] == 0){return b[1]-a[1]} return b[0] - a[0]});
+        pointList.sort(function(a, b){if(a[0]-b[0] === 0){return b[1]-a[1]} return b[0] - a[0]});
         return pointList[0]
     }
 
 
     positionCorners(nPCorners) {
         for (let i = 0; i < nPCorners.length; i++) {
-            let corner = nPCorners[i]
+            let corner = nPCorners[i];
             if(this.matrix[corner[1]][corner[0]] === this.yellow){
                 if(corner[0] < this.midPoint[0])
-                    this.corners.LU = corner
+                    this.corners.LU = corner;
                 else
                     this.corners.RU = corner
             } else {
                 if(corner[0] < this.midPoint[0])
-                    this.corners.LD = corner
+                    this.corners.LD = corner;
                 else
                     this.corners.RD = corner
             }
@@ -372,8 +372,8 @@ class CornerDetector {
     }
 
     getMatrix(x, y) {
-        if (x < 0 || x >= this.matrix[0].length) return 0;
-        if (y < 0 || y >= this.matrix.length) return 0;
+        if (x < 0 || x >= this.matrix[0].length) return -1;
+        if (y < 0 || y >= this.matrix.length) return -1;
         return this.matrix[y][x];
     }
 

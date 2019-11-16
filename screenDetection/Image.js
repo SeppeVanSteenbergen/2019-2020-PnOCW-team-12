@@ -413,10 +413,8 @@ class Image {
   }
 
   getMatrix(x, y) {
-    if (x < 0) x = 0;
-    else if (x >= this.getWidth()) x = this.getWidth() - 1;
-    if (y < 0) y = 0;
-    else if (y >= this.getHeight()) y = this.getHeight() - 1;
+    if (x < 0 || x >= this.width) return -1;
+    if (y < 0 || y >= this.height) return -1;
     return this.matrix[y][x];
   }
 

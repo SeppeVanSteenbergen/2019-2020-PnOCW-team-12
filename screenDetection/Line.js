@@ -22,6 +22,8 @@ class Line{
         this.dx = b[0] - a[0];
         this.dy = b[1] - a[1];
 
+        this.thres = 5;
+
     }
 
     get a(){
@@ -101,12 +103,16 @@ class Line{
             intersection = [Math.floor(x), Math.floor(y)];
         }
 
-        if(intersection != null && (width != 0 || height != 0)){
-            if(intersection[0] < 0 || intersection[0] > width || intersection[1] < 0 || intersection[1] > height){
+        if(intersection != null && (width !== 0 || height !== 0)){
+            if(intersection[0] + this.thres < 0 || intersection[0] - this.thres > width || intersection[1] + this.thres < 0 || intersection[1] - this.thres > height){
                 intersection = null;
+            } else {
+                if (intersection[0] < 0) intersection[0] = 0;
+                else if (intersection[0] > width) intersection[0] = width;
+                if (intersection[1] < 0) intersection[1] = 0;
+                else if (intersection[0] > height) intersection[0] = height;
             }
         }
-
         return intersection;
     }
 

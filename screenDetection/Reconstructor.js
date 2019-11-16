@@ -62,6 +62,7 @@ class Reconstructor {
         return reco
     }
 
+    //returns list of 4 points
     static reconstructCircleMidPoint(midPointCoo, matrix, id, radius){
         let lines = this.calcLinesCirc(midPointCoo, matrix, id, radius);
         let reco = [];
@@ -71,7 +72,8 @@ class Reconstructor {
                 reco.push(midPoint);
             }
         }
-
+        console.log("reconstructCircleMidpoint");
+        console.log(reco);
         return reco;
     }
 
@@ -234,8 +236,8 @@ class Reconstructor {
 
     }
     static getMatrix(x, y, matrix) {
-        if (x < 0 || x >= matrix[0].length) return 0;
-        if (y < 0 || y >= matrix.length) return 0;
+        if (x < 0 || x >= matrix[0].length) return -1;
+        if (y < 0 || y >= matrix.length) return -1;
         return matrix[y][x]
     }
 }
