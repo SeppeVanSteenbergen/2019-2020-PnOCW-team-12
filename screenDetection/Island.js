@@ -74,10 +74,10 @@ class Island {
   findCorners() {
     let cornerDetector = new CornerDetector(this.screenMatrix, this.midPoint, this.id)
     let detectedCorners = cornerDetector.cornerDetection()
-    //this.corners.LU = [detectedCorners.LU[0], detectedCorners.LU[1]]
-    //this.corners.LD = [detectedCorners.LD[0], detectedCorners.LD[1]]
-    //this.corners.RU = [detectedCorners.RU[0], detectedCorners.RU[1]]
-    //this.corners.RD = [detectedCorners.RD[0], detectedCorners.RD[1]]
+    this.corners.LU = [detectedCorners.LU[0], detectedCorners.LU[1]]
+    this.corners.LD = [detectedCorners.LD[0], detectedCorners.LD[1]]
+    this.corners.RU = [detectedCorners.RU[0], detectedCorners.RU[1]]
+    this.corners.RD = [detectedCorners.RD[0], detectedCorners.RD[1]]
   }
 
   calcMid() {
@@ -153,8 +153,8 @@ class Island {
   }
 
   getMatrix(x, y) {
-    if (x < 0 || x >= this.width) return -1;
-    if (y < 0 || y >= this.height) return -1;
+    if (x < 0 || x >= this.width) return 0;
+    if (y < 0 || y >= this.height) return 0;
     return this.screenMatrix[y][x];
   }
 }

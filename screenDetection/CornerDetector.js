@@ -89,8 +89,8 @@ class CornerDetector {
             missingPoints.push(helpLine1.calcIntersection(helpLine2, this.width, this.height));
             console.log(missingPoints);
 
-            this.positionCorners(missingPoints)
         }
+        this.positionCorners(missingPoints)
     }
 
     LeftUpPoint(pointList) {
@@ -115,7 +115,7 @@ class CornerDetector {
     positionCorners(nPCorners) {
         for (let i = 0; i < nPCorners.length; i++) {
             let corner = nPCorners[i];
-            if(this.matrix[corner[1]][corner[0]] === this.yellow){
+            if(corner[2] === this.yellow){
                 if(corner[0] < this.midPoint[0])
                     this.corners.LU = corner;
                 else
@@ -372,8 +372,8 @@ class CornerDetector {
     }
 
     getMatrix(x, y) {
-        if (x < 0 || x >= this.matrix[0].length) return -1;
-        if (y < 0 || y >= this.matrix.length) return -1;
+        if (x < 0 || x >= this.matrix[0].length) return 0;
+        if (y < 0 || y >= this.matrix.length) return 0;
         return this.matrix[y][x];
     }
 
