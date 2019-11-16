@@ -41,10 +41,12 @@ class Reconstructor {
     }
 
     static reconstructCircle(cornerCoo, matrix, id, radius) {
+        console.log(cornerCoo)
         let lines = this.calcLinesCirc(cornerCoo, matrix, id, radius);
         let reco = [];
         let furthestPoints = this.calcTwoFurthestPoints(lines);
         let validatedFurthestPoints = this.validateTwoFurthestPoints(matrix, cornerCoo, furthestPoints);
+        console.log(validatedFurthestPoints)
         validatedFurthestPoints.forEach(point => reco.push(point));
         let biggest;
         let biggestNb = -Infinity;
@@ -147,7 +149,7 @@ class Reconstructor {
 
         if (isFinite(a)) {
             for (let x = point1[0]; x <= point2[0]; x++) {
-                let y = Math.floor(a * x + b);
+                let y = Math.round(a * x + b);
                 let id = this.getMatrix(x, y, matrix);
                 if (id === 0) {
                     return true
