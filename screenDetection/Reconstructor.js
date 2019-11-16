@@ -134,7 +134,8 @@ class Reconstructor {
                 let point2 = points[j];
                 let dist = Algebra.calcDist(point1,point2);
                 if(dist > furthestDist) {
-                    furthestPoints = [point1, point2, dist]
+                    furthestPoints = [point1, point2, dist];
+                    furthestDist = dist;
                 }
             }
         }
