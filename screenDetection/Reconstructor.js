@@ -121,6 +121,10 @@ class Reconstructor {
     }
 
     static validateTwoFurthestPoints(matrix, cornerCoo, points) {
+        if (!isFinite(points[2])) {
+            return [];
+        }
+
         let validatedPoints = points.slice(0, 2);
         if (this.crossesWhite(matrix, cornerCoo, points[0])) {
             validatedPoints.shift();

@@ -32,7 +32,7 @@ class CornerDetector {
     }
 
     reconstructCorners(missingCornersCount) {
-        let missingPoints = [];
+        let helpMids = Reconstructor.reconstructCircleMidPoint(this.midPoint, this.matrix, this.id, this.radius);
         for (let i = 0; i < missingCornersCount; i++) {
             let helpPoint;
             let helpCorner;
@@ -40,7 +40,7 @@ class CornerDetector {
 
             //missing LU
             if (this.corners.LU == null) {
-                helpMid = this.LeftUpPoint(Reconstructor.reconstructCircleMidPoint(this.midPoint, this.matrix, this.id, this.radius));
+                helpMid = this.LeftUpPoint(helpMids);
                 if (this.corners.RU != null) {
                     helpPoint = this.LeftUpPoint(Reconstructor.reconstructCircle(this.corners.RU, this.matrix, this.id, this.radius));
                     helpCorner = this.corners.RU
@@ -51,7 +51,7 @@ class CornerDetector {
             }
             //missing RU
             else if (this.corners.RU == null) {
-                helpMid = this.RightUpPoint(Reconstructor.reconstructCircleMidPoint(this.midPoint, this.matrix, this.id, this.radius));
+                helpMid = this.RightUpPoint(helpMids);
                 if (this.corners.LU != null) {
                     helpPoint = this.RightUpPoint(Reconstructor.reconstructCircle(this.corners.LU, this.matrix, this.id, this.radius));
                     helpCorner = this.corners.LU
@@ -62,7 +62,7 @@ class CornerDetector {
             }
             //missing RD
             else if (this.corners.RD == null) {
-                helpMid = this.RightDownPoint(Reconstructor.reconstructCircleMidPoint(this.midPoint, this.matrix, this.id, this.radius));
+                helpMid = this.RightDownPoint(helpMids);
                 if (this.corners.RU != null) {
                     helpPoint = this.RightDownPoint(Reconstructor.reconstructCircle(this.corners.RU, this.matrix, this.id, this.radius));
                     helpCorner = this.corners.RU
@@ -73,7 +73,7 @@ class CornerDetector {
             }
             //missing LD
             else if (this.corners.LD == null) {
-                helpMid = this.LeftDownPoint(Reconstructor.reconstructCircleMidPoint(this.midPoint, this.matrix, this.id, this.radius));
+                helpMid = this.LeftDownPoint(helpMids);
                 if (this.corners.RD != null) {
                     helpPoint = this.LeftDownPoint(Reconstructor.reconstructCircle(this.corners.RD), this.matrix, this.id, this.radius);
                     helpCorner = this.corners.RD
@@ -86,47 +86,62 @@ class CornerDetector {
             let helpLine1 = new Line(helpPoint, helpCorner);
             let helpLine2 = new Line(this.midPoint, helpMid);
             console.log(helpLine1, helpLine2);
-            missingPoints.push(helpLine1.calcIntersection(helpLine2, this.width, this.height));
-            console.log(missingPoints);
+            let missingPoint = helpLine1.calcIntersection(helpLine2, this.width, this.height);
+            console.log(missingPoint);
 
-        }
-        this.positionCorners(missingPoints)
+            this.positionCorners([missingPoint]);
+        } 
     }
 
     LeftUpPoint(pointList) {
-        pointList.sort(function(a, b){if(a[0]-b[0] === 0){return a[1]-b[1]} return a[0] - b[0]});
-        return pointList[0]
+        pointList.sort(function(a,b) {
+            if (a[0] - b[0] <= 0 && a[1] - b[1] <= 0) {
+                return -1;
+            } else return 1;
+        });
+        return pointList[0];
     }
 
     RightUpPoint(pointList) {
-        pointList.sort(function(a, b){if(a[0]-b[0] === 0){return a[1]-b[1]} return b[0] - a[0]});
+        pointList.sort(function(a,b) {
+            if (b[0] - a[0] <= 0 && a[1] - b[1] <= 0) {
+                return -1;
+            } else return 1;
+        });
         return pointList[0]
     }
     LeftDownPoint(pointList) {
-        pointList.sort(function(a, b){if(a[0]-b[0] === 0){return b[1]-a[1]} return a[0] - b[0]});
+        pointList.sort(function(a,b) {
+            if (a[0] - b[0] <= 0 && b[1] - a[1] <= 0) {
+                return -1;
+            } else return 1;
+        });
         return pointList[0]
     }
     RightDownPoint(pointList) {
-        pointList.sort(function(a, b){if(a[0]-b[0] === 0){return b[1]-a[1]} return b[0] - a[0]});
+        pointList.sort(function(a,b) {
+            if (b[0] - a[0] <= 0 && b[1] - a[1] <= 0) {
+                return -1;
+            } else return 1;
+        });
         return pointList[0]
     }
-
 
     positionCorners(nPCorners) {
         for (let i = 0; i < nPCorners.length; i++) {
             let corner = nPCorners[i];
-            if(corner[2] === this.yellow){
-                if(corner[0] < this.midPoint[0])
+            if (corner[0] <= this.midPoint[0]) {
+                if (corner[1] <= this.midPoint[1]) {
                     this.corners.LU = corner;
-                else
-                    this.corners.RU = corner
+                } else this.corners.LD = corner;
             } else {
-                if(corner[0] < this.midPoint[0])
-                    this.corners.LD = corner;
-                else
-                    this.corners.RD = corner
+                if (corner[1] <= this.midPoint[1]) {
+                    this.corners.RU = corner;
+                } else this.corners.RD = corner;
             }
         }
+
+        console.log(this.corners)
         //TODO: als roos vanboven is moeten left en right nog worden omgewisseld!
     }
 
