@@ -55,7 +55,6 @@ class CornerDetector {
                     let helpPoints = Reconstructor.reconstructCircle(this.corners.RU, this.matrix, this.id, this.radius);
                     if (helpPoints.length >= 3) {
                         helpPoints = helpPoints.slice(0, 2);
-                        console.log(helpPoints);
                         helpPoint = this.findClosestPointToOtherPoint(helpPoints, helpMid);
                         helpCorner = this.corners.RU;
                     }
@@ -63,7 +62,7 @@ class CornerDetector {
                 if (this.corners.LD !== null && helpPoint === null) {
                     let helpPoints = Reconstructor.reconstructCircle(this.corners.LD, this.matrix, this.id, this.radius);
                     if (helpPoints.length >= 3) {
-                        helpPoints.slice(0, 2);
+                        helpPoints = helpPoints.slice(0, 2);
                         helpPoint = this.findClosestPointToOtherPoint(helpPoints, helpMid);
                         helpCorner = this.corners.LD;
                     }
@@ -75,7 +74,7 @@ class CornerDetector {
                 if (this.corners.LU !== null && helpPoint === null) {
                     let helpPoints = Reconstructor.reconstructCircle(this.corners.LU, this.matrix, this.id, this.radius);
                     if (helpPoints.length >= 3) {
-                        helpPoints.slice(0, 2);
+                        helpPoints = helpPoints.slice(0, 2);
                         helpPoint = this.findClosestPointToOtherPoint(helpPoints, helpMid);
                         helpCorner = this.corners.LU;
                     }
@@ -83,7 +82,7 @@ class CornerDetector {
                 if (this.corners.RD !== null && helpPoint === null) {
                     let helpPoints = Reconstructor.reconstructCircle(this.corners.RD, this.matrix, this.id, this.radius);
                     if (helpPoints.length >= 3) {
-                        helpPoints.slice(0, 2);
+                        helpPoints = helpPoints.slice(0, 2);
                         helpPoint = this.findClosestPointToOtherPoint(helpPoints, helpMid);
                         helpCorner = this.corners.RD;
                     }
@@ -95,7 +94,7 @@ class CornerDetector {
                 if (this.corners.RU != null && helpPoint === null) {
                     let helpPoints = Reconstructor.reconstructCircle(this.corners.RU, this.matrix, this.id, this.radius);
                     if (helpPoints.length >= 3) {
-                        helpPoints.slice(0, 2);
+                        helpPoints = helpPoints.slice(0, 2);
                         helpPoint = this.findClosestPointToOtherPoint(helpPoints, helpMid);
                         helpCorner = this.corners.RU;
                     }
@@ -103,7 +102,7 @@ class CornerDetector {
                 if (this.corners.LD !== null && helpPoint === null) {
                     let helpPoints = Reconstructor.reconstructCircle(this.corners.LD, this.matrix, this.id, this.radius);
                     if (helpPoints.length >= 3) {
-                        helpPoints.slice(0, 2);
+                        helpPoints = helpPoints.slice(0, 2);
                         helpPoint = this.findClosestPointToOtherPoint(helpPoints, helpMid);
                         helpCorner = this.corners.LD;
                     }
@@ -115,7 +114,7 @@ class CornerDetector {
                 if (this.corners.RD !== null && helpPoint === null) {
                     let helpPoints = Reconstructor.reconstructCircle(this.corners.RD, this.matrix, this.id, this.radius);
                     if (helpPoints.length >= 3) {
-                        helpPoints.slice(0, 2);
+                        helpPoints = helpPoints.slice(0, 2);
                         helpPoint = this.findClosestPointToOtherPoint(helpPoints, helpMid);
                         helpCorner = this.corners.RD;
                     }
@@ -123,7 +122,7 @@ class CornerDetector {
                 if (this.corners.LU !== null && helpPoint === null) {
                     let helpPoints = Reconstructor.reconstructCircle(this.corners.LU, this.matrix, this.id, this.radius);
                     if (helpPoints.length >= 3) {
-                        helpPoints.slice(0, 2);
+                        helpPoints = helpPoints.slice(0, 2);
                         helpPoint = this.findClosestPointToOtherPoint(helpPoints, helpMid);
                         helpCorner = this.corners.LU;
                     }
