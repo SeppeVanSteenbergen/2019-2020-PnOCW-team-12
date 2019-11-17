@@ -434,8 +434,8 @@ class Image {
     //     [island.minx, island.miny],
     //     [island.maxx, island.maxy]
     // )
-    this.drawer.drawCorners(island);
     this.drawer.drawMid(island);
+    this.drawer.drawCorners(island);
   }
 
   /**
