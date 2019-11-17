@@ -119,11 +119,18 @@ class Island {
   finishIsland() {
     this.midPoint = this.calcMid();
     this.findCorners();
+    if (this.islandIsFlipped()) {
+      this.barcode = this.barcode.toString().split("").reverse().join("");
+    }
     // this.orientation = this.findScreenOrientation();
     this.localToWorld();
     console.log(this.barcode);
     console.log(this.midPoint, this.corners);
     // console.log(this.orientation);
+  }
+
+  islandIsFlipped() {
+    return this.corners.RU[2] === this.pink;
   }
 
   localToWorld() {
