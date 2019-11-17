@@ -24,7 +24,10 @@ class CornerDetector {
         this.radius = this.calcRadius(this.radiusFactor,tmpCorners);
         //returns 4 corners in relative position
         let nonPositionCorners = this.validateCorners(tmpCorners);
-        this.positionCorners(nonPositionCorners);
+        this.corners = this.orderCorners(nonPositionCorners);
+        nonPositionCorners = nonPositionCorners.filter(function(point) {
+            return point != null;
+        });
         if (nonPositionCorners.length < 4)
             this.reconstructCorners(4 - nonPositionCorners.length);
         return this.corners
@@ -161,52 +164,30 @@ class CornerDetector {
     //     });
     // }
 
-    orderCorners(pointList) {
-        let cornerDict = {
-            LU: null,
-            RU: null,
-            RD: null,
-            LD: null
-        };
+    isValidOrder(pointList) {
+        let LU = pointList[0];
+        let RU = pointList[1];
 
+        return (
+            (LU === null || (LU[0] <= this.midPoint[0] && LU[1] <= this.midPoint[1])) &&
+            (RU === null || (RU[0] <= this.midPoint[0] && RU[1] <= this.midPoint[1]))
+        );
+    }
+
+    orderCorners(pointList) {
         for (let i = 0; i < pointList.length; i++) {
-            let corner = pointList[i];
-            if (corner[0] <= this.midPoint[0]) {
-                if (corner[1] <= this.midPoint[1]) {
-                    if (cornerDict.LU === null) {
-                        cornerDict.LU = corner;
-                    } else {
-                        if (cornerDict.LU[0] <= corner[0]) {
-                            cornerDict.RU = corner;
-                        } else [cornerDict.LU, cornerDict.RU] = [corner, cornerDict.LU];     
-                    }
-                } else if (cornerDict.LD === null) {
-                    cornerDict.LD = corner;
-                } else {
-                    if (cornerDict.LD[1] >= corner[1]) {
-                        cornerDict.LU = corner;
-                    } else [cornerDict.LD, cornerDict.LU] = [corner, cornerDict.LD];
-                }
-            } else {
-                if (corner[1] <= this.midPoint[1]) {
-                    if (cornerDict.RU === null) {
-                        cornerDict.RU = corner;
-                    } else {
-                        if (cornerDict.RU[0] >= corner[0]) {
-                            cornerDict.LU = corner;
-                        } else [cornerDict.RU, cornerDict.LU] = [corner, cornerDict.RU];
-                    }
-                } else if (cornerDict.RD === null) {
-                    cornerDict.RD = corner;
-                } else {
-                    if (cornerDict.RD[0] >= corner[0]) {
-                        cornerDict.LD = corner;
-                    } else [cornerDict.RD, cornerDict.LD] = [corner, cornerDict.RD];
-                }
+            if (this.isValidOrder(pointList)) {
+                break;
             }
+            pointList.push(pointList.shift());
         }
 
-        return cornerDict;
+        return ({
+            LU: pointList[0],
+            RU: pointList[1],
+            RD: pointList[2],
+            LD: pointList[3]
+        });
     }
 
     findHelpPoint(helpPoints, helpCorner, otherCorner) {
@@ -477,6 +458,7 @@ class CornerDetector {
             let tmpCorner = tmpCorners[c];
             if(Reconstructor.reconstructCircle([tmpCorner[0], tmpCorner[1]],this.matrix, this.id, this.radius).length >= 3)
                 validCorners.push(tmpCorner)
+            else validCorners.push(null);
         }
         return validCorners
     }

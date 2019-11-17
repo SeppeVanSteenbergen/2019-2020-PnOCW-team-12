@@ -1,8 +1,9 @@
 class Screen {
-  constructor(corners, transMatrix, midPoint, clientInfo, screenImgOriginal) {
+  constructor(corners, orientation, transMatrix, midPoint, clientInfo, screenImgOriginal) {
     this.corners = corners;
     this.relativeCorners = corners;
     
+    this.orientation = orientation
     this.transMatrix = transMatrix;
     this.midPoint = midPoint;
     this.clientInfo = clientInfo;
