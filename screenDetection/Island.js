@@ -6,8 +6,7 @@ class Island {
    * @param {int} id
    * @param imgOriginal
    */
-  constructor(leftUpperCoo, rightBottomCoo, id, imgOriginal) {
-    this.screenMatrix = [];
+  constructor(leftUpperCoo, rightBottomCoo, id, imgOriginal, matrix) {
 
     // coordinates seen from original matrix
     this.corners = {
@@ -23,17 +22,20 @@ class Island {
     this.miny = leftUpperCoo[1];
     this.maxy = rightBottomCoo[1];
 
+    this.setScreenMatrix(matrix);
+
     this.id = id;
     this.yellow = id;
     this.pink = id + 1;
     this.circle = id + 2;
 
     this.imgOriginal = imgOriginal;
+    this.midPoint = this.calcMid();
     this.barcode = BarcodeScanner.scan(this.getScreenImg());
   }
 
   isValid() {
-    return this.calcMid() !== null && this.barcode !== 0;
+    return this.midPoint !== null && this.barcode !== 0;
   }
 
   getScreenImg() {
@@ -92,16 +94,55 @@ class Island {
       }
     }
 
-    let lengthX = xValues.length;
-    let lengthY = yValues.length;
-    if (lengthX === 0 || lengthY === 0) {
+    if (xValues.length === 0 || yValues.length === 0) {
       return null;
     }
 
-    let sumX = xValues.reduce((previous, current) => current += previous);
-    let sumY = yValues.reduce((previous, current) => current += previous);
+    xValues = Island.filterPoints(xValues)
+    yValues = Island.filterPoints(yValues);
 
-    return [Math.round(sumX / lengthX), Math.round(sumY / lengthY)];
+    return [xValues[Math.round(xValues.length / 2)], yValues[Math.round(yValues.length / 2)]];
+  }
+
+  static filterPoints(input){
+    if (input.length <= 3) {
+      return input;
+    }
+
+    let values = input.sort(function (a, b) {
+      return a > b;
+    });
+
+    let slices = [];
+    let prev = values[0]
+    for (let i = 0; i < values.length; i++) {
+      const v = values[i];
+
+      if (v - prev > 3) {
+        slices.push(i);
+      }
+
+      prev = v;
+    }
+
+    let result = [];
+
+    let startSlice = 0;
+    for (let i = 0; i < slices.length; i++) {
+      const s = slices[i];
+      let tmp = values.slice(startSlice, s)
+      if (tmp.length > result.length) {
+        result = tmp;
+      }
+
+      startSlice = s;
+    }
+
+    if (result.length === 0) {
+      return values;
+    }
+
+    return result;
   }
 
   cssTransMatrix(transMatrix) {
@@ -117,7 +158,7 @@ class Island {
   }
 
   finishIsland() {
-    this.midPoint = this.calcMid();
+    //this.midPoint = this.calcMid();
     this.findCorners();
     if (this.islandIsFlipped()) {
       this.barcode = this.barcode.toString().split("").reverse().join("");

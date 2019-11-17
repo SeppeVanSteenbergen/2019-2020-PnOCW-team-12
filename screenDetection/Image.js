@@ -43,8 +43,8 @@ class Image {
     this.createBigMask();
     this.createOffset(this.offSet);
     this.createScreens();
-    this.createPictureCanvas(300, 500); //TODO: param meegeven
-    this.calcRelativeScreens(); //untested
+    //this.createPictureCanvas(300, 500); //TODO: param meegeven
+    //this.calcRelativeScreens(); //untested
     return this.screens;
   }
 
@@ -141,14 +141,14 @@ class Image {
       for (let x = 0; x < this.getWidth(); x++) {
         if (this.checkId(x, y)) {
           let newIslandCoo = this.floodfill(x, y, this.islandID);
-          let newIsland = new Island([newIslandCoo[0], newIslandCoo[1]], [newIslandCoo[2], newIslandCoo[3]], this.islandID, this.imgOriginal);
+          let newIsland = new Island([newIslandCoo[0], newIslandCoo[1]], [newIslandCoo[2], newIslandCoo[3]], this.islandID, this.imgOriginal, this.matrix);
           tmpIslands.push(newIsland);
           this.islandID += 3;
         }
       }
     }
     for (let i = 0; i < tmpIslands.length; i++) {
-      tmpIslands[i].setScreenMatrix(this.matrix);
+      //tmpIslands[i].setScreenMatrix(this.matrix);
       if (tmpIslands[i].isValid()) {
         tmpIslands[i].finishIsland();
         this.islands.push(tmpIslands[i]);

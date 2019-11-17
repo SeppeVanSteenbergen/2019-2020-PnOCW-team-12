@@ -32,7 +32,7 @@ class Drawer {
     }
 
     drawMid(island) {
-        this.drawPoint(island.midPoint[0], island.midPoint[1], 10);
+        this.drawPoint(island.midPoint[0], island.midPoint[1], 20);
     }
 
     /**
