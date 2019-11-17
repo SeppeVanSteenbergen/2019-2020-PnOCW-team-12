@@ -37,13 +37,14 @@ class CornerDetector {
             let helpMid = null;
             let helpPoint = null;
             let helpCorner = null;
-            let otherCorner = null;            
+            let otherCorner = null;
+            let helpPoints = null;
 
             //missing LU
             if (this.corners.LU === null) {
                 helpMid = helpMids.LU;
                 if (this.corners.RU !== null) {
-                    let helpPoints = Reconstructor.reconstructCircle(this.corners.RU, this.matrix, this.id, this.radius);
+                    helpPoints = Reconstructor.reconstructCircle(this.corners.RU, this.matrix, this.id, this.radius);
                     if (helpPoints.length >= 3) {
                         helpPoints = helpPoints.slice(0, 2);
                         helpCorner = this.corners.RU;
@@ -52,7 +53,7 @@ class CornerDetector {
                     }
                 } 
                 if (this.corners.LD !== null && helpPoint === null) {
-                    let helpPoints = Reconstructor.reconstructCircle(this.corners.LD, this.matrix, this.id, this.radius);
+                    helpPoints = Reconstructor.reconstructCircle(this.corners.LD, this.matrix, this.id, this.radius);
                     if (helpPoints.length >= 3) {
                         helpPoints = helpPoints.slice(0, 2);
                         helpCorner = this.corners.LD;
@@ -64,17 +65,15 @@ class CornerDetector {
             //missing RU
             else if (this.corners.RU === null) {
                 helpMid = helpMids.RU;
-                if (this.corners.LU !== null && helpPoint === null) {
-                    let helpPoints = Reconstructor.reconstructCircle(this.corners.LU, this.matrix, this.id, this.radius);
-                    if (helpPoints.length >= 3) {
-                        helpPoints = helpPoints.slice(0, 2);
-                        helpCorner = this.corners.LU;
-                        otherCorner = this.corners.LD;
-                        helpPoint = this.findHelpPoint(helpPoints, helpCorner, otherCorner);
-                    }
-                } 
+                helpPoints = Reconstructor.reconstructCircle(this.corners.LU, this.matrix, this.id, this.radius);
+                if (helpPoints.length >= 3) {
+                    helpPoints = helpPoints.slice(0, 2);
+                    helpCorner = this.corners.LU;
+                    otherCorner = this.corners.LD;
+                    helpPoint = this.findHelpPoint(helpPoints, helpCorner, otherCorner);
+                }
                 if (this.corners.RD !== null && helpPoint === null) {
-                    let helpPoints = Reconstructor.reconstructCircle(this.corners.RD, this.matrix, this.id, this.radius);
+                    helpPoints = Reconstructor.reconstructCircle(this.corners.RD, this.matrix, this.id, this.radius);
                     if (helpPoints.length >= 3) {
                         helpCorner = this.corners.RD;
                         otherCorner = this.corners.LD;
@@ -86,7 +85,7 @@ class CornerDetector {
             else if (this.corners.RD === null) {
                 helpMid = helpMids.RD;
                 if (this.corners.RU != null) {
-                    let helpPoints = Reconstructor.reconstructCircle(this.corners.RU, this.matrix, this.id, this.radius);
+                    helpPoints = Reconstructor.reconstructCircle(this.corners.RU, this.matrix, this.id, this.radius);
                     if (helpPoints.length >= 3) {
                         helpPoints = helpPoints.slice(0, 2);
                         helpCorner = this.corners.RU;
@@ -95,7 +94,7 @@ class CornerDetector {
                     }
                 } 
                 if (this.corners.LD !== null && helpPoint === null) {
-                    let helpPoints = Reconstructor.reconstructCircle(this.corners.LD, this.matrix, this.id, this.radius);
+                    helpPoints = Reconstructor.reconstructCircle(this.corners.LD, this.matrix, this.id, this.radius);
                     if (helpPoints.length >= 3) {
                         helpPoints = helpPoints.slice(0, 2);
                         helpCorner = this.corners.LD;
@@ -107,17 +106,15 @@ class CornerDetector {
             //missing LD
             else if (this.corners.LD === null) {
                 helpMid = helpMids.LD;
-                if (this.corners.RD !== null && helpPoint === null) {
-                    let helpPoints = Reconstructor.reconstructCircle(this.corners.RD, this.matrix, this.id, this.radius);
-                    if (helpPoints.length >= 3) {
-                        helpPoints = helpPoints.slice(0, 2);
-                        helpCorner = this.corners.RD;
-                        otherCorner = this.corners.RU;
-                        helpPoint = this.findHelpPoint(helpPoints, helpCorner, otherCorner);
-                    }
+                helpPoints = Reconstructor.reconstructCircle(this.corners.RD, this.matrix, this.id, this.radius);
+                if (helpPoints.length >= 3) {
+                    helpPoints = helpPoints.slice(0, 2);
+                    helpCorner = this.corners.RD;
+                    otherCorner = this.corners.RU;
+                    helpPoint = this.findHelpPoint(helpPoints, helpCorner, otherCorner);
                 }
                 if (this.corners.LU !== null && helpPoint === null) {
-                    let helpPoints = Reconstructor.reconstructCircle(this.corners.LU, this.matrix, this.id, this.radius);
+                    helpPoints = Reconstructor.reconstructCircle(this.corners.LU, this.matrix, this.id, this.radius);
                     if (helpPoints.length >= 3) {
                         helpPoints = helpPoints.slice(0, 2);
                         helpCorner = this.corners.LU;
@@ -130,6 +127,10 @@ class CornerDetector {
             let helpLine1 = new Line(helpPoint, helpCorner);
             let helpLine2 = new Line(this.midPoint, helpMid);
             let missingCorner = helpLine1.calcIntersection(helpLine2, this.width, this.height);
+            console.log(helpPoints)
+            console.log(helpLine1,helpLine2)
+            console.log("missingCorner")
+            console.log(missingCorner)
             this.addColorId(missingCorner, otherCorner);
 
             this.positionCorners([missingCorner]);
