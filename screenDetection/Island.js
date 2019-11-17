@@ -158,16 +158,13 @@ class Island {
   }
 
   finishIsland() {
-    //this.midPoint = this.calcMid();
     this.findCorners();
     if (this.islandIsFlipped()) {
       this.barcode = this.barcode.toString().split("").reverse().join("");
     }
-    // this.orientation = this.findScreenOrientation();
     this.localToWorld();
     console.log(this.barcode);
     console.log(this.midPoint, this.corners);
-    // console.log(this.orientation);
   }
 
   islandIsFlipped() {
@@ -180,7 +177,26 @@ class Island {
     this.corners.LD = [this.corners.LD[0] + this.minx, this.corners.LD[1] + this.miny, this.corners.LD[2]];
     this.corners.RU = [this.corners.RU[0] + this.minx, this.corners.RU[1] + this.miny, this.corners.RU[2]];
     this.corners.RD = [this.corners.RD[0] + this.minx, this.corners.RD[1] + this.miny, this.corners.RD[2]];
+
+    this.orderCornersToWorld()
   }
+
+  orderCornersToWorld() {
+    let corners = Object.values(this.corners);
+    for (let i = 0; i < corners.length; i++) {
+        if (corners[0][2] == this.yellow && corners[1][2] == this.yellow) {
+            break;
+        }
+        corners.push(corners.shift());
+    }
+
+    this.corners = {
+      LU: corners[0],
+      RU: corners[1],
+      RD: corners[2],
+      LD: corners[3]
+    }
+}
 
   createScreen(clientInfo) {
     let corners = this.corners;
