@@ -1,52 +1,20 @@
 class Reconstructor {
     /**
-     * 
-     * @param {Array[2]} cornerCoo Coordinate of the corner
-     * @param {Array[Array[]]} matrix screenmatrix (B&W)
+     *
+     * @param {Array} cornerCoo Coordinate of the corner
+     * @param {Array} matrix screenmatrix (B&W)
+     * @param id
+     * @param radius
      */
     //https://stackoverflow.com/questions/53432767/how-to-iterate-over-pixels-on-edge-of-a-square-in-1-iteration
 
-    static reconstruct(cornerCoo, matrix, id) {
-        let sideLength = 200;
-        let x = cornerCoo[0] - sideLength / 2;
-        let y = cornerCoo[1] - sideLength / 2;
-
-        let dx = 1;
-        let dy = 0;
-        let white = false;
-        let lines = [];
-        let newLine = [];
-        for (let side = 0; side < 4; side++) {
-            for (let i = 0; i < sideLength; i++) {
-                if (this.isFromIsland(x, y, matrix, id)) {
-                    white = true;
-                    newLine.push([x, y])
-                } else if (white) {
-                    white = false;
-                    lines.push(newLine.slice(0));
-                    newLine.length = 0
-                }
-                x += dx;
-                y += dy;
-            }
-            //turn right
-            let t = dx;
-            dx = -dy;
-            dy = t;
-        }
-        if (newLine.length > 0) {
-            lines.push(newLine.slice(0))
-        }
-        return lines
-    }
-
     static reconstructCircle(cornerCoo, matrix, id, radius) {
-        console.log(cornerCoo)
+        console.log(cornerCoo);
         let lines = this.calcLinesCirc(cornerCoo, matrix, id, radius);
         let reco = [];
         let furthestPoints = this.calcTwoFurthestPoints(lines);
         let validatedFurthestPoints = this.validateTwoFurthestPoints(matrix, cornerCoo, furthestPoints, lines);
-        console.log(validatedFurthestPoints)
+        console.log(validatedFurthestPoints);
         validatedFurthestPoints.forEach(point => reco.push(point));
         let biggest;
         let biggestNb = -Infinity;
@@ -71,7 +39,7 @@ class Reconstructor {
         for(let i = 0; i < lines.length; i++){
             let midPoint = lines[i][Math.floor(lines[i].length / 2)];
             if (!this.crossesWhite(matrix, midPointCoo, midPoint)) {
-                console.log(midPoint)
+                console.log(midPoint);
                 reco.push(midPoint);
             }
         }
@@ -223,46 +191,6 @@ class Reconstructor {
         }
 
         return false
-    }
-    
-    static calcRange(lines) {
-        let minX = Infinity;
-        let minXCoo;
-        let minY = Infinity;
-        let minYCoo;
-        let maxX = -Infinity;
-        let maxXCoo;
-        let maxY = -Infinity;
-        let maxYCoo;
-        for (let line = 0; line < lines.length; line++) {
-            let currLine = lines[line];
-            for (let pix = 0; pix < currLine.length; pix++) {
-                let currPix = currLine[pix];
-                if (currPix[0] < minX) { minX = currPix[0]; minXCoo = currPix }
-                else if (currPix[0] > maxX) { maxX = currPix[0]; maxXCoo = currPix }
-                if (currPix[1] < minY) { minY = currPix[1]; minYCoo = currPix }
-                else if (currPix[1] > maxY) { maxY = currPix[1]; maxYCoo = currPix }
-            }
-        }
-
-        return {
-            minXCoo: minXCoo, maxXCoo: maxXCoo, rangeX: maxX - minX,
-            minYCoo: minYCoo, maxYCoo: maxYCoo, rangeY: maxY - minY
-        }
-    }
-
-    furthest(lines) {
-        let maxX = -Infinity;
-        let maxY = -Infinity;
-        let minX = Infinity;
-        let minY = Infinity;
-        let points = [];
-        for(let line in lines) {
-            if(lines.hasOwnProperty(line)) {
-                points.push(...line)
-            }
-        }
-
     }
 
     static isFromIsland(x, y, matrix, id) {
