@@ -20,6 +20,7 @@ class CornerDetector {
 
     cornerDetection() {
         let tmpCorners = this.findCorners();
+        // tmpCorners = this.minOffset(tmpCorners);
         this.radius = this.calcRadius(this.radiusFactor,tmpCorners);
         //returns 4 corners in relative position
         let nonPositionCorners = this.validateCorners(tmpCorners);
@@ -31,7 +32,7 @@ class CornerDetector {
 
     reconstructCorners(missingCornersCount) {
         let helpMids = Reconstructor.reconstructCircleMidPoint(this.midPoint, this.matrix, this.id, this.radius);
-        helpMids = this.orderMidsCorners(helpMids);
+        helpMids = this.orderCorners(helpMids);
         for (let i = 0; i < missingCornersCount; i++) {
             let helpPoint = null;
             let helpCorner = null;
@@ -120,12 +121,33 @@ class CornerDetector {
             let helpLine1 = new Line(helpPoint, helpCorner);
             let helpLine2 = new Line(this.midPoint, helpMid);
             let missingPoint = helpLine1.calcIntersection(helpLine2, this.width, this.height);
+            console.log(missingPoint);
 
             this.positionCorners([missingPoint]);
         } 
     }
 
-    orderMidsCorners(pointList) {
+    // minOffset(corners) {
+    //     let orderedCorners = this.orderCorners(corners);
+    //     if (orderedCorners.LU !== null) {
+    //         orderedCorners.LU = [orderedCorners.LU[0] + 5, orderedCorners.LU[1] + 5, orderedCorners.LU[2]];
+    //     }
+    //     if (orderedCorners.RU !== null) {
+    //         orderedCorners.RU = [orderedCorners.RU[0] - 5, orderedCorners.RU[1] + 5, orderedCorners.RU[2]];
+    //     }
+    //     if (orderedCorners.RD !== null) {
+    //         orderedCorners.RD = [orderedCorners.RD[0] - 5, orderedCorners.RD[1] - 5, orderedCorners.RD[2]];
+    //     }
+    //     if (orderedCorners.LD !== null) {
+    //         orderedCorners.LD = [orderedCorners.LD[0] + 5, orderedCorners.LD[1] - 5, orderedCorners.LD[2]];
+    //     }
+
+    //     return Object.values(orderedCorners).filter(function (corner) {
+    //         return corner != null;
+    //     });
+    // }
+
+    orderCorners(pointList) {
         let cornerDict = {
             LU: null,
             RU: null,
