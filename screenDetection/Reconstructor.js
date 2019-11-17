@@ -126,7 +126,7 @@ class Reconstructor {
         }
         for (let i = 0; i < lines.length; i++) {
             if(lines[i].includes(point2)) {
-                if (lines[i][0] === point1) {
+                if (lines[i][0] === point2) {
                     line2 = lines[i];
                 } else line2 = lines[i].reverse();
             }

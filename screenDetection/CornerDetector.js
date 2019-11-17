@@ -36,7 +36,6 @@ class CornerDetector {
     reconstructCorners(missingCornersCount) {
         let helpMids = Reconstructor.reconstructCircleMidPoint(this.midPoint, this.matrix, this.id, this.radius);
         helpMids = this.orderCorners(helpMids);
-        console.log(helpMids);
         for (let i = 0; i < missingCornersCount; i++) {
             let helpMid = null;
             let helpPoint = null;
@@ -147,12 +146,9 @@ class CornerDetector {
     }
 
     reconstructCorner(helpPoint, helpCorner, helpMid) {
-        console.log("reconstructCorner")
         let helpLine1 = new Line(helpPoint, helpCorner);
         let helpLine2 = new Line(this.midPoint, helpMid);
         let missingCorner = helpLine1.calcIntersection(helpLine2, this.width, this.height);
-
-        console.log(helpLine1, helpLine2, missingCorner)
         
         return missingCorner;
     }
@@ -186,8 +182,10 @@ class CornerDetector {
         let RU = pointList[1];
 
         return (
-            (LU === null || (LU[0] <= this.midPoint[0] && LU[1] <= this.midPoint[1])) &&
-            (RU === null || (RU[0] >= this.midPoint[0] && RU[1] <= this.midPoint[1]))
+
+
+            (LU === null || (LU[1] <= this.midPoint[1])) &&
+            (RU === null || (RU[0] >= this.midPoint[0] || RU[1] <= this.midPoint[1]))
         );
     }
 
