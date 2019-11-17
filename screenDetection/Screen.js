@@ -9,7 +9,8 @@ class Screen {
     this.clientInfo = clientInfo;
 
     if (screenImgOriginal !== null && clientInfo !== null) {
-      let transformedTempImage = screenImgOriginal/*this.map(
+      let transformedTempImage = screenImgOriginal
+      /*this.map(
         screenImgOriginal,
         this.corners,
         600,
@@ -140,7 +141,6 @@ class Screen {
         img.data[indexDest + 3] = data[index + 3];
       }
     }
-
     return img;
   }
 

@@ -5,6 +5,7 @@ class Island {
    * @param rightBottomCoo
    * @param {int} id
    * @param imgOriginal
+   * @param matrix
    */
   constructor(leftUpperCoo, rightBottomCoo, id, imgOriginal, matrix) {
 
@@ -23,6 +24,8 @@ class Island {
     this.maxy = rightBottomCoo[1];
 
     this.setScreenMatrix(matrix);
+    this.height = this.screenMatrix.length;
+    this.width = this.screenMatrix[0].length;
 
     this.id = id;
     this.yellow = id;
@@ -38,46 +41,19 @@ class Island {
     return this.midPoint !== null && this.barcode !== 0;
   }
 
-  getScreenImg() {
-    let canvas = document.createElement('canvas');
-    canvas.width = this.imgOriginal.width;
-    canvas.height = this.imgOriginal.height;
-    let context = canvas.getContext("2d");
-    context.putImageData(this.imgOriginal, 0, 0);
-    return context.getImageData(this.minx, this.miny, this.maxx - this.minx, this.maxy - this.miny)
-  }
-
-  print() {
-    console.log('starting co: ' + this.minx + ', ' + this.miny);
-    console.log('ending co: ' + this.maxx + ', ' + this.maxy);
-  }
-
-  add(x, y) {
-    if (x > this.maxx) this.maxx = x;
-    if (x < this.minx) this.minx = x;
-    if (y > this.maxy) this.maxy = y;
-    if (y < this.miny) this.miny = y;
-  }
-
-  size() {
-    return (this.maxx - this.minx) * (this.maxy - this.miny);
-  }
-
   setScreenMatrix(matrix) {
     this.screenMatrix = matrix.slice(this.miny, this.maxy);
     for (let i = 0; i < this.maxy - this.miny; i++) {
       this.screenMatrix[i] = this.screenMatrix[i].slice(this.minx, this.maxx);
     }
-    this.width = this.screenMatrix[0].length;
-    this.height = this.screenMatrix.length;
   }
 
   findCorners() {
-    let cornerDetector = new CornerDetector(this.screenMatrix, this.midPoint, this.id)
-    let detectedCorners = cornerDetector.cornerDetection()
-    this.corners.LU = [detectedCorners.LU[0], detectedCorners.LU[1], detectedCorners.LU[2]]
-    this.corners.LD = [detectedCorners.LD[0], detectedCorners.LD[1], detectedCorners.LD[2]]
-    this.corners.RU = [detectedCorners.RU[0], detectedCorners.RU[1], detectedCorners.RU[2]]
+    let cornerDetector = new CornerDetector(this.screenMatrix, this.midPoint, this.id);
+    let detectedCorners = cornerDetector.cornerDetection();
+    this.corners.LU = [detectedCorners.LU[0], detectedCorners.LU[1], detectedCorners.LU[2]];
+    this.corners.LD = [detectedCorners.LD[0], detectedCorners.LD[1], detectedCorners.LD[2]];
+    this.corners.RU = [detectedCorners.RU[0], detectedCorners.RU[1], detectedCorners.RU[2]];
     this.corners.RD = [detectedCorners.RD[0], detectedCorners.RD[1], detectedCorners.RD[2]]
   }
 
@@ -85,8 +61,8 @@ class Island {
     let xValues = [];
     let yValues = [];
 
-    for (let y = 0; y < this.height; y++) {
-      for (let x = 0; x < this.width; x++) {
+    for (let y = 0; y < this.getHeight(); y++) {
+      for (let x = 0; x < this.getWidth(); x++) {
         if (this.getMatrix(x, y) === this.circle) {
           xValues.push(x);
           yValues.push(y);
@@ -98,7 +74,7 @@ class Island {
       return null;
     }
 
-    xValues = Island.filterPoints(xValues)
+    xValues = Island.filterPoints(xValues);
     yValues = Island.filterPoints(yValues);
 
     return [xValues[Math.round(xValues.length / 2)], yValues[Math.round(yValues.length / 2)]];
@@ -114,7 +90,7 @@ class Island {
     });
 
     let slices = [];
-    let prev = values[0]
+    let prev = values[0];
     for (let i = 0; i < values.length; i++) {
       const v = values[i];
 
@@ -130,7 +106,7 @@ class Island {
     let startSlice = 0;
     for (let i = 0; i < slices.length; i++) {
       const s = slices[i];
-      let tmp = values.slice(startSlice, s)
+      let tmp = values.slice(startSlice, s);
       if (tmp.length > result.length) {
         result = tmp;
       }
@@ -150,11 +126,6 @@ class Island {
     transMatrix[1][2], transMatrix[2][2], 0, transMatrix[3][2],
       0, 0, 1, 0,
     transMatrix[1][3], transMatrix[2][3], 0, [transMatrix[3][3]]]
-  }
-
-  switchColor(corner) {
-    if (corner[2] === this.pink) return this.yellow;
-    else return this.pink;
   }
 
   finishIsland() {
@@ -184,7 +155,7 @@ class Island {
   orderCornersToWorld() {
     let corners = Object.values(this.corners);
     for (let i = 0; i < corners.length; i++) {
-        if (corners[0][2] == this.yellow && corners[1][2] == this.yellow) {
+        if (corners[0][2] === this.yellow && corners[1][2] === this.yellow) {
             break;
         }
         corners.push(corners.shift());
@@ -216,5 +187,31 @@ class Island {
     if (x < 0 || x >= this.width) return 0;
     if (y < 0 || y >= this.height) return 0;
     return this.screenMatrix[y][x];
+  }
+
+  getScreenImg() {
+    let canvas = document.createElement('canvas');
+    canvas.width = this.imgOriginal.width;
+    canvas.height = this.imgOriginal.height;
+    let context = canvas.getContext("2d");
+    context.putImageData(this.imgOriginal, 0, 0);
+    return context.getImageData(this.minx, this.miny, this.maxx - this.minx, this.maxy - this.miny)
+  }
+
+  getHeight() {
+    return this.height;
+  }
+
+  getWidth() {
+    return this.width;
+  }
+
+  getSize() {
+    return this.width * this.height;
+  }
+
+  print() {
+    console.log('starting co: ' + this.minx + ', ' + this.miny);
+    console.log('ending co: ' + this.maxx + ', ' + this.maxy);
   }
 }
