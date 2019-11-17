@@ -70,7 +70,7 @@ class Reconstructor {
                 if (this.isFromIsland(x, y, matrix, id)) {
                     white = true;
                     blackCount = 0;
-                    newLine.push([x, y])
+                    newLine.push([x, y, this.getMatrix(x, y, matrix)]);
                 } else if (white && ++blackCount >= maxWrongPixel) {
                     blackCount = 0;
                     white = false;

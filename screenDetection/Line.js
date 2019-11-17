@@ -51,6 +51,17 @@ class Line{
     }
 
     /**
+     * Get the angle of this line with the x axis
+     */
+    get angle() {
+        let angle = Math.atan2(this.dy, this.dx) * 180/Math.PI;
+        if (angle < 0) {
+            angle += 360;
+        }
+        return angle;
+    }
+
+    /**
      * Get the start and end points to draw the line over the full canvas
      */
     calcInfinitePoints(width , height){

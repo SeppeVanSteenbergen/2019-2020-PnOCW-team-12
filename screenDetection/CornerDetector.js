@@ -181,12 +181,34 @@ class CornerDetector {
         let LU = pointList[0];
         let RU = pointList[1];
 
-        return (
+        if (LU === null && RU === null) {
+            let RD = pointList[2];
+            let LD = pointList[3];
 
+            return RD[2] === this.pink && LD[2] === this.pink;
+        } else if (LU === null) {
+            let RD = pointList[2];
+            
+            if (RD !== null) {
+                return RU[2] === this.yellow && RD[2] === this.pink;
+            } else {
+                let LD = pointList[3];
 
-            (LU === null || (LU[1] <= this.midPoint[1])) &&
-            (RU === null || (RU[0] >= this.midPoint[0] || RU[1] <= this.midPoint[1]))
-        );
+                return RU[2] === this.yellow && LD[2] === this.pink;
+            }
+        } else if (RU === null) {
+            let RD = pointList[2];
+            
+            if (RD !== null) {
+                return LU[2] === this.yellow && RD[2] === this.pink;
+            } else {
+                let LD = pointList[3];
+
+                return LU[2] === this.yellow && LD[2] === this.pink;
+            }
+        } else {
+            return LU[2] === this.yellow && RU[2] === this.yellow;
+        }
     }
 
     orderCorners(pointList) {
