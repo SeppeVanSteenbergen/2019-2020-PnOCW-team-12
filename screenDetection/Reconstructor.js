@@ -167,18 +167,22 @@ class Reconstructor {
             }
         }
         
+        //TODO implement with generic offset
+
         let validatedPoints = [];
         for (let i = 0; i < line1.length; i++) {
             point1 = line1[i];
             if (!this.crossesWhite(matrix, cornerCoo, point1)) {
-                validatedPoints.push(point1);
+                i += 3;
+                validatedPoints.push(line1[i]);
                 break;
             }
         }
         for (let i = 0; i < line2.length; i++) {
             point2 = line2[i];
             if (!this.crossesWhite(matrix, cornerCoo, point2)) {
-                validatedPoints.push(point2);
+                i += 3;
+                validatedPoints.push(line2[i]);
                 break;
             }
         }
