@@ -9,12 +9,10 @@ class Reconstructor {
     //https://stackoverflow.com/questions/53432767/how-to-iterate-over-pixels-on-edge-of-a-square-in-1-iteration
 
     static reconstructCircle(cornerCoo, matrix, id, radius) {
-        console.log(cornerCoo);
         let lines = this.calcLinesCirc(cornerCoo, matrix, id, radius);
         let reco = [];
         let furthestPoints = this.calcTwoFurthestPoints(lines);
         let validatedFurthestPoints = this.validateTwoFurthestPoints(matrix, cornerCoo, furthestPoints, lines);
-        console.log(validatedFurthestPoints);
         validatedFurthestPoints.forEach(point => reco.push(point));
         let biggest;
         let biggestNb = -Infinity;
@@ -39,7 +37,6 @@ class Reconstructor {
         for(let i = 0; i < lines.length; i++){
             let midPoint = lines[i][Math.floor(lines[i].length / 2)];
             if (!this.crossesWhite(matrix, midPointCoo, midPoint)) {
-                console.log(midPoint);
                 reco.push(midPoint);
             }
         }

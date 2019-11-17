@@ -118,14 +118,12 @@ class Island {
   }
 
   finishIsland() {
-    // console.log(this.barcode);
+    console.log(this.barcode);
     this.midPoint = this.calcMid();
     this.findCorners();
-    // console.log(this.circle);
-    // console.log(this.midPoint);
-    // console.log(this.screenMatrix);
     //this.orientation = this.findScreenOrientation();
     this.localToWorld();
+    console.log(this.midPoint, this.corners);
   }
 
   localToWorld() {

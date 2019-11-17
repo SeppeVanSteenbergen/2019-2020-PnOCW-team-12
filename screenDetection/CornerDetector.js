@@ -20,11 +20,9 @@ class CornerDetector {
 
     cornerDetection() {
         let tmpCorners = this.findCorners();
-        console.log(tmpCorners);
         this.radius = this.calcRadius(this.radiusFactor,tmpCorners);
         //returns 4 corners in relative position
         let nonPositionCorners = this.validateCorners(tmpCorners);
-        console.log(nonPositionCorners);
         this.positionCorners(nonPositionCorners);
         if (nonPositionCorners.length < 4)
             this.reconstructCorners(4 - nonPositionCorners.length);
@@ -32,7 +30,6 @@ class CornerDetector {
     }
 
     reconstructCorners(missingCornersCount) {
-        console.log(this.corners)
         let helpMids = Reconstructor.reconstructCircleMidPoint(this.midPoint, this.matrix, this.id, this.radius);
         helpMids = this.orderMidsCorners(helpMids);
         for (let i = 0; i < missingCornersCount; i++) {
@@ -122,9 +119,7 @@ class CornerDetector {
 
             let helpLine1 = new Line(helpPoint, helpCorner);
             let helpLine2 = new Line(this.midPoint, helpMid);
-            console.log(helpLine1, helpLine2)
             let missingPoint = helpLine1.calcIntersection(helpLine2, this.width, this.height);
-            console.log(missingPoint)
 
             this.positionCorners([missingPoint]);
         } 
