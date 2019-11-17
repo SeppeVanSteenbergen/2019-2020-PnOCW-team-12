@@ -17,12 +17,12 @@ class Line{
             console.error("point b is null")
         }
 
-        let tmp = null;
-        if(a[0] > b[0]){
-            tmp = a;
-            a = b;
-            b = tmp;
-        }
+        // let tmp = null;
+        // if(a[0] > b[0]){
+        //     tmp = a;
+        //     a = b;
+        //     b = tmp;
+        // }
 
         this._a = a.slice(0, 2);
         this._b = b.slice(0, 2);

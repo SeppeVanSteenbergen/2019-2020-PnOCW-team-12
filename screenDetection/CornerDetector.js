@@ -174,10 +174,16 @@ class CornerDetector {
     }
 
     findHelpPoint(helpPoints, helpCorner, otherCorner) {
-        let line1 = new Line(helpCorner, helpPoints[0]);
-        let line2 = new Line(helpCorner, otherCorner);
+        let line1 = new Line(helpCorner, otherCorner);
+        let line2 = new Line(helpCorner, helpPoints[0]);
 
-        return Math.sign(line1.dx) === Math.sign(line2.dx) && Math.sign(line1.dy) === Math.sign(line2.dy) ? helpPoints[1] : helpPoints[0];  
+        if (line1.dx === 0) {
+            return Math.sign(line1.dy) === Math.sign(line2.dy) && line2.dy > 3 ? helpPoints[1] : helpPoints[0];
+        } else if (line1.dy === 0) {
+            return Math.sign(line1.dx) === Math.sign(line2.dx) && line2.dx > 3 ? helpPoints[1] : helpPoints[0];
+        } else {
+            return Math.sign(line1.dx) === Math.sign(line2.dx) && Math.sign(line1.dy) === Math.sign(line2.dy) ? helpPoints[1] : helpPoints[0];
+        }
     }
 
     positionCorners(nPCorners) {
