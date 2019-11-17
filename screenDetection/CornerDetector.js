@@ -36,6 +36,7 @@ class CornerDetector {
     reconstructCorners(missingCornersCount) {
         let helpMids = Reconstructor.reconstructCircleMidPoint(this.midPoint, this.matrix, this.id, this.radius);
         helpMids = this.orderCorners(helpMids);
+        console.log(helpMids);
         for (let i = 0; i < missingCornersCount; i++) {
             let helpMid = null;
             let helpPoint = null;
@@ -64,6 +65,10 @@ class CornerDetector {
                         helpPoint = this.findHelpPoint(helpPoints, helpCorner, otherCorner);
                     }
                 }
+
+                let corner = this.reconstructCorner(helpPoint, helpCorner, helpMid);
+                this.addColorId(corner, this.corners.RD);
+                this.corners.LU = corner;
             }
             //missing RU
             else if (this.corners.RU === null) {
@@ -83,6 +88,10 @@ class CornerDetector {
                         helpPoint = this.findHelpPoint(helpPoints, helpCorner, otherCorner);
                     }
                 }
+
+                let corner = this.reconstructCorner(helpPoint, helpCorner, helpMid);
+                this.addColorId(corner, this.corners.LD);
+                this.corners.RU = corner;
             }
             //missing RD
             else if (this.corners.RD === null) {
@@ -105,6 +114,10 @@ class CornerDetector {
                         helpPoint = this.findHelpPoint(helpPoints, helpCorner, otherCorner);
                     }
                 }
+
+                let corner = this.reconstructCorner(helpPoint, helpCorner, helpMid);
+                this.addColorId(corner, this.corners.LU);
+                this.corners.RD = corner;
             }
             //missing LD
             else if (this.corners.LD === null) {
@@ -124,20 +137,24 @@ class CornerDetector {
                         otherCorner = this.corners.RU;
                         helpPoint = this.findHelpPoint(helpPoints, helpCorner, otherCorner);
                     }
-                } 
+                }
+                
+                let corner = this.reconstructCorner(helpPoint, helpCorner, helpMid);
+                this.addColorId(corner, this.corners.RU);
+                this.corners.LD = corner;
             }
-
-            let helpLine1 = new Line(helpPoint, helpCorner);
-            let helpLine2 = new Line(this.midPoint, helpMid);
-            let missingCorner = helpLine1.calcIntersection(helpLine2, this.width, this.height);
-            console.log(helpPoints)
-            console.log(helpLine1,helpLine2)
-            console.log("missingCorner")
-            console.log(missingCorner)
-            this.addColorId(missingCorner, otherCorner);
-
-            this.positionCorners([missingCorner]);
         } 
+    }
+
+    reconstructCorner(helpPoint, helpCorner, helpMid) {
+        console.log("reconstructCorner")
+        let helpLine1 = new Line(helpPoint, helpCorner);
+        let helpLine2 = new Line(this.midPoint, helpMid);
+        let missingCorner = helpLine1.calcIntersection(helpLine2, this.width, this.height);
+
+        console.log(helpLine1, helpLine2, missingCorner)
+        
+        return missingCorner;
     }
 
     addColorId(point, oppositePoint) {
@@ -170,7 +187,7 @@ class CornerDetector {
 
         return (
             (LU === null || (LU[0] <= this.midPoint[0] && LU[1] <= this.midPoint[1])) &&
-            (RU === null || (RU[0] <= this.midPoint[0] && RU[1] <= this.midPoint[1]))
+            (RU === null || (RU[0] >= this.midPoint[0] && RU[1] <= this.midPoint[1]))
         );
     }
 
@@ -194,51 +211,14 @@ class CornerDetector {
         let line1 = new Line(helpCorner, otherCorner);
         let line2 = new Line(helpCorner, helpPoints[0]);
 
-        if (line1.dx === 0) {
-            return Math.sign(line1.dy) === Math.sign(line2.dy) && line2.dy > 3 ? helpPoints[1] : helpPoints[0];
-        } else if (line1.dy === 0) {
-            return Math.sign(line1.dx) === Math.sign(line2.dx) && line2.dx > 3 ? helpPoints[1] : helpPoints[0];
+        if (line1.dx === 0 || line1.dy === 0) {
+            if (line1.dx === 0) {
+                return Math.sign(line1.dy) === Math.sign(line2.dy) && Math.abs(line2.dy) > 3 ? helpPoints[1] : helpPoints[0];
+            } else {
+            return Math.sign(line1.dx) === Math.sign(line2.dx) && Math.abs(line2.dx) > 3 ? helpPoints[1] : helpPoints[0];
+            }
         } else {
             return Math.sign(line1.dx) === Math.sign(line2.dx) && Math.sign(line1.dy) === Math.sign(line2.dy) ? helpPoints[1] : helpPoints[0];
-        }
-    }
-
-    positionCorners(nPCorners) {
-        for (let i = 0; i < nPCorners.length; i++) {
-            let corner = nPCorners[i];
-            if (corner[0] <= this.midPoint[0]) {
-                if (corner[1] <= this.midPoint[1]) {
-                    if (this.corners.LU === null) {
-                        this.corners.LU = corner;
-                    } else {
-                        if (this.corners.LU[0] <= corner[0]) {
-                            this.corners.RU = corner;
-                        } else [this.corners.LU, this.corners.RU] = [corner, this.corners.LU];     
-                    }
-                } else if (this.corners.LD === null) {
-                    this.corners.LD = corner;
-                } else {
-                    if (this.corners.LD[1] >= corner[1]) {
-                        this.corners.LU = corner;
-                    } else [this.corners.LD, this.corners.LU] = [corner, this.corners.LD];
-                }
-            } else {
-                if (corner[1] <= this.midPoint[1]) {
-                    if (this.corners.RU === null) {
-                        this.corners.RU = corner;
-                    } else {
-                        if (this.corners.RU[0] >= corner[0]) {
-                            this.corners.LU = corner;
-                        } else [this.corners.RU, this.corners.LU] = [corner, this.corners.RU];
-                    }
-                } else if (this.corners.RD === null) {
-                    this.corners.RD = corner;
-                } else {
-                    if (this.corners.RD[0] >= corner[0]) {
-                        this.corners.LD = corner;
-                    } else [this.corners.RD, this.corners.LD] = [corner, this.corners.RD];
-                }
-            }
         }
     }
 

@@ -63,7 +63,7 @@ class Reconstructor {
             y = cornerCoo[1] + Math.floor(radius * Math.sin(startTheta));
         }
 
-        for (let theta = startTheta + 2 * Math.PI; theta > startTheta; theta -= dTheta) {
+        for (let theta = startTheta; theta < startTheta + 2 * Math.PI; theta += dTheta) {
             let x = cornerCoo[0] + Math.floor(radius * Math.cos(theta));
             let y = cornerCoo[1] + Math.floor(radius * Math.sin(theta));
             if (newLine[newLine.length - 1] !== [x, y]) {
