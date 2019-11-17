@@ -30,7 +30,6 @@ class Island {
 
     this.imgOriginal = imgOriginal;
     this.barcode = BarcodeScanner.scan(this.getScreenImg());
-    //console.log(this.barcode)
   }
 
   isValid() {
@@ -74,10 +73,10 @@ class Island {
   findCorners() {
     let cornerDetector = new CornerDetector(this.screenMatrix, this.midPoint, this.id)
     let detectedCorners = cornerDetector.cornerDetection()
-    this.corners.LU = [detectedCorners.LU[0], detectedCorners.LU[1]]
-    this.corners.LD = [detectedCorners.LD[0], detectedCorners.LD[1]]
-    this.corners.RU = [detectedCorners.RU[0], detectedCorners.RU[1]]
-    this.corners.RD = [detectedCorners.RD[0], detectedCorners.RD[1]]
+    this.corners.LU = [detectedCorners.LU[0], detectedCorners.LU[1], detectedCorners.LU[2]]
+    this.corners.LD = [detectedCorners.LD[0], detectedCorners.LD[1], detectedCorners.LD[2]]
+    this.corners.RU = [detectedCorners.RU[0], detectedCorners.RU[1], detectedCorners.RU[2]]
+    this.corners.RD = [detectedCorners.RD[0], detectedCorners.RD[1], detectedCorners.RD[2]]
   }
 
   calcMid() {
@@ -118,32 +117,31 @@ class Island {
   }
 
   finishIsland() {
-    console.log(this.barcode);
     this.midPoint = this.calcMid();
     this.findCorners();
-    //this.orientation = this.findScreenOrientation();
+    // this.orientation = this.findScreenOrientation();
     this.localToWorld();
+    console.log(this.barcode);
     console.log(this.midPoint, this.corners);
+    // console.log(this.orientation);
   }
 
   localToWorld() {
     this.midPoint = [this.midPoint[0] + this.minx, this.midPoint[1] + this.miny];
-    this.corners.LU = [this.corners.LU[0] + this.minx, this.corners.LU[1] + this.miny];
-    this.corners.LD = [this.corners.LD[0] + this.minx, this.corners.LD[1] + this.miny];
-    this.corners.RU = [this.corners.RU[0] + this.minx, this.corners.RU[1] + this.miny];
-    this.corners.RD = [this.corners.RD[0] + this.minx, this.corners.RD[1] + this.miny];
+    this.corners.LU = [this.corners.LU[0] + this.minx, this.corners.LU[1] + this.miny, this.corners.LU[2]];
+    this.corners.LD = [this.corners.LD[0] + this.minx, this.corners.LD[1] + this.miny, this.corners.LD[2]];
+    this.corners.RU = [this.corners.RU[0] + this.minx, this.corners.RU[1] + this.miny, this.corners.RU[2]];
+    this.corners.RD = [this.corners.RD[0] + this.minx, this.corners.RD[1] + this.miny, this.corners.RD[2]];
   }
 
   createScreen(clientInfo) {
     let corners = this.corners;
-    let orientation = null;
-    /*for (let i = 0; i < corners.length; i++) {
-      corners[i][0] += this.minx;
-      corners[i][1] += this.miny;
-    }*/
+    let transMatrix = null;
+
     return new Screen(
       corners,
-      orientation,
+      this.orientation,
+      transMatrix,
       this.midPoint,
       clientInfo,
       this.imgOriginal
