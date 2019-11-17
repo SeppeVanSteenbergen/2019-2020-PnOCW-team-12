@@ -31,14 +31,6 @@ class CornerDetector {
         return this.corners
     }
 
-    findClosestPointToOtherPoint(points, point) {
-        points.sort(function(a, b) {
-            return Algebra.calcDist(a, point) - Algebra.calcDist(b, point);
-        });
-        
-        return points[0];
-    }
-
     reconstructCorners(missingCornersCount) {
         console.log(this.corners)
         let helpMids = Reconstructor.reconstructCircleMidPoint(this.midPoint, this.matrix, this.id, this.radius);
@@ -55,7 +47,7 @@ class CornerDetector {
                     let helpPoints = Reconstructor.reconstructCircle(this.corners.RU, this.matrix, this.id, this.radius);
                     if (helpPoints.length >= 3) {
                         helpPoints = helpPoints.slice(0, 2);
-                        helpPoint = this.findClosestPointToOtherPoint(helpPoints, helpMid);
+                        helpPoint = this.findHelpPoint(helpPoints, this.corners.RU, this.corners.RD);
                         helpCorner = this.corners.RU;
                     }
                 } 
@@ -63,7 +55,7 @@ class CornerDetector {
                     let helpPoints = Reconstructor.reconstructCircle(this.corners.LD, this.matrix, this.id, this.radius);
                     if (helpPoints.length >= 3) {
                         helpPoints = helpPoints.slice(0, 2);
-                        helpPoint = this.findClosestPointToOtherPoint(helpPoints, helpMid);
+                        helpPoint = this.findHelpPoint(helpPoints, this.corners.LD, this.corners.RD);
                         helpCorner = this.corners.LD;
                     }
                 }
@@ -71,17 +63,18 @@ class CornerDetector {
             //missing RU
             else if (this.corners.RU === null) {
                 helpMid = helpMids.RU;
-                let helpPoints = Reconstructor.reconstructCircle(this.corners.LU, this.matrix, this.id, this.radius);
-                if (helpPoints.length >= 3) {
-                    helpPoints = helpPoints.slice(0, 2);
-                    helpPoint = this.findClosestPointToOtherPoint(helpPoints, helpMid);
-                    helpCorner = this.corners.LU;
-                }
+                if (this.corners.LU !== null && helpPoint === null) {
+                    let helpPoints = Reconstructor.reconstructCircle(this.corners.LU, this.matrix, this.id, this.radius);
+                    if (helpPoints.length >= 3) {
+                        helpPoints = helpPoints.slice(0, 2);
+                        helpPoint = this.findHelpPoint(helpPoints, this.corners.LU, this.corners.LD);
+                        helpCorner = this.corners.LU;
+                    }
+                } 
                 if (this.corners.RD !== null && helpPoint === null) {
                     let helpPoints = Reconstructor.reconstructCircle(this.corners.RD, this.matrix, this.id, this.radius);
                     if (helpPoints.length >= 3) {
-                        helpPoints = helpPoints.slice(0, 2);
-                        helpPoint = this.findClosestPointToOtherPoint(helpPoints, helpMid);
+                        helpPoint = this.findHelpPoint(helpPoints, this.corners.RD, this.corners.LD);
                         helpCorner = this.corners.RD;
                     }
                 }
@@ -93,7 +86,7 @@ class CornerDetector {
                     let helpPoints = Reconstructor.reconstructCircle(this.corners.RU, this.matrix, this.id, this.radius);
                     if (helpPoints.length >= 3) {
                         helpPoints = helpPoints.slice(0, 2);
-                        helpPoint = this.findClosestPointToOtherPoint(helpPoints, helpMid);
+                        helpPoint = this.findHelpPoint(helpPoints, this.corners.RU, this.corners.LU);
                         helpCorner = this.corners.RU;
                     }
                 } 
@@ -101,7 +94,7 @@ class CornerDetector {
                     let helpPoints = Reconstructor.reconstructCircle(this.corners.LD, this.matrix, this.id, this.radius);
                     if (helpPoints.length >= 3) {
                         helpPoints = helpPoints.slice(0, 2);
-                        helpPoint = this.findClosestPointToOtherPoint(helpPoints, helpMid);
+                        helpPoint = this.findHelpPoint(helpPoints, this.corners.LD, this.corners.LU);
                         helpCorner = this.corners.LD;
                     }
                 }
@@ -109,17 +102,19 @@ class CornerDetector {
             //missing LD
             else if (this.corners.LD === null) {
                 helpMid = helpMids.LD;
-                let helpPoints = Reconstructor.reconstructCircle(this.corners.RD, this.matrix, this.id, this.radius);
-                if (helpPoints.length >= 3) {
-                    helpPoints = helpPoints.slice(0, 2);
-                    helpPoint = this.findClosestPointToOtherPoint(helpPoints, helpMid);
-                    helpCorner = this.corners.RD;
+                if (this.corners.RD !== null && helpPoint === null) {
+                    let helpPoints = Reconstructor.reconstructCircle(this.corners.RD, this.matrix, this.id, this.radius);
+                    if (helpPoints.length >= 3) {
+                        helpPoints = helpPoints.slice(0, 2);
+                        helpPoint = this.findHelpPoint(helpPoints, this.corners.RD, this.corners.RU);
+                        helpCorner = this.corners.RD;
+                    }
                 }
                 if (this.corners.LU !== null && helpPoint === null) {
                     let helpPoints = Reconstructor.reconstructCircle(this.corners.LU, this.matrix, this.id, this.radius);
                     if (helpPoints.length >= 3) {
                         helpPoints = helpPoints.slice(0, 2);
-                        helpPoint = this.findClosestPointToOtherPoint(helpPoints, helpMid);
+                        helpPoint = this.findHelpPoint(helpPoints, this.corners.LU, this.corners.RU);
                         helpCorner = this.corners.LU;
                     }
                 } 
@@ -183,17 +178,11 @@ class CornerDetector {
         return cornerDict;
     }
 
-    LeftUpPoint(pointList) {
-        
-    }
-    RightUpPoint(pointList) {
-        
-    }
-    LeftDownPoint(pointList) {
-        
-    }
-    RightDownPoint(pointList) {
-        
+    findHelpPoint(helpPoints, helpCorner, otherCorner) {
+        let line1 = new Line(helpCorner, helpPoints[0]);
+        let line2 = new Line(helpCorner, otherCorner);
+
+        return Math.sign(line1.dx) === Math.sign(line2.dx) && Math.sign(line1.dy) === Math.sign(line2.dy) ? helpPoints[1] : helpPoints[0];  
     }
 
     positionCorners(nPCorners) {
