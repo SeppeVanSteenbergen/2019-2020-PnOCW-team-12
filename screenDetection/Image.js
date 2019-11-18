@@ -14,7 +14,7 @@ class Image {
     this.islands = [];
     this.offSet = 1;
 
-    if (colorSpace === 'RGBA'){
+    if (colorSpace === 'RGBA') {
       this.imgOriginal = imgData
     }
 
@@ -36,7 +36,7 @@ class Image {
     this.analyse()
   }
 
-  analyse(){
+  analyse() {
     ColorSpace.rgbaToHsla(this.pixels)
     this.setColorSpace("HSLA");
     // console.log("debug");
@@ -54,12 +54,12 @@ class Image {
   //TODO: check resolution ook
   qualityCheck() {
     let RGBA = false
-    if(this.getColorSpace() === 'RGBA'){
+    if (this.getColorSpace() === 'RGBA') {
       ColorSpace.rgbaToHsla(this.pixels)
       this.setColorSpace('HSLA')
       RGBA = true;
     }
-    if(this.getColorSpace() !== 'HSLA'){
+    if (this.getColorSpace() !== 'HSLA') {
       console.error("Picture has to be in HSLA to do a quality check!")
     } else {
       let luminance = ColorSpace.calcLuminance(this.pixels)
@@ -67,7 +67,7 @@ class Image {
         console.error('Take a better picture');
       }
     }
-    if(RGBA){
+    if (RGBA) {
       ColorSpace.hslaToRgba(this.pixels)
       this.setColorSpace('RGBA')
     }
@@ -100,21 +100,18 @@ class Image {
   }
 
   calcIslandsFloodfill() {
-    let tmpIslands = [];
     for (let y = 0; y < this.getHeight(); y++) {
       for (let x = 0; x < this.getWidth(); x++) {
         if (this.checkId(x, y)) {
           let newIslandCoo = this.floodfill(x, y, this.islandID);
           let newIsland = new Island([newIslandCoo[0], newIslandCoo[1]], [newIslandCoo[2], newIslandCoo[3]], this.islandID, this.imgOriginal, this.matrix);
-          tmpIslands.push(newIsland);
+          if (newIsland.isValid()) {
+            newIsland.finishIsland()
+            this.islands.push(newIsland);
+          }
+
           this.islandID += 3;
         }
-      }
-    }
-    for (let i = 0; i < tmpIslands.length; i++) {
-      if (tmpIslands[i].isValid()) {
-        tmpIslands[i].finishIsland();
-        this.islands.push(tmpIslands[i]);
       }
     }
   }
@@ -275,7 +272,7 @@ class Image {
    * @param {int} w image width
    * @param {int} h image height
    */
-  createPictureCanvas(w, h){
+  createPictureCanvas(w, h) {
     this.pictureCanvas = {
       minx: null,
       maxx: null,
@@ -331,12 +328,12 @@ class Image {
   /**
    * Recalculate every screen's corner to match up with the mapped image pixels
    */
-  calcRelativeScreens(){
+  calcRelativeScreens() {
     let originX = this.pictureCanvas.minx;
     let originY = this.pictureCanvas.miny;
-    this.screens.forEach(function(s){
-      for(let key in s.corners){
-        if(s.corners.hasOwnProperty(key)) {
+    this.screens.forEach(function (s) {
+      for (let key in s.corners) {
+        if (s.corners.hasOwnProperty(key)) {
           s.relativeCorners[key][0] = s.corners[key][0] - originX;
           s.relativeCorners[key][1] = s.corners[key][1] - originY;
         }
@@ -364,11 +361,11 @@ class Image {
           let y = whites[i][1];
           let value = this.getMatrix(x, y);
           if (
-              y + yBox >= 0 &&
-              y + yBox < this.getHeight() &&
-              x + xBox >= 0 &&
-              x + xBox < this.getWidth() &&
-              this.getMatrix(x + xBox, y + yBox) === 0
+            y + yBox >= 0 &&
+            y + yBox < this.getHeight() &&
+            x + xBox >= 0 &&
+            x + xBox < this.getWidth() &&
+            this.getMatrix(x + xBox, y + yBox) === 0
           ) {
             this.matrix[y + yBox][x + xBox] = value;
           }
@@ -400,8 +397,8 @@ class Image {
     if (this.canvas !== null) {
       let context = this.canvas.getContext('2d');
       let imgData = context.createImageData(
-          this.canvas.width,
-          this.canvas.height
+        this.canvas.width,
+        this.canvas.height
       );
       imgData.data.set(this.pixels);
       return imgData;
