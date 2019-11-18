@@ -21,7 +21,7 @@ class Island {
 
     this.miny = leftUpperCoo[1];
     this.maxy = rightBottomCoo[1];
-
+    
     this.setScreenMatrix(matrix);
     this.height = this.screenMatrix.length;
     this.width = this.screenMatrix[0].length;

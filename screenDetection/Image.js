@@ -104,12 +104,13 @@ class Image {
       for (let x = 0; x < this.getWidth(); x++) {
         if (this.checkId(x, y)) {
           let newIslandCoo = this.floodfill(x, y, this.islandID);
+          if((newIslandCoo[0] - newIslandCoo[2]) * (newIslandCoo[1] - newIslandCoo[3]) <= 1000)
+            break
           let newIsland = new Island([newIslandCoo[0], newIslandCoo[1]], [newIslandCoo[2], newIslandCoo[3]], this.islandID, this.imgOriginal, this.matrix);
           if (newIsland.isValid()) {
             newIsland.finishIsland()
             this.islands.push(newIsland);
           }
-
           this.islandID += 3;
         }
       }
