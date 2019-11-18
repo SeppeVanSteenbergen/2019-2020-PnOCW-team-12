@@ -1,4 +1,7 @@
+const sensitivity = 10;
+
 class ColorRange {
+
   static inBlueRange(H, S, L) {
     return (
       (
@@ -83,36 +86,36 @@ class ColorRange {
 
   static inBlueGreenBoxA1(H, S) {
     return (
-      H >= 167 &&
-      H <= 193 &&
-      S >= 40 &&
+      H >= 167 - sensitivity &&
+      H <= 193 + sensitivity &&
+      S >= 40 - sensitivity &&
       S <= 100
     );
   }
 
   static inBlueGreenBoxA2(H, S) {
     return (
-      H >= 193 &&
-      H <= 199 &&
-      S >= 90 &&
+      H >= 193 - sensitivity &&
+      H <= 199 + sensitivity &&
+      S >= 90 - sensitivity &&
       S <= 100
     );
   }
 
   static inBlueGreenBoxB1(H, L) {
     return (
-      H >= 167 &&
-      H <= 194 &&
-      L >= 40 &&
-      L <= 60
+      H >= 167 - sensitivity &&
+      H <= 194 + sensitivity &&
+      L >= 40 - sensitivity &&
+      L <= 60 + sensitivity
     );
   }
 
   static inBlueGreenBoxB2(H, L) {
     return (
-      H >= 174 &&
-      H <= 199 &&
-      L >= 15 &&
+      H >= 174 - sensitivity &&
+      H <= 199 + sensitivity &&
+      L >= 15 + sensitivity &&
       L <= 40
     );
   }
@@ -205,46 +208,46 @@ class ColorRange {
 
   static inPinkBoxA1(H, S) {
     return (
-      H >= 291 &&
-      H <= 299 &&
-      S >= 94 &&
+      H >= 291 - sensitivity &&
+      H <= 299 + sensitivity &&
+      S >= 94  - sensitivity &&
       S <= 100
     );
   }
 
   static inPinkBoxA2(H, S) {
     return (
-      H >= 299 &&
-      H <= 310 &&
-      S >= 67 &&
+      H >= 299 - sensitivity &&
+      H <= 310 + sensitivity &&
+      S >= 67 - sensitivity &&
       S <= 100
     );
   }
 
   static inPinkBoxB1(H, L) {
     return (
-      H >= 291 &&
-      H <= 300 &&
-      L >= 37 &&
-      L <= 51
+      H >= 291 - sensitivity &&
+      H <= 300 + sensitivity &&
+      L >= 37 - sensitivity &&
+      L <= 51 + sensitivity
     );
   }
 
   static inPinkBoxB2(H, L) {
     return (
-      H >= 297 &&
-      H <= 300 &&
-      L >= 51 &&
-      L <= 58
+      H >= 297 - sensitivity &&
+      H <= 300 + sensitivity &&
+      L >= 51 - sensitivity &&
+      L <= 58 + sensitivity
     );
   }
 
   static inPinkBoxB3(H, L) {
     return (
-      H >= 300 &&
-      H <= 310 &&
-      L >= 31 &&
-      L <= 63
+      H >= 300 - sensitivity &&
+      H <= 310 + sensitivity &&
+      L >= 31 - sensitivity &&
+      L <= 63 + sensitivity
     );
   }
 
@@ -314,56 +317,55 @@ class ColorRange {
 
   static inYellowBoxA1(H, S) {
     return (
-      H >= 46 &&
-      H <= 54 &&
-      S >= 70 &&
+      H >= 46 - sensitivity &&
+      H <= 54  + sensitivity &&
+      S >= 70  - sensitivity &&
       S <= 100
     );
   }
 
   static inYellowBoxA2(H, S) {
     return (
-      H >= 54 &&
-      H <= 67 &&
-      S >= 60 &&
+      H >= 54 - sensitivity &&
+      H <= 67 + sensitivity &&
+      S >= 60 - sensitivity &&
       S <= 100
     );
   }
 
   static inYellowBoxB1(H, L) {
     return (
-      H >= 47 &&
-      H <= 51 &&
-      L >= 40 &&
-      L <= 56
+      H >= 47 - sensitivity &&
+      H <= 51 + sensitivity &&
+      L >= 40 - sensitivity &&
+      L <= 56 + sensitivity
     );
   }
 
   static inYellowBoxB2(H, L) {
     return (
-      H >= 46 &&
-      H <= 57 &&
-      L >= 19 &&
-      L <= 40
+      H >= 46 - sensitivity &&
+      H <= 57 + sensitivity &&
+      L >= 19 - sensitivity &&
+      L <= 40 + sensitivity
     );
   }
 
   static inYellowBoxB3(H, L) {
     return (
-      H >= 51 &&
-      H <= 67 &&
-      L >= 40 &&
-      L <= 52
+      H >= 51 - sensitivity &&
+      H <= 67 + sensitivity &&
+      L >= 40 - sensitivity &&
+      L <= 52 + sensitivity
     );
   }
 
   static inYellowBoxB4(H, L) {
     return (
-      H >= 57 &&
-      H <= 67 &&
-      L >= 29 &&
-      L <= 40 &&
-      L - 1.1 * H >= -34
+      H >= 57 - sensitivity &&
+      H <= 67 + sensitivity &&
+      L >= 29 - sensitivity &&
+      L <= 40 + sensitivity
     );
   }
 
