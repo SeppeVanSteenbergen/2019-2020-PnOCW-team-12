@@ -1,10 +1,12 @@
 class Reconstructor {
     /**
-     *
+     * Calculates the 2 points (later called helpPoints) around a corner that lie along the edges of the screen.
+     * Later used for corner reconstruction.
      * @param {Array} cornerCoo Coordinate of the corner
-     * @param {Array} matrix screenmatrix (B&W)
-     * @param id
-     * @param radius
+     * @param {Array.<Array>} matrix screenmatrix (B&W)
+     * @param {Int} id screen id
+     * @param {Int} radius radius of search circle
+     * @returns {Array.<Array>} reco, containing 4 coordinate arrays
      */
     //https://stackoverflow.com/questions/53432767/how-to-iterate-over-pixels-on-edge-of-a-square-in-1-iteration
 
@@ -32,7 +34,15 @@ class Reconstructor {
         return reco
     }
 
-    //returns list of 4 points
+    /**
+     * Calculates midPoints around the middle point. These midPoints lie on the diagonal lines of the screen
+     * and are used to make lines to potential unknown corners for reconstruction.
+     * @param midPointCoo, array containing midPoint coordinates
+     * @param {Array} matrix data matrix
+     * @param {Int} id screen id
+     * @param {Int} radius radius of search circle
+     * @returns {Array.<Array>} reco, array of arrays
+     */
     static reconstructCircleMidPoint(midPointCoo, matrix, id, radius){
         let lines = this.calcLinesCirc(midPointCoo, matrix, id, radius);
         let reco = [];
@@ -46,6 +56,14 @@ class Reconstructor {
         return reco;
     }
 
+    /**
+     * Calculates all lines "radius far" around point in yellow or pink region
+     * @param {Array} cornerCoo array containing corner coordinates
+     * @param {Array} matrix data matrix
+     * @param {Int} id screen id
+     * @param {Int} radius radius of search circle
+     * @returns {Array.<Array>} lines,
+     */
     static calcLinesCirc(cornerCoo, matrix, id, radius) {
         const dTheta = 0.01;
         const maxWrongPixel = 5;
@@ -87,6 +105,12 @@ class Reconstructor {
         return lines
     }
 
+    /**
+     * Takes lines list and determines the 2 lines that lie furthest from each other.
+     * Note: "lines" are just points going to corner.
+     * @param {Array.<Array>} lines
+     * @returns {[]|Array}
+     */
     static calcTwoFurthestPoints(lines) {
         if (lines.length < 2) {
             return [];

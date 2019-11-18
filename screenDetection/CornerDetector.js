@@ -22,7 +22,7 @@ class CornerDetector {
      * Detects all correct corners. If some are covered, the algorithm will use reconstruction methods to find them.
      * In case of covering, tmpCorners will contain correct and incorrect corners. The latter will be replaced with
      * reconstruction corners.
-     * @returns corners, array of arrays.
+     * @returns {Array.<Array>} corners, array of arrays.
      */
     cornerDetection() {
         let tmpCorners = this.findCorners();
@@ -42,7 +42,7 @@ class CornerDetector {
      * Uses array of known corners to reconstruct unknown corners using line intersection.
      * 2 lines are used: from known corner to helpPoint (using reconstructCircle) and from midpoint to helpMid
      * Array of corners should be properly sorted before calling function. (LU, RU, RD, LD)
-     * @returns corners, array of array.
+     * @returns {Array.<Array>} corners, array of array.
      */
     reconstructCorners() {
         let newCorners = {...this.corners};
@@ -178,10 +178,10 @@ class CornerDetector {
 
     /**
      * Intersects 2 lines to reconstruct missing corner from known corners and help/midPoints
-     * @param helpPoint, points around known corners along edges
-     * @param helpCorner, known corner
-     * @param helpMid, points around midPoint along diagonal lines
-     * @return missingCorner, array with coordinates
+     * @param {Array} helpPoint points around known corners along edges
+     * @param {Array} helpCorner known corner
+     * @param {Array.<Array>} helpMid points around midPoint along diagonal lines
+     * @return {Array} missingCorner, array with coordinates
      */
     reconstructCorner(helpPoint, helpCorner, helpMid) {
         let helpLine1 = new Line(helpPoint, helpCorner);
@@ -197,7 +197,7 @@ class CornerDetector {
 
     /**
      * Checks whether points are properly sorted.
-     * @param pointList, array of arrays
+     * @param {Array.<Array>} pointList array of arrays
      * @returns {boolean}
      */
     isValidOrder(pointList) {
@@ -236,7 +236,7 @@ class CornerDetector {
 
     /**
      * Orders points (usually corners)
-     * @param pointList, array of arrays containing points to be sorted
+     * @param {Array.<Array>} pointList array of arrays containing points to be sorted
      * @returns dictionary, containing properly sorted points as arrays with coordinates
      */
     orderCorners(pointList) {
@@ -257,10 +257,10 @@ class CornerDetector {
 
     /**
      * Finds correct helpPoint to use to get correct intersection for missing corners
-     * @param helpPoints, array of array containing helpPoints of helpCorner
-     * @param helpCorner
-     * @param otherCorner
-     * @returns result, array, correct helpPoint coordinates
+     * @param {Array.<Array>} helpPoints array of array containing helpPoints of helpCorner
+     * @param {Array} helpCorner
+     * @param {Array} otherCorner
+     * @returns {Array} result, array, correct helpPoint coordinates
      */
     findHelpPoint(helpPoints, helpCorner, otherCorner) {
         let knownLine = new Line(helpCorner, otherCorner)
@@ -287,7 +287,7 @@ class CornerDetector {
 
     /**
      * Detects all corners of island. May not be correct corners if covered.
-     * @returns corners, array of arrays.
+     * @returns {Array.<Array>} corners, array of arrays.
      */
     findCorners() {
         // choosing diagonal or straight corner detection
@@ -335,7 +335,7 @@ class CornerDetector {
     /**
      * Will scan for corners along diagonal lines. Used if screen is horizontal or vertical (perpendicularSearch()
      * will not work here)
-     * @returns corners, array of arrays.
+     * @returns {Array.<Array>} corners, array of arrays.
      */
     diagonalSearch() {
         let corners = [];
@@ -427,7 +427,7 @@ class CornerDetector {
 
     /**
      * Will scan for corners along vertical and horizontal lines. Used if screen is tilted.
-     * @returns corners, array of arrays.
+     * @returns {Array.<Array>} corners, array of arrays.
      */
     perpendicularSearch() {
         let corners = [];
