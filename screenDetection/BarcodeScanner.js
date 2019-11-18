@@ -50,7 +50,7 @@ class BarcodeScanner {
     let detectRatio = maxAmount / detectedAmount;
     //TODO: Needs to be updated with the right amount of barcodes on screen.
     let ratio = maxAmount / height / 10;
-    if (ratio < 0.1 || detectRatio < 0.5) {
+    if (detectRatio < 0.5) {
       // console.log('Picture is not good enough to detect barcode horizontal');
       return [0, 0, 0]
     } else {
@@ -109,7 +109,7 @@ class BarcodeScanner {
     let detectRatio = maxAmount / detectedAmount;
     //TODO: Needs to be updated with the right amount of barcodes on screen.
     let ratio = maxAmount / height / 10;
-    if (ratio < 0.1 || detectRatio < 0.5) {
+    if (detectRatio < 0.5) {
       // console.log('Picture is not good enough to detect barcode vertical');
       return [0, 0, 0]
     } else {
