@@ -88,6 +88,10 @@ class Reconstructor {
     }
 
     static calcTwoFurthestPoints(lines) {
+        if (lines.length < 2) {
+            return [];
+        }
+
         let points = [];
         for(let i = 0; i < lines.length; i++) {
             points.push(lines[i][0]);
@@ -135,7 +139,6 @@ class Reconstructor {
         }
 
         let validatedPoints = [];
-        let offset = 0;
         for (let i = 0; i < line1.length; i++) {
             point1 = line1[i];
             if (!this.crossesWhite(matrix, cornerCoo, point1)) {

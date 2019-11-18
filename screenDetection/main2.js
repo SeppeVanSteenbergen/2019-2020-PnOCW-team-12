@@ -34,24 +34,8 @@ imgElement.onload = function() {
     imgElement.width,
     imgElement.height,
     null
-  );
-  //imageTest.rgbaToHsla();
+  );  
 
-  /*let imageTest = new Image(
-    inputImage.getImgData(),
-    'imageOutConcatenated',
-    'HSLA',
-    imgElement.width,
-    imgElement.height,
-    null
-  );*/
-  /*
-  imageTest.createBigMask();
-  imageTest.medianBlurMatrix(3);
-  imageTest.medianBlur(3);
-  imageTest.createOffset(3);
-  imageTest.createScreens();
-  */
   ColorSpace.hslaToRgba(imageTest.pixels);
   imageTest.show();
 };

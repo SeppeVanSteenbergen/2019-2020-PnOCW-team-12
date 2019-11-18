@@ -20,9 +20,11 @@ class CornerDetector {
 
     cornerDetection() {
         let tmpCorners = this.findCorners();
+        console.log(tmpCorners)
         this.radius = this.calcRadius(this.radiusFactor,tmpCorners);
         //returns 4 corners in relative position
         let nonPositionCorners = this.validateCorners(tmpCorners);
+        console.log(nonPositionCorners)
         this.corners = this.orderCorners(nonPositionCorners);
         nonPositionCorners = nonPositionCorners.filter(function(point) {
             return point != null;

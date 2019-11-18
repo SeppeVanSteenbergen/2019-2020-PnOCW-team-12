@@ -38,7 +38,11 @@ class Image {
 
   analyse(){
     ColorSpace.rgbaToHsla(this.pixels)
-    this.setColorSpace("HSLA")
+    this.setColorSpace("HSLA");
+    // console.log("debug");
+    // this.debugMask();
+    // this.show();
+
     this.createBigMask();
     this.createOffset(this.offSet);
     this.createScreens();
@@ -201,6 +205,27 @@ class Image {
         this.matrix[y][x] = 3;
       } else {
         this.matrix[y][x] = 0;
+      }
+    }
+  }
+
+  debugMask() {
+    if (this.getColorSpace() !== 'HSLA') {
+      console.error('createGreenBlueMask only with HSLA as colorspace!');
+    }
+    for (let i = 0; i < this.pixels.length; i += 4) {
+      let H = this.pixels[i] * 2;
+      let S = this.pixels[i + 1];
+      let L = this.pixels[i + 2];
+
+      if (ColorRange.inYellowRange(H, S, L)) {
+        this.pixels[i + 2] = 100;
+      } else if (ColorRange.inPinkRange(H, S, L)) {
+        this.pixels[i + 2] = 100;
+      } else if (ColorRange.inMidRange(H, S, L)) {
+        this.pixels[i + 2] = 100;
+      } else {
+        this.pixels[i + 2] = 0;
       }
     }
   }
