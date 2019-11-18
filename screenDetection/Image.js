@@ -12,7 +12,7 @@ class Image {
     this.width = width;
     this.height = height;
     this.islands = [];
-    this.offSet = 3;
+    this.offSet = 1;
 
     if (colorSpace === 'RGBA'){
       this.imgOriginal = imgData
