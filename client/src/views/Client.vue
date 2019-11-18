@@ -212,6 +212,18 @@ export default {
       ctx.fillText(num, this.canvas.width / 2, this.canvas.height / 2)
     },
     drawCounterFinish() {
+      let img = new Image()
+
+      img.onload = function() {
+        let c = document.createElement('canvas')
+        c.width = img.width
+        c.height = img.height
+        let ctx = c.getContext('2d')
+
+        ctx.drawImage(img, 0, 0)
+      }
+
+      img.src = '/img/martijn.jpg'
       this.drawNumberOnCanvas('BOOM!')
     },
     drawDirectionsHandler(data) {
@@ -281,7 +293,7 @@ export default {
 
       this.canvas.height = height
       this.canvas.width = width
-/*
+      /*
       let ctx = this.canvas.getContext('2d')
       ctx.fillStyle = 'white'
       ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)

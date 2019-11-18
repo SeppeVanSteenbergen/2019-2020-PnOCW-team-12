@@ -444,22 +444,21 @@ export default {
       navigator.mediaDevices
         .getUserMedia(constraints)
         .then(stream => {
-          const track = stream.getVideoTracks()[0]
+          console.log(stream)
 
-          try {
-            const capabilities = track.getCapabilities()
-            // Check whether focus distance is supported or not.
-            if (capabilities.whiteBalanceMode) {
-              console.log(track)
-              track.applyConstraints({
-                advanced: [
-                  {whiteBalanceMode: '5500'}
-                ]
-              })
-              console.log(track)
-            }
-          } catch (e) {
-            console.log(e)
+          const track = stream.getVideoTracks()[0]
+          console.log(track.getCapabilities())
+
+          const capabilities = track.getCapabilities()
+          // Check whether focus distance is supported or not.
+          if (capabilities.whiteBalanceMode) {
+            console.log(track)
+            track.applyConstraints({
+              advanced: [
+                { whiteBalanceMode: 'continuous', colorTempurature: 5500 }
+              ]
+            })
+            console.log(track)
           }
 
           video.srcObject = stream

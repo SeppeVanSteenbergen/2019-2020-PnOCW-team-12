@@ -87,9 +87,21 @@ export default class DetectionDrawer {
     )
   }
 
+  clearScreen() {
+    const ctx = this.ctx
+    ctx.fillStyle = '#ffffff'
+    ctx.fillRect(
+        0,
+        0,
+        this.w,
+        this.h
+    )
+  }
+
   barcode(code, sections) {
     //Only integers are allowed because otherwise the barcode is not complete at the end.
     sections = Math.round(sections)
+    this.clearScreen()
 
     const ctx = this.ctx
     code = code
