@@ -46,6 +46,10 @@ export default class Image {
   analyse() {
     ColorSpace.rgbaToHsla(this.pixels)
     this.setColorSpace('HSLA')
+    // console.log("debug");
+    // this.debugMask();
+    // this.show();
+
     this.createBigMask()
     this.createOffset(this.offSet)
     this.createScreens()
@@ -101,11 +105,16 @@ export default class Image {
   }
 
   calcIslandsFloodfill() {
-    let tmpIslands = []
     for (let y = 0; y < this.getHeight(); y++) {
       for (let x = 0; x < this.getWidth(); x++) {
         if (this.checkId(x, y)) {
           let newIslandCoo = this.floodfill(x, y, this.islandID)
+          if (
+            (newIslandCoo[0] - newIslandCoo[2]) *
+              (newIslandCoo[1] - newIslandCoo[3]) <=
+            1000
+          )
+            break
           let newIsland = new Island(
             [newIslandCoo[0], newIslandCoo[1]],
             [newIslandCoo[2], newIslandCoo[3]],
@@ -113,16 +122,12 @@ export default class Image {
             this.imgOriginal,
             this.matrix
           )
-          tmpIslands.push(newIsland)
+          if (newIsland.isValid()) {
+            newIsland.finishIsland()
+            this.islands.push(newIsland)
+          }
           this.islandID += 3
         }
-      }
-    }
-    for (let i = 0; i < tmpIslands.length; i++) {
-      //tmpIslands[i].setScreenMatrix(this.matrix);
-      if (tmpIslands[i].isValid()) {
-        tmpIslands[i].finishIsland()
-        this.islands.push(tmpIslands[i])
       }
     }
   }
@@ -212,6 +217,27 @@ export default class Image {
         this.matrix[y][x] = 3
       } else {
         this.matrix[y][x] = 0
+      }
+    }
+  }
+
+  debugMask() {
+    if (this.getColorSpace() !== 'HSLA') {
+      console.error('createGreenBlueMask only with HSLA as colorspace!')
+    }
+    for (let i = 0; i < this.pixels.length; i += 4) {
+      let H = this.pixels[i] * 2
+      let S = this.pixels[i + 1]
+      let L = this.pixels[i + 2]
+
+      if (ColorRange.inYellowRange(H, S, L)) {
+        this.pixels[i + 2] = 100
+      } else if (ColorRange.inPinkRange(H, S, L)) {
+        this.pixels[i + 2] = 100
+      } else if (ColorRange.inMidRange(H, S, L)) {
+        this.pixels[i + 2] = 100
+      } else {
+        this.pixels[i + 2] = 0
       }
     }
   }
