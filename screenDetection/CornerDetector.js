@@ -226,23 +226,28 @@ class CornerDetector {
     }
 
     findHelpPoint(helpPoints, helpCorner, otherCorner) {
-        let offset = 50;
-        let line1 = new Line(helpCorner, otherCorner);
-        let line2 = new Line(helpCorner, helpPoints[0]);
+        let knownLine = new Line(helpCorner, otherCorner)
 
-        console.log("help points: " + helpPoints);
+        let result = helpPoints[0];
+        let angle = 0;
 
-        if (line1.dx === 0 || line1.dy === 0) {
-            if (line1.dx === 0) {
-                return Math.sign(line1.dy) === Math.sign(line2.dy) ? helpPoints[1] : helpPoints[0];
-            } else {
-            return Math.sign(line1.dx) === Math.sign(line2.dx) ? helpPoints[1] : helpPoints[0];
+        for (let i = 0; i < helpPoints.length; i++) {
+            const hp = helpPoints[i];
+
+            let line = new Line(helpCorner, hp)
+
+            let a = Math.abs(line.angle - knownLine.angle)
+
+            if(a > angle){
+                angle = a;
+                result = hp;
             }
-        } else {
-            let xDiff = Math.abs(Math.abs(line1.dx) - Math.abs(line2.dx));
-            let yDiff = Math.abs(Math.abs(line1.dy) - Math.abs(line2.dy));
-            return xDiff < offset && yDiff < offset ? helpPoints[1] : helpPoints[0];
+
         }
+
+        console.log("angle: " + angle, result)
+
+        return result;
     }
 
     findCorners() {
