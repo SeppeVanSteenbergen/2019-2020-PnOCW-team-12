@@ -51,14 +51,15 @@ class Line{
     }
 
     /**
-     * Get the angle of this line with the x axis
+     * Get the angle of this line with the x axis in degrees
      */
     get angle() {
-        let angle = Math.atan2(this.dy, this.dx) * 180/Math.PI;
+        let angle = Math.atan2(-this.dy, this.dx) * 180/Math.PI;
         if (angle < 0) {
             angle += 360;
         }
-        return angle;
+
+        return Math.round(angle);
     }
 
     /**

@@ -142,7 +142,8 @@ class Island {
     let topLine = new Line(this.corners.LU, this.corners.RU);
     let angle = topLine.angle;
 
-    return angle > 180;
+    // TODO: Check randgevallen (45 en 255)
+    return angle > 45 && angle < 225;
   }
 
   localToWorld() {
