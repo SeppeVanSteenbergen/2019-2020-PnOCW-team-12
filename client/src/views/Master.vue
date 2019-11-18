@@ -292,13 +292,18 @@
                   @change="loadFile"
                 >
                 </v-file-input>
+                <v-slider
+                  v-model="drawingImgScale"
+                  class="align-center"
+                  max="1"
+                  min="0.05"
+                  hide-details
+                ></v-slider>
                 <v-btn color="primary" @click="sendCustomImage">
                   Send Image
                 </v-btn>
                 <canvas ref="drawCanvas"></canvas>
               </v-card>
-
-
 
               <v-btn text @click="pictureModeDialog = false">Cancel</v-btn>
             </v-stepper-content>
@@ -341,7 +346,7 @@
 </template>
 <script>
 import PictureUpload from '../components/PictureUpload'
-import AlgorithmService from '../services/AlgotithmService'
+import AlgorithmService from '../services/AlgorithmService'
 
 export default {
   name: 'master',
@@ -389,7 +394,8 @@ export default {
       x: 0,
       y: 0,
       Xpos: 0,
-      Ypos: 0
+      Ypos: 0,
+      drawCanvasScale: 1
     }
   },
   components: {
@@ -438,6 +444,24 @@ export default {
       navigator.mediaDevices
         .getUserMedia(constraints)
         .then(stream => {
+          const track = stream.getVideoTracks()[0]
+
+          try {
+            const capabilities = track.getCapabilities()
+            // Check whether focus distance is supported or not.
+            if (capabilities.whiteBalanceMode) {
+              console.log(track)
+              track.applyConstraints({
+                advanced: [
+                  {whiteBalanceMode: '5500'}
+                ]
+              })
+              console.log(track)
+            }
+          } catch (e) {
+            console.log(e)
+          }
+
           video.srcObject = stream
           this.videoStream = stream
         })
@@ -580,9 +604,12 @@ export default {
         vue.drawingImg.onload = function() {
           let c = vue.$refs.drawCanvas
 
+          vue.drawCanvasScale =
+            window.innerWidth / vue.analysedImage.imgOriginal.width
+
           let ctx = c.getContext('2d')
-          c.width = vue.analysedImage.imgOriginal.width
-          c.height = vue.analysedImage.imgOriginal.height
+          c.width = vue.analysedImage.imgOriginal.width * vue.drawCanvasScale
+          c.height = vue.analysedImage.imgOriginal.height * vue.drawCanvasScale
           console.log('canv', c.width, c.height)
 
           c.removeEventListener('mousedown', vue.mouseDownHandler, false)
@@ -609,12 +636,12 @@ export default {
             vue.drawingImg,
             0,
             0,
-            vue.drawingImg.width,
-            vue.drawingImg.height,
+            vue.drawingImg.width * vue.drawCanvasScale,
+            vue.drawingImg.height * vue.drawCanvasScale,
             0,
             0,
-            vue.drawingImgScale * vue.drawingImg.width,
-            vue.drawingImgScale * vue.drawingImg.height
+            vue.drawingImgScale * vue.drawingImg.width * vue.drawCanvasScale,
+            vue.drawingImgScale * vue.drawingImg.height * vue.drawCanvasScale
           )
         }
 
@@ -670,18 +697,19 @@ export default {
         ctx.clearRect(0, 0, c.width, c.height)
         ctx.drawImage(
           this.drawingImg,
-          this.x + clientX - this.Xpos,
-          this.y + clientY - this.Ypos,
-          this.drawingImg.width,
-          this.drawingImg.height,
+          (this.x + clientX - this.Xpos) * this.drawCanvasScale,
+          (this.y + clientY - this.Ypos) * this.drawCanvasScale,
+          this.drawingImg.width * this.drawCanvasScale,
+          this.drawingImg.height * this.drawCanvasScale,
           0,
           0,
-          this.drawingImgScale * this.drawingImg.width,
-          this.drawingImgScale * this.drawingImg.height
+          this.drawingImgScale * this.drawingImg.width * this.drawCanvasScale,
+          this.drawingImgScale * this.drawingImg.height * this.drawCanvasScale
         )
         AlgorithmService.drawScreenOutlines(
           this.$refs.drawCanvas,
-          this.analysedImage
+          this.analysedImage,
+          this.drawCanvasScale
         )
       }
     },
@@ -694,14 +722,14 @@ export default {
 
       ctx.drawImage(
         this.drawingImg,
-        this.x,
-        this.y,
-        this.drawingImg.width,
-        this.drawingImg.height,
+        this.x * this.drawCanvasScale,
+        this.y * this.drawCanvasScale,
+        this.drawingImg.width * this.drawCanvasScale,
+        this.drawingImg.height * this.drawCanvasScale,
         0,
         0,
-        this.drawingImgScale * this.drawingImg.width,
-        this.drawingImgScale * this.drawingImg.height
+        this.drawingImgScale * this.drawingImg.width * this.drawCanvasScale,
+        this.drawingImgScale * this.drawingImg.height * this.drawCanvasScale
       )
       let img = ctx.getImageData(0, 0, c.width, c.height)
 
@@ -747,7 +775,7 @@ export default {
 
       outctx.putImageData(imgCopy, 0, 0)
 
-      AlgorithmService.drawScreenOutlines(outC, this.analysedImage)
+      AlgorithmService.drawScreenOutlines(outC, this.analysedImage, 1)
 
       let midList = []
 

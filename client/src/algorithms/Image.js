@@ -1,126 +1,79 @@
 import Island from './Island'
+import Drawer from './Drawer'
+import ColorSpace from './ColorSpace'
+import ColorRange from './ColorRange'
 
 export default class Image {
   constructor(imgData, canvasName, colorSpace, clientInfo) {
-    this.pixels = null
-    this.canvas = null
-    this.colorSpace = null
-
-    this.islands = null
-
-    this.matrix = null
-
-    this.imgData = null
-
     this.clientInfo = clientInfo
 
-    this.sensitivity = 18
     this.colorSpaces = ['RGBA', 'HSLA', 'BW']
-    this.islandID = 4 //jumps per two so we can save green and blue within an island.
+    this.islandID = 4 //jumps per three so we can save green and blue within an island.
     this.screens = []
-
-    /*lowerBoundG = [120 - this.sensitivity, 50, 25];
-    upperBoundG = [120 + this.sensitivity, 100, 75];
-    lowerBoundB = [240 - this.sensitivity, 50, 25];
-    upperBoundB = [240 + this.sensitivity, 100, 75];
-    lowerBoundMid = [180 - this.sensitivity, 50, 25];
-    upperBoundMid = [180 + this.sensitivity, 100, 75];*/
-
-    this.lowerBoundG = [120 - this.sensitivity, 50, 25]
-    this.upperBoundG = [120 + this.sensitivity, 100, 75]
-    this.lowerBoundB = [210, 50, 25]
-    this.upperBoundB = [250, 100, 75]
-    this.lowerBoundMid = [180 - this.sensitivity, 50, 25]
-    this.upperBoundMid = [180 + this.sensitivity, 100, 75]
+    this.pictureCanvas = null
+    this.width = imgData.width
+    this.height = imgData.height
+    this.islands = []
+    this.offSet = 3
 
     if (colorSpace === 'RGBA') {
-      this.imgOriginal = Image.copyImageData(imgData)
+      this.imgOriginal = imgData
     }
 
     this.setPixels(imgData.data)
-    this.qualityCheck()
     this.setCanvas(canvasName, imgData.width, imgData.height)
     this.setColorSpace(colorSpace)
-    this.width = imgData.width
-    this.height = imgData.height
+
     if (this.canvas !== null) {
       let context = this.canvas.getContext('2d')
       context.putImageData(imgData, 0, 0)
+      this.drawer = new Drawer(
+        this.getPixels(),
+        this.getWidth(),
+        this.getHeight(),
+        this.canvas.getContext('2d')
+      )
     }
 
-    this.islands = []
     this.matrix = new Array(this.getHeight())
     for (let i = 0; i < this.getHeight(); i++) {
       this.matrix[i] = new Array(this.getWidth())
     }
+
+    this.analyse()
   }
 
-  getImgData() {
-    if (this.canvas !== null) {
-      let context = this.canvas.getContext('2d')
-      let imgData = context.createImageData(
-        this.canvas.width,
-        this.canvas.height
-      )
-      imgData.data.set(this.pixels)
-      return imgData
-    } else {
-      return this.imgData
-    }
-  }
-
-  qualityCheck() {
-    if (this.calcLuminance() < 40 || 80 < this.calcLuminance()) {
-      console.log('Take a better picture')
-    }
-  }
-
-  calcLuminance() {
-    if (this.colorSpace === 'HSLa') {
-      let lum = 0
-      let size = this.pixels.length / 4
-      for (let i = 2; i < this.pixels.length; i + 4) {
-        lum += this.pixels[i]
-      }
-      return lum / size
-    }
-  }
-
-  /**
-   * Execute all the calulations to analyse the whole image
-   */
-  doCalulations() {
-    this.rgbaToHsla()
-    this.createGreenBlueMask()
-    this.medianBlurMatrix(3)
+  analyse() {
+    ColorSpace.rgbaToHsla(this.pixels)
+    this.setColorSpace('HSLA')
+    this.createBigMask()
+    this.createOffset(this.offSet)
     this.createScreens()
-    for (let i = 0; i < this.screens.length; i++) {
-      this.screens[i].findClientCode()
-      this.screens[i].calculateScreenImage(this.imgData)
+    //this.createPictureCanvas(300, 500); //TODO: param meegeven
+    //this.calcRelativeScreens(); //untested
+    return this.screens
+  }
+
+  //TODO: check resolution ook
+  qualityCheck() {
+    let RGBA = false
+    if (this.getColorSpace() === 'RGBA') {
+      ColorSpace.rgbaToHsla(this.pixels)
+      this.setColorSpace('HSLA')
+      RGBA = true
     }
-  }
-
-  /**
-   * Returns all the data from screens and main without images
-   */
-  getAllData() {
-    return true
-  }
-
-  getColorSpace() {
-    return this.colorSpace
-  }
-
-  getHeight() {
-    return this.height
-  }
-
-  getWidth() {
-    return this.width
-  }
-
-  setPixels(pixels) {
-    this.pixels = pixels
+    if (this.getColorSpace() !== 'HSLA') {
+      console.error('Picture has to be in HSLA to do a quality check!')
+    } else {
+      let luminance = ColorSpace.calcLuminance(this.pixels)
+      if (luminance < 40 || luminance > 80) {
+        console.error('Take a better picture')
+      }
+    }
+    if (RGBA) {
+      ColorSpace.hslaToRgba(this.pixels)
+      this.setColorSpace('RGBA')
+    }
   }
 
   setCanvas(canvasName, width, height) {
@@ -133,7 +86,7 @@ export default class Image {
 
   setColorSpace(newColorSpace) {
     if (!this.colorSpaces.includes(newColorSpace)) {
-      console.error('colorspace ' + newColorSpace + ' does not exist!')
+      console.error("colorspace '" + newColorSpace + "' doesn't exist!")
     }
     this.colorSpace = newColorSpace
   }
@@ -142,6 +95,8 @@ export default class Image {
     if (this.canvas !== null) {
       let context = this.canvas.getContext('2d')
       context.putImageData(this.getImgData(), 0, 0)
+
+      this.drawer._finishLines()
     }
   }
 
@@ -152,20 +107,20 @@ export default class Image {
         if (this.checkId(x, y)) {
           let newIslandCoo = this.floodfill(x, y, this.islandID)
           let newIsland = new Island(
-            newIslandCoo[0],
-            newIslandCoo[1],
+            [newIslandCoo[0], newIslandCoo[1]],
+            [newIslandCoo[2], newIslandCoo[3]],
             this.islandID,
-            this.imgOriginal
+            this.imgOriginal,
+            this.matrix
           )
-          newIsland.add(newIslandCoo[2], newIslandCoo[3])
           tmpIslands.push(newIsland)
           this.islandID += 3
         }
       }
     }
     for (let i = 0; i < tmpIslands.length; i++) {
-      tmpIslands[i].setScreenMatrix(this.matrix)
-      if (tmpIslands[i].isValidIsland()) {
+      //tmpIslands[i].setScreenMatrix(this.matrix);
+      if (tmpIslands[i].isValid()) {
         tmpIslands[i].finishIsland()
         this.islands.push(tmpIslands[i])
       }
@@ -214,7 +169,6 @@ export default class Image {
    * @param y
    * @returns {boolean}
    */
-
   checkId(x, y) {
     return (
       this.getMatrix(x, y) === 1 ||
@@ -223,8 +177,10 @@ export default class Image {
     )
   }
 
+  /**
+   * Creates the screens by detecting them in the image using the floodfill algorithm.
+   */
   createScreens() {
-    //this.screens.length = 0;
     this.screens = []
     this.calcIslandsFloodfill()
     for (let i = 0; i < this.islands.length; i++) {
@@ -235,218 +191,151 @@ export default class Image {
   }
 
   /**
-   * @param {HTMLCanvasElement} canvas canvas om imgdata op te pushen
+   * Create the value matrix, set coordinates with the correct color to the associated value.
    */
-  /**
-   matrixToImg(canvas) {
-
-        let data = context.createImageData(this.getWidth(), this.getHeight());
-
-        for (let j = 0; j < this.canvas.height; j++) {
-            for (let i = 0; i < this.canvas.width; i++) {
-                let pos = this.positionToPixel(i, j);
-                newData[pos], newData[pos + 1] = 0;
-                newData[pos + 2] = this.matrix[j][i];
-            }
-        }
-
-        let img = new Image(newData, canvas, "HSL");
-
-        img.hslaToRgba();
-
-        return img;
-    }
-   */
-
-  /*
-        math from https://www.rapidtables.com/convert/color/rgb-to-hsl.html
-    */
-  rgbaToHsla() {
-    for (let i = 0; i < this.pixels.length; i += 4) {
-      //convert rgb spectrum to 0-1
-      let red = this.pixels[i] / 255
-      let green = this.pixels[i + 1] / 255
-      let blue = this.pixels[i + 2] / 255
-
-      let min = Math.min(red, green, blue)
-      let max = Math.max(red, green, blue)
-
-      let L = (min + max) / 2
-      let S = this.findSaturation(min, max, L)
-      let H = this.findHue(red, green, blue, max, min)
-
-      this.pixels[i] = H / 2
-      this.pixels[i + 1] = Math.round(S * 100)
-      this.pixels[i + 2] = Math.round(L * 100)
-    }
-    this.setColorSpace('HSLA')
-  }
-
-  findSaturation(min, max, L) {
-    if (L < 0.5) {
-      if (min + max === 0) {
-        return 0
-      }
-      return (max - min) / (max + min)
-    } else {
-      return (max - min) / (2.0 - max - min)
-    }
-  }
-
-  findHue(red, green, blue, max, min) {
-    let hue = 0
-    if (max === min) {
-      return 0
-    } else if (red === max) {
-      hue = (green - blue) / (max - min)
-    } else if (green === max) {
-      hue = 2.0 + (blue - red) / (max - min)
-    } else if (blue === max) {
-      hue = 4.0 + (red - green) / (max - min)
-    }
-
-    hue *= 60
-    if (hue < 0) {
-      hue += 360
-    }
-    return hue
-  }
-
-  /*
-        image as Image
-        math from: http://www.niwa.nu/2013/05/math-behind-colorspace-conversions-rgb-hsl/
-    */
-  hslaToRgba() {
-    let R
-    let G
-    let B
-    let tmp1
-    let tmp2
-    let tmpR
-    let tmpG
-    let tmpB
-
-    if (this.colorSpace !== 'HSLA') {
-      console.error('Image has to be in HSLA to convert from HSLA to RGBA!')
+  createBigMask() {
+    if (this.getColorSpace() !== 'HSLA') {
+      console.error('createGreenBlueMask only with HSLA as colorspace!')
     }
     for (let i = 0; i < this.pixels.length; i += 4) {
-      let H = (this.pixels[i] * 2) / 360.0
-      let S = this.pixels[i + 1] / 100.0
-      let L = this.pixels[i + 2] / 100.0
-
-      if (S === 0) {
-        R = L
-        G = L
-        B = L
+      let H = this.pixels[i] * 2
+      let S = this.pixels[i + 1]
+      let L = this.pixels[i + 2]
+      let pixel = this.positionToPixel(i)
+      let x = pixel[0]
+      let y = pixel[1]
+      if (ColorRange.inYellowRange(H, S, L)) {
+        this.matrix[y][x] = 1
+      } else if (ColorRange.inPinkRange(H, S, L)) {
+        this.matrix[y][x] = 2
+      } else if (ColorRange.inMidRange(H, S, L)) {
+        this.matrix[y][x] = 3
       } else {
-        if (L < 0.5) {
-          tmp1 = L * (1.0 + S)
-        } else {
-          tmp1 = L + S - L * S
-        }
-        tmp2 = 2 * L - tmp1
-
-        tmpR = H + 1 / 3
-        tmpR = this.setTemporaryInRange(tmpR)
-
-        tmpG = H
-        tmpG = this.setTemporaryInRange(tmpG)
-
-        tmpB = H - 1 / 3
-        tmpB = this.setTemporaryInRange(tmpB)
-
-        R = this.hslaToRgbaCalculateColor(tmp1, tmp2, tmpR)
-        G = this.hslaToRgbaCalculateColor(tmp1, tmp2, tmpG)
-        B = this.hslaToRgbaCalculateColor(tmp1, tmp2, tmpB)
-      }
-
-      this.pixels[i] = Math.round(R * 255)
-      this.pixels[i + 1] = Math.round(G * 255)
-      this.pixels[i + 2] = Math.round(B * 255)
-    }
-    this.setColorSpace('RGBA')
-  }
-
-  setTemporaryInRange(temp) {
-    if (temp > 1) {
-      return temp - 1
-    } else if (temp < 0) {
-      return temp + 1
-    }
-    return temp
-  }
-
-  hslaToRgbaCalculateColor(tmp1, tmp2, tmpColor) {
-    if (6 * tmpColor < 1) {
-      return tmp2 + (tmp1 - tmp2) * 6 * tmpColor
-    } else if (2 * tmpColor < 1) {
-      return tmp1
-    } else if (3 * tmpColor < 2) {
-      return tmp2 + (tmp1 - tmp2) * (0.666 - tmpColor) * 6
-    }
-    return tmp2
-  }
-
-  addImgData(imgData) {
-    let pixelsToAdd = imgData.data
-    for (let i = 0; i < this.pixels.length; i += 4) {
-      this.pixels[i] += pixelsToAdd[i]
-      this.pixels[i + 1] += pixelsToAdd[i + 1]
-      this.pixels[i + 2] += pixelsToAdd[i + 2]
-    }
-  }
-
-  medianBlur(ksize) {
-    for (let y = 0; y < this.getHeight(); y++) {
-      for (let x = 0; x < this.getWidth(); x++) {
-        let LArray = []
-
-        let halfKsize = Math.floor(ksize / 2)
-        for (let yBox = -halfKsize; yBox <= halfKsize; yBox++) {
-          for (let xBox = -halfKsize; xBox <= halfKsize; xBox++) {
-            let pixel = this.getPixel(x + xBox, y + yBox)
-            LArray.push(pixel[2])
-          }
-        }
-        LArray.sort(function(a, b) {
-          return a - b
-        })
-
-        let i = this.pixelToPosition([x, y])
-        let half = Math.floor(LArray.length / 2)
-        this.pixels[i + 2] = LArray[half]
+        this.matrix[y][x] = 0
       }
     }
   }
 
-  medianBlurMatrix(ksize) {
-    for (let y = 0; y < this.getHeight(); y++) {
-      for (let x = 0; x < this.getWidth(); x++) {
-        let LArray = []
-
-        let halfKsize = Math.floor(ksize / 2)
-        for (let yBox = -halfKsize; yBox <= halfKsize; yBox++) {
-          for (let xBox = -halfKsize; xBox <= halfKsize; xBox++) {
-            if (
-              y + yBox >= 0 &&
-              y + yBox < this.getHeight() &&
-              x + xBox >= 0 &&
-              x + xBox < this.getWidth()
-            ) {
-              let pixel = this.matrix[y + yBox][x + xBox]
-              LArray.push(pixel)
-            }
-          }
-        }
-        LArray.sort(function(a, b) {
-          return a - b
-        })
-        let half = Math.floor(LArray.length / 2)
-        this.matrix[y][x] = LArray[half]
-      }
-    }
+  /**
+   * Returns the value from the matrix of the given coordinate.
+   * @param x
+   *        x position of the coordinate.
+   * @param y
+   *        y position of the coordinate.
+   * @returns {number}
+   *          The value of that pixel in the matrix
+   */
+  getMatrix(x, y) {
+    if (x < 0 || x >= this.width) return -1
+    if (y < 0 || y >= this.height) return -1
+    return this.matrix[y][x]
   }
 
+  /**
+   * Returns the coordinate in the matrix of the given position in the pixel array.
+   * @param position
+   *        The position of the element in the pixel array.
+   * @returns {[number, number]}
+   *          The x and y of the coordinate in an array.
+   */
+  positionToPixel(position) {
+    position /= 4
+    let x = position % this.getWidth()
+    let y = (position - x) / this.getWidth()
+    return [x, y]
+  }
+
+  /**
+   * Use the drawer class to draw the corners and midpoint of this island on the original imageData.
+   *
+   * @param island
+   *        the island to be drawn
+   */
+  drawIsland(island) {
+    this.drawer.drawMid(island)
+    this.drawer.drawCorners(island)
+  }
+
+  /**
+   * map the the given image size around the found screens
+   *
+   * @param {int} w image width
+   * @param {int} h image height
+   */
+  createPictureCanvas(w, h) {
+    this.pictureCanvas = {
+      minx: null,
+      maxx: null,
+      miny: null,
+      maxy: null,
+      scale: 1
+    }
+
+    let allCorners = []
+
+    this.screens.forEach(function(e) {
+      for (let key in e.corners) {
+        allCorners.push(e.corners[key])
+      }
+    })
+
+    //sort on x co
+    allCorners.sort(function(a, b) {
+      return a[0] >= b[0]
+    })
+
+    this.pictureCanvas['minx'] = allCorners[0][0]
+    this.pictureCanvas['maxx'] = allCorners[allCorners.length - 1][0]
+
+    //sort on y co
+    allCorners.sort(function(a, b) {
+      return a[1] >= b[1]
+    })
+
+    this.pictureCanvas['miny'] = allCorners[0][1]
+    this.pictureCanvas['maxy'] = allCorners[allCorners.length - 1][1]
+
+    //scale image to min size containing all screens
+    let pc = this.pictureCanvas
+    if (pc.minx + w < pc.maxx) {
+      let fac = (pc.maxx - pc.minx) / w
+      w = w * fac
+      h = h * fac
+    }
+    if (pc.miny + h < pc.maxy) {
+      let fac = (pc.maxy - pc.miny) / h
+      w = w * fac
+      h = h * fac
+    }
+
+    this.pictureCanvas.maxx = pc.minx + w
+    this.pictureCanvas.maxy = pc.miny + h
+    this.pictureCanvas.scale =
+      (this.pictureCanvas.maxx - this.pictureCanvas.minx) / w
+
+    return w, h
+  }
+
+  /**
+   * Recalculate every screen's corner to match up with the mapped image pixels
+   */
+  calcRelativeScreens() {
+    let originX = this.pictureCanvas.minx
+    let originY = this.pictureCanvas.miny
+    this.screens.forEach(function(s) {
+      for (let key in s.corners) {
+        if (s.corners.hasOwnProperty(key)) {
+          s.relativeCorners[key][0] = s.corners[key][0] - originX
+          s.relativeCorners[key][1] = s.corners[key][1] - originY
+        }
+      }
+    })
+  }
+
+  /**
+   * Makes
+   * @param factor
+   */
   createOffset(factor) {
     let whites = []
     for (let y = 0; y < this.getHeight(); y++) {
@@ -476,214 +365,8 @@ export default class Image {
     }
   }
 
-  getPixel(xPixel, yPixel) {
-    if (xPixel < 0) {
-      xPixel = 0
-    } else if (xPixel >= this.getWidth()) {
-      xPixel = this.getWidth() - 1
-    }
-
-    if (yPixel < 0) {
-      yPixel = 0
-    } else if (yPixel >= this.getHeight()) {
-      yPixel = this.getHeight() - 1
-    }
-    let i = (yPixel * this.getWidth() + xPixel) * 4
-    return [this.pixels[i], this.pixels[i + 1], this.pixels[i + 2]]
-  }
-
-  createBigMask() {
-    if (this.getColorSpace() !== 'HSLA') {
-      console.error('createGreenBlueMask only with HSLA as colorspace!')
-    }
-    for (let i = 0; i < this.pixels.length; i += 4) {
-      let H = this.pixels[i] * 2
-      let S = this.pixels[i + 1]
-      let L = this.pixels[i + 2]
-      let pixel = this.positionToPixel(i)
-      let x = pixel[0]
-      let y = pixel[1]
-      if (this.inGreenRange(H, S, L)) {
-        this.pixels[i + 1] = 0
-        this.pixels[i + 2] = 100
-        this.matrix[y][x] = 1
-      } else if (this.inBlueRange(H, S, L)) {
-        this.pixels[i + 1] = 0
-        this.pixels[i + 2] = 100
-        this.matrix[y][x] = 2
-      } else if (this.inMidRange(H, S, L)) {
-        this.pixels[i + 1] = 0
-        this.pixels[i + 2] = 100
-        this.matrix[y][x] = 3
-      } else {
-        this.pixels[i + 1] = 0
-        this.pixels[i + 2] = 0
-        this.matrix[y][x] = 0
-      }
-    }
-  }
-
-  inMidRange(H, S, L) {
-    return (
-      H >= this.lowerBoundMid[0] &&
-      S >= this.lowerBoundMid[1] &&
-      L >= this.lowerBoundMid[2] &&
-      H <= this.upperBoundMid[0] &&
-      S <= this.upperBoundMid[0] &&
-      L <= this.upperBoundMid[0]
-    )
-  }
-
-  inGreenRange(H, S, L) {
-    return (
-      H >= this.lowerBoundG[0] &&
-      S >= this.lowerBoundG[1] &&
-      L >= this.lowerBoundG[2] &&
-      H <= this.upperBoundG[0] &&
-      S <= this.upperBoundG[1] &&
-      L <= this.upperBoundG[2]
-    )
-  }
-
-  inBlueRange(H, S, L) {
-    return (
-      H >= this.lowerBoundB[0] &&
-      S >= this.lowerBoundB[1] &&
-      L >= this.lowerBoundB[2] &&
-      H <= this.upperBoundB[0] &&
-      S <= this.upperBoundB[1] &&
-      L <= this.upperBoundB[2]
-    )
-  }
-
-  getMatrix(x, y) {
-    if (x < 0) x = 0
-    else if (x >= this.getWidth()) x = this.getWidth() - 1
-    if (y < 0) y = 0
-    else if (y >= this.getHeight()) y = this.getHeight() - 1
-    return this.matrix[y][x]
-  }
-
-  positionToPixel(position) {
-    position /= 4
-    let x = position % this.getWidth()
-    let y = (position - x) / this.getWidth()
-    return [x, y]
-  }
-
-  pixelToPosition(pixel) {
-    return (pixel[1] * this.getWidth() + pixel[0]) * 4
-  }
-
   /**
-   * DEBUG METHODS
-   */
-
-  /**
-   * Draw a cross at the given pixel location of the given pixel size
-   * @param {int} x x co
-   * @param {int} y y co
-   * @param {int} size size
-   */
-  drawIsland(island) {
-    this.drawFillRect(
-      [island.minx, island.miny],
-      [island.maxx, island.maxy],
-      0.3
-    )
-    this.drawCorners(island)
-    this.drawMid(island)
-  }
-
-  drawCorners(island) {
-    let corners = Object.values(island.corners)
-    for (let j = 0; j < corners.length; j++) {
-      if (corners[j] !== null) {
-        this.drawPoint(corners[j][0], corners[j][1], 10)
-      }
-    }
-  }
-
-  drawMid(island) {
-    this.drawPoint(island.midPoint[0], island.midPoint[1], 10)
-  }
-
-  drawPoint(x, y, size) {
-    let change = true
-    if (this.getColorSpace() === 'HSLA') {
-      this.hslaToRgba()
-      let change = true
-    }
-
-    x = Math.round(x)
-    y = Math.round(y)
-    size = Math.round(size)
-
-    //verticale lijn
-    for (let j = y - size / 2; j <= y + size / 2; j++) {
-      let pos = this.pixelToPosition([x, j])
-
-      this.pixels[pos] = 0
-      this.pixels[pos + 1] = 255
-      this.pixels[pos + 2] = 255
-    }
-
-    //horizontale lijn
-    for (let i = x - size / 2; i <= x + size / 2; i++) {
-      let pos = this.pixelToPosition([i, y])
-
-      this.pixels[pos] = 0
-      this.pixels[pos + 1] = 255
-      this.pixels[pos + 2] = 255
-    }
-    if (change) {
-      this.rgbaToHsla()
-    }
-  }
-
-  /**
-   * Draw a filled rectangle on top of the image
-   *
-   * @param {Array} startCorner linkerbovenhoek vector co array
-   * @param {Array} endCorner rechteronderhoek vector co array
-   * @param {number} alpha getal 0..1
-   */
-  drawFillRect(startCorner, endCorner, alpha) {
-    let change = false
-    if (this.getColorSpace() === 'HSLA') {
-      this.hslaToRgba()
-      change = true
-    }
-    alpha = alpha * 255
-
-    for (let j = startCorner[1]; j <= endCorner[1]; j++) {
-      for (let i = startCorner[0]; i <= endCorner[0]; i++) {
-        let pos = this.pixelToPosition([i, j])
-
-        this.pixels[pos] = Math.min(this.pixels[pos] + alpha, 255)
-        this.pixels[pos + 1] = 0
-        this.pixels[pos + 2] = 0
-      }
-    }
-    if (change) {
-      this.rgbaToHsla()
-    }
-  }
-
-  makeRed(position) {
-    if (this.getColorSpace() === 'RGBA') {
-      this.pixels[position] = 255
-      this.pixels[++position] = 0
-      this.pixels[++position] = 0
-    } else if (this.getColorSpace() === 'HSLA') {
-      this.pixels[position] = 0
-      this.pixels[++position] = 100
-      this.pixels[++position] = 50
-    }
-  }
-
-  /**
-   * Clone a ImageData Object
+   * Clone an ImageData Object
    * @param src
    *        Source ImageData object
    * @returns {ImageData}
@@ -691,5 +374,43 @@ export default class Image {
    */
   static copyImageData(src) {
     return new ImageData(new Uint8ClampedArray(src.data), src.width, src.height)
+  }
+
+  /**
+   * Get all the data of the image
+   * @returns {*|ImageData}
+   */
+  getImgData() {
+    if (this.canvas !== null) {
+      let context = this.canvas.getContext('2d')
+      let imgData = context.createImageData(
+        this.canvas.width,
+        this.canvas.height
+      )
+      imgData.data.set(this.pixels)
+      return imgData
+    } else {
+      return this.imgOriginal.data
+    }
+  }
+
+  getColorSpace() {
+    return this.colorSpace
+  }
+
+  getHeight() {
+    return this.height
+  }
+
+  getWidth() {
+    return this.width
+  }
+
+  setPixels(pixels) {
+    this.pixels = pixels
+  }
+
+  getPixels() {
+    return this.pixels
   }
 }

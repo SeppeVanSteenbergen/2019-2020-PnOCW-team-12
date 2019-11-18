@@ -5,26 +5,17 @@ export default {
   fullAnalysis(imgData, clientInfo) {
     let inputImage = new Image(imgData, null, 'RGBA', clientInfo)
 
-    console.log('input image:')
-    console.log(inputImage)
-
-    inputImage.rgbaToHsla()
-
-    inputImage.createBigMask()
-    inputImage.medianBlurMatrix(3)
-    inputImage.medianBlur(3)
-    inputImage.createOffset(2)
-    inputImage.createScreens()
-
     return inputImage
   },
 
-  drawScreenOutlines(c, aImage) {
+  drawScreenOutlines(c, aImage, scale) {
     let ctx = c.getContext('2d')
+    ctx.scale(scale, scale)
     ctx.strokeStyle = '#ff0000'
     let s = aImage.screens
     for (let i = 0; i < s.length; i++) {
       ctx.beginPath()
+      ctx.save()
       ctx.moveTo(s[i].corners[0][0], s[i].corners[0][1])
       ctx.lineTo(s[i].corners[1][0], s[i].corners[1][1])
       ctx.lineTo(s[i].corners[2][0], s[i].corners[2][1])
@@ -33,6 +24,7 @@ export default {
       ctx.closePath()
       ctx.stroke()
     }
+    ctx.restore()
   },
 
   copyImageData(ctx, src) {
