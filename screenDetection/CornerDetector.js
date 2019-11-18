@@ -20,12 +20,9 @@ class CornerDetector {
 
     cornerDetection() {
         let tmpCorners = this.findCorners();
-        console.log(tmpCorners);
-        // tmpCorners = this.minOffset(tmpCorners);
         this.radius = this.calcRadius(this.radiusFactor,tmpCorners);
         //returns 4 corners in relative position
         let nonPositionCorners = this.validateCorners(tmpCorners);
-        console.log(nonPositionCorners);
         this.corners = this.orderCorners(nonPositionCorners);
         nonPositionCorners = nonPositionCorners.filter(function(point) {
             return point != null;
@@ -159,26 +156,6 @@ class CornerDetector {
     addColorId(point, oppositePoint) {
         point.push(oppositePoint[2] === this.yellow ? this.pink : this.yellow);
     }
-
-    // minOffset(corners) {
-    //     let orderedCorners = this.orderCorners(corners);
-    //     if (orderedCorners.LU !== null) {
-    //         orderedCorners.LU = [orderedCorners.LU[0] + 5, orderedCorners.LU[1] + 5, orderedCorners.LU[2]];
-    //     }
-    //     if (orderedCorners.RU !== null) {
-    //         orderedCorners.RU = [orderedCorners.RU[0] - 5, orderedCorners.RU[1] + 5, orderedCorners.RU[2]];
-    //     }
-    //     if (orderedCorners.RD !== null) {
-    //         orderedCorners.RD = [orderedCorners.RD[0] - 5, orderedCorners.RD[1] - 5, orderedCorners.RD[2]];
-    //     }
-    //     if (orderedCorners.LD !== null) {
-    //         orderedCorners.LD = [orderedCorners.LD[0] + 5, orderedCorners.LD[1] - 5, orderedCorners.LD[2]];
-    //     }
-
-    //     return Object.values(orderedCorners).filter(function (corner) {
-    //         return corner != null;
-    //     });
-    // }
 
     isValidOrder(pointList) {
         let LU = pointList[0];
