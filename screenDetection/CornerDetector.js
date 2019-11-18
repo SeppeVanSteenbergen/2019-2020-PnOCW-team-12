@@ -30,7 +30,7 @@ class CornerDetector {
             return point != null;
         });
         if (nonPositionCorners.length < 4)
-            this.reconstructCorners(4 - nonPositionCorners.length);
+            this.reconstructCorners();
         return this.corners
     }
 
@@ -40,6 +40,7 @@ class CornerDetector {
 
         let helpMids = Reconstructor.reconstructCircleMidPoint(this.midPoint, this.matrix, this.id, this.radius);
         helpMids = this.orderCorners(helpMids);
+        this.fixMids(helpMids);
 
         let helpMid = null;
         let helpPoint = null;
@@ -59,7 +60,7 @@ class CornerDetector {
                     helpPoint = this.findHelpPoint(helpPoints, helpCorner, otherCorner);
                 }
             } 
-            if (this.corners.LD !== null && helpPoint === null) {
+            else if (this.corners.LD !== null) {
                 helpPoints = Reconstructor.reconstructCircle(this.corners.LD, this.matrix, this.id, this.radius);
                 if (helpPoints.length >= 3) {
                     helpPoints = helpPoints.slice(0, 2);
@@ -85,7 +86,7 @@ class CornerDetector {
                     helpPoint = this.findHelpPoint(helpPoints, helpCorner, otherCorner);
                 }
             }
-            if (this.corners.RD !== null && helpPoint === null) {
+            else if (this.corners.RD !== null) {
                 helpPoints = Reconstructor.reconstructCircle(this.corners.RD, this.matrix, this.id, this.radius);
                 if (helpPoints.length >= 3) {
                     helpPoints = helpPoints.slice(0, 2);
@@ -113,7 +114,7 @@ class CornerDetector {
                     console.log(helpPoint);
                 }
             } 
-            if (this.corners.LD !== null && helpPoint === null) {
+            else if (this.corners.LD !== null) {
                 helpPoints = Reconstructor.reconstructCircle(this.corners.LD, this.matrix, this.id, this.radius);
                 if (helpPoints.length >= 3) {
                     helpPoints = helpPoints.slice(0, 2);
@@ -139,7 +140,7 @@ class CornerDetector {
                     helpPoint = this.findHelpPoint(helpPoints, helpCorner, otherCorner);
                 }
             }
-            if (this.corners.LU !== null && helpPoint === null) {
+            else if (this.corners.LU !== null) {
                 helpPoints = Reconstructor.reconstructCircle(this.corners.LU, this.matrix, this.id, this.radius);
                 if (helpPoints.length >= 3) {
                     helpPoints = helpPoints.slice(0, 2);
@@ -155,6 +156,11 @@ class CornerDetector {
         }
 
         this.corners = newCorners;
+    }
+
+    fixMids(helpMids) {
+        let points = Object.values(helpMids);
+        
     }
 
     reconstructCorner(helpPoint, helpCorner, helpMid) {
