@@ -24,7 +24,6 @@ export default class CornerDetector {
   cornerDetection() {
     let tmpCorners = this.findCorners()
     console.log(tmpCorners)
-    // tmpCorners = this.minOffset(tmpCorners);
     this.radius = this.calcRadius(this.radiusFactor, tmpCorners)
     //returns 4 corners in relative position
     let nonPositionCorners = this.validateCorners(tmpCorners)
@@ -33,12 +32,14 @@ export default class CornerDetector {
     nonPositionCorners = nonPositionCorners.filter(function(point) {
       return point != null
     })
-    if (nonPositionCorners.length < 4)
-      this.reconstructCorners(4 - nonPositionCorners.length)
+    if (nonPositionCorners.length < 4) this.reconstructCorners()
     return this.corners
   }
 
-  reconstructCorners(missingCornersCount) {
+  reconstructCorners() {
+    let newCorners = { ...this.corners }
+    console.log(newCorners)
+
     let helpMids = Reconstructor.reconstructCircleMidPoint(
       this.midPoint,
       this.matrix,
@@ -46,146 +47,162 @@ export default class CornerDetector {
       this.radius
     )
     helpMids = this.orderCorners(helpMids)
-    for (let i = 0; i < missingCornersCount; i++) {
-      let helpMid = null
-      let helpPoint = null
-      let helpCorner = null
-      let otherCorner = null
-      let helpPoints = null
+    this.fixMids(helpMids)
 
-      //missing LU
-      if (this.corners.LU === null) {
-        helpMid = helpMids.LU
-        if (this.corners.RU !== null) {
-          helpPoints = Reconstructor.reconstructCircle(
-            this.corners.RU,
-            this.matrix,
-            this.id,
-            this.radius
-          )
-          if (helpPoints.length >= 2) {
-            helpCorner = this.corners.RU
-            otherCorner = this.corners.RD
-            helpPoint = this.findHelpPoint(helpPoints, helpCorner, otherCorner)
-          }
-        }
-        if (this.corners.LD !== null && helpPoint === null) {
-          helpPoints = Reconstructor.reconstructCircle(
-            this.corners.LD,
-            this.matrix,
-            this.id,
-            this.radius
-          )
-          if (helpPoints.length >= 2) {
-            helpCorner = this.corners.LD
-            otherCorner = this.corners.RD
-            helpPoint = this.findHelpPoint(helpPoints, helpCorner, otherCorner)
-          }
-        }
+    let helpMid = null
+    let helpPoint = null
+    let helpCorner = null
+    let otherCorner = null
+    let helpPoints = null
 
-        let corner = this.reconstructCorner(helpPoint, helpCorner, helpMid)
-        this.addColorId(corner, this.corners.RD)
-        this.corners.LU = corner
+    //missing LU
+    if (this.corners.LU === null) {
+      helpMid = helpMids.LU
+      if (this.corners.RU !== null) {
+        helpPoints = Reconstructor.reconstructCircle(
+          this.corners.RU,
+          this.matrix,
+          this.id,
+          this.radius
+        )
+        if (helpPoints.length >= 3) {
+          helpPoints = helpPoints.slice(0, 2)
+          helpCorner = this.corners.RU
+          otherCorner = this.corners.RD
+          helpPoint = this.findHelpPoint(helpPoints, helpCorner, otherCorner)
+        }
+      } else if (this.corners.LD !== null) {
+        helpPoints = Reconstructor.reconstructCircle(
+          this.corners.LD,
+          this.matrix,
+          this.id,
+          this.radius
+        )
+        if (helpPoints.length >= 3) {
+          helpPoints = helpPoints.slice(0, 2)
+          helpCorner = this.corners.LD
+          otherCorner = this.corners.RD
+          helpPoint = this.findHelpPoint(helpPoints, helpCorner, otherCorner)
+        }
       }
-      //missing RU
-      else if (this.corners.RU === null) {
-        helpMid = helpMids.RU
+
+      let corner = this.reconstructCorner(helpPoint, helpCorner, helpMid)
+      this.addColorId(corner, this.corners.RD)
+      newCorners.LU = corner
+    }
+    //missing RU
+    if (this.corners.RU === null) {
+      helpMid = helpMids.RU
+      if (this.corners.LU !== null) {
         helpPoints = Reconstructor.reconstructCircle(
           this.corners.LU,
           this.matrix,
           this.id,
           this.radius
         )
-        if (helpPoints.length >= 2) {
+        if (helpPoints.length >= 3) {
+          helpPoints = helpPoints.slice(0, 2)
           helpCorner = this.corners.LU
           otherCorner = this.corners.LD
           helpPoint = this.findHelpPoint(helpPoints, helpCorner, otherCorner)
         }
-        if (this.corners.RD !== null && helpPoint === null) {
-          helpPoints = Reconstructor.reconstructCircle(
-            this.corners.RD,
-            this.matrix,
-            this.id,
-            this.radius
-          )
-          if (helpPoints.length >= 2) {
-            helpCorner = this.corners.RD
-            otherCorner = this.corners.LD
-            helpPoint = this.findHelpPoint(helpPoints, helpCorner, otherCorner)
-          }
-        }
-
-        let corner = this.reconstructCorner(helpPoint, helpCorner, helpMid)
-        this.addColorId(corner, this.corners.LD)
-        this.corners.RU = corner
-      }
-      //missing RD
-      else if (this.corners.RD === null) {
-        helpMid = helpMids.RD
-        if (this.corners.RU != null) {
-          helpPoints = Reconstructor.reconstructCircle(
-            this.corners.RU,
-            this.matrix,
-            this.id,
-            this.radius
-          )
-          if (helpPoints.length >= 2) {
-            helpCorner = this.corners.RU
-            otherCorner = this.corners.LU
-            helpPoint = this.findHelpPoint(helpPoints, helpCorner, otherCorner)
-          }
-        }
-        if (this.corners.LD !== null && helpPoint === null) {
-          helpPoints = Reconstructor.reconstructCircle(
-            this.corners.LD,
-            this.matrix,
-            this.id,
-            this.radius
-          )
-          if (helpPoints.length >= 2) {
-            helpCorner = this.corners.LD
-            otherCorner = this.corners.LU
-            helpPoint = this.findHelpPoint(helpPoints, helpCorner, otherCorner)
-          }
-        }
-
-        let corner = this.reconstructCorner(helpPoint, helpCorner, helpMid)
-        this.addColorId(corner, this.corners.LU)
-        this.corners.RD = corner
-      }
-      //missing LD
-      else if (this.corners.LD === null) {
-        helpMid = helpMids.LD
+      } else if (this.corners.RD !== null) {
         helpPoints = Reconstructor.reconstructCircle(
           this.corners.RD,
           this.matrix,
           this.id,
           this.radius
         )
-        if (helpPoints.length >= 2) {
+        if (helpPoints.length >= 3) {
+          helpPoints = helpPoints.slice(0, 2)
+          helpCorner = this.corners.RD
+          otherCorner = this.corners.LD
+          helpPoint = this.findHelpPoint(helpPoints, helpCorner, otherCorner)
+        }
+      }
+
+      let corner = this.reconstructCorner(helpPoint, helpCorner, helpMid)
+      this.addColorId(corner, this.corners.LD)
+      newCorners.RU = corner
+    }
+    //missing RD
+    if (this.corners.RD === null) {
+      helpMid = helpMids.RD
+      if (this.corners.RU !== null) {
+        helpPoints = Reconstructor.reconstructCircle(
+          this.corners.RU,
+          this.matrix,
+          this.id,
+          this.radius
+        )
+        if (helpPoints.length >= 3) {
+          console.log(helpPoints.slice(0))
+          helpPoints = helpPoints.slice(0, 2)
+          helpCorner = this.corners.RU
+          otherCorner = this.corners.LU
+          helpPoint = this.findHelpPoint(helpPoints, helpCorner, otherCorner)
+          console.log(helpPoint)
+        }
+      } else if (this.corners.LD !== null) {
+        helpPoints = Reconstructor.reconstructCircle(
+          this.corners.LD,
+          this.matrix,
+          this.id,
+          this.radius
+        )
+        if (helpPoints.length >= 3) {
+          helpPoints = helpPoints.slice(0, 2)
+          helpCorner = this.corners.LD
+          otherCorner = this.corners.LU
+          helpPoint = this.findHelpPoint(helpPoints, helpCorner, otherCorner)
+        }
+      }
+
+      let corner = this.reconstructCorner(helpPoint, helpCorner, helpMid)
+      this.addColorId(corner, this.corners.LU)
+      newCorners.RD = corner
+    }
+    //missing LD
+    if (this.corners.LD === null) {
+      helpMid = helpMids.LD
+      if (this.corners.RD !== null) {
+        helpPoints = Reconstructor.reconstructCircle(
+          this.corners.RD,
+          this.matrix,
+          this.id,
+          this.radius
+        )
+        if (helpPoints.length >= 3) {
+          helpPoints = helpPoints.slice(0, 2)
           helpCorner = this.corners.RD
           otherCorner = this.corners.RU
           helpPoint = this.findHelpPoint(helpPoints, helpCorner, otherCorner)
         }
-        if (this.corners.LU !== null && helpPoint === null) {
-          helpPoints = Reconstructor.reconstructCircle(
-            this.corners.LU,
-            this.matrix,
-            this.id,
-            this.radius
-          )
-          if (helpPoints.length >= 2) {
-            helpCorner = this.corners.LU
-            otherCorner = this.corners.RU
-            helpPoint = this.findHelpPoint(helpPoints, helpCorner, otherCorner)
-          }
+      } else if (this.corners.LU !== null) {
+        helpPoints = Reconstructor.reconstructCircle(
+          this.corners.LU,
+          this.matrix,
+          this.id,
+          this.radius
+        )
+        if (helpPoints.length >= 3) {
+          helpPoints = helpPoints.slice(0, 2)
+          helpCorner = this.corners.LU
+          otherCorner = this.corners.RU
+          helpPoint = this.findHelpPoint(helpPoints, helpCorner, otherCorner)
         }
-
-        let corner = this.reconstructCorner(helpPoint, helpCorner, helpMid)
-        this.addColorId(corner, this.corners.RU)
-        this.corners.LD = corner
       }
+
+      let corner = this.reconstructCorner(helpPoint, helpCorner, helpMid)
+      this.addColorId(corner, this.corners.RU)
+      newCorners.LD = corner
     }
+
+    this.corners = newCorners
+  }
+
+  fixMids(helpMids) {
+    let points = Object.values(helpMids)
   }
 
   reconstructCorner(helpPoint, helpCorner, helpMid) {
@@ -203,26 +220,6 @@ export default class CornerDetector {
   addColorId(point, oppositePoint) {
     point.push(oppositePoint[2] === this.yellow ? this.pink : this.yellow)
   }
-
-  // minOffset(corners) {
-  //     let orderedCorners = this.orderCorners(corners);
-  //     if (orderedCorners.LU !== null) {
-  //         orderedCorners.LU = [orderedCorners.LU[0] + 5, orderedCorners.LU[1] + 5, orderedCorners.LU[2]];
-  //     }
-  //     if (orderedCorners.RU !== null) {
-  //         orderedCorners.RU = [orderedCorners.RU[0] - 5, orderedCorners.RU[1] + 5, orderedCorners.RU[2]];
-  //     }
-  //     if (orderedCorners.RD !== null) {
-  //         orderedCorners.RD = [orderedCorners.RD[0] - 5, orderedCorners.RD[1] - 5, orderedCorners.RD[2]];
-  //     }
-  //     if (orderedCorners.LD !== null) {
-  //         orderedCorners.LD = [orderedCorners.LD[0] + 5, orderedCorners.LD[1] - 5, orderedCorners.LD[2]];
-  //     }
-
-  //     return Object.values(orderedCorners).filter(function (corner) {
-  //         return corner != null;
-  //     });
-  // }
 
   isValidOrder(pointList) {
     let LU = pointList[0]
@@ -275,27 +272,27 @@ export default class CornerDetector {
   }
 
   findHelpPoint(helpPoints, helpCorner, otherCorner) {
-    let line1 = new Line(helpCorner, otherCorner)
-    let line2 = new Line(helpCorner, helpPoints[0])
+    let knownLine = new Line(helpCorner, otherCorner)
 
-    if (line1.dx === 0 || line1.dy === 0) {
-      if (line1.dx === 0) {
-        return Math.sign(line1.dy) === Math.sign(line2.dy) &&
-          Math.abs(line2.dy) > 3
-          ? helpPoints[1]
-          : helpPoints[0]
-      } else {
-        return Math.sign(line1.dx) === Math.sign(line2.dx) &&
-          Math.abs(line2.dx) > 3
-          ? helpPoints[1]
-          : helpPoints[0]
+    let result = helpPoints[0]
+    let angle = 0
+
+    for (let i = 0; i < helpPoints.length; i++) {
+      const hp = helpPoints[i]
+
+      let line = new Line(helpCorner, hp)
+
+      let a = Math.abs(line.angle - knownLine.angle)
+
+      if (a > angle) {
+        angle = a
+        result = hp
       }
-    } else {
-      return Math.sign(line1.dx) === Math.sign(line2.dx) &&
-        Math.sign(line1.dy) === Math.sign(line2.dy)
-        ? helpPoints[1]
-        : helpPoints[0]
     }
+
+    console.log('angle: ' + angle, result)
+
+    return result
   }
 
   findCorners() {
@@ -513,10 +510,10 @@ export default class CornerDetector {
           this.matrix,
           this.id,
           this.radius
-        ).length >= 2
-      )
+        ).length >= 3
+      ) {
         validCorners.push(tmpCorner)
-      else validCorners.push(null)
+      } else validCorners.push(null)
     }
     return validCorners
   }

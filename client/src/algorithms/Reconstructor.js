@@ -22,6 +22,23 @@ export default class Reconstructor {
     )
     validatedFurthestPoints.forEach(point => reco.push(point))
 
+    let biggest
+    let biggestNb = -Infinity
+    for (let i = 0; i < lines.length; i++) {
+      if (
+        !lines[i].includes(furthestPoints[0]) &&
+        !lines[i].includes(furthestPoints[1])
+      ) {
+        if (biggestNb < lines[i].length) {
+          biggest = lines[i]
+          biggestNb = lines[i].length
+        }
+      }
+    }
+    if (biggest != null) {
+      reco.push(biggest[Math.floor(biggest.length / 2)])
+    }
+
     return reco
   }
 
@@ -85,6 +102,10 @@ export default class Reconstructor {
   }
 
   static calcTwoFurthestPoints(lines) {
+    if (lines.length < 2) {
+      return []
+    }
+
     let points = []
     for (let i = 0; i < lines.length; i++) {
       points.push(lines[i][0])
@@ -131,14 +152,10 @@ export default class Reconstructor {
       }
     }
 
-    //TODO implement with generic offset
-
     let validatedPoints = []
-    let offset = 0
     for (let i = 0; i < line1.length; i++) {
       point1 = line1[i]
       if (!this.crossesWhite(matrix, cornerCoo, point1)) {
-        i += offset
         validatedPoints.push(line1[i])
         break
       }
@@ -146,7 +163,6 @@ export default class Reconstructor {
     for (let i = 0; i < line2.length; i++) {
       point2 = line2[i]
       if (!this.crossesWhite(matrix, cornerCoo, point2)) {
-        i += offset
         validatedPoints.push(line2[i])
         break
       }

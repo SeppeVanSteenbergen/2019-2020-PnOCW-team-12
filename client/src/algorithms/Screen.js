@@ -6,7 +6,6 @@ export default class Screen {
   constructor(corners, midPoint, clientInfo, clientCode, screenImgOriginal) {
     this.corners = corners
     this.relativeCorners = corners
-
     this.midPoint = midPoint
     this.clientInfo = clientInfo
     this.clientCode = clientCode
@@ -21,7 +20,7 @@ export default class Screen {
       );*/
 
       console.log('transformed image')
-      //console.log(transformedTempImage)
+      //console.log(transformedTempImage);
       //this.clientCode = this.findClientCode(transformedTempImage)
       console.log('clientCode: ' + this.clientCode)
 
@@ -53,49 +52,6 @@ export default class Screen {
       return PermutationConverter.decode(barcode)
     }
     return null
-  }
-
-  mapToScreenCV(image) {
-    let src = cv.matFromImageData(image)
-    let dst = new cv.Mat()
-    let dsize = new cv.Size(this.width, this.height)
-
-    let destination = [
-      [0, 0],
-      [this.width, 0],
-      [this.width, this.height],
-      [0, this.height]
-    ]
-    let srcCorners = []
-
-    for (let i = 0; i < this.corners.length; i++) {
-      srcCorners.push(this.corners[i][0])
-      srcCorners.push(this.corners[i][1])
-    }
-
-    let dstCorners = JSON.parse('[' + destination.toString() + ']')
-
-    let srcTri = cv.matFromArray(4, 1, cv.CV_32FC2, srcCorners)
-    let dstTri = cv.matFromArray(4, 1, cv.CV_32FC2, dstCorners)
-    let M = cv.getPerspectiveTransform(srcTri, dstTri)
-    // You can try more different parameters
-    cv.warpPerspective(
-      src,
-      dst,
-      M,
-      dsize,
-      cv.INTER_LINEAR,
-      cv.BORDER_CONSTANT,
-      new cv.Scalar()
-    )
-    src.delete()
-    M.delete()
-    srcTri.delete()
-    dstTri.delete()
-    let dat = dst.data
-    dst.delete()
-
-    return new ImageData(new Uint8ClampedArray(dat), this.width, this.height)
   }
 
   /**

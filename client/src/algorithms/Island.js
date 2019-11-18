@@ -191,7 +191,8 @@ export default class Island {
     let topLine = new Line(this.corners.LU, this.corners.RU)
     let angle = topLine.angle
 
-    return angle > 180
+    // TODO: Check randgevallen (45 en 255)
+    return angle > 45 && angle < 225
   }
 
   localToWorld() {
@@ -220,6 +221,7 @@ export default class Island {
 
   createScreen(clientInfo) {
     let corners = this.corners
+
     return new Screen(
       corners,
       this.midPoint,
