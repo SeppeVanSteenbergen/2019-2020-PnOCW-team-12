@@ -26,11 +26,9 @@ class CornerDetector {
      */
     cornerDetection() {
         let tmpCorners = this.findCorners();
-        console.log(tmpCorners)
         this.radius = this.calcRadius(this.radiusFactor,tmpCorners);
         //returns 4 corners in relative position
         let nonPositionCorners = this.validateCorners(tmpCorners);
-        console.log(nonPositionCorners)
         this.corners = this.orderCorners(nonPositionCorners);
         nonPositionCorners = nonPositionCorners.filter(function(point) {
             return point != null;
@@ -48,7 +46,6 @@ class CornerDetector {
      */
     reconstructCorners() {
         let newCorners = {...this.corners};
-        console.log(newCorners);
 
         let helpMids = Reconstructor.reconstructCircleMidPoint(this.midPoint, this.matrix, this.id, this.radius);
         helpMids = this.orderCorners(helpMids);
@@ -118,12 +115,10 @@ class CornerDetector {
             if (this.corners.RU !== null) {
                 helpPoints = Reconstructor.reconstructCircle(this.corners.RU, this.matrix, this.id, this.radius);
                 if (helpPoints.length >= 3) {
-                    console.log(helpPoints.slice(0));
                     helpPoints = helpPoints.slice(0, 2);
                     helpCorner = this.corners.RU;
                     otherCorner = this.corners.LU;
                     helpPoint = this.findHelpPoint(helpPoints, helpCorner, otherCorner);
-                    console.log(helpPoint);
                 }
             } 
             else if (this.corners.LD !== null) {
@@ -280,8 +275,6 @@ class CornerDetector {
             }
 
         }
-
-        console.log("angle: " + angle, result)
 
         return result;
     }
