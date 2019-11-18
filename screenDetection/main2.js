@@ -35,7 +35,6 @@ imgElement.onload = function() {
     imgElement.height,
     null
   );  
-
   ColorSpace.hslaToRgba(imageTest.pixels);
   imageTest.show();
 };
