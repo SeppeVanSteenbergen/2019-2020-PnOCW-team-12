@@ -1,15 +1,13 @@
 class Screen {
-  constructor(corners, orientation, transMatrix, midPoint, clientInfo, screenImgOriginal) {
+  constructor(corners, midPoint, clientInfo, clientCode, screenImgOriginal) {
     this.corners = corners;
     this.relativeCorners = corners;
-    
-    this.orientation = orientation
-    this.transMatrix = transMatrix;
     this.midPoint = midPoint;
     this.clientInfo = clientInfo;
+    this.clientCode = clientCode;
 
     if (screenImgOriginal !== null && clientInfo !== null) {
-      let transformedTempImage = screenImgOriginal
+      //let transformedTempImage = screenImgOriginal
       /*this.map(
         screenImgOriginal,
         this.corners,
@@ -18,7 +16,7 @@ class Screen {
       );*/
 
       console.log('transformed image');
-      console.log(transformedTempImage);
+      //console.log(transformedTempImage);
       this.clientCode = this.findClientCode(transformedTempImage);
       console.log('clientCode: ' + this.clientCode);
 
@@ -46,11 +44,10 @@ class Screen {
     // let barcode2 = BarcodeScanner.scan2(img, 30)
     console.log('barcode 1: ' + barcode);
     // console.log('barcode 2: ' + barcode2)
-    if(barcode !== null) {
+    if (barcode !== null) {
       return PermutationConverter.decode(barcode);
     }
     return null;
-
   }
 
   /**
@@ -67,11 +64,25 @@ class Screen {
     return matrixC;
   }
 
-  cssTransMatrix(transMatrix){
-    return [transMatrix[1][1], transMatrix[2][1], 0 , transMatrix[3][1],
-  transMatrix[1][2], transMatrix[2][2], 0, transMatrix[3][2],
-  0, 0, 1, 0,
-  transMatrix[1][3], transMatrix[2][3], 0, [transMatrix[3][3]]]
+  cssTransMatrix(transMatrix) {
+    return [
+      transMatrix[1][1],
+      transMatrix[2][1],
+      0,
+      transMatrix[3][1],
+      transMatrix[1][2],
+      transMatrix[2][2],
+      0,
+      transMatrix[3][2],
+      0,
+      0,
+      1,
+      0,
+      transMatrix[1][3],
+      transMatrix[2][3],
+      0,
+      [transMatrix[3][3]]
+    ];
   }
 
   findMapMatrix(corners) {
@@ -145,7 +156,11 @@ class Screen {
   }
 
   transform(srcPX) {
-    let newCoord = Algebra.dotMMsmall(this.transMatrix, [[srcPX[0]], [srcPX[1]], [1]]);
+    let newCoord = Algebra.dotMMsmall(this.transMatrix, [
+      [srcPX[0]],
+      [srcPX[1]],
+      [1]
+    ]);
     let x = Math.round(newCoord[0] / newCoord[2]);
     let y = Math.round(newCoord[1] / newCoord[2]);
 
