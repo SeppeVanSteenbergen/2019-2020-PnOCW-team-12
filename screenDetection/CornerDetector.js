@@ -50,7 +50,8 @@ class CornerDetector {
                 helpMid = helpMids.LU;
                 if (this.corners.RU !== null) {
                     helpPoints = Reconstructor.reconstructCircle(this.corners.RU, this.matrix, this.id, this.radius);
-                    if (helpPoints.length >= 2) {
+                    if (helpPoints.length >= 3) {
+                        helpPoints = helpPoints.slice(0, 2);
                         helpCorner = this.corners.RU;
                         otherCorner = this.corners.RD;
                         helpPoint = this.findHelpPoint(helpPoints, helpCorner, otherCorner);
@@ -58,7 +59,8 @@ class CornerDetector {
                 } 
                 if (this.corners.LD !== null && helpPoint === null) {
                     helpPoints = Reconstructor.reconstructCircle(this.corners.LD, this.matrix, this.id, this.radius);
-                    if (helpPoints.length >= 2) {
+                    if (helpPoints.length >= 3) {
+                        helpPoints = helpPoints.slice(0, 2);
                         helpCorner = this.corners.LD;
                         otherCorner = this.corners.RD;
                         helpPoint = this.findHelpPoint(helpPoints, helpCorner, otherCorner);
@@ -73,14 +75,16 @@ class CornerDetector {
             else if (this.corners.RU === null) {
                 helpMid = helpMids.RU;
                 helpPoints = Reconstructor.reconstructCircle(this.corners.LU, this.matrix, this.id, this.radius);
-                if (helpPoints.length >= 2) {
+                if (helpPoints.length >= 3) {
+                    helpPoints = helpPoints.slice(0, 2);
                     helpCorner = this.corners.LU;
                     otherCorner = this.corners.LD;
                     helpPoint = this.findHelpPoint(helpPoints, helpCorner, otherCorner);
                 }
                 if (this.corners.RD !== null && helpPoint === null) {
                     helpPoints = Reconstructor.reconstructCircle(this.corners.RD, this.matrix, this.id, this.radius);
-                    if (helpPoints.length >= 2) {
+                    if (helpPoints.length >= 3) {
+                        helpPoints = helpPoints.slice(0, 2);
                         helpCorner = this.corners.RD;
                         otherCorner = this.corners.LD;
                         helpPoint = this.findHelpPoint(helpPoints, helpCorner, otherCorner);
@@ -96,7 +100,8 @@ class CornerDetector {
                 helpMid = helpMids.RD;
                 if (this.corners.RU != null) {
                     helpPoints = Reconstructor.reconstructCircle(this.corners.RU, this.matrix, this.id, this.radius);
-                    if (helpPoints.length >= 2) {
+                    if (helpPoints.length >= 3) {
+                        helpPoints = helpPoints.slice(0, 2);
                         helpCorner = this.corners.RU;
                         otherCorner = this.corners.LU;
                         helpPoint = this.findHelpPoint(helpPoints, helpCorner, otherCorner);
@@ -104,7 +109,8 @@ class CornerDetector {
                 } 
                 if (this.corners.LD !== null && helpPoint === null) {
                     helpPoints = Reconstructor.reconstructCircle(this.corners.LD, this.matrix, this.id, this.radius);
-                    if (helpPoints.length >= 2) {
+                    if (helpPoints.length >= 3) {
+                        helpPoints = helpPoints.slice(0, 2);
                         helpCorner = this.corners.LD;
                         otherCorner = this.corners.LU;
                         helpPoint = this.findHelpPoint(helpPoints, helpCorner, otherCorner);
@@ -119,14 +125,16 @@ class CornerDetector {
             else if (this.corners.LD === null) {
                 helpMid = helpMids.LD;
                 helpPoints = Reconstructor.reconstructCircle(this.corners.RD, this.matrix, this.id, this.radius);
-                if (helpPoints.length >= 2) {
+                if (helpPoints.length >= 3) {
+                    helpPoints = helpPoints.slice(0, 2);
                     helpCorner = this.corners.RD;
                     otherCorner = this.corners.RU;
                     helpPoint = this.findHelpPoint(helpPoints, helpCorner, otherCorner);
                 }
                 if (this.corners.LU !== null && helpPoint === null) {
                     helpPoints = Reconstructor.reconstructCircle(this.corners.LU, this.matrix, this.id, this.radius);
-                    if (helpPoints.length >= 2) {
+                    if (helpPoints.length >= 3) {
+                        helpPoints = helpPoints.slice(0, 2);
                         helpCorner = this.corners.LU;
                         otherCorner = this.corners.RU;
                         helpPoint = this.findHelpPoint(helpPoints, helpCorner, otherCorner);
@@ -451,9 +459,9 @@ class CornerDetector {
         let validCorners = [];
         for (let c = 0; c < tmpCorners.length; c++) {
             let tmpCorner = tmpCorners[c];
-            if(Reconstructor.reconstructCircle([tmpCorner[0], tmpCorner[1]],this.matrix, this.id, this.radius).length >= 2)
-                validCorners.push(tmpCorner)
-            else validCorners.push(null);
+            if(Reconstructor.reconstructCircle([tmpCorner[0], tmpCorner[1]],this.matrix, this.id, this.radius).length >= 3) {
+                validCorners.push(tmpCorner);
+            } else validCorners.push(null);
         }
         return validCorners
     }

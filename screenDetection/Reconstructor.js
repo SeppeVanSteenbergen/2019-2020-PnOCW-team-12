@@ -15,6 +15,20 @@ class Reconstructor {
         let validatedFurthestPoints = this.validateTwoFurthestPoints(matrix, cornerCoo, furthestPoints, lines);
         validatedFurthestPoints.forEach(point => reco.push(point));
 
+        let biggest;
+        let biggestNb = -Infinity;
+        for (let i = 0; i < lines.length; i++) {
+            if (!lines[i].includes(furthestPoints[0]) && !lines[i].includes(furthestPoints[1])) {
+                if (biggestNb < lines[i].length) {
+                    biggest = lines[i];
+                    biggestNb = lines[i].length;
+                }
+            }
+        }
+        if (biggest != null) {
+            reco.push(biggest[Math.floor(biggest.length / 2)]);
+        }
+
         return reco
     }
 
