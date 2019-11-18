@@ -2,6 +2,9 @@ class Delaunay {
 
   static triangulation(points, width, height) {
     if (points.length < 3) {
+      if(points.length == 2){
+        return [new Triangle(points[0], points[0], points[1])]
+      }
       return
     }
     let supTriangle = this.superTriangle(width, height)
