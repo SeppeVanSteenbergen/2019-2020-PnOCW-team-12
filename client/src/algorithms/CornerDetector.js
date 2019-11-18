@@ -203,6 +203,13 @@ export default class CornerDetector {
 
   fixMids(helpMids) {
     let points = Object.values(helpMids)
+    for (let i = 0; i < points.length; i++) {
+      let point = points[i]
+      if (point === null) {
+        //Plaats overstaand punt ipv null
+        points[i] = points[(i + 2) % 4]
+      }
+    }
   }
 
   reconstructCorner(helpPoint, helpCorner, helpMid) {

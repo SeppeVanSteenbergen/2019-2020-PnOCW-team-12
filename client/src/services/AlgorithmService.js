@@ -10,21 +10,18 @@ export default {
 
   drawScreenOutlines(c, aImage, scale) {
     let ctx = c.getContext('2d')
-    ctx.scale(scale, scale)
     ctx.strokeStyle = '#ff0000'
     let s = aImage.screens
     for (let i = 0; i < s.length; i++) {
       ctx.beginPath()
-      ctx.save()
-      ctx.moveTo(s[i].corners[0][0], s[i].corners[0][1])
-      ctx.lineTo(s[i].corners[1][0], s[i].corners[1][1])
-      ctx.lineTo(s[i].corners[2][0], s[i].corners[2][1])
-      ctx.lineTo(s[i].corners[3][0], s[i].corners[3][1])
-      ctx.lineTo(s[i].corners[0][0], s[i].corners[0][1])
+      ctx.moveTo(s[i].corners[0][0] * scale, s[i].corners[0][1] * scale)
+      ctx.lineTo(s[i].corners[1][0] * scale, s[i].corners[1][1] * scale)
+      ctx.lineTo(s[i].corners[2][0] * scale, s[i].corners[2][1] * scale)
+      ctx.lineTo(s[i].corners[3][0] * scale, s[i].corners[3][1] * scale)
+      ctx.lineTo(s[i].corners[0][0] * scale, s[i].corners[0][1] * scale)
       ctx.closePath()
       ctx.stroke()
     }
-    ctx.restore()
   },
 
   copyImageData(ctx, src) {

@@ -181,6 +181,7 @@ export default class Island {
           .reverse()
           .join('')
       )
+      this.clientCode = PermutationConverter.decode(this.barcode)
     }
     this.localToWorld()
     console.log(this.barcode)

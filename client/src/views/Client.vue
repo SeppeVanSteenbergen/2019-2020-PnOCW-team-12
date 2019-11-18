@@ -212,7 +212,7 @@ export default {
       ctx.fillText(num, this.canvas.width / 2, this.canvas.height / 2)
     },
     drawCounterFinish() {
-      let img = new Image()
+      /*let img = new Image()
 
       img.onload = function() {
         let c = document.createElement('canvas')
@@ -221,9 +221,13 @@ export default {
         let ctx = c.getContext('2d')
 
         ctx.drawImage(img, 0, 0)
+
+        let base64 = c.toDataURL('image/jpeg')
+
+        this.drawImageHandler({ image: base64 })
       }
 
-      img.src = '/img/martijn.jpg'
+      img.src = 'https://penocw12.student.cs.kuleuven.be/img/martijn.jpg'*/
       this.drawNumberOnCanvas('BOOM!')
     },
     drawDirectionsHandler(data) {

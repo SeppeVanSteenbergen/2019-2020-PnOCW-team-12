@@ -14,10 +14,10 @@ export default class Image {
     this.width = imgData.width
     this.height = imgData.height
     this.islands = []
-    this.offSet = 3
+    this.offSet = 1
 
     if (colorSpace === 'RGBA') {
-      this.imgOriginal = imgData
+      this.imgOriginal = this.copyImageData(imgData)
     }
 
     this.setPixels(imgData.data)
@@ -278,8 +278,10 @@ export default class Image {
    *        the island to be drawn
    */
   drawIsland(island) {
-    this.drawer.drawMid(island)
-    this.drawer.drawCorners(island)
+    if(this.canvas !== null) {
+      this.drawer.drawMid(island)
+      this.drawer.drawCorners(island)
+    }
   }
 
   /**

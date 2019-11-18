@@ -242,6 +242,18 @@
                   ref="video"
                   class="flex-wrap"
                 ></video>
+                <v-file-input
+                  v-model="displayFileVideo"
+                  color="deep-purple accent-4"
+                  counter
+                  label="Image input"
+                  placeholder="Select your files"
+                  prepend-icon="mdi-paperclip"
+                  outlined
+                  accept="image/*"
+                  @change="loadFileVideo"
+                >
+                </v-file-input>
                 <canvas ref="canva" class="flex-wrap"></canvas>
                 <br />
                 <v-btn @click="startVideo">start video</v-btn>
@@ -395,7 +407,8 @@ export default {
       y: 0,
       Xpos: 0,
       Ypos: 0,
-      drawCanvasScale: 1
+      drawCanvasScale: 1,
+      displayFileVideo: null
     }
   },
   components: {
@@ -645,6 +658,25 @@ export default {
         }
 
         vue.drawingImg.src = event.target.result
+      }
+
+      reader.readAsDataURL(file)
+    },
+    loadFileVideo(file) {
+      let vue = this
+      let reader = new FileReader()
+      let img = new Image()
+      reader.onload = function(event) {
+        img.onload = function() {
+          let c = vue.$refs.canva
+          let ctx = c.getContext('2d')
+          c.width = img.width
+          c.height = img.height
+
+          ctx.drawImage(img, 0, 0)
+        }
+
+        img.src = event.target.result
       }
 
       reader.readAsDataURL(file)
