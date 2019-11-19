@@ -43,6 +43,10 @@ export default class Island {
     this.clientCode = PermutationConverter.decode(this.barcode)
   }
 
+  getBarcod() {
+    return this.barcode
+  }
+
   isValid() {
     return this.midPoint !== null && this.barcode !== 0
   }
@@ -184,8 +188,8 @@ export default class Island {
       this.clientCode = PermutationConverter.decode(this.barcode)
     }
     this.localToWorld()
-    console.log(this.barcode)
-    console.log(this.midPoint, this.corners)
+
+    console.log("Detected screen: " + this.barcode)
   }
 
   islandIsFlipped() {

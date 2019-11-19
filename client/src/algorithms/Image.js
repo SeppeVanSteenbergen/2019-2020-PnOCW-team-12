@@ -123,8 +123,12 @@ export default class Image {
             this.matrix
           )
           if (newIsland.isValid()) {
-            newIsland.finishIsland()
-            this.islands.push(newIsland)
+            try {
+              newIsland.finishIsland()
+              this.islands.push(newIsland)
+            } catch (err) {
+              console.log(err + "in screen: " + newIsland.getBarcode())
+            }
           }
           this.islandID += 3
         }

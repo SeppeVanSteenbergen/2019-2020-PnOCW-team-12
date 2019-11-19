@@ -23,17 +23,20 @@ export default class CornerDetector {
 
   cornerDetection() {
     let tmpCorners = this.findCorners()
-    console.log(tmpCorners)
     this.radius = this.calcRadius(this.radiusFactor, tmpCorners)
     //returns 4 corners in relative position
     let nonPositionCorners = this.validateCorners(tmpCorners)
-    console.log(nonPositionCorners)
+    if (nonPositionCorners.filter(function (point) {
+      return point != null;
+    }).length < 2) throw "Not enough good corners detected for reconstruction"
+
     this.corners = this.orderCorners(nonPositionCorners)
-    nonPositionCorners = nonPositionCorners.filter(function(point) {
+    nonPositionCorners = nonPositionCorners.filter(function (point) {
       return point != null
     })
-    if (nonPositionCorners.length < 4) this.reconstructCorners()
-    return this.corners
+    if (nonPositionCorners.length < 4) this.reconstructCorners() {
+      return this.corners
+    }
   }
 
   reconstructCorners() {
@@ -327,7 +330,7 @@ export default class CornerDetector {
 
     let yValuesLeftVariance = Math.sqrt(
       yValuesLeft.reduce((t, n) => t + Math.pow(yValuesLeftAvg - n, 2)) /
-        yValuesLeft.length
+      yValuesLeft.length
     )
 
     if (yValuesLeftVariance > sd_threshold) diagonalSearch = true
@@ -539,7 +542,7 @@ export default class CornerDetector {
   farestToMid(corners) {
     let distances = []
     let midPoint = this.midPoint
-    corners.forEach(function(corner) {
+    corners.forEach(function (corner) {
       if (corner !== null) {
         distances.push(Algebra.calcDist(corner, midPoint))
       } else distances.push(null)
