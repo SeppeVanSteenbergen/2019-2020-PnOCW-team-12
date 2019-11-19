@@ -46,7 +46,7 @@ function validateColor() {
       }
     }
 
-    if (amount / pixels.length < 1) {
+    if (amount / (pixels.length / 4) < 0.9) {
       alert("Not all pixels are detected as the right color. Send this picture to Seppe");
     }
   } catch (error) {
