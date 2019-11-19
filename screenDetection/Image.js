@@ -112,9 +112,8 @@ class Image {
               newIsland.finishIsland()
               this.islands.push(newIsland);
             } catch (err) {
-              console.log(err)
-            }
-            
+              console.log(err + " in screen: " + newIsland.getBarcode())
+            } 
           }
           this.islandID += 3;
         }

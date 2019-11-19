@@ -29,12 +29,17 @@ class CornerDetector {
         this.radius = this.calcRadius(this.radiusFactor,tmpCorners);
         //returns 4 corners in relative position
         let nonPositionCorners = this.validateCorners(tmpCorners);
+        if (nonPositionCorners.filter(function(point) {
+            return point != null;
+        }).length < 2) throw "Not enough good corners detected for reconstruction"
+
         this.corners = this.orderCorners(nonPositionCorners);
         nonPositionCorners = nonPositionCorners.filter(function(point) {
             return point != null;
         });
-        if (nonPositionCorners.length < 4)
+        if (nonPositionCorners.length < 4) {
             this.reconstructCorners();
+        }
         return this.corners
     }
 

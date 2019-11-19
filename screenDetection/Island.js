@@ -37,6 +37,10 @@ class Island {
     this.clientCode = PermutationConverter.decode(this.barcode);
   }
 
+  getBarcode() {
+    return this.barcode;
+  }
+
   isValid() {
     return this.midPoint !== null && this.barcode !== 0;
   }
@@ -177,8 +181,8 @@ class Island {
       );
     }
     this.localToWorld();
-    console.log(this.barcode);
-    console.log(this.midPoint, this.corners);
+
+    console.log("Detected screen: " + this.barcode);
   }
 
   islandIsFlipped() {
