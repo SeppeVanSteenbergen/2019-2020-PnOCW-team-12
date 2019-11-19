@@ -1,4 +1,4 @@
-const sensitivity = 20
+const sensitivity = 10
 
 export default class ColorRange {
   static inBlueRange(H, S, L) {
