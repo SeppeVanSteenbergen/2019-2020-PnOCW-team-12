@@ -9,12 +9,12 @@ inputElement.addEventListener(
   false
 );
 imgElement.onload = function() {
-  let maxAmountBorderPx = 2000;
-  if (imgElement.width + imgElement.height > maxAmountBorderPx) {
-    let ratio = imgElement.width / imgElement.height;
-    imgElement.height = Math.round(maxAmountBorderPx / (ratio + 1.0));
-    imgElement.width = Math.round(ratio * imgElement.height);
-  }
+  // let maxAmountBorderPx = 2000;
+  // if (imgElement.width + imgElement.height > maxAmountBorderPx) {
+  //   let ratio = imgElement.width / imgElement.height;
+  //   imgElement.height = Math.round(maxAmountBorderPx / (ratio + 1.0));
+  //   imgElement.width = Math.round(ratio * imgElement.height);
+  // }
   let inputCanvas = document.getElementById('inputImage');
   let inputContext = inputCanvas.getContext('2d');
   inputContext.clearRect(0, 0, inputCanvas.width, inputCanvas.height);
