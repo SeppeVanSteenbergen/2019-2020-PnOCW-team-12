@@ -21,27 +21,42 @@ export default class CornerDetector {
     this.pink = id + 1
   }
 
+  /**
+   * Detects all correct corners. If some are covered, the algorithm will use reconstruction methods to find them.
+   * In case of covering, tmpCorners will contain correct and incorrect corners. The latter will be replaced with
+   * reconstruction corners.
+   * @returns {Array.<Array>} corners, array of arrays.
+   */
   cornerDetection() {
     let tmpCorners = this.findCorners()
     this.radius = this.calcRadius(this.radiusFactor, tmpCorners)
     //returns 4 corners in relative position
     let nonPositionCorners = this.validateCorners(tmpCorners)
-    if (nonPositionCorners.filter(function (point) {
-      return point != null;
-    }).length < 2) throw "Not enough good corners detected for reconstruction"
+    if (
+      nonPositionCorners.filter(function(point) {
+        return point != null
+      }).length < 2
+    )
+      throw 'Not enough good corners detected for reconstruction'
 
     this.corners = this.orderCorners(nonPositionCorners)
-    nonPositionCorners = nonPositionCorners.filter(function (point) {
+    nonPositionCorners = nonPositionCorners.filter(function(point) {
       return point != null
     })
-    if (nonPositionCorners.length < 4) this.reconstructCorners() {
-      return this.corners
+    if (nonPositionCorners.length < 4) {
+      this.reconstructCorners()
     }
+    return this.corners
   }
 
+  /**
+   * Uses array of known corners to reconstruct unknown corners using line intersection.
+   * 2 lines are used: from known corner to helpPoint (using reconstructCircle) and from midpoint to helpMid
+   * Array of corners should be properly sorted before calling function. (LU, RU, RD, LD)
+   * @returns {Array.<Array>} corners, array of array.
+   */
   reconstructCorners() {
     let newCorners = { ...this.corners }
-    console.log(newCorners)
 
     let helpMids = Reconstructor.reconstructCircleMidPoint(
       this.midPoint,
@@ -139,12 +154,10 @@ export default class CornerDetector {
           this.radius
         )
         if (helpPoints.length >= 3) {
-          console.log(helpPoints.slice(0))
           helpPoints = helpPoints.slice(0, 2)
           helpCorner = this.corners.RU
           otherCorner = this.corners.LU
           helpPoint = this.findHelpPoint(helpPoints, helpCorner, otherCorner)
-          console.log(helpPoint)
         }
       } else if (this.corners.LD !== null) {
         helpPoints = Reconstructor.reconstructCircle(
@@ -215,6 +228,13 @@ export default class CornerDetector {
     }
   }
 
+  /**
+   * Intersects 2 lines to reconstruct missing corner from known corners and help/midPoints
+   * @param {Array} helpPoint points around known corners along edges
+   * @param {Array} helpCorner known corner
+   * @param {Array.<Array>} helpMid points around midPoint along diagonal lines
+   * @return {Array} missingCorner, array with coordinates
+   */
   reconstructCorner(helpPoint, helpCorner, helpMid) {
     let helpLine1 = new Line(helpPoint, helpCorner)
     let helpLine2 = new Line(this.midPoint, helpMid)
@@ -231,6 +251,11 @@ export default class CornerDetector {
     point.push(oppositePoint[2] === this.yellow ? this.pink : this.yellow)
   }
 
+  /**
+   * Checks whether points are properly sorted.
+   * @param {Array.<Array>} pointList array of arrays
+   * @returns {boolean}
+   */
   isValidOrder(pointList) {
     let LU = pointList[0]
     let RU = pointList[1]
@@ -265,6 +290,11 @@ export default class CornerDetector {
     }
   }
 
+  /**
+   * Orders points (usually corners)
+   * @param {Array.<Array>} pointList array of arrays containing points to be sorted
+   * @returns dictionary, containing properly sorted points as arrays with coordinates
+   */
   orderCorners(pointList) {
     for (let i = 0; i < pointList.length; i++) {
       if (this.isValidOrder(pointList)) {
@@ -281,6 +311,13 @@ export default class CornerDetector {
     }
   }
 
+  /**
+   * Finds correct helpPoint to use to get correct intersection for missing corners
+   * @param {Array.<Array>} helpPoints array of array containing helpPoints of helpCorner
+   * @param {Array} helpCorner
+   * @param {Array} otherCorner
+   * @returns {Array} result, array, correct helpPoint coordinates
+   */
   findHelpPoint(helpPoints, helpCorner, otherCorner) {
     let knownLine = new Line(helpCorner, otherCorner)
 
@@ -300,11 +337,13 @@ export default class CornerDetector {
       }
     }
 
-    console.log('angle: ' + angle, result)
-
     return result
   }
 
+  /**
+   * Detects all corners of island. May not be correct corners if covered.
+   * @returns {Array.<Array>} corners, array of arrays.
+   */
   findCorners() {
     // choosing diagonal or straight corner detection
     let diagonalSearch = false
@@ -330,7 +369,7 @@ export default class CornerDetector {
 
     let yValuesLeftVariance = Math.sqrt(
       yValuesLeft.reduce((t, n) => t + Math.pow(yValuesLeftAvg - n, 2)) /
-      yValuesLeft.length
+        yValuesLeft.length
     )
 
     if (yValuesLeftVariance > sd_threshold) diagonalSearch = true
@@ -347,6 +386,11 @@ export default class CornerDetector {
     return corners
   }
 
+  /**
+   * Will scan for corners along diagonal lines. Used if screen is horizontal or vertical (perpendicularSearch()
+   * will not work here)
+   * @returns {Array.<Array>} corners, array of arrays.
+   */
   diagonalSearch() {
     let corners = []
     // left upper corner
@@ -431,6 +475,10 @@ export default class CornerDetector {
     return corners
   }
 
+  /**
+   * Will scan for corners along vertical and horizontal lines. Used if screen is tilted.
+   * @returns {Array.<Array>} corners, array of arrays.
+   */
   perpendicularSearch() {
     let corners = []
     // left
@@ -542,7 +590,7 @@ export default class CornerDetector {
   farestToMid(corners) {
     let distances = []
     let midPoint = this.midPoint
-    corners.forEach(function (corner) {
+    corners.forEach(function(corner) {
       if (corner !== null) {
         distances.push(Algebra.calcDist(corner, midPoint))
       } else distances.push(null)

@@ -43,7 +43,7 @@ export default class Island {
     this.clientCode = PermutationConverter.decode(this.barcode)
   }
 
-  getBarcod() {
+  getBarcode() {
     return this.barcode
   }
 
@@ -185,11 +185,10 @@ export default class Island {
           .reverse()
           .join('')
       )
-      this.clientCode = PermutationConverter.decode(this.barcode)
     }
     this.localToWorld()
 
-    console.log("Detected screen: " + this.barcode)
+    console.log('Detected screen: ' + this.barcode)
   }
 
   islandIsFlipped() {

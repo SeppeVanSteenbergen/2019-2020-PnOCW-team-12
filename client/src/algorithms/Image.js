@@ -4,10 +4,8 @@ import ColorSpace from './ColorSpace'
 import ColorRange from './ColorRange'
 
 export default class Image {
-  constructor(imgDat, canvasName, colorSpace, clientInfo) {
+  constructor(imgData, canvasName, colorSpace, clientInfo) {
     this.clientInfo = clientInfo
-
-    let imgData = this.resizeImage(imgDat)
 
     this.colorSpaces = ['RGBA', 'HSLA', 'BW']
     this.islandID = 4 //jumps per three so we can save green and blue within an island.
@@ -19,7 +17,7 @@ export default class Image {
     this.offSet = 1
 
     if (colorSpace === 'RGBA') {
-      this.imgOriginal = this.copyImageData(imgData)
+      this.imgOriginal = imgData
     }
 
     this.setPixels(imgData.data)
@@ -29,13 +27,13 @@ export default class Image {
     if (this.canvas !== null) {
       let context = this.canvas.getContext('2d')
       context.putImageData(imgData, 0, 0)
-      this.drawer = new Drawer(
-        this.getPixels(),
-        this.getWidth(),
-        this.getHeight(),
-        this.canvas.getContext('2d')
-      )
     }
+    this.drawer = new Drawer(
+      this.getPixels(),
+      this.getWidth(),
+      this.getHeight(),
+      this.canvas.getContext('2d')
+    )
 
     this.matrix = new Array(this.getHeight())
     for (let i = 0; i < this.getHeight(); i++) {
@@ -129,7 +127,7 @@ export default class Image {
               newIsland.finishIsland()
               this.islands.push(newIsland)
             } catch (err) {
-              console.log(err + "in screen: " + newIsland.getBarcode())
+              console.log(err + ' in screen: ' + newIsland.getBarcode())
             }
           }
           this.islandID += 3
@@ -284,10 +282,8 @@ export default class Image {
    *        the island to be drawn
    */
   drawIsland(island) {
-    if (this.canvas !== null) {
-      this.drawer.drawMid(island)
-      this.drawer.drawCorners(island)
-    }
+    this.drawer.drawMid(island)
+    this.drawer.drawCorners(island)
   }
 
   /**
@@ -446,14 +442,5 @@ export default class Image {
 
   getPixels() {
     return this.pixels
-  }
-
-  resizeImage(imgData) {
-    let maxAmountBorderPx = 2000
-    if (imgData.width + imgData.height > maxAmountBorderPx) {
-      let ratio = imgData.width / imgData.height
-      imgData.height = Math.round(maxAmountBorderPx / (ratio + 1.0))
-      imgData.width = Math.round(ratio * imgData.height)
-    }
   }
 }
