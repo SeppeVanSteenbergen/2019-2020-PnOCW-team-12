@@ -4,8 +4,10 @@ import ColorSpace from './ColorSpace'
 import ColorRange from './ColorRange'
 
 export default class Image {
-  constructor(imgData, canvasName, colorSpace, clientInfo) {
+  constructor(imgDat, canvasName, colorSpace, clientInfo) {
     this.clientInfo = clientInfo
+
+    let imgData = this.resizeImage(imgDat)
 
     this.colorSpaces = ['RGBA', 'HSLA', 'BW']
     this.islandID = 4 //jumps per three so we can save green and blue within an island.
@@ -278,7 +280,7 @@ export default class Image {
    *        the island to be drawn
    */
   drawIsland(island) {
-    if(this.canvas !== null) {
+    if (this.canvas !== null) {
       this.drawer.drawMid(island)
       this.drawer.drawCorners(island)
     }
@@ -440,5 +442,14 @@ export default class Image {
 
   getPixels() {
     return this.pixels
+  }
+
+  resizeImage(imgData) {
+    let maxAmountBorderPx = 2000
+    if (imgData.width + imgData.height > maxAmountBorderPx) {
+      let ratio = imgData.width / imgData.height
+      imgData.height = Math.round(maxAmountBorderPx / (ratio + 1.0))
+      imgData.width = Math.round(ratio * imgData.height)
+    }
   }
 }
