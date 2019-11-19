@@ -108,8 +108,13 @@ class Image {
             break
           let newIsland = new Island([newIslandCoo[0], newIslandCoo[1]], [newIslandCoo[2], newIslandCoo[3]], this.islandID, this.imgOriginal, this.matrix);
           if (newIsland.isValid()) {
-            newIsland.finishIsland()
-            this.islands.push(newIsland);
+            try {
+              newIsland.finishIsland()
+              this.islands.push(newIsland);
+            } catch (err) {
+              console.log(err)
+            }
+            
           }
           this.islandID += 3;
         }
