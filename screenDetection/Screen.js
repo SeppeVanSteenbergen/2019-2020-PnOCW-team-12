@@ -1,14 +1,14 @@
 class Screen {
-  constructor(corners, transMatrix, midPoint, clientInfo, screenImgOriginal) {
+  constructor(corners, midPoint, clientInfo, clientCode, screenImgOriginal) {
     this.corners = corners;
     this.relativeCorners = corners;
-    
-    this.transMatrix = transMatrix;
     this.midPoint = midPoint;
     this.clientInfo = clientInfo;
+    this.clientCode = clientCode;
 
     if (screenImgOriginal !== null && clientInfo !== null) {
-      let transformedTempImage = screenImgOriginal/*this.map(
+      //let transformedTempImage = screenImgOriginal
+      /*this.map(
         screenImgOriginal,
         this.corners,
         600,
@@ -16,7 +16,7 @@ class Screen {
       );*/
 
       console.log('transformed image');
-      console.log(transformedTempImage);
+      //console.log(transformedTempImage);
       this.clientCode = this.findClientCode(transformedTempImage);
       console.log('clientCode: ' + this.clientCode);
 
@@ -41,14 +41,13 @@ class Screen {
    */
   findClientCode(img) {
     let barcode = BarcodeScanner.scan(img, 30);
-    let barcode2 = BarcodeScanner.scan2(img, 30)
+    // let barcode2 = BarcodeScanner.scan2(img, 30)
     console.log('barcode 1: ' + barcode);
-    console.log('barcode 2: ' + barcode2)
-    if(barcode !== null) {
+    // console.log('barcode 2: ' + barcode2)
+    if (barcode !== null) {
       return PermutationConverter.decode(barcode);
     }
     return null;
-
   }
 
   /**
@@ -65,11 +64,25 @@ class Screen {
     return matrixC;
   }
 
-  cssTransMatrix(transMatrix){
-    return [transMatrix[1][1], transMatrix[2][1], 0 , transMatrix[3][1],
-  transMatrix[1][2], transMatrix[2][2], 0, transMatrix[3][2],
-  0, 0, 1, 0,
-  transMatrix[1][3], transMatrix[2][3], 0, [transMatrix[3][3]]]
+  cssTransMatrix(transMatrix) {
+    return [
+      transMatrix[1][1],
+      transMatrix[2][1],
+      0,
+      transMatrix[3][1],
+      transMatrix[1][2],
+      transMatrix[2][2],
+      0,
+      transMatrix[3][2],
+      0,
+      0,
+      1,
+      0,
+      transMatrix[1][3],
+      transMatrix[2][3],
+      0,
+      [transMatrix[3][3]]
+    ];
   }
 
   findMapMatrix(corners) {
@@ -139,7 +152,6 @@ class Screen {
         img.data[indexDest + 3] = data[index + 3];
       }
     }
-
     return img;
   }
 
