@@ -34,7 +34,6 @@ function validateColor() {
 
   try {
     if (color === "colorSelect") throw "Select color before validating!"
-
     let amount = 0;
     for (let i = 0; i < pixels.length; i += 4) {
       let H = pixels[i] * 2;
@@ -48,6 +47,8 @@ function validateColor() {
 
     if (amount / (pixels.length / 4) < 0.9) {
       alert("Not all pixels are detected as the right color. Send this picture to Seppe");
+    } else {
+      alert("color is already validated!")
     }
   } catch (error) {
     alert(error)
