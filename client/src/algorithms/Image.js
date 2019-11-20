@@ -27,13 +27,14 @@ export default class Image {
     if (this.canvas !== null) {
       let context = this.canvas.getContext('2d')
       context.putImageData(imgData, 0, 0)
+
+      this.drawer = new Drawer(
+        this.getPixels(),
+        this.getWidth(),
+        this.getHeight(),
+        this.canvas.getContext('2d')
+      )
     }
-    this.drawer = new Drawer(
-      this.getPixels(),
-      this.getWidth(),
-      this.getHeight(),
-      this.canvas.getContext('2d')
-    )
 
     this.matrix = new Array(this.getHeight())
     for (let i = 0; i < this.getHeight(); i++) {
@@ -46,10 +47,6 @@ export default class Image {
   analyse() {
     ColorSpace.rgbaToHsla(this.pixels)
     this.setColorSpace('HSLA')
-    // console.log("debug");
-    // this.debugMask();
-    // this.show();
-
     this.createBigMask()
     this.createOffset(this.offSet)
     this.createScreens()
@@ -111,7 +108,7 @@ export default class Image {
           let newIslandCoo = this.floodfill(x, y, this.islandID)
           if (
             (newIslandCoo[0] - newIslandCoo[2]) *
-              (newIslandCoo[1] - newIslandCoo[3]) <=
+            (newIslandCoo[1] - newIslandCoo[3]) <=
             1000
           )
             break
@@ -225,27 +222,6 @@ export default class Image {
     }
   }
 
-  debugMask() {
-    if (this.getColorSpace() !== 'HSLA') {
-      console.error('createGreenBlueMask only with HSLA as colorspace!')
-    }
-    for (let i = 0; i < this.pixels.length; i += 4) {
-      let H = this.pixels[i] * 2
-      let S = this.pixels[i + 1]
-      let L = this.pixels[i + 2]
-
-      if (ColorRange.inYellowRange(H, S, L)) {
-        this.pixels[i + 2] = 100
-      } else if (ColorRange.inPinkRange(H, S, L)) {
-        this.pixels[i + 2] = 100
-      } else if (ColorRange.inMidRange(H, S, L)) {
-        this.pixels[i + 2] = 100
-      } else {
-        this.pixels[i + 2] = 0
-      }
-    }
-  }
-
   /**
    * Returns the value from the matrix of the given coordinate.
    * @param x
@@ -303,14 +279,14 @@ export default class Image {
 
     let allCorners = []
 
-    this.screens.forEach(function(e) {
+    this.screens.forEach(function (e) {
       for (let key in e.corners) {
         allCorners.push(e.corners[key])
       }
     })
 
     //sort on x co
-    allCorners.sort(function(a, b) {
+    allCorners.sort(function (a, b) {
       return a[0] >= b[0]
     })
 
@@ -318,7 +294,7 @@ export default class Image {
     this.pictureCanvas['maxx'] = allCorners[allCorners.length - 1][0]
 
     //sort on y co
-    allCorners.sort(function(a, b) {
+    allCorners.sort(function (a, b) {
       return a[1] >= b[1]
     })
 
@@ -352,7 +328,7 @@ export default class Image {
   calcRelativeScreens() {
     let originX = this.pictureCanvas.minx
     let originY = this.pictureCanvas.miny
-    this.screens.forEach(function(s) {
+    this.screens.forEach(function (s) {
       for (let key in s.corners) {
         if (s.corners.hasOwnProperty(key)) {
           s.relativeCorners[key][0] = s.corners[key][0] - originX
