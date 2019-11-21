@@ -50,7 +50,7 @@ imgElement.onload = function() {
   t[0][2], t[1][2], 0, t[2][2]]
 
   console.log(t)
-  t = "perspective: none; transform: matrix3d(" + t.join(", ") + ")";
+  t = "transform: matrix3d(" + t.join(", ") + ")";
   outputCanvas.style = t
   outputContext.drawImage(imgElement, 0, 0, imgElement.width, imgElement.height)
 
