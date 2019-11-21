@@ -16,6 +16,12 @@ export default class Image {
     this.islands = []
     this.offSet = 1
 
+    // Resize to max full HD resolution
+    let maxBorder = [1920, 1080]
+    if (imgData.width > maxBorder[0] || imgData.height > maxBorder[1]) {
+      imgData = this.resizeImage(imgData, maxBorder)
+    }
+
     if (colorSpace === 'RGBA') {
       this.imgOriginal = imgData
     }
@@ -41,6 +47,20 @@ export default class Image {
     }
 
     this.analyse()
+  }
+
+  resizeImage(image, border) {
+    let scaleWidth = border[0] / image.width
+    let scaleHeight = border[1] / image.height
+    let scale = Math.min(scaleWidth, scaleHeight)
+    
+    let canvas = document.createElement("canvas")
+    let ctx = canvas.getContext("2d")
+    ctx.putImageData(image, 0, 0)
+    ctx.scale(scale, scale)
+    let resizedImage = ctx.getImageData(0, 0, image.width * scale, image.height * scale)
+
+    return resizedImage
   }
 
   analyse() {
@@ -108,7 +128,7 @@ export default class Image {
           let newIslandCoo = this.floodfill(x, y, this.islandID)
           if (
             (newIslandCoo[0] - newIslandCoo[2]) *
-              (newIslandCoo[1] - newIslandCoo[3]) <=
+            (newIslandCoo[1] - newIslandCoo[3]) <=
             1000
           )
             break
@@ -279,14 +299,14 @@ export default class Image {
 
     let allCorners = []
 
-    this.screens.forEach(function(e) {
+    this.screens.forEach(function (e) {
       for (let key in e.corners) {
         allCorners.push(e.corners[key])
       }
     })
 
     //sort on x co
-    allCorners.sort(function(a, b) {
+    allCorners.sort(function (a, b) {
       return a[0] >= b[0]
     })
 
@@ -294,7 +314,7 @@ export default class Image {
     this.pictureCanvas['maxx'] = allCorners[allCorners.length - 1][0]
 
     //sort on y co
-    allCorners.sort(function(a, b) {
+    allCorners.sort(function (a, b) {
       return a[1] >= b[1]
     })
 
@@ -328,7 +348,7 @@ export default class Image {
   calcRelativeScreens() {
     let originX = this.pictureCanvas.minx
     let originY = this.pictureCanvas.miny
-    this.screens.forEach(function(s) {
+    this.screens.forEach(function (s) {
       for (let key in s.corners) {
         if (s.corners.hasOwnProperty(key)) {
           s.relativeCorners[key][0] = s.corners[key][0] - originX
