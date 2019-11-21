@@ -255,4 +255,12 @@ class Algebra {
     let dy = a[1] - b[1];
     return Math.sqrt(Math.pow(dx,2) + Math.pow(dy,2));
   }
+
+  static valueM(value, M){
+    for(let j = 0; j < M.length; j++){
+      for(let i = 0; i < M[j].length; j++){
+        M[j][i] *= value
+      }
+    }
+  }
 }

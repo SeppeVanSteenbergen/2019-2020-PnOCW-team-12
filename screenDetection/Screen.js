@@ -6,26 +6,11 @@ class Screen {
     this.clientInfo = clientInfo;
     this.clientCode = clientCode;
 
-    if (screenImgOriginal !== null && clientInfo !== null) {
-      //let transformedTempImage = screenImgOriginal
-      /*this.map(
-        screenImgOriginal,
-        this.corners,
-        600,
-        600
-      );*/
-
-      console.log('transformed image');
-      //console.log(transformedTempImage);
-      this.clientCode = this.findClientCode(transformedTempImage);
-      console.log('clientCode: ' + this.clientCode);
-
-      if (typeof this.clientInfo !== 'undefined' && this.clientCode !== null) {
-        this.width = this.clientInfo[this.clientCode].size.width;
-        this.height = this.clientInfo[this.clientCode].size.height;
-
-        this.calcTranformationMatrix();
-      }
+    if (typeof this.clientInfo !== 'undefined' && this.clientCode !== null) {
+      this.width = this.clientInfo[this.clientCode].size.width;
+      this.height = this.clientInfo[this.clientCode].size.height;
+      this.calcTranformationMatrix();
+      console.log(this.transMatrix)
     }
   }
 
@@ -59,7 +44,7 @@ class Screen {
   transformationMatrix(source, destination) {
     let matrixA = this.findMapMatrix(destination);
     let matrixB = this.findMapMatrix(source);
-    let matrixC = Algebra.dotMMsmall(matrixA, Algebra.inv(matrixB));
+    let matrixC = Algebra.dotMMsmall(matrixA, Algebra.valueM(Algebra.det(matrixB), Algebra.inv(matrixB)));
     this.transMatrix = matrixC;
     return matrixC;
   }
@@ -86,11 +71,11 @@ class Screen {
   }
 
   findMapMatrix(corners) {
-    let row1 = [corners[0][0], corners[1][0], corners[2][0]]; // x1,x2,x3
-    let row2 = [corners[0][1], corners[1][1], corners[2][1]]; // y1,y2,y3
+    let row1 = [corners.LU[0], corners.RU[0], corners.RD[0]]; // x1,x2,x3
+    let row2 = [corners.LU[1], corners.RU[1], corners.RD[1]]; // y1,y2,y3
     let row3 = [1, 1, 1]; // 1 ,1 ,1
     let subMatrix1 = [row1, row2, row3];
-    let subMatrix2 = [[corners[3][0]], [corners[3][1]], [1]]; // x4, y4, 1
+    let subMatrix2 = [[corners.LD[0]], [corners.LD[1]], [1]]; // x4, y4, 1
 
     let resultMatrix = Algebra.dotMMsmall(Algebra.inv(subMatrix1), subMatrix2);
     for (let i = 0; i < 3; i++) {
@@ -102,12 +87,12 @@ class Screen {
   }
 
   calcTranformationMatrix() {
-    let destination = [
-      [0, 0],
-      [this.width, 0],
-      [this.width, this.height],
-      [0, this.height]
-    ];
+    let destination = {
+      LU: [0, 0],
+      RU: [this.width, 0],
+      RD: [this.width, this.height],
+      LD: [0, this.height]
+    };
     this.transformationMatrix(destination, this.corners);
   }
 
