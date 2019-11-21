@@ -75,10 +75,22 @@ export default class Screen {
 
   cssTransMatrix(transMatrix) {
     return [
-      transMatrix[0][0],  transMatrix[1][0],  0,  transMatrix[2][0],
-      transMatrix[0][1],  transMatrix[1][1],  0,  transMatrix[2][1],
-      0,                  0,                  1,  0,
-      transMatrix[0][2],  transMatrix[1][2],  0,  transMatrix[2][2]
+      transMatrix[0][0],
+      transMatrix[1][0],
+      0,
+      transMatrix[2][0],
+      transMatrix[0][1],
+      transMatrix[1][1],
+      0,
+      transMatrix[2][1],
+      0,
+      0,
+      1,
+      0,
+      transMatrix[0][2],
+      transMatrix[1][2],
+      0,
+      transMatrix[2][2]
     ]
   }
 
@@ -144,13 +156,13 @@ export default class Screen {
     let M = cv.getPerspectiveTransform(srcTri, dstTri)
     // You can try more different parameters
     cv.warpPerspective(
-        src,
-        dst,
-        M,
-        dsize,
-        cv.INTER_LINEAR,
-        cv.BORDER_CONSTANT,
-        new cv.Scalar()
+      src,
+      dst,
+      M,
+      dsize,
+      cv.INTER_LINEAR,
+      cv.BORDER_CONSTANT,
+      new cv.Scalar()
     )
     src.delete()
     M.delete()
@@ -159,11 +171,7 @@ export default class Screen {
     let dat = dst.data
     dst.delete()
 
-    return new ImageData(
-        new Uint8ClampedArray(dat),
-        this.width,
-        this.height
-    )
+    return new ImageData(new Uint8ClampedArray(dat), this.width, this.height)
   }
 
   /**
