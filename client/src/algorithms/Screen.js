@@ -33,6 +33,7 @@ export default class Screen {
         this.height = this.clientInfo[this.clientCode].size.height
 
         this.calcTranformationMatrix()
+        this.cssMatrix = this.cssTransMatrix(this.transMatrix)
       }
     }
   }
