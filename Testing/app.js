@@ -5,20 +5,33 @@ const path = require('path')
 const app = express()
 const fs = require('fs')
 
-app.use(serveStatic(path.join(__dirname, 'public')))
+//app.use(serveStatic(path.join(__dirname, 'public')))
+app.use((req, res, next) => {
+  console.log(req.url)
+  console.log(fs.existsSync(path.join(__dirname, '../client/src/algorithms' + req.url)))
 
-app.use(serveStatic(path.join(__dirname, '../screenDetection')))
-app.use(serveStatic(path.join(__dirname, '../barcodeScanner')))
-
-app.get('/file-list', (req, res) => {
-  fs.readdir('./public/Images', (err, files) => {
-    let imageList = []
-    for(let i = 0; i < files.length; i++) {
-      imageList.push('Images/' + files[i])
-    }
-    res.send(imageList)
-  })
+  if (
+    fs.existsSync(path.join(__dirname, '../client/src/algorithms' + req.url))
+  ) {
+    fs.readFile(
+      path.join(__dirname, '../client/src/algorithms' + req.url),
+      'utf8',
+      function(err, data) {
+        console.log('err')
+        res.send(data.slice(data.search('export default') + 15))
+      }
+    )
+  } else {
+    console.log('next use')
+    next()
+  }
 })
+
+app.use(serveStatic(path.join(__dirname, 'pub2')))
+
+//app.use(serveStatic(path.join(__dirname, '../screenDetection')))
+//app.use(serveStatic(path.join(__dirname, '../barcodeScanner')))
+
 app.listen(5000, () => {
   console.log('running on port 5000')
 })

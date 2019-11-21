@@ -1,6 +1,7 @@
-const sensitivity = 10
-
 export default class ColorRange {
+  static sensitivity() {
+    return 10
+  }
   static inBlueRange(H, S, L) {
     return (
       (this.inBlueBoxA1(H, S) ||
@@ -45,36 +46,36 @@ export default class ColorRange {
 
   static inBlueGreenBoxA1(H, S) {
     return (
-      H >= 167 - sensitivity &&
-      H <= 193 + sensitivity &&
-      S >= 40 - sensitivity &&
+      H >= 167 - ColorRange.sensitivity() &&
+      H <= 193 + ColorRange.sensitivity() &&
+      S >= 40 - ColorRange.sensitivity() &&
       S <= 100
     )
   }
 
   static inBlueGreenBoxA2(H, S) {
     return (
-      H >= 193 - sensitivity &&
-      H <= 199 + sensitivity &&
-      S >= 90 - sensitivity &&
+      H >= 193 - ColorRange.sensitivity() &&
+      H <= 199 + ColorRange.sensitivity() &&
+      S >= 90 - ColorRange.sensitivity() &&
       S <= 100
     )
   }
 
   static inBlueGreenBoxB1(H, L) {
     return (
-      H >= 167 - sensitivity &&
-      H <= 194 + sensitivity &&
-      L >= 40 - sensitivity &&
-      L <= 60 + sensitivity
+      H >= 167 - ColorRange.sensitivity() &&
+      H <= 194 + ColorRange.sensitivity() &&
+      L >= 40 - ColorRange.sensitivity() &&
+      L <= 60 + ColorRange.sensitivity()
     )
   }
 
   static inBlueGreenBoxB2(H, L) {
     return (
-      H >= 174 - sensitivity &&
-      H <= 199 + sensitivity &&
-      L >= 15 + sensitivity &&
+      H >= 174 - ColorRange.sensitivity() &&
+      H <= 199 + ColorRange.sensitivity() &&
+      L >= 15 + ColorRange.sensitivity() &&
       L <= 40
     )
   }
@@ -124,46 +125,46 @@ export default class ColorRange {
 
   static inPinkBoxA1(H, S) {
     return (
-      H >= 291 - sensitivity &&
-      H <= 299 + sensitivity &&
-      S >= 94 - sensitivity &&
+      H >= 291 - ColorRange.sensitivity() &&
+      H <= 299 + ColorRange.sensitivity() &&
+      S >= 94 - ColorRange.sensitivity() &&
       S <= 100
     )
   }
 
   static inPinkBoxA2(H, S) {
     return (
-      H >= 299 - sensitivity &&
-      H <= 310 + sensitivity &&
-      S >= 67 - sensitivity &&
+      H >= 299 - ColorRange.sensitivity() &&
+      H <= 310 + ColorRange.sensitivity() &&
+      S >= 67 - ColorRange.sensitivity() &&
       S <= 100
     )
   }
 
   static inPinkBoxB1(H, L) {
     return (
-      H >= 291 - sensitivity &&
-      H <= 300 + sensitivity &&
-      L >= 37 - sensitivity &&
-      L <= 51 + sensitivity
+      H >= 291 - ColorRange.sensitivity() &&
+      H <= 300 + ColorRange.sensitivity() &&
+      L >= 37 - ColorRange.sensitivity() &&
+      L <= 51 + ColorRange.sensitivity()
     )
   }
 
   static inPinkBoxB2(H, L) {
     return (
-      H >= 297 - sensitivity &&
-      H <= 300 + sensitivity &&
-      L >= 51 - sensitivity &&
-      L <= 58 + sensitivity
+      H >= 297 - ColorRange.sensitivity() &&
+      H <= 300 + ColorRange.sensitivity() &&
+      L >= 51 - ColorRange.sensitivity() &&
+      L <= 58 + ColorRange.sensitivity()
     )
   }
 
   static inPinkBoxB3(H, L) {
     return (
-      H >= 300 - sensitivity &&
-      H <= 310 + sensitivity &&
-      L >= 31 - sensitivity &&
-      L <= 63 + sensitivity
+      H >= 300 - ColorRange.sensitivity() &&
+      H <= 310 + ColorRange.sensitivity() &&
+      L >= 31 - ColorRange.sensitivity() &&
+      L <= 63 + ColorRange.sensitivity()
     )
   }
 
@@ -202,55 +203,55 @@ export default class ColorRange {
 
   static inYellowBoxA1(H, S) {
     return (
-      H >= 46 - sensitivity &&
-      H <= 54 + sensitivity &&
-      S >= 70 - sensitivity &&
+      H >= 46 - ColorRange.sensitivity() &&
+      H <= 54 + ColorRange.sensitivity() &&
+      S >= 70 - ColorRange.sensitivity() &&
       S <= 100
     )
   }
 
   static inYellowBoxA2(H, S) {
     return (
-      H >= 54 - sensitivity &&
-      H <= 67 + sensitivity &&
-      S >= 60 - sensitivity &&
+      H >= 54 - ColorRange.sensitivity() &&
+      H <= 67 + ColorRange.sensitivity() &&
+      S >= 60 - ColorRange.sensitivity() &&
       S <= 100
     )
   }
 
   static inYellowBoxB1(H, L) {
     return (
-      H >= 47 - sensitivity &&
-      H <= 51 + sensitivity &&
-      L >= 40 - sensitivity &&
-      L <= 56 + sensitivity
+      H >= 47 - ColorRange.sensitivity() &&
+      H <= 51 + ColorRange.sensitivity() &&
+      L >= 40 - ColorRange.sensitivity() &&
+      L <= 56 + ColorRange.sensitivity()
     )
   }
 
   static inYellowBoxB2(H, L) {
     return (
-      H >= 46 - sensitivity &&
-      H <= 57 + sensitivity &&
-      L >= 19 - sensitivity &&
-      L <= 40 + sensitivity
+      H >= 46 - ColorRange.sensitivity() &&
+      H <= 57 + ColorRange.sensitivity() &&
+      L >= 19 - ColorRange.sensitivity() &&
+      L <= 40 + ColorRange.sensitivity()
     )
   }
 
   static inYellowBoxB3(H, L) {
     return (
-      H >= 51 - sensitivity &&
-      H <= 67 + sensitivity &&
-      L >= 40 - sensitivity &&
-      L <= 52 + sensitivity
+      H >= 51 - ColorRange.sensitivity() &&
+      H <= 67 + ColorRange.sensitivity() &&
+      L >= 40 - ColorRange.sensitivity() &&
+      L <= 52 + ColorRange.sensitivity()
     )
   }
 
   static inYellowBoxB4(H, L) {
     return (
-      H >= 57 - sensitivity &&
-      H <= 67 + sensitivity &&
-      L >= 29 - sensitivity &&
-      L <= 40 + sensitivity
+      H >= 57 - ColorRange.sensitivity() &&
+      H <= 67 + ColorRange.sensitivity() &&
+      L >= 29 - ColorRange.sensitivity() &&
+      L <= 40 + ColorRange.sensitivity()
     )
   }
 
