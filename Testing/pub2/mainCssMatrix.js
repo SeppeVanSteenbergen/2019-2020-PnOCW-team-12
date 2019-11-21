@@ -40,13 +40,15 @@ imgElement.onload = function() {
   outputContext.clearRect(0, 0, imgElement.width, imgElement.height)
   outputCanvas.width = imgElement.width
   outputCanvas.height =  imgElement.height
-  
-  t = imageTest.screens[0].cssMatrix
-  console.log(t)
-  t = "transform: matrix3d(" + t.join(", ") + ")";
-  outputCanvas.style = t
-  outputContext.drawImage(imgElement, 0, 0, imgElement.width, imgElement.height)
+  let transImage = document.createElement('img');
+  transImage = document.getElementById('transImg');
 
+ // let h = imageTest.screens[0].cssTransMatrix(Algebra.inv(imageTest.screens[0].transMatrix))
+  let h = imageTest.screens[0].cssMatrix
+  //console.log(t)
+  let t = "transform: matrix3d(" + h.join(", ") + ")";
+  outputCanvas.style = t
+  outputContext.drawImage(transImage,0,0, imgElement.width, imgElement.height)
   
   ColorSpace.hslaToRgba(imageTest.pixels);
   imageTest.show(); 
