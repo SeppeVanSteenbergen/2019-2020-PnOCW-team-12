@@ -45,29 +45,17 @@ class Screen {
     let matrixA = this.findMapMatrix(destination);
     let matrixB = this.findMapMatrix(source);
     let matrixC = Algebra.dotMMsmall(matrixB, Algebra.inv(matrixA));
-    this.transMatrix = matrixC;
     return matrixC;
   }
 
   cssTransMatrix(transMatrix) {
+    //let transMatrix = Algebra.inv(transMatrix2)
     return [
-      transMatrix[1][1],
-      transMatrix[2][1],
-      0,
-      transMatrix[3][1],
-      transMatrix[1][2],
-      transMatrix[2][2],
-      0,
-      transMatrix[3][2],
-      0,
-      0,
-      1,
-      0,
-      transMatrix[1][3],
-      transMatrix[2][3],
-      0,
-      [transMatrix[3][3]]
-    ];
+      transMatrix[0][0],  transMatrix[1][0],  0,  transMatrix[2][0],
+      transMatrix[0][1],  transMatrix[1][1],  0,  transMatrix[2][1],
+      0,                  0,                  1,  0,
+      transMatrix[0][2],  transMatrix[1][2],  0,  transMatrix[2][2]
+    ]
   }
 
   findMapMatrix(corners) {
@@ -93,7 +81,8 @@ class Screen {
       RD: [this.width, this.height],
       LD: [0, this.height]
     };
-    this.transformationMatrix(destination, this.corners);
+    this.transMatrix = this.transformationMatrix(destination, this.corners);
+    this.cssMatrix = this.cssTransMatrix(this.transMatrix)
   }
 
   /**

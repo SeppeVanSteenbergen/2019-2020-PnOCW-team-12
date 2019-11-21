@@ -33,7 +33,7 @@ imgElement.onload = function() {
     'RGBA',
     imgElement.width,
     imgElement.height,
-    [{size: {width: 600, height: 600}}]
+    [{size: {width: 600, height: 300}}]
   ); 
   let outputCanvas = document.getElementById('output')
   let outputContext = outputCanvas.getContext('2d')
@@ -41,14 +41,7 @@ imgElement.onload = function() {
   outputCanvas.width = imgElement.width
   outputCanvas.height =  imgElement.height
   
-
-  t = imageTest.screens[0].transMatrix
-  
-  t = [t[0][0], t[1][0], 0, t[2][0],
-  t[0][1], t[1][1], 0, t[2][1],
-  0   , 0   , 1, 0   ,  
-  t[0][2], t[1][2], 0, t[2][2]]
-
+  t = imageTest.screens[0].cssMatrix
   console.log(t)
   t = "transform: matrix3d(" + t.join(", ") + ")";
   outputCanvas.style = t
