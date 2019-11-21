@@ -35,13 +35,13 @@ imgElement.onload = function() {
   ); 
   let outputCanvas = document.getElementById('output')
   let outputContext = outputCanvas.getContext('2d')
-  outputContext.clearRect(0, 0, imgElement.width, imgElement.height)
+  //outputContext.clearRect(0, 0, imgElement.width, imgElement.height)
   outputCanvas.width = imgElement.width
   outputCanvas.height =  imgElement.height
   let outputCanvas2 = document.getElementById('output2')
   let outputContext2 = outputCanvas.getContext('2d')
-  outputContext2.clearRect(0, 0, imgElement.width, imgElement.height)
-  outputCanvas2.width =   imgElement.width
+  //outputContext2.clearRect(0, 0, imgElement.width, imgElement.height)
+  outputCanvas2.width = imgElement.width
   outputCanvas2.height =  imgElement.height
   // let outputCanvas3 = document.getElementById('output3')
   // let outputContext3 = outputCanvas.getContext('2d')
@@ -56,8 +56,8 @@ imgElement.onload = function() {
   let h2 = imageTest.screens[1].cssMatrix
   // let h3 = imageTest.screens[2].cssMatrix
   //console.log(t)
-  let t = "transform: matrix3d(" + h.join(", ") + ")";
-  let t2 = "transform: matrix3d(" + h2.join(", ") + ")";
+  let t = "transform: matrix3d(" + h.join(", ") + "); object-fit: none; height: 300px; width: 300px; object-position: -30px";
+  let t2 = "transform: matrix3d(" + h2.join(", ") + "); object-fit: none; height: 300px; width: 300px; object-position: -30px";
   //let t3 = "transform: matrix3d(" + h3.join(", ") + ")";
   outputCanvas.style = t
   outputContext.drawImage(transImage,0,0, imgElement.width, imgElement.height)
