@@ -3,3 +3,7 @@
 **/dist
 **/sessions
 .DS_Store
+
+server/uploads/images/
+
+*/node_modules/

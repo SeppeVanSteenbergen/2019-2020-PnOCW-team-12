@@ -22,7 +22,7 @@ const httpServer = require('http').createServer(app)
 
 let io
 if (config.secure) {
-  io = require('socket.io')(httpsServer, { origins: '*:*' })
+  io = require('socket.io')(httpsServer, { origins: '*:*', pingTimeout: 20000 })
 } else {
   io = require('socket.io')(httpServer, { origins: '*:*' })
 }
@@ -78,13 +78,12 @@ if (config.secure) {
     )
   })
 
-
   // Redirecting to https
   const httpApp = express()
 
   httpApp.get('*', function(req, res) {
     console.log('Redirect server running')
-    res.redirect('https://' + req.headers.host  + req.path)
+    res.redirect('https://' + req.headers.host + req.path)
   })
   httpApp.listen(80)
 } else {

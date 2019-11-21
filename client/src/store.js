@@ -14,7 +14,8 @@ export default new Vuex.Store({
       uuid: null
     },
     userLoggedIn: false,
-    roomList: {}
+    roomList: {},
+    roomClientInfo:[]
   },
   mutations: {
     SOCKET_CONNECT(state) {
@@ -31,6 +32,9 @@ export default new Vuex.Store({
       console.log('room list updated')
       console.log(roomList)
       state.roomList = roomList
+    },
+    SOCKET_roomClientInfo(state, roomClientInfo){
+      state.roomClientInfo = roomClientInfo
     },
     drawerOpen(state) {
       state.drawer = true
@@ -66,14 +70,19 @@ export default new Vuex.Store({
           }
           console.log(state.roomList[i].clients.length)
 
-          for (let j = 0; j < Object.keys(state.roomList[i].clients).length; j++) {
+          for (
+            let j = 0;
+            j < Object.keys(state.roomList[i].clients).length;
+            j++
+          ) {
             console.log('COMPARING')
             console.log(state.roomList[i].clients[j])
             console.log(state.user.uuid)
             if (state.roomList[i].clients[j] === state.user.uuid) {
               return {
                 role: 0,
-                room: i
+                room: i,
+                client_id: j
               }
             }
           }
@@ -82,7 +91,8 @@ export default new Vuex.Store({
 
       return {
         role: -1,
-        room: -1
+        room: -1,
+        client_id: -1
       }
     }
   }

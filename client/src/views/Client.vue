@@ -50,12 +50,17 @@
   </v-container>
 </template>
 <script>
+import DetectionDrawer from '../algorithms/DetectionDrawer'
+
+import NumberConverter from '../algorithms/PermutationConverter'
+
 export default {
   name: 'client',
   data() {
     return {
       fullscreen: false,
-      canvas: null
+      canvas: null,
+      intervalObj: null
     }
   },
   mounted() {
@@ -90,9 +95,27 @@ export default {
         case 'display-image':
           this.drawImageHandler(message.data)
           break
+        case 'display-detection-screen':
+          this.displayDetectionScreenHandler(message.data)
+          break
         default:
           console.log('command not supported')
           break
+      }
+    },
+    updateScreenSize() {
+      this.$socket.emit('setScreenSize', {
+        size: {
+          width: screen.width,
+          height: screen.height
+        }
+      })
+    },
+    pings(data) {
+      if (typeof data !== 'undefined') {
+        data.clientTime = window.Date.now()
+        console.log(data)
+        this.$socket.emit('pongs', data)
       }
     }
   },
@@ -101,6 +124,20 @@ export default {
       console.log('given command:')
       console.log(data.command)
       this.runFloodScreenCommandList(data.command, 0)
+    },
+    displayDetectionScreenHandler(data) {
+      const id = this.$store.getters.getRole.client_id
+      let factor = 0.02
+      const borderWidth =
+        screen.width > screen.height
+          ? screen.width * factor
+          : screen.height * factor
+
+      let drawer = new DetectionDrawer(this.canvas, screen, borderWidth)
+
+      //drawer.drawBorder()
+
+      drawer.barcode(NumberConverter.encode(id), 6)
     },
     runFloodScreenCommandList(list, startIndex) {
       for (let i = startIndex; i < list.length; i++) {
@@ -117,7 +154,7 @@ export default {
       }
     },
     countDownHandler(data) {
-      this.countdownRecursive(data.start, data.interval)
+      this.countDownIntervalHandler(data.start, data.interval, data.startTime)
     },
     countdownRecursive(number, interval) {
       console.log(
@@ -133,6 +170,28 @@ export default {
           number - 1,
           interval
         )
+      }
+    },
+    countDownIntervalHandler(start, interval, startTime) {
+      clearInterval(this.intervalObj)
+      this.intervalObj = setInterval(
+        this.countDownInterval,
+        Math.floor(interval / 2),
+        start,
+        interval,
+        startTime
+      )
+    },
+    countDownInterval(start, interval, startTime) {
+      let time = new Date().getTime()
+      if (time < startTime) return
+      let number = start - Math.floor((time - startTime) / interval)
+
+      if (number > 0) {
+        this.drawNumberOnCanvas(number)
+      } else {
+        this.drawCounterFinish()
+        clearInterval(this.intervalObj)
       }
     },
     drawNumberOnCanvas(num) {
@@ -153,6 +212,22 @@ export default {
       ctx.fillText(num, this.canvas.width / 2, this.canvas.height / 2)
     },
     drawCounterFinish() {
+      /*let img = new Image()
+
+      img.onload = function() {
+        let c = document.createElement('canvas')
+        c.width = img.width
+        c.height = img.height
+        let ctx = c.getContext('2d')
+
+        ctx.drawImage(img, 0, 0)
+
+        let base64 = c.toDataURL('image/jpeg')
+
+        this.drawImageHandler({ image: base64 })
+      }
+
+      img.src = 'https://penocw12.student.cs.kuleuven.be/img/martijn.jpg'*/
       this.drawNumberOnCanvas('BOOM!')
     },
     drawDirectionsHandler(data) {
@@ -222,14 +297,14 @@ export default {
 
       this.canvas.height = height
       this.canvas.width = width
-
+      /*
       let ctx = this.canvas.getContext('2d')
       ctx.fillStyle = 'white'
       ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
       ctx.fillStyle = 'black'
       ctx.beginPath()
       ctx.arc(width / 2, height / 2, width / 4, 0, 2 * Math.PI)
-      ctx.stroke()
+      ctx.stroke()*/
 
       this.canvas.style.display = 'block'
     },
@@ -285,6 +360,9 @@ export default {
         )
       }
       image.src = base64Image
+    },
+    stopRunning() {
+      clearInterval(this.intervalObj)
     }
   }
 }
