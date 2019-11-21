@@ -7,6 +7,14 @@ export default class Image {
   constructor(imgData, canvasName, colorSpace, clientInfo) {
     this.clientInfo = clientInfo
 
+    // Resize to max full HD resolution
+    let maxBorder = [1920, 1080]
+    if (imgData.width > maxBorder[0] || imgData.height > maxBorder[1]) {
+      imgData = this.resizeImage(imgData, maxBorder)
+    }
+
+    console.log(imgData)
+
     this.colorSpaces = ['RGBA', 'HSLA', 'BW']
     this.islandID = 4 //jumps per three so we can save green and blue within an island.
     this.screens = []
@@ -15,12 +23,6 @@ export default class Image {
     this.height = imgData.height
     this.islands = []
     this.offSet = 1
-
-    // Resize to max full HD resolution
-    let maxBorder = [1920, 1080]
-    if (imgData.width > maxBorder[0] || imgData.height > maxBorder[1]) {
-      imgData = this.resizeImage(imgData, maxBorder)
-    }
 
     if (colorSpace === 'RGBA') {
       this.imgOriginal = imgData

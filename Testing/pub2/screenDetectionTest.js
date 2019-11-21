@@ -26,7 +26,7 @@ imgElement.onload = function() {
     'imageOutConcatenated',
     'RGBA',
     null
-  );  
+  );
   ColorSpace.hslaToRgba(imageTest.pixels);
   imageTest.show();
 };
