@@ -41,12 +41,16 @@ imgElement.onload = function() {
   outputCanvas.width = imgElement.width
   outputCanvas.height =  imgElement.height
   
+
   t = imageTest.screens[0].transMatrix
+  
   t = [t[0][0], t[1][0], 0, t[2][0],
-  t[0][1], t[1][1], 0, t[1][2],
-  0   , 0   , 1, 0   ,
+  t[0][1], t[1][1], 0, t[2][1],
+  0   , 0   , 1, 0   ,  
   t[0][2], t[1][2], 0, t[2][2]]
-  t = "transform: matrix3d(" + t.join(", ") + ")";
+
+  console.log(t)
+  t = "perspective: none; transform: matrix3d(" + t.join(", ") + ")";
   outputCanvas.style = t
   outputContext.drawImage(imgElement, 0, 0, imgElement.width, imgElement.height)
 

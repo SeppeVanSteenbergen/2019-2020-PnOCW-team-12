@@ -10,7 +10,7 @@ class Screen {
       this.width = this.clientInfo[this.clientCode].size.width;
       this.height = this.clientInfo[this.clientCode].size.height;
       this.calcTranformationMatrix();
-      console.log(this.transMatrix)
+      console.log(Algebra.inv(this.transMatrix))
     }
   }
 
@@ -44,7 +44,7 @@ class Screen {
   transformationMatrix(source, destination) {
     let matrixA = this.findMapMatrix(destination);
     let matrixB = this.findMapMatrix(source);
-    let matrixC = Algebra.dotMMsmall(matrixA, Algebra.valueM(Algebra.det(matrixB), Algebra.inv(matrixB)));
+    let matrixC = Algebra.dotMMsmall(matrixB, Algebra.inv(matrixA));
     this.transMatrix = matrixC;
     return matrixC;
   }
