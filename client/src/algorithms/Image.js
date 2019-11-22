@@ -52,18 +52,44 @@ export default class Image {
       return image
     }
 
-    let canvas = document.createElement("canvas")
-    let ctx = canvas.getContext("2d")
+    let canvas = document.createElement('canvas')
+    let ctx = canvas.getContext('2d')
     canvas.width = image.width * scale
     canvas.height = image.height * scale
     ctx.drawImage(image, 0, 0, canvas.width, canvas.height)
 
-    let resizedImage = document.createElement("img")
+    let resizedImage = document.createElement('img')
     resizedImage.src = canvas.toDataURL()
     resizedImage.width = canvas.width
     resizedImage.height = canvas.height
 
     return resizedImage
+  }
+
+  static resizeImageData(imgData, border) {
+    let scaleWidth = border[0] / imgData.width
+    let scaleHeight = border[1] / imgData.height
+    let scale = Math.min(scaleWidth, scaleHeight)
+
+    if (scale >= 1) {
+      return imgData
+    }
+
+    let canvas = document.createElement('canvas')
+    canvas.width = imgData.width
+    canvas.height = imgData.height
+    let ctx = canvas.getContext('2d')
+
+    let copyCanvas = document.createElement('canvas')
+    copyCanvas.width = imgData.width
+    copyCanvas.height = imgData.height
+    copyCanvas.getContext('2d').putImageData(imgData, 0, 0)
+
+    ctx.scale(scale, scale)
+    ctx.drawImage(copyCanvas, 0, 0)
+    let resizedImgData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+
+    return resizedImgData
   }
 
   analyse() {
@@ -110,7 +136,7 @@ export default class Image {
 
   setColorSpace(newColorSpace) {
     if (!this.colorSpaces.includes(newColorSpace)) {
-      console.error("colorspace '" + newColorSpace + "' doesn't exist!")
+      console.error('colorspace ' + newColorSpace + ' doesn not exist!')
     }
     this.colorSpace = newColorSpace
   }
@@ -131,7 +157,7 @@ export default class Image {
           let newIslandCoo = this.floodfill(x, y, this.islandID)
           if (
             (newIslandCoo[0] - newIslandCoo[2]) *
-            (newIslandCoo[1] - newIslandCoo[3]) <=
+              (newIslandCoo[1] - newIslandCoo[3]) <=
             1000
           )
             break
@@ -304,14 +330,14 @@ export default class Image {
 
     let allCorners = []
 
-    this.screens.forEach(function (e) {
+    this.screens.forEach(function(e) {
       for (let key in e.corners) {
         allCorners.push(e.corners[key])
       }
     })
 
     //sort on x co
-    allCorners.sort(function (a, b) {
+    allCorners.sort(function(a, b) {
       return a[0] >= b[0]
     })
 
@@ -319,7 +345,7 @@ export default class Image {
     this.pictureCanvas['maxx'] = allCorners[allCorners.length - 1][0]
 
     //sort on y co
-    allCorners.sort(function (a, b) {
+    allCorners.sort(function(a, b) {
       return a[1] >= b[1]
     })
 
@@ -353,7 +379,7 @@ export default class Image {
   calcRelativeScreens() {
     let originX = this.pictureCanvas.minx
     let originY = this.pictureCanvas.miny
-    this.screens.forEach(function (s) {
+    this.screens.forEach(function(s) {
       for (let key in s.corners) {
         if (s.corners.hasOwnProperty(key)) {
           s.relativeCorners[key][0] = s.corners[key][0] - originX
