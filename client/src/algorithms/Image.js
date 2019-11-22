@@ -58,7 +58,10 @@ export default class Image {
     canvas.height = image.height * scale
     ctx.drawImage(image, 0, 0, canvas.width, canvas.height)
 
-    let resizedImage = ctx.getImageData(0, 0, canvas.width, canvas.height)
+    let resizedImage = document.createElement("img")
+    resizedImage.src = canvas.toDataURL()
+    resizedImage.width = canvas.width
+    resizedImage.height = canvas.height
 
     return resizedImage
   }

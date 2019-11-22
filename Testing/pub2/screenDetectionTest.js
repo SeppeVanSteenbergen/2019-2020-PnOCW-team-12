@@ -10,13 +10,14 @@ inputElement.addEventListener(
 );
 imgElement.onload = function() {
   // Resize image to max full HD resolution
-  inputImgData = Image.resizeImage(imgElement, [1920, 1080])
+  let resizedImage = Image.resizeImage(imgElement, [1920, 1080]);
   let inputCanvas = document.getElementById('inputImage');
   let inputContext = inputCanvas.getContext('2d');
   inputContext.clearRect(0, 0, inputCanvas.width, inputCanvas.height);
-  inputCanvas.width = inputImgData.width;
-  inputCanvas.height = inputImgData.height;
-  inputContext.putImageData(inputImgData, 0, 0);
+  inputCanvas.width = resizedImage.width;
+  inputCanvas.height = resizedImage.height;
+  inputContext.drawImage(resizedImage, 0, 0, resizedImage.width, resizedImage.height);
+  let inputImgData = inputContext.getImageData(0, 0, resizedImage.width, resizedImage.height);
   let imageTest = new Image(
     inputImgData,
     'imageOutConcatenated',
