@@ -213,7 +213,9 @@ export default class Image {
     this.screens = []
     this.calcIslandsFloodfill()
     for (let i = 0; i < this.islands.length; i++) {
-      this.drawIsland(this.islands[i])
+      if (this.canvas !== null) {
+        this.drawIsland(this.islands[i])
+      }
       let newScreen = this.islands[i].createScreen(this.clientInfo)
       this.screens.push(newScreen)
     }
