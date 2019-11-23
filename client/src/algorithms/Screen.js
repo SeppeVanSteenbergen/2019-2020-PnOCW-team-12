@@ -32,8 +32,10 @@ export default class Screen {
         this.width = this.clientInfo[this.clientCode].size.width
         this.height = this.clientInfo[this.clientCode].size.height
 
-        this.calcTranformationMatrix()
+        this.transMatrix = this.calcTranformationMatrix()
+        console.log(this.transMatrix)
         this.cssMatrix = this.cssTransMatrix(this.transMatrix)
+        console.log(this.cssMatrix)
       }
     }
   }
@@ -69,8 +71,6 @@ export default class Screen {
     let matrixA = this.findMapMatrix(destination)
     let matrixB = this.findMapMatrix(source)
     let matrixC = Algebra.dotMMsmall(matrixA, Algebra.inv(matrixB))
-    this.transMatrix = matrixC
-    this.transMatrixCSS = this.cssTransMatrix(matrixC)
     return matrixC
   }
 
@@ -118,7 +118,9 @@ export default class Screen {
       [this.width, this.height],
       [0, this.height]
     ]
-    this.transformationMatrix(this.corners, destination)
+
+    let matrix = this.transformationMatrix(this.corners, destination)
+    return matrix
   }
 
   /**

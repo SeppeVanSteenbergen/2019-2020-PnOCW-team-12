@@ -352,25 +352,10 @@ export default class Image {
     this.pictureCanvas['miny'] = allCorners[0][1]
     this.pictureCanvas['maxy'] = allCorners[allCorners.length - 1][1]
 
-    //scale image to min size containing all screens
-    let pc = this.pictureCanvas
-    if (pc.minx + w < pc.maxx) {
-      let fac = (pc.maxx - pc.minx) / w
-      w = w * fac
-      h = h * fac
-    }
-    if (pc.miny + h < pc.maxy) {
-      let fac = (pc.maxy - pc.miny) / h
-      w = w * fac
-      h = h * fac
-    }
+    w = this.pictureCanvas.maxx - this.pictureCanvas.minx
+    h = this.pictureCanvas.maxy - this.pictureCanvas.miny
 
-    this.pictureCanvas.maxx = pc.minx + w
-    this.pictureCanvas.maxy = pc.miny + h
-    this.pictureCanvas.scale =
-      (this.pictureCanvas.maxx - this.pictureCanvas.minx) / w
-
-    return w, h
+    return [w, h]
   }
 
   /**
