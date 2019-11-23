@@ -759,8 +759,7 @@ export default {
         )
         AlgorithmService.drawScreenOutlines(
           this.$refs.drawCanvas,
-          this.analysedImage,
-          this.drawCanvasScale
+          this.analysedImage
         )
       }
     },
@@ -807,7 +806,8 @@ export default {
         this.$refs.canva.height
       )
 
-      let imgCopy = AlgorithmService.copyImageData(inctx, inputImageData)
+      //let imgCopy = AlgorithmService.copyImageData(inctx, inputImageData)
+      let imgCopy = inputImageData
 
       let clientInfo = this.$store.state.roomClientInfo
 
@@ -832,7 +832,7 @@ export default {
 
       outctx.putImageData(imgCopy, 0, 0)
 
-      AlgorithmService.drawScreenOutlines(outC, this.analysedImage, 1)
+      AlgorithmService.drawScreenOutlines(outC, this.analysedImage)
 
       let midList = []
 
