@@ -76,17 +76,17 @@ export default class Image {
     }
 
     let canvas = document.createElement('canvas')
-    canvas.width = imgData.width
-    canvas.height = imgData.height
+    canvas.width = imgData.width * scale
+    canvas.height = imgData.height * scale
     let ctx = canvas.getContext('2d')
 
     let copyCanvas = document.createElement('canvas')
     copyCanvas.width = imgData.width
     copyCanvas.height = imgData.height
-    copyCanvas.getContext('2d').putImageData(imgData, 0, 0)
+    let copyCtx = copyCanvas.getContext('2d')
+    copyCtx.putImageData(imgData, 0, 0)
 
-    ctx.scale(scale, scale)
-    ctx.drawImage(copyCanvas, 0, 0)
+    ctx.drawImage(copyCanvas, 0, 0, canvas.width, canvas.height)
     let resizedImgData = ctx.getImageData(0, 0, canvas.width, canvas.height)
 
     return resizedImgData

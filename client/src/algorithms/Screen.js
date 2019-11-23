@@ -33,9 +33,7 @@ export default class Screen {
         this.height = this.clientInfo[this.clientCode].size.height
 
         this.transMatrix = this.calcTranformationMatrix()
-        console.log(this.transMatrix)
         this.cssMatrix = this.cssTransMatrix(this.transMatrix)
-        console.log(this.cssMatrix)
       }
     }
   }
