@@ -118,7 +118,7 @@ export default class Screen {
       [this.width, this.height],
       [0, this.height]
     ]
-    this.transformationMatrix(destination, this.corners)
+    this.transformationMatrix(this.corners, destination)
   }
 
   /**
