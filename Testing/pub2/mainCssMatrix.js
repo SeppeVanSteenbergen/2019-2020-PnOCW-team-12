@@ -30,6 +30,8 @@ imgElement.onload = function() {
   outputCanvas.width = boxWidth
   outputCanvas.height =  boxHeight
   outputContext.drawImage(transImage, 0, 0, outputCanvas.width, outputCanvas.height)
+
+  let transImageData = outputContext.getImageData(0, 0, outputCanvas.width, outputCanvas.height)
   
   // let outputCanvas2 = document.getElementById('output2')
   // outputCanvas2.width = 2000
@@ -50,11 +52,12 @@ imgElement.onload = function() {
   //let t3 = "transform: matrix3d(" + h3.join(", ") + ")";
 
   let outputCanvas2 = document.getElementById("output2")
-  // outputCanvas2.style = t
+  outputCanvas2.style = t
   let outputContext2 = outputCanvas2.getContext("2d")
   outputCanvas2.width = screen.width
   outputCanvas2.height =  screen.height
-  outputContext2.drawImage(transImage, 0, 0, outputCanvas2.width, outputCanvas2.height)
+  outputContext2.putImageData(transImageData, 0, 0)
+  // outputContext2.drawImage(transImage, 0, 0, outputCanvas2.width, outputCanvas2.height)
   // outputContext.drawImage(transImage,0,0, 1920, 1080)
   // let imgData2 = outputCanvas.getContext('2d').getImageData(0,0,2000,2000)
   // let ctxCanvas2 = outputCanvas2.getContext("2d")
