@@ -157,7 +157,7 @@ export default class Image {
           let newIslandCoo = this.floodfill(x, y, this.islandID)
           if (
             (newIslandCoo[0] - newIslandCoo[2]) *
-              (newIslandCoo[1] - newIslandCoo[3]) <=
+            (newIslandCoo[1] - newIslandCoo[3]) <=
             1000
           )
             break
@@ -324,14 +324,14 @@ export default class Image {
 
     let allCorners = []
 
-    this.screens.forEach(function(e) {
+    this.screens.forEach(function (e) {
       for (let key in e.corners) {
         allCorners.push(e.corners[key])
       }
     })
 
     //sort on x co
-    allCorners.sort(function(a, b) {
+    allCorners.sort(function (a, b) {
       return a[0] - b[0]
     })
 
@@ -339,7 +339,7 @@ export default class Image {
     points['maxx'] = allCorners[allCorners.length - 1][0]
 
     //sort on y co
-    allCorners.sort(function(a, b) {
+    allCorners.sort(function (a, b) {
       return a[1] - b[1]
     })
 
@@ -364,13 +364,61 @@ export default class Image {
     return [w, h]
   }
 
+  showTransformatedImage(image) {
+    let extremeValues = this.findExtremeValues()
+    let [boxWidth, boxHeight] = this.createPictureCanvas(
+      image.width,
+      image.height
+    )
+
+    let transformatedStyles = []
+    for (let i = 0; i < this.screens.length; i++) {
+      let h = this.screens[i].cssMatrix
+      let t =
+        'position: absolute; left:' +
+        extremeValues.minx +
+        'px; top: ' +
+        extremeValues.miny +
+        'px; transform: matrix3d(' +
+        h.join(', ') +
+        '); transform-origin: ' +
+        -extremeValues.minx +
+        'px ' +
+        -extremeValues.miny +
+        'px; width: ' +
+        boxWidth +
+        'px; height: ' +
+        boxHeight +
+        'px; object-fit: none'
+
+      transformatedStyles.push(t)
+    }
+
+    if (this.canvas !== null) {
+      for (let i = 0; i < transformatedStyles.length; i++) {
+        let outputCanvas = document.getElementById('output' + (i + 1))
+        outputCanvas.style = transformatedStyles[i]
+        let outputContext = outputCanvas.getContext('2d')
+        outputCanvas.width = boxWidth
+        outputCanvas.height = boxHeight
+        outputContext.drawImage(
+          image,
+          0,
+          0,
+          outputCanvas.width,
+          outputCanvas.height
+        )
+      }
+    }
+  }
+
   /**
    * Recalculate every screen's corner to match up with the mapped image pixels
    */
   calcRelativeScreens() {
     let originX = this.pictureCanvas.minx
     let originY = this.pictureCanvas.miny
-    this.screens.forEach(function(s) {
+    this.screens.forEach(function (s) {
       for (let key in s.corners) {
         if (s.corners.hasOwnProperty(key)) {
           s.relativeCorners[key][0] = s.corners[key][0] - originX
