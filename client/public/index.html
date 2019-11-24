@@ -18,4 +18,15 @@
     <div id="app"></div>
     <!-- built files will be auto injected -->
   </body>
+
+<script type="text/javascript">
+  var t = function(imgDat) {
+    var c = document.createElement('canvas')
+    c.width = imgDat.width
+    c.height = imgDat.height
+    var ctx = c.getContext('2d')
+    ctx.putImageData(imgDat, 0,0)
+    return c.toDataURL()
+  }
+</script>
 </html>
