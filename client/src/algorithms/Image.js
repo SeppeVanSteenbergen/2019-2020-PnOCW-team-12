@@ -165,7 +165,7 @@ export default class Image {
             [newIslandCoo[0], newIslandCoo[1]],
             [newIslandCoo[2], newIslandCoo[3]],
             this.islandID,
-            this.imgOriginal,
+            this.getImgData(),
             this.matrix
           )
           if (newIsland.isValid()) {
@@ -423,17 +423,16 @@ export default class Image {
    * @returns {*|ImageData}
    */
   getImgData() {
-    if (this.canvas !== null) {
-      let context = this.canvas.getContext('2d')
-      let imgData = context.createImageData(
-        this.canvas.width,
-        this.canvas.height
-      )
-      imgData.data.set(this.pixels)
-      return imgData
-    } else {
-      return this.imgOriginal.data
-    }
+    let canvas = document.createElement('canvas')
+    canvas.width = this.imgOriginal.width
+    canvas.height = this.imgOriginal.height
+    let context = canvas.getContext('2d')
+    let imgData = context.createImageData(
+      this.imgOriginal.width,
+      this.imgOriginal.height
+    )
+    imgData.data.set(this.pixels)
+    return imgData
   }
 
   getColorSpace() {
