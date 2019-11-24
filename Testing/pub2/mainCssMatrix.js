@@ -35,9 +35,9 @@ imgElement.onload = function () {
   let h = imageTest.screens[0].cssMatrix
   // let h2 = imageTest.screens[1].cssMatrix
   // let h3 = imageTest.screens[2].cssMatrix
-  let t = "position: absolute; left:" + extremeValues.minx + "px; top: " + extremeValues.miny + "px; transform: matrix3d(" + h.join(", ") + "); transform-origin: left top; width: " + boxWidth + "px; height: " + boxHeight + "px; object-fit: none";
-  // let t2 = "position: absolute; left:" + extremeValues.minx + "px; top: " + extremeValues.miny + "px; transform: matrix3d(" + h2.join(", ") + "); transform-origin: left top; width: " + boxWidth + "px; height: " + boxHeight + "px; object-fit: none";
-  //let t3 = "position: absolute; left:" + extremeValues.minx + "px; top: " + extremeValues.miny + "px; transform: matrix3d(" + h3.join(", ") + "); transform-origin: left top; width: " + boxWidth + "px; height: " + boxHeight + "px; object-fit: none";
+  let t = "position: absolute; left:" + extremeValues.minx + "px; top: " + extremeValues.miny + "px; transform: matrix3d(" + h.join(", ") + "); transform-origin: " + -extremeValues.minx + "px " + -extremeValues.miny + "px; width: " + boxWidth + "px; height: " + boxHeight + "px; object-fit: none";
+  // let t2 = "position: absolute; left:" + extremeValues.minx + "px; top: " + extremeValues.miny + "px; transform: matrix3d(" + h2.join(", ") + "); transform-origin: " + -extremeValues.minx + "px " + -extremeValues.miny + "px; width: " + boxWidth + "px; height: " + boxHeight + "px; object-fit: none";
+  //let t3 = "position: absolute; left:" + extremeValues.minx + "px; top: " + extremeValues.miny + "px; transform: matrix3d(" + h3.join(", ") + "); transform-origin: " + -extremeValues.minx + "px " + -extremeValues.miny + "px; width: " + boxWidth + "px; height: " + boxHeight + "px; object-fit: none";
 
   let outputCanvas = document.getElementById('output')
   outputCanvas.style = t
