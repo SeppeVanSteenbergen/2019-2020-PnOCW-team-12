@@ -332,7 +332,7 @@ export default class Image {
 
     //sort on x co
     allCorners.sort(function(a, b) {
-      return a[0] >= b[0]
+      return a[0] - b[0]
     })
 
     points['minx'] = allCorners[0][0]
@@ -340,7 +340,7 @@ export default class Image {
 
     //sort on y co
     allCorners.sort(function(a, b) {
-      return a[1] >= b[1]
+      return a[1] - b[1]
     })
 
     points['miny'] = allCorners[0][1]
