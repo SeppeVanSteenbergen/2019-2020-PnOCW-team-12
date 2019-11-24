@@ -313,14 +313,8 @@ export default class Image {
     this.drawer.drawCorners(island)
   }
 
-  /**
-   * map the the given image size around the found screens
-   *
-   * @param {int} w image width
-   * @param {int} h image height
-   */
-  createPictureCanvas(w, h) {
-    this.pictureCanvas = {
+  findExtremeValues() {
+    let points = {
       minx: null,
       maxx: null,
       miny: null,
@@ -341,19 +335,31 @@ export default class Image {
       return a[0] >= b[0]
     })
 
-    this.pictureCanvas['minx'] = allCorners[0][0]
-    this.pictureCanvas['maxx'] = allCorners[allCorners.length - 1][0]
+    points['minx'] = allCorners[0][0]
+    points['maxx'] = allCorners[allCorners.length - 1][0]
 
     //sort on y co
     allCorners.sort(function(a, b) {
       return a[1] >= b[1]
     })
 
-    this.pictureCanvas['miny'] = allCorners[0][1]
-    this.pictureCanvas['maxy'] = allCorners[allCorners.length - 1][1]
+    points['miny'] = allCorners[0][1]
+    points['maxy'] = allCorners[allCorners.length - 1][1]
 
-    w = this.pictureCanvas.maxx - this.pictureCanvas.minx
-    h = this.pictureCanvas.maxy - this.pictureCanvas.miny
+    return points
+  }
+
+  /**
+   * map the the given image size around the found screens
+   *
+   * @param {int} w image width
+   * @param {int} h image height
+   */
+  createPictureCanvas(w, h) {
+    let pictureCanvas = this.findExtremeValues()
+
+    w = pictureCanvas.maxx - pictureCanvas.minx
+    h = pictureCanvas.maxy - pictureCanvas.miny
 
     return [w, h]
   }

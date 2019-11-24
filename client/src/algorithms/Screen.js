@@ -63,12 +63,12 @@ export default class Screen {
    *source is array of 4 arrays containing source corners
    * destination is array of 4 arrays containing destination corners
    * return transformation matrix for 3d to 2d perspective change
-   * math from https://stackoverflow.com/questions/14244032/redraw-image-from-3d-perspective-to-2d
+   * math from https://math.stackexchange.com/questions/296794/finding-the-transform-matrix-from-4-projected-points-with-javascript/339033#339033
    */
   transformationMatrix(source, destination) {
-    let matrixA = this.findMapMatrix(destination)
-    let matrixB = this.findMapMatrix(source)
-    let matrixC = Algebra.dotMMsmall(matrixA, Algebra.inv(matrixB))
+    let matrixA = this.findMapMatrix(source)
+    let matrixB = this.findMapMatrix(destination)
+    let matrixC = Algebra.dotMMsmall(matrixB, Algebra.inv(matrixA))
     return matrixC
   }
 
