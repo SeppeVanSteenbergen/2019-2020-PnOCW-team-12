@@ -29,39 +29,36 @@ imgElement.onload = function () {
   let transImage = document.createElement('img');
   transImage = document.getElementById('transImg');
   let [boxWidth, boxHeight] = imageTest.createPictureCanvas(transImage.width, transImage.height)
-  console.log(boxWidth, boxHeight)
+
+  let extremeValues = imageTest.findExtremeValues()
+
+  let h = imageTest.screens[0].cssMatrix
+  // let h2 = imageTest.screens[1].cssMatrix
+  // let h3 = imageTest.screens[2].cssMatrix
+  let t = "position: absolute; left:" + extremeValues.minx + "px; top: " + extremeValues.miny + "px; transform: matrix3d(" + h.join(", ") + "); transform-origin: left top; width: " + boxWidth + "px; height: " + boxHeight + "px; object-fit: none";
+  // let t2 = "position: absolute; left:" + extremeValues.minx + "px; top: " + extremeValues.miny + "px; transform: matrix3d(" + h2.join(", ") + "); transform-origin: left top; width: " + boxWidth + "px; height: " + boxHeight + "px; object-fit: none";
+  //let t3 = "position: absolute; left:" + extremeValues.minx + "px; top: " + extremeValues.miny + "px; transform: matrix3d(" + h3.join(", ") + "); transform-origin: left top; width: " + boxWidth + "px; height: " + boxHeight + "px; object-fit: none";
 
   let outputCanvas = document.getElementById('output')
+  outputCanvas.style = t
   let outputContext = outputCanvas.getContext('2d')
   outputCanvas.width = boxWidth
   outputCanvas.height = boxHeight
   outputContext.drawImage(transImage, 0, 0, outputCanvas.width, outputCanvas.height)
 
-  let extremeValues = imageTest.findExtremeValues()
+  // let outputCanvas2 = document.getElementById("output2")
+  // outputCanvas2.style = t2
+  // let outputContext2 = outputCanvas2.getContext("2d")
+  // outputCanvas2.width = boxWidth
+  // outputCanvas2.height = boxHeight
+  // outputContext2.drawImage(transImage, 0, 0, outputCanvas2.width, outputCanvas2.height)
 
-  let h = imageTest.screens[0].cssMatrix
-  let h2 = imageTest.screens[1].cssMatrix
-  // let h3 = imageTest.screens[2].cssMatrix
-  let t = "transform: matrix3d(" + h.join(", ") + "); object-fit: none; position: absolute; left:" + extremeValues.minx + "px; top: " + extremeValues.miny + "px;" +
-    "transform-style: preserve-3d; perspective: none; perspective-origin:center center;";
-  let t2 = "transform: matrix3d(" + h2.join(", ") + "); object-fit: none; position: absolute; left:" + extremeValues.minx + "px; top: " + extremeValues.miny + "px;" +
-    "transform-style: preserve-3d; perspective: none; perspective-origin:center center;";
-  //let t3 = "transform: matrix3d(" + h3.join(", ") + ")" object-fit: none; position: absolute; left:" + extremeValues.minx + "px; top: " + extremeValues.miny + "px;" +
-  // "transform-style: preserve-3d; perspective: none; perspective-origin:center center;";
-
-  let outputCanvas2 = document.getElementById("output2")
-  outputCanvas2.style = t
-  let outputContext2 = outputCanvas2.getContext("2d")
-  outputCanvas2.width = outputCanvas.width
-  outputCanvas2.height = outputCanvas.height
-  outputContext2.drawImage(outputCanvas, 0, 0, outputCanvas2.width, outputCanvas2.height)
-
-  let outputCanvas3 = document.getElementById("output3")
-  outputCanvas3.style = t2
-  let outputContext3 = outputCanvas3.getContext("2d")
-  outputCanvas3.width = outputCanvas.width
-  outputCanvas3.height = outputCanvas.height
-  outputContext3.drawImage(outputCanvas, 0, 0, outputCanvas3.width, outputCanvas3.height)
+  // let outputCanvas3 = document.getElementById("output3")
+  // outputCanvas3.style = t3
+  // let outputContext3 = outputCanvas3.getContext("2d")
+  // outputCanvas3.width = boxWidth
+  // outputCanvas3.height = boxHeight
+  // outputContext3.drawImage(transImage, 0, 0, outputCanvas3.width, outputCanvas3.height)
 
   ColorSpace.hslaToRgba(imageTest.pixels);
   imageTest.show();

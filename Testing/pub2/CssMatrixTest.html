@@ -3,30 +3,14 @@
 
 <head>
 	<meta charset="utf-8">
-	<style>
-		* {
-			box-sizing: border-box;
-		}
-
-		.column {
-			float: left;
-			width: 50%;
-			padding: 5px;
-		}
-
-		.output::after {
-			content: "";
-			clear: both;
-			display: table;
-		}
-	</style>
-	<title>Screen detection test</title>
+	<style></style>
+	<title>Css matrix test</title>
 </head>
 
 <body>
-	<h2>Screen detection test</h2>
+	<h2>Css matrix test</h2>
 	<div>
-		<div class="input">
+		<div class="input" style="position: absolute; left: 0px; top: 0px;">
 			<canvas id="inputImage"></canvas>
 			<img id="imageSrc" style="display: none;" alt="No Image" />
 			<div class="caption">imageSrc <input type="file" id="fileInput" name="file" /></div>
