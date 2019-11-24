@@ -37,16 +37,17 @@ imgElement.onload = function () {
   outputCanvas.height = boxHeight
   outputContext.drawImage(transImage, 0, 0, outputCanvas.width, outputCanvas.height)
 
-  let LU0 = imageTest.screens[0].corners[0]
-
-  // let LU1 = imageTest.screens[1].corners[0]
+  let extremeValues = imageTest.findExtremeValues()
 
   let h = imageTest.screens[0].cssMatrix
-  // let h2 = imageTest.screens[1].cssMatrix
+  let h2 = imageTest.screens[1].cssMatrix
   // let h3 = imageTest.screens[2].cssMatrix
-  let t = "transform: matrix3d(" + h.join(", ") + "); object-fit: none; position: absolute; left:" + LU0[0] + "px; top: " + LU0[1] + "px;";
-  // let t2 = "transform: matrix3d(" + h2.join(", ") + "); object-fit: none; position: absolute; left:" + LU0[0] + "px; top: " + LU0[1] + "px;";
-  //let t3 = "transform: matrix3d(" + h3.join(", ") + ")" object-fit: none; position: absolute; left:" + LU0[0] + "px; top: " + LU0[1] + "px;";
+  let t = "transform: matrix3d(" + h.join(", ") + "); object-fit: none; position: absolute; left:" + extremeValues.minx + "px; top: " + extremeValues.miny + "px;" +
+    "transform-style: preserve-3d; perspective: none; perspective-origin:center center;";
+  let t2 = "transform: matrix3d(" + h2.join(", ") + "); object-fit: none; position: absolute; left:" + extremeValues.minx + "px; top: " + extremeValues.miny + "px;" +
+    "transform-style: preserve-3d; perspective: none; perspective-origin:center center;";
+  //let t3 = "transform: matrix3d(" + h3.join(", ") + ")" object-fit: none; position: absolute; left:" + extremeValues.minx + "px; top: " + extremeValues.miny + "px;" +
+  // "transform-style: preserve-3d; perspective: none; perspective-origin:center center;";
 
   let outputCanvas2 = document.getElementById("output2")
   outputCanvas2.style = t
@@ -55,12 +56,12 @@ imgElement.onload = function () {
   outputCanvas2.height = outputCanvas.height
   outputContext2.drawImage(outputCanvas, 0, 0, outputCanvas2.width, outputCanvas2.height)
 
-  // let outputCanvas3 = document.getElementById("output3")
-  // outputCanvas3.style = t2
-  // let outputContext3 = outputCanvas3.getContext("2d")
-  // outputCanvas3.width = outputCanvas.width
-  // outputCanvas3.height = outputCanvas.height
-  // outputContext3.drawImage(outputCanvas, 0, 0, outputCanvas3.width, outputCanvas3.height,
+  let outputCanvas3 = document.getElementById("output3")
+  outputCanvas3.style = t2
+  let outputContext3 = outputCanvas3.getContext("2d")
+  outputCanvas3.width = outputCanvas.width
+  outputCanvas3.height = outputCanvas.height
+  outputContext3.drawImage(outputCanvas, 0, 0, outputCanvas3.width, outputCanvas3.height)
 
   ColorSpace.hslaToRgba(imageTest.pixels);
   imageTest.show();
