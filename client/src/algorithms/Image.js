@@ -17,7 +17,7 @@ export default class Image {
     this.offSet = 1
 
     if (colorSpace === 'RGBA') {
-      this.imgOriginal = imgData
+      this.imgOriginal = Image.copyImageData(imgData)
     }
 
     this.setPixels(imgData.data)
