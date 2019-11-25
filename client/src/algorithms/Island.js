@@ -39,7 +39,11 @@ export default class Island {
 
     this.imgOriginal = imgOriginal
     this.midPoint = this.calcMid()
-    this.barcode = BarcodeScanner.scan(this.getScreenImg())
+    this.barcode = BarcodeScanner.scan(
+      this.getScreenImg(),
+      this.getWidth(),
+      this.getHeight()
+    )
     this.clientCode = PermutationConverter.decode(this.barcode)
   }
 

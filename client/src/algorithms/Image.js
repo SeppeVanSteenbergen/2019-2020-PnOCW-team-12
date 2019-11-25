@@ -371,6 +371,50 @@ export default class Image {
     }
   }
 
+  showTransformatedImage(image) {
+    let info = this.createPictureCanvas(image.width, image.height)
+
+    let transformatedStyles = []
+    for (let i = 0; i < this.screens.length; i++) {
+      let h = this.screens[i].cssMatrix
+      let t =
+        'position: absolute; left:' +
+        info.minx +
+        'px; top: ' +
+        info.miny +
+        'px; transform: matrix3d(' +
+        h.join(', ') +
+        '); transform-origin: ' +
+        -info.minx +
+        'px ' +
+        -info.miny +
+        'px; width: ' +
+        info.w +
+        'px; height: ' +
+        info.h +
+        'px; object-fit: none'
+
+      transformatedStyles.push(t)
+    }
+
+    if (this.canvas !== null) {
+      for (let i = 0; i < transformatedStyles.length; i++) {
+        let outputCanvas = document.getElementById('output' + (i + 1))
+        outputCanvas.style = transformatedStyles[i]
+        let outputContext = outputCanvas.getContext('2d')
+        outputCanvas.width = info.w
+        outputCanvas.height = info.h
+        outputContext.drawImage(
+          image,
+          0,
+          0,
+          outputCanvas.width,
+          outputCanvas.height
+        )
+      }
+    }
+  }
+
   /**
    * Recalculate every screen's corner to match up with the mapped image pixels
    */
