@@ -18,12 +18,7 @@ imgElement.onload = function() {
   inputCanvas.height = resizedImage.height;
   inputContext.drawImage(resizedImage, 0, 0, resizedImage.width, resizedImage.height);
   let inputImgData = inputContext.getImageData(0, 0, resizedImage.width, resizedImage.height);
-  let imageTest = new Image(
-    inputImgData,
-    'imageOutConcatenated',
-    'RGBA',
-    null
-  );
+  let imageTest = new Image(inputImgData, 'imageOutConcatenated', 'RGBA', null);
   ColorSpace.hslaToRgba(imageTest.pixels);
   imageTest.show();
 };

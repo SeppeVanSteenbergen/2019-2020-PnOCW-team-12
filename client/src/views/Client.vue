@@ -127,9 +127,9 @@ export default {
     },
     displayDetectionScreenHandler(data) {
       const id = this.$store.getters.getRole.client_id
-      let factor = 0.02
+      let factor = 0.06
       const borderWidth =
-        screen.width > screen.height
+        screen.width < screen.height
           ? screen.width * factor
           : screen.height * factor
 
@@ -137,7 +137,7 @@ export default {
 
       //drawer.drawBorder()
 
-      drawer.barcode(NumberConverter.encode(id), 6)
+      drawer.barcode(NumberConverter.encode(id), 4)
     },
     runFloodScreenCommandList(list, startIndex) {
       for (let i = startIndex; i < list.length; i++) {

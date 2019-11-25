@@ -307,7 +307,7 @@
                 <v-slider
                   v-model="drawingImgScale"
                   class="align-center"
-                  max="1"
+                  max="2"
                   min="0.05"
                   hide-details
                 ></v-slider>
@@ -594,6 +594,13 @@ export default {
     takePicture() {
       this.$refs.canva.width = this.$refs.video.videoWidth
       this.$refs.canva.height = this.$refs.video.videoHeight
+
+      let imgWidth = screen.width - 10
+      let ratio = this.$refs.video.videoHeight / this.$refs.video.videoWidth
+
+      this.$refs.canva.style.width = imgWidth + 'px'
+      this.$refs.canva.style.height = Math.round(imgWidth * ratio) + 'px'
+
       console.log(this.$refs.canva.width)
       this.$refs.canva
         .getContext('2d')
@@ -620,8 +627,15 @@ export default {
             window.innerWidth / vue.analysedImage.imgOriginal.width
 
           let ctx = c.getContext('2d')
-          c.width = vue.analysedImage.imgOriginal.width * vue.drawCanvasScale
-          c.height = vue.analysedImage.imgOriginal.height * vue.drawCanvasScale
+          c.width = vue.analysedImage.imgOriginal.width
+          c.height = vue.analysedImage.imgOriginal.height
+
+          let imgWidth = screen.width - 10
+          let ratio = c.height / c.width
+
+          c.style.width = imgWidth + 'px'
+          c.style.height = Math.round(imgWidth * ratio) + 'px'
+
           console.log('canv', c.width, c.height)
 
           c.removeEventListener('mousedown', vue.mouseDownHandler, false)
@@ -674,6 +688,12 @@ export default {
           c.height = img.height
 
           ctx.drawImage(img, 0, 0)
+
+          let imgWidth = screen.width - 10
+          let ratio = c.height / c.width
+
+          c.style.width = imgWidth + 'px'
+          c.style.height = Math.round(imgWidth * ratio) + 'px'
         }
 
         img.src = event.target.result
@@ -739,8 +759,7 @@ export default {
         )
         AlgorithmService.drawScreenOutlines(
           this.$refs.drawCanvas,
-          this.analysedImage,
-          this.drawCanvasScale
+          this.analysedImage
         )
       }
     },
@@ -787,7 +806,8 @@ export default {
         this.$refs.canva.height
       )
 
-      let imgCopy = AlgorithmService.copyImageData(inctx, inputImageData)
+      //let imgCopy = AlgorithmService.copyImageData(inctx, inputImageData)
+      let imgCopy = inputImageData
 
       let clientInfo = this.$store.state.roomClientInfo
 
@@ -804,9 +824,15 @@ export default {
       outC.width = inC.width
       outC.height = inC.height
 
+      let imgWidth = screen.width - 10
+      let ratio = inC.height / inC.width
+
+      outC.style.width = imgWidth + 'px'
+      outC.style.height = Math.round(imgWidth * ratio) + 'px'
+
       outctx.putImageData(imgCopy, 0, 0)
 
-      AlgorithmService.drawScreenOutlines(outC, this.analysedImage, 1)
+      AlgorithmService.drawScreenOutlines(outC, this.analysedImage)
 
       let midList = []
 

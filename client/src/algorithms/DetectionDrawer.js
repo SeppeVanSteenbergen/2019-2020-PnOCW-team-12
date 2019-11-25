@@ -136,7 +136,7 @@ export default class DetectionDrawer {
       ctx.fill()
     }
 
-    this.drawX(this.borderWidth, barWidth)
+    this.drawX(this.borderWidth, barWidth/2)
     this.drawBorder(this.borderWidth)
 
     return barWidth

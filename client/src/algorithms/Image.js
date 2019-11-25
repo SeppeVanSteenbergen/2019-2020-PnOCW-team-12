@@ -17,7 +17,7 @@ export default class Image {
     this.offSet = 1
 
     if (colorSpace === 'RGBA') {
-      this.imgOriginal = imgData
+      this.imgOriginal = Image.copyImageData(imgData)
     }
 
     this.setPixels(imgData.data)
@@ -76,17 +76,17 @@ export default class Image {
     }
 
     let canvas = document.createElement('canvas')
-    canvas.width = imgData.width
-    canvas.height = imgData.height
+    canvas.width = imgData.width * scale
+    canvas.height = imgData.height * scale
     let ctx = canvas.getContext('2d')
 
     let copyCanvas = document.createElement('canvas')
     copyCanvas.width = imgData.width
     copyCanvas.height = imgData.height
-    copyCanvas.getContext('2d').putImageData(imgData, 0, 0)
+    let copyCtx = copyCanvas.getContext('2d')
+    copyCtx.putImageData(imgData, 0, 0)
 
-    ctx.scale(scale, scale)
-    ctx.drawImage(copyCanvas, 0, 0)
+    ctx.drawImage(copyCanvas, 0, 0, canvas.width, canvas.height)
     let resizedImgData = ctx.getImageData(0, 0, canvas.width, canvas.height)
 
     return resizedImgData
@@ -157,7 +157,7 @@ export default class Image {
           let newIslandCoo = this.floodfill(x, y, this.islandID)
           if (
             (newIslandCoo[0] - newIslandCoo[2]) *
-              (newIslandCoo[1] - newIslandCoo[3]) <=
+            (newIslandCoo[1] - newIslandCoo[3]) <=
             1000
           )
             break
@@ -165,7 +165,7 @@ export default class Image {
             [newIslandCoo[0], newIslandCoo[1]],
             [newIslandCoo[2], newIslandCoo[3]],
             this.islandID,
-            this.imgOriginal,
+            this.getImgData(),
             this.matrix
           )
           if (newIsland.isValid()) {
@@ -313,14 +313,8 @@ export default class Image {
     this.drawer.drawCorners(island)
   }
 
-  /**
-   * map the the given image size around the found screens
-   *
-   * @param {int} w image width
-   * @param {int} h image height
-   */
-  createPictureCanvas(w, h) {
-    this.pictureCanvas = {
+  findExtremeValues() {
+    let points = {
       minx: null,
       maxx: null,
       miny: null,
@@ -330,47 +324,92 @@ export default class Image {
 
     let allCorners = []
 
-    this.screens.forEach(function(e) {
+    this.screens.forEach(function (e) {
       for (let key in e.corners) {
         allCorners.push(e.corners[key])
       }
     })
 
     //sort on x co
-    allCorners.sort(function(a, b) {
-      return a[0] >= b[0]
+    allCorners.sort(function (a, b) {
+      return a[0] - b[0]
     })
 
-    this.pictureCanvas['minx'] = allCorners[0][0]
-    this.pictureCanvas['maxx'] = allCorners[allCorners.length - 1][0]
+    points['minx'] = allCorners[0][0]
+    points['maxx'] = allCorners[allCorners.length - 1][0]
 
     //sort on y co
-    allCorners.sort(function(a, b) {
-      return a[1] >= b[1]
+    allCorners.sort(function (a, b) {
+      return a[1] - b[1]
     })
 
-    this.pictureCanvas['miny'] = allCorners[0][1]
-    this.pictureCanvas['maxy'] = allCorners[allCorners.length - 1][1]
+    points['miny'] = allCorners[0][1]
+    points['maxy'] = allCorners[allCorners.length - 1][1]
 
-    //scale image to min size containing all screens
-    let pc = this.pictureCanvas
-    if (pc.minx + w < pc.maxx) {
-      let fac = (pc.maxx - pc.minx) / w
-      w = w * fac
-      h = h * fac
+    return points
+  }
+
+  /**
+   * map the the given image size around the found screens
+   *
+   * @param {int} w image width
+   * @param {int} h image height
+   */
+  createPictureCanvas(w, h) {
+    let pictureCanvas = this.findExtremeValues()
+
+    w = pictureCanvas.maxx - pictureCanvas.minx
+    h = pictureCanvas.maxy - pictureCanvas.miny
+
+    return [w, h]
+  }
+
+  showTransformatedImage(image) {
+    let extremeValues = this.findExtremeValues()
+    let [boxWidth, boxHeight] = this.createPictureCanvas(
+      image.width,
+      image.height
+    )
+
+    let transformatedStyles = []
+    for (let i = 0; i < this.screens.length; i++) {
+      let h = this.screens[i].cssMatrix
+      let t =
+        'position: absolute; left:' +
+        extremeValues.minx +
+        'px; top: ' +
+        extremeValues.miny +
+        'px; transform: matrix3d(' +
+        h.join(', ') +
+        '); transform-origin: ' +
+        -extremeValues.minx +
+        'px ' +
+        -extremeValues.miny +
+        'px; width: ' +
+        boxWidth +
+        'px; height: ' +
+        boxHeight +
+        'px; object-fit: none'
+
+      transformatedStyles.push(t)
     }
-    if (pc.miny + h < pc.maxy) {
-      let fac = (pc.maxy - pc.miny) / h
-      w = w * fac
-      h = h * fac
+
+    if (this.canvas !== null) {
+      for (let i = 0; i < transformatedStyles.length; i++) {
+        let outputCanvas = document.getElementById('output' + (i + 1))
+        outputCanvas.style = transformatedStyles[i]
+        let outputContext = outputCanvas.getContext('2d')
+        outputCanvas.width = boxWidth
+        outputCanvas.height = boxHeight
+        outputContext.drawImage(
+          image,
+          0,
+          0,
+          outputCanvas.width,
+          outputCanvas.height
+        )
+      }
     }
-
-    this.pictureCanvas.maxx = pc.minx + w
-    this.pictureCanvas.maxy = pc.miny + h
-    this.pictureCanvas.scale =
-      (this.pictureCanvas.maxx - this.pictureCanvas.minx) / w
-
-    return w, h
   }
 
   /**
@@ -379,7 +418,7 @@ export default class Image {
   calcRelativeScreens() {
     let originX = this.pictureCanvas.minx
     let originY = this.pictureCanvas.miny
-    this.screens.forEach(function(s) {
+    this.screens.forEach(function (s) {
       for (let key in s.corners) {
         if (s.corners.hasOwnProperty(key)) {
           s.relativeCorners[key][0] = s.corners[key][0] - originX
@@ -438,17 +477,16 @@ export default class Image {
    * @returns {*|ImageData}
    */
   getImgData() {
-    if (this.canvas !== null) {
-      let context = this.canvas.getContext('2d')
-      let imgData = context.createImageData(
-        this.canvas.width,
-        this.canvas.height
-      )
-      imgData.data.set(this.pixels)
-      return imgData
-    } else {
-      return this.imgOriginal.data
-    }
+    let canvas = document.createElement('canvas')
+    canvas.width = this.imgOriginal.width
+    canvas.height = this.imgOriginal.height
+    let context = canvas.getContext('2d')
+    let imgData = context.createImageData(
+      this.imgOriginal.width,
+      this.imgOriginal.height
+    )
+    imgData.data.set(this.pixels)
+    return imgData
   }
 
   getColorSpace() {
