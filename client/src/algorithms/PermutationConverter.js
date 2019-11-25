@@ -73,6 +73,8 @@ export default class PermutationConverter {
   }
 
   static moveElementInArray(array, startIndex, endIndex) {
+    if(startIndex < endIndex) endIndex--
+
     let num = array[startIndex]
     array.splice(startIndex, 1)
     array.splice(endIndex, 0, num)
