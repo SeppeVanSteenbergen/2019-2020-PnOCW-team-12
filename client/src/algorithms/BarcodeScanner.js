@@ -2,7 +2,10 @@ import ColorRange from './ColorRange'
 
 export default class BarcodeScanner {
 
-  static barcodeAmount = 4 //amount of barcodes shown on each slave screen.
+
+  static barcodeAmount() {
+    return 4
+  } //amount of barcodes shown on each slave screen.
 
   static scan(imageObject, width, height) {
     let horThresh = Math.ceil(width/(27*10)) //html heeft 27 baren en dan moet 10 procent van een bar gedetecteerd worden
@@ -96,7 +99,7 @@ export default class BarcodeScanner {
     let detectedAmount = amounts.reduce((a, b) => a + b, 0)
 
     let detectRatio = maxAmount / detectedAmount
-    let ratio = maxAmount / height / BarcodeScanner.barcodeAmount
+    let ratio = maxAmount / height / BarcodeScanner.barcodeAmount()
     if (detectRatio < 0.5) {
       return [0, 0, 0]
     } else {
@@ -199,7 +202,7 @@ export default class BarcodeScanner {
     let detectedAmount = amounts.reduce((a, b) => a + b, 0)
 
     let detectRatio = maxAmount / detectedAmount
-    let ratio = maxAmount / height / BarcodeScanner.barcodeAmount
+    let ratio = maxAmount / height / BarcodeScanner.barcodeAmount()
     if (detectRatio < 0.5) {
       return [0, 0, 0]
     } else {
