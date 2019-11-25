@@ -83,6 +83,18 @@ module.exports = {
         image: (image in base64 encoded string)
         }
     }
+
+    imageCSS
+    {
+      type: 'display-image-css'
+      data: {
+        image: (base64 image)
+        ox: (x offset in px, integer value)
+        oy: (y offset in px, integer value)
+        w: (width in px, integer value)
+        h: (height in px, integer value)
+        css: (css for the target canvas element)
+     }
 	*/
 
   // TODO check for message integrity
@@ -120,9 +132,9 @@ module.exports = {
 
   sendDataByUserID(name, data, user_id) {
     this.sendDataBySocketID(
-      name,
-      data,
-      dataHelper.getSocketIDFromUserID(user_id)
+        name,
+        data,
+        dataHelper.getSocketIDFromUserID(user_id)
     )
   },
 
@@ -140,7 +152,7 @@ module.exports = {
       return 1
     }
     const clientList = dataHelper.getClientsOfRoom(
-      dataHelper.getUserRoom(master_user_id)
+        dataHelper.getUserRoom(master_user_id)
     )
     console.log('CLIENTS IN ROOM')
     console.log(clientList)
@@ -156,11 +168,11 @@ module.exports = {
     }
 
     const clientList = dataHelper.getClientsOfRoom(
-      dataHelper.getUserRoom(master_user_id)
+        dataHelper.getUserRoom(master_user_id)
     )
 
     const clientInfo = clientList.map(user_id =>
-      dataHelper.getUserInfo(user_id)
+        dataHelper.getUserInfo(user_id)
     )
 
     this.sendDataByUserID('roomClientInfo', clientInfo, master_user_id)
@@ -172,7 +184,7 @@ module.exports = {
     }
 
     const clientList = dataHelper.getClientsOfRoom(
-      dataHelper.getUserRoom(master_user_id)
+        dataHelper.getUserRoom(master_user_id)
     )
     for (let i = 0; i < clientList.length; i++) {
       this.sendDataByUserID('updateScreenSize', null, clientList[i])
@@ -204,8 +216,8 @@ module.exports = {
     }
 
     if (
-      Object.keys(pingList[data.room_id]).length ===
-      dataHelper.getClientsOfRoom(data.room_id).length
+        Object.keys(pingList[data.room_id]).length ===
+        dataHelper.getClientsOfRoom(data.room_id).length
     ) {
       this.sendCountDown(data.room_id, data)
     }
@@ -265,7 +277,7 @@ module.exports = {
 
     for (let i in clients) {
       payload.data.startTime =
-        new Date().getTime() + clientPings[clients[i]].timeDelta + startOffset
+          new Date().getTime() + clientPings[clients[i]].timeDelta + startOffset
 
       this.sendDataByUserID('screenCommand', payload, clients[i])
     }
