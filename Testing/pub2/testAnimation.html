@@ -21,6 +21,7 @@
         let triangulation = Delaunay.triangulation(Delaunay.randomPointsGenerator(10, canvas), canvas.width, canvas.height)
         let firstPoint = triangulation[0].point1
         let endPoint = triangulation[0].point2
+        console.log(firstPoint + "----->" + endPoint)
         var animation = new Animations(canvas)
         animation.setPosition(firstPoint[0], firstPoint[1])
         animation.setDirection(firstPoint, endPoint)
@@ -42,7 +43,7 @@
                 ctx.strokeStyle = '#000'
                 ctx.stroke()
             }
-        }, 100)
+        }, 1)
     </script>
 	
 

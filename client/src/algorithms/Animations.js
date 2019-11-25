@@ -72,20 +72,11 @@ export default class Animations {
     inRange(endPoint){
         return (Math.pow(endPoint[0] - this.position.x,2) + Math.pow(endPoint[1] - this.position.y,2) < Math.pow(this.range,2))
     }
-  }
-
-  inRange(endPoint) {
-    return (
-      Math.pow(endPoint[0] - this.position.x, 2) +
-        Math.pow(endPoint[1] - this.position.y, 2) <
-      Math.pow(this.range, 2)
-    )
-  }
 
   setDirection(beginPoint, endPoint) {
-    let dx = endPoint[0] - beginPoint[0]
-    this.dx = dx / Math.abs(dx)
-    this.dy = (endPoint[1]-beginPoint[1])/(endPoint[0]-beginPoint[0])
+    let line = new Line(beginPoint, endPoint)
+    this.dx = line.dx / Math.abs(line.dx)
+    this.dy = line.slope * this.dx
   }
 
   findNeighbours(point, triangulation) {
