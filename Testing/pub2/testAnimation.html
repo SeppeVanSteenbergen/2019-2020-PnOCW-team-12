@@ -24,6 +24,8 @@
         var animation = new Animations(canvas)
         animation.setPosition(firstPoint[0], firstPoint[1])
         animation.setDirection(firstPoint, endPoint)
+        animation.firstPoint = firstPoint
+        animation.endPoint = endPoint
         
         setInterval(function(){
             animation.drawImage(firstPoint, endPoint, triangulation)
@@ -40,7 +42,7 @@
                 ctx.strokeStyle = '#000'
                 ctx.stroke()
             }
-        }, 1/60)
+        }, 100)
     </script>
 	
 

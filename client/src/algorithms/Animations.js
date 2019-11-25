@@ -1,6 +1,6 @@
-import Triangle from "./Triangle"
-import Delaunay from "./Delaunay"
-import Line from "./Line"
+import Triangle from './Triangle'
+import Delaunay from './Delaunay'
+import Line from './Line'
 
 export default class Animations{
     constructor(canvas){
@@ -11,6 +11,8 @@ export default class Animations{
         this.radius = 5
         this.fillStyle = "red"
         this.range = 5
+        this.firstPoint
+        this.endPoint
     }
 
     setPosition(x, y){
@@ -44,14 +46,13 @@ export default class Animations{
         this.delaunay = delaunay
     }
 
-    drawImage(firstPoint, endPoint, triangulation){
-        let update = this.updateFrameTriangulation(firstPoint, endPoint, triangulation)
+    drawImage(triangulation){
+        this.updateFrameTriangulation(triangulation)
         this.ctx.clearRect(0, 0, canvas.width, canvas.height);
         this.ctx.beginPath()
         this.ctx.fillStyle = this.fillStyle
         this.ctx.arc(this.position.x, this.position.y, this.radius, 0, 2 * Math.PI)
         this.ctx.fill()
-        return update
     }
 
     updateFrame() {
@@ -63,21 +64,24 @@ export default class Animations{
         this.go(dx, dy)
     }
 
-    updateFrameTriangulation(firstPoint, endPoint, triangulation){
-        if(!this.inRange(firstPoint, endPoint)){
+    updateFrameTriangulation(triangulation){
+        if(!this.inRange(this.endPoint)){
             this.go(this.dx, this.dy)
-            return [firstPoint, endPoint]
         }
         else {
-            let newNeighbours = this.findNeighbours(endPoint, triangulation)
+            let newNeighbours = this.findNeighbours(this.endPoint, triangulation)
             let random = Math.floor(Math.random()*newNeighbours.length)
             let newNeighbour = newNeighbours[random]
-            return [endPoint, newNeighbour]
+            this.setPosition(endPoint[0], endPoint[1])
+            this.setDirection(endpoint, newNeighbour)
+            this.firstPoint = this.endPoint.slice()
+            this.endPoint = newNeighbour
         }
     }
 
-    inRange(firstPoint, endPoint){
-        return (Math.pow(endPoint[0] - firstPoint[0],2) + Math.pow(endPoint[1] - firstPoint[1]) < this.range)
+    inRange(endPoint){
+        
+        return (Math.pow(endPoint[0] - this.position.x,2) + Math.pow(endPoint[1] - this.position.y,2) < Math.pow(this.range,2))
     }
 
     setDirection(beginPoint, endPoint){
