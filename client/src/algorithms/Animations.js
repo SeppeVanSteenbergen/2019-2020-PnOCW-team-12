@@ -73,14 +73,14 @@ export default class Animations{
             let random = Math.floor(Math.random()*newNeighbours.length)
             let newNeighbour = newNeighbours[random]
             this.setPosition(this.endPoint[0], this.endPoint[1])
-            this.setDirection(this.endpoint, newNeighbour)
+            this.setDirection(this.endPoint, newNeighbour)
             this.firstPoint = this.endPoint.slice()
             this.endPoint = newNeighbour
+            console.log(this.firstPoint + " ---> " + this.endPoint + "  slope = " + this.dy)
         }
     }
 
     inRange(endPoint){
-        
         return (Math.pow(endPoint[0] - this.position.x,2) + Math.pow(endPoint[1] - this.position.y,2) < Math.pow(this.range,2))
     }
 
