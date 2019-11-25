@@ -72,8 +72,8 @@ export default class Animations{
             let newNeighbours = this.findNeighbours(this.endPoint, triangulation)
             let random = Math.floor(Math.random()*newNeighbours.length)
             let newNeighbour = newNeighbours[random]
-            this.setPosition(endPoint[0], endPoint[1])
-            this.setDirection(endpoint, newNeighbour)
+            this.setPosition(this.endPoint[0], this.endPoint[1])
+            this.setDirection(this.endpoint, newNeighbour)
             this.firstPoint = this.endPoint.slice()
             this.endPoint = newNeighbour
         }

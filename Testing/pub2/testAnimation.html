@@ -28,7 +28,7 @@
         animation.endPoint = endPoint
         
         setInterval(function(){
-            animation.drawImage(firstPoint, endPoint, triangulation)
+            animation.drawImage(triangulation)
             for(let tri = 0; tri < triangulation.length; tri++){
                 let ctx = canvas.getContext("2d")
                 let triangle = triangulation[tri]
