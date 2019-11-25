@@ -9,7 +9,7 @@
 
 <body>
 	<h2>Css matrix test</h2>
-	<div class="fullScreen">
+	<div id="fullScreen">
 		<div class="input" style="position: absolute; left: 0px; top: 0px;">
 			<canvas id="inputImage"></canvas>
 			<img id="imageSrc" style="display: none;" alt="No Image" />
@@ -44,7 +44,7 @@
 	<script src="CornerDetector.js" type="text/javascript"></script>
 	<script>
 		function toggleFullscreen() {
-			let elem = document.querySelector("fullScreen");
+			let elem = document.getElementById("fullScreen");
 
 			if (!document.fullscreenElement) {
 				elem.requestFullscreen().catch(err => {
