@@ -46,9 +46,10 @@ export default class Delaunay {
     let edges2 = {}
     for(let item of edges){
       if(!(item[0] in edges2)){
-        edges2[item[0]] = {}
+        edges2[item[0]] = []
       }
-      edges2[item[0]].push(item[1])
+      if(!edges2[item[0]].includes(item[1]))
+        edges2[item[0]].push(item[1])
     }
     return edges2
   }
