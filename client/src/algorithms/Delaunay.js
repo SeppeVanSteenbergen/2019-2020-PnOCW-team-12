@@ -23,13 +23,35 @@ export default class Delaunay {
   sorts all points in points in function of distance to seedPoint in descending order to seedPoint
   */
   radialSort(points, point) {
-    points.sort(function(a, b) {
+    points.sort(function (a, b) {
       let distanceA = this.calcDistance(a, point)
       let distanceB = this.calcDistance(b, point)
       return distanceB - distanceA
     })
 
     return points
+  }
+
+  static triangulationEdges(triangulation) {
+    let edges = new Set();
+    for (let i = 0; i < triangulation.length; i++) {
+      let triangle = triangulation[i]
+      edges.add([triangle.point1, triangle.point2])
+      edges.add([triangle.point2, triangle.point3])
+      edges.add([triangle.point3, triangle.point1])
+      edges.add([triangle.point2, triangle.point1])
+      edges.add([triangle.point3, triangle.point2])
+      edges.add([triangle.point1, triangle.point3])
+    }
+    let edges2 = {}
+    for(let item of edges){
+      if(!(item[0] in edges2)){
+        edges2[item[0]] = []
+      }
+      if(!edges2[item[0]].includes(item[1]))
+        edges2[item[0]].push(item[1])
+    }
+    return edges2
   }
 
   static triangulation(points, width, height) {
@@ -60,7 +82,6 @@ export default class Delaunay {
         }
       }
       let polygon = []
-      //let edges = []
       for (let t = 0; t < badTriangles.length; t++) {
         for (let e = 0; e < badTriangles[t].edges.length; e++) {
           // check if any other triangle in badTriangles also has this edge
@@ -79,20 +100,6 @@ export default class Delaunay {
           }
         }
       }
-      /*for(let e1 = 0; e1 < edges.length - 1; e1++){
-          for(let e2 = e1 + 1; e2 < edges.length; e2++){
-              if(equalEdges(edges[e1], edges[e2])){
-                  edges[e2] = null
-                  edges[e1] = null
-                  break
-              }
-          }
-      }
-      for(let e = 0; e < edges.length; e++){
-          if(edges[e] !== null){
-              polygon.push(edges[e])
-          }
-      }*/
 
       for (let i = 0; i < badTriangles.length; i++) {
         triangulation = this.arrayRemove(triangulation, badTriangles[i])
@@ -165,9 +172,9 @@ export default class Delaunay {
     let numerator = dist1 * dist2 * dist3
     let denumerator = Math.sqrt(
       (dist1 + dist2 + dist3) *
-        (dist2 + dist3 - dist1) *
-        (dist3 + dist1 - dist2) *
-        (dist1 + dist2 - dist3)
+      (dist2 + dist3 - dist1) *
+      (dist3 + dist1 - dist2) *
+      (dist1 + dist2 - dist3)
     )
     return numerator / denumerator
   }
@@ -197,12 +204,12 @@ export default class Delaunay {
     //crossProdcut is positive if point lays at same side of edgex and edgey
     if (
       this.crossProduct(edge1[1], point, edge1[0]) *
-        this.crossProduct(edge2[1], point, edge2[0]) >=
+      this.crossProduct(edge2[1], point, edge2[0]) >=
       0
     )
       if (
         this.crossProduct(edge2[1], point, edge2[0]) *
-          this.crossProduct(edge3[1], point, edge3[0]) >=
+        this.crossProduct(edge3[1], point, edge3[0]) >=
         0
       )
         //Same side of edge2 and edge3
