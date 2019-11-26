@@ -11,7 +11,7 @@
 </head>
 
 <body>
-    <div  style="background-color: greenyellow; width: 100%; height: 50px; align-content:stretch0;">
+    <div  style="background-color: greenyellow; width: 100%; height: 50px; align-content:stretch;">
         <div style="width: fit-content; display: inline-block; margin-left: 20px;">
             <input id="randomNb" type="number">
             <button type="button" onclick="validateRandomForm()">Random Points</button>
@@ -25,12 +25,10 @@
             <button type="button" onclick="clearAll()">Clear canvas</button>
         </div>
             canvas dimensions: <p id ="dimension" style="display: inline-block;"></p>
-        </div>
     </div>
 
 
-    <canvas id="canv">
-    </canvas>
+    <canvas id="canv"></canvas>
 
 
 </body>
@@ -43,18 +41,18 @@
                 set points, randompointsgenerator to 0 points
                 remove points.push out of comments in addPoint(event)
         */
-        var c = document.getElementById("canv");
-        c.width = window.innerWidth
-        c.height = window.innerHeight
-        document.getElementById("dimension").innerHTML = c.width + " x " +  c.height
-        var ctx = c.getContext("2d")
+        let c = document.getElementById("canv");
+        c.width = window.innerWidth;
+        c.height = window.innerHeight;
+        document.getElementById("dimension").innerHTML = c.width + " x " +  c.height;
+        let ctx = c.getContext("2d");
 
-        var points = []
+        let points = [];
 
         function validateRandomForm(){
-            let nbPoints = document.getElementById("randomNb").value
+            let nbPoints = document.getElementById("randomNb").value;
             if(isNaN(nbPoints) || nbPoints < 0 || nbPoints > 10000){
-                alert("invalid number")
+                alert("invalid number");
                 return false
             } else{
                 randomPoints(nbPoints)
@@ -62,13 +60,13 @@
         }
 
         function addNewPoint(){
-            let x = document.getElementById("x-coo").value
-            let y = document.getElementById("y-coo").value
+            let x = document.getElementById("x-coo").value;
+            let y = document.getElementById("y-coo").value;
             if(isNaN(x) || x < 0 || x > c.width){
-                alert("invalid x-coordinate")
+                alert("invalid x-coordinate");
                 return false
             }else if(isNaN(y) || y < 0 || y > c.height){
-                alert("invalid y-coordinate")
+                alert("invalid y-coordinate");
                 return false
             } else{
                 addPoint([x,y])
@@ -77,15 +75,15 @@
         }
 
         function clearAll(){
-            clearCanvas()
+            clearCanvas();
             points.length = 0
         }
 
         function randomPoints(nbPoints){
-            points = Delaunay.randomPointsGenerator(nbPoints, c)
-            let triangulation = Delaunay.triangulation(points, c.width, c.height)
-            clearCanvas()
-            drawTriangulation(triangulation)
+            points = Delaunay.randomPointsGenerator(nbPoints, c);
+            let triangulation = Delaunay.triangulation(points, c.width, c.height);
+            clearCanvas();
+            drawTriangulation(triangulation);
             drawPoints(points)
         }
 
@@ -93,7 +91,7 @@
             for (let i = 0; i < triangulation.length; i++) {
                     drawTriangle(triangulation[i]);
                 }
-            console.log(triangulation)
+            console.log(triangulation);
             console.log(Delaunay.triangulationEdges(triangulation))
         }
 
@@ -109,15 +107,15 @@
         }
 
         function addPoint(point) {
-            points.push([point[0], point[1]])
-            let triangulation = Delaunay.triangulation(points, c.width, c.height)
-            clearCanvas()
-            drawTriangulation(triangulation)
+            points.push([point[0], point[1]]);
+            let triangulation = Delaunay.triangulation(points, c.width, c.height);
+            clearCanvas();
+            drawTriangulation(triangulation);
             drawPoints(points)
         }
 
         function addPointEvent(event){
-            let rect = c.getBoundingClientRect()
+            let rect = c.getBoundingClientRect();
             addPoint([event.clientX- rect.left, event.clientY - rect.top])
         }
         function clearCanvas(){
@@ -125,15 +123,15 @@
         }
 
         function drawTriangle(triangle) {
-            let ctx = c.getContext("2d")
-            ctx.beginPath()
-            ctx.moveTo(triangle.point1[0], triangle.point1[1])
-            ctx.lineTo(triangle.point2[0], triangle.point2[1])
-            ctx.lineTo(triangle.point3[0], triangle.point3[1])
-            ctx.lineTo(triangle.point1[0], triangle.point1[1])
-            ctx.closePath()
-            ctx.lineWidth = 5
-            ctx.strokeStyle = '#000'
+            let ctx = c.getContext("2d");
+            ctx.beginPath();
+            ctx.moveTo(triangle.point1[0], triangle.point1[1]);
+            ctx.lineTo(triangle.point2[0], triangle.point2[1]);
+            ctx.lineTo(triangle.point3[0], triangle.point3[1]);
+            ctx.lineTo(triangle.point1[0], triangle.point1[1]);
+            ctx.closePath();
+            ctx.lineWidth = 5;
+            ctx.strokeStyle = '#000';
             ctx.stroke()
         }
 
@@ -142,11 +140,6 @@
     </script>
 
     <style>
-        .canv {
-            width: 100%;
-            height: 100%;
-        }
-
         html,
         body {
             width: 100%;
