@@ -1,10 +1,11 @@
 export default class ColorSpace {
-  /*
-      math from https://www.rapidtables.com/convert/color/rgb-to-hsl.html
-  */
+  /**
+   * pixels as array in rgba colorspace
+   * math from https://www.rapidtables.com/convert/color/rgb-to-hsl.html
+   */
   static rgbaToHsla(pixels) {
     for (let i = 0; i < pixels.length; i += 4) {
-      //convert rgb spectrum to 0-1
+      // Convert rgb spectrum to 0-1
       let red = pixels[i] / 255
       let green = pixels[i + 1] / 255
       let blue = pixels[i + 2] / 255
@@ -129,5 +130,66 @@ export default class ColorSpace {
       lum += pixels[i]
     }
     return lum / size
+  }
+
+  /**
+   * pixels as array in rgba colorspace
+   * math from https://www.easyrgb.com/en/math.php
+   */
+  static rgbaToXyza(pixels) {
+    for (let i = 0; i < pixels.length; i += 4) {
+      // Convert rgb spectrum to 0-1
+      let red = pixels[i] / 255
+      let green = pixels[i + 1] / 255
+      let blue = pixels[i + 2] / 255
+
+      red = red > 0.04045 ? Math.pow((red + 0.055) / 1.055, 2, 4) : red / 12.92
+      green =
+        green > 0.04045
+          ? Math.pow((green + 0.055) / 1.055, 2, 4)
+          : green / 12.92
+      blue =
+        blue > 0.04045 ? Math.pow((blue + 0.055) / 1.055, 2, 4) : blue / 12.92
+
+      red *= 100
+      green *= 100
+      blue *= 100
+
+      let X = red * 0.4124 + green * 0.3576 + blue * 0.1805
+      let Y = red * 0.2126 + green * 0.7152 + blue * 0.0722
+      let Z = red * 0.0193 + green * 0.1192 + blue * 0.9505
+
+      pixels[i] = X
+      pixels[i + 1] = Y
+      pixels[i + 2] = Z
+    }
+
+    return pixels
+  }
+
+  /**
+   * pixels as array in xyza colorspace
+   * math from https://www.easyrgb.com/en/math.php
+   */
+  static xyzaToCieLab(pixels) {
+    for (let i = 0; i < pixels.length; i += 4) {
+      let X = pixels[i] / 95.047
+      let Y = pixels[i + 1] / 100
+      let Z = pixels[i + 2] / 108.883
+
+      X = X > 0.008856 ? Math.pow(X, 1 / 3) : 7.787 * X + 16 / 116
+      Y = Y > 0.008856 ? Math.pow(Y, 1 / 3) : 7.787 * Y + 16 / 116
+      Z = Z > 0.008856 ? Math.pow(Z, 1 / 3) : 7.787 * Z + 16 / 116
+
+      let CieL = 116 * Y - 16
+      let CieA = 500 * (X - Y)
+      let CieB = 200 * (Y - Z)
+
+      pixels[i] = CieL
+      pixels[i + 1] = CieA
+      pixels[i + 2] = CieB
+    }
+
+    return pixels
   }
 }
