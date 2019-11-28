@@ -18,7 +18,7 @@
     <canvas id="canvas" style="width: 900px; height: 900px"></canvas>
     <script>
         var canvas = document.getElementById("canvas")
-        let triangulation = Delaunay.triangulation(Delaunay.randomPointsGenerator(10, canvas), canvas.width, canvas.height)
+        let triangulation = Delaunay.triangulation(Delaunay.randomPointsGenerator(5, canvas), canvas.width, canvas.height)
         let firstPoint = triangulation[0].point1
         let endPoint = triangulation[0].point2
         console.log(firstPoint + "----->" + endPoint)
@@ -43,7 +43,8 @@
                 ctx.strokeStyle = '#000'
                 ctx.stroke()
             }
-        }, 1)
+
+        }, 10)
     </script>
 	
 

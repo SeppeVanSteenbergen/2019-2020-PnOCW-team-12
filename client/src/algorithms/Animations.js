@@ -11,6 +11,7 @@ export default class Animations {
     this.radius = 5
     this.fillStyle = 'red '
     this.range = 5
+    this. speed = 5
     this.firstPoint
     this.endPoint
   }
@@ -54,6 +55,10 @@ export default class Animations {
   }
 
     updateFrameTriangulation(triangulation){
+      let canReturn = false
+      if (triangulation[0].point1 === triangulation[0].point2){
+        canReturn = true
+      }
         if(!this.inRange(this.endPoint)){
             this.go(this.dx, this.dy)
         }
@@ -61,6 +66,10 @@ export default class Animations {
             let newNeighbours = this.findNeighbours(this.endPoint, triangulation)
             let random = Math.floor(Math.random()*newNeighbours.length)
             let newNeighbour = newNeighbours[random]
+            while(canReturn === false && newNeighbour[0] === this.firstPoint[0] && newNeighbour[1] === this.firstPoint[1]){
+              random = Math.floor(Math.random()*newNeighbours.length)
+              newNeighbour = newNeighbours[random]
+            }
             this.setPosition(this.endPoint[0], this.endPoint[1])
             this.setDirection(this.endPoint, newNeighbour)
             this.firstPoint = this.endPoint.slice()
@@ -77,6 +86,9 @@ export default class Animations {
     let line = new Line(beginPoint, endPoint)
     this.dx = line.dx / Math.abs(line.dx)
     this.dy = line.slope * this.dx
+    let scale = Math.sqrt(Math.pow(this.dx,2) + Math.pow(this.dy,2))
+    this.dx /= scale/this.speed
+    this.dy /= scale/this.speed
   }
 
   findNeighbours(point, triangulation) {
