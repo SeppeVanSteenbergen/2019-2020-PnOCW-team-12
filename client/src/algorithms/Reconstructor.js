@@ -1,258 +1,6 @@
 import Algebra from './Algebra'
-import Line from './Line'
 
 export default class Reconstructor {
-  constructor(midPoint, matrix, id, radius, width, height) {
-    this.midPoint = midPoint
-    this.matrix = matrix
-    this.id = id
-    this.radius = radius
-    this.width = width
-    this.height = height
-    this.yellow = id
-    this.pink = id + 1
-  }
-
-  /**
-   * Uses array of known corners to reconstruct unknown corners using line intersection.
-   * 2 lines are used: from known corner to helpPoint (using reconstructCircle) and from midpoint to helpMid
-   * Array of corners should be properly sorted before calling function. (LU, RU, RD, LD)
-   * @returns {Array.<Array>} corners, array of array.
-   */
-  reconstructCorners(corners) {
-    let newCorners = { ...corners }
-
-    let helpMids = this.reconstructCircleMidPoint(this.radius)
-    helpMids = this.orderCorners(helpMids)
-    this.fixMids(helpMids)
-
-    let helpMid = null
-    let helpPoint = null
-    let helpCorner = null
-    let otherCorner = null
-    let helpPoints = null
-
-    //missing LU
-    if (corners.LU === null) {
-      helpMid = helpMids.LU
-      if (corners.RU !== null) {
-        helpPoints = this.reconstructCircle(
-          corners.RU,
-          this.radius
-        )
-        if (helpPoints.length >= 3) {
-          helpPoints = helpPoints.slice(0, 2)
-          helpCorner = corners.RU
-          otherCorner = corners.RD
-          helpPoint = this.findHelpPoint(helpPoints, helpCorner, otherCorner)
-        }
-      } else if (corners.LD !== null) {
-        helpPoints = this.reconstructCircle(
-          corners.LD,
-          this.radius
-        )
-        if (helpPoints.length >= 3) {
-          helpPoints = helpPoints.slice(0, 2)
-          helpCorner = corners.LD
-          otherCorner = corners.RD
-          helpPoint = this.findHelpPoint(helpPoints, helpCorner, otherCorner)
-        }
-      }
-
-      let corner = this.reconstructCorner(helpPoint, helpCorner, helpMid)
-      this.addColorId(corner, corners.RD)
-      newCorners.LU = corner
-    }
-    //missing RU
-    if (corners.RU === null) {
-      helpMid = helpMids.RU
-      if (corners.LU !== null) {
-        helpPoints = this.reconstructCircle(
-          corners.LU,
-          this.radius
-        )
-        if (helpPoints.length >= 3) {
-          helpPoints = helpPoints.slice(0, 2)
-          helpCorner = corners.LU
-          otherCorner = corners.LD
-          helpPoint = this.findHelpPoint(helpPoints, helpCorner, otherCorner)
-        }
-      } else if (corners.RD !== null) {
-        helpPoints = this.reconstructCircle(
-          corners.RD,
-          this.radius
-        )
-        if (helpPoints.length >= 3) {
-          helpPoints = helpPoints.slice(0, 2)
-          helpCorner = corners.RD
-          otherCorner = corners.LD
-          helpPoint = this.findHelpPoint(helpPoints, helpCorner, otherCorner)
-        }
-      }
-
-      let corner = this.reconstructCorner(helpPoint, helpCorner, helpMid)
-      this.addColorId(corner, corners.LD)
-      newCorners.RU = corner
-    }
-    //missing RD
-    if (corners.RD === null) {
-      helpMid = helpMids.RD
-      if (corners.RU !== null) {
-        helpPoints = this.reconstructCircle(
-          corners.RU,
-          this.radius
-        )
-        if (helpPoints.length >= 3) {
-          helpPoints = helpPoints.slice(0, 2)
-          helpCorner = corners.RU
-          otherCorner = corners.LU
-          helpPoint = this.findHelpPoint(helpPoints, helpCorner, otherCorner)
-        }
-      } else if (corners.LD !== null) {
-        helpPoints = this.reconstructCircle(
-          corners.LD,
-          this.radius
-        )
-        if (helpPoints.length >= 3) {
-          helpPoints = helpPoints.slice(0, 2)
-          helpCorner = corners.LD
-          otherCorner = corners.LU
-          helpPoint = this.findHelpPoint(helpPoints, helpCorner, otherCorner)
-        }
-      }
-
-      let corner = this.reconstructCorner(helpPoint, helpCorner, helpMid)
-      this.addColorId(corner, corners.LU)
-      newCorners.RD = corner
-    }
-    //missing LD
-    if (corners.LD === null) {
-      helpMid = helpMids.LD
-      if (corners.RD !== null) {
-        helpPoints = this.reconstructCircle(
-          corners.RD,
-          this.radius
-        )
-        if (helpPoints.length >= 3) {
-          helpPoints = helpPoints.slice(0, 2)
-          helpCorner = corners.RD
-          otherCorner = corners.RU
-          helpPoint = this.findHelpPoint(helpPoints, helpCorner, otherCorner)
-        }
-      } else if (corners.LU !== null) {
-        helpPoints = this.reconstructCircle(
-          corners.LU,
-          this.radius
-        )
-        if (helpPoints.length >= 3) {
-          helpPoints = helpPoints.slice(0, 2)
-          helpCorner = corners.LU
-          otherCorner = corners.RU
-          helpPoint = this.findHelpPoint(helpPoints, helpCorner, otherCorner)
-        }
-      }
-
-      let corner = this.reconstructCorner(helpPoint, helpCorner, helpMid)
-      this.addColorId(corner, corners.RU)
-      newCorners.LD = corner
-    }
-
-    return newCorners
-  }
-
-  /**
-   * Checks whether points are properly sorted.
-   * @param {Array.<Array>} pointList array of arrays
-   * @returns {boolean}
-   */
-  isValidOrder(pointList) {
-    let LU = pointList[0]
-    let RU = pointList[1]
-
-    if (LU === null && RU === null) {
-      let RD = pointList[2]
-      let LD = pointList[3]
-
-      return RD[2] === this.pink && LD[2] === this.pink
-    } else if (LU === null) {
-      let RD = pointList[2]
-
-      if (RD !== null) {
-        return RU[2] === this.yellow && RD[2] === this.pink
-      } else {
-        let LD = pointList[3]
-
-        return RU[2] === this.yellow && LD[2] === this.pink
-      }
-    } else if (RU === null) {
-      let RD = pointList[2]
-
-      if (RD !== null) {
-        return LU[2] === this.yellow && RD[2] === this.pink
-      } else {
-        let LD = pointList[3]
-
-        return LU[2] === this.yellow && LD[2] === this.pink
-      }
-    } else {
-      return LU[2] === this.yellow && RU[2] === this.yellow
-    }
-  }
-
-  /**
-   * Orders points (usually corners)
-   * @param {Array.<Array>} pointList array of arrays containing points to be sorted
-   * @returns dictionary, containing properly sorted points as arrays with coordinates
-   */
-  orderCorners(pointList) {
-    for (let i = 0; i < pointList.length; i++) {
-      if (this.isValidOrder(pointList)) {
-        break
-      }
-      pointList.push(pointList.shift())
-    }
-
-    return {
-      LU: pointList[0],
-      RU: pointList[1],
-      RD: pointList[2],
-      LD: pointList[3]
-    }
-  }
-
-  fixMids(helpMids) {
-    let points = Object.values(helpMids)
-    for (let i = 0; i < points.length; i++) {
-      let point = points[i]
-      if (point === null) {
-        //Plaats overstaand punt ipv null
-        points[i] = points[(i + 2) % 4]
-      }
-    }
-  }
-
-  /**
-   * Intersects 2 lines to reconstruct missing corner from known corners and help/midPoints
-   * @param {Array} helpPoint points around known corners along edges
-   * @param {Array} helpCorner known corner
-   * @param {Array.<Array>} helpMid points around midPoint along diagonal lines
-   * @return {Array} missingCorner, array with coordinates
-   */
-  reconstructCorner(helpPoint, helpCorner, helpMid) {
-    let helpLine1 = new Line(helpPoint, helpCorner)
-    let helpLine2 = new Line(this.midPoint, helpMid)
-    return helpLine1.calcIntersection(
-        helpLine2,
-        this.width,
-        this.height
-    )
-  }
-
-  addColorId(point, oppositePoint) {
-    point.push(oppositePoint[2] === this.yellow ? this.pink : this.yellow)
-  }
-
-
   /**
    * Calculates the 2 points (later called helpPoints) around a corner that lie along the edges of the screen.
    * Later used for corner reconstruction.
@@ -264,11 +12,12 @@ export default class Reconstructor {
    */
   //https://stackoverflow.com/questions/53432767/how-to-iterate-over-pixels-on-edge-of-a-square-in-1-iteration
 
-  reconstructCircle(cornerCoo, radius) {
-    let lines = this.calcLinesCirc(cornerCoo, radius)
+  static reconstructCircle(cornerCoo, matrix, id, radius) {
+    let lines = this.calcLinesCirc(cornerCoo, matrix, id, radius)
     let reco = []
     let furthestPoints = this.calcTwoFurthestPoints(lines)
     let validatedFurthestPoints = this.validateTwoFurthestPoints(
+      matrix,
       cornerCoo,
       furthestPoints,
       lines
@@ -304,46 +53,17 @@ export default class Reconstructor {
    * @param {Int} radius radius of search circle
    * @returns {Array.<Array>} reco, array of arrays
    */
-  reconstructCircleMidPoint(radius) {
-    let lines = this.calcLinesCirc(this.midPoint, radius)
+  static reconstructCircleMidPoint(midPointCoo, matrix, id, radius) {
+    let lines = this.calcLinesCirc(midPointCoo, matrix, id, radius)
     let reco = []
     for (let i = 0; i < lines.length; i++) {
-      let middle = lines[i][Math.floor(lines[i].length / 2)]
-      if (!this.crossesWhite(this.midPoint, middle)) {
-        reco.push(middle)
+      let midPoint = lines[i][Math.floor(lines[i].length / 2)]
+      if (!this.crossesWhite(matrix, midPointCoo, midPoint)) {
+        reco.push(midPoint)
       }
     }
 
     return reco
-  }
-
-  /**
-   * Finds correct helpPoint to use to get correct intersection for missing corners
-   * @param {Array.<Array>} helpPoints array of array containing helpPoints of helpCorner
-   * @param {Array} helpCorner
-   * @param {Array} otherCorner
-   * @returns {Array} result, array, correct helpPoint coordinates
-   */
-  findHelpPoint(helpPoints, helpCorner, otherCorner) {
-    let knownLine = new Line(helpCorner, otherCorner)
-
-    let result = helpPoints[0]
-    let angle = 0
-
-    for (let i = 0; i < helpPoints.length; i++) {
-      const hp = helpPoints[i]
-
-      let line = new Line(helpCorner, hp)
-
-      let a = Math.abs(line.angle - knownLine.angle)
-
-      if (a > angle) {
-        angle = a
-        result = hp
-      }
-    }
-
-    return result
   }
 
   /**
@@ -354,7 +74,7 @@ export default class Reconstructor {
    * @param {Int} radius radius of search circle
    * @returns {Array.<Array>} lines,
    */
-  calcLinesCirc(cornerCoo, radius) {
+  static calcLinesCirc(cornerCoo, matrix, id, radius) {
     const dTheta = 0.01
     const maxWrongPixel = 5
 
@@ -367,7 +87,7 @@ export default class Reconstructor {
     let startTheta = 0
     let x = cornerCoo[0] + Math.floor(radius * Math.cos(startTheta))
     let y = cornerCoo[1] + Math.floor(radius * Math.sin(startTheta))
-    while (this.isFromIsland(x, y)) {
+    while (this.isFromIsland(x, y, matrix, id)) {
       startTheta += dTheta
       x = cornerCoo[0] + Math.floor(radius * Math.cos(startTheta))
       y = cornerCoo[1] + Math.floor(radius * Math.sin(startTheta))
@@ -381,10 +101,10 @@ export default class Reconstructor {
       let x = cornerCoo[0] + Math.floor(radius * Math.cos(theta))
       let y = cornerCoo[1] + Math.floor(radius * Math.sin(theta))
       if (newLine[newLine.length - 1] !== [x, y]) {
-        if (this.isFromIsland(x, y)) {
+        if (this.isFromIsland(x, y, matrix, id)) {
           white = true
           blackCount = 0
-          newLine.push([x, y, this.getMatrix(x, y)])
+          newLine.push([x, y, this.getMatrix(x, y, matrix)])
         } else if (white && ++blackCount >= maxWrongPixel) {
           blackCount = 0
           white = false
@@ -405,7 +125,7 @@ export default class Reconstructor {
    * @param {Array.<Array>} lines
    * @returns {[]|Array}
    */
-  calcTwoFurthestPoints(lines) {
+  static calcTwoFurthestPoints(lines) {
     if (lines.length < 2) {
       return []
     }
@@ -431,7 +151,7 @@ export default class Reconstructor {
     return furthestPoints
   }
 
-  validateTwoFurthestPoints(cornerCoo, points, lines) {
+  static validateTwoFurthestPoints(matrix, cornerCoo, points, lines) {
     if (!isFinite(points[2])) {
       return []
     }
@@ -459,14 +179,14 @@ export default class Reconstructor {
     let validatedPoints = []
     for (let i = 0; i < line1.length; i++) {
       point1 = line1[i]
-      if (!this.crossesWhite(cornerCoo, point1)) {
+      if (!this.crossesWhite(matrix, cornerCoo, point1)) {
         validatedPoints.push(line1[i])
         break
       }
     }
     for (let i = 0; i < line2.length; i++) {
       point2 = line2[i]
-      if (!this.crossesWhite(cornerCoo, point2)) {
+      if (!this.crossesWhite(matrix, cornerCoo, point2)) {
         validatedPoints.push(line2[i])
         break
       }
@@ -475,7 +195,7 @@ export default class Reconstructor {
     return validatedPoints
   }
 
-  crossesWhite(cornerCoo, point) {
+  static crossesWhite(matrix, cornerCoo, point) {
     let point1 = cornerCoo
     let point2 = point
 
@@ -489,7 +209,7 @@ export default class Reconstructor {
     if (isFinite(a)) {
       for (let x = point1[0]; x <= point2[0]; x++) {
         let y = Math.round(a * x + b)
-        let id = this.getMatrix(x, y)
+        let id = this.getMatrix(x, y, matrix)
         if (id === 0) {
           return true
         }
@@ -500,7 +220,7 @@ export default class Reconstructor {
       }
       let x = point1[0]
       for (let y = point1[1]; y <= point2[1]; y++) {
-        let id = this.getMatrix(x, y)
+        let id = this.getMatrix(x, y, matrix)
         if (id === 0) {
           return true
         }
@@ -510,14 +230,14 @@ export default class Reconstructor {
     return false
   }
 
-  isFromIsland(x, y) {
-    let pixel = this.getMatrix(x, y)
-    return pixel >= this.id && pixel <= this.id + 2
+  static isFromIsland(x, y, matrix, id) {
+    let pixel = this.getMatrix(x, y, matrix)
+    return pixel >= id && pixel <= id + 2
   }
 
-  getMatrix(x, y) {
-    if (x < 0 || x >= this.matrix[0].length) return 0
-    if (y < 0 || y >= this.matrix.length) return 0
-    return this.matrix[y][x]
+  static getMatrix(x, y, matrix) {
+    if (x < 0 || x >= matrix[0].length) return 0
+    if (y < 0 || y >= matrix.length) return 0
+    return matrix[y][x]
   }
 }
