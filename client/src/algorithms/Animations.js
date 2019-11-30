@@ -4,6 +4,9 @@ import Line from './Line'
 
 export default class Animations {
   constructor(canvas) {
+    this.catImage = new Image()
+    this.catImage.src = "cat3.png"
+    this.nbFrames = 8
     this.width = canvas.width
     this.height = canvas.height
     this.ctx = canvas.getContext('2d')
@@ -11,7 +14,8 @@ export default class Animations {
     this.radius = 5
     this.fillStyle = 'red '
     this.range = 5
-    this. speed = 5
+    this.speed = 10
+    this.frame = 0
     this.firstPoint
     this.endPoint
   }
@@ -48,10 +52,14 @@ export default class Animations {
   drawImage(triangulation) {
     this.updateFrameTriangulation(triangulation)
     this.ctx.clearRect(0, 0, canvas.width, canvas.height)
-    this.ctx.beginPath()
-    this.ctx.fillStyle = this.fillStyle
-    this.ctx.arc(this.position.x, this.position.y, this.radius, 0, 2 * Math.PI)
-    this.ctx.fill()
+    this.animateSprite(this.position.x,this.position.y,this.catImage, this.catImage.width,
+        this.catImage.height, this.nbFrames)
+
+    // this.ctx.beginPath()
+      // this.ctx.fillStyle = this.fillStyle
+      // this.ctx.arc(this.position.x, this.position.y, this.radius, 0, 2 * Math.PI)
+      // this.ctx.fill()
+    return [this.position.x, this.position.y]
   }
 
     updateFrameTriangulation(triangulation){
@@ -104,4 +112,29 @@ export default class Animations {
     }
     return neighbours
   }
+
+  animateSprite(x, y, image, spriteWidth, spriteHeight, nbFrames){
+
+
+    if (this.endPoint[0] >= this.firstPoint[0]){
+      this.ctx.drawImage(image, this.frame * spriteWidth/nbFrames , 0,
+          spriteWidth /nbFrames, spriteHeight, (x-spriteWidth/(2*nbFrames)),y-spriteHeight,spriteWidth/nbFrames, spriteHeight)
+    }
+    else{
+      this.ctx.translate(this.width, 0)
+      this.ctx.scale(-1,1)
+      this.ctx.drawImage(image, this.frame * spriteWidth/nbFrames , 0,
+          spriteWidth /nbFrames, spriteHeight, -(x+spriteWidth/(2*nbFrames))+this.width,y-spriteHeight,spriteWidth/nbFrames, spriteHeight)
+      this.ctx.translate(this.width, 0)
+      this.ctx.scale(-1,1)
+    }
+    this.frame += 1
+    if (this.frame>=nbFrames){
+      this.frame=0
+
+    }
+
+
+  }
+
 }

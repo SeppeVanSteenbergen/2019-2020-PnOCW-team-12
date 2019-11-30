@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<style></style>
-	<title>Css matrix test</title>
+	<title>Animation test</title>
 </head>
 
 <body>
@@ -14,8 +14,8 @@
     <script src="Point.js" type="text/javascript"></script>
     <script src="Line.js" type="text/javascript"></script>
 
-    <h2>Animation Test</h2>
-    <canvas id="canvas" style="width: 900px; height: 900px"></canvas>
+<!--    <h2>Animation Test</h2>-->
+    <canvas id="canvas" width= "900" height= "900""></canvas>
     <script>
         var canvas = document.getElementById("canvas")
         let triangulation = Delaunay.triangulation(Delaunay.randomPointsGenerator(5, canvas), canvas.width, canvas.height)
@@ -27,9 +27,13 @@
         animation.setDirection(firstPoint, endPoint)
         animation.firstPoint = firstPoint
         animation.endPoint = endPoint
-        
+        // catImage  = new Image()
+        // catImage.src = "catsmall2.png"
+
         setInterval(function(){
             animation.drawImage(triangulation)
+            // animation.animateSprite(pos[0],pos[1],catImage, 400, 25, 8)
+
             for(let tri = 0; tri < triangulation.length; tri++){
                 let ctx = canvas.getContext("2d")
                 let triangle = triangulation[tri]
@@ -44,7 +48,12 @@
                 ctx.stroke()
             }
 
-        }, 10)
+        }, 50)
+        // setInterval(function(){
+        //     animation.animateSprite(25,25,catImage, canvas, 400, 25, 8)
+        //
+        //
+        // }, 75)
     </script>
 	
 
