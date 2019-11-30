@@ -16,6 +16,7 @@ export default class Animations {
     this.range = 5
     this.speed = 10
     this.frame = 0
+    this.angle = 0
     this.firstPoint
     this.endPoint
   }
@@ -50,11 +51,13 @@ export default class Animations {
   }
 
   drawImage(triangulation) {
-    this.updateFrameTriangulation(triangulation)
     this.ctx.clearRect(0, 0, canvas.width, canvas.height)
     this.animateSprite(this.position.x,this.position.y,this.catImage, this.catImage.width,
         this.catImage.height, this.nbFrames)
-
+    this.updateFrameTriangulation(triangulation)
+    this.angle = Math.atan2(this.endPoint[1]-this.firstPoint[1], this.endPoint[0]-this.firstPoint[0])*180/Math.PI
+    // if (this.angle < 0 )
+    //   this.angle +=180
     // this.ctx.beginPath()
       // this.ctx.fillStyle = this.fillStyle
       // this.ctx.arc(this.position.x, this.position.y, this.radius, 0, 2 * Math.PI)
@@ -82,7 +85,9 @@ export default class Animations {
             this.setDirection(this.endPoint, newNeighbour)
             this.firstPoint = this.endPoint.slice()
             this.endPoint = newNeighbour
-            console.log(this.firstPoint + " ---> " + this.endPoint + "  slope = " + this.dy)
+            console.log(this.firstPoint + " ---> " + this.endPoint + " angle: "+
+                this.angle)
+          console.log(this.dy)
         }
     }
 
@@ -115,19 +120,33 @@ export default class Animations {
 
   animateSprite(x, y, image, spriteWidth, spriteHeight, nbFrames){
 
+    if (this.endPoint[0] < this.firstPoint[0]){
+      this.angle += 180
+    }
+
+    this.ctx.save();
+    this.ctx.translate(x, y);
+    this.ctx.rotate(this.angle*Math.PI/180);
+    this.ctx.translate(-x, -y);
+    // this.ctx.drawImage(image, this.frame * spriteWidth/nbFrames , 0,
+    //     spriteWidth /nbFrames, spriteHeight, xCoo,yCoo,spriteWidth/nbFrames, spriteHeight)
+    // this.ctx.restore();
+
 
     if (this.endPoint[0] >= this.firstPoint[0]){
       this.ctx.drawImage(image, this.frame * spriteWidth/nbFrames , 0,
-          spriteWidth /nbFrames, spriteHeight, (x-spriteWidth/(2*nbFrames)),y-spriteHeight,spriteWidth/nbFrames, spriteHeight)
+          spriteWidth /nbFrames, spriteHeight, (x-spriteWidth/(2*nbFrames)),y-spriteHeight/2,spriteWidth/nbFrames, spriteHeight)
     }
     else{
+      this.ctx.save()
       this.ctx.translate(this.width, 0)
       this.ctx.scale(-1,1)
       this.ctx.drawImage(image, this.frame * spriteWidth/nbFrames , 0,
-          spriteWidth /nbFrames, spriteHeight, -(x+spriteWidth/(2*nbFrames))+this.width,y-spriteHeight,spriteWidth/nbFrames, spriteHeight)
-      this.ctx.translate(this.width, 0)
-      this.ctx.scale(-1,1)
+          spriteWidth /nbFrames, spriteHeight, -(x+spriteWidth/(2*nbFrames))+this.width,y-spriteHeight/2,spriteWidth/nbFrames, spriteHeight)
+      this.ctx.restore()
+
     }
+    this.ctx.restore()
     this.frame += 1
     if (this.frame>=nbFrames){
       this.frame=0
