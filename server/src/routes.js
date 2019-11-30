@@ -44,6 +44,8 @@ module.exports = (app, passport) => {
   })
   app.use('/', serveStatic(path.join(__dirname, '../dist')))
 
+  app.get('/video/*', AuthenticationPolicy.isAuthenticated, DataConroller.streamVideo)
+
   app.use((req, res) => {
     fs.readFile(
       path.join(__dirname, '../dist/index.html'),

@@ -802,16 +802,30 @@
 
         return c.toDataURL()
       },
+
+      cutOutBase64(img, w, h) {
+        let c  = document.createElement('canvas')
+        c.width = w
+        c.height = h
+        let ctx = c.getContext('2d')
+        ctx.drawImage(0,0,w,h, 0,0,w,h)
+        return c.toDataURL()
+      },
       sendImageCSS() {
+        this.sendCSSImage(this.drawingImg)
+      },
+      sendCSSImage(img) {
         //loaded image to base64 conversion
         console.log('base64 image')
-        let base64 = this.imageToBase64(this.drawingImg)
 
         // get all the data
         let info = this.analysedImage.createPictureCanvas(
             this.drawingImg.width,
             this.drawingImg.height
         )
+
+        let base64 = this.cutOutBase64(img, info.w, info.h)
+
 
         console.log(info)
 
