@@ -95,6 +95,39 @@ module.exports = {
         h: (height in px, integer value)
         css: (css for the target canvas element)
      }
+
+     loadVideo
+     {
+        type: 'load-video'
+        data: {
+          videoURL: (relative url of the video file),
+          ox: (x offset in px, integer value)
+          oy: (y offset in px, integer value)
+          w: (width in px, integer value)
+          h: (height in px, integer value)
+          css: (css for the target canvas element)
+        }
+
+     }
+
+     startVideo
+     {
+        type: 'start-video'
+        data: {}
+     }
+
+     pauseVideo
+     {
+        type:'pause-video'
+        data:{}
+     }
+
+     restartVideo
+     {
+      type: 'restart-video'
+      data: {}
+     }
+
 	*/
 
   // TODO check for message integrity
