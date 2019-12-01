@@ -26,8 +26,9 @@ def rgb_to_hsl(r, g, b):
     return hue, saturation, lightness
 
 
-def prep_images(folder):
-    path = os.path.join(os.getcwd(), "images/input", folder)
+def prep_images(color):
+    path = os.path.join(os.getcwd(), "images/input", color)
+
     images = [cv2.imread(file) for file in glob.glob(os.path.join(path, "**/*.jpg"), recursive=True)]
 
     if not images:
@@ -39,7 +40,7 @@ def prep_images(folder):
     return np.concatenate(r), np.concatenate(g), np.concatenate(b)
 
 
-def display_rgb(r, g, b, size, color):
+def display_rgb(color, r, g, b, size, plot_color):
     # Start plotting environment
     fig = plt.figure()
     ax = fig.add_subplot(111, projection="3d")
@@ -101,15 +102,20 @@ def display_rgb(r, g, b, size, color):
     ax.zaxis.pane.set_edgecolor("white")
 
     # Plot all the pixels
-    ax.scatter3D(r, g, b, s=size, c=color)
+    ax.scatter3D(r, g, b, s=size, c=plot_color)
 
     # Save plot
     plt.tight_layout()
     ax.view_init(azim=-135, elev=15)
-    plt.savefig("rgb.png", dpi=300, transparent=False, bbox_inches="tight", pad_inches=1)
+
+    path = os.path.join(os.getcwd(), "images/output", color)
+    plt.savefig(os.path.join(path, "rgb.png"), dpi=300, transparent=False, bbox_inches="tight", pad_inches=1)
+
+    # Close plot
+    plt.close(fig)
 
 
-def display_hue_histogram(h, color):
+def display_hue_histogram(color, h, plot_color):
     # Start plotting environment
     fig = plt.figure()
     ax = plt.axes()
@@ -152,7 +158,7 @@ def display_hue_histogram(h, color):
 
     # Plot Hue histogram
     h = [int(round(hue)) for hue in h]
-    plt.hist(h, max(h) - min(h) + 1, facecolor=color)
+    plt.hist(h, max(h) - min(h) + 1, facecolor=plot_color)
 
     # Set each axis limits
     ax.set_xlim(x_min, x_max)
@@ -167,10 +173,15 @@ def display_hue_histogram(h, color):
     ax.set_position([chartBox.x0, chartBox.y0, chartBox.width * 0.6, chartBox.height])
     ax.legend(loc='upper left', bbox_to_anchor=(1, 1), ncol=1)
     plt.tight_layout()
-    plt.savefig("hueHist.png", dpi=300, transparent=False, bbox_inches="tight", pad_inches=1)
+
+    path = os.path.join(os.getcwd(), "images/output", color)
+    plt.savefig(os.path.join(path, "hueHist.png"), dpi=300, transparent=False, bbox_inches="tight", pad_inches=1)
+
+    # Close plot
+    plt.close(fig)
 
 
-def display_hsl(h, s, l, size, color):
+def display_hsl(color, h, s, l, size, plot_color):
     # Start plotting environment
     fig = plt.figure()
     ax = fig.add_subplot(111, projection="3d")
@@ -235,12 +246,14 @@ def display_hsl(h, s, l, size, color):
     ax.zaxis.pane.set_edgecolor('w')
 
     # Plot all the pixels
-    ax.scatter3D(h, s, l, s=size, c=color)
+    ax.scatter3D(h, s, l, s=size, c=plot_color)
 
     # Save plot
     plt.tight_layout()
     ax.view_init(azim=-135, elev=15)
-    plt.savefig("hsl3D.png", dpi=300, transparent=False, bbox_inches="tight", pad_inches=1)
+
+    path = os.path.join(os.getcwd(), "images/output", color)
+    plt.savefig(os.path.join(path, "hsl3D.png"), dpi=300, transparent=False, bbox_inches="tight", pad_inches=1)
 
     # set up a figure twice as wide as it is tall
     fig = plt.figure(figsize=plt.figaspect(1 / 2))
@@ -295,7 +308,7 @@ def display_hsl(h, s, l, size, color):
     plt.grid(axis="y", color="green", linestyle="--")
 
     # Plot all the pixels
-    plt.scatter(h, s, s=size, c=color)
+    plt.scatter(h, s, s=size, c=plot_color)
 
     # ===============
     # Second subplot
@@ -347,11 +360,16 @@ def display_hsl(h, s, l, size, color):
     plt.grid(axis="y", color="blue", linestyle="--")
 
     # Plot all the pixels
-    plt.scatter(h, l, s=size, c=color)
+    plt.scatter(h, l, s=size, c=plot_color)
 
     # Save plot
     plt.tight_layout()
-    plt.savefig("hsl.png", dpi=300, transparent=False, bbox_inches="tight", pad_inches=1)
+
+    path = os.path.join(os.getcwd(), "images/output", color)
+    plt.savefig(os.path.join(path, "hsl.png"), dpi=300, transparent=False, bbox_inches="tight", pad_inches=1)
+
+    # Close plot
+    plt.close(fig)
 
 
 def get_xaxis_limits(h):
@@ -370,11 +388,17 @@ def get_xaxis_limits(h):
     return x_min, x_max
 
 
-R, G, B = prep_images("white")
-display_rgb(R, G, B, 1, "black")
+def plot_color_spectrum(colors):
+    for color in colors:
+        R, G, B = prep_images(color)
+        display_rgb(color, R, G, B, 1, "black")
 
-H, S, L = rgb_to_hsl(R, G, B)
-display_hue_histogram(H, "black")
-display_hsl(H, S, L, 1, "black")
+        H, S, L = rgb_to_hsl(R, G, B)
+        display_hue_histogram(color, H, "black")
+        display_hsl(color, H, S, L, 1, "black")
+
+
+colors = ["blue", "blueGreen", "green", "pink", "red", "white", "yellow"]
+plot_color_spectrum(colors)
 
 # plt.show()
