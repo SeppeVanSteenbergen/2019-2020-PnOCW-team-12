@@ -35,10 +35,10 @@ export default {
     return Delaunay.triangulation(points)
   },
 
-  delaunayImage(triangulation, midPoints, canv) {
+  delaunayImage(triangulation, midPoints, width, height) {
     let c = document.createElement('canvas')
-    c.width = canv.width
-    c.height = canv.height
+    c.width = width
+    c.height = height
     let ctx = c.getContext('2d')
     ctx.fillStyle = '#ffffff'
     ctx.fillRect(0, 0, c.width, c.height)

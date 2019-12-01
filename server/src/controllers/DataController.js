@@ -1,6 +1,7 @@
 const dataHelper = require('../helpers/dataHelper')
 const fs = require('fs')
 const path = require('path')
+const Config = require('../config/config')
 
 module.exports = {
   getAllRooms(req, res) {
@@ -65,7 +66,7 @@ module.exports = {
       return res.status(404)
     }
     res.send({
-      videoURL: '/video/' + file.filename
+      videoURL: Config.server.url + '/video/' + file.filename
     })
   }
 }

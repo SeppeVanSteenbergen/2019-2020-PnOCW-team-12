@@ -748,8 +748,8 @@ export default {
 
           // get all the data
           let info = this.analysedImage.createPictureCanvas(
-            this.drawingImg.width,
-            this.drawingImg.height
+            this.analysedImage.width,
+            this.analysedImage.height
           )
 
           for (let i = 0; i < this.analysedImage.screens.length; i++) {
@@ -965,7 +965,7 @@ export default {
       c.width = w
       c.height = h
       let ctx = c.getContext('2d')
-      ctx.drawImage(0, 0, w, h, 0, 0, w, h)
+      ctx.drawImage(img, 0, 0, w, h, 0, 0, w, h)
       return c.toDataURL()
     },
     sendImageCSS() {
@@ -1082,7 +1082,7 @@ export default {
       outC.style.width = imgWidth + 'px'
       outC.style.height = Math.round(imgWidth * ratio) + 'px'
 
-      outctx.putImageData(imgCopy, 0, 0)
+      outctx.putImageData(this.analysedImage.imgOriginal, 0, 0)
 
       AlgorithmService.drawScreenOutlines(outC, this.analysedImage)
 
@@ -1094,8 +1094,8 @@ export default {
 
       let triangulation = AlgorithmService.delaunay(
         midList,
-        this.analysedImage.imgOriginal.width,
-        this.analysedImage.imgOriginal.height
+        this.analysedImage.width,
+        this.analysedImage.height
       )
 
       let delaunayImgObject = AlgorithmService.delaunayImage(

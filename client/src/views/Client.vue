@@ -42,8 +42,8 @@
           Go Fullscreen
         </v-btn>
         <div ref="canvWrap" class="fullscreen">
-          <canvas ref="canvas" v-if="canvasMode"> </canvas>
-          <video v-if="!canvasMode" ref="vid">
+          <canvas ref="canvas"> </canvas>
+          <video ref="vid">
             <source :src="videoURL" />
           </video>
         </div>
@@ -68,7 +68,8 @@ export default {
       intervalObj: null,
       defaultCSS: 'width:100%;height:100%',
       videoURL: '',
-      canvasMode: true
+      canvasMode: true,
+      videoTimeout: null
     }
   },
   mounted() {
@@ -426,8 +427,22 @@ export default {
     },
     loadVideoHandler(data) {
       this.videoURL = data.videoURL
-      this.$refs.vid.style = data.css
+      this.canvas.style = data.css
       this.$refs.vid.load()
+      this.$refs.vid.style = 'display:none'
+      this.beginVideoTimeout()
+    },
+    beginVideoTimeout() {
+      let c = this.canvas
+      let ctx = c.getContext('2d')
+
+      this.videoLoop(ctx)
+    },
+    videoLoop(ctx) {
+      if (!this.canvasMode) {
+        ctx.drawImage(this.$refs.vid, 0, 0)
+        setTimeout(this.videoLoop, 1000 / 30, ctx) // drawing at 30fps
+      }
     },
     startVideoHandler() {
       this.$refs.vid.play()
