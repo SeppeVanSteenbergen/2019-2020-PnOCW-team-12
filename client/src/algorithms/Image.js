@@ -481,12 +481,12 @@ export default class Image {
    */
   getImgData() {
     let canvas = document.createElement('canvas')
-    canvas.width = this.imgOriginal.width
-    canvas.height = this.imgOriginal.height
+    canvas.width = this.width
+    canvas.height = this.height
     let context = canvas.getContext('2d')
     let imgData = context.createImageData(
-      this.imgOriginal.width,
-      this.imgOriginal.height
+      this.width,
+      this.height
     )
     imgData.data.set(this.pixels)
     return imgData
