@@ -31,22 +31,24 @@
         // catImage.src = "catsmall2.png"
 
         setInterval(function(){
+          canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height)
+          for(let tri = 0; tri < triangulation.length; tri++){
+            let ctx = canvas.getContext("2d")
+            let triangle = triangulation[tri]
+            ctx.beginPath()
+            ctx.moveTo(triangle.point1[0], triangle.point1[1])
+            ctx.lineTo(triangle.point2[0], triangle.point2[1])
+            ctx.lineTo(triangle.point3[0], triangle.point3[1])
+            ctx.lineTo(triangle.point1[0], triangle.point1[1])
+            ctx.closePath()
+            ctx.lineWidth = 1
+            ctx.strokeStyle = '#000'
+            ctx.stroke()
+          }
             animation.drawImage(triangulation)
             // animation.animateSprite(pos[0],pos[1],catImage, 400, 25, 8)
 
-            for(let tri = 0; tri < triangulation.length; tri++){
-                let ctx = canvas.getContext("2d")
-                let triangle = triangulation[tri]
-                ctx.beginPath()
-                ctx.moveTo(triangle.point1[0], triangle.point1[1])
-                ctx.lineTo(triangle.point2[0], triangle.point2[1])
-                ctx.lineTo(triangle.point3[0], triangle.point3[1])
-                ctx.lineTo(triangle.point1[0], triangle.point1[1])
-                ctx.closePath()
-                ctx.lineWidth = 1
-                ctx.strokeStyle = '#000'
-                ctx.stroke()
-            }
+
 
         }, 50)
         // setInterval(function(){

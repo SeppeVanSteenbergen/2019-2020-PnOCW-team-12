@@ -5,7 +5,7 @@ import Line from './Line'
 export default class Animations {
   constructor(canvas) {
     this.catImage = new Image()
-    this.catImage.src = "cat3.png"
+    this.catImage.src = "cat3_trans.png"
     this.nbFrames = 8
     this.width = canvas.width
     this.height = canvas.height
@@ -51,7 +51,6 @@ export default class Animations {
   }
 
   drawImage(triangulation) {
-    this.ctx.clearRect(0, 0, canvas.width, canvas.height)
     this.animateSprite(this.position.x,this.position.y,this.catImage, this.catImage.width,
         this.catImage.height, this.nbFrames)
     this.updateFrameTriangulation(triangulation)
