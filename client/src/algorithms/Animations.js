@@ -3,8 +3,8 @@ import Delaunay from './Delaunay'
 import Line from './Line'
 
 export default class Animations {
-  constructor(canvas) {
-    this.catImage = new Image()
+  constructor(triangulation, canvas) {
+    this.catImage = new window.Image()
     this.catImage.src = "cat3_trans.png"
     this.nbFrames = 8
     this.width = canvas.width
@@ -19,6 +19,7 @@ export default class Animations {
     this.angle = 0
     this.firstPoint
     this.endPoint
+    this.triangulation = triangulation
   }
 
   setPosition(x, y) {
@@ -50,30 +51,68 @@ export default class Animations {
     this.delaunay = delaunay
   }
 
-  drawImage(triangulation) {
+  drawImage() {
+    this.updateFrame()
     this.animateSprite(this.position.x,this.position.y,this.catImage, this.catImage.width,
         this.catImage.height, this.nbFrames)
-    this.updateFrameTriangulation(triangulation)
-    this.angle = Math.atan2(this.endPoint[1]-this.firstPoint[1], this.endPoint[0]-this.firstPoint[0])*180/Math.PI
-    // if (this.angle < 0 )
-    //   this.angle +=180
-    // this.ctx.beginPath()
-      // this.ctx.fillStyle = this.fillStyle
-      // this.ctx.arc(this.position.x, this.position.y, this.radius, 0, 2 * Math.PI)
-      // this.ctx.fill()
-    return [this.position.x, this.position.y]
+
+    return {
+      x: this.position.x,
+      y: this.position.y,
+      direction: this.angle,
+      frame: this.frame
+    }
   }
 
-    updateFrameTriangulation(triangulation){
+  drawCat(canvas, x, y, angle, frame) {
+
+    let ctx = canvas.getContext('2d')
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(angle*Math.PI/180);
+    ctx.translate(-x, -y);
+
+
+    if (this.endPoint[0] >= this.firstPoint[0]){
+      ctx.drawImage(this.catImage, frame * this.catImage.width/this.nbFrames , 0,
+          this.catImage.width /this.nbFrames, this.catImage.height, (x-this.catImage.width/(2*this.nbFrames)),y-this.catImage.height/2,this.catImage.width/this.nbFrames, this.catImage.height)
+    }
+    else{
+      ctx.save()
+      ctx.translate(canvas.width, 0)
+      ctx.scale(-1,1)
+      ctx.drawImage(this.catImage, frame * this.catImage.width/this.nbFrames , 0,
+          this.catImage.width /this.nbFrames, this.catImage.height, -(x+this.catImage.width/(2*this.nbFrames))+this.width,y-this.catImage.height/2,this.catImage.width/this.nbFrames, this.catImage.height)
+      ctx.restore()
+
+    }
+    ctx.restore()
+  }
+
+  getNextFrame() {
+    this.updateFrame()
+    return {
+      x: this.position.x,
+      y: this.position.y,
+      angle: this.angle,
+      frame: this.frame
+    }
+  }
+
+  /**
+   * sets the new Position, direction, firstpoint, endpoint and angle of this class
+   * @param triangulation
+   */
+    updateFrame(){
       let canReturn = false
-      if (triangulation[0].point1 === triangulation[0].point2){
+      if (this.triangulation[0].point1 === this.triangulation[0].point2){
         canReturn = true
       }
         if(!this.inRange(this.endPoint)){
             this.go(this.dx, this.dy)
         }
         else {
-            let newNeighbours = this.findNeighbours(this.endPoint, triangulation)
+            let newNeighbours = this.findNeighbours(this.endPoint, this.triangulation)
             let random = Math.floor(Math.random()*newNeighbours.length)
             let newNeighbour = newNeighbours[random]
             while(canReturn === false && newNeighbour[0] === this.firstPoint[0] && newNeighbour[1] === this.firstPoint[1]){
@@ -88,6 +127,18 @@ export default class Animations {
                 this.angle)
           console.log(this.dy)
         }
+
+    this.angle = Math.atan2(this.endPoint[1]-this.firstPoint[1], this.endPoint[0]-this.firstPoint[0])*180/Math.PI
+
+    if (this.endPoint[0] < this.firstPoint[0]){
+      this.angle += 180
+    }
+
+    this.frame += 1
+    if (this.frame>=this.nbFrames){
+      this.frame=0
+    }
+
     }
 
     inRange(endPoint){
@@ -119,17 +170,10 @@ export default class Animations {
 
   animateSprite(x, y, image, spriteWidth, spriteHeight, nbFrames){
 
-    if (this.endPoint[0] < this.firstPoint[0]){
-      this.angle += 180
-    }
-
     this.ctx.save();
     this.ctx.translate(x, y);
     this.ctx.rotate(this.angle*Math.PI/180);
     this.ctx.translate(-x, -y);
-    // this.ctx.drawImage(image, this.frame * spriteWidth/nbFrames , 0,
-    //     spriteWidth /nbFrames, spriteHeight, xCoo,yCoo,spriteWidth/nbFrames, spriteHeight)
-    // this.ctx.restore();
 
 
     if (this.endPoint[0] >= this.firstPoint[0]){
@@ -146,13 +190,6 @@ export default class Animations {
 
     }
     this.ctx.restore()
-    this.frame += 1
-    if (this.frame>=nbFrames){
-      this.frame=0
-
-    }
-
-
   }
 
 }
