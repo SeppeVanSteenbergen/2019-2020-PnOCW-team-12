@@ -5,7 +5,9 @@
 
 server/uploads/images/
 
-*/node_modules
+**/node_modules
+server/files/*
+!server/files/.gitkeep
 
 ## Core latex/pdflatex auxiliary files:
 *.aux
