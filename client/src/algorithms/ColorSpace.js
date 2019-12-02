@@ -21,6 +21,8 @@ export default class ColorSpace {
       pixels[i + 1] = Math.round(S * 100)
       pixels[i + 2] = Math.round(L * 100)
     }
+
+    return pixels
   }
 
   static findSaturation(min, max, L) {
@@ -101,6 +103,8 @@ export default class ColorSpace {
       pixels[i + 1] = Math.round(G * 255)
       pixels[i + 2] = Math.round(B * 255)
     }
+
+    return pixels
   }
 
   static setTemporaryInRange(temp) {
@@ -264,5 +268,22 @@ export default class ColorSpace {
     )
 
     return deltaC00
+  }
+
+  /**
+   * Two pixels as array in hsla colorspace
+   */
+  static sameColors(color1, color2) {
+    let hsla = new color1.constructor(color1.length + color2.length)
+    hsla.set(color1)
+    hsla.set(color2, color1.length)
+
+    let rgba = this.hslaToRgba(hsla)
+    let xyza = this.rgbaToXyza(rgba)
+    let cieLab = this.xyzaToCieLab(xyza)
+    
+    let deltaC00 = this.deltaC00(cieLab.slice(0, 4), cieLab.slice(4, 8))
+
+    return deltaC00 <= 5
   }
 }

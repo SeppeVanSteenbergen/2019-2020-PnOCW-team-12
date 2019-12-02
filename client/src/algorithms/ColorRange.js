@@ -75,8 +75,8 @@ export default class ColorRange {
     return (
       H >= 174 - ColorRange.sensitivity() &&
       H <= 199 + ColorRange.sensitivity() &&
-      L >= 15 + ColorRange.sensitivity() &&
-      L <= 40
+      L >= 15 - ColorRange.sensitivity() &&
+      L <= 40 + ColorRange.sensitivity()
     )
   }
 

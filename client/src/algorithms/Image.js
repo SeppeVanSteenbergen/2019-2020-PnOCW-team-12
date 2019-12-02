@@ -154,37 +154,33 @@ export default class Image {
     for (let y = 0; y < this.getHeight(); y++) {
       for (let x = 0; x < this.getWidth(); x++) {
         if (this.checkId(x, y)) {
-          let newIslandCoo = this.floodfill(x, y, this.islandID)
-          if (
-            (newIslandCoo[0] - newIslandCoo[2]) *
-              (newIslandCoo[1] - newIslandCoo[3]) <=
-            1000
-          )
-            break
-          let newIsland = new Island(
-            [newIslandCoo[0], newIslandCoo[1]],
-            [newIslandCoo[2], newIslandCoo[3]],
-            this.islandID,
-            this.getImgData(),
-            this.matrix
-          )
-          if (newIsland.isValid()) {
-            try {
-              newIsland.finishIsland()
-              this.islands.push(newIsland)
-            } catch (err) {
-              console.log(err + ' in screen: ' + newIsland.getBarcode())
+          let newIslandCoo = this.floodfill(x, y)
+          if (this.isPossibleIsland(newIslandCoo)) {
+            let newIsland = new Island(
+              newIslandCoo[0],
+              newIslandCoo[1],
+              this.islandID,
+              this.getImgData(),
+              this.matrix
+            )
+            if (newIsland.isValid()) {
+              try {
+                newIsland.finishIsland()
+                this.islands.push(newIsland)
+              } catch (err) {
+                console.log(err + ' in screen: ' + newIsland.getBarcode())
+              }
             }
+            this.islandID += 3
           }
-          this.islandID += 3
         }
       }
     }
   }
 
-  floodfill(xPos, yPos, islandID) {
+  floodfill(xPos, yPos) {
     let stack = [[xPos, yPos]]
-    let pixel
+    let coo
     let x
     let y
     let minX = xPos
@@ -192,30 +188,69 @@ export default class Image {
     let maxX = xPos
     let maxY = yPos
     while (stack.length > 0) {
-      pixel = stack.pop()
-      x = pixel[0]
-      y = pixel[1]
-      if (this.getMatrix(x, y) <= 3) {
-        this.matrix[y][x] += islandID - 1
+      coo = stack.pop()
+      x = coo[0]
+      y = coo[1]
+      let id = this.getMatrix(x, y)
+      if (id >= 0 && id <= 3) {
+        let pixel = this.getPixel(x, y)
+        this.matrix[y][x] += this.islandID - 1
         minX = Math.min(minX, x)
         minY = Math.min(minY, y)
         maxX = Math.max(maxX, x)
         maxY = Math.max(maxY, y)
         if (this.checkId(x - 1, y)) {
           stack.push([x - 1, y])
+        } else if (this.getMatrix(x - 1, y) === 0) {
+          if (ColorSpace.sameColors(pixel, this.getPixel(x - 1, y))) {
+            this.setMatrix(x - 1, y, id)
+            stack.push([x - 1, y])
+          }
         }
         if (this.checkId(x + 1, y)) {
           stack.push([x + 1, y])
+        } else if (this.getMatrix(x + 1, y) === 0) {
+          if (ColorSpace.sameColors(pixel, this.getPixel(x + 1, y))) {
+            this.setMatrix(x + 1, y, id)
+            stack.push([x + 1, y])
+          }
         }
         if (this.checkId(x, y - 1)) {
           stack.push([x, y - 1])
+        } else if (this.getMatrix(x, y - 1) === 0) {
+          if (ColorSpace.sameColors(pixel, this.getPixel(x, y - 1))) {
+            this.setMatrix(x, y - 1, id)
+            stack.push([x, y - 1])
+          }
         }
         if (this.checkId(x, y + 1)) {
           stack.push([x, y + 1])
+        } else if (this.getMatrix(x, y + 1) === 0) {
+          if (ColorSpace.sameColors(pixel, this.getPixel(x, y + 1))) {
+            this.setMatrix(x, y + 1, id)
+            stack.push([x, y + 1])
+          }
         }
       }
     }
-    return [minX, minY, maxX, maxY]
+    return [[minX, minY], [maxX, maxY]]
+  }
+
+  isPossibleIsland(coo) {
+    let minx = coo[0][0]
+    let miny = coo[0][1]
+    let maxx = coo[1][0]
+    let maxy = coo[1][1]
+
+    let matrix = this.matrix.slice(miny, maxy)
+    for (let i = 0; i < maxy - miny; i++) {
+      matrix[i] = matrix[i].slice(minx, maxx)
+    }
+
+    let ids = matrix.flat()
+    if (ids.includes(this.islandID) && ids.includes(this.islandID + 1) & ids.includes(this.islandID + 2)) {
+      return true
+    }
   }
 
   /**
@@ -252,7 +287,7 @@ export default class Image {
    */
   createBigMask() {
     if (this.getColorSpace() !== 'HSLA') {
-      console.error('createGreenBlueMask only with HSLA as colorspace!')
+      console.error('createBigMask only with HSLA as colorspace!')
     }
     for (let i = 0; i < this.pixels.length; i += 4) {
       let H = this.pixels[i] * 2
@@ -283,9 +318,29 @@ export default class Image {
    *          The value of that pixel in the matrix
    */
   getMatrix(x, y) {
-    if (x < 0 || x >= this.width) return -1
-    if (y < 0 || y >= this.height) return -1
+    if (x < 0 || x >= this.getWidth()) return -1
+    if (y < 0 || y >= this.getHeight()) return -1
     return this.matrix[y][x]
+  }
+
+  setMatrix(x, y, id) {
+    if (this.getMatrix(x, y) > 0) return
+
+    if (x < 0) x = 0
+    if (x > this.getWidth()) x = this.getWidth()
+    if (y < 0) y = 0
+    if (y > this.getHeight()) y = this.getHeight()
+
+    this.matrix[y][x] = id
+  }
+
+  getPixel(x, y) {
+    if (x < 0 || x > this.getWidth()) return [0, 0, 0, 255]
+    if (y < 0 || y > this.getHeight()) return [0, 0, 0, 255]
+
+    let position = (y * this.getWidth() + x) * 4
+
+    return this.getPixels().slice(position, position + 4)
   }
 
   /**
@@ -324,14 +379,14 @@ export default class Image {
 
     let allCorners = []
 
-    this.screens.forEach(function(e) {
+    this.screens.forEach(function (e) {
       for (let key in e.corners) {
         allCorners.push(e.corners[key])
       }
     })
 
     //sort on x co
-    allCorners.sort(function(a, b) {
+    allCorners.sort(function (a, b) {
       return a[0] - b[0]
     })
 
@@ -339,7 +394,7 @@ export default class Image {
     points['maxx'] = allCorners[allCorners.length - 1][0]
 
     //sort on y co
-    allCorners.sort(function(a, b) {
+    allCorners.sort(function (a, b) {
       return a[1] - b[1]
     })
 
@@ -421,7 +476,7 @@ export default class Image {
   calcRelativeScreens() {
     let originX = this.pictureCanvas.minx
     let originY = this.pictureCanvas.miny
-    this.screens.forEach(function(s) {
+    this.screens.forEach(function (s) {
       for (let key in s.corners) {
         if (s.corners.hasOwnProperty(key)) {
           s.relativeCorners[key][0] = s.corners[key][0] - originX
