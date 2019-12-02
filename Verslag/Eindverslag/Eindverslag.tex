@@ -1,7 +1,10 @@
 \documentclass[a4paper,11pt]{article}
 
+\usepackage{listings}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows}
 \usepackage[margin=3cm]{geometry}
-
+\usepackage{amsmath}
 \usepackage{graphicx}
 \usepackage{subcaption}
 \usepackage[colorlinks,allcolors=violet]{hyperref}
@@ -12,7 +15,7 @@
 \usepackage{subcaption}
 
 % https://tex.stackexchange.com/questions/94032/fancy-tables-in-latex
-\usepackage[table]{xcolor}
+%\usepackage[table]{xcolor}
 \usepackage{booktabs}
 
 \usepackage[utf8]{inputenc}
@@ -70,11 +73,10 @@ Seppe Van Steenbergen &\\
 \input{Reconstructie.tex}
 	
 \input{Triangulatie}
-\newpage
 
 \input{Animation}
-\newpage
 
+\newpage
 \bibliographystyle{unsrt}
 \bibliography{Bibliography}
 
