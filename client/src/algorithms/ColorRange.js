@@ -3,14 +3,15 @@ export default class ColorRange {
     return 10
   }
   static inBlueRange(H, S, L) {
-    return (
+    /*return (
       (this.inBlueBoxA1(H, S) ||
         this.inBlueBoxA2(H, S) ||
         this.inBlueBoxA3(H, S)) &&
       (this.inBlueBoxB1(H, L) ||
         this.inBlueBoxB2(H, L) ||
         this.inBlueBoxB3(H, L))
-    )
+    )*/
+    return H > 216 && H < 260 && S > 50 && L > 20
   }
 
   static inBlueBoxA1(H, S) {
@@ -81,13 +82,14 @@ export default class ColorRange {
   }
 
   static inGreenRange(H, S, L) {
-    return (
+    /*return (
       (this.inGreenBoxA1(H, S) || this.inGreenBoxA2(H, S)) &&
       (this.inGreenBoxB1(H, L) ||
         this.inGreenBoxB2(H, L) ||
         this.inGreenBoxB3(H, L) ||
         this.inGreenBoxB4(H, L))
-    )
+    )*/
+    return H > 100 && H < 140 && S > 60 && L > 30
   }
 
   static inGreenBoxA1(H, S) {

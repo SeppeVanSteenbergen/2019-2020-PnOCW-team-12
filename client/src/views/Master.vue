@@ -753,8 +753,8 @@ export default {
 
           // get all the data
           let info = this.analysedImage.createPictureCanvas(
-            this.$refs.vid.videoWidth,
-              this.$refs.vid.videoHeight,
+            this.analysedImage.width,
+              this.analysedImage.height,
           )
 
           for (let i = 0; i < this.analysedImage.screens.length; i++) {

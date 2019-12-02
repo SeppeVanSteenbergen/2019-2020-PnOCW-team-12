@@ -469,7 +469,9 @@ export default {
       c.width = w
       c.height = h
       let ctx = c.getContext('2d')
-      ctx.drawImage(img, minx, miny, w, h, 0, 0, w, h)
+
+
+      ctx.putImageData(img, 0,0, minx, miny, w, h)
       return ctx.getImageData(0,0,w,h)
     },
     animationInitHandler(data) {
