@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6500 64-bit) (preloaded format=pdflatex 2019.10.21)  2 DEC 2019 15:56
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6500 64-bit) (preloaded format=pdflatex 2019.10.21)  2 DEC 2019 18:02
 entering extended mode
 **./Eindverslag.tex
 (Eindverslag.tex
@@ -947,7 +947,26 @@ Package pdftex.def Info: Requested size: 170.71393pt x 43.81587pt on input line
  44.
 ) [6] [7 <./img/bowyer-watson_superdriehoek.png> <./img/bowyer-watson_nieuwpunt
 .png> <./img/bowyer-watson_verwijderen.png> <./img/colineair.jpg> <./img/almost
-_colinair.jpg>] (Animation.tex) [8] (Eindverslag.bbl
+_colinair.jpg>] (Animation.tex
+<img/cat2.png, id=142, 1505.625pt x 94.10156pt>
+File: img/cat2.png Graphic file (type png)
+<use img/cat2.png>
+Package pdftex.def Info: img/cat2.png  used on input line 10. on input line 10.
+
+Package pdftex.def Info: Requested size: 451.691pt x 28.23068pt on input line 1
+0.
+
+Overfull \hbox (24.89964pt too wide) in paragraph at lines 10--11
+ [][] 
+ []
+
+
+LaTeX Warning: Citation `catsprite' on page 8 undefined on input line 11.
+
+
+LaTeX Warning: Citation `catsprite' on page 8 undefined on input line 11.
+
+) [8 <./img/cat2.png>] (Eindverslag.bbl
 LaTeX Font Info:    Try loading font information for T1+lmtt on input line 5.
 
 ("D:\Program Files\Miktex\tex\latex\lm\t1lmtt.fd"
@@ -970,26 +989,29 @@ ttps : / / en . wikipedia . org / wiki / Bowyer % E2 % 80 %
  []
 
 )
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 82.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 83.
  [9]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 82.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 83.
  (Eindverslag.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 82.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 82.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 83.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 83.
 Package rerunfilecheck Info: File `Eindverslag.out' has not changed.
 (rerunfilecheck)             Checksum: 9C20FAE9A8D3511F1D7737BCCB5728CC;700.
 
 
 LaTeX Warning: There were undefined references.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 82.
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 83.
  ) 
 Here is how much of TeX's memory you used:
- 10052 strings out of 493312
- 154293 string characters out of 3140626
- 286145 words of memory out of 3000000
- 13315 multiletter control sequences out of 15000+200000
- 45173 words of font info for 80 fonts, out of 3000000 for 9000
+ 10070 strings out of 493312
+ 154527 string characters out of 3140626
+ 286205 words of memory out of 3000000
+ 13328 multiletter control sequences out of 15000+200000
+ 45256 words of font info for 81 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
  42i,8n,45p,2872b,535s stack positions out of 5000i,500n,10000p,200000b,50000s
 {D:/Program Files/Miktex/fonts/enc/dvips/lm/lm-ec.enc}{D:/Program Files/Mikte
@@ -1000,9 +1022,9 @@ ype1/public/lm/lmmi10.pfb><D:/Program Files/Miktex/fonts/type1/public/lm/lmr10.
 pfb><D:/Program Files/Miktex/fonts/type1/public/lm/lmr8.pfb><D:/Program Files/M
 iktex/fonts/type1/public/lm/lmri10.pfb><D:/Program Files/Miktex/fonts/type1/pub
 lic/lm/lmtt10.pfb>
-Output written on Eindverslag.pdf (9 pages, 2213547 bytes).
+Output written on Eindverslag.pdf (9 pages, 2267388 bytes).
 PDF statistics:
- 191 PDF objects out of 1000 (max. 8388607)
- 33 named destinations out of 1000 (max. 500000)
- 13966 words of extra memory for PDF output out of 14400 (max. 10000000)
+ 198 PDF objects out of 1000 (max. 8388607)
+ 35 named destinations out of 1000 (max. 500000)
+ 13971 words of extra memory for PDF output out of 14400 (max. 10000000)
 

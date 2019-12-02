@@ -17,4 +17,10 @@ S.W. Sloan and G.T. Houlsby.
 \newblock Technical report, Department of Civil Engineering, University of
   Newcastle and Department of Engineering Science, University of Oxford, 1984.
 
+\bibitem{catsprite}
+Kat sprite sheet.
+\newblock
+  \url{https://docs.coronalabs.com/guide/media/spriteAnimation/index.html },
+  December 2019.
+
 \end{thebibliography}
