@@ -1,10 +1,7 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7000 64-bit) (preloaded format=pdflatex 2019.5.22)  2 DEC 2019 14:20
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7000 64-bit) (preloaded format=pdflatex 2019.5.22)  2 DEC 2019 14:30
 entering extended mode
-**C:/Users/toons/Documents/Informatica/2019-2020/PnO/2019-2020-PnOCW-team-12/Ve
-rslag/Eindverslag/Eindverslag.tex
-
-(C:/Users/toons/Documents/Informatica/2019-2020/PnO/2019-2020-PnOCW-team-12/Ver
-slag/Eindverslag/Eindverslag.tex
+**./Eindverslag.tex
+(Eindverslag.tex
 LaTeX2e <2018-12-01>
 ("C:\Users\toons\AppData\Local\Programs\MiKTeX 2.9\tex/latex/base\article.cls"
 Document Class: article 2018/09/03 v1.4i Standard LaTeX document class
@@ -381,9 +378,7 @@ Package microtype Info: Loading configuration file microtype.cfg.
 ("C:\Users\toons\AppData\Local\Programs\MiKTeX 2.9\tex/latex/microtype\microtyp
 e.cfg"
 File: microtype.cfg 2019/10/10 v2.7c microtype main configuration file (RS)
-))
-(C:/Users/toons/Documents/Informatica/2019-2020/PnO/2019-2020-PnOCW-team-12/Ver
-slag/Eindverslag\Eindverslag.aux)
+)) (Eindverslag.aux)
 \openout1 = `Eindverslag.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 27.
@@ -489,11 +484,7 @@ Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 LaTeX Info: Redefining \ref on input line 27.
 LaTeX Info: Redefining \pageref on input line 27.
 LaTeX Info: Redefining \nameref on input line 27.
-
-(C:/Users/toons/Documents/Informatica/2019-2020/PnO/2019-2020-PnOCW-team-12/Ver
-slag/Eindverslag\Eindverslag.out)
-(C:/Users/toons/Documents/Informatica/2019-2020/PnO/2019-2020-PnOCW-team-12/Ver
-slag/Eindverslag\Eindverslag.out)
+ (Eindverslag.out) (Eindverslag.out)
 \@outlinefile=\write3
 \openout3 = `Eindverslag.out'.
 
@@ -560,17 +551,16 @@ Underfull \hbox (badness 10000) in paragraph at lines 45--60
  []
 
 
-(C:/Users/toons/Documents/Informatica/2019-2020/PnO/2019-2020-PnOCW-team-12/Ver
-slag/Eindverslag\Eindverslag.toc)
+Package hyperref Warning: old toc file detected, not used; run LaTeX again.
+
 \tf@toc=\write4
 \openout4 = `Eindverslag.toc'.
 
- [1
+[1
 
 {C:/Users/toons/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}]
-(C:/Users/toons/Documents/Informatica/2019-2020/PnO/2019-2020-PnOCW-team-12/Ver
-slag/Eindverslag\Detectie.tex
-<img/mask.png, id=42, 548.80031pt x 326.72063pt>
+(Detectie.tex
+<img/mask.png, id=12, 548.80031pt x 326.72063pt>
 File: img/mask.png Graphic file (type png)
 <use img/mask.png>
 Package pdftex.def Info: img/mask.png  used on input line 9.
@@ -580,25 +570,16 @@ Underfull \hbox (badness 10000) in paragraph at lines 17--20
 
  []
 
-[2 <C:/Users/toons/Documents/Informatica/2019-2020/PnO/2019-2020-PnOCW-team-12/
-Verslag/Eindverslag/img/mask.png>]
-<img/perpSearch.png, id=52, 575.90157pt x 396.7322pt>
+[2 <./img/mask.png>]
+<img/perpSearch.png, id=25, 575.90157pt x 396.7322pt>
 File: img/perpSearch.png Graphic file (type png)
 <use img/perpSearch.png>
 Package pdftex.def Info: img/perpSearch.png  used on input line 23.
 (pdftex.def)             Requested size: 345.54361pt x 238.04114pt.
 
 
-Package caption Warning: \label without proper reference on input line 38.
-See the caption package documentation for explanation.
-
-
 LaTeX Warning: Reference `fig:foute hoek' on page 3 undefined on input line 27.
 
-
-
-Package caption Warning: \label without proper reference on input line 32.
-See the caption package documentation for explanation.
 
 
 LaTeX Warning: Reference `fig:correcte hoek' on page 3 undefined on input line 
@@ -609,12 +590,12 @@ Underfull \hbox (badness 10000) in paragraph at lines 27--28
 
  []
 
-<img/correctCorner.png, id=55, 848.4197pt x 654.19406pt>
+<img/correctCorner.png, id=26, 848.4197pt x 654.19406pt>
 File: img/correctCorner.png Graphic file (type png)
 <use img/correctCorner.png>
 Package pdftex.def Info: img/correctCorner.png  used on input line 34.
 (pdftex.def)             Requested size: 128.0387pt x 98.7238pt.
-<img/notACorner.png, id=56, 1178.15157pt x 651.93562pt>
+<img/notACorner.png, id=27, 1178.15157pt x 651.93562pt>
 File: img/notACorner.png Graphic file (type png)
 <use img/notACorner.png>
 Package pdftex.def Info: img/notACorner.png  used on input line 40.
@@ -622,24 +603,20 @@ Package pdftex.def Info: img/notACorner.png  used on input line 40.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-)
-(C:/Users/toons/Documents/Informatica/2019-2020/PnO/2019-2020-PnOCW-team-12/Ver
-slag/Eindverslag\Reconstructie.tex [3 <C:/Users/toons/Documents/Informatica/201
-9-2020/PnO/2019-2020-PnOCW-team-12/Verslag/Eindverslag/img/perpSearch.png>]
+) (Reconstructie.tex [3 <./img/perpSearch.png>]
 
 LaTeX Warning: Reference `Foto van screendetectie html!!!!' on page 4 undefined
  on input line 8.
 
-[4 <C:/Users/toons/Documents/Informatica/2019-2020/PnO/2019-2020-PnOCW-team-12/
-Verslag/Eindverslag/img/correctCorner.png> <C:/Users/toons/Documents/Informatic
-a/2019-2020/PnO/2019-2020-PnOCW-team-12/Verslag/Eindverslag/img/notACorner.png>
-]
+[4 <./img/correctCorner.png> <./img/notACorner.png>]
+
+LaTeX Warning: Reference `subsec:diagonalen' on page 5 undefined on input line 
+13.
+
 
 LaTeX Warning: Reference `intersectie' on page 5 undefined on input line 13.
 
-) [5]
-(C:/Users/toons/Documents/Informatica/2019-2020/PnO/2019-2020-PnOCW-team-12/Ver
-slag/Eindverslag\triangulatie.tex
+) [5] (triangulatie.tex
 
 LaTeX Warning: Citation `delaunaywiki' on page 6 undefined on input line 2.
 
@@ -667,19 +644,19 @@ LaTeX Warning: Reference `bowyer-watson-b' on page 6 undefined on input line 8.
 LaTeX Warning: Reference `bowyer-watson-c' on page 6 undefined on input line 10
 .
 
-<img/bowyer-watson_superdriehoek.png, id=76, 578.16pt x 433.62pt>
+<img/bowyer-watson_superdriehoek.png, id=49, 578.16pt x 433.62pt>
 File: img/bowyer-watson_superdriehoek.png Graphic file (type png)
 <use img/bowyer-watson_superdriehoek.png>
 Package pdftex.def Info: img/bowyer-watson_superdriehoek.png  used on input lin
 e 15.
 (pdftex.def)             Requested size: 170.71393pt x 128.03589pt.
-<img/bowyer-watson_nieuwpunt.png, id=77, 578.16pt x 433.62pt>
+<img/bowyer-watson_nieuwpunt.png, id=50, 578.16pt x 433.62pt>
 File: img/bowyer-watson_nieuwpunt.png Graphic file (type png)
 <use img/bowyer-watson_nieuwpunt.png>
 Package pdftex.def Info: img/bowyer-watson_nieuwpunt.png  used on input line 20
 .
 (pdftex.def)             Requested size: 170.71393pt x 128.03589pt.
-<img/bowyer-watson_verwijderen.png, id=78, 578.16pt x 433.62pt>
+<img/bowyer-watson_verwijderen.png, id=51, 578.16pt x 433.62pt>
 File: img/bowyer-watson_verwijderen.png Graphic file (type png)
 <use img/bowyer-watson_verwijderen.png>
 Package pdftex.def Info: img/bowyer-watson_verwijderen.png  used on input line 
@@ -700,34 +677,19 @@ LaTeX Warning: Reference `colineair' on page 6 undefined on input line 34.
 LaTeX Warning: Reference `almost_colineair' on page 6 undefined on input line 3
 4.
 
-
-! LaTeX Error: File `colineair' not found.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.38 ...degraphics[width=0.4\textwidth]{colineair}
-                                                  
-? 
-
-! LaTeX Error: File `almost_colinair' not found.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.44 ...hics[width=0.4\textwidth]{almost_colinair}
-                                                  
-? 
-) [6] [7 <C:/Users/toons/Documents/Informatica/2019-2020/PnO/2019-2020-PnOCW-te
-am-12/Verslag/Eindverslag/img/bowyer-watson_superdriehoek.png> <C:/Users/toons/
-Documents/Informatica/2019-2020/PnO/2019-2020-PnOCW-team-12/Verslag/Eindverslag
-/img/bowyer-watson_nieuwpunt.png> <C:/Users/toons/Documents/Informatica/2019-20
-20/PnO/2019-2020-PnOCW-team-12/Verslag/Eindverslag/img/bowyer-watson_verwijdere
-n.png>]
-(C:/Users/toons/Documents/Informatica/2019-2020/PnO/2019-2020-PnOCW-team-12/Ver
-slag/Eindverslag\Eindverslag.bbl
+<img/colineair.jpg, id=52, 472.76625pt x 176.45924pt>
+File: img/colineair.jpg Graphic file (type jpg)
+<use img/colineair.jpg>
+Package pdftex.def Info: img/colineair.jpg  used on input line 38.
+(pdftex.def)             Requested size: 170.71393pt x 63.71913pt.
+<img/almost_colinair.jpg, id=53, 361.35pt x 92.7465pt>
+File: img/almost_colinair.jpg Graphic file (type jpg)
+<use img/almost_colinair.jpg>
+Package pdftex.def Info: img/almost_colinair.jpg  used on input line 44.
+(pdftex.def)             Requested size: 170.71393pt x 43.81587pt.
+) [6] [7 <./img/bowyer-watson_superdriehoek.png> <./img/bowyer-watson_nieuwpunt
+.png> <./img/bowyer-watson_verwijderen.png> <./img/colineair.jpg> <./img/almost
+_colinair.jpg>] (Eindverslag.bbl
 
 LaTeX Warning: Empty `thebibliography' environment on input line 3.
 
@@ -745,7 +707,7 @@ Package rerunfilecheck Warning: File `Eindverslag.out' has changed.
 (rerunfilecheck)                or use package `bookmark'.
 
 Package rerunfilecheck Info: Checksums for `Eindverslag.out':
-(rerunfilecheck)             Before: 182725DD57346DF332DC10394177C387;367
+(rerunfilecheck)             Before: D41D8CD98F00B204E9800998ECF8427E;0
 (rerunfilecheck)             After:  CBF57225F6D107A89E21D0F435BBE4B8;537.
 
 LaTeX Warning: There were undefined references.
@@ -756,13 +718,13 @@ LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 80.
  ) 
 Here is how much of TeX's memory you used:
- 9749 strings out of 492945
- 155894 string characters out of 3126252
- 292137 words of memory out of 3000000
- 13377 multiletter control sequences out of 15000+200000
+ 9735 strings out of 492945
+ 154886 string characters out of 3126252
+ 291680 words of memory out of 3000000
+ 13378 multiletter control sequences out of 15000+200000
  44771 words of font info for 78 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 42i,8n,46p,2965b,535s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 42i,8n,46p,2872b,535s stack positions out of 5000i,500n,10000p,200000b,50000s
 {C:/Users/toons/AppData/Local/Programs/MiKTeX 2.9/fonts/enc/dvips/lm/lm-rm.en
 c}{C:/Users/toons/AppData/Local/Programs/MiKTeX 2.9/fonts/enc/dvips/lm/lm-ec.en
 c}{C:/Users/toons/AppData/Local/Programs/MiKTeX 2.9/fonts/enc/dvips/lm/lm-mathi
@@ -773,9 +735,9 @@ lic/lm/lmmi10.pfb><C:/Users/toons/AppData/Local/Programs/MiKTeX 2.9/fonts/type1
 /public/lm/lmr10.pfb><C:/Users/toons/AppData/Local/Programs/MiKTeX 2.9/fonts/ty
 pe1/public/lm/lmr8.pfb><C:/Users/toons/AppData/Local/Programs/MiKTeX 2.9/fonts/
 type1/public/lm/lmri10.pfb>
-Output written on Eindverslag.pdf (8 pages, 2153718 bytes).
+Output written on Eindverslag.pdf (8 pages, 2173677 bytes).
 PDF statistics:
- 135 PDF objects out of 1000 (max. 8388607)
+ 109 PDF objects out of 1000 (max. 8388607)
  26 named destinations out of 1000 (max. 500000)
- 13396 words of extra memory for PDF output out of 14400 (max. 10000000)
+ 13358 words of extra memory for PDF output out of 14400 (max. 10000000)
 
