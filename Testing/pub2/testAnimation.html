@@ -22,7 +22,7 @@
         let firstPoint = triangulation[0].point1
         let endPoint = triangulation[0].point2
         console.log(firstPoint + "----->" + endPoint)
-        var animation = new Animations(triangulation, canvas)
+        var animation = new Animations(triangulation, {width: canvas.width, height:canvas.height})
         animation.setPosition(firstPoint[0], firstPoint[1])
         animation.setDirection(firstPoint, endPoint)
         animation.firstPoint = firstPoint
@@ -46,7 +46,7 @@
             ctx.stroke()
           }
             let info = animation.getNextFrame()
-            animation.drawCat(canvas, info.x, info.y, info.angle, info.frame)
+            animation.drawCat(canvas, info.x, info.y, info.angle, info.frame, info.right)
             // animation.animateSprite(pos[0],pos[1],catImage, 400, 25, 8)
 
 

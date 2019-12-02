@@ -22,4 +22,13 @@ export default class Triangle {
     }
     return false
   }
+
+  toObject() {
+    return {
+      point1: this.point1,
+      point2: this.point2,
+      point3: this.point3,
+      edges: this.edges
+    }
+  }
 }

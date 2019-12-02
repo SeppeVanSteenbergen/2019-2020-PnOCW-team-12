@@ -56,8 +56,9 @@
 </template>
 <script>
 import DetectionDrawer from '../algorithms/DetectionDrawer'
-
+import AlgorithmService from '../services/AlgorithmService'
 import NumberConverter from '../algorithms/PermutationConverter'
+import Animation from '../algorithms/Animations'
 
 export default {
   name: 'client',
@@ -69,7 +70,8 @@ export default {
       defaultCSS: 'width:100%;height:100%',
       videoURL: '',
       canvasMode: true,
-      videoTimeout: null
+      videoTimeout: null,
+      delaunayImage: null
     }
   },
   mounted() {
@@ -128,6 +130,9 @@ export default {
         case 'restart-video':
           this.restartVideoHandler()
           break
+        case 'animation-init':
+          this.animationInitHandler(message.data)
+          break
         default:
           console.log('command not supported')
           break
@@ -147,6 +152,9 @@ export default {
         console.log(data)
         this.$socket.emit('pongs', data)
       }
+    },
+    af(data) {
+      this.animationFrameHandler(data)
     }
   },
   methods: {
@@ -428,6 +436,8 @@ export default {
     loadVideoHandler(data) {
       this.videoURL = data.videoURL
       this.canvas.style = data.css
+      this.canvas.width = data.h
+      this.canvas.width = data.w
       this.$refs.vid.load()
       this.$refs.vid.style = 'display:none'
       this.beginVideoTimeout()
@@ -440,7 +450,7 @@ export default {
     },
     videoLoop(ctx) {
       if (!this.canvasMode) {
-        ctx.drawImage(this.$refs.vid, 0, 0)
+        ctx.drawImage(this.$refs.vid, 0, 0, this.canvas.width, this.canvas.height, 0,0, this.canvas.width, this.canvas.height)
         setTimeout(this.videoLoop, 1000 / 30, ctx) // drawing at 30fps
       }
     },
@@ -452,6 +462,53 @@ export default {
     },
     restartVideoHandler() {
       this.$refs.vid.load()
+    },
+
+    cutout(imgData, w, h, minx, miny) {
+      let c = document.createElement('canvas')
+      c.width = w
+      c.height = h
+      let ctx = c.getContext('2d')
+      ctx.drawImage(img, minx, miny, w, h, 0, 0, w, h)
+      return ctx.getImageData(0,0,w,h)
+    },
+    animationInitHandler(data) {
+      //create delaunay image and draw on canvas
+      this.delaunayImage = AlgorithmService.delaunayImage(data.triangulation, data.midpoints, data.width, data.height)
+
+      // cut right part out of delaunay image
+      this.delaunayImage = this.cutout(this.delaunayImage, data.w, data.h, data.minx, data.miny)
+
+      //create animation object
+      this.animation = new Animation(null, this.delaunayImage)
+
+
+      //display the image on the screen
+      let c = document.createElement('canvas')
+      c.width = this.delaunayImage.width
+      c.height = this.delaunayImage.height
+      let ctx = c.getContext('2d')
+      ctx.putImageData(this.delaunayImage, 0,0)
+      // add style to the output canvas
+
+      this.canvas.getContext('2d').putImageData(this.delaunayImage, 0,0)
+      this.canvas.style = data.css
+      this.canvas.width = data.w
+      this.canvas.height = data.h
+
+      this.minx = data.ox
+      this.miny = data.oy
+
+    },
+    /**
+     *
+     * @param data
+     *        [x,y,angle,frame, right]
+     */
+    animationFrameHandler(data) {
+      let ctx = this.canvas.getContext('2d')
+      ctx.putImageData(this.delaunayImage, 0,0)
+      this.animation.drawCat(this.canvas, data[0] - this.minx, data[1] - this.miny, data[2], data[3], data[4])
     }
   }
 }

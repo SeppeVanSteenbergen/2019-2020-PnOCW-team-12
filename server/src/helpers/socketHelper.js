@@ -128,6 +128,22 @@ module.exports = {
       data: {}
      }
 
+     initAnimation
+     {
+      type: 'animation-init'
+      data: {
+          triangulation: [Tri1, Tri2, ..]  (list of triangles
+          midpoints: [[12,23],[123,123],...]   (list of points)
+          width: (width of the original image)
+          height: (height of the original image)
+
+          css: (css for the output canvas)
+          ox: (x offset in px, integer value)
+          oy: (y offset in px, integer value)
+          w: (width in px, integer value for transformation)
+          h: (height in px, integer value for transformation)
+      }
+     }
 	*/
 
   // TODO check for message integrity
@@ -146,6 +162,15 @@ module.exports = {
     } else {
       this.sendDataToRoomOfMaster('screenCommand', message.payload, user_id)
     }
+  },
+  /**
+   *
+   * @param user_id
+   * @param data
+   *        [x,y,angle,frame, right]
+   */
+  animationFrame(user_id, data) {
+    this.sendDataToRoomOfMaster('af', data, user_id)
   },
 
   closeRoom(user_id) {

@@ -352,13 +352,15 @@
                       <v-btn color="primary" @click="executePauseVideo">
                         Pause Video
                       </v-btn>
-                      <canvas ref="drawCanvas"></canvas> </v-card
-                  ></v-expansion-panel-content>
+                      <canvas ref="drawCanvas"></canvas> </v-card></v-expansion-panel-content>
                 </v-expansion-panel>
                 <v-expansion-panel>
                   <v-expansion-panel-header>Animation</v-expansion-panel-header>
                   <v-expansion-panel-content>
                     <v-card class="mb-12 fullheight" elevation="0">
+                      <v-btn color="primary" @click="executeInitAnimation">
+                        Init Animation
+                      </v-btn>
                       <v-btn color="primary" @click="executeStartAnimation">
                         Start Animation
                       </v-btn>
@@ -412,6 +414,7 @@
 <script>
 import PictureUpload from '../components/PictureUpload'
 import AlgorithmService from '../services/AlgorithmService'
+import Animation from '../algorithms/Animations'
 
 export default {
   name: 'master',
@@ -463,7 +466,9 @@ export default {
       drawCanvasScale: 1,
       displayFileVideo: null,
 
-      videofile: null
+      videofile: null,
+      animationInterval: null,
+      animationFramerate: 30
     }
   },
   components: {
@@ -748,8 +753,8 @@ export default {
 
           // get all the data
           let info = this.analysedImage.createPictureCanvas(
-            this.analysedImage.width,
-            this.analysedImage.height
+            this.$refs.vid.videoWidth,
+              this.$refs.vid.videoHeight,
           )
 
           for (let i = 0; i < this.analysedImage.screens.length; i++) {
@@ -782,7 +787,11 @@ export default {
                 type: 'load-video',
                 data: {
                   videoURL: result.data.videoURL,
-                  css: css
+                  css: css,
+                  w:info.w,
+                  h:info.h,
+                  ox: info.minx,
+                  oy: info.miny
                 }
               },
               to: user_id
@@ -797,10 +806,92 @@ export default {
     },
 
     executeStartAnimation() {
+      if(this.animationInterval !== null) {
+        clearInterval(this.animationInterval)
+      }
+      this.animationInterval = setInterval(this.sendAnimation, this.animationFramerate)
+    },
 
+    sendAnimation() {
+      let info = this.animation.getNextFrame()
+
+      let obj = [info.x,info.y, info.angle, info.frame, info.right?1:0]
+
+      this.$socket.emit('af', obj)
     },
     executeStopAnimation(){
+      if(this.animationInterval !== null) {
+        clearInterval(this.animationInterval)
+      }
+      this.animationInterval = null
+    },
+    executeInitAnimation() {
+      let tri = []
+      for (let i = 0; i < this.analysedImage.triangulation.length; i++) {
+        tri.push(this.analysedImage.triangulation[i].toObject())
+      }
 
+      let midpoints = this.analysedImage.midPoints
+
+      let width = this.analysedImage.width
+      let height = this.analysedImage.height
+
+      let info = this.analysedImage.createPictureCanvas(0,0)
+
+
+      for (let i = 0; i < this.analysedImage.screens.length; i++) {
+        console.log('looping through screens')
+        let cssMatrix = this.analysedImage.screens[i].cssMatrix
+
+        let user_id = this.myRoom.clients[
+            this.analysedImage.screens[i].clientCode
+            ]
+
+        let css =
+            'position: absolute; left:' +
+            info.minx +
+            'px; top: ' +
+            info.miny +
+            'px; transform: matrix3d(' +
+            cssMatrix.join(', ') +
+            '); transform-origin: ' +
+            -info.minx +
+            'px ' +
+            -info.miny +
+            'px; width: ' +
+            info.w +
+            'px; height: ' +
+            info.h +
+            'px; object-fit: none'
+
+
+        let obj = {
+          payload: {
+            type: 'animation-init',
+            data: {
+              triangulation: tri,
+              midpoints: midpoints,
+              width: width,
+              height: height,
+
+              css: css,
+              ox: info.minx,
+              oy: info.miny,
+              w: info.w,
+              h: info.h
+            }
+          },
+          to: user_id
+        }
+
+        this.$socket.emit('screenCommand', obj)
+      }
+
+      // create animation object
+      this.animation = new Animation(this.analysedImage.triangulation, {
+        width: this.analysedImage.width,
+        height: this.analysedImage.height
+      })
     },
     executeStartVideo() {
       let obj = {
@@ -1097,6 +1188,8 @@ export default {
         this.analysedImage.width,
         this.analysedImage.height
       )
+      this.analysedImage.triangulation = triangulation
+      this.analysedImage.midPoints = midList
 
       let delaunayImgObject = AlgorithmService.delaunayImage(
         triangulation,

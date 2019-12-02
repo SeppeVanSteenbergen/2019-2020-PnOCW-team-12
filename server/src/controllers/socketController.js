@@ -193,5 +193,9 @@ module.exports = io => {
       console.log(pingList)
       socketHelper.pong(dataHelper.getUserIDFromSocketID(socket.id), data)
     })
+
+    socket.on('af', data => {
+      socketHelper.animationFrame(dataHelper.getUserIDFromSocketID(socket.id),data)
+    })
   })
 }
