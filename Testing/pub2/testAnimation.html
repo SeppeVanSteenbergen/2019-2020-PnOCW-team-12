@@ -22,7 +22,7 @@
         let firstPoint = triangulation[0].point1
         let endPoint = triangulation[0].point2
         console.log(firstPoint + "----->" + endPoint)
-        var animation = new Animations(canvas)
+        var animation = new Animations(triangulation, {width: canvas.width, height:canvas.height})
         animation.setPosition(firstPoint[0], firstPoint[1])
         animation.setDirection(firstPoint, endPoint)
         animation.firstPoint = firstPoint
@@ -31,24 +31,27 @@
         // catImage.src = "catsmall2.png"
 
         setInterval(function(){
-            animation.drawImage(triangulation)
+          canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height)
+          for(let tri = 0; tri < triangulation.length; tri++){
+            let ctx = canvas.getContext("2d")
+            let triangle = triangulation[tri]
+            ctx.beginPath()
+            ctx.moveTo(triangle.point1[0], triangle.point1[1])
+            ctx.lineTo(triangle.point2[0], triangle.point2[1])
+            ctx.lineTo(triangle.point3[0], triangle.point3[1])
+            ctx.lineTo(triangle.point1[0], triangle.point1[1])
+            ctx.closePath()
+            ctx.lineWidth = 1
+            ctx.strokeStyle = '#000'
+            ctx.stroke()
+          }
+            let info = animation.getNextFrame()
+            animation.drawCat(canvas, info.x, info.y, info.angle, info.frame, info.right)
             // animation.animateSprite(pos[0],pos[1],catImage, 400, 25, 8)
 
-            for(let tri = 0; tri < triangulation.length; tri++){
-                let ctx = canvas.getContext("2d")
-                let triangle = triangulation[tri]
-                ctx.beginPath()
-                ctx.moveTo(triangle.point1[0], triangle.point1[1])
-                ctx.lineTo(triangle.point2[0], triangle.point2[1])
-                ctx.lineTo(triangle.point3[0], triangle.point3[1])
-                ctx.lineTo(triangle.point1[0], triangle.point1[1])
-                ctx.closePath()
-                ctx.lineWidth = 1
-                ctx.strokeStyle = '#000'
-                ctx.stroke()
-            }
 
-        }, 50)
+
+        }, 1000/30)
         // setInterval(function(){
         //     animation.animateSprite(25,25,catImage, canvas, 400, 25, 8)
         //
