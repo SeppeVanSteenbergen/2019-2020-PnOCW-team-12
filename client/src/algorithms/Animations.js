@@ -1,5 +1,6 @@
 import Line from './Line'
 import config from '../config/config'
+import Delaunay from './Delaunay'
 
 export default class Animations {
   constructor(triangulation, canvas) {
@@ -24,6 +25,7 @@ export default class Animations {
     this.firstPoint
     this.endPoint
     this.triangulation = triangulation
+    this.edges = Delaunay.triangulationEdges(triangulation)
   }
 
   setPosition(x, y) {
@@ -194,17 +196,7 @@ export default class Animations {
   }
 
   findNeighbours(point, triangulation) {
-    let neighbours = []
-    for (let tri = 0; tri < triangulation.length; tri++) {
-      if (triangulation[tri].getPoints().includes(point)) {
-        for (let i = 0; i < 3; i++) {
-          if (point !== triangulation[tri].getPoints()[i]) {
-            neighbours.push(triangulation[tri].getPoints()[i])
-          }
-        }
-      }
-    }
-    return neighbours
+    return this.edges[point]
   }
 
   animateSprite(x, y, image, spriteWidth, spriteHeight, nbFrames) {
