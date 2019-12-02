@@ -22,10 +22,14 @@ export default class Animations {
     this.speed = 10
     this.frame = 0
     this.angle = 0
+    this.posStack = []
     this.firstPoint
     this.endPoint
     this.triangulation = triangulation
-    this.edges = Delaunay.triangulationEdges(triangulation)
+    if(triangulation !== null) {
+      this.edges = Delaunay.triangulationEdges(triangulation)
+    }
+
   }
 
   setPosition(x, y) {
@@ -53,29 +57,29 @@ export default class Animations {
     return this.getPosition()
   }
 
-  setDelaunay(delaunay) {
-    this.delaunay = delaunay
-  }
+  // setDelaunay(delaunay) {
+  //   this.delaunay = delaunay
+  // }
 
-  drawImage() {
-    this.updateFrame()
-    this.animateSprite(
-      this.position.x,
-      this.position.y,
-      this.catImage,
-      this.catImage.width,
-      this.catImage.height,
-      this.nbFrames
-    )
-
-    return {
-      x: this.position.x,
-      y: this.position.y,
-      direction: this.angle,
-      frame: this.frame,
-      right: this.endPoint[0] >= this.firstPoint[0]
-    }
-  }
+  // drawImage() {
+  //   this.updateFrame()
+  //   this.animateSprite(
+  //     this.position.x,
+  //     this.position.y,
+  //     this.catImage,
+  //     this.catImage.width,
+  //     this.catImage.height,
+  //     this.nbFrames
+  //   )
+  //
+  //   return {
+  //     x: this.position.x,
+  //     y: this.position.y,
+  //     direction: this.angle,
+  //     frame: this.frame,
+  //     right: this.endPoint[0] >= this.firstPoint[0]
+  //   }
+  // }
 
   drawCat(canvas, x, y, angle, frame, right) {
     let ctx = canvas.getContext('2d')
@@ -92,7 +96,7 @@ export default class Animations {
         this.catImage.width / this.nbFrames,
         this.catImage.height,
         x - this.catImage.width / (2 * this.nbFrames),
-        y - this.catImage.height / 2,
+        y - this.catImage.height ,
         this.catImage.width / this.nbFrames,
         this.catImage.height
       )
@@ -107,7 +111,7 @@ export default class Animations {
         this.catImage.width / this.nbFrames,
         this.catImage.height,
         -(x + this.catImage.width / (2 * this.nbFrames)) + this.width,
-        y - this.catImage.height / 2,
+        y - this.catImage.height ,
         this.catImage.width / this.nbFrames,
         this.catImage.height
       )
@@ -199,41 +203,41 @@ export default class Animations {
     return this.edges[point]
   }
 
-  animateSprite(x, y, image, spriteWidth, spriteHeight, nbFrames) {
-    this.ctx.save()
-    this.ctx.translate(x, y)
-    this.ctx.rotate((this.angle * Math.PI) / 180)
-    this.ctx.translate(-x, -y)
-
-    if (this.endPoint[0] >= this.firstPoint[0]) {
-      this.ctx.drawImage(
-        image,
-        (this.frame * spriteWidth) / nbFrames,
-        0,
-        spriteWidth / nbFrames,
-        spriteHeight,
-        x - spriteWidth / (2 * nbFrames),
-        y - spriteHeight / 2,
-        spriteWidth / nbFrames,
-        spriteHeight
-      )
-    } else {
-      this.ctx.save()
-      this.ctx.translate(this.width, 0)
-      this.ctx.scale(-1, 1)
-      this.ctx.drawImage(
-        image,
-        (this.frame * spriteWidth) / nbFrames,
-        0,
-        spriteWidth / nbFrames,
-        spriteHeight,
-        -(x + spriteWidth / (2 * nbFrames)) + this.width,
-        y - spriteHeight / 2,
-        spriteWidth / nbFrames,
-        spriteHeight
-      )
-      this.ctx.restore()
-    }
-    this.ctx.restore()
-  }
+  // animateSprite(x, y, image, spriteWidth, spriteHeight, nbFrames) {
+  //   this.ctx.save()
+  //   this.ctx.translate(x, y)
+  //   this.ctx.rotate((this.angle * Math.PI) / 180)
+  //   this.ctx.translate(-x, -y)
+  //
+  //   if (this.endPoint[0] >= this.firstPoint[0]) {
+  //     this.ctx.drawImage(
+  //       image,
+  //       (this.frame * spriteWidth) / nbFrames,
+  //       0,
+  //       spriteWidth / nbFrames,
+  //       spriteHeight,
+  //       x - spriteWidth / (2 * nbFrames),
+  //       y - spriteHeight / 2,
+  //       spriteWidth / nbFrames,
+  //       spriteHeight
+  //     )
+  //   } else {
+  //     this.ctx.save()
+  //     this.ctx.translate(this.width, 0)
+  //     this.ctx.scale(-1, 1)
+  //     this.ctx.drawImage(
+  //       image,
+  //       (this.frame * spriteWidth) / nbFrames,
+  //       0,
+  //       spriteWidth / nbFrames,
+  //       spriteHeight,
+  //       -(x + spriteWidth / (2 * nbFrames)) + this.width,
+  //       y - spriteHeight / 2,
+  //       spriteWidth / nbFrames,
+  //       spriteHeight
+  //     )
+  //     this.ctx.restore()
+  //   }
+  //   this.ctx.restore()
+  // }
 }

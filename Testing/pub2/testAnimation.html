@@ -27,6 +27,8 @@
         animation.setDirection(firstPoint, endPoint)
         animation.firstPoint = firstPoint
         animation.endPoint = endPoint
+
+        var animationClient = new Animations(null, {width: canvas.width, height:canvas.height})
         // catImage  = new Image()
         // catImage.src = "catsmall2.png"
 
@@ -45,13 +47,16 @@
             ctx.strokeStyle = '#000'
             ctx.stroke()
           }
+          //master side
             let info = animation.getNextFrame()
-            animation.drawCat(canvas, info.x, info.y, info.angle, info.frame, info.right)
+
+            // client side
+            animationClient.drawCat(canvas, info.x, info.y, info.angle, info.frame, info.right)
             // animation.animateSprite(pos[0],pos[1],catImage, 400, 25, 8)
 
 
 
-        }, 1000/30)
+        }, 50)
         // setInterval(function(){
         //     animation.animateSprite(25,25,catImage, canvas, 400, 25, 8)
         //
