@@ -155,28 +155,24 @@ export default class Image {
       for (let x = 0; x < this.getWidth(); x++) {
         if (this.checkId(x, y)) {
           let newIslandCoo = this.floodfill(x, y, this.islandID)
-          if (
-            (newIslandCoo[0] - newIslandCoo[2]) *
-              (newIslandCoo[1] - newIslandCoo[3]) <=
-            1000
-          )
-            break
-          let newIsland = new Island(
-            [newIslandCoo[0], newIslandCoo[1]],
-            [newIslandCoo[2], newIslandCoo[3]],
-            this.islandID,
-            this.getImgData(),
-            this.matrix
-          )
-          if (newIsland.isValid()) {
-            try {
-              newIsland.finishIsland()
-              this.islands.push(newIsland)
-            } catch (err) {
-              console.log(err + ' in screen: ' + newIsland.getBarcode())
+          if (this.isPossibleIsland(newIslandCoo)) {
+            let newIsland = new Island(
+              [newIslandCoo[0], newIslandCoo[1]],
+              [newIslandCoo[2], newIslandCoo[3]],
+              this.islandID,
+              this.getImgData(),
+              this.matrix
+            )
+            if (newIsland.isValid()) {
+              try {
+                newIsland.finishIsland()
+                this.islands.push(newIsland)
+              } catch (err) {
+                console.log(err + ' in screen: ' + newIsland.getBarcode())
+              }
             }
+            this.islandID += 3
           }
-          this.islandID += 3
         }
       }
     }
@@ -216,6 +212,25 @@ export default class Image {
       }
     }
     return [minX, minY, maxX, maxY]
+  }
+
+  isPossibleIsland(coo) {
+    let minx = coo[0]
+    let miny = coo[1]
+    let maxx = coo[2]
+    let maxy = coo[3]
+
+    let matrix = this.matrix.slice(miny, maxy)
+    for (let i = 0; i < maxy - miny; i++) {
+      matrix[i] = matrix[i].slice(minx, maxx)
+    }
+
+    let ids = matrix.flat()
+    if (
+      ids.includes(this.islandID) &&
+      ids.includes(this.islandID + 1) & ids.includes(this.islandID + 2)
+    )
+      return true
   }
 
   /**
