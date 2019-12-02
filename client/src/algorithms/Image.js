@@ -328,7 +328,7 @@ export default class Image {
     this.drawer.drawCorners(island)
   }
 
-  findExtremeValues() {
+  findExtremeValues(width, height) {
     let points = {
       minx: null,
       maxx: null,
@@ -361,6 +361,14 @@ export default class Image {
     points['miny'] = allCorners[0][1]
     points['maxy'] = allCorners[allCorners.length - 1][1]
 
+    let scale = width / (points['maxx'] - points['minx'])
+
+    if(height * scale < (points['maxy'] - points['miny'])){
+      scale = height / (points['maxy'] - points['miny'])
+    }
+
+    points['scale'] = scale
+
     return points
   }
 
@@ -382,7 +390,8 @@ export default class Image {
       minx: pictureCanvas.minx,
       miny: pictureCanvas.miny,
       maxx: pictureCanvas.maxx,
-      maxy: pictureCanvas.maxy
+      maxy: pictureCanvas.maxy,
+      scale: pictureCanvas.scale
     }
   }
 
