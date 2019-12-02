@@ -1,3 +1,20 @@
-\begin{thebibliography}{}
+\begin{thebibliography}{1}
+
+\bibitem{delaunaywiki}
+Delaunay triangulation.
+\newblock \url{https://en.wikipedia.org/wiki/Delaunay_triangulation}, October
+  2019.
+
+\bibitem{Bowyer-WatsonWiki}
+Bowyer-watson algorithm.
+\newblock \url{https://en.wikipedia.org/wiki/Bowyer%E2%80%93Watson_algorithm},
+  October 2019.
+
+\bibitem{bowyer-watsonImplementation}
+S.W. Sloan and G.T. Houlsby.
+\newblock An implementation of watson's algorithm for computing 2-dimensional
+  delaunay triangulations.
+\newblock Technical report, Department of Civil Engineering, University of
+  Newcastle and Department of Engineering Science, University of Oxford, 1984.
 
 \end{thebibliography}
