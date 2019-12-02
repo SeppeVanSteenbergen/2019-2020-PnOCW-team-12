@@ -25,7 +25,7 @@
         this.canvas = canvas;
         this.canvas.width = this.w
         this.canvas.height = this.h
-        this.barcodeColorValues = ['#ff0000', '#ffff00', '#00ff00', '#0000ff', '#ff00ff'];
+        this.barcodeColorValues = ['#000000', '#999999'];
         this.ctx = this.canvas.getContext('2d')
       }
 
@@ -93,32 +93,64 @@
         ctx.fillRect(this.borderWidth, this.borderWidth, this.w - 2 * this.borderWidth, this.h - 2 * this.borderWidth);
       }
 
-      barcode(code, sections) {
+      barcode(clientNb, sections) {
 
         //Only integers are allowed because otherwise the barcode is not complete at the end.
         sections = Math.round(sections);
 
         const ctx = this.ctx
-        code = code.toString().split('').map(val => parseInt(val - 1));
+        let codeString = clientNb.toString(2)
+        let nbZero = 0
+        let code = []
+        for(let i = 0; i < codeString.length; i++){
+          code.push(codeString.charAt(i))
+          if(codeString.charAt(i) == 1)
+            nbZero++
+          else
+            nbZero = 0
+          
+          if(nbZero == 2){
+            code.push(0)
+            nbZero = 0
+          }
+          
+        }
+        code.push(1)
+        code.push(1)
+        code.push(1)
+        console.log(code)
 
-        const barWidth = (this.w - 2*this.borderWidth) / (sections * 6 + 1);
+        
+
+        const barWidth = (this.w - 2*this.borderWidth) / (sections * (code.length + 1) + 1);
+        let startAt = this.borderWidth + barWidth
         
         //const amountOfIterations = Math.floor((this.w - 2 * this.borderWidth) / (6 * width))
 
-        for (let i = 0; i < sections * 6; i += 6) {
-          for (let j = 0; j < 5; j++) {
+        for (let i = 0; i < sections * (code.length + 1); i += (code.length + 1)) {
+          for (let j = 0; j < code.length; j++) {
             ctx.beginPath();
             ctx.fillStyle = this.barcodeColorValues[code[j]];
-            ctx.rect(barWidth * (i + j) + this.borderWidth + barWidth, this.borderWidth + barWidth, barWidth,
+            ctx.rect(startAt, this.borderWidth + barWidth, barWidth,
                 this.h - 2*this.borderWidth - 2*barWidth);
             ctx.fill();
+            startAt += barWidth
+            ctx.beginPath();
+            ctx.fillStyle = "#ffffff"
+            ctx.rect(startAt, this.borderWidth + barWidth, 20,
+                this.h - 2*this.borderWidth - 2*barWidth);
+            ctx.fill()
+            startAt += 20
           }
           ctx.beginPath();
           ctx.fillStyle = '#ffffff';
-          ctx.rect(barWidth * (i + 5) + this.borderWidth + barWidth, this.borderWidth, barWidth,
+          ctx.rect(startAt + barWidth, this.borderWidth, barWidth,
             this.h - 2*this.borderWidth);
           ctx.fill();
+          startAt += barWidth
         }
+
+
 
         this.drawX(this.borderWidth, barWidth);
         this.drawBorder(this.borderWidth);
