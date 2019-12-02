@@ -266,7 +266,7 @@ module.exports = {
     let currentTime = Date.now()
     let ping = currentTime - data.startTime
     // time to add to server time to get client time
-    let timeDelta = data.clientTime - ping / 2 - currentTime
+    let timeDelta = (data.clientTime + ping / 2) - currentTime
     if(typeof pingList[data.room_id] === 'undefined') pingList[data.room_id] = {}
     pingList[data.room_id][user_id] = {
       ping: ping,
@@ -333,9 +333,11 @@ module.exports = {
       data: data.command
     }
 
+    let now = new Date().getTime()
+
     for (let i in clients) {
       payload.data.startTime =
-          new Date().getTime() + clientPings[clients[i]].timeDelta + startOffset
+          now + clientPings[clients[i]].timeDelta + startOffset
 
       this.sendDataByUserID('screenCommand', payload, clients[i])
     }
