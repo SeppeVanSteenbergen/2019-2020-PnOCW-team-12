@@ -1,0 +1,52 @@
+In dit project wordt er gebruik gemaakt van VueJS framework voor de front end. Deze keuze is gemaakt omdat dit het makkelijker maakt om de code in verschillende bestanden te verdelen en ook om makkelijker user interfaces te maken.
+
+
+\subsection{Masters en clients}
+Bij het openen van de pagina is er een knop om zich eerst aan te melden in het platform. Dit is geïmplementeerd om het later eventueel een login systeem te implementeren met wachtwoord op een makkelijke manier.
+Hierna is het mogelijk te kiezen om master of client te worden.
+Deze informatie wordt in de server opgeslagen in memory.
+\paragraph{Kamers} Elke master heeft zijn eigen kamer waar clients zich kunnen aansluiten. Dit maakt het mogelijk de applicatie simultaan te gebruiken met meerdere masters. Elke keer als er een commando wordt verstuurd krijgen enkel de clients in de kamer dat signaal.
+
+\subsection{Data protocols}
+%hoe en waarom de commando's voor het scherm worden verstuurd
+In deze sectie worden de verschillende manieren om data te verzenden uitgelegd
+\subsubsection{Commando's}
+Elke client kan op een canvas de pijlen tekenen, achtergrond scherm veranderen of een foto afbeelden. De commando's om de schermen te controleren via de master worden allemaal doorgestuurd via SocketIO. Deze techniek is gekozen over http omdat ze niet te veel data moeten verzenden en SocketIO ook een constant de client, master en server aangesloten houd. Hierdoor worden alle berichten direct ontvangen. Een voorbeeld van wat er wordt verstuurd in figuur \ref{jsonScreenCommand}.
+Enkel 'payload' gedeelte wordt verstuurd naar de clients vanaf de server.
+
+\begin{figure}
+    \begin{lstlisting}[language=json,firstnumber=1]
+    {
+    payload:{
+    type: "flood-screen",
+    data: {
+    command: [{
+    type: "color"/"interval",
+    value: "[255,0,0]" / "200" }] (integer or rgb list)
+    }
+    }
+    to: [user_id or "all"](to single user or all users in room)
+    }
+
+    \end{lstlisting}
+    \caption{Voorbeeld json commando voor flood-screen verzonden naar de server} \label{jsonScreenCommand}
+\end{figure}
+
+\subsubsection{Video verzenden}
+De video's worden niet direct verstuurd naar elke client om af te spelen. Dit zou een lange wachttijd nodig hebben vooraleer het video bestand helemaal verzonden is en terug gekregen door elke client.
+De video is geïmplementeerd zodat die eerst naar de server wordt verstuurd via een HTTPS POST request (door een html form) en opgeslagen als een bestand op de server. Vervolgens wordt er naar elke client de link doorsgestuurd vanwaar ze de video kunnen streamen via een html video element. De video wordt dan gebufferd en kan dan direct worden afgespeeld zonder dat het hele video bestand al gedownload is.
+
+\subsection{Beveiliging}
+\paragraph{HTTPS} Staat voor Hypertext Transfer Protocol Secure. Door dit protocol zijn alle berichten geëncrypteerd waardoor het niet zomaar mogelijk is door hackers om verzonden berichten te lezen.
+\paragraph{Login security} Naast HTTPS is het ook belangerijk dat een aangesloten gebruiker zich niet zomaar kan voordoen als een andere gebruiker. Of dat eender wie zomaar aan alle informatie kan geraken. Voor dit op te lossen hebben alle ingelogde gebruikers een geëncrypteerde cookie dat hun user\_id bevat. Dit maakt het mogelijk om elke verschillende gebruiker te identificeren in de backend server door deze cookie te decrypteren. Dit maakt het mogelijk om bepaalde server endpoints, met bijvoorbeeld video of foto bestanden, enkel aan ingelogde gebruikers bloot te stellen en niet aan alle andere gebruikers die geen inlog cookie hebben.
+Vervolgens is security ook een probleem bij sockets. Als sockets een aansluiting verliezen worden ze terug aangesloten, enkel verandert hun id. Om te kunnen zien van wie welke socket is moet elke gebruiker zijn user\_id verzenden via de socket om deze socket aan zijn user\_id te linken. Deze informatie wordt allemaal in de server opgeslagen om later elke socket te identificeren
+
+\subsection{Latere uitbreidingen}
+\paragraph{Login systeem} Nu is er een anoniem login systeem ingeboud waar er geen wachtwoord voor vereist is. Later kan dit makkelijk omgevormd worden om login met inloggegevens te implementeren.
+\paragraph{Foto upload met https} Nu worden de foto's doorgestuurd via sockets. Later is het te bedoeling net als video de foto's door te sturen via https. Zodat de master één keer de foto moet uploaden en de clients dan zelf de foto aanvragen.
+\paragraph{SocketIO beveiliging} Om nu de socket te identificeren moet elke gebruiker zijn user\_id versturen. Dit kan voor problemen zorgen als een hacker een andere user\_id verzend via de socket om zich als iemand ander voor te doen. Om dit op te lossen is het idee om een tijdelijk inlog wachtwoord aan te maken dat de gebruiker kan verzenden om zich te identificeren via de socket. 
+ 
+ 
+ 
+ 
+ 
