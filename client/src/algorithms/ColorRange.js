@@ -175,6 +175,7 @@ export default class ColorRange {
       (this.inRedBoxA1(H, S) || this.inRedBoxA2(H, S)) &&
       (this.inRedBoxB1(H, L) || this.inRedBoxB2(H, L))
     )
+    //return ((H > 339 && H <= 360) || (H >= 0 && H < 21)) && S > 60 && L > 40
   }
 
   static inRedBoxA1(H, S) {
