@@ -5,11 +5,12 @@ export default class DetectionDrawer {
     this.borderWidth = borderWidth
     this.c2 = '#00ff00'
     this.c1 = '#0000ff'
+    this.middleColor = '#ff0000'
     this.canvas = canvas
     this.canvas.width = this.w
     this.canvas.height = this.h
     this.barcodeColorValues = [
-      '#ff0000',
+      '#00ffff',
       '#ffff00',
       '#00ff00',
       '#0000ff',
@@ -71,7 +72,7 @@ export default class DetectionDrawer {
     ctx.stroke()
 
     ctx.beginPath()
-    ctx.fillStyle = '#00ffff'
+    ctx.fillStyle = this.middleColor
     ctx.arc(this.w / 2, this.h / 2, circleRadius, 0, Math.PI * 2)
     ctx.fill()
   }

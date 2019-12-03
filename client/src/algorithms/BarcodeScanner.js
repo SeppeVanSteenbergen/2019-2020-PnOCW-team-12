@@ -32,7 +32,7 @@ export default class BarcodeScanner {
           }
         }
         scanned = []
-      } else if (ColorRange.inRedRange(H, S, L) && !scanned.includes(1)) {
+      } else if (ColorRange.inBlueGreenRange(H, S, L) && !scanned.includes(1)) {
         scanned.push(1)
       } else if (ColorRange.inYellowRange(H, S, L) && !scanned.includes(2)) {
         scanned.push(2)
