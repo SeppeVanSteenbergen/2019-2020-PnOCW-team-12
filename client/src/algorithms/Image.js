@@ -379,7 +379,7 @@ export default class Image {
    * @param {int} h image height
    */
   createPictureCanvas(w, h) {
-    let pictureCanvas = this.findExtremeValues()
+    let pictureCanvas = this.findExtremeValues(w, h)
 
     w = Math.abs(pictureCanvas.maxx - pictureCanvas.minx)
     h = Math.abs(pictureCanvas.maxy - pictureCanvas.miny)
