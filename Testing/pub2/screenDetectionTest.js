@@ -10,7 +10,7 @@ inputElement.addEventListener(
 );
 imgElement.onload = function() {
   // Resize image to max full HD resolution
-  let resizedImage = Image.resizeImage(imgElement, [1920, 1080]);
+  let resizedImage = imgElement
   let inputCanvas = document.getElementById('inputImage');
   let inputContext = inputCanvas.getContext('2d');
   inputContext.clearRect(0, 0, inputCanvas.width, inputCanvas.height);

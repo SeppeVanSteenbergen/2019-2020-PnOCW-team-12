@@ -280,7 +280,7 @@ export default class Image {
         this.matrix[y][x] = 1
       } else if (ColorRange.inGreenRange(H, S, L)) {
         this.matrix[y][x] = 2
-      } else if (ColorRange.inMidRange(H, S, L)) {
+      } else if (ColorRange.inRedRange(H, S, L)) {
         this.matrix[y][x] = 3
       } else {
         this.matrix[y][x] = 0
