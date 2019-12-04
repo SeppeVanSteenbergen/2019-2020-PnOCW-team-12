@@ -15,7 +15,7 @@
             <v-list v-if="roomList.length !== 0">
               <v-list>
                 <v-list-item
-                  v-for="room_id in Object.keys(roomList)"
+                 v-for="room_id in Object.keys(roomList)"
                   :key="room_id"
                   @click="joinRoom(room_id)"
                 >
@@ -471,7 +471,7 @@ export default {
       let ctx = c.getContext('2d')
 
 
-      ctx.putImageData(img, 0,0, minx, miny, w, h)
+      ctx.putImageData(imgData, 0,0, minx, miny, w, h)
       return ctx.getImageData(0,0,w,h)
     },
     animationInitHandler(data) {

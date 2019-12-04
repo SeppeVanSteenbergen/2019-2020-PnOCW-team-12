@@ -153,9 +153,11 @@ export default class CornerDetector {
 
     let corners = []
     if (diagonalSearch) {
+      console.log('diagonal search')
       // Diagonal search
       corners = this.diagonalSearch()
     } else {
+      console.log('perpendicular search')
       // Perpendicular search
       corners = this.perpendicularSearch()
     }
