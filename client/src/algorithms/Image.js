@@ -276,11 +276,11 @@ export default class Image {
       let pixel = this.positionToPixel(i)
       let x = pixel[0]
       let y = pixel[1]
-      if (ColorRange.inYellowRange(H, S, L)) {
+      if (ColorRange.inBlueRange(H, S, L)) {
         this.matrix[y][x] = 1
-      } else if (ColorRange.inPinkRange(H, S, L)) {
+      } else if (ColorRange.inGreenRange(H, S, L)) {
         this.matrix[y][x] = 2
-      } else if (ColorRange.inMidRange(H, S, L)) {
+      } else if (ColorRange.inRedRange(H, S, L)) {
         this.matrix[y][x] = 3
       } else {
         this.matrix[y][x] = 0
@@ -328,7 +328,7 @@ export default class Image {
     this.drawer.drawCorners(island)
   }
 
-  findExtremeValues() {
+  findExtremeValues(width, height) {
     let points = {
       minx: null,
       maxx: null,
@@ -361,6 +361,14 @@ export default class Image {
     points['miny'] = allCorners[0][1]
     points['maxy'] = allCorners[allCorners.length - 1][1]
 
+    let scale = width / (points['maxx'] - points['minx'])
+
+    if(height * scale < (points['maxy'] - points['miny'])){
+      scale = height / (points['maxy'] - points['miny'])
+    }
+
+    points['scale'] = scale
+
     return points
   }
 
@@ -371,7 +379,7 @@ export default class Image {
    * @param {int} h image height
    */
   createPictureCanvas(w, h) {
-    let pictureCanvas = this.findExtremeValues()
+    let pictureCanvas = this.findExtremeValues(w, h)
 
     w = Math.abs(pictureCanvas.maxx - pictureCanvas.minx)
     h = Math.abs(pictureCanvas.maxy - pictureCanvas.miny)
@@ -382,7 +390,8 @@ export default class Image {
       minx: pictureCanvas.minx,
       miny: pictureCanvas.miny,
       maxx: pictureCanvas.maxx,
-      maxy: pictureCanvas.maxy
+      maxy: pictureCanvas.maxy,
+      scale: pictureCanvas.scale
     }
   }
 

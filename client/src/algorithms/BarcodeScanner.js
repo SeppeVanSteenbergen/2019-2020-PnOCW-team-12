@@ -4,8 +4,8 @@ export default class BarcodeScanner {
   static scan(imageObject) {
     let hor = this.scanHorizontal(imageObject)
     let ver = this.scanVertical(imageObject)
-    let maxRatio = Math.max(hor[2], ver[2])
-    if (hor[2] === maxRatio && maxRatio >= 0) {
+    let maxRatio = Math.max(hor[1], ver[1])
+    if (hor[1] === maxRatio && maxRatio >= 0) {
       return hor[0]
     } else if (maxRatio >= 0) return ver[0]
   }
@@ -23,16 +23,8 @@ export default class BarcodeScanner {
       let S = image[i + 1]
       let L = image[i + 2]
 
-      if (ColorRange.inWhiteRange(H, S, L)) {
-        if (scanned.length === 5) {
-          if (barcodes[scanned] === undefined) {
-            barcodes[scanned] = 1
-          } else {
-            barcodes[scanned] += 1
-          }
-        }
-        scanned = []
-      } else if (ColorRange.inRedRange(H, S, L) && !scanned.includes(1)) {
+      
+      if (ColorRange.inBlueGreenRange(H, S, L) && !scanned.includes(1)) {
         scanned.push(1)
       } else if (ColorRange.inYellowRange(H, S, L) && !scanned.includes(2)) {
         scanned.push(2)
@@ -42,6 +34,15 @@ export default class BarcodeScanner {
         scanned.push(4)
       } else if (ColorRange.inPinkRange(H, S, L) && !scanned.includes(5)) {
         scanned.push(5)
+      } else if (ColorRange.inWhiteRange(H, S, L)) {
+        if (scanned.length === 5) {
+          if (barcodes[scanned] === undefined) {
+            barcodes[scanned] = 1
+          } else {
+            barcodes[scanned] += 1
+          }
+        }
+        scanned = []
       }
     }
 
@@ -86,16 +87,8 @@ export default class BarcodeScanner {
         let S = image[i + 1]
         let L = image[i + 2]
 
-        if (ColorRange.inWhiteRange(H, S, L)) {
-          if (scanned.length === 5) {
-            if (barcodes[scanned] === undefined) {
-              barcodes[scanned] = 1
-            } else {
-              barcodes[scanned] += 1
-            }
-          }
-          scanned = []
-        } else if (ColorRange.inRedRange(H, S, L) && !scanned.includes(1)) {
+        
+        if (ColorRange.inRedRange(H, S, L) && !scanned.includes(1)) {
           scanned.push(1)
         } else if (ColorRange.inYellowRange(H, S, L) && !scanned.includes(2)) {
           scanned.push(2)
@@ -105,6 +98,15 @@ export default class BarcodeScanner {
           scanned.push(4)
         } else if (ColorRange.inPinkRange(H, S, L) && !scanned.includes(5)) {
           scanned.push(5)
+        } else if (ColorRange.inWhiteRange(H, S, L)) {
+          if (scanned.length === 5) {
+            if (barcodes[scanned] === undefined) {
+              barcodes[scanned] = 1
+            } else {
+              barcodes[scanned] += 1
+            }
+          }
+          scanned = []
         }
       }
     }
