@@ -64,10 +64,10 @@ literate=
 \usepackage[T1]{fontenc}
 \usepackage{microtype} % good font tricks
 
+\begin{document}
+
 \newcommand{\note}[1]{{\colorbox{yellow!40!white}{#1}}}
 \newcommand{\exampletext}[1]{{\color{blue!60!black}#1}}
-
-\begin{document}
 
 \noindent
 \colorbox[HTML]{52BDEC}{\bfseries\parbox{\textwidth}{\centering\large
@@ -123,8 +123,6 @@ Seppe Van Steenbergen &\\
 
 \input{Algoritmeverloop.tex}
 
-\newpage
-
 \section{Detectie}\label{sec:detectie}
 \input{Detectie.tex}
 
@@ -134,7 +132,8 @@ Seppe Van Steenbergen &\\
 \section{Identificatie}\label{sec:identificatie}
 \input{Identificatie.tex}
 
-\input{Transformatie.tex}
+\section{Transformatie voor image-show}\label{sec:transformatie}
+\input{Transformatie voor image-show}
 
 \input{Triangulatie}
 

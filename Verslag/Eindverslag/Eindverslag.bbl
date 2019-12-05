@@ -1,14 +1,45 @@
-\begin{thebibliography}{1}
+\begin{thebibliography}{10}
+
+\bibitem{inbook}
+Edgar Chavolla, Daniel Zaldivar, Erik Cuevas, and Marco Cisneros.
+\newblock {\em Color Spaces Advantages and Disadvantages in Image Color
+  Clustering Segmentation}, pages 3--22.
+\newblock 01 2018.
+
+\bibitem{rasouli2017effect}
+Amir Rasouli and John~K Tsotsos.
+\newblock The effect of color space selection on detectability and
+  discriminability of colored objects.
+\newblock {\em arXiv preprint arXiv:1702.05421}, 2017.
+
+\bibitem{hslColorWheel}
+Hsl color wheel.
+\newblock \url{https://www.quackit.com/pix/stock/color_wheel_hsl.png}.
+\newblock Geraadplaagd december 2019.
+
+\bibitem{TSAI20121291}
+Shun-Hung Tsai and Yu-Hsiang Tseng.
+\newblock A novel color detection method based on hsl color space for robotic
+  soccer competition.
+\newblock {\em Computers \& Mathematics with Applications}, 64(5):1291 -- 1300,
+  2012.
+\newblock Advanced Technologies in Computer, Consumer and Control.
 
 \bibitem{floodfill}
 Flood fill.
 \newblock \url{https://en.wikipedia.org/wiki/Flood_fill}.
 \newblock geraadpleegd okotber 2019.
 
-\bibitem{intersectie}
-Line-line intersection.
-\newblock \url{https://en.wikipedia.org/wiki/Line%E2%80%93line_intersection}.
-\newblock Geraadpleegd oktober 2019.
+\bibitem{shi-tomashi}
+Harris corner detection and shi-tomasi corner detection.
+\newblock
+  \url{https://medium.com/pixel-wise/detect-those-corners-aba0f034078b}.
+\newblock Geraadpleegd november 2019.
+
+\bibitem{article}
+Wojciech Mokrzycki and Maciej Tatol.
+\newblock Color difference delta e - a survey.
+\newblock {\em Machine Graphics and Vision}, 20:383--411, 04 2011.
 
 \bibitem{redrawImageFrom3dPerspectiveTo2d}
 stack overflow.
@@ -47,6 +78,11 @@ S.W. Sloan and G.T. Houlsby.
 Kat sprite sheet.
 \newblock
   \url{https://docs.coronalabs.com/guide/media/spriteAnimation/index.html }.
+\newblock Geraadplaagd december 2019.
+
+\bibitem{mousesprite}
+Kat sprite sheet.
+\newblock \url{https://i.imgur.com/AUVnIPz.gif}.
 \newblock Geraadplaagd december 2019.
 
 \end{thebibliography}
