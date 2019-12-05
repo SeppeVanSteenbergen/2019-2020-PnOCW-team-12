@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6500 64-bit) (preloaded format=pdflatex 2019.10.21)  5 DEC 2019 18:50
+=======
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019) (preloaded format=pdflatex 2019.10.14)  5 DEC 2019 18:53
+>>>>>>> master
 entering extended mode
 **./Eindverslag.tex
 (Eindverslag.tex
@@ -1215,6 +1219,7 @@ Overfull \hbox (18.07578pt too wide) in paragraph at lines 35--36
 [][] 
  []
 
+<<<<<<< HEAD
 [6]) (Algoritmeverloop.tex [7]) (Detectie.tex [8]
 
 LaTeX Warning: Citation `Kleuren plots' on page 9 undefined on input line 11.
@@ -1226,10 +1231,22 @@ Package pdftex.def Info: img/hslGreen.png  used on input line 15. on input line
  15.
 Package pdftex.def Info: Requested size: 426.79135pt x 210.35263pt on input lin
 e 15.
+=======
+[6]) (./Algoritmeverloop.tex [7]) (./Detectie.tex [8]
+
+LaTeX Warning: Citation `Kleuren plots' on page 9 undefined on input line 11.
+
+<img/hslGreen.png, id=340, 674.52pt x 332.442pt>
+File: img/hslGreen.png Graphic file (type png)
+<use img/hslGreen.png>
+Package pdftex.def Info: img/hslGreen.png  used on input line 15.
+(pdftex.def)             Requested size: 426.79135pt x 210.35263pt.
+>>>>>>> master
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 [9]
+<<<<<<< HEAD
 <img/mask.png, id=323, 548.80031pt x 326.72063pt>
 File: img/mask.png Graphic file (type png)
 <use img/mask.png>
@@ -1237,11 +1254,19 @@ Package pdftex.def Info: img/mask.png  used on input line 30. on input line 30.
 
 Package pdftex.def Info: Requested size: 274.39948pt x 163.35991pt on input lin
 e 30.
+=======
+<img/mask.png, id=356, 548.80031pt x 326.72063pt>
+File: img/mask.png Graphic file (type png)
+<use img/mask.png>
+Package pdftex.def Info: img/mask.png  used on input line 30.
+(pdftex.def)             Requested size: 274.39948pt x 163.35991pt.
+>>>>>>> master
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 [10 <./img/hslGreen.png>]
+<<<<<<< HEAD
 <img/perpSearch.png, id=335, 575.90157pt x 396.7322pt>
 File: img/perpSearch.png Graphic file (type png)
 <use img/perpSearch.png>
@@ -1250,6 +1275,14 @@ ne 47.
 Package pdftex.def Info: Requested size: 192.0548pt x 132.30225pt on input line
  47.
 <img/diagSearch.png, id=336, 575.90157pt x 396.7322pt>
+=======
+<img/perpSearch.png, id=369, 575.90157pt x 396.7322pt>
+File: img/perpSearch.png Graphic file (type png)
+<use img/perpSearch.png>
+Package pdftex.def Info: img/perpSearch.png  used on input line 47.
+(pdftex.def)             Requested size: 192.0548pt x 132.30225pt.
+<img/diagSearch.png, id=370, 575.90157pt x 396.7322pt>
+>>>>>>> master
 File: img/diagSearch.png Graphic file (type png)
 <use img/diagSearch.png>
 Package pdftex.def Info: img/diagSearch.png  used on input line 53. on input li
@@ -1261,6 +1294,7 @@ Package pdftex.def Info: Requested size: 192.0548pt x 132.30225pt on input line
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 [11 <./img/mask.png>]
+<<<<<<< HEAD
 <img/correctCorner.png, id=348, 848.4197pt x 654.19406pt>
 File: img/correctCorner.png Graphic file (type png)
 <use img/correctCorner.png>
@@ -1277,6 +1311,20 @@ Package pdftex.def Info: Requested size: 128.0387pt x 70.84769pt on input line
 72.
 ) (Reconstructie.tex [12 <./img/perpSearch.png> <./img/diagSearch.png> <./img/c
 orrectCorner.png> <./img/notACorner.png>]
+=======
+<img/correctCorner.png, id=382, 848.4197pt x 654.19406pt>
+File: img/correctCorner.png Graphic file (type png)
+<use img/correctCorner.png>
+Package pdftex.def Info: img/correctCorner.png  used on input line 66.
+(pdftex.def)             Requested size: 128.0387pt x 98.7238pt.
+<img/notACorner.png, id=383, 1178.15157pt x 651.93562pt>
+File: img/notACorner.png Graphic file (type png)
+<use img/notACorner.png>
+Package pdftex.def Info: img/notACorner.png  used on input line 72.
+(pdftex.def)             Requested size: 128.0387pt x 70.84769pt.
+) (./Reconstructie.tex [12 <./img/perpSearch.png> <./img/diagSearch.png> <./img
+/correctCorner.png> <./img/notACorner.png>]
+>>>>>>> master
 
 LaTeX Warning: Reference `Foto van screendetectie html!!!!' on page 13 undefine
 d on input line 10.
@@ -1284,6 +1332,7 @@ d on input line 10.
 
 LaTeX Warning: Reference `intersectie' on page 13 undefined on input line 16.
 
+<<<<<<< HEAD
 ) [13] (Identificatie.tex [14]
 <img/screen.png, id=373, 1204.5pt x 677.53125pt>
 File: img/screen.png Graphic file (type png)
@@ -1295,12 +1344,23 @@ e 8.
 ) (Transformatie.tex [15 <./img/screen.png>])
 (Triangulatie.tex [16]
 <img/bowyer-watson_superdriehoek.png, id=400, 578.16pt x 433.62pt>
+=======
+) [13] (./Identificatie.tex [14]
+<img/screen.png, id=407, 1204.5pt x 677.53125pt>
+File: img/screen.png Graphic file (type png)
+<use img/screen.png>
+Package pdftex.def Info: img/screen.png  used on input line 8.
+(pdftex.def)             Requested size: 341.43437pt x 192.05424pt.
+) (./Transformatie.tex [15 <./img/screen.png>]) (./Triangulatie.tex [16]
+<img/bowyer-watson_superdriehoek.png, id=434, 578.16pt x 433.62pt>
+>>>>>>> master
 File: img/bowyer-watson_superdriehoek.png Graphic file (type png)
 <use img/bowyer-watson_superdriehoek.png>
 Package pdftex.def Info: img/bowyer-watson_superdriehoek.png  used on input lin
 e 15. on input line 15.
 Package pdftex.def Info: Requested size: 170.71393pt x 128.03589pt on input lin
 e 15.
+<<<<<<< HEAD
 <img/bowyer-watson_nieuwpunt.png, id=401, 578.16pt x 433.62pt>
 File: img/bowyer-watson_nieuwpunt.png Graphic file (type png)
 <use img/bowyer-watson_nieuwpunt.png>
@@ -1358,6 +1418,54 @@ Package pdftex.def Info: Requested size: 383.93343pt x 197.9892pt on input line
  34.
 ) (Besluit.tex [19 <./img/schermen.png>]) [20]
 (Eindverslag.bbl
+=======
+(pdftex.def)             Requested size: 170.71393pt x 128.03589pt.
+<img/bowyer-watson_nieuwpunt.png, id=435, 578.16pt x 433.62pt>
+File: img/bowyer-watson_nieuwpunt.png Graphic file (type png)
+<use img/bowyer-watson_nieuwpunt.png>
+Package pdftex.def Info: img/bowyer-watson_nieuwpunt.png  used on input line 20
+.
+(pdftex.def)             Requested size: 170.71393pt x 128.03589pt.
+<img/bowyer-watson_verwijderen.png, id=436, 578.16pt x 433.62pt>
+File: img/bowyer-watson_verwijderen.png Graphic file (type png)
+<use img/bowyer-watson_verwijderen.png>
+Package pdftex.def Info: img/bowyer-watson_verwijderen.png  used on input line 
+25.
+(pdftex.def)             Requested size: 170.71393pt x 128.03589pt.
+ [17 <./img/bowyer-watson_superdriehoek.png> <./img/bowyer-watson_nieuwpunt.png
+> <./img/bowyer-watson_verwijderen.png>]
+<img/colineair.jpg, id=451, 472.76625pt x 176.45924pt>
+File: img/colineair.jpg Graphic file (type jpg)
+<use img/colineair.jpg>
+Package pdftex.def Info: img/colineair.jpg  used on input line 38.
+(pdftex.def)             Requested size: 170.71393pt x 63.71913pt.
+<img/almost_colinair.jpg, id=452, 361.35pt x 92.7465pt>
+File: img/almost_colinair.jpg Graphic file (type jpg)
+<use img/almost_colinair.jpg>
+Package pdftex.def Info: img/almost_colinair.jpg  used on input line 44.
+(pdftex.def)             Requested size: 170.71393pt x 43.81587pt.
+)
+(./Animation.tex
+<img/cat2.png, id=456, 1505.625pt x 94.10156pt>
+File: img/cat2.png Graphic file (type png)
+<use img/cat2.png>
+Package pdftex.def Info: img/cat2.png  used on input line 10.
+(pdftex.def)             Requested size: 301.11966pt x 18.81996pt.
+<img/mouse2_trans.png, id=459, 376.40625pt x 24.09pt>
+File: img/mouse2_trans.png Graphic file (type png)
+<use img/mouse2_trans.png>
+Package pdftex.def Info: img/mouse2_trans.png  used on input line 17.
+(pdftex.def)             Requested size: 301.1254pt x 19.272pt.
+ [18 <./img/colineair.jpg> <./img/almost_colinair.jpg> <./img/cat2.png> <./img/
+mouse2_trans.png>]
+<img/schermen.png, id=475, 767.86874pt x 395.97937pt>
+File: img/schermen.png Graphic file (type png)
+<use img/schermen.png>
+Package pdftex.def Info: img/schermen.png  used on input line 34.
+(pdftex.def)             Requested size: 383.93343pt x 197.9892pt.
+) (./Besluit.tex [19 <./img/schermen.png>])
+[20] (./Eindverslag.bbl
+>>>>>>> master
 Underfull \hbox (badness 3668) in paragraph at lines 42--48
 []\T1/lmr/m/n/10.95 (+20) StackExchange.  Fin-ding the trans-form ma-trix from 
 4 pro-jec-ted points
@@ -1388,6 +1496,7 @@ ttps : / / en . wikipedia . org / wiki / Bowyer % E2 % 80 %
  []
 
 ) [21]
+<<<<<<< HEAD
 <img/algoOverview.png, id=469, 521.95pt x 1156.32pt>
 File: img/algoOverview.png Graphic file (type png)
 <use img/algoOverview.png>
@@ -1424,10 +1533,194 @@ Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 174.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 174.
 Package rerunfilecheck Info: File `Eindverslag.out' has not changed.
 (rerunfilecheck)             Checksum: 2457D2F63B68472F8B423D244C977579;2614.
+=======
+<img/algoOverview.png, id=504, 521.95pt x 1156.32pt>
+File: img/algoOverview.png Graphic file (type png)
+<use img/algoOverview.png>
+Package pdftex.def Info: img/algoOverview.png  used on input line 152.
+(pdftex.def)             Requested size: 260.97435pt x 578.15858pt.
+ [22 <./img/algoOverview.png>]
+<img/DetectAndFilterCorners.png, id=510, 473.77pt x 433.62pt>
+File: img/DetectAndFilterCorners.png Graphic file (type png)
+<use img/DetectAndFilterCorners.png>
+Package pdftex.def Info: img/DetectAndFilterCorners.png  used on input line 160
+.
+(pdftex.def)             Requested size: 473.76884pt x 433.61894pt.
 
+Overfull \hbox (46.9775pt too wide) in paragraph at lines 160--161
+ [][] 
+ []
+
+[23 <./img/DetectAndFilterCorners.png>]
+<img/ReconstructionFlowchart.png, id=516, 531.9875pt x 1065.9825pt>
+File: img/ReconstructionFlowchart.png Graphic file (type png)
+<use img/ReconstructionFlowchart.png>
+Package pdftex.def Info: img/ReconstructionFlowchart.png  used on input line 16
+8.
+(pdftex.def)             Requested size: 292.59402pt x 586.29219pt.
+ [24 <./img/ReconstructionFlowchart.png>] (./AppendixKleurenPlots.tex
+<img/rgbRed.png, id=522, 433.62pt x 332.442pt>
+File: img/rgbRed.png Graphic file (type png)
+<use img/rgbRed.png>
+Package pdftex.def Info: img/rgbRed.png  used on input line 8.
+(pdftex.def)             Requested size: 192.0548pt x 147.2438pt.
+<img/rgbYellow.png, id=523, 433.62pt x 332.442pt>
+File: img/rgbYellow.png Graphic file (type png)
+<use img/rgbYellow.png>
+Package pdftex.def Info: img/rgbYellow.png  used on input line 15.
+(pdftex.def)             Requested size: 192.0548pt x 147.2438pt.
+<img/rgbGreen.png, id=524, 433.62pt x 332.442pt>
+File: img/rgbGreen.png Graphic file (type png)
+<use img/rgbGreen.png>
+Package pdftex.def Info: img/rgbGreen.png  used on input line 28.
+(pdftex.def)             Requested size: 192.0548pt x 147.2438pt.
+<img/rgbBlueGreen.png, id=525, 433.62pt x 332.442pt>
+File: img/rgbBlueGreen.png Graphic file (type png)
+<use img/rgbBlueGreen.png>
+Package pdftex.def Info: img/rgbBlueGreen.png  used on input line 35.
+(pdftex.def)             Requested size: 192.0548pt x 147.2438pt.
+<img/rgbBlue.png, id=526, 433.62pt x 332.442pt>
+File: img/rgbBlue.png Graphic file (type png)
+<use img/rgbBlue.png>
+Package pdftex.def Info: img/rgbBlue.png  used on input line 48.
+(pdftex.def)             Requested size: 192.0548pt x 147.2438pt.
+<img/rgbPink.png, id=527, 433.62pt x 332.442pt>
+File: img/rgbPink.png Graphic file (type png)
+<use img/rgbPink.png>
+Package pdftex.def Info: img/rgbPink.png  used on input line 55.
+(pdftex.def)             Requested size: 192.0548pt x 147.2438pt.
+<img/hueHistRed.png, id=528, 457.71pt x 332.442pt>
+File: img/hueHistRed.png Graphic file (type png)
+<use img/hueHistRed.png>
+Package pdftex.def Info: img/hueHistRed.png  used on input line 68.
+(pdftex.def)             Requested size: 192.0548pt x 139.49278pt.
+<img/hueHistYellow.png, id=529, 457.71pt x 332.442pt>
+File: img/hueHistYellow.png Graphic file (type png)
+<use img/hueHistYellow.png>
+Package pdftex.def Info: img/hueHistYellow.png  used on input line 75.
+(pdftex.def)             Requested size: 192.0548pt x 139.49278pt.
+ [25 <./img/rgbRed.png> <./img/rgbYellow.png> <./img/rgbGreen.png> <./img/rgbBl
+ueGreen.png> <./img/rgbBlue.png> <./img/rgbPink.png>]
+<img/hueHistGreen.png, id=544, 457.71pt x 332.442pt>
+File: img/hueHistGreen.png Graphic file (type png)
+<use img/hueHistGreen.png>
+Package pdftex.def Info: img/hueHistGreen.png  used on input line 88.
+(pdftex.def)             Requested size: 192.0548pt x 139.49278pt.
+<img/hueHistBlueGreen.png, id=545, 457.71pt x 332.442pt>
+File: img/hueHistBlueGreen.png Graphic file (type png)
+<use img/hueHistBlueGreen.png>
+Package pdftex.def Info: img/hueHistBlueGreen.png  used on input line 95.
+(pdftex.def)             Requested size: 192.0548pt x 139.49278pt.
+<img/hueHistBlue.png, id=546, 457.71pt x 332.442pt>
+File: img/hueHistBlue.png Graphic file (type png)
+<use img/hueHistBlue.png>
+Package pdftex.def Info: img/hueHistBlue.png  used on input line 108.
+(pdftex.def)             Requested size: 192.0548pt x 139.49278pt.
+<img/hueHistPink.png, id=547, 457.71pt x 332.442pt>
+File: img/hueHistPink.png Graphic file (type png)
+<use img/hueHistPink.png>
+Package pdftex.def Info: img/hueHistPink.png  used on input line 115.
+(pdftex.def)             Requested size: 192.0548pt x 139.49278pt.
+<img/hsl3DRed.png, id=548, 426.393pt x 332.442pt>
+File: img/hsl3DRed.png Graphic file (type png)
+<use img/hsl3DRed.png>
+Package pdftex.def Info: img/hsl3DRed.png  used on input line 130.
+(pdftex.def)             Requested size: 192.0548pt x 149.73447pt.
+<img/hsl3DYellow.png, id=549, 426.393pt x 332.442pt>
+File: img/hsl3DYellow.png Graphic file (type png)
+<use img/hsl3DYellow.png>
+Package pdftex.def Info: img/hsl3DYellow.png  used on input line 137.
+(pdftex.def)             Requested size: 192.0548pt x 149.73447pt.
+ [26 <./img/hueHistRed.png> <./img/hueHistYellow.png> <./img/hueHistGreen.png> 
+<./img/hueHistBlueGreen.png> <./img/hueHistBlue.png> <./img/hueHistPink.png>]
+<img/hsl3DGreen.png, id=563, 426.393pt x 332.442pt>
+File: img/hsl3DGreen.png Graphic file (type png)
+<use img/hsl3DGreen.png>
+Package pdftex.def Info: img/hsl3DGreen.png  used on input line 150.
+(pdftex.def)             Requested size: 192.0548pt x 149.73447pt.
+<img/hsl3DBlueGreen.png, id=564, 426.393pt x 332.442pt>
+File: img/hsl3DBlueGreen.png Graphic file (type png)
+<use img/hsl3DBlueGreen.png>
+Package pdftex.def Info: img/hsl3DBlueGreen.png  used on input line 157.
+(pdftex.def)             Requested size: 192.0548pt x 149.73447pt.
+<img/hsl3DBlue.png, id=565, 426.393pt x 332.442pt>
+File: img/hsl3DBlue.png Graphic file (type png)
+<use img/hsl3DBlue.png>
+Package pdftex.def Info: img/hsl3DBlue.png  used on input line 170.
+(pdftex.def)             Requested size: 192.0548pt x 149.73447pt.
+<img/hsl3DPink.png, id=566, 426.393pt x 332.442pt>
+File: img/hsl3DPink.png Graphic file (type png)
+<use img/hsl3DPink.png>
+Package pdftex.def Info: img/hsl3DPink.png  used on input line 177.
+(pdftex.def)             Requested size: 192.0548pt x 149.73447pt.
+<img/hslRed.png, id=567, 674.52pt x 332.442pt>
+File: img/hslRed.png Graphic file (type png)
+<use img/hslRed.png>
+Package pdftex.def Info: img/hslRed.png  used on input line 188.
+(pdftex.def)             Requested size: 426.79135pt x 210.35263pt.
+ [27 <./img/hsl3DRed.png> <./img/hsl3DYellow.png> <./img/hsl3DGreen.png> <./img
+/hsl3DBlueGreen.png> <./img/hsl3DBlue.png> <./img/hsl3DPink.png>]
+<img/hslYellow.png, id=582, 674.52pt x 332.442pt>
+File: img/hslYellow.png Graphic file (type png)
+<use img/hslYellow.png>
+Package pdftex.def Info: img/hslYellow.png  used on input line 197.
+(pdftex.def)             Requested size: 426.79135pt x 210.35263pt.
+File: img/hslGreen.png Graphic file (type png)
+<use img/hslGreen.png>
+Package pdftex.def Info: img/hslGreen.png  used on input line 204.
+(pdftex.def)             Requested size: 426.79135pt x 210.35263pt.
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+<img/hslBlueGreen.png, id=583, 674.52pt x 332.442pt>
+File: img/hslBlueGreen.png Graphic file (type png)
+<use img/hslBlueGreen.png>
+Package pdftex.def Info: img/hslBlueGreen.png  used on input line 211.
+(pdftex.def)             Requested size: 426.79135pt x 210.35263pt.
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+<img/hslBlue.png, id=584, 674.52pt x 332.442pt>
+File: img/hslBlue.png Graphic file (type png)
+<use img/hslBlue.png>
+Package pdftex.def Info: img/hslBlue.png  used on input line 218.
+(pdftex.def)             Requested size: 426.79135pt x 210.35263pt.
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+<img/hslPink.png, id=585, 674.52pt x 332.442pt>
+File: img/hslPink.png Graphic file (type png)
+<use img/hslPink.png>
+Package pdftex.def Info: img/hslPink.png  used on input line 225.
+(pdftex.def)             Requested size: 426.79135pt x 210.35263pt.
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+) [28 <./img/hslRed.png> <./img/hslYellow.png>] [29 <./img/hslBlueGreen.png>]
+[30 <./img/hslBlue.png> <./img/hslPink.png>]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 178.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 178.
+ (./Eindverslag.aux)
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 178.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 178.
+
+
+Package rerunfilecheck Warning: File `Eindverslag.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+Package rerunfilecheck Info: Checksums for `Eindverslag.out':
+(rerunfilecheck)             Before: ECFD7FC1443245F95D91EA3E8C69C3E4;2941
+(rerunfilecheck)             After:  BE8D1E96B1AAC54476D7B09430D8C97E;2919.
 
 LaTeX Warning: There were undefined references.
+>>>>>>> master
 
+
+LaTeX Warning: There were multiply-defined labels.
+
+<<<<<<< HEAD
 
 LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
 
@@ -1458,4 +1751,36 @@ PDF statistics:
  559 PDF objects out of 1000 (max. 8388607)
  133 named destinations out of 1000 (max. 500000)
  14767 words of extra memory for PDF output out of 17280 (max. 10000000)
+=======
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 178.
+ ) 
+Here is how much of TeX's memory you used:
+ 23263 strings out of 492616
+ 429757 string characters out of 6129480
+ 562872 words of memory out of 5000000
+ 26445 multiletter control sequences out of 15000+600000
+ 49609 words of font info for 95 fonts, out of 8000000 for 9000
+ 1141 hyphenation exceptions out of 8191
+ 55i,9n,56p,2870b,1323s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/local/texlive/2019/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{/usr/local/
+texlive/2019/texmf-dist/fonts/enc/dvips/lm/lm-mathex.enc}{/usr/local/texlive/20
+19/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/local/texlive/2019/texmf-d
+ist/fonts/enc/dvips/lm/lm-mathsy.enc}{/usr/local/texlive/2019/texmf-dist/fonts/
+enc/dvips/lm/lm-ec.enc}</usr/local/texlive/2019/texmf-dist/fonts/type1/public/l
+m/lmbx10.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/public/lm/lmbx12.p
+fb></usr/local/texlive/2019/texmf-dist/fonts/type1/public/lm/lmex10.pfb></usr/l
+ocal/texlive/2019/texmf-dist/fonts/type1/public/lm/lmmi10.pfb></usr/local/texli
+ve/2019/texmf-dist/fonts/type1/public/lm/lmmi8.pfb></usr/local/texlive/2019/tex
+mf-dist/fonts/type1/public/lm/lmr10.pfb></usr/local/texlive/2019/texmf-dist/fon
+ts/type1/public/lm/lmr8.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/pub
+lic/lm/lmri10.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/public/lm/lms
+y10.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/public/lm/lmsy8.pfb></u
+sr/local/texlive/2019/texmf-dist/fonts/type1/public/lm/lmtt10.pfb>
+Output written on Eindverslag.pdf (30 pages, 7954024 bytes).
+PDF statistics:
+ 687 PDF objects out of 1000 (max. 8388607)
+ 556 compressed objects within 6 object streams
+ 160 named destinations out of 1000 (max. 500000)
+ 14930 words of extra memory for PDF output out of 17280 (max. 10000000)
+>>>>>>> master
 
