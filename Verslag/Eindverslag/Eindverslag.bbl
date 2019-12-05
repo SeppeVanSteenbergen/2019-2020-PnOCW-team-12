@@ -12,6 +12,11 @@ Amir Rasouli and John~K Tsotsos.
   discriminability of colored objects.
 \newblock {\em arXiv preprint arXiv:1702.05421}, 2017.
 
+\bibitem{hslColorWheel}
+Hsl color wheel.
+\newblock \url{https://www.quackit.com/pix/stock/color_wheel_hsl.png}.
+\newblock Geraadplaagd december 2019.
+
 \bibitem{TSAI20121291}
 Shun-Hung Tsai and Yu-Hsiang Tseng.
 \newblock A novel color detection method based on hsl color space for robotic
@@ -30,6 +35,11 @@ Harris corner detection and shi-tomasi corner detection.
 \newblock
   \url{https://medium.com/pixel-wise/detect-those-corners-aba0f034078b}.
 \newblock Geraadpleegd november 2019.
+
+\bibitem{article}
+Wojciech Mokrzycki and Maciej Tatol.
+\newblock Color difference delta e - a survey.
+\newblock {\em Machine Graphics and Vision}, 20:383--411, 04 2011.
 
 \bibitem{redrawImageFrom3dPerspectiveTo2d}
 stack overflow.
