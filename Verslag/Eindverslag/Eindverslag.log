@@ -1,4 +1,8 @@
+<<<<<<< Updated upstream
 This is pdfTeX, Version 3.14159265-2.6-1.40.18 (MiKTeX 2.9.6500 64-bit) (preloaded format=pdflatex 2019.10.21)  5 DEC 2019 17:58
+=======
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019) (preloaded format=pdflatex 2019.10.14)  5 DEC 2019 18:17
+>>>>>>> Stashed changes
 entering extended mode
 **./Eindverslag.tex
 (Eindverslag.tex
@@ -1016,9 +1020,20 @@ LaTeX Info: Redefining \lslig on input line 914.
 )
 Package microtype Info: Loading configuration file microtype.cfg.
 
+<<<<<<< Updated upstream
 ("D:\Program Files\Miktex\tex\latex\microtype\microtype.cfg"
 File: microtype.cfg 2019/10/10 v2.7c microtype main configuration file (RS)
 )) (Eindverslag.aux)
+=======
+(/usr/local/texlive/2019/texmf-dist/tex/latex/microtype/microtype.cfg
+File: microtype.cfg 2019/02/28 v2.7b microtype main configuration file (RS)
+))
+(./Eindverslag.aux
+
+LaTeX Warning: Label `bijlageA1' multiply defined.
+
+)
+>>>>>>> Stashed changes
 \openout1 = `Eindverslag.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 69.
@@ -1036,7 +1051,11 @@ LaTeX Font Info:    ... okay on input line 69.
 LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 69.
 LaTeX Font Info:    ... okay on input line 69.
 LaTeX Font Info:    Try loading font information for T1+lmr on input line 69.
+<<<<<<< Updated upstream
  ("D:\Program Files\Miktex\tex\latex\lm\t1lmr.fd"
+=======
+ (/usr/local/texlive/2019/texmf-dist/tex/latex/lm/t1lmr.fd
+>>>>>>> Stashed changes
 File: t1lmr.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 \c@lstlisting=\count153
@@ -1106,9 +1125,15 @@ Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: float package is loaded.
 Package caption Info: hyperref package is loaded.
 Package caption Info: End \AtBeginDocument code.
+<<<<<<< Updated upstream
 \AtBeginShipoutBox=\box44
 Package hyperref Info: Link coloring ON on input line 69.
 ("D:\Program Files\Miktex\tex\latex\hyperref\nameref.sty"
+=======
+\AtBeginShipoutBox=\box43
+Package hyperref Info: Link coloring ON on input line 69.
+(/usr/local/texlive/2019/texmf-dist/tex/latex/hyperref/nameref.sty
+>>>>>>> Stashed changes
 Package: nameref 2016/05/21 v2.44 Cross-referencing by name of section
 
 ("D:\Program Files\Miktex\tex\generic\oberdiek\gettitlestring.sty"
@@ -1193,7 +1218,9 @@ Underfull \hbox (badness 10000) in paragraph at lines 71--82
 
  []
 
+(./Abstract.tex) [1
 
+<<<<<<< Updated upstream
 Underfull \hbox (badness 10000) in paragraph at lines 87--102
 
  []
@@ -1208,17 +1235,34 @@ Underfull \hbox (badness 10000) in paragraph at lines 87--102
 LaTeX Font Info:    Try loading font information for T1+lmtt on input line 20.
 
 ("D:\Program Files\Miktex\tex\latex\lm\t1lmtt.fd"
+=======
+{/usr/local/texlive/2019/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] (./Eind
+verslag.toc)
+\tf@toc=\write5
+\openout5 = `Eindverslag.toc'.
+
+ [2] [3] (./Inleiding.tex) (./Framework.tex
+[4]
+LaTeX Font Info:    Try loading font information for T1+lmtt on input line 20.
+ (/usr/local/texlive/2019/texmf-dist/tex/latex/lm/t1lmtt.fd
+>>>>>>> Stashed changes
 File: t1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
 )
 Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `lmtt' (encoding: T1).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
+<<<<<<< Updated upstream
  [4] [5]) (Synchronisatie.tex
+=======
+ [5])
+(./Synchronisatie.tex
+>>>>>>> Stashed changes
 Overfull \hbox (18.07578pt too wide) in paragraph at lines 35--36
 [][] 
  []
 
+<<<<<<< Updated upstream
 [6]) (Detectie.tex [7]
 <img/hslGreen.png, id=272, 818.0964pt x 332.442pt>
 File: img/hslGreen.png Graphic file (type png)
@@ -1279,30 +1323,87 @@ Package pdftex.def Info: Requested size: 128.0387pt x 70.84769pt on input line
 70.
 ) (Reconstructie.tex [11 <./img/perpSearch.png> <./img/diagSearch.png> <./img/c
 orrectCorner.png> <./img/notACorner.png>]
+=======
+[6]) (./Detectie.tex [7] [8]
+<img/hslGreen.png, id=300, 818.0964pt x 332.442pt>
+File: img/hslGreen.png Graphic file (type png)
+<use img/hslGreen.png>
+Package pdftex.def Info: img/hslGreen.png  used on input line 15.
+(pdftex.def)             Requested size: 426.79135pt x 173.42882pt.
+ [9 <./img/hslGreen.png>]
+<img/mask.png, id=312, 548.80031pt x 326.72063pt>
+File: img/mask.png Graphic file (type png)
+<use img/mask.png>
+Package pdftex.def Info: img/mask.png  used on input line 30.
+(pdftex.def)             Requested size: 274.39948pt x 163.35991pt.
+ [10 <./img/mask.png>]
+<img/perpSearch.png, id=326, 575.90157pt x 396.7322pt>
+File: img/perpSearch.png Graphic file (type png)
+<use img/perpSearch.png>
+Package pdftex.def Info: img/perpSearch.png  used on input line 47.
+(pdftex.def)             Requested size: 192.0548pt x 132.30225pt.
+<img/diagSearch.png, id=327, 575.90157pt x 396.7322pt>
+File: img/diagSearch.png Graphic file (type png)
+<use img/diagSearch.png>
+Package pdftex.def Info: img/diagSearch.png  used on input line 53.
+(pdftex.def)             Requested size: 192.0548pt x 132.30225pt.
+<img/correctCorner.png, id=330, 848.4197pt x 654.19406pt>
+File: img/correctCorner.png Graphic file (type png)
+<use img/correctCorner.png>
+Package pdftex.def Info: img/correctCorner.png  used on input line 66.
+(pdftex.def)             Requested size: 128.0387pt x 98.7238pt.
+<img/notACorner.png, id=331, 1178.15157pt x 651.93562pt>
+File: img/notACorner.png Graphic file (type png)
+<use img/notACorner.png>
+Package pdftex.def Info: img/notACorner.png  used on input line 72.
+(pdftex.def)             Requested size: 128.0387pt x 70.84769pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+) (./Reconstructie.tex [11 <./img/perpSearch.png> <./img/diagSearch.png>]
+>>>>>>> Stashed changes
 
 LaTeX Warning: Reference `Foto van screendetectie html!!!!' on page 12 undefine
 d on input line 10.
 
+<<<<<<< Updated upstream
+=======
+[12 <./img/correctCorner.png> <./img/notACorner.png>]
+>>>>>>> Stashed changes
 
-LaTeX Warning: Reference `intersectie' on page 12 undefined on input line 16.
+LaTeX Warning: Reference `intersectie' on page 13 undefined on input line 16.
 
+<<<<<<< Updated upstream
 ) [12] (Identificatie.tex [13]
 <img/screen.png, id=335, 1204.5pt x 677.53125pt>
+=======
+) [13] (./Identificatie.tex
+<img/screen.png, id=357, 1204.5pt x 677.53125pt>
+>>>>>>> Stashed changes
 File: img/screen.png Graphic file (type png)
 <use img/screen.png>
 Package pdftex.def Info: img/screen.png  used on input line 8. on input line 8.
 
+<<<<<<< Updated upstream
 Package pdftex.def Info: Requested size: 341.43437pt x 192.05424pt on input lin
 e 8.
 ) (Transformatie.tex [14 <./img/screen.png>])
 (Triangulatie.tex [15]
 <img/bowyer-watson_superdriehoek.png, id=362, 578.16pt x 433.62pt>
+=======
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+) [14] (./Transformatie.tex [15 <./img/screen.png>]) (./Triangulatie.tex
+<img/bowyer-watson_superdriehoek.png, id=381, 578.16pt x 433.62pt>
+>>>>>>> Stashed changes
 File: img/bowyer-watson_superdriehoek.png Graphic file (type png)
 <use img/bowyer-watson_superdriehoek.png>
 Package pdftex.def Info: img/bowyer-watson_superdriehoek.png  used on input lin
 e 15. on input line 15.
 Package pdftex.def Info: Requested size: 170.71393pt x 128.03589pt on input lin
 e 15.
+<<<<<<< Updated upstream
 <img/bowyer-watson_nieuwpunt.png, id=363, 578.16pt x 433.62pt>
 File: img/bowyer-watson_nieuwpunt.png Graphic file (type png)
 <use img/bowyer-watson_nieuwpunt.png>
@@ -1361,6 +1462,77 @@ Package pdftex.def Info: Requested size: 383.93343pt x 197.9892pt on input line
 ) (Besluit.tex [18 <./img/schermen.png>]) [19]
 (Eindverslag.bbl
 Underfull \hbox (badness 3668) in paragraph at lines 42--48
+=======
+(pdftex.def)             Requested size: 170.71393pt x 128.03589pt.
+<img/bowyer-watson_nieuwpunt.png, id=382, 578.16pt x 433.62pt>
+File: img/bowyer-watson_nieuwpunt.png Graphic file (type png)
+<use img/bowyer-watson_nieuwpunt.png>
+Package pdftex.def Info: img/bowyer-watson_nieuwpunt.png  used on input line 20
+.
+(pdftex.def)             Requested size: 170.71393pt x 128.03589pt.
+<img/bowyer-watson_verwijderen.png, id=383, 578.16pt x 433.62pt>
+File: img/bowyer-watson_verwijderen.png Graphic file (type png)
+<use img/bowyer-watson_verwijderen.png>
+Package pdftex.def Info: img/bowyer-watson_verwijderen.png  used on input line 
+25.
+(pdftex.def)             Requested size: 170.71393pt x 128.03589pt.
+<img/colineair.jpg, id=388, 472.76625pt x 176.45924pt>
+File: img/colineair.jpg Graphic file (type jpg)
+<use img/colineair.jpg>
+Package pdftex.def Info: img/colineair.jpg  used on input line 38.
+(pdftex.def)             Requested size: 170.71393pt x 63.71913pt.
+<img/almost_colinair.jpg, id=389, 361.35pt x 92.7465pt>
+File: img/almost_colinair.jpg Graphic file (type jpg)
+<use img/almost_colinair.jpg>
+Package pdftex.def Info: img/almost_colinair.jpg  used on input line 44.
+(pdftex.def)             Requested size: 170.71393pt x 43.81587pt.
+)
+(./Animation.tex [16] [17 <./img/bowyer-watson_superdriehoek.png> <./img/bowyer
+-watson_nieuwpunt.png> <./img/bowyer-watson_verwijderen.png> <./img/colineair.j
+pg> <./img/almost_colinair.jpg>]
+<img/cat2.png, id=409, 1505.625pt x 94.10156pt>
+File: img/cat2.png Graphic file (type png)
+<use img/cat2.png>
+Package pdftex.def Info: img/cat2.png  used on input line 10.
+(pdftex.def)             Requested size: 301.11966pt x 18.81996pt.
+) (./Besluit.tex [18 <./img/cat2.png>])
+[19]
+
+! LaTeX Error: Unknown float option `H'.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.142 	\begin{figure}[H]
+                        
+Option `H' ignored and `p' used.
+
+<img/algoOverview.png, id=424, 521.95pt x 1156.32pt>
+File: img/algoOverview.png Graphic file (type png)
+<use img/algoOverview.png>
+Package pdftex.def Info: img/algoOverview.png  used on input line 144.
+(pdftex.def)             Requested size: 260.97435pt x 578.15858pt.
+
+! LaTeX Error: Unknown float option `H'.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.149 	\begin{figure}[H]
+                        
+Option `H' ignored and `p' used.
+
+<img/DetectAndFilterCorners.png, id=425, 473.77pt x 433.62pt>
+File: img/DetectAndFilterCorners.png Graphic file (type png)
+<use img/DetectAndFilterCorners.png>
+Package pdftex.def Info: img/DetectAndFilterCorners.png  used on input line 151
+.
+(pdftex.def)             Requested size: 236.88441pt x 216.80946pt.
+[20] [21 <./img/algoOverview.png>] (./Eindverslag.bbl
+Underfull \hbox (badness 3668) in paragraph at lines 41--47
+>>>>>>> Stashed changes
 []\T1/lmr/m/n/10.95 (+20) StackExchange.  Fin-ding the trans-form ma-trix from 
 4 pro-jec-ted points
  []
@@ -1389,6 +1561,7 @@ Underfull \hbox (badness 3965) in paragraph at lines 55--58
 ttps : / / en . wikipedia . org / wiki / Bowyer % E2 % 80 %
  []
 
+<<<<<<< Updated upstream
 ) [20] (AppendixKleurenPlots.tex) [21]
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 145.
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 145.
@@ -1397,10 +1570,21 @@ Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 145.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 145.
 Package rerunfilecheck Info: File `Eindverslag.out' has not changed.
 (rerunfilecheck)             Checksum: BC67AEF82A92AC14B7E92CA7B8EFB1BA;2319.
+=======
+) [22] [23 <./img/DetectAndFilterCorners.png>]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 163.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 163.
+ (./Eindverslag.aux)
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 163.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 163.
+Package rerunfilecheck Info: File `Eindverslag.out' has not changed.
+(rerunfilecheck)             Checksum: ED2F49B6A154EC85603DF4BDF4165CFA;2499.
+>>>>>>> Stashed changes
 
 
 LaTeX Warning: There were undefined references.
 
+<<<<<<< Updated upstream
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 145.
  ) 
 Here is how much of TeX's memory you used:
@@ -1428,4 +1612,39 @@ PDF statistics:
  504 PDF objects out of 1000 (max. 8388607)
  117 named destinations out of 1000 (max. 500000)
  14720 words of extra memory for PDF output out of 17280 (max. 10000000)
+=======
+
+LaTeX Warning: There were multiply-defined labels.
+
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 163.
+ ) 
+Here is how much of TeX's memory you used:
+ 23007 strings out of 492616
+ 425196 string characters out of 6129480
+ 559083 words of memory out of 5000000
+ 26263 multiletter control sequences out of 15000+600000
+ 49479 words of font info for 94 fonts, out of 8000000 for 9000
+ 1141 hyphenation exceptions out of 8191
+ 55i,9n,56p,2870b,1319s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/local/texlive/2019/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{/usr/local/
+texlive/2019/texmf-dist/fonts/enc/dvips/lm/lm-mathex.enc}{/usr/local/texlive/20
+19/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/local/texlive/2019/texmf-d
+ist/fonts/enc/dvips/lm/lm-mathsy.enc}{/usr/local/texlive/2019/texmf-dist/fonts/
+enc/dvips/lm/lm-ec.enc}</usr/local/texlive/2019/texmf-dist/fonts/type1/public/l
+m/lmbx10.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/public/lm/lmbx12.p
+fb></usr/local/texlive/2019/texmf-dist/fonts/type1/public/lm/lmex10.pfb></usr/l
+ocal/texlive/2019/texmf-dist/fonts/type1/public/lm/lmmi10.pfb></usr/local/texli
+ve/2019/texmf-dist/fonts/type1/public/lm/lmmi8.pfb></usr/local/texlive/2019/tex
+mf-dist/fonts/type1/public/lm/lmr10.pfb></usr/local/texlive/2019/texmf-dist/fon
+ts/type1/public/lm/lmr8.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/pub
+lic/lm/lmri10.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/public/lm/lms
+y10.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/public/lm/lmsy8.pfb></u
+sr/local/texlive/2019/texmf-dist/fonts/type1/public/lm/lmtt10.pfb>
+Output written on Eindverslag.pdf (23 pages, 2637946 bytes).
+PDF statistics:
+ 533 PDF objects out of 1000 (max. 8388607)
+ 462 compressed objects within 5 object streams
+ 124 named destinations out of 1000 (max. 500000)
+ 14744 words of extra memory for PDF output out of 17280 (max. 10000000)
+>>>>>>> Stashed changes
 
