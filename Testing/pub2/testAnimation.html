@@ -18,7 +18,7 @@
     <canvas id="canvas" width= "900" height= "900""></canvas>
     <script>
         var canvas = document.getElementById("canvas")
-        let triangulation = Delaunay.triangulation(Delaunay.randomPointsGenerator(5, canvas), canvas.width, canvas.height)
+        let triangulation = Delaunay.triangulation(Delaunay.randomPointsGenerator(3, canvas), canvas.width, canvas.height)
         let firstPoint = triangulation[0].point1
         let endPoint = triangulation[0].point2
         console.log(firstPoint + "----->" + endPoint)
@@ -52,11 +52,11 @@
             let info1 = animation1.getNextFrame()
 
             // client side
-            animationClient.drawCats(3, 40, canvas, info1.x, info1.y, info1.angle, info1.frame, info1.right)
-            // animationClient.drawCat(canvas, info1.x, info1.y, info1.angle, info1.frame, info1.right)
+            animationClient.drawCats(5, 50, canvas, info1.x, info1.y, info1.angle, info1.frame, info1.right)
+            // animationClient.drawAnimal(canvas, info1.x, info1.y, info1.angle, info1.frame, info1.right)
             // if (posStack.length > 20){
-            //     animationClient.drawCat(canvas, posStack[0].x, posStack[0].y, posStack[0].angle, posStack[0].frame, posStack[0].right)
-            //     animationClient.drawCat(canvas, posStack[10].x, posStack[10].y, posStack[10].angle, posStack[10].frame, posStack[10].right)
+            //     animationClient.drawAnimal(canvas, posStack[0].x, posStack[0].y, posStack[0].angle, posStack[0].frame, posStack[0].right)
+            //     animationClient.drawAnimal(canvas, posStack[10].x, posStack[10].y, posStack[10].angle, posStack[10].frame, posStack[10].right)
             //
             //     posStack.shift()
             // }

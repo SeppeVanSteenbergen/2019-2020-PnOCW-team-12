@@ -510,7 +510,7 @@ export default {
     animationFrameHandler(data) {
       let ctx = this.canvas.getContext('2d')
       ctx.putImageData(this.delaunayImage, 0,0)
-      this.animation.drawCat(this.canvas, data[0] - this.minx, data[1] - this.miny, data[2], data[3], data[4])
+      this.animation.drawAnimal(this.canvas, data[0] - this.minx, data[1] - this.miny, data[2], data[3], data[4])
     }
   }
 }
