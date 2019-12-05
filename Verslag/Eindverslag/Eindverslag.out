@@ -1,17 +1,16 @@
-<<<<<<< Updated upstream
-\BOOKMARK [1][-]{section.1}{Abstract}{}% 1
-\BOOKMARK [1][-]{section.2}{Inleiding}{}% 2
-\BOOKMARK [1][-]{section.3}{Framework}{}% 3
-\BOOKMARK [2][-]{subsection.3.1}{Masters en clients}{section.3}% 4
-\BOOKMARK [2][-]{subsection.3.2}{Communicatie protocollen}{section.3}% 5
-\BOOKMARK [3][-]{subsubsection.3.2.1}{Commando's}{subsection.3.2}% 6
-\BOOKMARK [3][-]{subsubsection.3.2.2}{Video verzenden}{subsection.3.2}% 7
-\BOOKMARK [2][-]{subsection.3.3}{Beveiliging}{section.3}% 8
-\BOOKMARK [2][-]{subsection.3.4}{Uitbreidingsmogelijkheden}{section.3}% 9
-\BOOKMARK [1][-]{section.4}{Synchronisatie}{}% 10
-\BOOKMARK [2][-]{subsection.4.1}{Vertraging berekenen}{section.4}% 11
-\BOOKMARK [2][-]{subsection.4.2}{Kloksynchronisatie}{section.4}% 12
-\BOOKMARK [2][-]{subsection.4.3}{Aftelklok}{section.4}% 13
+\BOOKMARK [1][-]{section.1}{Inleiding}{}% 1
+\BOOKMARK [1][-]{section.2}{Framework}{}% 2
+\BOOKMARK [2][-]{subsection.2.1}{Masters en clients}{section.2}% 3
+\BOOKMARK [2][-]{subsection.2.2}{Communicatie protocollen}{section.2}% 4
+\BOOKMARK [3][-]{subsubsection.2.2.1}{Commando's}{subsection.2.2}% 5
+\BOOKMARK [3][-]{subsubsection.2.2.2}{Video verzenden}{subsection.2.2}% 6
+\BOOKMARK [2][-]{subsection.2.3}{Beveiliging}{section.2}% 7
+\BOOKMARK [2][-]{subsection.2.4}{Uitbreidingsmogelijkheden}{section.2}% 8
+\BOOKMARK [1][-]{section.3}{Synchronisatie}{}% 9
+\BOOKMARK [2][-]{subsection.3.1}{Vertraging berekenen}{section.3}% 10
+\BOOKMARK [2][-]{subsection.3.2}{Kloksynchronisatie}{section.3}% 11
+\BOOKMARK [2][-]{subsection.3.3}{Aftelklok}{section.3}% 12
+\BOOKMARK [1][-]{section.4}{Algemeen verloop detectie algoritme}{}% 13
 \BOOKMARK [1][-]{section.5}{Detectie}{}% 14
 \BOOKMARK [2][-]{subsection.5.1}{Kleuren}{section.5}% 15
 \BOOKMARK [3][-]{subsubsection.5.1.1}{Kleurmodellen en ruimtes}{subsection.5.1}% 16
@@ -35,46 +34,17 @@
 \BOOKMARK [2][-]{subsection.10.2}{Delaunay}{section.10}% 34
 \BOOKMARK [2][-]{subsection.10.3}{Server/Client side}{section.10}% 35
 \BOOKMARK [1][-]{section.11}{Besluit}{}% 36
+<<<<<<< HEAD
 \BOOKMARK [1][-]{appendix.A}{Kleuren plots}{}% 37
+\BOOKMARK [2][-]{subsection.A.1}{RGB plots}{appendix.A}% 38
+\BOOKMARK [2][-]{subsection.A.2}{Histogrammen}{appendix.A}% 39
+\BOOKMARK [2][-]{subsection.A.3}{HSL plots}{appendix.A}% 40
+\BOOKMARK [3][-]{subsubsection.A.3.1}{3D}{subsection.A.3}% 41
+\BOOKMARK [3][-]{subsubsection.A.3.2}{2D}{subsection.A.3}% 42
 =======
-\BOOKMARK [1][-]{section.1}{Inleiding}{}% 1
-\BOOKMARK [1][-]{section.2}{Framework}{}% 2
-\BOOKMARK [2][-]{subsection.2.1}{Masters en clients}{section.2}% 3
-\BOOKMARK [2][-]{subsection.2.2}{Communicatie protocollen}{section.2}% 4
-\BOOKMARK [3][-]{subsubsection.2.2.1}{Commando's}{subsection.2.2}% 5
-\BOOKMARK [3][-]{subsubsection.2.2.2}{Video verzenden}{subsection.2.2}% 6
-\BOOKMARK [2][-]{subsection.2.3}{Beveiliging}{section.2}% 7
-\BOOKMARK [2][-]{subsection.2.4}{Uitbreidingsmogelijkheden}{section.2}% 8
-\BOOKMARK [1][-]{section.3}{Synchronisatie}{}% 9
-\BOOKMARK [2][-]{subsection.3.1}{Vertraging berekenen}{section.3}% 10
-\BOOKMARK [2][-]{subsection.3.2}{Kloksynchronisatie}{section.3}% 11
-\BOOKMARK [2][-]{subsection.3.3}{Aftelklok}{section.3}% 12
-\BOOKMARK [1][-]{section.4}{Detectie}{}% 13
-\BOOKMARK [2][-]{subsection.4.1}{Kleuren}{section.4}% 14
-\BOOKMARK [3][-]{subsubsection.4.1.1}{Kleurmodellen en ruimtes}{subsection.4.1}% 15
-\BOOKMARK [3][-]{subsubsection.4.1.2}{Ranges in de HSL kleurruimte}{subsection.4.1}% 16
-\BOOKMARK [3][-]{subsubsection.4.1.3}{Verdere verbeteringen}{subsection.4.1}% 17
-\BOOKMARK [2][-]{subsection.4.2}{Flood fill}{section.4}% 18
-\BOOKMARK [2][-]{subsection.4.3}{Hoekpunten}{section.4}% 19
-\BOOKMARK [1][-]{section.5}{Reconstructie}{}% 20
-\BOOKMARK [2][-]{subsection.5.1}{Hulppunten op diagonalen}{section.5}% 21
-\BOOKMARK [2][-]{subsection.5.2}{Reconstrueren van een hoekpunt}{section.5}% 22
-\BOOKMARK [1][-]{section.6}{Identificatie}{}% 23
-\BOOKMARK [2][-]{subsection.6.1}{Barcode}{section.6}% 24
-\BOOKMARK [2][-]{subsection.6.2}{Verdere verbeteringen}{section.6}% 25
-\BOOKMARK [1][-]{section.7}{Transformatie voor image-show}{}% 26
-\BOOKMARK [2][-]{subsection.7.1}{transformatiematrix}{section.7}% 27
-\BOOKMARK [1][-]{section.8}{Triangulatie}{}% 28
-\BOOKMARK [2][-]{subsection.8.1}{Bowyer-Watson}{section.8}% 29
-\BOOKMARK [2][-]{subsection.8.2}{Valkuilen}{section.8}% 30
-\BOOKMARK [1][-]{section.9}{Animation}{}% 31
-\BOOKMARK [2][-]{subsection.9.1}{Sprites}{section.9}% 32
-\BOOKMARK [2][-]{subsection.9.2}{Delaunay}{section.9}% 33
-\BOOKMARK [2][-]{subsection.9.3}{Server/Client side}{section.9}% 34
-\BOOKMARK [1][-]{section.10}{Besluit}{}% 35
-\BOOKMARK [1][-]{appendix.A}{Bijlage 1: Overzicht algoritme}{}% 36
-\BOOKMARK [2][-]{subsection.A.1}{Algemeen}{appendix.A}% 37
-\BOOKMARK [2][-]{subsection.A.2}{Hoekdetectie en filtering}{appendix.A}% 38
-\BOOKMARK [2][-]{subsection.A.3}{Reconstructie}{appendix.A}% 39
-\BOOKMARK [1][-]{subsection.A.3}{Referenties}{}% 40
->>>>>>> Stashed changes
+\BOOKMARK [1][-]{section.11}{Referenties}{}% 37
+\BOOKMARK [1][-]{appendix.A}{Bijlage 1: Overzicht algoritme}{}% 38
+\BOOKMARK [2][-]{subsection.A.1}{Algemeen}{appendix.A}% 39
+\BOOKMARK [2][-]{subsection.A.2}{Hoekdetectie en filtering}{appendix.A}% 40
+\BOOKMARK [2][-]{subsection.A.3}{Reconstructie}{appendix.A}% 41
+>>>>>>> master
