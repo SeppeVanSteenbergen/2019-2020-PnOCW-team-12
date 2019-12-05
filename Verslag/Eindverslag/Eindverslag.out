@@ -25,24 +25,23 @@
 \BOOKMARK [2][-]{subsection.7.1}{Barcode}{section.7}% 25
 \BOOKMARK [2][-]{subsection.7.2}{Verdere verbeteringen}{section.7}% 26
 \BOOKMARK [1][-]{section.8}{Transformatie voor image-show}{}% 27
-\BOOKMARK [1][-]{section.9}{Transformatie voor image-show}{}% 28
-\BOOKMARK [2][-]{subsection.9.1}{transformatiematrix}{section.9}% 29
-\BOOKMARK [1][-]{section.10}{Triangulatie}{}% 30
-\BOOKMARK [2][-]{subsection.10.1}{Bowyer-Watson}{section.10}% 31
-\BOOKMARK [2][-]{subsection.10.2}{Valkuilen}{section.10}% 32
-\BOOKMARK [1][-]{section.11}{Animation}{}% 33
-\BOOKMARK [2][-]{subsection.11.1}{Sprites}{section.11}% 34
-\BOOKMARK [2][-]{subsection.11.2}{Delaunay}{section.11}% 35
-\BOOKMARK [2][-]{subsection.11.3}{Server/Client side}{section.11}% 36
-\BOOKMARK [1][-]{section.12}{Besluit}{}% 37
-\BOOKMARK [1][-]{section.12}{Referenties}{}% 38
-\BOOKMARK [1][-]{appendix.A}{Overzicht algoritme}{}% 39
-\BOOKMARK [2][-]{subsection.A.1}{Algemeen}{appendix.A}% 40
-\BOOKMARK [2][-]{subsection.A.2}{Hoekdetectie en filtering}{appendix.A}% 41
-\BOOKMARK [2][-]{subsection.A.3}{Reconstructie}{appendix.A}% 42
-\BOOKMARK [1][-]{appendix.B}{Kleuren plots}{}% 43
-\BOOKMARK [2][-]{subsection.B.1}{RGB plots}{appendix.B}% 44
-\BOOKMARK [2][-]{subsection.B.2}{Histogrammen}{appendix.B}% 45
-\BOOKMARK [2][-]{subsection.B.3}{HSL plots}{appendix.B}% 46
-\BOOKMARK [3][-]{subsubsection.B.3.1}{3D}{subsection.B.3}% 47
-\BOOKMARK [3][-]{subsubsection.B.3.2}{2D}{subsection.B.3}% 48
+\BOOKMARK [2][-]{subsection.8.1}{transformatiematrix}{section.8}% 28
+\BOOKMARK [1][-]{section.9}{Triangulatie}{}% 29
+\BOOKMARK [2][-]{subsection.9.1}{Bowyer-Watson}{section.9}% 30
+\BOOKMARK [2][-]{subsection.9.2}{Valkuilen}{section.9}% 31
+\BOOKMARK [1][-]{section.10}{Animation}{}% 32
+\BOOKMARK [2][-]{subsection.10.1}{Sprites}{section.10}% 33
+\BOOKMARK [2][-]{subsection.10.2}{Delaunay}{section.10}% 34
+\BOOKMARK [2][-]{subsection.10.3}{Server/Client side}{section.10}% 35
+\BOOKMARK [1][-]{section.11}{Besluit}{}% 36
+\BOOKMARK [1][-]{section.11}{Referenties}{}% 37
+\BOOKMARK [1][-]{appendix.A}{Overzicht algoritme}{}% 38
+\BOOKMARK [2][-]{subsection.A.1}{Algemeen}{appendix.A}% 39
+\BOOKMARK [2][-]{subsection.A.2}{Hoekdetectie en filtering}{appendix.A}% 40
+\BOOKMARK [2][-]{subsection.A.3}{Reconstructie}{appendix.A}% 41
+\BOOKMARK [1][-]{appendix.B}{Kleuren plots}{}% 42
+\BOOKMARK [2][-]{subsection.B.1}{RGB plots}{appendix.B}% 43
+\BOOKMARK [2][-]{subsection.B.2}{Histogrammen}{appendix.B}% 44
+\BOOKMARK [2][-]{subsection.B.3}{HSL plots}{appendix.B}% 45
+\BOOKMARK [3][-]{subsubsection.B.3.1}{3D}{subsection.B.3}% 46
+\BOOKMARK [3][-]{subsubsection.B.3.2}{2D}{subsection.B.3}% 47

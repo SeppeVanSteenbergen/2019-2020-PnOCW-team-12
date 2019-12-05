@@ -45,24 +45,23 @@
 \contentsline {subsection}{\numberline {7.1}Barcode}{18}{subsection.7.1}% 
 \contentsline {subsection}{\numberline {7.2}Verdere verbeteringen}{19}{subsection.7.2}% 
 \contentsline {section}{\numberline {8}Transformatie voor image-show}{19}{section.8}% 
-\contentsline {section}{\numberline {9}Transformatie voor image-show}{19}{section.9}% 
-\contentsline {subsection}{\numberline {9.1}transformatiematrix}{20}{subsection.9.1}% 
-\contentsline {section}{\numberline {10}Triangulatie}{20}{section.10}% 
-\contentsline {subsection}{\numberline {10.1}Bowyer-Watson}{20}{subsection.10.1}% 
-\contentsline {subsection}{\numberline {10.2}Valkuilen}{21}{subsection.10.2}% 
-\contentsline {section}{\numberline {11}Animation}{22}{section.11}% 
-\contentsline {subsection}{\numberline {11.1}Sprites}{22}{subsection.11.1}% 
-\contentsline {subsection}{\numberline {11.2}Delaunay}{22}{subsection.11.2}% 
-\contentsline {subsection}{\numberline {11.3}Server/Client side}{23}{subsection.11.3}% 
-\contentsline {section}{\numberline {12}Besluit}{23}{section.12}% 
-\contentsline {section}{Referenties}{25}{section.12}% 
-\contentsline {section}{\numberline {A}Overzicht algoritme}{26}{appendix.A}% 
-\contentsline {subsection}{\numberline {A.1}Algemeen}{26}{subsection.A.1}% 
-\contentsline {subsection}{\numberline {A.2}Hoekdetectie en filtering}{27}{subsection.A.2}% 
-\contentsline {subsection}{\numberline {A.3}Reconstructie}{28}{subsection.A.3}% 
-\contentsline {section}{\numberline {B}Kleuren plots}{29}{appendix.B}% 
-\contentsline {subsection}{\numberline {B.1}RGB plots}{29}{subsection.B.1}% 
-\contentsline {subsection}{\numberline {B.2}Histogrammen}{30}{subsection.B.2}% 
-\contentsline {subsection}{\numberline {B.3}HSL plots}{31}{subsection.B.3}% 
-\contentsline {subsubsection}{\numberline {B.3.1}3D}{31}{subsubsection.B.3.1}% 
-\contentsline {subsubsection}{\numberline {B.3.2}2D}{32}{subsubsection.B.3.2}% 
+\contentsline {subsection}{\numberline {8.1}transformatiematrix}{19}{subsection.8.1}% 
+\contentsline {section}{\numberline {9}Triangulatie}{20}{section.9}% 
+\contentsline {subsection}{\numberline {9.1}Bowyer-Watson}{20}{subsection.9.1}% 
+\contentsline {subsection}{\numberline {9.2}Valkuilen}{21}{subsection.9.2}% 
+\contentsline {section}{\numberline {10}Animation}{22}{section.10}% 
+\contentsline {subsection}{\numberline {10.1}Sprites}{22}{subsection.10.1}% 
+\contentsline {subsection}{\numberline {10.2}Delaunay}{22}{subsection.10.2}% 
+\contentsline {subsection}{\numberline {10.3}Server/Client side}{22}{subsection.10.3}% 
+\contentsline {section}{\numberline {11}Besluit}{23}{section.11}% 
+\contentsline {section}{Referenties}{24}{section.11}% 
+\contentsline {section}{\numberline {A}Overzicht algoritme}{25}{appendix.A}% 
+\contentsline {subsection}{\numberline {A.1}Algemeen}{25}{subsection.A.1}% 
+\contentsline {subsection}{\numberline {A.2}Hoekdetectie en filtering}{26}{subsection.A.2}% 
+\contentsline {subsection}{\numberline {A.3}Reconstructie}{27}{subsection.A.3}% 
+\contentsline {section}{\numberline {B}Kleuren plots}{28}{appendix.B}% 
+\contentsline {subsection}{\numberline {B.1}RGB plots}{28}{subsection.B.1}% 
+\contentsline {subsection}{\numberline {B.2}Histogrammen}{29}{subsection.B.2}% 
+\contentsline {subsection}{\numberline {B.3}HSL plots}{30}{subsection.B.3}% 
+\contentsline {subsubsection}{\numberline {B.3.1}3D}{30}{subsubsection.B.3.1}% 
+\contentsline {subsubsection}{\numberline {B.3.2}2D}{31}{subsubsection.B.3.2}% 
