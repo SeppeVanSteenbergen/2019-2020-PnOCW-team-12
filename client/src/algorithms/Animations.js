@@ -18,14 +18,16 @@ export default class Animations {
     this.position = { x: 0, y: 0 }
     this.radius = 5
     this.fillStyle = 'red '
-    this.range = 5
-    this.speed = 10
+    this.range = 7
+    this.speed = 12
     this.frame = 0
     this.angle = 0
     this.posStack = []
     this.firstPoint
     this.endPoint
     this.triangulation = triangulation
+    this.stack = []
+
     if(triangulation !== null) {
       this.edges = Delaunay.triangulationEdges(triangulation)
     }
@@ -80,6 +82,19 @@ export default class Animations {
   //     right: this.endPoint[0] >= this.firstPoint[0]
   //   }
   // }
+
+  drawCats(nbCats, distCats, canvas, x, y, angle, frame, right){
+    this.stack.push([x,y, angle, frame, right])
+    this.drawCat(canvas, x, y, angle, frame, right)
+    if (this.stack.length>distCats-distCats/nbCats){
+      for(let i = 0; i< nbCats-1; i++){
+        this.drawCat(canvas, this.stack[i*Math.round(distCats/nbCats)][0],
+            this.stack[i*Math.round(distCats/nbCats)][1], this.stack[i*Math.round(distCats/nbCats)][2],
+            this.stack[i*Math.round(distCats/nbCats)][3], this.stack[i*Math.round(distCats/nbCats)][4])
+      }
+      this.stack.shift()
+    }
+  }
 
   drawCat(canvas, x, y, angle, frame, right) {
     let ctx = canvas.getContext('2d')
