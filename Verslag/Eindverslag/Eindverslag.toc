@@ -22,14 +22,16 @@
 \contentsline {paragraph}{Hoekreconstructie}{8}{section*.14}% 
 \contentsline {paragraph}{}{8}{section*.15}% 
 \contentsline {paragraph}{Triangulatie}{8}{section*.16}% 
+\contentsline {paragraph}{Afbeelding weergeven}{9}{section*.18}% 
 \contentsline {section}{\numberline {5}Detectie}{9}{section.5}% 
 \contentsline {subsection}{\numberline {5.1}Kleuren}{9}{subsection.5.1}% 
-\contentsline {subsubsection}{\numberline {5.1.1}Kleurmodellen en ruimtes}{9}{subsubsection.5.1.1}% 
+\contentsline {subsubsection}{\numberline {5.1.1}Kleurmodellen en ruimtes}{10}{subsubsection.5.1.1}% 
 \contentsline {subsubsection}{\numberline {5.1.2}Ranges in de HSL kleurruimte}{10}{subsubsection.5.1.2}% 
 \contentsline {subsubsection}{\numberline {5.1.3}Verdere verbeteringen}{11}{subsubsection.5.1.3}% 
 \contentsline {subsection}{\numberline {5.2}Flood fill}{11}{subsection.5.2}% 
 \contentsline {subsection}{\numberline {5.3}Hoekpunten}{12}{subsection.5.3}% 
 \contentsline {section}{\numberline {6}Reconstructie}{13}{section.6}% 
+<<<<<<< Updated upstream
 \contentsline {paragraph}{Algoritme}{14}{section*.23}% 
 \contentsline {subsection}{\numberline {6.1}Hulppunten op diagonalen}{14}{subsection.6.1}% 
 \contentsline {paragraph}{Startpunt}{14}{section*.24}% 
@@ -41,6 +43,19 @@
 \contentsline {section}{\numberline {8}Transformatie voor image-show}{17}{section.8}% 
 \contentsline {subsection}{\numberline {8.1}transformatiematrix}{17}{subsection.8.1}% 
 \contentsline {section}{\numberline {9}Triangulatie}{18}{section.9}% 
+=======
+\contentsline {paragraph}{Algoritme}{14}{section*.24}% 
+\contentsline {subsection}{\numberline {6.1}Hulppunten op diagonalen}{14}{subsection.6.1}% 
+\contentsline {paragraph}{Startpunt}{14}{section*.25}% 
+\contentsline {paragraph}{Ordenen}{14}{section*.26}% 
+\contentsline {subsection}{\numberline {6.2}Reconstrueren van een hoekpunt}{15}{subsection.6.2}% 
+\contentsline {section}{\numberline {7}Identificatie}{15}{section.7}% 
+\contentsline {subsection}{\numberline {7.1}Barcode}{15}{subsection.7.1}% 
+\contentsline {subsection}{\numberline {7.2}Verdere verbeteringen}{16}{subsection.7.2}% 
+\contentsline {section}{\numberline {8}Transformatie voor image-show}{17}{section.8}% 
+\contentsline {subsection}{\numberline {8.1}transformatiematrix}{17}{subsection.8.1}% 
+\contentsline {section}{\numberline {9}Triangulatie}{17}{section.9}% 
+>>>>>>> Stashed changes
 \contentsline {subsection}{\numberline {9.1}Bowyer-Watson}{18}{subsection.9.1}% 
 \contentsline {subsection}{\numberline {9.2}Valkuilen}{19}{subsection.9.2}% 
 \contentsline {section}{\numberline {10}Animation}{20}{section.10}% 
