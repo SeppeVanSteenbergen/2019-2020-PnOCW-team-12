@@ -277,4 +277,20 @@ export default class ColorRange {
   static inMidRange(H, S, L) {
     return this.inBlueGreenRange(H, S, L)
   }
+
+  static inZeroRange(H, S, L){
+    return L <= 50
+  }
+
+  static inOneRange(H,S,L){
+    return S <= 50 && L > 40 && L <= 70
+  }
+
+  static inCommaRange(H,S,L){
+    return L > 70
+  }
+
+  static inSepRange(H,S,L){
+    return S > 50 && L > 40 && L <= 70
+  }
 }

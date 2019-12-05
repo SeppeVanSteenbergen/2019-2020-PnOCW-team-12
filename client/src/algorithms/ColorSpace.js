@@ -21,6 +21,7 @@ export default class ColorSpace {
       pixels[i + 1] = Math.round(S * 100)
       pixels[i + 2] = Math.round(L * 100)
     }
+    return pixels
   }
 
   static findSaturation(min, max, L) {

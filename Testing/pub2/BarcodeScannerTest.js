@@ -17,8 +17,21 @@ imgElement.onload = function() {
     inputCanvas.width = imgElement.width;
     inputCanvas.height = imgElement.height;
     inputContext.drawImage(imgElement, 0, 0, imgElement.width, imgElement.height);
+
     let inputImgData = inputContext.getImageData(0, 0, imgElement.width, imgElement.height);
-    let image = rgbaToHsla(inputImgData.data);
-    let barcode = scanner(image, inputImgData.width, inputImgData.height, 15);
+    let colors1 = {}
+
+    ColorSpace.rgbaToHsla(inputImgData.data);
+    let barcode = BarcodeScanner.scanHorizontalData(inputImgData.data, inputCanvas.height);
+    let colors = {}
+    // for(let i = 0; i < inputImgData.data.length; i += 4){
+    //     let color = [inputImgData.data[i], inputImgData.data[i + 1], inputImgData.data[i + 2]]
+    //     if(colors[color] === undefined){
+    //         colors[color] = 1
+    //     } else{
+    //         colors[color] += 1
+    //     }
+    // }
+    // console.log(colors)
     console.log(barcode);
 };

@@ -16,32 +16,29 @@ export default class BarcodeScanner {
 
     let scanned = []
     let barcodes = {}
-
+ let comma = false
     for (let i = 0; i < image.length; i += 4) {
       // Color + code: Red = 1; Yellow = 2; Green = 3; Blue = 4; Pink = 5
-      let H = image[i] * 2
+      let H = 0
       let S = image[i + 1]
       let L = image[i + 2]
-
-      if (ColorRange.inWhiteRange(H, S, L)) {
-        if (scanned.length === 5) {
-          if (barcodes[scanned] === undefined) {
-            barcodes[scanned] = 1
-          } else {
-            barcodes[scanned] += 1
-          }
+     
+      if (!comma && ColorRange.inSepRange(H, S, L)) {
+        if (barcodes[scanned] === undefined) {
+          barcodes[scanned] = 1
+        } else {
+          barcodes[scanned] += 1
         }
         scanned = []
-      } else if (ColorRange.inRedRange(H, S, L) && !scanned.includes(1)) {
+        comma = true
+      } else if (ColorRange.inZeroRange(H, S, L) && comma) {
+        scanned.push(0)
+        comma = false
+      } else if (ColorRange.inOneRange(H, S, L) && comma) {
         scanned.push(1)
-      } else if (ColorRange.inYellowRange(H, S, L) && !scanned.includes(2)) {
-        scanned.push(2)
-      } else if (ColorRange.inGreenRange(H, S, L) && !scanned.includes(3)) {
-        scanned.push(3)
-      } else if (ColorRange.inBlueRange(H, S, L) && !scanned.includes(4)) {
-        scanned.push(4)
-      } else if (ColorRange.inPinkRange(H, S, L) && !scanned.includes(5)) {
-        scanned.push(5)
+        comma = false
+      } else if (ColorRange.inCommaRange(H,S,L)){
+        comma = true
       }
     }
 
@@ -58,11 +55,12 @@ export default class BarcodeScanner {
     } else {
       // console.log(detectRatio, ratio);
       let barcode = parseInt(
-          Object.keys(barcodes)
-              .find(key => barcodes[key] === maxAmount)
-              .toString()
-              .replace(/,/g, '')
+        Object.keys(barcodes)
+          .find(key => barcodes[key] === maxAmount)
+          .toString()
+          .replace(/,/g, '')
       )
+      console.log(barcode)
       return [barcode, ratio, detectRatio]
     }
   }
@@ -122,12 +120,64 @@ export default class BarcodeScanner {
     } else {
       // console.log(detectRatio, ratio);
       let barcode = parseInt(
-          Object.keys(barcodes)
-              .find(key => barcodes[key] === maxAmount)
-              .toString()
-              .replace(/,/g, '')
+        Object.keys(barcodes)
+          .find(key => barcodes[key] === maxAmount)
+          .toString()
+          .replace(/,/g, '')
       )
       return [barcode, ratio, detectRatio]
+    }
+  }
+  static scanHorizontalData(image, height) {
+
+    let scanned = []
+    let barcodes = {}
+    let comma = true
+    for (let i = 0; i < image.length; i += 4) {
+      // Color + code: Red = 1; Yellow = 2; Green = 3; Blue = 4; Pink = 5
+      let H = image[i]
+      let S = image[i + 1]
+      let L = image[i + 2]
+     
+      if (!comma && ColorRange.inSepRange(H, S, L)) {
+        if (barcodes[scanned] === undefined) {
+          barcodes[scanned] = 1
+        } else {
+          barcodes[scanned] += 1
+        }
+        scanned = []
+        comma = true
+      } else if (ColorRange.inOneRange(H, S, L) && comma) {
+        scanned.push(1)
+        comma = false
+      } else if (ColorRange.inZeroRange(H, S, L) && comma) {
+        scanned.push(0)
+        comma = false
+      } else if (ColorRange.inCommaRange(H,S,L)){
+        comma = true
+      }
+    }
+    console.log(barcodes)
+    let amounts = Object.values(barcodes)
+    let maxAmount = Math.max(...amounts)
+    let detectedAmount = amounts.reduce((a, b) => a + b, 0)
+
+    let detectRatio = maxAmount / detectedAmount
+    //TODO: Needs to be updated with the right amount of barcodes on screen.
+    let ratio = maxAmount / height / 10
+    if (detectRatio < 0.1) {
+      // console.log('Picture is not good enough to detect barcode horizontal');
+      return [0, 0, 0]
+    } else {
+      // console.log(detectRatio, ratio);
+      let barcode = parseInt(
+        Object.keys(barcodes)
+          .find(key => barcodes[key] === maxAmount)
+          .toString()
+          .replace(/,/g, '')
+      )
+      console.log(barcode)
+      return [barcode, detectRatio, detectedAmount]
     }
   }
 }

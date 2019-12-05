@@ -99,31 +99,30 @@
         sections = Math.round(sections);
 
         const ctx = this.ctx
+        const sepSize = 10
         let codeString = clientNb.toString(2)
         let nbZero = 0
         let code = []
         for(let i = 0; i < codeString.length; i++){
           code.push(codeString.charAt(i))
-          if(codeString.charAt(i) == 1)
-            nbZero++
-          else
-            nbZero = 0
+          // if(codeString.charAt(i) == 1)
+          //   nbZero++
+          // else
+          //   nbZero = 0
           
-          if(nbZero == 2){
-            code.push(0)
-            nbZero = 0
-          }
+          // if(nbZero == 2){
+          //   code.push(0)
+          //   nbZero = 0
+          // }
           
         }
-        code.push(1)
-        code.push(1)
-        code.push(1)
         console.log(code)
 
         
 
-        const barWidth = (this.w - 2*this.borderWidth) / (sections * (code.length + 1) + 1);
-        let startAt = this.borderWidth + barWidth
+        const codeWidth = (this.w - 3*this.borderWidth) / (sections+1);
+        const barWidth = (codeWidth - sepSize)/code.length
+        let startAt = 2* this.borderWidth
         
         //const amountOfIterations = Math.floor((this.w - 2 * this.borderWidth) / (6 * width))
 
@@ -137,17 +136,16 @@
             startAt += barWidth
             ctx.beginPath();
             ctx.fillStyle = "#ffffff"
-            ctx.rect(startAt, this.borderWidth + barWidth, 20,
+            ctx.rect(startAt, this.borderWidth + barWidth, 10,
                 this.h - 2*this.borderWidth - 2*barWidth);
             ctx.fill()
-            startAt += 20
+            startAt += sepSize
           }
           ctx.beginPath();
-          ctx.fillStyle = '#ffffff';
-          ctx.rect(startAt + barWidth, this.borderWidth, barWidth,
+          ctx.fillStyle = '#ff0000';
+          ctx.rect(startAt - sepSize, this.borderWidth, 10,
             this.h - 2*this.borderWidth);
           ctx.fill();
-          startAt += barWidth
         }
 
 
