@@ -10,7 +10,7 @@ Hierna heeft men de keuze om master of client te worden, deze informatie wordt i
 
 \subsection{Communicatie protocollen}
 %hoe en waarom de commando's voor het scherm worden verstuurd
-Om de communicatie tussen master en clients gestructureerd te laten verlopen, worden verschillende manieren gebruikt.
+Om de communicatie tussen master en clients gestructureerd te laten verlopen zijn er enkele mogelijkheden.
 Hieronder worden de verschillende gebruikte protocollen om data te verzenden uitgelegd.
 \subsubsection{Commando's}
 Elke client kan op de canvas van zijn scherm pijlen tekenen, de achtergrond van kleur laten veranderen of een afbeelding weergeven. De commando's om de schermen te controleren via de master worden allemaal doorgestuurd via \textit{SocketIO}. Deze techniek is gekozen over het \textit{http-protocol} omdat de hoeveelheid te verzenden data niet zo groot is en SocketIO ook op constante basis de client, master en server aangesloten houdt. Hierdoor worden alle berichten onmiddelijk ontvangen. Een voorbeeld van wat er wordt verstuurd word weergegevin in figuur \ref{jsonScreenCommand}.
@@ -40,8 +40,8 @@ Het uploaden van video is zo geïmplementeerd dat deze eerst naar de server word
 
 \subsection{Beveiliging}
 \paragraph{HTTPS} Staat voor Hypertext Transfer Protocol Secure. Door dit protocol zijn alle berichten geëncrypteerd waardoor het voor buitenstaanders niet zomaar mogelijk is verzonden berichten te lezen .
-\paragraph{Login security} Naast HTTPS is het ook belangerijk dat een aangesloten gebruiker zich niet zomaar kan voordoen als een andere gebruiker. Of eender wie zomaar aan alle informatie kan. Om deze redenen hebben alle ingelogde gebruikers een geëncrypteerde \textit{cookie}] die hun gebruikers\_id bevat. Dit maakt het mogelijk om elke verschillende gebruiker te identificeren in de backend-server door deze te decrypteren. Hierdoor is het mogelijk om bepaalde server endpoints, met bijvoorbeeld video of foto bestanden, enkel aan ingelogde gebruikers bloot te stellen en niet aan andere gebruikers die geen inlog cookie hebben.
-Vervolgens is veiligheid ook een probleem bij sockets. Als sockets hun aansluiting verliezen worden ze automatisch opnieuw aangesloten.Hierbij veranderd enkel hun id. Om te kunnen zien tot welke client een socket toebehoort, moet elke gebruiker zijn gebruikers\_id verzenden via de socket om deze aan zijn gebruikers\_id te kunnen linken. Deze informatie wordt allemaal in de server opgeslaan.
+\paragraph{Login security} Naast HTTPS is het ook belangerijk dat een aangesloten gebruiker zich niet zomaar kan voordoen als een andere gebruiker. Of eender wie zomaar aan alle informatie kan. Om deze redenen hebben alle ingelogde gebruikers een geëncrypteerde \textit{cookie} die hun gebruikers\_id bevat. Dit maakt het mogelijk om elke verschillende gebruiker te identificeren in de backend-server door deze te decrypteren. Hierdoor is het mogelijk om bepaalde server endpoints, met bijvoorbeeld video of foto bestanden, enkel aan ingelogde gebruikers bloot te stellen en niet aan andere gebruikers die geen inlog cookie hebben.
+Vervolgens is veiligheid ook een probleem bij sockets. Als sockets hun aansluiting verliezen worden ze automatisch opnieuw aangesloten. Hierbij veranderd enkel hun id. Om te kunnen zien tot welke client een socket toebehoort, moet elke gebruiker zijn gebruikers\_id verzenden via de socket om deze aan zijn gebruikers\_id te kunnen linken. Deze informatie wordt allemaal in de server opgeslaan.
 
 \subsection{Uitbreidingsmogelijkheden}
 \paragraph{Login systeem} Momenteel is er een anoniem login systeem ingeboud waar er geen wachtwoord voor vereist is. Doordat dit nu al ingewerkt zit, kan dit later makkelijk omgevormd worden naar een login met inloggegevens.
