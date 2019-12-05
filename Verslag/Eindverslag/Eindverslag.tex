@@ -9,6 +9,7 @@
 \usepackage{subcaption}
 \usepackage[colorlinks,allcolors=violet]{hyperref}
 \usepackage{url}
+\usepackage{float}
 \usepackage{lmodern}
 \usepackage[dutch]{babel}
 \usepackage{hyperref}
@@ -17,6 +18,7 @@
 \usepackage{tikz}
 \usetikzlibrary{shapes.geometric, arrows, positioning}
 \usepackage{gensymb}
+
 
 \colorlet{punct}{red!60!black}
 \definecolor{background}{HTML}{EEEEEE}
@@ -98,14 +100,16 @@ Seppe Van Steenbergen &\\
 \bottomrule
 \hline
 \end{tabular}\\
-
 \noindent
 {\color[HTML]{52BDEC} \rule{\linewidth}{1mm} }
-\tableofcontents
+
+
+\section*{Abstract}\label{sec:abstract}
+\input{Abstract.tex}
 \newpage
 
-\section{Abstract}\label{sec:abstract}
-\input{Abstract.tex}
+\tableofcontents
+\newpage
 
 \input{Inleiding}
 
@@ -133,6 +137,26 @@ Seppe Van Steenbergen &\\
 \input{Besluit}
 
 \newpage
+\appendix
+\section{Bijlage 1: Overzicht algoritme}
+\subsection{Algemeen}
+	\begin{figure}[H]
+		\centering
+		\includegraphics[scale= 0.5]{img/algoOverview.png}
+		\caption{}
+		\label{bijlageA1}
+	\end{figure}
+\subsection{Hoekdetectie en filtering}
+	\begin{figure}[H]
+		\centering
+		\includegraphics[scale= 0.5]{img/DetectAndFilterCorners.png}
+		\caption{}
+		\label{bijlageA2}
+	\end{figure}
+\subsection{Reconstructie}
+
+\newpage
+\addcontentsline{toc}{section}{Referenties}
 \bibliographystyle{unsrt}
 \bibliography{Bibliography}
 

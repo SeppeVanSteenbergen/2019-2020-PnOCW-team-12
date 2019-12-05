@@ -1,47 +1,103 @@
+<<<<<<< Updated upstream
+\select@language {dutch}
+\contentsline {section}{\numberline {1}Abstract}{3}{section.1}
+\contentsline {section}{\numberline {2}Inleiding}{3}{section.2}
+\contentsline {section}{\numberline {3}Framework}{4}{section.3}
+\contentsline {subsection}{\numberline {3.1}Masters en clients}{4}{subsection.3.1}
+\contentsline {paragraph}{Kamers}{4}{section*.2}
+\contentsline {subsection}{\numberline {3.2}Communicatie protocollen}{4}{subsection.3.2}
+\contentsline {subsubsection}{\numberline {3.2.1}Commando's}{4}{subsubsection.3.2.1}
+\contentsline {subsubsection}{\numberline {3.2.2}Video verzenden}{5}{subsubsection.3.2.2}
+\contentsline {subsection}{\numberline {3.3}Beveiliging}{5}{subsection.3.3}
+\contentsline {paragraph}{HTTPS}{5}{section*.4}
+\contentsline {paragraph}{Login security}{5}{section*.5}
+\contentsline {subsection}{\numberline {3.4}Uitbreidingsmogelijkheden}{6}{subsection.3.4}
+\contentsline {paragraph}{Login systeem}{6}{section*.6}
+\contentsline {paragraph}{Foto upload met https}{6}{section*.7}
+\contentsline {paragraph}{SocketIO beveiliging}{6}{section*.8}
+\contentsline {section}{\numberline {4}Synchronisatie}{6}{section.4}
+\contentsline {subsection}{\numberline {4.1}Vertraging berekenen}{6}{subsection.4.1}
+\contentsline {subsection}{\numberline {4.2}Kloksynchronisatie}{6}{subsection.4.2}
+\contentsline {subsection}{\numberline {4.3}Aftelklok}{7}{subsection.4.3}
+\contentsline {section}{\numberline {5}Detectie}{7}{section.5}
+\contentsline {subsection}{\numberline {5.1}Kleuren}{7}{subsection.5.1}
+\contentsline {subsubsection}{\numberline {5.1.1}Kleurmodellen en ruimtes}{7}{subsubsection.5.1.1}
+\contentsline {subsubsection}{\numberline {5.1.2}Ranges in de HSL kleurruimte}{8}{subsubsection.5.1.2}
+\contentsline {subsubsection}{\numberline {5.1.3}Verdere verbeteringen}{8}{subsubsection.5.1.3}
+\contentsline {subsection}{\numberline {5.2}Flood fill}{9}{subsection.5.2}
+\contentsline {subsection}{\numberline {5.3}Hoekpunten}{10}{subsection.5.3}
+\contentsline {section}{\numberline {6}Reconstructie}{11}{section.6}
+\contentsline {paragraph}{Algoritme}{11}{section*.15}
+\contentsline {subsection}{\numberline {6.1}Hulppunten op diagonalen}{12}{subsection.6.1}
+\contentsline {paragraph}{Startpunt}{12}{section*.16}
+\contentsline {paragraph}{Ordenen}{12}{section*.17}
+\contentsline {subsection}{\numberline {6.2}Reconstrueren van een hoekpunt}{13}{subsection.6.2}
+\contentsline {section}{\numberline {7}Identificatie}{13}{section.7}
+\contentsline {subsection}{\numberline {7.1}Barcode}{13}{subsection.7.1}
+\contentsline {subsection}{\numberline {7.2}Verdere verbeteringen}{14}{subsection.7.2}
+\contentsline {section}{\numberline {8}Transformatie voor image-show}{15}{section.8}
+\contentsline {subsection}{\numberline {8.1}transformatiematrix}{15}{subsection.8.1}
+\contentsline {section}{\numberline {9}Triangulatie}{15}{section.9}
+\contentsline {subsection}{\numberline {9.1}Bowyer-Watson}{16}{subsection.9.1}
+\contentsline {subsection}{\numberline {9.2}Valkuilen}{17}{subsection.9.2}
+\contentsline {section}{\numberline {10}Animation}{17}{section.10}
+\contentsline {subsection}{\numberline {10.1}Sprites}{17}{subsection.10.1}
+\contentsline {subsection}{\numberline {10.2}Delaunay}{17}{subsection.10.2}
+\contentsline {subsection}{\numberline {10.3}Server/Client side}{18}{subsection.10.3}
+\contentsline {section}{\numberline {11}Besluit}{18}{section.11}
+\contentsline {section}{\numberline {A}Kleuren plots}{21}{appendix.A}
+=======
 \babel@toc {dutch}{}
-\contentsline {section}{\numberline {1}Abstract}{3}{section.1}% 
-\contentsline {section}{\numberline {2}Inleiding}{3}{section.2}% 
-\contentsline {section}{\numberline {3}Framework}{4}{section.3}% 
-\contentsline {subsection}{\numberline {3.1}Masters en clients}{4}{subsection.3.1}% 
-\contentsline {paragraph}{Kamers}{4}{section*.2}% 
-\contentsline {subsection}{\numberline {3.2}Communicatie protocollen}{4}{subsection.3.2}% 
-\contentsline {subsubsection}{\numberline {3.2.1}Commando's}{4}{subsubsection.3.2.1}% 
-\contentsline {subsubsection}{\numberline {3.2.2}Video verzenden}{5}{subsubsection.3.2.2}% 
-\contentsline {subsection}{\numberline {3.3}Beveiliging}{5}{subsection.3.3}% 
-\contentsline {paragraph}{HTTPS}{5}{section*.4}% 
-\contentsline {paragraph}{Login security}{5}{section*.5}% 
-\contentsline {subsection}{\numberline {3.4}Uitbreidingsmogelijkheden}{6}{subsection.3.4}% 
-\contentsline {paragraph}{Login systeem}{6}{section*.6}% 
-\contentsline {paragraph}{Foto upload met https}{6}{section*.7}% 
-\contentsline {paragraph}{SocketIO beveiliging}{6}{section*.8}% 
-\contentsline {section}{\numberline {4}Synchronisatie}{6}{section.4}% 
-\contentsline {subsection}{\numberline {4.1}Vertraging berekenen}{6}{subsection.4.1}% 
-\contentsline {subsection}{\numberline {4.2}Kloksynchronisatie}{6}{subsection.4.2}% 
-\contentsline {subsection}{\numberline {4.3}Aftelklok}{7}{subsection.4.3}% 
-\contentsline {section}{\numberline {5}Detectie}{7}{section.5}% 
-\contentsline {subsection}{\numberline {5.1}Kleuren}{7}{subsection.5.1}% 
-\contentsline {subsubsection}{\numberline {5.1.1}Kleurmodellen en ruimtes}{7}{subsubsection.5.1.1}% 
-\contentsline {subsubsection}{\numberline {5.1.2}Ranges in de HSL kleurruimte}{8}{subsubsection.5.1.2}% 
-\contentsline {subsubsection}{\numberline {5.1.3}Verdere verbeteringen}{8}{subsubsection.5.1.3}% 
-\contentsline {subsection}{\numberline {5.2}Flood fill}{9}{subsection.5.2}% 
-\contentsline {subsection}{\numberline {5.3}Hoekpunten}{10}{subsection.5.3}% 
-\contentsline {section}{\numberline {6}Reconstructie}{11}{section.6}% 
-\contentsline {paragraph}{Algoritme}{11}{section*.15}% 
-\contentsline {subsection}{\numberline {6.1}Hulppunten op diagonalen}{12}{subsection.6.1}% 
-\contentsline {paragraph}{Startpunt}{12}{section*.16}% 
-\contentsline {paragraph}{Ordenen}{12}{section*.17}% 
-\contentsline {subsection}{\numberline {6.2}Reconstrueren van een hoekpunt}{13}{subsection.6.2}% 
-\contentsline {section}{\numberline {7}Identificatie}{13}{section.7}% 
-\contentsline {subsection}{\numberline {7.1}Barcode}{13}{subsection.7.1}% 
-\contentsline {subsection}{\numberline {7.2}Verdere verbeteringen}{14}{subsection.7.2}% 
-\contentsline {section}{\numberline {8}Transformatie voor image-show}{15}{section.8}% 
-\contentsline {subsection}{\numberline {8.1}transformatiematrix}{15}{subsection.8.1}% 
-\contentsline {section}{\numberline {9}Triangulatie}{15}{section.9}% 
-\contentsline {subsection}{\numberline {9.1}Bowyer-Watson}{16}{subsection.9.1}% 
-\contentsline {subsection}{\numberline {9.2}Valkuilen}{17}{subsection.9.2}% 
-\contentsline {section}{\numberline {10}Animation}{17}{section.10}% 
-\contentsline {subsection}{\numberline {10.1}Sprites}{17}{subsection.10.1}% 
-\contentsline {subsection}{\numberline {10.2}Delaunay}{17}{subsection.10.2}% 
-\contentsline {subsection}{\numberline {10.3}Server/Client side}{18}{subsection.10.3}% 
-\contentsline {section}{\numberline {11}Besluit}{18}{section.11}% 
-\contentsline {section}{\numberline {A}Kleuren plots}{20}{appendix.A}% 
+\contentsline {section}{\numberline {1}Inleiding}{4}{section.1}% 
+\contentsline {section}{\numberline {2}Framework}{4}{section.2}% 
+\contentsline {subsection}{\numberline {2.1}Masters en clients}{4}{subsection.2.1}% 
+\contentsline {paragraph}{Kamers}{4}{section*.3}% 
+\contentsline {subsection}{\numberline {2.2}Communicatie protocollen}{5}{subsection.2.2}% 
+\contentsline {subsubsection}{\numberline {2.2.1}Commando's}{5}{subsubsection.2.2.1}% 
+\contentsline {subsubsection}{\numberline {2.2.2}Video verzenden}{5}{subsubsection.2.2.2}% 
+\contentsline {subsection}{\numberline {2.3}Beveiliging}{5}{subsection.2.3}% 
+\contentsline {paragraph}{HTTPS}{5}{section*.5}% 
+\contentsline {paragraph}{Login security}{6}{section*.6}% 
+\contentsline {subsection}{\numberline {2.4}Uitbreidingsmogelijkheden}{6}{subsection.2.4}% 
+\contentsline {paragraph}{Login systeem}{6}{section*.7}% 
+\contentsline {paragraph}{Foto upload met https}{6}{section*.8}% 
+\contentsline {paragraph}{SocketIO beveiliging}{6}{section*.9}% 
+\contentsline {section}{\numberline {3}Synchronisatie}{6}{section.3}% 
+\contentsline {subsection}{\numberline {3.1}Vertraging berekenen}{6}{subsection.3.1}% 
+\contentsline {subsection}{\numberline {3.2}Kloksynchronisatie}{7}{subsection.3.2}% 
+\contentsline {subsection}{\numberline {3.3}Aftelklok}{7}{subsection.3.3}% 
+\contentsline {section}{\numberline {4}Detectie}{8}{section.4}% 
+\contentsline {subsection}{\numberline {4.1}Kleuren}{8}{subsection.4.1}% 
+\contentsline {subsubsection}{\numberline {4.1.1}Kleurmodellen en ruimtes}{8}{subsubsection.4.1.1}% 
+\contentsline {paragraph}{RGB}{8}{section*.12}% 
+\contentsline {paragraph}{CIE}{8}{section*.13}% 
+\contentsline {paragraph}{HSL en HSV}{8}{section*.14}% 
+\contentsline {subsubsection}{\numberline {4.1.2}Ranges in de HSL kleurruimte}{8}{subsubsection.4.1.2}% 
+\contentsline {subsubsection}{\numberline {4.1.3}Verdere verbeteringen}{9}{subsubsection.4.1.3}% 
+\contentsline {subsection}{\numberline {4.2}Flood fill}{10}{subsection.4.2}% 
+\contentsline {subsection}{\numberline {4.3}Hoekpunten}{10}{subsection.4.3}% 
+\contentsline {section}{\numberline {5}Reconstructie}{11}{section.5}% 
+\contentsline {paragraph}{Algoritme}{12}{section*.19}% 
+\contentsline {subsection}{\numberline {5.1}Hulppunten op diagonalen}{12}{subsection.5.1}% 
+\contentsline {paragraph}{Startpunt}{12}{section*.20}% 
+\contentsline {paragraph}{Ordenen}{13}{section*.21}% 
+\contentsline {subsection}{\numberline {5.2}Reconstrueren van een hoekpunt}{13}{subsection.5.2}% 
+\contentsline {section}{\numberline {6}Identificatie}{14}{section.6}% 
+\contentsline {subsection}{\numberline {6.1}Barcode}{14}{subsection.6.1}% 
+\contentsline {subsection}{\numberline {6.2}Verdere verbeteringen}{14}{subsection.6.2}% 
+\contentsline {section}{\numberline {7}Transformatie voor image-show}{15}{section.7}% 
+\contentsline {subsection}{\numberline {7.1}transformatiematrix}{15}{subsection.7.1}% 
+\contentsline {section}{\numberline {8}Triangulatie}{16}{section.8}% 
+\contentsline {subsection}{\numberline {8.1}Bowyer-Watson}{16}{subsection.8.1}% 
+\contentsline {subsection}{\numberline {8.2}Valkuilen}{16}{subsection.8.2}% 
+\contentsline {section}{\numberline {9}Animation}{18}{section.9}% 
+\contentsline {subsection}{\numberline {9.1}Sprites}{18}{subsection.9.1}% 
+\contentsline {subsection}{\numberline {9.2}Delaunay}{18}{subsection.9.2}% 
+\contentsline {subsection}{\numberline {9.3}Server/Client side}{18}{subsection.9.3}% 
+\contentsline {section}{\numberline {10}Besluit}{18}{section.10}% 
+\contentsline {section}{\numberline {A}Bijlage 1: Overzicht algoritme}{20}{appendix.A}% 
+\contentsline {subsection}{\numberline {A.1}Algemeen}{20}{subsection.A.1}% 
+\contentsline {subsection}{\numberline {A.2}Hoekdetectie en filtering}{20}{subsection.A.2}% 
+\contentsline {subsection}{\numberline {A.3}Reconstructie}{20}{subsection.A.3}% 
+\contentsline {section}{Referenties}{22}{subsection.A.3}% 
+>>>>>>> Stashed changes
