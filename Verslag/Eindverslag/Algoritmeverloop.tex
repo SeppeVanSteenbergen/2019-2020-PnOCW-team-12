@@ -11,15 +11,15 @@ Eens de gewenste opstelling bekomen is, kan de master het commando geven om dete
 \end{figure}
 
 \paragraph{Hoekdetectie}
-Vervolgens zoekt het algoritme naar hoeken, zie bijlage \ref{bijlageA2}. Er wordt gekeken of het scherm gekanteld of recht staat en met deze info het bijpassende hoekdetectie algoritme toegepast. Hierna worden de hoeken gefilterd en zijn de hoeken gedetecteerd. Als er niet genoeg hoeken gevonden zijn, is het geen geldig {\it island}.
+Vervolgens zoekt het algoritme naar hoeken, zie bijlage \ref{bijlageA2} en sectie \ref{sec:detectie} voor een meer gedetailleerde beschrijving. Er wordt gekeken of het scherm gekanteld of recht staat en met deze info het bijpassende hoekdetectie algoritme toegepast. Hierna worden de hoeken gefilterd en zijn de hoeken gedetecteerd. Als er niet genoeg hoeken gevonden zijn, is het geen geldig {\it island}.
 
 \paragraph{Hoekreconstructie}
-In bijlage \ref{bijlageA3} en deel \ref{sec:reconstructie}, staat het hoekreconstructie gedeelte gedetailleerder beschreven. Dit wordt uitgevoerd wanneer er niet genoeg hoeken zijn herkend voor een scherm, maar wel genoeg om te reconstrueren. Het gaat de missende hoeken reconstrueren door de lijnen vanuit de reeds gevonden hoeken te volgen.
+In bijlage \ref{bijlageA3} en deel \ref{sec:reconstructie}, staat het hoekreconstructie gedeelte gedetailleerder beschreven. Dit wordt uitgevoerd wanneer er niet genoeg hoeken zijn herkend voor een scherm, maar wel genoeg om te reconstrueren. Het gaat de missende hoeken reconstrueren door de lijnen vanuit de reeds gevonden hoeken en berekende hulpunten te volgen.
 \paragraph{}
 Met alle hoeken en middelpunt op zak is er een scherm gevonden en wordt het geïdentificeerd met behulp van een barcode. Het scherm wordt toegewezen aan een cliënt. Het zoeken gaat verder tot alle cliënts gevonden zijn of alle pixels uit de afbeelding zijn overlopen.
 
 \paragraph{Triangulatie}
-Na de analyse wordt het resultaat getoond aan de hand van de Delaunay triangulatie, weergegeven in figuur \ref{fig:triang}. Schermen die niet gedetecteerd werden, worden hierin niet betrokken.
+Na de analyse wordt het resultaat getoond aan de hand van de Delaunay triangulatie, weergegeven in figuur \ref{fig:triang}. Schermen die niet gedetecteerd werden, worden hierin niet betrokken. Meer uitleg over triangulaties in sectie \ref{sec:triangulatie}
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.09]{img/triang.jpg}

@@ -1,5 +1,5 @@
-\section{Triangulatie}
-Wanneer de schermen herkent en geïdentificeerd zijn, worden ze aan elkaar gelinkt door middel van een triangulatie. Het project gebruikt een Delaunay triangulatie. Dit is een speciale vorm waarbij de kleinste hoek gemaximaliseert wordt en waarbij de driehoeken niet overlappen. \cite{delaunaywiki}
+\section{Triangulatie} \label{sec:triangulatie}
+Wanneer de schermen herkent en geïdentificeerd zijn, worden ze aan elkaar gelinkt door middel van een triangulatie. Het project gebruikt een Delaunay triangulatie. Dit is een speciale vorm waarbij de kleinste hoek gemaximaliseert wordt en waarbij de driehoeken niet overlappen \cite{delaunaywiki}.
 Er wordt gebruik gemaakt van het Bowyer-Watson algoritme. \cite{Bowyer-WatsonWiki} Het heeft een tijdscomplexiteit van $O(n^2)$, dit is zeker niet de beste complexiteit om een Delaunay triangulatie te berekenen. Aangezien in de toepassing maximaal 120 schermen gebruikt kunnen worden, voldoet $O(n^2)$. Met de eenvoudige implementatie is dit dan ook een voordehandliggende keuze.
 
 \subsection{Bowyer-Watson}

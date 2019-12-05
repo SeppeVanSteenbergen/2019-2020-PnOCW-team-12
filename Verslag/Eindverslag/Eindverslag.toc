@@ -23,54 +23,45 @@
 \contentsline {paragraph}{}{8}{section*.15}% 
 \contentsline {paragraph}{Triangulatie}{8}{section*.16}% 
 \contentsline {paragraph}{Afbeelding weergeven}{9}{section*.18}% 
-\contentsline {section}{\numberline {5}Detectie}{9}{section.5}% 
-\contentsline {subsection}{\numberline {5.1}Kleuren}{9}{subsection.5.1}% 
+\contentsline {section}{\numberline {5}Detectie}{10}{section.5}% 
+\contentsline {subsection}{\numberline {5.1}Kleuren}{10}{subsection.5.1}% 
 \contentsline {subsubsection}{\numberline {5.1.1}Kleurmodellen en ruimtes}{10}{subsubsection.5.1.1}% 
-\contentsline {subsubsection}{\numberline {5.1.2}Ranges in de HSL kleurruimte}{10}{subsubsection.5.1.2}% 
-\contentsline {subsubsection}{\numberline {5.1.3}Verdere verbeteringen}{11}{subsubsection.5.1.3}% 
-\contentsline {subsection}{\numberline {5.2}Flood fill}{11}{subsection.5.2}% 
-\contentsline {subsection}{\numberline {5.3}Hoekpunten}{12}{subsection.5.3}% 
-\contentsline {section}{\numberline {6}Reconstructie}{13}{section.6}% 
-<<<<<<< Updated upstream
-\contentsline {paragraph}{Algoritme}{14}{section*.23}% 
-\contentsline {subsection}{\numberline {6.1}Hulppunten op diagonalen}{14}{subsection.6.1}% 
-\contentsline {paragraph}{Startpunt}{14}{section*.24}% 
-\contentsline {paragraph}{Ordenen}{15}{section*.25}% 
-\contentsline {subsection}{\numberline {6.2}Reconstrueren van een hoekpunt}{15}{subsection.6.2}% 
-\contentsline {section}{\numberline {7}Identificatie}{16}{section.7}% 
-\contentsline {subsection}{\numberline {7.1}Barcode}{16}{subsection.7.1}% 
-\contentsline {subsection}{\numberline {7.2}Verdere verbeteringen}{16}{subsection.7.2}% 
-\contentsline {section}{\numberline {8}Transformatie voor image-show}{17}{section.8}% 
-\contentsline {subsection}{\numberline {8.1}transformatiematrix}{17}{subsection.8.1}% 
-\contentsline {section}{\numberline {9}Triangulatie}{18}{section.9}% 
-=======
-\contentsline {paragraph}{Algoritme}{14}{section*.24}% 
-\contentsline {subsection}{\numberline {6.1}Hulppunten op diagonalen}{14}{subsection.6.1}% 
-\contentsline {paragraph}{Startpunt}{14}{section*.25}% 
-\contentsline {paragraph}{Ordenen}{14}{section*.26}% 
-\contentsline {subsection}{\numberline {6.2}Reconstrueren van een hoekpunt}{15}{subsection.6.2}% 
-\contentsline {section}{\numberline {7}Identificatie}{15}{section.7}% 
-\contentsline {subsection}{\numberline {7.1}Barcode}{15}{subsection.7.1}% 
-\contentsline {subsection}{\numberline {7.2}Verdere verbeteringen}{16}{subsection.7.2}% 
-\contentsline {section}{\numberline {8}Transformatie voor image-show}{17}{section.8}% 
-\contentsline {subsection}{\numberline {8.1}transformatiematrix}{17}{subsection.8.1}% 
-\contentsline {section}{\numberline {9}Triangulatie}{17}{section.9}% 
->>>>>>> Stashed changes
-\contentsline {subsection}{\numberline {9.1}Bowyer-Watson}{18}{subsection.9.1}% 
-\contentsline {subsection}{\numberline {9.2}Valkuilen}{19}{subsection.9.2}% 
-\contentsline {section}{\numberline {10}Animation}{20}{section.10}% 
-\contentsline {subsection}{\numberline {10.1}Sprites}{20}{subsection.10.1}% 
-\contentsline {subsection}{\numberline {10.2}Delaunay}{20}{subsection.10.2}% 
-\contentsline {subsection}{\numberline {10.3}Server/Client side}{20}{subsection.10.3}% 
-\contentsline {section}{\numberline {11}Besluit}{21}{section.11}% 
-\contentsline {section}{Referenties}{22}{section.11}% 
-\contentsline {section}{\numberline {A}Overzicht algoritme}{23}{appendix.A}% 
-\contentsline {subsection}{\numberline {A.1}Algemeen}{23}{subsection.A.1}% 
-\contentsline {subsection}{\numberline {A.2}Hoekdetectie en filtering}{24}{subsection.A.2}% 
-\contentsline {subsection}{\numberline {A.3}Reconstructie}{25}{subsection.A.3}% 
-\contentsline {section}{\numberline {B}Kleuren plots}{26}{appendix.B}% 
-\contentsline {subsection}{\numberline {B.1}RGB plots}{26}{subsection.B.1}% 
-\contentsline {subsection}{\numberline {B.2}Histogrammen}{27}{subsection.B.2}% 
-\contentsline {subsection}{\numberline {B.3}HSL plots}{28}{subsection.B.3}% 
-\contentsline {subsubsection}{\numberline {B.3.1}3D}{28}{subsubsection.B.3.1}% 
-\contentsline {subsubsection}{\numberline {B.3.2}2D}{29}{subsubsection.B.3.2}% 
+\contentsline {paragraph}{RGB}{10}{section*.20}% 
+\contentsline {paragraph}{CIE}{10}{section*.21}% 
+\contentsline {paragraph}{HSL en HSV}{10}{section*.22}% 
+\contentsline {subsubsection}{\numberline {5.1.2}Ranges in de HSL kleurruimte}{11}{subsubsection.5.1.2}% 
+\contentsline {subsubsection}{\numberline {5.1.3}Verdere verbeteringen}{12}{subsubsection.5.1.3}% 
+\contentsline {subsection}{\numberline {5.2}Flood fill}{12}{subsection.5.2}% 
+\contentsline {subsection}{\numberline {5.3}Hoekpunten}{13}{subsection.5.3}% 
+\contentsline {section}{\numberline {6}Reconstructie}{14}{section.6}% 
+\contentsline {paragraph}{Algoritme}{15}{section*.28}% 
+\contentsline {subsection}{\numberline {6.1}Hulppunten op diagonalen}{15}{subsection.6.1}% 
+\contentsline {paragraph}{Startpunt}{15}{section*.29}% 
+\contentsline {paragraph}{Ordenen}{16}{section*.30}% 
+\contentsline {subsection}{\numberline {6.2}Reconstrueren van een hoekpunt}{17}{subsection.6.2}% 
+\contentsline {paragraph}{Eerste hulppunt}{17}{section*.31}% 
+\contentsline {paragraph}{Tweede hulpunt}{17}{section*.32}% 
+\contentsline {section}{\numberline {7}Identificatie}{18}{section.7}% 
+\contentsline {subsection}{\numberline {7.1}Barcode}{18}{subsection.7.1}% 
+\contentsline {subsection}{\numberline {7.2}Verdere verbeteringen}{19}{subsection.7.2}% 
+\contentsline {section}{\numberline {8}Transformatie voor image-show}{19}{section.8}% 
+\contentsline {subsection}{\numberline {8.1}transformatiematrix}{19}{subsection.8.1}% 
+\contentsline {section}{\numberline {9}Triangulatie}{20}{section.9}% 
+\contentsline {subsection}{\numberline {9.1}Bowyer-Watson}{20}{subsection.9.1}% 
+\contentsline {subsection}{\numberline {9.2}Valkuilen}{21}{subsection.9.2}% 
+\contentsline {section}{\numberline {10}Animation}{22}{section.10}% 
+\contentsline {subsection}{\numberline {10.1}Sprites}{22}{subsection.10.1}% 
+\contentsline {subsection}{\numberline {10.2}Delaunay}{22}{subsection.10.2}% 
+\contentsline {subsection}{\numberline {10.3}Server/Client side}{22}{subsection.10.3}% 
+\contentsline {section}{\numberline {11}Besluit}{23}{section.11}% 
+\contentsline {section}{Referenties}{24}{section.11}% 
+\contentsline {section}{\numberline {A}Overzicht algoritme}{25}{appendix.A}% 
+\contentsline {subsection}{\numberline {A.1}Algemeen}{25}{subsection.A.1}% 
+\contentsline {subsection}{\numberline {A.2}Hoekdetectie en filtering}{26}{subsection.A.2}% 
+\contentsline {subsection}{\numberline {A.3}Reconstructie}{27}{subsection.A.3}% 
+\contentsline {section}{\numberline {B}Kleuren plots}{28}{appendix.B}% 
+\contentsline {subsection}{\numberline {B.1}RGB plots}{28}{subsection.B.1}% 
+\contentsline {subsection}{\numberline {B.2}Histogrammen}{29}{subsection.B.2}% 
+\contentsline {subsection}{\numberline {B.3}HSL plots}{30}{subsection.B.3}% 
+\contentsline {subsubsection}{\numberline {B.3.1}3D}{30}{subsubsection.B.3.1}% 
+\contentsline {subsubsection}{\numberline {B.3.2}2D}{31}{subsubsection.B.3.2}% 
