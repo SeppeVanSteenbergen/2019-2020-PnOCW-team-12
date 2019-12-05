@@ -1,48 +1,9 @@
-This is BibTeX, Version 0.99d (TeX Live 2019)
-Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
-The top-level auxiliary file: Eindverslag.aux
+This is BibTeX, Version 0.99dThe top-level auxiliary file: Eindverslag.aux
+White space in argument---line 64 of file Eindverslag.aux
+ : \citation{Kleuren
+ :                   plots}
+I'm skipping whatever remains of this command
 The style file: unsrt.bst
 Database file #1: Bibliography.bib
 Warning--empty publisher in inbook
-You've used 12 entries,
-            1791 wiz_defined-function locations,
-            505 strings with 5611 characters,
-and the built_in function-call counts, 1818 in all, are:
-= -- 162
-> -- 52
-< -- 1
-+ -- 24
-- -- 12
-* -- 54
-:= -- 260
-add.period$ -- 40
-call.type$ -- 12
-change.case$ -- 12
-chr.to.int$ -- 0
-cite$ -- 13
-duplicate$ -- 79
-empty$ -- 229
-format.name$ -- 12
-if$ -- 439
-int.to.chr$ -- 0
-int.to.str$ -- 12
-missing$ -- 4
-newline$ -- 67
-num.names$ -- 6
-pop$ -- 74
-preamble$ -- 1
-purify$ -- 0
-quote$ -- 0
-skip$ -- 40
-stack$ -- 0
-substring$ -- 48
-swap$ -- 16
-text.length$ -- 1
-text.prefix$ -- 0
-top$ -- 0
-type$ -- 0
-warning$ -- 1
-while$ -- 9
-width$ -- 14
-write$ -- 124
-(There was 1 warning)
+(There was 1 error message)
