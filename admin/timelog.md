@@ -60,8 +60,41 @@ Week 7:
 | Names &nbsp; &nbsp; &nbsp; &nbsp;| Maandag &nbsp; &nbsp; &nbsp; &nbsp;| Dinsdag &nbsp; &nbsp; &nbsp; &nbsp;| Woensdag &nbsp; &nbsp; &nbsp; &nbsp;| Donderdag &nbsp; &nbsp; &nbsp; &nbsp;| Vrijdag &nbsp; &nbsp; &nbsp; &nbsp;| Zaterdag &nbsp; &nbsp; &nbsp; &nbsp;| Zondag &nbsp; &nbsp; &nbsp; &nbsp;|
 |--------------------|----------------------|----------------------|----------------------|----------------------|----------------------|----------------------|----------------------|
 |**TS**              |                      |                      |                      |                      |                      |                      |                      |
-|**SVS**             | color (8)            |                      |                      |                      |                      |                      |                      |
+|**SVS**             | color (8)            | color(4)             | color(2)             | color(6)             | reco(8)              | reco(10)             | reco(16)             |
 |**DV**              |                      |                      |                      |                      |                      |                      |                      |
 |**BVDB**            |                      |                      |                      |                      |                      |                      |                      |
-|**MD**              | adv (5)              |  adv(9)              |                      |                      |                      |                      |                      |
+|**MD**              | adv (5)              | adv(9)               |                      |                      |                      |                      |                      |
+|**FB**              |                      |                      |                      |                      |                      |                      |                      |
+
+Week 8:
+
+| Names &nbsp; &nbsp; &nbsp; &nbsp;| Maandag &nbsp; &nbsp; &nbsp; &nbsp;| Dinsdag &nbsp; &nbsp; &nbsp; &nbsp;| Woensdag &nbsp; &nbsp; &nbsp; &nbsp;| Donderdag &nbsp; &nbsp; &nbsp; &nbsp;| Vrijdag &nbsp; &nbsp; &nbsp; &nbsp;| Zaterdag &nbsp; &nbsp; &nbsp; &nbsp;| Zondag &nbsp; &nbsp; &nbsp; &nbsp;|
+|--------------------|----------------------|----------------------|----------------------|----------------------|----------------------|----------------------|----------------------|
+|**TS**              |                      |                      |                      |                      |                      |                      |                      |
+|**SVS**             | reco(10)             | bugs(4)              | color(6)             | transform(4)         | transform(8)         | transform(6)         | transform(12)        |
+|**DV**              |                      |                      |                      |                      |                      |                      |                      |
+|**BVDB**            |                      |                      |                      |                      |                      |                      |                      |
+|**MD**              |                      |                      |                      |                      |                      |                      |                      |
+|**FB**              |                      |                      |                      |                      |                      |                      |                      |
+
+Week 9:
+
+| Names &nbsp; &nbsp; &nbsp; &nbsp;| Maandag &nbsp; &nbsp; &nbsp; &nbsp;| Dinsdag &nbsp; &nbsp; &nbsp; &nbsp;| Woensdag &nbsp; &nbsp; &nbsp; &nbsp;| Donderdag &nbsp; &nbsp; &nbsp; &nbsp;| Vrijdag &nbsp; &nbsp; &nbsp; &nbsp;| Zaterdag &nbsp; &nbsp; &nbsp; &nbsp;| Zondag &nbsp; &nbsp; &nbsp; &nbsp;|
+|--------------------|----------------------|----------------------|----------------------|----------------------|----------------------|----------------------|----------------------|
+|**TS**              |                      |                      |                      |                      |                      |                      |                      |
+|**SVS**             | transform(8)         |                      | color(6)             | color(4)             | color(4)             |                      | verslag(6)           |
+|**DV**              |                      |                      |                      |                      |                      |                      |                      |
+|**BVDB**            |                      |                      |                      |                      |                      |                      |                      |
+|**MD**              |                      |                      |                      |                      |                      |                      |                      |
+|**FB**              |                      |                      |                      |                      |                      |                      |                      |
+
+Week 10:
+
+| Names &nbsp; &nbsp; &nbsp; &nbsp;| Maandag &nbsp; &nbsp; &nbsp; &nbsp;| Dinsdag &nbsp; &nbsp; &nbsp; &nbsp;| Woensdag &nbsp; &nbsp; &nbsp; &nbsp;| Donderdag &nbsp; &nbsp; &nbsp; &nbsp;| Vrijdag &nbsp; &nbsp; &nbsp; &nbsp;| Zaterdag &nbsp; &nbsp; &nbsp; &nbsp;| Zondag &nbsp; &nbsp; &nbsp; &nbsp;|
+|--------------------|----------------------|----------------------|----------------------|----------------------|----------------------|----------------------|----------------------|
+|**TS**              |                      |                      |                      |                      |                      |                      |                      |
+|**SVS**             | verslag(6)           | verslag(6)           | verslag(4)           |                      |                      |                      |                      |
+|**DV**              |                      |                      |                      |                      |                      |                      |                      |
+|**BVDB**            |                      |                      |                      |                      |                      |                      |                      |
+|**MD**              |                      |                      |                      |                      |                      |                      |                      |
 |**FB**              |                      |                      |                      |                      |                      |                      |                      |
