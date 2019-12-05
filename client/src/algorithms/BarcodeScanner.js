@@ -4,10 +4,11 @@ export default class BarcodeScanner {
   static scan(imageObject) {
     let hor = this.scanHorizontal(imageObject)
     let ver = this.scanVertical(imageObject)
-    let maxRatio = Math.max(hor[1], ver[1])
-    if (hor[1] === maxRatio && maxRatio >= 0) {
+    if (hor[1] > ver[1] && hor[1] >= 0) {
       return hor[0]
-    } else if (maxRatio >= 0) return ver[0]
+    } else if (ver[1] >= 0) {
+      return ver[0]
+    }
   }
 
   static scanHorizontal(imageObject) {
@@ -23,7 +24,6 @@ export default class BarcodeScanner {
       let S = image[i + 1]
       let L = image[i + 2]
 
-      
       if (ColorRange.inBlueGreenRange(H, S, L) && !scanned.includes(1)) {
         scanned.push(1)
       } else if (ColorRange.inYellowRange(H, S, L) && !scanned.includes(2)) {
@@ -59,10 +59,10 @@ export default class BarcodeScanner {
     } else {
       // console.log(detectRatio, ratio);
       let barcode = parseInt(
-          Object.keys(barcodes)
-              .find(key => barcodes[key] === maxAmount)
-              .toString()
-              .replace(/,/g, '')
+        Object.keys(barcodes)
+          .find(key => barcodes[key] === maxAmount)
+          .toString()
+          .replace(/,/g, '')
       )
       return [barcode, ratio, detectRatio]
     }
@@ -87,7 +87,6 @@ export default class BarcodeScanner {
         let S = image[i + 1]
         let L = image[i + 2]
 
-        
         if (ColorRange.inRedRange(H, S, L) && !scanned.includes(1)) {
           scanned.push(1)
         } else if (ColorRange.inYellowRange(H, S, L) && !scanned.includes(2)) {
@@ -124,10 +123,10 @@ export default class BarcodeScanner {
     } else {
       // console.log(detectRatio, ratio);
       let barcode = parseInt(
-          Object.keys(barcodes)
-              .find(key => barcodes[key] === maxAmount)
-              .toString()
-              .replace(/,/g, '')
+        Object.keys(barcodes)
+          .find(key => barcodes[key] === maxAmount)
+          .toString()
+          .replace(/,/g, '')
       )
       return [barcode, ratio, detectRatio]
     }

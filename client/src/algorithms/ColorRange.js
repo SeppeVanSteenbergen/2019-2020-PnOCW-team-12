@@ -2,35 +2,41 @@ export default class ColorRange {
   static sensitivity() {
     return 10
   }
-  static settings(){
+  static settings() {
     return {
-      red:{
-        min:0,
-        max:20,
-        min2:340,
-        max2:360},
-      yellow:{
-        min:40,
-        max:80},
-      green:{
-        min:100,
-        max:140},
-      lightblue:{
-        min:160,
-        max:200},
+      red: {
+        min: 0,
+        max: 20,
+        min2: 340,
+        max2: 360
+      },
+      yellow: {
+        min: 40,
+        max: 86
+      },
+      green: {
+        min: 100,
+        max: 150
+      },
+      lightblue: {
+        min: 160,
+        max: 200
+      },
       blue: {
-        min:216,
-        max:260},
-      purple:{
-        min:280,
-        max:320}
+        min: 216,
+        max: 260
+      },
+      purple: {
+        min: 280,
+        max: 320
+      }
     }
   }
   static checkColorRange(color, H) {
-    if(H >= color.min && H <=color.max){
+    if (H >= color.min && H <= color.max) {
       return true
     }
-    if(color.max2 && H >= color.min2 && H <= color.max2) {
+    if (color.max2 && H >= color.min2 && H <= color.max2) {
       return true
     }
     return false
@@ -44,7 +50,12 @@ export default class ColorRange {
         this.inBlueBoxB2(H, L) ||
         this.inBlueBoxB3(H, L))
     )*/
-    return this.checkColorRange(this.settings().blue, H) && S > 50 && L > 20
+    return (
+      this.checkColorRange(this.settings().blue, H) &&
+      S > 40 &&
+      L > 20 &&
+      L <= 90
+    )
   }
 
   static inBlueBoxA1(H, S) {
@@ -72,7 +83,9 @@ export default class ColorRange {
   }
 
   static inBlueGreenRange(H, S, L) {
-    return this.checkColorRange(this.settings().lightblue, H) && S > 50 && L > 40
+    return (
+      this.checkColorRange(this.settings().lightblue, H) && S > 50 && L > 40
+    )
   }
 
   static inBlueGreenBoxA1(H, S) {
@@ -147,12 +160,13 @@ export default class ColorRange {
   }
 
   static inPinkRange(H, S, L) {
-    return (
+    /*return (
       (this.inPinkBoxA1(H, S) || this.inPinkBoxA2(H, S)) &&
       (this.inPinkBoxB1(H, L) ||
         this.inPinkBoxB2(H, L) ||
         this.inPinkBoxB3(H, L))
-    )
+    )*/
+    return this.checkColorRange(this.settings().purple, H) && S > 50 && L > 30
   }
 
   static inPinkBoxA1(H, S) {
@@ -205,7 +219,9 @@ export default class ColorRange {
       (this.inRedBoxA1(H, S) || this.inRedBoxA2(H, S)) &&
       (this.inRedBoxB1(H, L) || this.inRedBoxB2(H, L))
     )*/
-    return this.checkColorRange(this.settings().red, H) && S > 60 && L > 40 && L < 90
+    return (
+      this.checkColorRange(this.settings().red, H) && S > 60 && L > 40 && L < 90
+    )
   }
 
   static inRedBoxA1(H, S) {
@@ -225,7 +241,12 @@ export default class ColorRange {
   }
 
   static inYellowRange(H, S, L) {
-    return this.checkColorRange(this.settings().yellow, H) && S > 60 && L > 40 && L < 90
+    return (
+      this.checkColorRange(this.settings().yellow, H) &&
+      S > 60 &&
+      L > 40 &&
+      L < 90
+    )
   }
 
   static inYellowBoxA1(H, S) {
