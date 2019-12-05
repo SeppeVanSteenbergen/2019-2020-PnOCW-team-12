@@ -5,13 +5,17 @@ import Delaunay from './Delaunay'
 export default class Animations {
   constructor(triangulation, canvas) {
     this.catImage = new window.Image()
+    this.mouseImage = new window.Image()
     if (typeof config !== 'undefined') {
-      this.catImage.src = config.backend.url + '/img/cat3_trans.png'
+      this.catImage.src = config.backend.url + '/img/cat4_trans.png'
+      this.mouseImage.src = config.backend.url + '/img/mouse2_trans.png'
     } else {
-      this.catImage.src = 'cat3_trans.png'
+      this.catImage.src = 'cat4_trans.png'
+      this.mouseImage.src = 'mouse2_trans.png'
+
     }
 
-    this.nbFrames = 8
+    this.nbFrames = 7
     this.width = canvas.width
     this.height = canvas.height
     //this.ctx = canvas.getContext('2d')
@@ -85,18 +89,30 @@ export default class Animations {
 
   drawCats(nbCats, distCats, canvas, x, y, angle, frame, right){
     this.stack.push([x,y, angle, frame, right])
-    this.drawCat(canvas, x, y, angle, frame, right)
-    if (this.stack.length>distCats-distCats/nbCats){
-      for(let i = 0; i< nbCats-1; i++){
-        this.drawCat(canvas, this.stack[i*Math.round(distCats/nbCats)][0],
-            this.stack[i*Math.round(distCats/nbCats)][1], this.stack[i*Math.round(distCats/nbCats)][2],
-            this.stack[i*Math.round(distCats/nbCats)][3], this.stack[i*Math.round(distCats/nbCats)][4])
+    if (this.stack.length>distCats){
+      for(let i = 0; i<= nbCats-1; i++){
+        if (i === 0){
+          this.drawAnimal(canvas, this.stack[i*Math.round(distCats/nbCats)][0],
+              this.stack[i*Math.round(distCats/nbCats)][1], this.stack[i*Math.round(distCats/nbCats)][2],
+              this.stack[i*Math.round(distCats/nbCats)][3], this.stack[i*Math.round(distCats/nbCats)][4], true)
+        }
+        else {
+          this.drawAnimal(canvas, this.stack[i * Math.round(distCats / nbCats)][0],
+              this.stack[i * Math.round(distCats / nbCats)][1], this.stack[i * Math.round(distCats / nbCats)][2],
+              this.stack[i * Math.round(distCats / nbCats)][3], this.stack[i * Math.round(distCats / nbCats)][4], false)
+        }
       }
       this.stack.shift()
     }
   }
 
-  drawCat(canvas, x, y, angle, frame, right) {
+  drawAnimal(canvas, x, y, angle, frame, right, cat) {
+    if (cat){
+      var image = this.catImage
+    }
+    else {
+      var image = this.mouseImage
+    }
     let ctx = canvas.getContext('2d')
     ctx.save()
     ctx.translate(x, y)
@@ -105,30 +121,30 @@ export default class Animations {
 
     if (right) {
       ctx.drawImage(
-        this.catImage,
-        (frame * this.catImage.width) / this.nbFrames,
+          image,
+        (frame * image.width) / this.nbFrames,
         0,
-        this.catImage.width / this.nbFrames,
-        this.catImage.height,
-        x - this.catImage.width / (2 * this.nbFrames),
-        y - this.catImage.height ,
-        this.catImage.width / this.nbFrames,
-        this.catImage.height
+          image.width / this.nbFrames,
+          image.height,
+        x - image.width / (2 * this.nbFrames),
+        y - image.height ,
+          image.width / this.nbFrames,
+          image.height
       )
     } else {
       ctx.save()
       ctx.translate(canvas.width, 0)
       ctx.scale(-1, 1)
       ctx.drawImage(
-        this.catImage,
-        (frame * this.catImage.width) / this.nbFrames,
+          image,
+        (frame * image.width) / this.nbFrames,
         0,
-        this.catImage.width / this.nbFrames,
-        this.catImage.height,
-        -(x + this.catImage.width / (2 * this.nbFrames)) + this.width,
-        y - this.catImage.height ,
-        this.catImage.width / this.nbFrames,
-        this.catImage.height
+          image.width / this.nbFrames,
+          image.height,
+        -(x + image.width / (2 * this.nbFrames)) + this.width,
+        y - image.height ,
+          image.width / this.nbFrames,
+          image.height
       )
       ctx.restore()
     }
