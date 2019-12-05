@@ -22,9 +22,11 @@
 \BOOKMARK [1][-]{section.5}{Identificatie}{}% 22
 \BOOKMARK [2][-]{subsection.5.1}{Barcode}{section.5}% 23
 \BOOKMARK [2][-]{subsection.5.2}{Verdere verbeteringen}{section.5}% 24
-\BOOKMARK [1][-]{section.6}{Triangulatie}{}% 25
-\BOOKMARK [2][-]{subsection.6.1}{Bowyer-Watson}{section.6}% 26
-\BOOKMARK [2][-]{subsection.6.2}{Valkuilen}{section.6}% 27
-\BOOKMARK [1][-]{section.7}{Animation}{}% 28
-\BOOKMARK [2][-]{subsection.7.1}{Sprites}{section.7}% 29
-\BOOKMARK [2][-]{subsection.7.2}{Delaunay}{section.7}% 30
+\BOOKMARK [1][-]{section.6}{Transformatie voor image-show}{}% 25
+\BOOKMARK [2][-]{subsection.6.1}{transformatiematrix}{section.6}% 26
+\BOOKMARK [1][-]{section.7}{Triangulatie}{}% 27
+\BOOKMARK [2][-]{subsection.7.1}{Bowyer-Watson}{section.7}% 28
+\BOOKMARK [2][-]{subsection.7.2}{Valkuilen}{section.7}% 29
+\BOOKMARK [1][-]{section.8}{Animation}{}% 30
+\BOOKMARK [2][-]{subsection.8.1}{Sprites}{section.8}% 31
+\BOOKMARK [2][-]{subsection.8.2}{Delaunay}{section.8}% 32
