@@ -9,7 +9,7 @@ Voor elk punt worden alle driehoeken gezocht waarvan het punt in de omschreven c
 
 Eens alle punten toegevoegd zijn, worden de driehoeken die één of meer hoeken van de omkaderende vierhoek bevatten verwijderd, zie figuur \ref{bowyer-watson-c}. Aangezien deze driehoeken aan de buitenkant liggen is dit toegestaan. Er zal een Delaunay triangulatie overblijven van alle onderzochte punten.
 
-\begin{figure}
+\begin{figure}[H]
 	\center
 	\begin{subfigure}{0.4\textwidth}
 		\includegraphics[width=\textwidth]{img/bowyer-watson_superdriehoek}
@@ -33,15 +33,16 @@ Eens alle punten toegevoegd zijn, worden de driehoeken die één of meer hoeken 
 \subsection{Valkuilen}
 In theorie kan er van elke opstelling waarbij de punten niet allemaal colineair zijn een triangulatie worden gevonden, zie figuur \ref{colineair}. Echter door afronding bij de berekeningen zal er bij bijna colineaire punten geen juiste  configuratie gevonden worden, zie figuur \ref{almost_colineair}. 
 
-\begin{figure}
+\begin{figure}[H]
 	\center
 	\includegraphics[width=0.4\textwidth]{img/colineair}
 	\caption{Van colineaire punten kan geen triangulatie gevonden worden.}
 	\label{colineair}
 \end{figure}
-\begin{figure}
+\begin{figure}[H]
 	\center
 	\includegraphics[width=0.4\textwidth]{img/almost_colinair}
 	\caption{Van bijna colineaire punten kan geen triangulatie gevonden worden door afrondingsfouten bij berekeningen.}
 	\label{almost_colineair}
 \end{figure}
+
