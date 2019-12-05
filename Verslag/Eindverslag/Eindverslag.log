@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2019/dev/Debian) (preloaded format=pdflatex 2019.8.2)  5 DEC 2019 23:36
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2019/dev/Debian) (preloaded format=pdflatex 2019.8.2)  5 DEC 2019 23:54
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -924,13 +924,13 @@ Package pdftex.def Info: img/opstelling.jpg  used on input line 8.
 <img/triang.jpg, id=335, 3854.4pt x 2186.1675pt>
 File: img/triang.jpg Graphic file (type jpg)
 <use img/triang.jpg>
-Package pdftex.def Info: img/triang.jpg  used on input line 25.
+Package pdftex.def Info: img/triang.jpg  used on input line 26.
 (pdftex.def)             Requested size: 346.88104pt x 196.74658pt.
  [8 <./img/opstelling.jpg>]
-<img/resultaat.jpg, id=350, 3426.8025pt x 1995.455pt>
+<img/resultaat.jpg, id=348, 3426.8025pt x 1995.455pt>
 File: img/resultaat.jpg Graphic file (type jpg)
 <use img/resultaat.jpg>
-Package pdftex.def Info: img/resultaat.jpg  used on input line 34.
+Package pdftex.def Info: img/resultaat.jpg  used on input line 35.
 (pdftex.def)             Requested size: 308.39893pt x 179.58319pt.
 ) (./Detectie.tex
 [9 <./img/triang.jpg> <./img/resultaat.jpg>]
@@ -946,36 +946,39 @@ File: img/hslGreen.png Graphic file (type png)
 Package pdftex.def Info: img/hslGreen.png  used on input line 23.
 (pdftex.def)             Requested size: 426.79135pt x 210.35263pt.
  [11 <./img/hslColorWheel.png>] [12 <./img/hslGreen.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 33--35
+
+ []
+
 <img/mask.png, id=397, 548.80031pt x 326.72063pt>
 File: img/mask.png Graphic file (type png)
 <use img/mask.png>
 Package pdftex.def Info: img/mask.png  used on input line 38.
 (pdftex.def)             Requested size: 274.39948pt x 163.35991pt.
- [13 <./img/mask.png>]
+[13 <./img/mask.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 51--53
+
+ []
+
 <img/perpSearch.png, id=410, 575.90157pt x 396.7322pt>
 File: img/perpSearch.png Graphic file (type png)
 <use img/perpSearch.png>
-Package pdftex.def Info: img/perpSearch.png  used on input line 55.
+Package pdftex.def Info: img/perpSearch.png  used on input line 58.
 (pdftex.def)             Requested size: 192.0548pt x 132.30225pt.
 <img/diagSearch.png, id=411, 575.90157pt x 396.7322pt>
 File: img/diagSearch.png Graphic file (type png)
 <use img/diagSearch.png>
-Package pdftex.def Info: img/diagSearch.png  used on input line 61.
+Package pdftex.def Info: img/diagSearch.png  used on input line 64.
 (pdftex.def)             Requested size: 192.0548pt x 132.30225pt.
-
-Underfull \hbox (badness 10000) in paragraph at lines 49--66
-
- []
-
 <img/correctCorner.png, id=414, 1164.60094pt x 683.55376pt>
 File: img/correctCorner.png Graphic file (type png)
 <use img/correctCorner.png>
-Package pdftex.def Info: img/correctCorner.png  used on input line 74.
+Package pdftex.def Info: img/correctCorner.png  used on input line 77.
 (pdftex.def)             Requested size: 128.0387pt x 75.14941pt.
 <img/notACorner.png, id=415, 1487.5575pt x 881.54344pt>
 File: img/notACorner.png Graphic file (type png)
 <use img/notACorner.png>
-Package pdftex.def Info: img/notACorner.png  used on input line 80.
+Package pdftex.def Info: img/notACorner.png  used on input line 83.
 (pdftex.def)             Requested size: 128.0387pt x 75.86505pt.
 ) (./Reconstructie.tex [14 <./img/perpSearch.png> <./img/diagSearch.png> <./img
 /correctCorner.png> <./img/notACorner.png>]
@@ -1262,13 +1265,13 @@ LaTeX Warning: There were multiply-defined labels.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 184.
  ) 
 Here is how much of TeX's memory you used:
- 23239 strings out of 492615
- 427554 string characters out of 6131391
+ 23241 strings out of 492615
+ 427578 string characters out of 6131391
  561518 words of memory out of 5000000
  26395 multiletter control sequences out of 15000+600000
- 49479 words of font info for 94 fonts, out of 8000000 for 9000
+ 49609 words of font info for 95 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 55i,9n,56p,2171b,1325s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 55i,8n,56p,2171b,1325s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/lm/lm-rm.enc}{/usr/share/texmf/fonts/enc/dv
 ips/lm/lm-mathex.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/s
 hare/texmf/fonts/enc/dvips/lm/lm-mathsy.enc}{/usr/share/texmf/fonts/enc/dvips/l
@@ -1280,7 +1283,7 @@ ts/type1/public/lm/lmmi8.pfb></usr/share/texmf/fonts/type1/public/lm/lmr10.pfb>
 public/lm/lmri10.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy10.pfb></usr/s
 hare/texmf/fonts/type1/public/lm/lmsy8.pfb></usr/share/texmf/fonts/type1/public
 /lm/lmtt10.pfb>
-Output written on Eindverslag.pdf (34 pages, 8353497 bytes).
+Output written on Eindverslag.pdf (34 pages, 8353489 bytes).
 PDF statistics:
  740 PDF objects out of 1000 (max. 8388607)
  598 compressed objects within 6 object streams

@@ -31,7 +31,7 @@ Uit de plots is echter gebleken dat aparte onderscheiding van zes verschillende 
 \subsection{Flood fill}
 Elk individueel slave scherm laat een vooraf bepaalde afbeelding zien met gekende kleur-waarden zoals op figuur \ref{scherm}. Deze afbeelding voor detectie is een combinatie van vorige iteraties van het project. Het combineren van een border met een kruis geeft het meeste informatie over de associatie van de kleur-gefilterde pixels bij overlap of afgedekte delen van het scherm en bovendien meer informatie over de relatieve oriëntatie van het scherm op de foto. Om deze schermen te detecteren wordt de foto gefilterd op basis van gekende HSL ranges (zie \ref{Ranges}) en een standaard four-way flood fill algoritme \cite{floodfill} om de associatie van de verbonden pixels te behouden. Na de executie van de flood fill is er voor elk gedetecteerd eiland een pixel masker met een unieke ID per eiland opgeslagen in elke pixel, waar de verdere bewerkingen op uitgevoerd zullen worden. Het geimplementeerde floodfill algoritme groeit volgens de vier pixel-buren en een stack-based iteratie process om recursie-overflow tegen te gaan bij grote afbeeldingen en eilanden. In een worst-case scenario zal dit algoritme een eiland detecteren over de volledige afbeelding. Aangezien elke pixel maximaal vier keer in de stack terecht kan komen, door zijn vier buren, loopt deze flood fill volgens een tijdscomplexiteit van 
 \[O(4mn)=O(mn)\]
- met m en n de dimensies van de afbeelding. De grootte van elk eiland zal in de praktijk over het algemeen een stuk kleiner zijn dan de volledige afbeelding.
+ met m en n de dimensies van de afbeelding. De grootte van elk eiland zal in de praktijk over het algemeen een stuk kleiner zijn dan de volledige afbeelding. \\
 
 \begin{figure}[H]
 \centering
@@ -39,15 +39,18 @@ Elk individueel slave scherm laat een vooraf bepaalde afbeelding zien met gekend
 \caption{Kleurenmasker van een scherm na floodfill}
 \end{figure}
 
+
 Niet enkel de associatie van de gemaskeerde pixels wordt op deze manier behouden, maar deze methode maakt ook dat de komende pixel bewerkingen maar over een minimale bounding box uitgevoerd worden ten opzichten van de volledige pixel matrix. Elk resulterend resultaat van floodfill geeft een verbonden pixel verzameling, een island, als resutlaat. De resulterende islands worden achteraf gefilterd opdat elk eiland de drie kleuren van de border en het middelpunt bevatten. Als er aan deze voorwaarde voldaan is wordt er een poging gedaan om lokaal een middelpunt en geldige barcode te lezen \ref{barcode}. Bij het falen van een van deze verificatiestappen wordt het eiland verworpen, de overblijvende eilanden zijn geldige eilanden voor verdere hoekdetectie.
 
 \subsection{Hoekpunten}
 Er werd vooraf een algemeen hoek-detectie algoritme Shi-Tomashi \cite{shi-tomashi} geïmplementeerd en getest, maar gaf een te complex resultaat op de binaire maskers om de juiste hoeken te filteren. Dit algoritme draagt ook een relatief grote overhead door de x- en y-sobel operaties die elks een volledige pixel convolution over alle pixels als pre-processing toepassen. Onze algoritmes zijn veel simplistischer en zullen in de praktijk nooit verder dan de boundary van een eiland uitgevoerd worden in tegenstelling tot de volledige island matrix, maar geven een perfect bruikbaar resultaat voor onze noden.
-
-In de eerste stap wordt er bepaald of het scherm voornamelijk recht of gekanteld is ten opzichte van de foto. Hiervoor wordt langs de linker kant van het kader de standaarddeviatie van pixels in het masker berekend. Bij een standaardafwijking onder de 15\% wordt een scherm als liggend of verticaal gezien op de foto en niet gekanteld.\\
+\bigskip
+In de eerste stap wordt er bepaald of het scherm voornamelijk recht of gekanteld is ten opzichte van de foto. Hiervoor wordt langs de linker kant van het kader de standaarddeviatie van pixels in het masker berekend. Bij een standaardafwijking onder de 15\% wordt een scherm als liggend of verticaal gezien op de foto en niet gekanteld.
+\bigskip
 Als in eerste instantie het scherm als gedraaid beschouwd wordt, zal er vanuit elke rand van de bounding box van het eiland het de eerste mask-pixel als corner beschouwd worden. In het geval dat het scherm relatief horizontaal of verticaal recht staat, zal er loodrecht op de randen gezocht worden (zie figuur: \ref{fig:perp search}), maar volgens een diagonaal tot een mask-pixel (zie figuur: \ref{fig:diag search}). Beide variante hoekdetectie algoritmes lopen in worst-case scenario volgens
 \[O(4mn)=O(mn)\]
-maar zoals eerder vermeld zullen deze in de praktijk maar tot de boundary van het masker lopen.\\
+maar zoals eerder vermeld zullen deze in de praktijk maar tot de boundary van het masker lopen. \\
+
 \begin{figure}[H] 
 \centering
 \begin{subfigure}{0.5\textwidth}

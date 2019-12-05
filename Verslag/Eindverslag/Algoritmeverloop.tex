@@ -1,6 +1,6 @@
 \section{Algemeen verloop algoritme}
 Er gaat heel wat vooraf aan het weergeven van een afbeelding, video of animatie op alle geconnecteerde toestellen. In bijlage \ref{bijlageA1} is een algemeen overzicht te vinden.
-
+\bigskip
 Eens de gewenste opstelling bekomen is, kan de master het commando geven om detectieschermen weer te geven op de toestellen. Dit wordt weergegeven op figuur \ref{fig:opstelling}. Deze configuratie wordt nu vastgelegd door de master en geüpload om te analyseren. Indien nodig wordt de afbeelding eerst herschaald volgens 1920x1080 pixels om performantie te bevorderen. Ook wordt van {\it RGBA} naar {\it HSLA} spectrum gegaan. Vervolgens wordt er gefilterd op de twee randkleuren van het detectiescherm. Hieruit volgen de zogenaamde {\it islands} die gefilterd worden tot er enkel mogelijke schermen overblijven.
 
 \begin{figure}[H]
@@ -15,7 +15,8 @@ Vervolgens zoekt het algoritme naar hoeken, zie bijlage \ref{bijlageA2} en secti
 
 \paragraph{Hoekreconstructie}
 In bijlage \ref{bijlageA3} en deel \ref{sec:reconstructie}, staat het hoekreconstructie gedeelte gedetailleerder beschreven. Dit wordt uitgevoerd wanneer er niet genoeg hoeken zijn herkend voor een scherm, maar wel genoeg om te reconstrueren. Het gaat de missende hoeken reconstrueren door de lijnen vanuit de reeds gevonden hoeken en berekende hulpunten te volgen.
-\paragraph{}
+
+\paragraph{Identificatie}
 Met alle hoeken en middelpunt op zak is er een scherm gevonden en wordt het geïdentificeerd met behulp van een barcode. Het scherm wordt toegewezen aan een cliënt. Het zoeken gaat verder tot alle cliënts gevonden zijn of alle pixels uit de afbeelding zijn overlopen.
 
 \paragraph{Triangulatie}
