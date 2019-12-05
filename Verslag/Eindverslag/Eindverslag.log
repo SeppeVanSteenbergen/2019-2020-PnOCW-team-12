@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019) (preloaded format=pdflatex 2019.10.14)  5 DEC 2019 16:27
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019) (preloaded format=pdflatex 2019.10.14)  5 DEC 2019 17:12
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -919,7 +919,7 @@ Overfull \hbox (18.07578pt too wide) in paragraph at lines 35--36
  []
 
 [5]) (./Detectie.tex [6]
-<img/hslGreen.png, id=250, 818.0964pt x 332.442pt>
+<img/hslGreen.png, id=252, 818.0964pt x 332.442pt>
 File: img/hslGreen.png Graphic file (type png)
 <use img/hslGreen.png>
 Package pdftex.def Info: img/hslGreen.png  used on input line 13.
@@ -928,40 +928,36 @@ Package pdftex.def Info: img/hslGreen.png  used on input line 13.
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[7]
-<img/mask.png, id=264, 548.80031pt x 326.72063pt>
+[7] [8 <./img/hslGreen.png>]
+<img/mask.png, id=272, 548.80031pt x 326.72063pt>
 File: img/mask.png Graphic file (type png)
 <use img/mask.png>
 Package pdftex.def Info: img/mask.png  used on input line 28.
 (pdftex.def)             Requested size: 274.39948pt x 163.35991pt.
- [8 <./img/hslGreen.png>]
-<img/perpSearch.png, id=275, 575.90157pt x 396.7322pt>
+ [9 <./img/mask.png>]
+<img/perpSearch.png, id=285, 575.90157pt x 396.7322pt>
 File: img/perpSearch.png Graphic file (type png)
 <use img/perpSearch.png>
 Package pdftex.def Info: img/perpSearch.png  used on input line 45.
 (pdftex.def)             Requested size: 192.0548pt x 132.30225pt.
-<img/diagSearch.png, id=276, 575.90157pt x 396.7322pt>
+<img/diagSearch.png, id=286, 575.90157pt x 396.7322pt>
 File: img/diagSearch.png Graphic file (type png)
 <use img/diagSearch.png>
 Package pdftex.def Info: img/diagSearch.png  used on input line 51.
 (pdftex.def)             Requested size: 192.0548pt x 132.30225pt.
-
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-[9 <./img/mask.png>]
-<img/correctCorner.png, id=287, 848.4197pt x 654.19406pt>
+<img/correctCorner.png, id=289, 848.4197pt x 654.19406pt>
 File: img/correctCorner.png Graphic file (type png)
 <use img/correctCorner.png>
 Package pdftex.def Info: img/correctCorner.png  used on input line 64.
 (pdftex.def)             Requested size: 128.0387pt x 98.7238pt.
-<img/notACorner.png, id=288, 1178.15157pt x 651.93562pt>
+<img/notACorner.png, id=290, 1178.15157pt x 651.93562pt>
 File: img/notACorner.png Graphic file (type png)
 <use img/notACorner.png>
 Package pdftex.def Info: img/notACorner.png  used on input line 70.
 (pdftex.def)             Requested size: 128.0387pt x 70.84769pt.
-) (./Reconstructie.tex [10 <./img/perpSearch.png> <./img/diagSearch.png> <./img
-/correctCorner.png> <./img/notACorner.png>]
+) (./Reconstructie.tex
+[10 <./img/perpSearch.png> <./img/diagSearch.png> <./img/correctCorner.png> <./
+img/notACorner.png>]
 
 LaTeX Warning: Reference `Foto van screendetectie html!!!!' on page 11 undefine
 d on input line 10.
@@ -971,54 +967,54 @@ d on input line 10.
 LaTeX Warning: Reference `intersectie' on page 12 undefined on input line 16.
 
 ) (./Identificatie.tex [12]
-<img/screen.png, id=313, 1204.5pt x 677.53125pt>
+<img/screen.png, id=315, 1204.5pt x 677.53125pt>
 File: img/screen.png Graphic file (type png)
 <use img/screen.png>
 Package pdftex.def Info: img/screen.png  used on input line 8.
 (pdftex.def)             Requested size: 341.43437pt x 192.05424pt.
-) [13 <./img/screen.png>] (./Transformatie.tex)
-(./Triangulatie.tex [14]
-<img/bowyer-watson_superdriehoek.png, id=340, 578.16pt x 433.62pt>
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+) (./Transformatie.tex [13]) (./Triangulatie.tex [14 <./img/screen.png>]
+<img/bowyer-watson_superdriehoek.png, id=342, 578.16pt x 433.62pt>
 File: img/bowyer-watson_superdriehoek.png Graphic file (type png)
 <use img/bowyer-watson_superdriehoek.png>
 Package pdftex.def Info: img/bowyer-watson_superdriehoek.png  used on input lin
 e 15.
 (pdftex.def)             Requested size: 170.71393pt x 128.03589pt.
-<img/bowyer-watson_nieuwpunt.png, id=341, 578.16pt x 433.62pt>
+<img/bowyer-watson_nieuwpunt.png, id=343, 578.16pt x 433.62pt>
 File: img/bowyer-watson_nieuwpunt.png Graphic file (type png)
 <use img/bowyer-watson_nieuwpunt.png>
 Package pdftex.def Info: img/bowyer-watson_nieuwpunt.png  used on input line 20
 .
 (pdftex.def)             Requested size: 170.71393pt x 128.03589pt.
-<img/bowyer-watson_verwijderen.png, id=342, 578.16pt x 433.62pt>
+<img/bowyer-watson_verwijderen.png, id=344, 578.16pt x 433.62pt>
 File: img/bowyer-watson_verwijderen.png Graphic file (type png)
 <use img/bowyer-watson_verwijderen.png>
 Package pdftex.def Info: img/bowyer-watson_verwijderen.png  used on input line 
 25.
 (pdftex.def)             Requested size: 170.71393pt x 128.03589pt.
-<img/colineair.jpg, id=347, 472.76625pt x 176.45924pt>
+<img/colineair.jpg, id=349, 472.76625pt x 176.45924pt>
 File: img/colineair.jpg Graphic file (type jpg)
 <use img/colineair.jpg>
 Package pdftex.def Info: img/colineair.jpg  used on input line 38.
 (pdftex.def)             Requested size: 170.71393pt x 63.71913pt.
-<img/almost_colinair.jpg, id=348, 361.35pt x 92.7465pt>
+<img/almost_colinair.jpg, id=350, 361.35pt x 92.7465pt>
 File: img/almost_colinair.jpg Graphic file (type jpg)
 <use img/almost_colinair.jpg>
 Package pdftex.def Info: img/almost_colinair.jpg  used on input line 44.
 (pdftex.def)             Requested size: 170.71393pt x 43.81587pt.
-) (./Animation.tex
-<img/cat2.png, id=350, 1505.625pt x 94.10156pt>
+)
+(./Animation.tex [15] [16 <./img/bowyer-watson_superdriehoek.png> <./img/bowyer
+-watson_nieuwpunt.png> <./img/bowyer-watson_verwijderen.png> <./img/colineair.j
+pg> <./img/almost_colinair.jpg>]
+<img/cat2.png, id=370, 1505.625pt x 94.10156pt>
 File: img/cat2.png Graphic file (type png)
 <use img/cat2.png>
 Package pdftex.def Info: img/cat2.png  used on input line 10.
 (pdftex.def)             Requested size: 301.11966pt x 18.81996pt.
-
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-[15] [16 <./img/bowyer-watson_superdriehoek.png> <./img/bowyer-watson_nieuwpunt
-.png> <./img/bowyer-watson_verwijderen.png> <./img/colineair.jpg> <./img/almost
-_colinair.jpg>]) [17 <./img/cat2.png>] (./Eindverslag.bbl
+) [17 <./img/cat2.png>] (./Eindverslag.bbl
 Underfull \hbox (badness 3668) in paragraph at lines 41--47
 []\T1/lmr/m/n/10.95 (+20) StackExchange.  Fin-ding the trans-form ma-trix from 
 4 pro-jec-ted points
@@ -1084,10 +1080,10 @@ ts/type1/public/lm/lmr8.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/pub
 lic/lm/lmri10.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/public/lm/lms
 y10.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/public/lm/lmsy8.pfb></u
 sr/local/texlive/2019/texmf-dist/fonts/type1/public/lm/lmtt10.pfb>
-Output written on Eindverslag.pdf (18 pages, 2572568 bytes).
+Output written on Eindverslag.pdf (18 pages, 2573168 bytes).
 PDF statistics:
- 464 PDF objects out of 1000 (max. 8388607)
- 402 compressed objects within 5 object streams
+ 466 PDF objects out of 1000 (max. 8388607)
+ 404 compressed objects within 5 object streams
  108 named destinations out of 1000 (max. 500000)
  14686 words of extra memory for PDF output out of 17280 (max. 10000000)
 
