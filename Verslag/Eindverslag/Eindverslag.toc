@@ -26,7 +26,7 @@
 \contentsline {subsection}{\numberline {5.2}Flood fill}{9}{subsection.5.2}% 
 \contentsline {subsection}{\numberline {5.3}Hoekpunten}{10}{subsection.5.3}% 
 \contentsline {section}{\numberline {6}Reconstructie}{11}{section.6}% 
-\contentsline {paragraph}{Algoritme}{11}{section*.15}% 
+\contentsline {paragraph}{Algoritme}{12}{section*.15}% 
 \contentsline {subsection}{\numberline {6.1}Hulppunten op diagonalen}{12}{subsection.6.1}% 
 \contentsline {paragraph}{Startpunt}{12}{section*.16}% 
 \contentsline {paragraph}{Ordenen}{12}{section*.17}% 
@@ -38,10 +38,15 @@
 \contentsline {subsection}{\numberline {8.1}transformatiematrix}{15}{subsection.8.1}% 
 \contentsline {section}{\numberline {9}Triangulatie}{15}{section.9}% 
 \contentsline {subsection}{\numberline {9.1}Bowyer-Watson}{16}{subsection.9.1}% 
-\contentsline {subsection}{\numberline {9.2}Valkuilen}{17}{subsection.9.2}% 
-\contentsline {section}{\numberline {10}Animation}{17}{section.10}% 
-\contentsline {subsection}{\numberline {10.1}Sprites}{17}{subsection.10.1}% 
-\contentsline {subsection}{\numberline {10.2}Delaunay}{17}{subsection.10.2}% 
+\contentsline {subsection}{\numberline {9.2}Valkuilen}{16}{subsection.9.2}% 
+\contentsline {section}{\numberline {10}Animation}{16}{section.10}% 
+\contentsline {subsection}{\numberline {10.1}Sprites}{16}{subsection.10.1}% 
+\contentsline {subsection}{\numberline {10.2}Delaunay}{16}{subsection.10.2}% 
 \contentsline {subsection}{\numberline {10.3}Server/Client side}{18}{subsection.10.3}% 
 \contentsline {section}{\numberline {11}Besluit}{18}{section.11}% 
 \contentsline {section}{\numberline {A}Kleuren plots}{20}{appendix.A}% 
+\contentsline {subsection}{\numberline {A.1}RGB plots}{20}{subsection.A.1}% 
+\contentsline {subsection}{\numberline {A.2}Histogrammen}{21}{subsection.A.2}% 
+\contentsline {subsection}{\numberline {A.3}HSL plots}{22}{subsection.A.3}% 
+\contentsline {subsubsection}{\numberline {A.3.1}3D}{22}{subsubsection.A.3.1}% 
+\contentsline {subsubsection}{\numberline {A.3.2}2D}{23}{subsubsection.A.3.2}% 

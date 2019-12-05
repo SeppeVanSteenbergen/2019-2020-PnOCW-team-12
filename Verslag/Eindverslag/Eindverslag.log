@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2019/dev/Debian) (preloaded format=pdflatex 2019.8.2)  5 DEC 2019 17:39
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2019/dev/Debian) (preloaded format=pdflatex 2019.8.2)  5 DEC 2019 18:46
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -699,7 +699,11 @@ Package microtype Info: Loading configuration file microtype.cfg.
 (/usr/share/texlive/texmf-dist/tex/latex/microtype/microtype.cfg
 File: microtype.cfg 2018/01/14 v2.7a microtype main configuration file (RS)
 ))
-(./Eindverslag.aux)
+(./Eindverslag.aux
+
+LaTeX Warning: Label `hslGreenPlot' multiply defined.
+
+)
 \openout1 = `Eindverslag.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 68.
@@ -905,32 +909,30 @@ Overfull \hbox (18.07578pt too wide) in paragraph at lines 35--36
  []
 
 [6]) (./Detectie.tex [7]
-<img/hslGreen.png, id=273, 818.0964pt x 332.442pt>
+
+LaTeX Warning: Citation `Kleuren plots' on page 8 undefined on input line 9.
+
+<img/hslGreen.png, id=300, 674.52pt x 332.442pt>
 File: img/hslGreen.png Graphic file (type png)
 <use img/hslGreen.png>
 Package pdftex.def Info: img/hslGreen.png  used on input line 13.
-(pdftex.def)             Requested size: 426.79135pt x 173.42882pt.
-
+(pdftex.def)             Requested size: 426.79135pt x 210.35263pt.
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 [8]
-<img/mask.png, id=288, 548.80031pt x 326.72063pt>
+<img/mask.png, id=313, 548.80031pt x 326.72063pt>
 File: img/mask.png Graphic file (type png)
 <use img/mask.png>
 Package pdftex.def Info: img/mask.png  used on input line 28.
 (pdftex.def)             Requested size: 274.39948pt x 163.35991pt.
-
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-[9 <./img/hslGreen.png>]
-<img/perpSearch.png, id=300, 575.90157pt x 396.7322pt>
+ [9 <./img/hslGreen.png>]
+<img/perpSearch.png, id=325, 575.90157pt x 396.7322pt>
 File: img/perpSearch.png Graphic file (type png)
 <use img/perpSearch.png>
 Package pdftex.def Info: img/perpSearch.png  used on input line 45.
 (pdftex.def)             Requested size: 192.0548pt x 132.30225pt.
-<img/diagSearch.png, id=301, 575.90157pt x 396.7322pt>
+<img/diagSearch.png, id=326, 575.90157pt x 396.7322pt>
 File: img/diagSearch.png Graphic file (type png)
 <use img/diagSearch.png>
 Package pdftex.def Info: img/diagSearch.png  used on input line 51.
@@ -940,12 +942,12 @@ Package pdftex.def Info: img/diagSearch.png  used on input line 51.
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 [10 <./img/mask.png>]
-<img/correctCorner.png, id=313, 848.4197pt x 654.19406pt>
+<img/correctCorner.png, id=337, 848.4197pt x 654.19406pt>
 File: img/correctCorner.png Graphic file (type png)
 <use img/correctCorner.png>
 Package pdftex.def Info: img/correctCorner.png  used on input line 64.
 (pdftex.def)             Requested size: 128.0387pt x 98.7238pt.
-<img/notACorner.png, id=314, 1178.15157pt x 651.93562pt>
+<img/notACorner.png, id=338, 1178.15157pt x 651.93562pt>
 File: img/notACorner.png Graphic file (type png)
 <use img/notACorner.png>
 Package pdftex.def Info: img/notACorner.png  used on input line 70.
@@ -956,55 +958,59 @@ Package pdftex.def Info: img/notACorner.png  used on input line 70.
 LaTeX Warning: Reference `Foto van screendetectie html!!!!' on page 12 undefine
 d on input line 10.
 
+[12]
 
-LaTeX Warning: Reference `intersectie' on page 12 undefined on input line 16.
+LaTeX Warning: Reference `intersectie' on page 13 undefined on input line 16.
 
-) [12] (./Identificatie.tex [13]
-<img/screen.png, id=340, 1204.5pt x 677.53125pt>
+) (./Identificatie.tex [13]
+<img/screen.png, id=363, 1204.5pt x 677.53125pt>
 File: img/screen.png Graphic file (type png)
 <use img/screen.png>
 Package pdftex.def Info: img/screen.png  used on input line 8.
 (pdftex.def)             Requested size: 341.43437pt x 192.05424pt.
-) (./Transformatie.tex [14 <./img/screen.png>]) (./Triangulatie.tex [15]
-<img/bowyer-watson_superdriehoek.png, id=368, 578.16pt x 433.62pt>
+) [14 <./img/screen.png>] (./Transformatie.tex)
+(./Triangulatie.tex [15]
+<img/bowyer-watson_superdriehoek.png, id=389, 578.16pt x 433.62pt>
 File: img/bowyer-watson_superdriehoek.png Graphic file (type png)
 <use img/bowyer-watson_superdriehoek.png>
 Package pdftex.def Info: img/bowyer-watson_superdriehoek.png  used on input lin
 e 15.
 (pdftex.def)             Requested size: 170.71393pt x 128.03589pt.
-<img/bowyer-watson_nieuwpunt.png, id=369, 578.16pt x 433.62pt>
+<img/bowyer-watson_nieuwpunt.png, id=390, 578.16pt x 433.62pt>
 File: img/bowyer-watson_nieuwpunt.png Graphic file (type png)
 <use img/bowyer-watson_nieuwpunt.png>
 Package pdftex.def Info: img/bowyer-watson_nieuwpunt.png  used on input line 20
 .
 (pdftex.def)             Requested size: 170.71393pt x 128.03589pt.
-<img/bowyer-watson_verwijderen.png, id=370, 578.16pt x 433.62pt>
+<img/bowyer-watson_verwijderen.png, id=391, 578.16pt x 433.62pt>
 File: img/bowyer-watson_verwijderen.png Graphic file (type png)
 <use img/bowyer-watson_verwijderen.png>
 Package pdftex.def Info: img/bowyer-watson_verwijderen.png  used on input line 
 25.
 (pdftex.def)             Requested size: 170.71393pt x 128.03589pt.
- [16 <./img/bowyer-watson_superdriehoek.png> <./img/Bowyer-Watson_nieuwpunt.png
-> <./img/Bowyer-Watson_verwijderen.png>]
-<img/colineair.jpg, id=384, 472.76625pt x 176.45924pt>
+<img/colineair.jpg, id=396, 472.76625pt x 176.45924pt>
 File: img/colineair.jpg Graphic file (type jpg)
 <use img/colineair.jpg>
 Package pdftex.def Info: img/colineair.jpg  used on input line 38.
 (pdftex.def)             Requested size: 170.71393pt x 63.71913pt.
-<img/almost_colinair.jpg, id=385, 361.35pt x 92.7465pt>
+<img/almost_colinair.jpg, id=397, 361.35pt x 92.7465pt>
 File: img/almost_colinair.jpg Graphic file (type jpg)
 <use img/almost_colinair.jpg>
 Package pdftex.def Info: img/almost_colinair.jpg  used on input line 44.
 (pdftex.def)             Requested size: 170.71393pt x 43.81587pt.
-)
-(./Animation.tex
-<img/cat2.png, id=387, 1505.625pt x 94.10156pt>
+) (./Animation.tex
+<img/cat2.png, id=399, 1505.625pt x 94.10156pt>
 File: img/cat2.png Graphic file (type png)
 <use img/cat2.png>
 Package pdftex.def Info: img/cat2.png  used on input line 10.
 (pdftex.def)             Requested size: 301.11966pt x 18.81996pt.
- [17 <./img/colineair.JPG> <./img/almost_colinair.JPG> <./img/cat2.png>]) (./Be
-sluit.tex) [18] (./Eindverslag.bbl
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[16] [17 <./img/bowyer-watson_superdriehoek.png> <./img/Bowyer-Watson_nieuwpunt
+.png> <./img/Bowyer-Watson_verwijderen.png> <./img/colineair.JPG> <./img/almost
+_colinair.JPG>]) (./Besluit.tex) [18 <./img/cat2.png>] (./Eindverslag.bbl
 Underfull \hbox (badness 3668) in paragraph at lines 42--48
 []\T1/lmr/m/n/10.95 (+20) StackExchange.  Fin-ding the trans-form ma-trix from 
 4 pro-jec-ted points
@@ -1034,85 +1040,187 @@ Underfull \hbox (badness 3965) in paragraph at lines 55--58
 ttps : / / en . wikipedia . org / wiki / Bowyer % E2 % 80 %
  []
 
-) [19] (./AppendixKleurenPlots.tex) [20]
+) [19] (./AppendixKleurenPlots.tex
+<img/rgbRed.png, id=446, 433.62pt x 332.442pt>
+File: img/rgbRed.png Graphic file (type png)
+<use img/rgbRed.png>
+Package pdftex.def Info: img/rgbRed.png  used on input line 8.
+(pdftex.def)             Requested size: 192.0548pt x 147.2438pt.
+<img/rgbYellow.png, id=447, 433.62pt x 332.442pt>
+File: img/rgbYellow.png Graphic file (type png)
+<use img/rgbYellow.png>
+Package pdftex.def Info: img/rgbYellow.png  used on input line 15.
+(pdftex.def)             Requested size: 192.0548pt x 147.2438pt.
+<img/rgbGreen.png, id=448, 433.62pt x 332.442pt>
+File: img/rgbGreen.png Graphic file (type png)
+<use img/rgbGreen.png>
+Package pdftex.def Info: img/rgbGreen.png  used on input line 28.
+(pdftex.def)             Requested size: 192.0548pt x 147.2438pt.
+<img/rgbBlueGreen.png, id=449, 433.62pt x 332.442pt>
+File: img/rgbBlueGreen.png Graphic file (type png)
+<use img/rgbBlueGreen.png>
+Package pdftex.def Info: img/rgbBlueGreen.png  used on input line 35.
+(pdftex.def)             Requested size: 192.0548pt x 147.2438pt.
+<img/rgbBlue.png, id=450, 433.62pt x 332.442pt>
+File: img/rgbBlue.png Graphic file (type png)
+<use img/rgbBlue.png>
+Package pdftex.def Info: img/rgbBlue.png  used on input line 48.
+(pdftex.def)             Requested size: 192.0548pt x 147.2438pt.
+<img/rgbPink.png, id=451, 433.62pt x 332.442pt>
+File: img/rgbPink.png Graphic file (type png)
+<use img/rgbPink.png>
+Package pdftex.def Info: img/rgbPink.png  used on input line 55.
+(pdftex.def)             Requested size: 192.0548pt x 147.2438pt.
+<img/hueHistRed.png, id=452, 457.71pt x 332.442pt>
+File: img/hueHistRed.png Graphic file (type png)
+<use img/hueHistRed.png>
+Package pdftex.def Info: img/hueHistRed.png  used on input line 68.
+(pdftex.def)             Requested size: 192.0548pt x 139.49278pt.
+<img/hueHistYellow.png, id=453, 457.71pt x 332.442pt>
+File: img/hueHistYellow.png Graphic file (type png)
+<use img/hueHistYellow.png>
+Package pdftex.def Info: img/hueHistYellow.png  used on input line 75.
+(pdftex.def)             Requested size: 192.0548pt x 139.49278pt.
+ [20 <./img/rgbRed.png> <./img/rgbYellow.png> <./img/rgbGreen.png> <./img/rgbBl
+ueGreen.png> <./img/rgbBlue.png> <./img/rgbPink.png>]
+<img/hueHistGreen.png, id=467, 457.71pt x 332.442pt>
+File: img/hueHistGreen.png Graphic file (type png)
+<use img/hueHistGreen.png>
+Package pdftex.def Info: img/hueHistGreen.png  used on input line 88.
+(pdftex.def)             Requested size: 192.0548pt x 139.49278pt.
+<img/hueHistBlueGreen.png, id=468, 457.71pt x 332.442pt>
+File: img/hueHistBlueGreen.png Graphic file (type png)
+<use img/hueHistBlueGreen.png>
+Package pdftex.def Info: img/hueHistBlueGreen.png  used on input line 95.
+(pdftex.def)             Requested size: 192.0548pt x 139.49278pt.
+<img/hueHistBlue.png, id=469, 457.71pt x 332.442pt>
+File: img/hueHistBlue.png Graphic file (type png)
+<use img/hueHistBlue.png>
+Package pdftex.def Info: img/hueHistBlue.png  used on input line 108.
+(pdftex.def)             Requested size: 192.0548pt x 139.49278pt.
+<img/hueHistPink.png, id=470, 457.71pt x 332.442pt>
+File: img/hueHistPink.png Graphic file (type png)
+<use img/hueHistPink.png>
+Package pdftex.def Info: img/hueHistPink.png  used on input line 115.
+(pdftex.def)             Requested size: 192.0548pt x 139.49278pt.
+<img/hsl3DRed.png, id=471, 426.393pt x 332.442pt>
+File: img/hsl3DRed.png Graphic file (type png)
+<use img/hsl3DRed.png>
+Package pdftex.def Info: img/hsl3DRed.png  used on input line 130.
+(pdftex.def)             Requested size: 192.0548pt x 149.73447pt.
+<img/hsl3DYellow.png, id=472, 426.393pt x 332.442pt>
+File: img/hsl3DYellow.png Graphic file (type png)
+<use img/hsl3DYellow.png>
+Package pdftex.def Info: img/hsl3DYellow.png  used on input line 137.
+(pdftex.def)             Requested size: 192.0548pt x 149.73447pt.
+ [21 <./img/hueHistRed.png> <./img/hueHistYellow.png> <./img/hueHistGreen.png> 
+<./img/hueHistBlueGreen.png> <./img/hueHistBlue.png> <./img/hueHistPink.png>]
+<img/hsl3DGreen.png, id=486, 426.393pt x 332.442pt>
+File: img/hsl3DGreen.png Graphic file (type png)
+<use img/hsl3DGreen.png>
+Package pdftex.def Info: img/hsl3DGreen.png  used on input line 150.
+(pdftex.def)             Requested size: 192.0548pt x 149.73447pt.
+<img/hsl3DBlueGreen.png, id=487, 426.393pt x 332.442pt>
+File: img/hsl3DBlueGreen.png Graphic file (type png)
+<use img/hsl3DBlueGreen.png>
+Package pdftex.def Info: img/hsl3DBlueGreen.png  used on input line 157.
+(pdftex.def)             Requested size: 192.0548pt x 149.73447pt.
+<img/hsl3DBlue.png, id=488, 426.393pt x 332.442pt>
+File: img/hsl3DBlue.png Graphic file (type png)
+<use img/hsl3DBlue.png>
+Package pdftex.def Info: img/hsl3DBlue.png  used on input line 170.
+(pdftex.def)             Requested size: 192.0548pt x 149.73447pt.
+<img/hsl3DPink.png, id=489, 426.393pt x 332.442pt>
+File: img/hsl3DPink.png Graphic file (type png)
+<use img/hsl3DPink.png>
+Package pdftex.def Info: img/hsl3DPink.png  used on input line 177.
+(pdftex.def)             Requested size: 192.0548pt x 149.73447pt.
+<img/hslRed.png, id=490, 674.52pt x 332.442pt>
+File: img/hslRed.png Graphic file (type png)
+<use img/hslRed.png>
+Package pdftex.def Info: img/hslRed.png  used on input line 188.
+(pdftex.def)             Requested size: 426.79135pt x 210.35263pt.
+ [22 <./img/hsl3DRed.png> <./img/hsl3DYellow.png> <./img/hsl3DGreen.png> <./img
+/hsl3DBlueGreen.png> <./img/hsl3DBlue.png> <./img/hsl3DPink.png>]
+<img/hslYellow.png, id=504, 674.52pt x 332.442pt>
+File: img/hslYellow.png Graphic file (type png)
+<use img/hslYellow.png>
+Package pdftex.def Info: img/hslYellow.png  used on input line 197.
+(pdftex.def)             Requested size: 426.79135pt x 210.35263pt.
+File: img/hslGreen.png Graphic file (type png)
+<use img/hslGreen.png>
+Package pdftex.def Info: img/hslGreen.png  used on input line 204.
+(pdftex.def)             Requested size: 426.79135pt x 210.35263pt.
+
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+<img/hslBlueGreen.png, id=505, 674.52pt x 332.442pt>
+File: img/hslBlueGreen.png Graphic file (type png)
+<use img/hslBlueGreen.png>
+Package pdftex.def Info: img/hslBlueGreen.png  used on input line 211.
+(pdftex.def)             Requested size: 426.79135pt x 210.35263pt.
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+<img/hslBlue.png, id=506, 674.52pt x 332.442pt>
+File: img/hslBlue.png Graphic file (type png)
+<use img/hslBlue.png>
+Package pdftex.def Info: img/hslBlue.png  used on input line 218.
+(pdftex.def)             Requested size: 426.79135pt x 210.35263pt.
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+<img/hslPink.png, id=507, 674.52pt x 332.442pt>
+File: img/hslPink.png Graphic file (type png)
+<use img/hslPink.png>
+Package pdftex.def Info: img/hslPink.png  used on input line 225.
+(pdftex.def)             Requested size: 426.79135pt x 210.35263pt.
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+) [23 <./img/hslRed.png> <./img/hslYellow.png>]
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 144.
+ [24 <./img/hslBlueGreen.png>]
+[25 <./img/hslBlue.png> <./img/hslPink.png>]
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 144.
  (./Eindverslag.aux)
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 144.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 144.
+Package rerunfilecheck Info: File `Eindverslag.out' has not changed.
+(rerunfilecheck)             Checksum: C2A803A80B7BF75985C24048555FA645;2589.
 
-
-Package rerunfilecheck Warning: File `Eindverslag.out' has changed.
-(rerunfilecheck)                Rerun to get outlines right
-(rerunfilecheck)                or use package `bookmark'.
-
-Package rerunfilecheck Info: Checksums for `Eindverslag.out':
-(rerunfilecheck)             Before: 59C690E4202F5215B3D911C5A3BFA2A7;2231
-(rerunfilecheck)             After:  E51A890EC4E0F3634BB640CFCAE9D75A;2282.
 
 LaTeX Warning: There were undefined references.
 
 
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+LaTeX Warning: There were multiply-defined labels.
 
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 144.
  ) 
 Here is how much of TeX's memory you used:
- 22922 strings out of 492615
- 421908 string characters out of 6131391
- 557873 words of memory out of 5000000
- 26170 multiletter control sequences out of 15000+600000
+ 23080 strings out of 492615
+ 424909 string characters out of 6131391
+ 560137 words of memory out of 5000000
+ 26291 multiletter control sequences out of 15000+600000
  49479 words of font info for 94 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  55i,9n,56p,2870b,1321s stack positions out of 5000i,500n,10000p,200000b,80000s
-pdfTeX warning (dest): name{subsection.9.3} has been referenced but does not 
-exist, replaced by a fixed one
-
-pdfTeX warning (dest): name{subsection.8.2} has been referenced but does not ex
-ist, replaced by a fixed one
-
-pdfTeX warning (dest): name{subsubsection.4.1.3} has been referenced but does n
-ot exist, replaced by a fixed one
-
-pdfTeX warning (dest): name{subsubsection.4.1.2} has been referenced but does n
-ot exist, replaced by a fixed one
-
-pdfTeX warning (dest): name{subsubsection.4.1.1} has been referenced but does n
-ot exist, replaced by a fixed one
-
-pdfTeX warning (dest): name{subsection.2.4} has been referenced but does not ex
-ist, replaced by a fixed one
-
-pdfTeX warning (dest): name{subsection.2.3} has been referenced but does not ex
-ist, replaced by a fixed one
-
-pdfTeX warning (dest): name{subsubsection.2.2.2} has been referenced but does n
-ot exist, replaced by a fixed one
-
-pdfTeX warning (dest): name{subsubsection.2.2.1} has been referenced but does n
-ot exist, replaced by a fixed one
-
-pdfTeX warning (dest): name{subsection.2.2} has been referenced but does not ex
-ist, replaced by a fixed one
-
-pdfTeX warning (dest): name{subsection.2.1} has been referenced but does not ex
-ist, replaced by a fixed one
-
-{/usr/share/texmf/fonts/enc/dvips/lm/lm-rm.enc}{/usr/share/texmf/fonts/enc/dvip
-s/lm/lm-mathex.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/sha
-re/texmf/fonts/enc/dvips/lm/lm-mathsy.enc}{/usr/share/texmf/fonts/enc/dvips/lm/
-lm-ec.enc}</usr/share/texmf/fonts/type1/public/lm/lmbx10.pfb></usr/share/texmf/
-fonts/type1/public/lm/lmbx12.pfb></usr/share/texmf/fonts/type1/public/lm/lmex10
-.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi10.pfb></usr/share/texmf/fonts
-/type1/public/lm/lmmi8.pfb></usr/share/texmf/fonts/type1/public/lm/lmr10.pfb></
-usr/share/texmf/fonts/type1/public/lm/lmr8.pfb></usr/share/texmf/fonts/type1/pu
-blic/lm/lmri10.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy10.pfb></usr/sha
-re/texmf/fonts/type1/public/lm/lmsy8.pfb></usr/share/texmf/fonts/type1/public/l
-m/lmtt10.pfb>
-Output written on Eindverslag.pdf (20 pages, 2579128 bytes).
+{/usr/share/texmf/fonts/enc/dvips/lm/lm-rm.enc}{/usr/share/texmf/fonts/enc/dv
+ips/lm/lm-mathex.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/s
+hare/texmf/fonts/enc/dvips/lm/lm-mathsy.enc}{/usr/share/texmf/fonts/enc/dvips/l
+m/lm-ec.enc}</usr/share/texmf/fonts/type1/public/lm/lmbx10.pfb></usr/share/texm
+f/fonts/type1/public/lm/lmbx12.pfb></usr/share/texmf/fonts/type1/public/lm/lmex
+10.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi10.pfb></usr/share/texmf/fon
+ts/type1/public/lm/lmmi8.pfb></usr/share/texmf/fonts/type1/public/lm/lmr10.pfb>
+</usr/share/texmf/fonts/type1/public/lm/lmr8.pfb></usr/share/texmf/fonts/type1/
+public/lm/lmri10.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy10.pfb></usr/s
+hare/texmf/fonts/type1/public/lm/lmsy8.pfb></usr/share/texmf/fonts/type1/public
+/lm/lmtt10.pfb>
+Output written on Eindverslag.pdf (25 pages, 7805222 bytes).
 PDF statistics:
- 503 PDF objects out of 1000 (max. 8388607)
- 439 compressed objects within 5 object streams
- 124 named destinations out of 1000 (max. 500000)
- 14702 words of extra memory for PDF output out of 17280 (max. 10000000)
+ 605 PDF objects out of 1000 (max. 8388607)
+ 490 compressed objects within 5 object streams
+ 138 named destinations out of 1000 (max. 500000)
+ 14865 words of extra memory for PDF output out of 17280 (max. 10000000)
 
