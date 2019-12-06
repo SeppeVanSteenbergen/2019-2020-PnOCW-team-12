@@ -1,6 +1,5 @@
 \section{Algemeen verloop algoritme}
-Er gaat heel wat vooraf aan het weergeven van een afbeelding, video of animatie op alle geconnecteerde toestellen. In bijlage \ref{bijlageA1} is een algemeen overzicht te vinden.
-\bigskip
+Er gaat heel wat vooraf aan het weergeven van een afbeelding, video of animatie op alle geconnecteerde toestellen. In bijlage \ref{bijlageA1} is een algemeen overzicht te vinden.\\[3mm]
 Eens de gewenste opstelling bekomen is, kan de master het commando geven om detectieschermen weer te geven op de toestellen. Dit wordt weergegeven op figuur \ref{fig:opstelling}. Deze configuratie wordt nu vastgelegd door de master en geüpload om te analyseren. Indien nodig wordt de afbeelding eerst herschaald volgens 1920x1080 pixels om performantie te bevorderen. Ook wordt van {\it RGBA} naar {\it HSLA} spectrum gegaan. Vervolgens wordt er gefilterd op de twee randkleuren van het detectiescherm. Hieruit volgen de zogenaamde {\it islands} die gefilterd worden tot er enkel mogelijke schermen overblijven.
 
 \begin{figure}[H]

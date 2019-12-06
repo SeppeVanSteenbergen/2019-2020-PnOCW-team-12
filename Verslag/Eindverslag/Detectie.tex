@@ -39,17 +39,15 @@ Elk individueel slave scherm laat een vooraf bepaalde afbeelding zien met gekend
 \caption{Kleurenmasker van een scherm na floodfill}
 \end{figure}
 
-
+\noindent
 Niet enkel de associatie van de gemaskeerde pixels wordt op deze manier behouden, maar deze methode maakt ook dat de komende pixel bewerkingen maar over een minimale bounding box uitgevoerd worden ten opzichten van de volledige pixel matrix. Elk resulterend resultaat van floodfill geeft een verbonden pixel verzameling, een island, als resutlaat. De resulterende islands worden achteraf gefilterd opdat elk eiland de drie kleuren van de border en het middelpunt bevatten. Als er aan deze voorwaarde voldaan is wordt er een poging gedaan om lokaal een middelpunt en geldige barcode te lezen \ref{barcode}. Bij het falen van een van deze verificatiestappen wordt het eiland verworpen, de overblijvende eilanden zijn geldige eilanden voor verdere hoekdetectie.
 
 \subsection{Hoekpunten}
-Er werd vooraf een algemeen hoek-detectie algoritme Shi-Tomashi \cite{shi-tomashi} geïmplementeerd en getest, maar gaf een te complex resultaat op de binaire maskers om de juiste hoeken te filteren. Dit algoritme draagt ook een relatief grote overhead door de x- en y-sobel operaties die elks een volledige pixel convolution over alle pixels als pre-processing toepassen. Onze algoritmes zijn veel simplistischer en zullen in de praktijk nooit verder dan de boundary van een eiland uitgevoerd worden in tegenstelling tot de volledige island matrix, maar geven een perfect bruikbaar resultaat voor onze noden.
-\bigskip
-In de eerste stap wordt er bepaald of het scherm voornamelijk recht of gekanteld is ten opzichte van de foto. Hiervoor wordt langs de linker kant van het kader de standaarddeviatie van pixels in het masker berekend. Bij een standaardafwijking onder de 15\% wordt een scherm als liggend of verticaal gezien op de foto en niet gekanteld.
-\bigskip
+Er werd vooraf een algemeen hoek-detectie algoritme Shi-Tomashi \cite{shi-tomashi} geïmplementeerd en getest, maar gaf een te complex resultaat op de binaire maskers om de juiste hoeken te filteren. Dit algoritme draagt ook een relatief grote overhead door de x- en y-sobel operaties die elks een volledige pixel convolution over alle pixels als pre-processing toepassen. Onze algoritmes zijn veel simplistischer en zullen in de praktijk nooit verder dan de boundary van een eiland uitgevoerd worden in tegenstelling tot de volledige island matrix, maar geven een perfect bruikbaar resultaat voor onze noden.\\[3mm]
+In de eerste stap wordt er bepaald of het scherm voornamelijk recht of gekanteld is ten opzichte van de foto. Hiervoor wordt langs de linker kant van het kader de standaarddeviatie van pixels in het masker berekend. Bij een standaardafwijking onder de 15\% wordt een scherm als liggend of verticaal gezien op de foto en niet gekanteld.\\[3mm]
 Als in eerste instantie het scherm als gedraaid beschouwd wordt, zal er vanuit elke rand van de bounding box van het eiland het de eerste mask-pixel als corner beschouwd worden. In het geval dat het scherm relatief horizontaal of verticaal recht staat, zal er loodrecht op de randen gezocht worden (zie figuur: \ref{fig:perp search}), maar volgens een diagonaal tot een mask-pixel (zie figuur: \ref{fig:diag search}). Beide variante hoekdetectie algoritmes lopen in worst-case scenario volgens
 \[O(4mn)=O(mn)\]
-maar zoals eerder vermeld zullen deze in de praktijk maar tot de boundary van het masker lopen. \\
+maar zoals eerder vermeld zullen deze in de praktijk maar tot de boundary van het masker lopen.
 
 \begin{figure}[H] 
 \centering
@@ -68,6 +66,7 @@ maar zoals eerder vermeld zullen deze in de praktijk maar tot de boundary van he
 \caption{Hoekdetectie}
 \end{figure}
 
+\noindent
 Beide variaties van hoek-detectie zal altijd vier hoeken als resultaat opleveren. Dit zullen door overlap en foutjes in het maskeren niet altijd correcte hoeken zijn. Na het bepalen, worden de hoeken nagekeken of deze resultaten wel degelijk kwalificeren als hoek. Deze kwalificatie is gebaseerd op bepaalde eigenschappen die in de buurt van elke hoek moeten gevonden worden, namelijk twee lijnen die tot de boord behoren en een diagonaallijn die naar het middelpunt van het scherm loopt (zie figuur: \ref{fig:correcte hoek}). Deze lijnen zijn bepaald door te filteren door de border- en diagonaal-kleur die gescheiden zijn door een witte rand. Deze aanwijzingen moeten gevonden worden binnen een relatieve straal die gelijk is aan 25\% van de maximale afstand van de hoekpunten tot het middelpunt. Als in een eerder gevonden hoek deze voorwaarden niet aanwezig zijn (zie figuur: \ref{fig:foute hoek}), wordt deze hoek verworpen als resultaat van de hoek detectie.
 
 \begin{figure}[H] 
