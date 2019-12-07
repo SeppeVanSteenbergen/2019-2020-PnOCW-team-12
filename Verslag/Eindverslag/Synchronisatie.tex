@@ -2,7 +2,7 @@ Bij een live applicatie is het belangerijk dat de aangesloten apparaten de mogel
 
 \subsection{Vertraging berekenen}
 Er is een vertraging tussen een aangesloten client en de server, de {\it ping}. Dit is gemeten in miliseconden.
-Deze wordt gemeten door een bericht met de actuele tijd te verzenden van de server naar de client, en terug. De verzonden tijd wordt afgetrokken van de actuele tijd waarmee we de ping verkrijgen.
+Deze wordt gemeten door een bericht met de actuele tijd te verzenden van de server naar de client, en terug. De verzonden tijd wordt afgetrokken van de actuele tijd waarmee de ping verkregen is.
 In figuur \ref{diag} is de informatieoverdracht zichtbaar. In de server wordt de server tijd (TS1) berekend, verzonden naar de client en terug gekregen.
 Nu wordt de actuele tijd berekend in de server TS2. Dus de uiteindelijke ping is:
 \[ping = TS2 - TS1\]

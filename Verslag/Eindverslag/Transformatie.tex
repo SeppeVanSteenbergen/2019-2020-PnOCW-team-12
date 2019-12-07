@@ -1,5 +1,5 @@
-\section{Transformatie voor image-show}
-Alle schermen moeten een deel van een foto weergeven. Echter doordat de schermen drie--dimensionaal gedraaid zijn, moet de weer te geven foto getransformeerd worden. De afbeelding moet namelijk vanuit perspectief twee--dimensionaal zijn afgebeeld. Het gebruikte algoritme gaat vier bron-- en bestemmingshoeken gebruiken als invoer om tot een transformatie--matrix te komen. Deze matrix wordt gebruikt om later met {\it image3d} transform een snelle transformatie op een canvaselement mogelijk te maken.
+
+	Alle schermen moeten een deel van een foto weergeven. Echter doordat de schermen drie--dimensionaal gedraaid zijn, moet de weer te geven foto getransformeerd worden. De afbeelding moet namelijk vanuit perspectief twee--dimensionaal zijn afgebeeld. Het gebruikte algoritme gaat vier bron-- en bestemmingshoeken gebruiken als invoer om tot een transformatie--matrix te komen. Deze matrix wordt gebruikt om later met {\it image3d} transform een snelle transformatie op een canvaselement mogelijk te maken.
 
 \subsection{transformatiematrix}
 De vier bron-- en bestemmingshoeken zijn respectievelijk de start-- en eindhoeken. Er zal per lijst van hoeken een matrix worden berekent nadat de coefficiënten berekend zijn geweest. $(x_i, y_i)$ zijn de hoekpunten, $i = 1..4$ voor de start--hoeken en $i = 5..8$ voor de eind--hoeken. \cite{redrawImageFrom3dPerspectiveTo2d}
@@ -29,7 +29,6 @@ $$
 $$
 De twee matrices A en B, respecitivelijk met de bron- en bestemmingshoeken, worden gebruikt om de transformatiematrix te berekenen.
 $$ C = AB^{-1}$$
-
 $C$ is de transformatiematrix, deze wordt later gebruikt om de {\it matrix3d} op te stellen. \cite{projectiveTransformation}
 $$
 \begin{Bmatrix}

@@ -84,7 +84,7 @@
   author       = {scratchapixel},
   title        = {The Perspective and Orthographic Projection Matrix},
   howpublished = {\url{https://www.scratchapixel.com/lessons/3d-basic-rendering/perspective-and-orthographic-projection-matrix/building-basic-perspective-projection-matrix}},
-  note         = {Geraadpleegd november 2019},
+  note         = {G},
 }
 
 @Misc{floodfill,
@@ -92,6 +92,13 @@
   howpublished = {\url{https://en.wikipedia.org/wiki/Flood_fill}},
   note         = {geraadpleegd okotber 2019},
   url          = {https://en.wikipedia.org/wiki/Flood_fill},
+}
+
+@Misc{intersectie,
+  title        = {Line-line intersection},
+  howpublished = {\url{https://en.wikipedia.org/wiki/Line%E2%80%93line_intersection}},
+  note         = {Geraadpleegd oktober 2019},
+  url          = {https://en.wikipedia.org/wiki/Line%E2%80%93line_intersection},
 }
 
 @Comment{jabref-meta: databaseType:bibtex;}

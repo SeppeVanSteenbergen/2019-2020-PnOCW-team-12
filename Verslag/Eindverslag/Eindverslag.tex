@@ -64,10 +64,10 @@ literate=
 \usepackage[T1]{fontenc}
 \usepackage{microtype} % good font tricks
 
+\begin{document}
+
 \newcommand{\note}[1]{{\colorbox{yellow!40!white}{#1}}}
 \newcommand{\exampletext}[1]{{\color{blue!60!black}#1}}
-
-\begin{document}
 
 \noindent
 \colorbox[HTML]{52BDEC}{\bfseries\parbox{\textwidth}{\centering\large
@@ -94,12 +94,14 @@ Martijn Debeuf &\\
 Toon Sauvillers &\\ % fill in the time spend on this task per team member who worked on it
 Dirk Vanbeveren  &\\
 Bert Van den Bosch & \\
-Seppe Van Steenbergen &\\
+Seppe Van Steenbergen & 270h\\
 
 
 \bottomrule
 \hline
 \end{tabular}\\
+\smallskip
+
 \noindent
 {\color[HTML]{52BDEC} \rule{\linewidth}{1mm} }
 
@@ -130,7 +132,8 @@ Seppe Van Steenbergen &\\
 \section{Identificatie}\label{sec:identificatie}
 \input{Identificatie.tex}
 
-\input{Transformatie voor image-show}
+\section{Transformatie voor image-show}\label{sec:transformatie}
+\input{Transformatie.tex}
 
 \input{Triangulatie}
 
@@ -145,6 +148,8 @@ Seppe Van Steenbergen &\\
 
 \newpage
 \appendix
+\renewcommand\thefigure{\thesection.\arabic{figure}}   
+\setcounter{figure}{0} 
 \section{Overzicht algoritme}
 \subsection{Algemeen}
 \begin{figure}[H]
@@ -172,6 +177,7 @@ Seppe Van Steenbergen &\\
 \newpage
 
 \section{Kleuren plots}
+\label{kleurenPlots}
 \input{AppendixKleurenPlots.tex}
 \newpage
 
