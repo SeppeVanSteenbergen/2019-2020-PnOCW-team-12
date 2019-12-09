@@ -398,6 +398,8 @@ export default class Image {
   showTransformatedImage(image) {
     let info = this.createPictureCanvas(image.width, image.height)
 
+    let ratio = Math.max(info.w / image.width, info.h / image.height)
+
     let transformatedStyles = []
     for (let i = 0; i < this.screens.length; i++) {
       let h = this.screens[i].cssMatrix
@@ -416,7 +418,7 @@ export default class Image {
         info.w +
         'px; height: ' +
         info.h +
-        'px; object-fit: none'
+        'px;'
 
       transformatedStyles.push(t)
     }
@@ -432,8 +434,8 @@ export default class Image {
           image,
           0,
           0,
-          outputCanvas.width,
-          outputCanvas.height
+          Math.round(image.width * ratio),
+          Math.round(image.height * ratio)
         )
       }
     }
