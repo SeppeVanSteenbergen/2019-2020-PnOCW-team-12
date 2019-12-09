@@ -18,15 +18,8 @@
     <canvas id="canvas" width= "1920" height= "900"></canvas>
     <script>
         var canvas = document.getElementById("canvas")
-        let triangulation = Delaunay.triangulation(Delaunay.randomPointsGenerator(6 , canvas), canvas.width, canvas.height)
-        let firstPoint = triangulation[0].point1
-        let endPoint = triangulation[0].point2
-        console.log(firstPoint + "----->" + endPoint)
+        var triangulation = Delaunay.triangulation(Delaunay.randomPointsGenerator(3, canvas), canvas.width, canvas.height)
         var animation1 = new Animations(triangulation, {width: canvas.width, height:canvas.height})
-        animation1.setPosition(firstPoint[0], firstPoint[1])
-        animation1.setDirection(firstPoint, endPoint)
-        animation1.firstPoint = firstPoint
-        animation1.endPoint = endPoint
 
 
         var animationClient = new Animations(null, {width: canvas.width, height:canvas.height}, true)

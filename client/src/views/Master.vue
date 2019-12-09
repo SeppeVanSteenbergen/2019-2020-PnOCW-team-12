@@ -1072,7 +1072,7 @@ export default {
         this.drawingImg.height
       )
 
-      let base64 = this.cutOutBase64(img, info.w, info.h)
+      let base64 = this.imageToBase64(img)
 
       console.log(info)
 

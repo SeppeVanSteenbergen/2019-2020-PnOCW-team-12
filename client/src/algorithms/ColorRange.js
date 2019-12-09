@@ -12,11 +12,11 @@ export default class ColorRange {
       },
       yellow: {
         min: 40,
-        max: 86
+        max: 80
       },
       green: {
         min: 100,
-        max: 150
+        max: 140
       },
       lightblue: {
         min: 160,

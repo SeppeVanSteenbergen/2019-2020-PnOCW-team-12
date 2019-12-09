@@ -36,8 +36,16 @@ export default class Animations {
     this.angle = 0
     this.snowAngle = 0
     this.posStack = []
-    this.firstPoint
-    this.endPoint
+
+    if (triangulation !== null) {
+      let firstPoint = triangulation[0].point1
+      let endPoint = triangulation[0].point2
+      this.setPosition(firstPoint[0], firstPoint[1])
+      this.setDirection(firstPoint, endPoint)
+      this.firstPoint = firstPoint
+      this.endPoint = endPoint
+    }
+
     this.triangulation = triangulation
     this.stack = []
 
@@ -55,7 +63,6 @@ export default class Animations {
     if(triangulation !== null) {
       this.edges = Delaunay.triangulationEdges(triangulation)
     }
-
   }
 
   setPosition(x, y) {
@@ -116,11 +123,6 @@ export default class Animations {
               this.stack[i*Math.round(distCats/nbCats)][1], this.stack[i*Math.round(distCats/nbCats)][2],
               this.stack[i*Math.round(distCats/nbCats)][3], this.stack[i*Math.round(distCats/nbCats)][4], true)
         }
-        else {
-          this.drawAnimal(canvas, this.stack[i * Math.round(distCats / nbCats)][0],
-              this.stack[i * Math.round(distCats / nbCats)][1], this.stack[i * Math.round(distCats / nbCats)][2],
-              this.stack[i * Math.round(distCats / nbCats)][3], this.stack[i * Math.round(distCats / nbCats)][4], false)
-        }
       }
       this.stack.shift()
     }
@@ -128,10 +130,9 @@ export default class Animations {
   }
 
   drawAnimal(canvas, x, y, angle, frame, right, cat) {
-    if (cat){
+    if (cat) {
       var image = this.catImage
-    }
-    else {
+    } else {
       var image = this.mouseImage
     }
     let ctx = canvas.getContext('2d')
@@ -142,30 +143,30 @@ export default class Animations {
 
     if (right) {
       ctx.drawImage(
-          image,
+        image,
         (frame * image.width) / this.nbFrames,
         0,
-          image.width / this.nbFrames,
-          image.height,
+        image.width / this.nbFrames,
+        image.height,
         x - image.width / (2 * this.nbFrames),
-        y - image.height ,
-          image.width / this.nbFrames,
-          image.height
+        y - image.height,
+        image.width / this.nbFrames,
+        image.height
       )
     } else {
       ctx.save()
       ctx.translate(canvas.width, 0)
       ctx.scale(-1, 1)
       ctx.drawImage(
-          image,
+        image,
         (frame * image.width) / this.nbFrames,
         0,
-          image.width / this.nbFrames,
-          image.height,
+        image.width / this.nbFrames,
+        image.height,
         -(x + image.width / (2 * this.nbFrames)) + this.width,
-        y - image.height ,
-          image.width / this.nbFrames,
-          image.height
+        y - image.height,
+        image.width / this.nbFrames,
+        image.height
       )
       ctx.restore()
     }
@@ -235,6 +236,8 @@ export default class Animations {
   }
 
   inRange(endPoint) {
+    if (endPoint === null) return true
+
     return (
       Math.pow(endPoint[0] - this.position.x, 2) +
         Math.pow(endPoint[1] - this.position.y, 2) <
