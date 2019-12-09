@@ -102,7 +102,7 @@ export default {
           this.setDefaultCSS()
           this.countDownHandler(message.data)
           break
-        case 'draw-directions':
+        case 'drawSnow-directions':
           this.setDefaultCSS()
           this.drawDirectionsHandler(message.data)
           break
@@ -475,7 +475,7 @@ export default {
       return ctx.getImageData(0,0,w,h)
     },
     animationInitHandler(data) {
-      //create delaunay image and draw on canvas
+      //create delaunay image and drawSnow on canvas
       this.delaunayImage = AlgorithmService.delaunayImage(data.triangulation, data.midpoints, data.width, data.height)
 
       // cut right part out of delaunay image

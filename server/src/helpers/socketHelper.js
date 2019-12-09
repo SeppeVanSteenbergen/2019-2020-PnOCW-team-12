@@ -48,7 +48,7 @@ module.exports = {
 
 	drawDirections
 	{
-		type: 'draw-directions',
+		type: 'drawSnow-directions',
 		data: {
 			command: [{
 				deg: (degrees from top)
