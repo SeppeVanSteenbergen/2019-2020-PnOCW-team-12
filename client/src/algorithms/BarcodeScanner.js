@@ -15,7 +15,7 @@ export default class BarcodeScanner {
     let height = imageObject.height
     let image = imageObject.data
 
-    let scanned = []
+    let scanned = 0
     let barcodes = {}
     let average = -20
     let count = 1
@@ -26,31 +26,28 @@ export default class BarcodeScanner {
       let S = image[i + 1]
       let L = image[i + 2]
       let contrast = Math.abs(average - L)
-      if(S < 60)
-      if(contrast > 20 && count2++ > 3){
+      if(S < 60){
+      if(contrast > 25 && count2++ > 3){
         count2 = 0
           debug.push(this.positionToPixel(i, imageObject.width))
           count = 1
           average = L
-          //Nieuwe scanned of nieuwe barcode
           if (contrast > 70) {
-            scanned.push(0)
-          } else if (contrast > 40) {
-            scanned.push(1)
+            scanned++
           } else {
-            if (scanned.length !== 0) {
+            if (true) {
               if (barcodes[scanned] === undefined) {
                 barcodes[scanned] = 1
               } else {
                 barcodes[scanned] += 1
               }
             }
-
-            scanned.length = 0
+            scanned = 0
           }
         } else {
           average = (average * count + L) / ++count
         }
+      }
     }
     console.log('scanned')
     console.log(debug)
