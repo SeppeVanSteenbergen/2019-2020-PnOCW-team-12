@@ -69,6 +69,24 @@ export default class BarcodeScanner {
     return (pixel[1] * width + pixel[0]) * 4
   }
 
+  /**
+   * TODO: waar max en min uitlezen, in welke matrix read + over alle pixels?
+   * 
+   * @param {Array} arr pixel array TODO: uitbreiden naar matrix?
+   * @param {int} min min grijswaarde : [0..100]
+   * @param {int} max max grijswaarde : [0..100]
+   */
+  static applyLevelsAdjustment(arr, min, max){
+    let fac = (max - min) / 100;
+
+    for (let i = 0; i < arr.length; i++) {
+      arr[i] = (arr[i] - min) * fac;
+    }
+
+    return arr;
+
+  }
+
   static scanVertical(imageObject) {
     let height = imageObject.height
     let image = imageObject.data
