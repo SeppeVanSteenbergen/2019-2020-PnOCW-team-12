@@ -49,7 +49,7 @@ export default class Animations {
     this.triangulation = triangulation
     this.stack = []
 
-    this.mp = 500; //max particles
+    this.mp = 250; //max particles
     this.particles = [];
     for(let i = 0; i < this.mp; i++) {
       this.particles.push({
