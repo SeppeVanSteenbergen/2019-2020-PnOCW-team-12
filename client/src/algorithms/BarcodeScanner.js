@@ -30,30 +30,29 @@ export default class BarcodeScanner {
       if(contrast > 20 && count2++ > 3){
         count2 = 0
           debug.push(this.positionToPixel(i, imageObject.width))
-        count = 1
-        average = L
-        //Nieuwe scanned of nieuwe barcode
-        if(contrast > 70) {
-          scanned.push(0)
-        }
-        else if (contrast > 40) {
-          scanned.push(1)
-        }
-        else {
-          if(scanned.length !== 0){
-          if (barcodes[scanned] === undefined) {
-            barcodes[scanned] = 1
+          count = 1
+          average = L
+          //Nieuwe scanned of nieuwe barcode
+          if (contrast > 70) {
+            scanned.push(0)
+          } else if (contrast > 40) {
+            scanned.push(1)
           } else {
-            barcodes[scanned] += 1
-          }}
+            if (scanned.length !== 0) {
+              if (barcodes[scanned] === undefined) {
+                barcodes[scanned] = 1
+              } else {
+                barcodes[scanned] += 1
+              }
+            }
 
-          scanned.length = 0
+            scanned.length = 0
+          }
+        } else {
+          average = (average * count + L) / ++count
         }
-      }else {
-        average = (average * count + L) / (++count)
-      }
     }
-    console.log("scanned")
+    console.log('scanned')
     console.log(debug)
     let amounts = Object.values(barcodes)
     let maxAmount = Math.max(...amounts)
@@ -62,7 +61,7 @@ export default class BarcodeScanner {
     let detectRatio = maxAmount / detectedAmount
     let ratio = maxAmount / height / 10
     if (detectRatio < 0) {
-      console.log('Picture is not good enough to detect barcode horizontal');
+      console.log('Picture is not good enough to detect barcode horizontal')
       return [0, 0, 0]
     } else {
       // console.log(detectRatio, ratio);
@@ -89,12 +88,12 @@ export default class BarcodeScanner {
   }
 
   static getMaxMinValues(imageObject) {
-    let max = 0;
-    let min = Infinity;
+    let max = 0
+    let min = Infinity
 
     let pixels = imageObject.data
     let start = Math.floor(pixels.length / 3)
-    let end = Math.ceil(pixels.length * 2 / 3)
+    let end = Math.ceil((pixels.length * 2) / 3)
     for (let i = start; i < end * 3; i += 4) {
       let value = pixels[i + 2]
 
@@ -111,21 +110,20 @@ export default class BarcodeScanner {
 
   /**
    * TODO: waar max en min uitlezen, in welke matrix read + over alle pixels?
-   * 
+   *
    * @param {Array} arr pixel array TODO: uitbreiden naar matrix?
    * @param {int} min min grijswaarde : [0..100]
    * @param {int} max max grijswaarde : [0..100]
    */
   static applyLevelsAdjustment(imageObject, min, max) {
-    let fac = (max - min) / 100;
+    let fac = (max - min) / 100
 
     let arr = imageObject.data
     for (let i = 0; i < arr.length; i++) {
-      arr[i + 2] = (arr[i + 2] - min) * fac;
+      arr[i + 2] = (arr[i + 2] - min) * fac
     }
 
-    return arr;
-
+    return arr
   }
 
   static scanVertical(imageObject) {
