@@ -134,7 +134,6 @@ export default class Animations {
           this.drawAnimal(canvas, this.stack[i * Math.round(distCats / nbCats)][0],
               this.stack[i * Math.round(distCats / nbCats)][1], this.stack[i * Math.round(distCats / nbCats)][2],
               this.stack[i * Math.round(distCats / nbCats)][3], this.stack[i * Math.round(distCats / nbCats)][4], false)
-        }
       }
       }
       this.stack.shift()
