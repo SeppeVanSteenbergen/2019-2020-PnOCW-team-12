@@ -1,3 +1,4 @@
+
 let imgElement = document.createElement("img");
     imgElement = document.getElementById('imageSrc');
 let inputElement = document.getElementById('fileInput');

@@ -3,6 +3,7 @@ import ColorRange from './ColorRange'
 export default class BarcodeScanner {
   static scan(imageObject) {
     //TODO: preprocess??
+    this.debugPixels(imageObject)
     let hor = this.scanHorizontal(imageObject)
     let ver = this.scanVertical(imageObject)
     let maxRatio = Math.max(hor[2], ver[2])
@@ -14,7 +15,6 @@ export default class BarcodeScanner {
   static scanHorizontal(imageObject) {
     let height = imageObject.height
     let image = imageObject.data
-    let even
     let scanned = 0
     let barcodes = {}
     let average = -20
@@ -22,36 +22,36 @@ export default class BarcodeScanner {
     let debug = []
     let count2 = 0
     for (let i = 0; i < image.length; i += 4) {
-      let H = image[i]
       let S = image[i + 1]
       let L = image[i + 2]
       let contrast = average - L
-      if(S < 60){
-      if(contrast > 70 && count2++ > 3) {
-        count2 = 0
-        count = 1
-        average = L
-        scanned++
-      } else if (contrast < -70 && count2++ > 3) {
-        count2 = 0
-        count = 1
-        average = L
-        scanned++
-      } else if (Math.abs(contrast) > 33){
-            if (scanned >= 0) {
-              scanned *= 2
-              if(!even){
-                scanned++
-              }
-              if (barcodes[scanned] === undefined) {
-                barcodes[scanned] = 1
-              } else {
-                barcodes[scanned] += 1
-              }
+      if (S < 60) {
+        if (contrast > 70 && count2++ > 3) {
+          count2 = 0
+          count = 1
+          average = L
+          scanned++
+        } else if (contrast < -70 && count2++ > 3) {
+          count2 = 0
+          count = 1
+          average = L
+          scanned++
+        } else if (Math.abs(contrast) > 33) {
+          if (scanned >= 0) {
+            scanned *= 2
+            if (scanned % 2 !== 0) {
+              scanned++
             }
-            scanned = 0
-        }x else {
+            if (barcodes[scanned] === undefined) {
+              barcodes[scanned] = 1
+            } else {
+              barcodes[scanned] += 1
+            }
+          }
+          scanned = 0
+        } else {
           average = (average * count + L) / ++count
+        }
       }
     }
     console.log('scanned')
@@ -77,6 +77,17 @@ export default class BarcodeScanner {
       console.log(detectRatio)
       return [barcode, ratio, detectRatio]
     }
+  }
+
+  static debugPixels(imageObject) {
+    let image = imageObject.data
+    let result = []
+    for (let i = 0; i < image.length; i += 4) {
+      let S = image[i + 1]
+      let L = image[i + 2]
+      result.push([S,L])
+    }
+    console.log(result)
   }
 
   static pixelToPosition(pixel, width) {
