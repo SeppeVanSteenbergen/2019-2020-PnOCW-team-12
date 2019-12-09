@@ -132,6 +132,7 @@ export default {
           this.restartVideoHandler()
           break
         case 'animation-init':
+          this.setDefaultCSS()
           this.animationInitHandler(message.data)
           break
         default:
@@ -488,7 +489,7 @@ export default {
       //this.delaunayImage = Image.resizeImageData(this.delaunayImage, [data.w, data.h])
 
       //create animation object
-      this.animation = new Animation(null, this.delaunayImage)
+      this.animation = new Animation(null, this.delaunayImage, true)
 
 
       //display the image on the screen
@@ -516,7 +517,7 @@ export default {
     animationFrameHandler(data) {
       let ctx = this.canvas.getContext('2d')
       ctx.putImageData(this.delaunayImage, 0,0)
-      this.animation.drawAnimal(this.canvas, data[0] - this.minx, data[1] - this.miny, data[2], data[3], data[4])
+      this.animation.drawAnimals(5,150,this.canvas, data[0] - this.minx, data[1] - this.miny, data[2], data[3], data[4])
     }
   }
 }

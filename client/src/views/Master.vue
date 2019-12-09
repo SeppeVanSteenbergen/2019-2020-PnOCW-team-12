@@ -468,7 +468,7 @@ export default {
 
       videofile: null,
       animationInterval: null,
-      animationFramerate: 30
+      animationFramerate: 50
     }
   },
   components: {
@@ -891,7 +891,7 @@ export default {
       this.animation = new Animation(this.analysedImage.triangulation, {
         width: this.analysedImage.width,
         height: this.analysedImage.height
-      })
+      }, false)
     },
     executeStartVideo() {
       let obj = {
