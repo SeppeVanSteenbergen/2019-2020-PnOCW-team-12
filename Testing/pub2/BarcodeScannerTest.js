@@ -11,6 +11,7 @@ imgElement.onload = function() {
         imgElement.height = Math.round(maxAmountBorderPx / (ratio + 1.0));
         imgElement.width = Math.round(ratio * imgElement.height);
     }
+    console.log(imgElement.width)
     let inputCanvas = document.getElementById("inputImage");
     let inputContext = inputCanvas.getContext("2d");
     inputContext.clearRect(0, 0, inputCanvas.width, inputCanvas.height);
@@ -20,18 +21,8 @@ imgElement.onload = function() {
 
     let inputImgData = inputContext.getImageData(0, 0, imgElement.width, imgElement.height);
     let colors1 = {}
-
     ColorSpace.rgbaToHsla(inputImgData.data);
-    let barcode = BarcodeScanner.scanHorizontalData(inputImgData.data, inputCanvas.height);
-    let colors = {}
-    // for(let i = 0; i < inputImgData.data.length; i += 4){
-    //     let color = [inputImgData.data[i], inputImgData.data[i + 1], inputImgData.data[i + 2]]
-    //     if(colors[color] === undefined){
-    //         colors[color] = 1
-    //     } else{
-    //         colors[color] += 1
-    //     }
-    // }
-    // console.log(colors)
+    console.log("start scan")
+    let barcode = BarcodeScanner.scanHorizontal(inputImgData);
     console.log(barcode);
 };

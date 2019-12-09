@@ -16,41 +16,47 @@ export default class BarcodeScanner {
 
     let scanned = []
     let barcodes = {}
- let comma = false
+    let average = -20
+    let count = 1
+    let debug = []
+    let count2 = 0
     for (let i = 0; i < image.length; i += 4) {
-      // Color + code: Red = 1; Yellow = 2; Green = 3; Blue = 4; Pink = 5
-      let H = 0
       let S = image[i + 1]
       let L = image[i + 2]
-     
-      if (!comma && ColorRange.inSepRange(H, S, L)) {
-        if (barcodes[scanned] === undefined) {
-          barcodes[scanned] = 1
-        } else {
-          barcodes[scanned] += 1
+      let contrast = Math.abs(average - L)
+      if(contrast > 30 && count2++ > 3){
+        count2 = 0
+          debug.push(this.positionToPixel(i, imageObject.width))
+        count = 1
+        average = L
+        //Nieuwe scanned of nieuwe barcode
+        if(contrast > 80) {
+          scanned.push(0)
         }
-        scanned = []
-        comma = true
-      } else if (ColorRange.inZeroRange(H, S, L) && comma) {
-        scanned.push(0)
-        comma = false
-      } else if (ColorRange.inOneRange(H, S, L) && comma) {
-        scanned.push(1)
-        comma = false
-      } else if (ColorRange.inCommaRange(H,S,L)){
-        comma = true
+        else if (contrast > 50) {
+          scanned.push(1)
+        }
+        else{
+          if (barcodes[scanned] === undefined) {
+            barcodes[scanned] = 1
+          } else {
+            barcodes[scanned] += 1
+          }
+        }
+      }else {
+        average = (average * count + L) / (++count)
       }
     }
-
+    console.log("scanned")
+    console.log(debug)
     let amounts = Object.values(barcodes)
     let maxAmount = Math.max(...amounts)
     let detectedAmount = amounts.reduce((a, b) => a + b, 0)
 
     let detectRatio = maxAmount / detectedAmount
-    //TODO: Needs to be updated with the right amount of barcodes on screen.
     let ratio = maxAmount / height / 10
-    if (detectRatio < 0.5) {
-      // console.log('Picture is not good enough to detect barcode horizontal');
+    if (detectRatio < 0) {
+      console.log('Picture is not good enough to detect barcode horizontal');
       return [0, 0, 0]
     } else {
       // console.log(detectRatio, ratio);
@@ -61,6 +67,7 @@ export default class BarcodeScanner {
           .replace(/,/g, '')
       )
       console.log(barcode)
+      console.log(detectRatio)
       return [barcode, ratio, detectRatio]
     }
   }
@@ -128,56 +135,10 @@ export default class BarcodeScanner {
       return [barcode, ratio, detectRatio]
     }
   }
-  static scanHorizontalData(image, height) {
-
-    let scanned = []
-    let barcodes = {}
-    let comma = true
-    for (let i = 0; i < image.length; i += 4) {
-      // Color + code: Red = 1; Yellow = 2; Green = 3; Blue = 4; Pink = 5
-      let H = image[i]
-      let S = image[i + 1]
-      let L = image[i + 2]
-     
-      if (!comma && ColorRange.inSepRange(H, S, L)) {
-        if (barcodes[scanned] === undefined) {
-          barcodes[scanned] = 1
-        } else {
-          barcodes[scanned] += 1
-        }
-        scanned = []
-        comma = true
-      } else if (ColorRange.inOneRange(H, S, L) && comma) {
-        scanned.push(1)
-        comma = false
-      } else if (ColorRange.inZeroRange(H, S, L) && comma) {
-        scanned.push(0)
-        comma = false
-      } else if (ColorRange.inCommaRange(H,S,L)){
-        comma = true
-      }
-    }
-    console.log(barcodes)
-    let amounts = Object.values(barcodes)
-    let maxAmount = Math.max(...amounts)
-    let detectedAmount = amounts.reduce((a, b) => a + b, 0)
-
-    let detectRatio = maxAmount / detectedAmount
-    //TODO: Needs to be updated with the right amount of barcodes on screen.
-    let ratio = maxAmount / height / 10
-    if (detectRatio < 0.1) {
-      // console.log('Picture is not good enough to detect barcode horizontal');
-      return [0, 0, 0]
-    } else {
-      // console.log(detectRatio, ratio);
-      let barcode = parseInt(
-        Object.keys(barcodes)
-          .find(key => barcodes[key] === maxAmount)
-          .toString()
-          .replace(/,/g, '')
-      )
-      console.log(barcode)
-      return [barcode, detectRatio, detectedAmount]
-    }
+  static positionToPixel(position, width) {
+    position /= 4
+    let x = position % width
+    let y = (position - x) / width
+    return [x, y]
   }
 }
