@@ -22,27 +22,32 @@ export default class BarcodeScanner {
     let debug = []
     let count2 = 0
     for (let i = 0; i < image.length; i += 4) {
+      let H = image[i]
       let S = image[i + 1]
       let L = image[i + 2]
       let contrast = Math.abs(average - L)
-      if(contrast > 30 && count2++ > 3){
+      if(!ColorRange.inBlueRange(H,S,L) && !ColorRange.inGreenRange(H,S,L) && !ColorRange.inRedRange(H,S,L))
+      if(contrast > 20 && count2++ > 3){
         count2 = 0
           debug.push(this.positionToPixel(i, imageObject.width))
         count = 1
         average = L
         //Nieuwe scanned of nieuwe barcode
-        if(contrast > 80) {
+        if(contrast > 70) {
           scanned.push(0)
         }
-        else if (contrast > 50) {
+        else if (contrast > 40) {
           scanned.push(1)
         }
-        else{
+        else {
+          if(scanned.length !== 0){
           if (barcodes[scanned] === undefined) {
             barcodes[scanned] = 1
           } else {
             barcodes[scanned] += 1
-          }
+          }}
+
+          scanned.length = 0
         }
       }else {
         average = (average * count + L) / (++count)
