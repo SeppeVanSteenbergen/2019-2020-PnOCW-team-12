@@ -14,7 +14,7 @@ export default class BarcodeScanner {
   static scanHorizontal(imageObject) {
     let height = imageObject.height
     let image = imageObject.data
-
+    let even
     let scanned = 0
     let barcodes = {}
     let average = -20
@@ -25,17 +25,24 @@ export default class BarcodeScanner {
       let H = image[i]
       let S = image[i + 1]
       let L = image[i + 2]
-      let contrast = Math.abs(average - L)
+      let contrast = average - L
       if(S < 60){
-      if(contrast > 25 && count2++ > 3){
+      if(contrast > 70 && count2++ > 3) {
         count2 = 0
-          debug.push(this.positionToPixel(i, imageObject.width))
-          count = 1
-          average = L
-          if (contrast > 70) {
-            scanned++
-          } else {
-            if (true) {
+        count = 1
+        average = L
+        scanned++
+      } else if (contrast < -70 && count2++ > 3) {
+        count2 = 0
+        count = 1
+        average = L
+        scanned++
+      } else if (Math.abs(contrast) > 33){
+            if (scanned >= 0) {
+              scanned *= 2
+              if(!even){
+                scanned++
+              }
               if (barcodes[scanned] === undefined) {
                 barcodes[scanned] = 1
               } else {
@@ -43,10 +50,8 @@ export default class BarcodeScanner {
               }
             }
             scanned = 0
-          }
-        } else {
+        }x else {
           average = (average * count + L) / ++count
-        }
       }
     }
     console.log('scanned')
