@@ -24,6 +24,10 @@ imgElement.onload = function() {
     let colors1 = {}
     ColorSpace.rgbaToHsla(inputImgData.data);
     console.log("start scan")
+    let test11 = [50,50,50,50,50,0,0,0,0,0,100,100,100,100,100,0,0,0,0,0,100,100,100,100,100,0,0,0,0,0,100,100,100,100,100,50,50,50,50,50]
+    let test8 = [50,50,50,50,50,100,100,100,100,100,0,0,0,0,0,100,100,100,100,100,0,0,0,0,0,50,50,50,50,50]
+    let test1 = [50,50,50,50,50,0,0,0,0,0,50,50,50,50,50]
+    let test2 = [50,50,50,50,50,100,100,100,100,100,50,50,50,50,50]
     let barcode = BarcodeScanner.scanHorizontal(inputImgData);
     console.log(barcode);
 };

@@ -76,7 +76,7 @@ export default class DetectionDrawer {
     let codeString = clientNb.toString(2)
     let code = []
     let zero = false
-    if(clientNb % 2 == 0){
+    if(clientNb % 2 === 0){
       zero = true
     }
     for (let i = 0; i < clientNb/2; i++) {

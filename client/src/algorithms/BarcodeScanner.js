@@ -17,29 +17,37 @@ export default class BarcodeScanner {
     let image = imageObject.data
     let scanned = 0
     let barcodes = {}
-    let average = -20
+    let average = image[1]
+    let start = true
+    let white = true
     let count = 1
-    let debug = []
-    let count2 = 0
-    for (let i = 0; i < image.length; i += 4) {
+    for (let i = 4; i < image.length; i += 4) {
       let S = image[i + 1]
       let L = image[i + 2]
       let contrast = average - L
       if (S < 60) {
-        if (contrast > 70 && count2++ > 3) {
-          count2 = 0
+        if (contrast > 70) {
+          //from white to black
           count = 1
           average = L
           scanned++
-        } else if (contrast < -70 && count2++ > 3) {
-          count2 = 0
+        } else if (contrast < -70) {
+          //from black to white
           count = 1
           average = L
           scanned++
         } else if (Math.abs(contrast) > 33) {
-          if (scanned >= 0) {
+          //from grey to black or white
+          if (start) {
+            white = L > 50
+            count = 1
+            average = L
+            start = false
+          } else if (scanned >= 0) {
             scanned *= 2
-            if (scanned % 2 !== 0) {
+            if (white) {
+              scanned += 2
+            } else {
               scanned++
             }
             if (barcodes[scanned] === undefined) {
@@ -47,15 +55,16 @@ export default class BarcodeScanner {
             } else {
               barcodes[scanned] += 1
             }
+            scanned = 0
+            start = true
           }
-          scanned = 0
         } else {
           average = (average * count + L) / ++count
         }
       }
     }
+    console.log(barcodes)
     console.log('scanned')
-    console.log(debug)
     let amounts = Object.values(barcodes)
     let maxAmount = Math.max(...amounts)
     let detectedAmount = amounts.reduce((a, b) => a + b, 0)
@@ -79,13 +88,84 @@ export default class BarcodeScanner {
     }
   }
 
+  static testBar(list) {
+    let scanned = 0
+    let barcodes = {}
+    let average = list[1]
+    let count = 1
+    let start = true
+    let white = true
+    let contrast
+    for (let i = 1; i < list.length; i += 1) {
+      let L = list[i]
+      contrast = average - L
+      if (contrast > 70) {
+        //from white to black
+        count = 1
+        average = L
+        scanned++
+      } else if (contrast < -70) {
+        //from black to white
+        count = 1
+        average = L
+        scanned++
+      } else if (Math.abs(contrast) > 33) {
+        if (start) {
+          white = L > 50
+          count = 1
+          average = L
+          start = false
+        } else if (scanned >= 0) {
+          scanned *= 2
+          if (white) {
+            scanned += 2
+          } else{
+            scanned ++
+          }
+          if (barcodes[scanned] === undefined) {
+            barcodes[scanned] = 1
+          } else {
+            barcodes[scanned] += 1
+          }
+          scanned = 0
+          start = true
+        }
+      } else {
+        average = (average * count + L) / ++count
+      }
+    }
+    console.log(barcodes)
+    console.log('scanned')
+    let amounts = Object.values(barcodes)
+    let maxAmount = Math.max(...amounts)
+    let detectedAmount = amounts.reduce((a, b) => a + b, 0)
+
+    let detectRatio = maxAmount / detectedAmount
+    let ratio = maxAmount / 10
+    if (detectRatio < 0) {
+      console.log('Picture is not good enough to detect barcode horizontal')
+      return [0, 0, 0]
+    } else {
+      // console.log(detectRatio, ratio);
+      let barcode = parseInt(
+        Object.keys(barcodes)
+          .find(key => barcodes[key] === maxAmount)
+          .toString()
+          .replace(/,/g, '')
+      )
+      console.log(barcode)
+      console.log(detectRatio)
+      return [barcode, ratio, detectRatio]
+    }
+  }
+
   static debugPixels(imageObject) {
     let image = imageObject.data
     let result = []
     for (let i = 0; i < image.length; i += 4) {
       let S = image[i + 1]
       let L = image[i + 2]
-      result.push([S,L])
+      result.push([S, L])
     }
     console.log(result)
   }
