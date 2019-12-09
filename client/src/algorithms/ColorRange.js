@@ -255,6 +255,14 @@ export default class ColorRange {
     )
   }
 
+  static inMaskRange(H, S, L) {
+    return (
+      this.inGreenRange(H, S, L) ||
+      this.inRedRange(H, S, L) ||
+      this.inBlueRange(H, S, L)
+    )
+  }
+
   static inWhiteRange(H, S, L) {
     return (
       (this.inWhiteBoxA1(H, S) && this.inWhiteBoxB1(H, L)) ||
@@ -278,19 +286,19 @@ export default class ColorRange {
     return this.inBlueGreenRange(H, S, L)
   }
 
-  static inZeroRange(H, S, L){
+  static inZeroRange(H, S, L) {
     return L <= 50
   }
 
-  static inOneRange(H,S,L){
+  static inOneRange(H, S, L) {
     return S <= 50 && L > 40 && L <= 70
   }
 
-  static inCommaRange(H,S,L){
+  static inCommaRange(H, S, L) {
     return L > 70
   }
 
-  static inSepRange(H,S,L){
+  static inSepRange(H, S, L) {
     return S > 50 && L > 40 && L <= 70
   }
 }

@@ -22,45 +22,47 @@ export default class BarcodeScanner {
     let white = true
     let count = 1
     for (let i = 4; i < image.length; i += 4) {
+      let H = image[i]
       let S = image[i + 1]
       let L = image[i + 2]
       let contrast = average - L
-      if (S < 60) {
-        if (contrast > 70) {
-          //from white to black
+      if (ColorRange.inMaskRange(H,S,L)) {
+        break
+      }
+      if (contrast > 70) {
+        //from white to black
+        count = 1
+        average = L
+        scanned++
+      } else if (contrast < -70) {
+        //from black to white
+        count = 1
+        average = L
+        scanned++
+      } else if (Math.abs(contrast) > 33) {
+        //from grey to black or white
+        if (start) {
+          white = L > 50
           count = 1
           average = L
-          scanned++
-        } else if (contrast < -70) {
-          //from black to white
-          count = 1
-          average = L
-          scanned++
-        } else if (Math.abs(contrast) > 33) {
-          //from grey to black or white
-          if (start) {
-            white = L > 50
-            count = 1
-            average = L
-            start = false
-          } else if (scanned >= 0) {
-            scanned *= 2
-            if (white) {
-              scanned += 2
-            } else {
-              scanned++
-            }
-            if (barcodes[scanned] === undefined) {
-              barcodes[scanned] = 1
-            } else {
-              barcodes[scanned] += 1
-            }
-            scanned = 0
-            start = true
+          start = false
+        } else if (scanned >= 0) {
+          scanned *= 2
+          if (white) {
+            scanned += 2
+          } else {
+            scanned++
           }
-        } else {
-          average = (average * count + L) / ++count
+          if (barcodes[scanned] === undefined) {
+            barcodes[scanned] = 1
+          } else {
+            barcodes[scanned] += 1
+          }
+          scanned = 0
+          start = true
         }
+      } else {
+        average = (average * count + L) / ++count
       }
     }
     console.log(barcodes)
@@ -119,8 +121,8 @@ export default class BarcodeScanner {
           scanned *= 2
           if (white) {
             scanned += 2
-          } else{
-            scanned ++
+          } else {
+            scanned++
           }
           if (barcodes[scanned] === undefined) {
             barcodes[scanned] = 1
