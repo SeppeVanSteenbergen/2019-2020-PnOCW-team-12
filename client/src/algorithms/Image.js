@@ -318,7 +318,7 @@ export default class Image {
   }
 
   /**
-   * Use the drawer class to draw the corners and midpoint of this island on the original imageData.
+   * Use the drawer class to drawSnow the corners and midpoint of this island on the original imageData.
    *
    * @param island
    *        the island to be drawn

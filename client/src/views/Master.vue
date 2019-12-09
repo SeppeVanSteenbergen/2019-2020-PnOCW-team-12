@@ -426,7 +426,7 @@ export default {
           title: 'floodfill'
         },
         {
-          title: 'draw direction'
+          title: 'drawSnow direction'
         },
         {
           title: 'countdown'
@@ -544,7 +544,7 @@ export default {
     executeDirections(user_id = null) {
       let object = {
         payload: {
-          type: 'draw-directions',
+          type: 'drawSnow-directions',
           data: {
             command: [
               {
