@@ -2,6 +2,7 @@ import ColorRange from './ColorRange'
 
 export default class BarcodeScanner {
   static scan(imageObject) {
+    //TODO: preprocess??
     let hor = this.scanHorizontal(imageObject)
     let ver = this.scanVertical(imageObject)
     let maxRatio = Math.max(hor[2], ver[2])
@@ -74,6 +75,52 @@ export default class BarcodeScanner {
 
   static pixelToPosition(pixel, width) {
     return (pixel[1] * width + pixel[0]) * 4
+  }
+
+  static preProcessBarcode(imageObject) {
+    let [min, max] = this.getMaxMinValues
+
+    this.applyLevelsAdjustment(imageObject, min, max)
+  }
+
+  static getMaxMinValues(imageObject) {
+    let max = 0;
+    let min = Infinity;
+
+    let pixels = imageObject.data
+    let start = Math.floor(pixels.length / 3)
+    let end = Math.ceil(pixels.length * 2 / 3)
+    for (let i = start; i < end * 3; i += 4) {
+      let value = pixels[i + 2]
+
+      if (value < min) {
+        min = value
+      }
+      if (value > max) {
+        max = value
+      }
+    }
+
+    return [min, max]
+  }
+
+  /**
+   * TODO: waar max en min uitlezen, in welke matrix read + over alle pixels?
+   * 
+   * @param {Array} arr pixel array TODO: uitbreiden naar matrix?
+   * @param {int} min min grijswaarde : [0..100]
+   * @param {int} max max grijswaarde : [0..100]
+   */
+  static applyLevelsAdjustment(imageObject, min, max) {
+    let fac = (max - min) / 100;
+
+    let arr = imageObject.data
+    for (let i = 0; i < arr.length; i++) {
+      arr[i + 2] = (arr[i + 2] - min) * fac;
+    }
+
+    return arr;
+
   }
 
   static scanVertical(imageObject) {
