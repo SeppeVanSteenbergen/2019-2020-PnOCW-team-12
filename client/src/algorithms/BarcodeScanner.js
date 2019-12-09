@@ -26,7 +26,7 @@ export default class BarcodeScanner {
       let S = image[i + 1]
       let L = image[i + 2]
       let contrast = Math.abs(average - L)
-      if(!ColorRange.inBlueRange(H,S,L) && !ColorRange.inGreenRange(H,S,L) && !ColorRange.inRedRange(H,S,L))
+      if(S < 60)
       if(contrast > 20 && count2++ > 3){
         count2 = 0
           debug.push(this.positionToPixel(i, imageObject.width))

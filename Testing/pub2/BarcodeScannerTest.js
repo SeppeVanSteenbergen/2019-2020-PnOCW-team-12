@@ -5,13 +5,13 @@ let inputElement = document.getElementById('fileInput');
         imgElement.src = URL.createObjectURL(e.target.files[0]);
     }, false);
 imgElement.onload = function() {
+    /*
     let maxAmountBorderPx = 1000;
     if (imgElement.width + imgElement.height > maxAmountBorderPx) {
         let ratio = imgElement.width / imgElement.height;
         imgElement.height = Math.round(maxAmountBorderPx / (ratio + 1.0));
         imgElement.width = Math.round(ratio * imgElement.height);
-    }
-    console.log(imgElement.width)
+    } */
     let inputCanvas = document.getElementById("inputImage");
     let inputContext = inputCanvas.getContext("2d");
     inputContext.clearRect(0, 0, inputCanvas.width, inputCanvas.height);

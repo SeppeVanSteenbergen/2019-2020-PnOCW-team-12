@@ -66,7 +66,6 @@ export default     class DetectionDrawer {
   barcode(clientNb, sections) {
 
     //Only integers are allowed because otherwise the barcode is not complete at the end.
-    sections = Math.round(sections);
 
     const ctx = this.ctx
     const sepSize = 10
@@ -79,12 +78,17 @@ export default     class DetectionDrawer {
 
 
 
-    const codeWidth = (this.w - 3*this.borderWidth) / (sections+1);
-    const barWidth = (codeWidth - sepSize)/code.length
+    const codeWidth = (this.canvas.width - 3*this.borderWidth) / sections;
+    const barWidth = codeWidth/code.length
     let startAt = this.borderWidth
 
     //const amountOfIterations = Math.floor((this.w - 2 * this.borderWidth) / (6 * width))
-
+    ctx.beginPath();
+    ctx.fillStyle = "#ffffff"
+    ctx.rect(startAt, 0, barWidth,
+        this.h);
+    ctx.fill()
+    startAt += barWidth
     for (let i = 0; i < sections * (code.length + 1); i += (code.length + 1)) {
       for (let j = 0; j < code.length; j++) {
         ctx.beginPath();
@@ -95,7 +99,7 @@ export default     class DetectionDrawer {
         startAt += barWidth
         ctx.beginPath();
         ctx.fillStyle = "#ffffff"
-        ctx.rect(startAt, this.borderWidth + barWidth, 10,
+        ctx.rect(startAt, 0, barWidth,
             this.h);
         ctx.fill()
         startAt += barWidth
