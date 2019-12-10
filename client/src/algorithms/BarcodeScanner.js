@@ -2,9 +2,12 @@ import ColorRange from './ColorRange'
 
 export default class BarcodeScanner {
   static scan(imageObject) {
-    //TODO: preprocess??
-    let hor = this.scanHorizontal(imageObject)
-    let ver = this.scanVertical(imageObject)
+    let pixels = imageObject //anders worden pixel values aangepast in pre-process
+    
+    this.preProcessBarcode(pixels)
+
+    let hor = this.scanHorizontal(pixels)
+    let ver = this.scanVertical(pixels)
     let maxRatio = Math.max(hor[2], ver[2])
     if (hor[2] === maxRatio && maxRatio >= 0) {
       return hor[0]
@@ -81,18 +84,30 @@ export default class BarcodeScanner {
     return (pixel[1] * width + pixel[0]) * 4
   }
 
+  /**
+   * Pre-process the image for better barcode decoding
+   * 
+   * @param {ImageData} imageObject 
+   */
   static preProcessBarcode(imageObject) {
     let [min, max] = this.getMaxMinValues(imageObject)
 
-    console.log("min en max: ", min, max)
+    // console.log("min en max: ", min, max)
 
     let result = this.applyLevelsAdjustment(imageObject, min, max)
 
-    console.log("min en max: ", this.getMaxMinValues(result))
+    // console.log("min en max: ", this.getMaxMinValues(result))
 
     return result
   }
 
+  /**
+   * Get max and min L values from the given image
+   * 
+   * Optional: use start and end constants to limit search domain
+   * 
+   * @param {ImageData} imageObject 
+   */
   static getMaxMinValues(imageObject) {
     let max = 0
     let min = Infinity
@@ -115,7 +130,7 @@ export default class BarcodeScanner {
   }
 
   /**
-   * TODO: waar max en min uitlezen, in welke matrix read + over alle pixels?
+   * Apply Histogram equilization with extra CONTRAST constant
    *
    * @param {Array} arr pixel array TODO: uitbreiden naar matrix?
    * @param {int} min min grijswaarde : [0..100]
@@ -128,8 +143,6 @@ export default class BarcodeScanner {
     max -= CONTRAST
     
     const fac = 100 / (max - min);
-
-    console.log("fac: ", fac)
 
     let arr = imageObject
     for (let i = 0; i < arr.data.length; i+=4) {

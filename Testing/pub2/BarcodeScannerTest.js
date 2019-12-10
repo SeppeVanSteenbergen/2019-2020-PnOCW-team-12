@@ -23,6 +23,6 @@ imgElement.onload = function() {
     let colors1 = {}
     ColorSpace.rgbaToHsla(inputImgData.data);
     console.log("start scan")
-    let barcode = BarcodeScanner.scanHorizontal(inputImgData);
+    let barcode = BarcodeScanner.scan(inputImgData);
     console.log(barcode);
 };
