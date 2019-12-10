@@ -18,6 +18,7 @@ export default class BarcodeScanner {
     let scanned = 0
     let barcodes = {}
     let average = image[1]
+    let newBar = true
     let start = true
     let white = true
     let count = 1
@@ -26,22 +27,33 @@ export default class BarcodeScanner {
       let S = image[i + 1]
       let L = image[i + 2]
       let contrast = average - L
-      if (ColorRange.inMaskRange(H,S,L)) {
-        break
-      }
-      if (contrast > 70) {
-        //from white to black
+      //skip the eventually started bar if you cross a borderpixel
+      if (ColorRange.inMaskRange(H, S, L)) {
+        newBar = true
+        start = true
+      //from white to black and the sequence is already started
+      } else if (contrast > 70 && !start) {
         count = 1
         average = L
         scanned++
-      } else if (contrast < -70) {
-        //from black to white
+      //from black to white and the sequence is already started
+      } else if (contrast < -70 && !start) {
         count = 1
         average = L
         scanned++
+      // sequences not started yet
+      } else if (contrast > 70 && start) {
+        average = L
+      } else if (contrast < -70 && start) {
+        average = L
+      //from grey to black or white
       } else if (Math.abs(contrast) > 33) {
-        //from grey to black or white
-        if (start) {
+        //beginning of a sequence
+        if (newBar) {
+          newBar = false
+          average = L
+        //sequence was already started
+        } else if (!newBar && start) {
           white = L > 50
           count = 1
           average = L
@@ -90,29 +102,42 @@ export default class BarcodeScanner {
     }
   }
 
+  // this is to test on a small list see 'BarcodeScannerTest.js", values of 20 represent borders in original picture
   static testBar(list) {
     let scanned = 0
     let barcodes = {}
-    let average = list[1]
+    let average = -20
     let count = 1
+    let newBar = true
     let start = true
     let white = true
     let contrast
     for (let i = 1; i < list.length; i += 1) {
       let L = list[i]
+      if(L === 20) {
+        newBar = true
+        start = true
+      }
       contrast = average - L
-      if (contrast > 70) {
+      if (contrast > 70 && !start) {
         //from white to black
         count = 1
         average = L
         scanned++
-      } else if (contrast < -70) {
+      } else if (contrast < -70 && !start) {
         //from black to white
         count = 1
         average = L
         scanned++
+      } else if ( contrast > 70 && start) {
+        average = L
+      } else if (contrast < -70 && start) {
+        average = L
       } else if (Math.abs(contrast) > 33) {
-        if (start) {
+        if (newBar) {
+          newBar = false
+          average = L
+        } else if (!newBar && start) {
           white = L > 50
           count = 1
           average = L
@@ -130,6 +155,7 @@ export default class BarcodeScanner {
             barcodes[scanned] += 1
           }
           scanned = 0
+          newBar = true
           start = true
         }
       } else {
