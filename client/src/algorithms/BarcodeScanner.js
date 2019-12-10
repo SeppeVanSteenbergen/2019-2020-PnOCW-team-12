@@ -9,11 +9,11 @@ export default class BarcodeScanner {
     this.debugPixels(pixels)
 
     let hor = this.scanHorizontal(pixels)
-    let ver = this.scanVertical(pixels)
-    let maxRatio = Math.max(hor[2], ver[2])
-    if (hor[2] === maxRatio && maxRatio >= 0) {
-      return hor[0]
-    } else if (maxRatio >= 0) return ver[0]
+    //let ver = this.scanVertical(pixels)
+    //let maxRatio = Math.max(hor[2], ver[2])
+   // if (hor[2] === maxRatio && maxRatio >= 0) {
+    //  return hor[0]
+    //} else if (maxRatio >= 0) return ver[0]
   }
 
   static scanHorizontal(imageObject) {
@@ -41,10 +41,10 @@ export default class BarcodeScanner {
       } else if(scanning){ //geen grijswaarde
         scanning = false
         //scanned toevoegen aan barcodes
-        if (barcodes[scanned] === undefined) {
-          barcodes[scanned] = 1
+        if (barcodes[[scanned, white]] === undefined) {
+          barcodes[[scanned, white]] = 1
         } else {
-          barcodes[scanned] += 1
+          barcodes[[scanned, white]] += 1
         }
         scanned = 0
       }

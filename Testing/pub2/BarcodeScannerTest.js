@@ -28,6 +28,6 @@ imgElement.onload = function() {
     let test8 = [50,50,50,50,50,100,100,100,100,100,0,0,0,0,0,100,100,100,100,100,0,0,0,0,0,50,50,50,50,50]
     let test1 = [50,50,50,50,50,0,0,0,0,0,50,50,50,50,50]
     let test2 = [50,50,50,50,50,100,100,100,100,100,50,50,50,50,50]
-    let barcode = BarcodeScanner.scanHorizontal(inputImgData);
+    let barcode = BarcodeScanner.scan(inputImgData);
     console.log(barcode);
 };
