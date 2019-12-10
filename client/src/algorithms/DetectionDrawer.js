@@ -97,7 +97,7 @@ export default class DetectionDrawer {
 
     //const amountOfIterations = Math.floor((this.w - 2 * this.borderWidth) / (6 * width))
     ctx.beginPath();
-    ctx.fillStyle = '#808080'
+    ctx.fillStyle = '#ff00b6'
     ctx.rect(startAt, 0, barWidth,
         this.h);
     ctx.fill()
@@ -113,7 +113,7 @@ export default class DetectionDrawer {
       }
 
       ctx.beginPath()
-      ctx.fillStyle = '#808080'
+      ctx.fillStyle = '#ff00b6'
       ctx.rect(startAt, 0, barWidth, this.h)
       ctx.fill()
       startAt += barWidth
