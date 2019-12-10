@@ -82,9 +82,15 @@ export default class BarcodeScanner {
   }
 
   static preProcessBarcode(imageObject) {
-    let [min, max] = this.getMaxMinValues
+    let [min, max] = this.getMaxMinValues(imageObject)
 
-    this.applyLevelsAdjustment(imageObject, min, max)
+    console.log("min en max: ", min, max)
+
+    let result = this.applyLevelsAdjustment(imageObject, min, max)
+
+    console.log("min en max: ", this.getMaxMinValues(result))
+
+    return result
   }
 
   static getMaxMinValues(imageObject) {
@@ -93,8 +99,8 @@ export default class BarcodeScanner {
 
     let pixels = imageObject.data
     let start = Math.floor(pixels.length / 3)
-    let end = Math.ceil((pixels.length * 2) / 3)
-    for (let i = start; i < end * 3; i += 4) {
+    let end = Math.ceil(pixels.length * 2 / 3)
+    for (let i = 0; i < pixels.length; i += 4) {
       let value = pixels[i + 2]
 
       if (value < min) {
@@ -116,14 +122,20 @@ export default class BarcodeScanner {
    * @param {int} max max grijswaarde : [0..100]
    */
   static applyLevelsAdjustment(imageObject, min, max) {
-    let fac = (max - min) / 100
+    const CONTRAST = 10;
 
-    let arr = imageObject.data
-    for (let i = 0; i < arr.length; i++) {
-      arr[i + 2] = (arr[i + 2] - min) * fac
+    min += CONTRAST
+    max -= CONTRAST
+    
+    const fac = 100 / (max - min);
+
+    console.log("fac: ", fac)
+
+    let arr = imageObject
+    for (let i = 0; i < arr.data.length; i+=4) {
+      arr.data[i + 2] = Math.min((arr.data[i + 2] - min) * fac, 100)
     }
-
-    return arr
+    return arr;
   }
 
   static scanVertical(imageObject) {
