@@ -6,9 +6,10 @@ export default class BarcodeScanner {
     
     this.preProcessBarcode(pixels)
 
+    this.debugPixels(pixels)
+
     let hor = this.scanHorizontal(pixels)
     let ver = this.scanVertical(pixels)
-    this.debugPixels(imageObject)
     let maxRatio = Math.max(hor[2], ver[2])
     if (hor[2] === maxRatio && maxRatio >= 0) {
       return hor[0]
