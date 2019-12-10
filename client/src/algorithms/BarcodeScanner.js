@@ -19,74 +19,36 @@ export default class BarcodeScanner {
   static scanHorizontal(imageObject) {
     let height = imageObject.height
     let image = imageObject.data
-    let scanned = 0
+
     let barcodes = {}
-    let average = [
-      image[2],
-      image[6],
-      image[10],
-      image[18],
-      image[22],
-      image[26]
-    ]
-    let newBar = true
-    let start = true
-    let white = true
-    for (let i = 12; i < image.length; i += 4) {
+    let scanned = 0
+    let previous = image[2]
+    let white
+    let scanning = false
+    for (let i = 4; i < image.length; i += 4) {
       let H = image[i]
       let S = image[i + 1]
       let L = image[i + 2]
-      let contrast = this.average(average) - L
-      //skip the eventually started bar if you cross a borderpixel
-      if (ColorRange.inMaskRange(H, S, L)) {
-        newBar = true
-        start = true
-        scanned = 0
-      //from white to black and the sequence is already started
-      } else if (contrast > 70 && !start) {
-        average = [L, L, L, L, L, L]
-        scanned++
-      //from black to white and the sequence is already started
-      } else if (contrast < -70 && !start) {
-        average = [L, L, L, L, L, L]
-        scanned++
-      // sequences not started yet
-      } else if (contrast > 70 && start) {
-        average = [L, L, L, L, L, L]
-      } else if (contrast < -70 && start) {
-        average = [L, L, L, L, L, L]
-      //from grey to black or white
-      } else if (Math.abs(contrast) > 33) {
-        //beginning of a sequence
-        if (newBar) {
-          scanned = 0
-          newBar = false
-          average = [L, L, L, L, L, L]
-        //sequence was already started
-        } else if (!newBar && start) {
-          white = L > 50
-          average = [L, L, L, L, L, L]
-          start = false
-        } else if (scanned >= 0) {
-          scanned *= 2
-          if (white) {
-            scanned += 2
-          } else {
-            scanned++
-          }
-          if (barcodes[scanned] === undefined) {
-            barcodes[scanned] = 1
-          } else {
-            barcodes[scanned] += 1
-          }
-          scanned = 0
-          newBar = true
-          start = true
+      let contrast = previous - L
+
+      if(S < 30){ //grijswaarden (kan veranderd worden in 'geen bordercolor')
+        if(!scanning){
+          scanning = true
+          white = L < 50
+        }else if(contrast > 70 || contrast < -70){ // zwart <-> wit
+          scanned++
         }
-      } else {
-        average.shift()
-        average.push(image[i+6])
+      } else if(scanning){ //geen grijswaarde
+        scanning = false
+        //scanned toevoegen aan barcodes
+        if (barcodes[scanned] === undefined) {
+          barcodes[scanned] = 1
+        } else {
+          barcodes[scanned] += 1
+        }
+        scanned = 0
       }
+      previous = L
     }
     console.log(barcodes)
     console.log('scanned')
@@ -114,11 +76,9 @@ export default class BarcodeScanner {
   }
 
   static average(list) {
-    let sum = 0
-    for (let i = 0; i < list.length; i++) {
-      sum += list[i]
-    }
-    return sum / list.length
+    let tmpList = list.slice()
+    tmpList.sort()
+    return tmpList[Math.round(tmpList.length / 2)]
   }
 
   // this is to test on a small list see 'BarcodeScannerTest.js", values of 20 represent borders in original picture
