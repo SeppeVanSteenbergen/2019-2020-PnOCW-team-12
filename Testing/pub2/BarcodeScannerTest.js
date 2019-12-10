@@ -1,3 +1,4 @@
+
 let imgElement = document.createElement("img");
     imgElement = document.getElementById('imageSrc');
 let inputElement = document.getElementById('fileInput');
@@ -23,6 +24,10 @@ imgElement.onload = function() {
     let colors1 = {}
     ColorSpace.rgbaToHsla(inputImgData.data);
     console.log("start scan")
-    let barcode = BarcodeScanner.scan(inputImgData);
+    let test11 = [20,20,20,20,20,0,50,50,50,50,50,0,0,0,0,0,50,50,50,50,50,100,100,0,0,0,0,0,100,100,100,100,100,0,0,0,50,50,50,50,50,0,0,0,0,0,100,100,100,100,100,0,0,0,0,0,100,100,100,100,100,0,0,0,0,0,100,100,100,100,100,50,50,50,50,50]
+    let test8 = [50,50,50,50,50,100,100,100,100,100,0,0,0,0,0,100,100,100,100,100,0,0,0,0,0,50,50,50,50,50]
+    let test1 = [50,50,50,50,50,0,0,0,0,0,50,50,50,50,50]
+    let test2 = [50,50,50,50,50,100,100,100,100,100,50,50,50,50,50]
+    let barcode = BarcodeScanner.testBar2(test11);
     console.log(barcode);
 };

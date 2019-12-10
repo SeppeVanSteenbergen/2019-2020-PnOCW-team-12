@@ -8,6 +8,7 @@ export default class BarcodeScanner {
 
     let hor = this.scanHorizontal(pixels)
     let ver = this.scanVertical(pixels)
+    this.debugPixels(imageObject)
     let maxRatio = Math.max(hor[2], ver[2])
     if (hor[2] === maxRatio && maxRatio >= 0) {
       return hor[0]
@@ -17,46 +18,70 @@ export default class BarcodeScanner {
   static scanHorizontal(imageObject) {
     let height = imageObject.height
     let image = imageObject.data
-
-    let scanned = []
+    let scanned = 0
     let barcodes = {}
-    let average = -20
+    let average = image[1]
+    let newBar = true
+    let start = true
+    let white = true
     let count = 1
-    let debug = []
-    let count2 = 0
-    for (let i = 0; i < image.length; i += 4) {
+    for (let i = 4; i < image.length; i += 4) {
       let H = image[i]
       let S = image[i + 1]
       let L = image[i + 2]
-      let contrast = Math.abs(average - L)
-      if(S < 60)
-      if(contrast > 20 && count2++ > 3){
-        count2 = 0
-          debug.push(this.positionToPixel(i, imageObject.width))
+      let contrast = average - L
+      //skip the eventually started bar if you cross a borderpixel
+      if (ColorRange.inMaskRange(H, S, L)) {
+        newBar = true
+        start = true
+      //from white to black and the sequence is already started
+      } else if (contrast > 70 && !start) {
+        count = 1
+        average = L
+        scanned++
+      //from black to white and the sequence is already started
+      } else if (contrast < -70 && !start) {
+        count = 1
+        average = L
+        scanned++
+      // sequences not started yet
+      } else if (contrast > 70 && start) {
+        average = L
+      } else if (contrast < -70 && start) {
+        average = L
+      //from grey to black or white
+      } else if (Math.abs(contrast) > 33) {
+        //beginning of a sequence
+        if (newBar) {
+          newBar = false
+          average = L
+        //sequence was already started
+        } else if (!newBar && start) {
+          white = L > 50
           count = 1
           average = L
-          //Nieuwe scanned of nieuwe barcode
-          if (contrast > 70) {
-            scanned.push(0)
-          } else if (contrast > 40) {
-            scanned.push(1)
+          start = false
+        } else if (scanned >= 0) {
+          scanned *= 2
+          if (white) {
+            scanned += 2
           } else {
-            if (scanned.length !== 0) {
-              if (barcodes[scanned] === undefined) {
-                barcodes[scanned] = 1
-              } else {
-                barcodes[scanned] += 1
-              }
-            }
-
-            scanned.length = 0
+            scanned++
           }
-        } else {
-          average = (average * count + L) / ++count
+          if (barcodes[scanned] === undefined) {
+            barcodes[scanned] = 1
+          } else {
+            barcodes[scanned] += 1
+          }
+          scanned = 0
+          start = true
         }
+      } else {
+        average = (average * count + L) / ++count
+      }
     }
+    console.log(barcodes)
     console.log('scanned')
-    console.log(debug)
     let amounts = Object.values(barcodes)
     let maxAmount = Math.max(...amounts)
     let detectedAmount = amounts.reduce((a, b) => a + b, 0)
@@ -78,6 +103,102 @@ export default class BarcodeScanner {
       console.log(detectRatio)
       return [barcode, ratio, detectRatio]
     }
+  }
+
+  // this is to test on a small list see 'BarcodeScannerTest.js", values of 20 represent borders in original picture
+  static testBar(list) {
+    let scanned = 0
+    let barcodes = {}
+    let average = -20
+    let count = 1
+    let newBar = true
+    let start = true
+    let white = true
+    let contrast
+    for (let i = 1; i < list.length; i += 1) {
+      let L = list[i]
+      if(L === 20) {
+        newBar = true
+        start = true
+      }
+      contrast = average - L
+      if (contrast > 70 && !start) {
+        //from white to black
+        count = 1
+        average = L
+        scanned++
+      } else if (contrast < -70 && !start) {
+        //from black to white
+        count = 1
+        average = L
+        scanned++
+      } else if ( contrast > 70 && start) {
+        average = L
+      } else if (contrast < -70 && start) {
+        average = L
+      } else if (Math.abs(contrast) > 33) {
+        if (newBar) {
+          newBar = false
+          average = L
+        } else if (!newBar && start) {
+          white = L > 50
+          count = 1
+          average = L
+          start = false
+        } else if (scanned >= 0) {
+          scanned *= 2
+          if (white) {
+            scanned += 2
+          } else {
+            scanned++
+          }
+          if (barcodes[scanned] === undefined) {
+            barcodes[scanned] = 1
+          } else {
+            barcodes[scanned] += 1
+          }
+          scanned = 0
+          newBar = true
+          start = true
+        }
+      } else {
+        average = (average * count + L) / ++count
+      }
+    }
+    console.log(barcodes)
+    console.log('scanned')
+    let amounts = Object.values(barcodes)
+    let maxAmount = Math.max(...amounts)
+    let detectedAmount = amounts.reduce((a, b) => a + b, 0)
+
+    let detectRatio = maxAmount / detectedAmount
+    let ratio = maxAmount / 10
+    if (detectRatio < 0) {
+      console.log('Picture is not good enough to detect barcode horizontal')
+      return [0, 0, 0]
+    } else {
+      // console.log(detectRatio, ratio);
+      let barcode = parseInt(
+        Object.keys(barcodes)
+          .find(key => barcodes[key] === maxAmount)
+          .toString()
+          .replace(/,/g, '')
+      )
+      console.log(barcode)
+      console.log(detectRatio)
+      return [barcode, ratio, detectRatio]
+    }
+  }
+
+  static debugPixels(imageObject) {
+    let image = imageObject.data
+    let result = []
+    for (let i = 0; i < image.length; i += 4) {
+      let S = image[i + 1]
+      let L = image[i + 2]
+      result.push([S, L])
+    }
+    console.log(result)
   }
 
   static pixelToPosition(pixel, width) {

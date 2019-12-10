@@ -8,7 +8,7 @@ export default class DetectionDrawer {
     this.canvas = canvas
     this.canvas.width = this.w
     this.canvas.height = this.h
-    this.barcodeColorValues = ['#000000', '#545454']
+    this.barcodeColorValues = ['#000000', '#ffffff']
     this.ctx = this.canvas.getContext('2d')
   }
 
@@ -75,8 +75,17 @@ export default class DetectionDrawer {
     const sepSize = 10
     let codeString = clientNb.toString(2)
     let code = []
-    for (let i = 0; i < codeString.length; i++) {
-      code.push(codeString.charAt(i))
+    let zero = false
+    if(clientNb % 2 === 0){
+      zero = true
+    }
+    for (let i = 0; i < clientNb/2; i++) {
+      if(zero){
+        code.push(1)
+      } else{
+        code.push(0)
+      }
+      zero = !zero
     }
     console.log(code)
 
@@ -88,7 +97,7 @@ export default class DetectionDrawer {
 
     //const amountOfIterations = Math.floor((this.w - 2 * this.borderWidth) / (6 * width))
     ctx.beginPath();
-    ctx.fillStyle = "#ffffff"
+    ctx.fillStyle = '#808080'
     ctx.rect(startAt, 0, barWidth,
         this.h);
     ctx.fill()
@@ -101,18 +110,13 @@ export default class DetectionDrawer {
         ctx.fill()
         startAt += barWidth
         ctx.beginPath();
-        ctx.fillStyle = "#ffffff"
-        ctx.rect(startAt, 0, barWidth,
-            this.h);
-        ctx.fill()
-        startAt += barWidth
       }
 
       ctx.beginPath()
-      ctx.fillStyle = '#a8a8a8'
+      ctx.fillStyle = '#808080'
       ctx.rect(startAt, 0, barWidth, this.h)
       ctx.fill()
-      startAt += 2 * barWidth
+      startAt += barWidth
     }
 
     this.drawX(this.borderWidth, barWidth)
