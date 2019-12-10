@@ -21,7 +21,7 @@ export default class BarcodeScanner {
     let image = imageObject.data
     let scanned = 0
     let barcodes = {}
-    let average = image[1]
+    let average = [image[1], image[1], image[1]]
     let newBar = true
     let start = true
     let white = true
@@ -30,7 +30,7 @@ export default class BarcodeScanner {
       let H = image[i]
       let S = image[i + 1]
       let L = image[i + 2]
-      let contrast = average - L
+      let contrast = this.average(average) - L
       //skip the eventually started bar if you cross a borderpixel
       if (ColorRange.inMaskRange(H, S, L)) {
         newBar = true
@@ -38,29 +38,29 @@ export default class BarcodeScanner {
       //from white to black and the sequence is already started
       } else if (contrast > 70 && !start) {
         count = 1
-        average = L
+        average = [L, L, L]
         scanned++
       //from black to white and the sequence is already started
       } else if (contrast < -70 && !start) {
         count = 1
-        average = L
+        average = [L, L, L]
         scanned++
       // sequences not started yet
       } else if (contrast > 70 && start) {
-        average = L
+        average = [L, L, L]
       } else if (contrast < -70 && start) {
-        average = L
+        average = [L, L, L]
       //from grey to black or white
       } else if (Math.abs(contrast) > 33) {
         //beginning of a sequence
         if (newBar) {
           newBar = false
-          average = L
+          average = [L, L, L]
         //sequence was already started
         } else if (!newBar && start) {
           white = L > 50
           count = 1
-          average = L
+          average = [L, L, L]
           start = false
         } else if (scanned >= 0) {
           scanned *= 2
@@ -78,7 +78,8 @@ export default class BarcodeScanner {
           start = true
         }
       } else {
-        average = (average * count + L) / ++count
+        average.shift()
+        average.push(L)
       }
     }
     console.log(barcodes)
@@ -104,6 +105,14 @@ export default class BarcodeScanner {
       console.log(detectRatio)
       return [barcode, ratio, detectRatio]
     }
+  }
+
+  static average(list){
+    let sum = 0
+    for(let i = 0; i < list.length; i++){
+      sum += list[i]
+    }
+    return sum/list.length
   }
 
   // this is to test on a small list see 'BarcodeScannerTest.js", values of 20 represent borders in original picture
