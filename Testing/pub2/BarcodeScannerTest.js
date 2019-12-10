@@ -18,7 +18,7 @@ imgElement.onload = function() {
     inputContext.clearRect(0, 0, inputCanvas.width, inputCanvas.height);
     inputCanvas.width = imgElement.width;
     inputCanvas.height = imgElement.height;
-    inputContext.drawImage(imgElement, 0, 0, imgElement.width, imgElement.height);
+
 
     let inputImgData = inputContext.getImageData(0, 0, imgElement.width, imgElement.height);
     let colors1 = {}
@@ -29,5 +29,9 @@ imgElement.onload = function() {
     let test1 = [50,50,50,50,50,0,0,0,0,0,50,50,50,50,50]
     let test2 = [50,50,50,50,50,100,100,100,100,100,50,50,50,50,50]
     let barcode = BarcodeScanner.scan(inputImgData);
+
+    ColorSpace.hslaToRgba(inputImgData.data)
+    inputContext.drawImage(imgElement, 0, 0, imgElement.width, imgElement.height);
+
     console.log(barcode);
 };

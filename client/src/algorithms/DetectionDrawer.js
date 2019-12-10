@@ -91,17 +91,11 @@ export default class DetectionDrawer {
 
 
 
-    const codeWidth = (this.canvas.width - 3*this.borderWidth) / sections;
+    const codeWidth = (this.canvas.width - 2*this.borderWidth) / (sections + 1);
     const barWidth = codeWidth/code.length
     let startAt = this.borderWidth
 
     //const amountOfIterations = Math.floor((this.w - 2 * this.borderWidth) / (6 * width))
-    ctx.beginPath();
-    ctx.fillStyle = '#ff00b6'
-    ctx.rect(startAt, 0, barWidth,
-        this.h);
-    ctx.fill()
-    startAt += barWidth
     for (let i = 0; i < sections * (code.length + 1); i += (code.length + 1)) {
       for (let j = 0; j < code.length; j++) {
         ctx.beginPath()

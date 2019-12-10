@@ -208,16 +208,17 @@ export default class BarcodeScanner {
     let min = Infinity
 
     let pixels = imageObject.data
-    let start = Math.floor(pixels.length / 3)
-    let end = Math.ceil(pixels.length * 2 / 3)
-    for (let i = 0; i < pixels.length; i += 4) {
-      let value = pixels[i + 2]
 
-      if (value < min) {
-        min = value
-      }
-      if (value > max) {
-        max = value
+    for (let i = 0; i < pixels.length; i += 4) {
+      if(pixels[i+1] < 30) {
+        let value = pixels[i + 2]
+
+        if (value < min) {
+          min = value
+        }
+        if (value > max) {
+          max = value
+        }
       }
     }
 
@@ -232,18 +233,18 @@ export default class BarcodeScanner {
    * @param {int} max max grijswaarde : [0..100]
    */
   static applyLevelsAdjustment(imageObject, min, max) {
-    const CONTRAST = 10
+    const half = min + (max - min) / 2
 
-    min += CONTRAST
-    max -= CONTRAST
-    
-    const fac = 100 / (max - min)
-
-    let arr = imageObject
-    for (let i = 0; i < arr.data.length; i+=4) {
-      arr.data[i + 2] = Math.min((arr.data[i + 2] - min) * fac, 100)
+    let pixels = imageObject.data
+    for (let i = 0; i < pixels.length; i+=4) {
+      if(pixels[i+1] < 30){
+        if(pixels[i+2] < half)
+            pixels[i+2] = 0
+      } else{
+        pixels[i+2] = 100
+      }
     }
-    return arr
+    return imageObject
   }
 
   static scanVertical(imageObject) {
