@@ -3,7 +3,7 @@ import ColorRange from './ColorRange'
 export default class BarcodeScanner {
   static scan(imageObject) {
     let pixels = imageObject //anders worden pixel values aangepast in pre-process
-    
+
     this.preProcessBarcode(pixels)
 
     this.debugPixels(pixels)
@@ -11,7 +11,7 @@ export default class BarcodeScanner {
     let hor = this.scanHorizontal(pixels)
     //let ver = this.scanVertical(pixels)
     //let maxRatio = Math.max(hor[2], ver[2])
-   // if (hor[2] === maxRatio && maxRatio >= 0) {
+    // if (hor[2] === maxRatio && maxRatio >= 0) {
     //  return hor[0]
     //} else if (maxRatio >= 0) return ver[0]
   }
@@ -26,24 +26,38 @@ export default class BarcodeScanner {
     let white
     let scanning = false
     for (let i = 4; i < image.length; i += 4) {
-      let H = image[i]
       let S = image[i + 1]
       let L = image[i + 2]
       let contrast = previous - L
 
-      if(S < 30){ //grijswaarden (kan veranderd worden in 'geen bordercolor')
-        if(!scanning){
+      if (S < 30) {
+        //grijswaarden (kan veranderd worden in 'geen bordercolor')
+        if (!scanning) {
           scanning = true
           white = L < 50
-        }else if(contrast > 70 || contrast < -70){ // zwart <-> wit
+        } else if (contrast > 70 || contrast < -70) {
+          // zwart <-> wit
           scanned++
         }
-      } else if(scanning){ //geen grijswaarde
+      } else if (scanning) {
+        //geen grijswaarde
         scanning = false
         //scanned toevoegen aan barcodes
         if (barcodes[[scanned, white]] === undefined) {
+          scanned *= 2
+          if (white) {
+            scanned++
+          } else {
+            scanned += 2
+          }
           barcodes[[scanned, white]] = 1
         } else {
+          scanned *= 2
+          if (white) {
+            scanned++
+          } else {
+            scanned += 2
+          }
           barcodes[[scanned, white]] += 1
         }
         scanned = 0
@@ -81,89 +95,6 @@ export default class BarcodeScanner {
     return tmpList[Math.round(tmpList.length / 2)]
   }
 
-  // this is to test on a small list see 'BarcodeScannerTest.js", values of 20 represent borders in original picture
-  static testBar(list) {
-    let scanned = 0
-    let barcodes = {}
-    let average = [list[1], list[1], list[1]]
-    let newBar = true
-    let start = true
-    let white = true
-    let contrast
-    for (let i = 1; i < list.length; i += 1) {
-      let L = list[i]
-      contrast = this.average(average) - L
-      if(L === 20) {
-        newBar = true
-        start = true
-        scanned = 0
-      } else if (contrast > 70 && !start) {
-        //from white to black
-        average = [L,L,L]
-        scanned++
-      } else if (contrast < -70 && !start) {
-        //from black to white
-        average = [L,L,L]
-        scanned++
-      } else if ( contrast > 70 && start) {
-        average = [L,L,L]
-      } else if (contrast < -70 && start) {
-        average = [L,L,L]
-      } else if (Math.abs(contrast) > 33) {
-        if (newBar) {
-          scanned = 0
-          newBar = false
-          average = [L,L,L]
-        } else if (!newBar && start) {
-          white = L > 50
-          average = [L,L,L]
-          start = false
-        } else if (scanned >= 0) {
-          scanned *= 2
-          if (white) {
-            scanned += 2
-          } else {
-            scanned++
-          }
-          if (barcodes[scanned] === undefined) {
-            barcodes[scanned] = 1
-          } else {
-            barcodes[scanned] += 1
-          }
-          scanned = 0
-          newBar = true
-          start = true
-        }
-      } else {
-        average.shift()
-        average.push(L)
-      }
-    }
-    console.log(barcodes)
-    console.log('scanned')
-    let amounts = Object.values(barcodes)
-    let maxAmount = Math.max(...amounts)
-    let detectedAmount = amounts.reduce((a, b) => a + b, 0)
-
-    let detectRatio = maxAmount / detectedAmount
-    let ratio = maxAmount / 10
-    if (detectRatio < 0) {
-      console.log('Picture is not good enough to detect barcode horizontal')
-      return [0, 0, 0]
-    } else {
-      // console.log(detectRatio, ratio);
-      let barcode = parseInt(
-        Object.keys(barcodes)
-          .find(key => barcodes[key] === maxAmount)
-          .toString()
-          .replace(/,/g, '')
-      )
-      console.log(barcode)
-      console.log(detectRatio)
-      return [barcode, ratio, detectRatio]
-    }
-  }
-
   static debugPixels(imageObject) {
     let image = imageObject.data
     let result = []
@@ -181,27 +112,20 @@ export default class BarcodeScanner {
 
   /**
    * Pre-process the image for better barcode decoding
-   * 
-   * @param {ImageData} imageObject 
+   *
+   * @param {ImageData} imageObject
    */
   static preProcessBarcode(imageObject) {
     let [min, max] = this.getMaxMinValues(imageObject)
-
-    // console.log("min en max: ", min, max)
-
-    let result = this.applyLevelsAdjustment(imageObject, min, max)
-
-    // console.log("min en max: ", this.getMaxMinValues(result))
-
-    return result
+    return this.applyLevelsAdjustment(imageObject, min, max)
   }
 
   /**
    * Get max and min L values from the given image
-   * 
+   *
    * Optional: use start and end constants to limit search domain
-   * 
-   * @param {ImageData} imageObject 
+   *
+   * @param {ImageData} imageObject
    */
   static getMaxMinValues(imageObject) {
     let max = 0

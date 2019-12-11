@@ -70,22 +70,25 @@ export default class DetectionDrawer {
 
   barcode(clientNb, sections) {
     //Only integers are allowed because otherwise the barcode is not complete at the end.
-
     const ctx = this.ctx
-    const sepSize = 10
-    let codeString = clientNb.toString(2)
     let code = []
-    let zero = false
-    if(clientNb % 2 === 0){
-      zero = true
+    let even = false
+    let amount = 0
+    if (clientNb % 2 === 0){
+      even = true
     }
-    for (let i = 0; i < clientNb/2; i++) {
-      if(zero){
+    if (even) {
+      amount = clientNb / 2 + 1
+    } else {
+      amount = Math.round((clientNb + 2) / 2)
+    }
+    for (let i = 0; i < amount; i++) {
+      if(even){
         code.push(1)
       } else{
         code.push(0)
       }
-      zero = !zero
+      even = !even
     }
     console.log(code)
 
