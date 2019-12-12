@@ -30,11 +30,11 @@ export default class BarcodeScanner {
       let L = image[i + 2]
       let contrast = previous - L
 
-      if (S < 30) {
+      if (S > 30) {
         //grijswaarden (kan veranderd worden in 'geen bordercolor')
         if (!scanning) {
           scanning = true
-          white = L < 50
+          white = L > 50
         } else if (contrast > 70 || contrast < -70) {
           // zwart <-> wit
           scanned++
@@ -42,22 +42,15 @@ export default class BarcodeScanner {
       } else if (scanning) {
         //geen grijswaarde
         scanning = false
+        scanned *= 2
+        if (!white) {
+          scanned--
+        }
         //scanned toevoegen aan barcodes
+        if (scanned ===  0 && !white)
         if (barcodes[[scanned, white]] === undefined) {
-          scanned *= 2
-          if (white) {
-            scanned++
-          } else {
-            scanned += 2
-          }
-          barcodes[[scanned, white]] = 1
+            barcodes[[scanned, white]] = 1
         } else {
-          scanned *= 2
-          if (white) {
-            scanned++
-          } else {
-            scanned += 2
-          }
           barcodes[[scanned, white]] += 1
         }
         scanned = 0

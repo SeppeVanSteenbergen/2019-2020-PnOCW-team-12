@@ -28,7 +28,7 @@ imgElement.onload = function() {
     let test8 = [50,50,50,50,50,100,100,100,100,100,0,0,0,0,0,100,100,100,100,100,0,0,0,0,0,50,50,50,50,50]
     let test1 = [50,50,50,50,50,0,0,0,0,0,50,50,50,50,50]
     let test2 = [50,50,50,50,50,100,100,100,100,100,50,50,50,50,50]
-    let barcode = BarcodeScanner.scan(inputImgData);
+    let barcode = BarcodeScanner.scanHorizontal(inputImgData);
 
     ColorSpace.hslaToRgba(inputImgData.data)
     inputContext.drawImage(imgElement, 0, 0, imgElement.width, imgElement.height);

@@ -89,7 +89,7 @@ export default class DetectionDrawer {
     }
     console.log(code)
     const barAmount = (sections*code.length)+(sections-1)
-    const barWidth = (this.canvas.width - 2*this.borderWidth) / barAmount
+    const barWidth = (this.canvas.width - 2 * this.borderWidth) / barAmount
     let startAt = this.borderWidth
 
     //const amountOfIterations = Math.floor((this.w - 2 * this.borderWidth) / (6 * width))
