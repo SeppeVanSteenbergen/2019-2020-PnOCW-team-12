@@ -40,7 +40,7 @@ export default class PixelIterator {
     }
     if (this.xoffset >= this.width) {
       this.terminated = true
-      console.log('terminated')
+      return null
     }
     if (this.left) {
       let curY = Math.floor(this.y + this.m * this.x++)
