@@ -18,6 +18,7 @@ imgElement.onload = function() {
     inputContext.clearRect(0, 0, inputCanvas.width, inputCanvas.height);
     inputCanvas.width = imgElement.width;
     inputCanvas.height = imgElement.height;
+    inputContext.drawImage(imgElement, 0, 0, imgElement.width, imgElement.height);
 
 
     let inputImgData = inputContext.getImageData(0, 0, imgElement.width, imgElement.height);
@@ -28,10 +29,10 @@ imgElement.onload = function() {
     let test8 = [50,50,50,50,50,100,100,100,100,100,0,0,0,0,0,100,100,100,100,100,0,0,0,0,0,50,50,50,50,50]
     let test1 = [50,50,50,50,50,0,0,0,0,0,50,50,50,50,50]
     let test2 = [50,50,50,50,50,100,100,100,100,100,50,50,50,50,50]
-    let barcode = BarcodeScanner.scanHorizontal(inputImgData);
+    let barcode = BarcodeScanner.scan(inputImgData);
+    ColorSpace.hslaToRgba(inputImgData.data);
+    inputContext.putImageData(inputImgData, 0, 0);
 
-    ColorSpace.hslaToRgba(inputImgData.data)
-    inputContext.drawImage(imgElement, 0, 0, imgElement.width, imgElement.height);
 
     console.log(barcode);
 };
