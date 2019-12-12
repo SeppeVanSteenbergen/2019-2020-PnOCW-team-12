@@ -60,27 +60,47 @@ export default class BarcodeScanner {
     let keys = Object.keys(barcodes)
     let resultKeys = []
     for (let i = 0; i < keys.length; i++) {
-      resultKeys.push(parseInt(keys[i][0]))
+      resultKeys.push([
+        parseInt(keys[i][0]),
+        keys[i].substring(2) === 'true',
+        barcodes[keys[i]]
+      ])
     }
-    console.log(resultKeys)
-    let HighestKey = Math.max(resultKeys)
+    let filteredCode = BarcodeScanner.filterBarcode(resultKeys)
+    console.log(filteredCode)
+    let barcode = filteredCode[0]
+    let highestWhite = filteredCode[1]
     let amounts = Object.values(barcodes)
     let maxAmount = Math.max(...amounts)
     let detectedAmount = amounts.reduce((a, b) => a + b, 0)
-
     let detectRatio = maxAmount / detectedAmount
     let ratio = maxAmount / height / 10
     if (detectRatio < 0) {
       console.log('Picture is not good enough to detect barcode horizontal')
       return [0, 0, 0]
     } else {
-      // console.log(detectRatio, ratio);
-      let barcode = barcodes[highestKey[1]]
       barcode *= 2
+      if (!highestWhite) {
+         barcode -= 1
+      }
       console.log(barcode)
       console.log(detectRatio)
       return [barcode, ratio, detectRatio]
     }
+  }
+
+  static filterBarcode(list) {
+    let length = list.length
+    for (let i = 0; i < length; i++) {
+      for (let j = 0; j < length - i - 1; j++) {
+        if(list[j][2] < list[j+1][2]) {
+          let tmp = list[j + 1]
+          list[j + 1] = list[j]
+          list[j] = tmp
+        }
+      }
+    }
+    return list[0]
   }
 
   static average(list) {
