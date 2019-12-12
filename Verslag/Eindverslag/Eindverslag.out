@@ -39,12 +39,18 @@
 \BOOKMARK [2][-]{subsection.A.1}{Algemeen}{appendix.A}% 39
 \BOOKMARK [2][-]{subsection.A.2}{Hoekdetectie en filtering}{appendix.A}% 40
 \BOOKMARK [2][-]{subsection.A.3}{Reconstructie}{appendix.A}% 41
+<<<<<<< Updated upstream
 <<<<<<< HEAD
 =======
+=======
+>>>>>>> Stashed changes
 \BOOKMARK [1][-]{appendix.B}{Kleuren plots}{}% 42
 \BOOKMARK [2][-]{subsection.B.1}{RGB plots}{appendix.B}% 43
 \BOOKMARK [2][-]{subsection.B.2}{Histogrammen}{appendix.B}% 44
 \BOOKMARK [2][-]{subsection.B.3}{HSL plots}{appendix.B}% 45
 \BOOKMARK [3][-]{subsubsection.B.3.1}{3D}{subsection.B.3}% 46
 \BOOKMARK [3][-]{subsubsection.B.3.2}{2D}{subsection.B.3}% 47
+<<<<<<< Updated upstream
 >>>>>>> master
+=======
+>>>>>>> Stashed changes
