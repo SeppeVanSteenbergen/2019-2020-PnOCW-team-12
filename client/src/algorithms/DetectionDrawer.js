@@ -14,9 +14,6 @@ export default class DetectionDrawer {
 
   drawBorder(l) {
     let ctx = this.ctx
-    let cornersize = this.w * 0.1
-    let h = this.h * 0.1
-
     ctx.beginPath()
     ctx.fillStyle = this.c1
     ctx.rect(0, 0, this.w, l)
@@ -32,7 +29,7 @@ export default class DetectionDrawer {
     ctx.fill()
   }
 
-  drawX(l, space) {
+  drawX(l) {
     let lineWidth = l
     let circleRadius = lineWidth * 1.2
 
@@ -91,11 +88,8 @@ export default class DetectionDrawer {
       even = !even
     }
     console.log(code)
-
-
-
-    const codeWidth = (this.canvas.width - 2*this.borderWidth) / (sections + 1);
-    const barWidth = codeWidth/code.length
+    const barAmount = (sections*code.length)+(sections-1)
+    const barWidth = (this.canvas.width - 2*this.borderWidth) / barAmount
     let startAt = this.borderWidth
 
     //const amountOfIterations = Math.floor((this.w - 2 * this.borderWidth) / (6 * width))
@@ -106,7 +100,7 @@ export default class DetectionDrawer {
         ctx.rect(startAt, 0, barWidth, this.h)
         ctx.fill()
         startAt += barWidth
-        ctx.beginPath();
+        ctx.beginPath()
       }
 
       ctx.beginPath()
