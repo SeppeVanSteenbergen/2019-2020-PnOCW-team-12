@@ -43,10 +43,6 @@ export default class BarcodeScanner {
         //scanned !== 0 || white === true to skip the "black" barcode
         //geen grijswaarde
         scanning = false
-        scanned *= 2
-        if (!white) {
-          scanned--
-        }
         //scanned toevoegen aan barcodes
         if (!ColorRange.inMaskRange(H, S, L)) {
           if (barcodes[[scanned, white]] === undefined) {
@@ -61,6 +57,13 @@ export default class BarcodeScanner {
     }
     console.log(barcodes)
     console.log('scanned')
+    let keys = Object.keys(barcodes)
+    let resultKeys = []
+    for (let i = 0; i < keys.length; i++) {
+      resultKeys.push(parseInt(keys[i][0]))
+    }
+    console.log(resultKeys)
+    let HighestKey = Math.max(resultKeys)
     let amounts = Object.values(barcodes)
     let maxAmount = Math.max(...amounts)
     let detectedAmount = amounts.reduce((a, b) => a + b, 0)
@@ -72,12 +75,8 @@ export default class BarcodeScanner {
       return [0, 0, 0]
     } else {
       // console.log(detectRatio, ratio);
-      let barcode = parseInt(
-        Object.keys(barcodes)
-          .find(key => barcodes[key] === maxAmount)
-          .toString()
-          .replace(/,/g, '')
-      )
+      let barcode = barcodes[highestKey[1]]
+      barcode *= 2
       console.log(barcode)
       console.log(detectRatio)
       return [barcode, ratio, detectRatio]
