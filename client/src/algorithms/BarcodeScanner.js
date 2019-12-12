@@ -66,7 +66,7 @@ export default class BarcodeScanner {
         barcodes[keys[i]]
       ])
     }
-    let filteredCode = BarcodeScanner.filterBarcode(resultKeys)
+    let filteredCode = this.filterBarcode(resultKeys)
     console.log(filteredCode)
     let barcode = filteredCode[0]
     let highestWhite = filteredCode[1]
