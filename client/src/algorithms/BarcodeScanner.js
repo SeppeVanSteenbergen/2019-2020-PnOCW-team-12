@@ -4,7 +4,7 @@ export default class BarcodeScanner {
   static scan(imageObject) {
     let pixels = imageObject //anders worden pixel values aangepast in pre-process
 
-    //this.preProcessBarcode(pixels)
+    this.preProcessBarcode(pixels)
 
     //this.debugPixels(pixels)
 
@@ -30,7 +30,7 @@ export default class BarcodeScanner {
       let S = image[i + 1]
       let L = image[i + 2]
       let contrast = previous - L
-      if (S < 60 && (L < 20 || 75 < L)) {
+      if (L < 25 || 75 < L) {
         //grijswaarden (kan veranderd worden in 'geen bordercolor')
         if (!scanning) {
           scanning = true
@@ -112,9 +112,8 @@ export default class BarcodeScanner {
    */
   static preProcessBarcode(imageObject) {
     let [minl, maxl] = this.getMaxMinValues(imageObject, 2)
-    let [mins, maxs] = this.getMaxMinValues(imageObject, 1)
-    let s = mins + (mins + maxs) * 0.7
-    this.applyLevelsAdjustment(imageObject, minl, maxl, s)
+
+    this.applyLevelsAdjustment(imageObject, minl, maxl)
   }
 
   /**
@@ -131,9 +130,7 @@ export default class BarcodeScanner {
     let pixels = imageObject.data
     let grayList = []
     for (let i = 0; i < pixels.length; i += 4) {
-      if (pixels[i + 1] < 50) {
         grayList.push(pixels[i + value])
-      }
     }
     grayList.sort()
     let end = (grayList.length * 20) / 100
@@ -157,18 +154,16 @@ export default class BarcodeScanner {
    * @param {int} min min grijswaarde : [0..100]
    * @param {int} max max grijswaarde : [0..100]
    */
-  static applyLevelsAdjustment(imageObject, min, max, s) {
-    const half = (max + min) / 2
-    console.log(half, max, min)
+  static applyLevelsAdjustment(imageObject, min, max) {
+    const quart = min + (max - min) / 25
+    const quartUp = max - (max-min) / 25
     let pixels = imageObject.data
     for (let i = 0; i < pixels.length; i += 4) {
-      if (pixels[i + 1] < s) {
-        if (pixels[i + 2] < half) {
+        if (pixels[i + 2] < quart) {
           pixels[i + 2] = 0
-        } else {
+        } else if(pixels[i+2] > quartUp) {
           pixels[i + 2] = 100
         }
-      }
     }
     return imageObject
   }
