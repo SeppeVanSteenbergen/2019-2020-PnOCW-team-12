@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+* {
+  box-sizing: border-box;
+}
+
+.column {
+  float: left;
+  width: 50%;
+  padding: 5px;
+}
+
+.output::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+</style>
+<title>Screen detection test</title>
+ </head>
+<body>
+<h2>Screen detection test</h2>
+
+    <H2>Run tests on all images</H2>
+    <input type="button" value="run" onClick="runAllTests()"/>
+    <img style="display:none" id="im"/>
+
+    <img src="" id="bert" />
+    <!-- /Images/CrossTest/Cross-20/0019.png -->
+<canvas id="canv"></canvas>
+</section>
+
+
+</body>
+<footer>
+    <script src="testing.js" type="text/javascript"></script>
+    <script src="screenTesting.js" type="text/javascript"></script>
+    <script src="barcodeTesting.js" type="text/javascript"></script>
+    <script src="../../screenDetection/Island.js" type="text/javascript"></script>
+    <script src="../../screenDetection/Image.js" type="text/javascript"></script>
+    <script src="../../screenDetection/Screen.js" type="text/javascript"></script>
+    <script src="../../screenDetection/barcodeScanner.js" type="text/javascript"></script>
+
+</footer>
+</html>

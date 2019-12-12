@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script type="text/javascript" src='Delaunay.js'> </script>
+    <script type="text/javascript" src="Triangle.js"></script>
+
+    <meta charset="utf-8">
+    <title>Color Background</title>
+
+</head>
+
+<body>
+
+
+<canvas id="canv">
+</canvas>
+
+
+</body>
+
+<footer>
+    
+    <script>
+        /*
+            TO ADD OWN POINTS TO PLOTTER:
+                set points, randompointsgenerator to 0 points
+                remove points.push out of comments in addPoint(event)
+        */
+        const w = window.innerWidth
+        const h = window.innerHeight
+
+        //let points = []
+        //points.push([30,200],[407,244], [50,50], [250,250])
+        // console.log(points)
+
+
+
+        var c = document.getElementById("canv");
+        c.width = w;
+        c.height = h;
+
+        var points = Delaunay.randomPointsGenerator(0, c)
+        //points = []
+        //points.push([601,197],[671,639],[1444,682],[27,453],[902,197],[687,525])
+        //points.push([27,453],[601,197],[671,639],[902,197],[687,525])
+
+
+        // function randomPoint(points){
+        //     let coord = triangulation(points)
+        //     console.log(coord)
+        //     let ctx = c.getContext("2d");
+        //     ctx.beginPath();
+        //     ctx.fillStyle = "#f00";
+        //     ctx.rect(coord[1][0]-3.5, coord[1][1]-3.5, 7, 7);
+        //     ctx.fill();
+        //     ctx.beginPath()
+        //     ctx.arc(coord[0][0], coord[0][1], coord[0][2], 0, 2 * Math.PI)
+        //     ctx.stroke()
+        // }
+
+        function selectSinglePoint(points, seed){
+            let coord = triangulation2(points, seed)
+            // console.log(coord)
+            let ctx = c.getContext("2d");
+            ctx.beginPath();
+            ctx.fillStyle = "#f00";
+            ctx.rect(coord[2][0][0]-3.5, coord[2][0][1]-3.5, 7, 7);
+            ctx.fill();
+            ctx.beginPath()
+            ctx.arc(coord[0][0], coord[0][1], coord[1][0], 0, 2 * Math.PI)
+            ctx.stroke()
+        }
+
+
+        function drawPoints(points) {
+            let ctx = c.getContext("2d");
+            for (let i=0; i<points.length;i++){
+                ctx.beginPath();
+                ctx.fillStyle = "#000";
+                ctx.rect(points[i][0]-3.5, points[i][1]-3.5, 7, 7);
+                ctx.fill();
+            }
+
+        }
+
+        function makeHull(points){
+            points = addToConvexHull(hullSort(points))
+            let ctx = c.getContext("2d");
+            for (let i = 0; i < points.length-1; i++){
+                ctx.beginPath();
+                ctx.moveTo(points[i][0], points[i][1])
+                ctx.lineTo(points[i+1][0], points[i+1][1])
+                ctx.stroke()
+
+            }
+            ctx.beginPath();
+            ctx.moveTo(points[points.length-1][0], points[points.length-1][1])
+            ctx.lineTo(points[0][0], points[0][1])
+            ctx.stroke()
+        }
+
+        function increaseHull(event){
+            let ctx = c.getContext("2d");
+            let newPoint = [event.clientX, event.clientY]
+            ctx.beginPath();
+            ctx.fillStyle = "#000";
+            ctx.rect(newPoint[0]-3.5, newPoint[1]-3.5, 7, 7);
+            ctx.fill();
+            points.push(newPoint)
+            makeHull(points)
+            console.log(points)
+        }
+
+        function selectPoint(event) {
+            // console.log(event.clientX, event.clientY)
+            for (let i = 0; i < points.length; i++){
+                if (event.clientX <= points[i][0]+10 && event.clientX >= points[i][0]-10
+                    && event.clientY <= points[i][1]+10 && event.clientY >= points[i][1]-10){
+                    return selectSinglePoint(points, points[i])
+
+                }
+
+            }
+
+        }
+        function addPoint(event){
+            points.push([event.clientX, event.clientY])
+            let ctx = c.getContext("2d");
+            ctx.clearRect(0, 0, c.width, c.height);
+            
+            let triangulation = Delaunay.triangulation(points, c.width, c.height)
+            if(typeof triangulation !== 'undefined'){
+                for(let i = 0; i < triangulation.length; i++){
+                    drawTriangle(triangulation[i]);
+                }
+            }
+            for(let i = 0; i < points.length; i++){
+                ctx.beginPath();
+                ctx.fillStyle = "#FF0000";
+                ctx.rect(points[i][0]-3.5, points[i][1]-3.5, 7, 7);
+                ctx.fill();
+            }
+            
+            
+        }
+        function drawTriangle(triangle){
+            let ctx = c.getContext("2d")
+            ctx.beginPath()
+            ctx.moveTo(triangle.point1[0], triangle.point1[1])
+            ctx.lineTo(triangle.point2[0], triangle.point2[1])
+            ctx.lineTo(triangle.point3[0], triangle.point3[1])
+            ctx.lineTo(triangle.point1[0], triangle.point1[1])
+            ctx.closePath()
+            ctx.lineWidth = 5
+            ctx.strokeStyle = '#000'
+            ctx.stroke()
+
+        }
+
+        // document.addEventListener("click", selectPoint);
+        document.addEventListener("click", addPoint)
+
+        const borderWidth = screen.width * 0.02;
+
+        drawPoints(points);
+        makeHull(points)
+
+    </script>
+
+    <style>
+        .canv {
+            width: 100%;
+            height: 100%;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            display: block;
+            box-sizing: border-box;
+        }
+    </style>
+</footer>
+
+</html>

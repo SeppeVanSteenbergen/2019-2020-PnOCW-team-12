@@ -36,7 +36,7 @@ module.exports = {
     }
   },
   getSocketRegistrationKey(req, res) {
-    let randNumber = Math.floor(Math.random()*90000) + 10000
+    let randNumber = Math.floor(Math.random() * 90000) + 10000
 
     dataHelper.addUserRegistration(req.user.uuid, randNumber)
 

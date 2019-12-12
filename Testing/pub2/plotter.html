@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script type="text/javascript" src='Delaunay.js'> </script>
+    <script type="text/javascript" src="Triangle.js"></script>
+
+    <meta charset="utf-8">
+    <title>Color Background</title>
+
+</head>
+
+<body>
+    <div  style="background-color: greenyellow; width: 100%; height: 50px; align-content:stretch;">
+        <div style="width: fit-content; display: inline-block; margin-left: 20px;">
+            <input id="randomNb" type="number">
+            <button type="button" onclick="validateRandomForm()">Random Points</button>
+        </div>
+        <div style="width: fit-content; display: inline-block; margin-left:20px">
+            x-coo: <input id="x-coo" type="number">
+            y-coo: <input id="y-coo" type="number">
+            <button type="button" onclick="addNewPoint()">addNewPoint</button>
+        </div>
+        <div style="width: fit-content; display: inline-block; margin-left:20px; margin-right: 30px ;">
+            <button type="button" onclick="clearAll()">Clear canvas</button>
+        </div>
+            canvas dimensions: <p id ="dimension" style="display: inline-block;"></p>
+    </div>
+
+
+    <canvas id="canv"></canvas>
+
+
+</body>
+
+<footer>
+
+    <script>
+        /*
+            TO ADD OWN POINTS TO PLOTTER:
+                set points, randompointsgenerator to 0 points
+                remove points.push out of comments in addPoint(event)
+        */
+        let c = document.getElementById("canv");
+        c.width = window.innerWidth;
+        c.height = window.innerHeight;
+        document.getElementById("dimension").innerHTML = c.width + " x " +  c.height;
+        let ctx = c.getContext("2d");
+
+        let points = [];
+
+        function validateRandomForm(){
+            let nbPoints = document.getElementById("randomNb").value;
+            if(isNaN(nbPoints) || nbPoints < 0 || nbPoints > 10000){
+                alert("invalid number");
+                return false
+            } else{
+                randomPoints(nbPoints)
+            }
+        }
+
+        function addNewPoint(){
+            let x = document.getElementById("x-coo").value;
+            let y = document.getElementById("y-coo").value;
+            if(isNaN(x) || x < 0 || x > c.width){
+                alert("invalid x-coordinate");
+                return false
+            }else if(isNaN(y) || y < 0 || y > c.height){
+                alert("invalid y-coordinate");
+                return false
+            } else{
+                addPoint([x,y])
+            }
+
+        }
+
+        function clearAll(){
+            clearCanvas();
+            points.length = 0
+        }
+
+        function randomPoints(nbPoints){
+            points = Delaunay.randomPointsGenerator(nbPoints, c);
+            let triangulation = Delaunay.triangulation(points, c.width, c.height);
+            clearCanvas();
+            drawTriangulation(triangulation);
+            drawPoints(points)
+        }
+
+        function drawTriangulation(triangulation){
+            for (let i = 0; i < triangulation.length; i++) {
+                    drawTriangle(triangulation[i]);
+                }
+            console.log(triangulation);
+            console.log(Delaunay.triangulationEdges(triangulation))
+        }
+
+        function drawPoints(points) {
+            let ctx = c.getContext("2d");
+            for (let i = 0; i < points.length; i++) {
+                ctx.beginPath();
+                ctx.fillStyle = "#000";
+                ctx.arc(points[i][0], points[i][1], 7, 0, 2 * Math.PI);
+                ctx.fill();
+            }
+
+        }
+
+        function addPoint(point) {
+            points.push([point[0], point[1]]);
+            let triangulation = Delaunay.triangulation(points, c.width, c.height);
+            clearCanvas();
+            drawTriangulation(triangulation);
+            drawPoints(points)
+        }
+
+        function addPointEvent(event){
+            let rect = c.getBoundingClientRect();
+            addPoint([event.clientX- rect.left, event.clientY - rect.top])
+        }
+        function clearCanvas(){
+            ctx.clearRect(0,0,c.width,c.height)
+        }
+
+        function drawTriangle(triangle) {
+            let ctx = c.getContext("2d");
+            ctx.beginPath();
+            ctx.moveTo(triangle.point1[0], triangle.point1[1]);
+            ctx.lineTo(triangle.point2[0], triangle.point2[1]);
+            ctx.lineTo(triangle.point3[0], triangle.point3[1]);
+            ctx.lineTo(triangle.point1[0], triangle.point1[1]);
+            ctx.closePath();
+            ctx.lineWidth = 5;
+            ctx.strokeStyle = '#000';
+            ctx.stroke()
+        }
+
+        // document.addEventListener("click", selectPoint);
+        document.getElementById("canv").addEventListener("click", addPointEvent)
+    </script>
+
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            display: block;
+            box-sizing: border-box;
+        }
+    </style>
+</footer>
+
+</html>

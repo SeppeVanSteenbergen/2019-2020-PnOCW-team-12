@@ -48,7 +48,7 @@ module.exports = {
 
 	drawDirections
 	{
-		type: 'draw-directions',
+		type: 'drawSnow-directions',
 		data: {
 			command: [{
 				deg: (degrees from top)
@@ -68,8 +68,82 @@ module.exports = {
 		}
 	}
 
+	displayDetectionScreen
+	{
+	  type: 'display-detection-screen',
+	  data: {
+	    id: 4    (positive integer between 0 and 119
+    }
+  }
 
+   displayImage
+   {
+      type: 'display-image'
+      data: {
+        image: (image in base64 encoded string)
+        }
+    }
 
+    imageCSS
+    {
+      type: 'display-image-css'
+      data: {
+        image: (base64 image)
+        ox: (x offset in px, integer value)
+        oy: (y offset in px, integer value)
+        w: (width in px, integer value)
+        h: (height in px, integer value)
+        css: (css for the target canvas element)
+     }
+
+     loadVideo
+     {
+        type: 'load-video'
+        data: {
+          videoURL: (relative url of the video file),
+          ox: (x offset in px, integer value)
+          oy: (y offset in px, integer value)
+          w: (width in px, integer value)
+          h: (height in px, integer value)
+          css: (css for the target canvas element)
+        }
+
+     }
+
+     startVideo
+     {
+        type: 'start-video'
+        data: {}
+     }
+
+     pauseVideo
+     {
+        type:'pause-video'
+        data:{}
+     }
+
+     restartVideo
+     {
+      type: 'restart-video'
+      data: {}
+     }
+
+     initAnimation
+     {
+      type: 'animation-init'
+      data: {
+          triangulation: [Tri1, Tri2, ..]  (list of triangles
+          midpoints: [[12,23],[123,123],...]   (list of points)
+          width: (width of the original image)
+          height: (height of the original image)
+
+          css: (css for the output canvas)
+          ox: (x offset in px, integer value)
+          oy: (y offset in px, integer value)
+          w: (width in px, integer value for transformation)
+          h: (height in px, integer value for transformation)
+      }
+     }
 	*/
 
   // TODO check for message integrity
@@ -77,37 +151,57 @@ module.exports = {
     console.log('SCREEN COMMAND')
     console.log(message)
     if (!dataHelper.isMasterUser(user_id)) {
-      console.log('The user is not allow to send this command')
+      console.log('The user is not allowed to send this command')
       return 1
     }
 
-    if (message.to !== 'all') {
+    if (message.payload.type === 'count-down') {
+      this.handleCountDown(user_id, message.payload.data)
+    } else if (message.to !== 'all') {
       this.sendDataByUserID('screenCommand', message.payload, message.to)
     } else {
       this.sendDataToRoomOfMaster('screenCommand', message.payload, user_id)
     }
   },
+  /**
+   *
+   * @param user_id
+   * @param data
+   *        [x,y,angle,frame, right]
+   */
+  animationFrame(user_id, data) {
+    this.sendDataToRoomOfMaster('af', data, user_id)
+  },
+
   closeRoom(user_id) {
     dataHelper.closeRoom(user_id)
     this.updateAllRoomLists() // TODO only update the clients from the room
   },
+
   openRoom(user_id) {
     dataHelper.openRoom(user_id)
     this.updateAllRoomLists() // TODO only update the clients from the room
   },
+
   toggleRoom(user_id) {
     dataHelper.toggleRoom(user_id)
     this.updateAllRoomLists() // TODO only update the clients from the room
   },
+
   sendDataByUserID(name, data, user_id) {
     this.sendDataBySocketID(
-      name,
-      data,
-      dataHelper.getSocketIDFromUserID(user_id)
+        name,
+        data,
+        dataHelper.getSocketIDFromUserID(user_id)
     )
   },
+
   sendDataBySocketID(name, data, socket_id) {
-    io.to(socket_id).emit(name, data)
+    if (data === null) {
+      io.to(socket_id).emit(name)
+    } else {
+      io.to(socket_id).emit(name, data)
+    }
   },
 
   sendDataToRoomOfMaster(name, data, master_user_id) {
@@ -116,13 +210,42 @@ module.exports = {
       return 1
     }
     const clientList = dataHelper.getClientsOfRoom(
-      dataHelper.getUserRoom(master_user_id)
+        dataHelper.getUserRoom(master_user_id)
     )
     console.log('CLIENTS IN ROOM')
     console.log(clientList)
 
-    for (let client_id in clientList) {
-      this.sendDataByUserID(name, data, clientList[client_id])
+    for (let i in clientList) {
+      this.sendDataByUserID(name, data, clientList[i])
+    }
+  },
+  sendClientInfo(master_user_id) {
+    if (!dataHelper.isMasterUser(master_user_id)) {
+      console.log('The given user is not a master user')
+      return 1
+    }
+
+    const clientList = dataHelper.getClientsOfRoom(
+        dataHelper.getUserRoom(master_user_id)
+    )
+
+    const clientInfo = clientList.map(user_id =>
+        dataHelper.getUserInfo(user_id)
+    )
+
+    this.sendDataByUserID('roomClientInfo', clientInfo, master_user_id)
+  },
+  updateRoomClientInfo(master_user_id) {
+    if (!dataHelper.isMasterUser(master_user_id)) {
+      console.log('The given user is not a master user')
+      return 1
+    }
+
+    const clientList = dataHelper.getClientsOfRoom(
+        dataHelper.getUserRoom(master_user_id)
+    )
+    for (let i = 0; i < clientList.length; i++) {
+      this.sendDataByUserID('updateScreenSize', null, clientList[i])
     }
   },
   sendSuccessMessageToSocket(socket_id, message) {
@@ -133,6 +256,90 @@ module.exports = {
   },
   disconnectSocket(socket_id) {
     io.sockets.connected[socket_id].disconnect()
-  }
+  },
 
+  /*
+    on receiving pong data,
+   */
+
+  pong(user_id, data) {
+    let currentTime = Date.now()
+    let ping = currentTime - data.startTime
+    // time to add to server time to get client time
+    let timeDelta = (data.clientTime + ping / 2) - currentTime
+    if(typeof pingList[data.room_id] === 'undefined') pingList[data.room_id] = {}
+    pingList[data.room_id][user_id] = {
+      ping: ping,
+      timeDelta: timeDelta
+    }
+
+    if (
+        Object.keys(pingList[data.room_id]).length ===
+        dataHelper.getClientsOfRoom(data.room_id).length
+    ) {
+      this.sendCountDown(data.room_id, data)
+    }
+  },
+  pingRoom(room_id, data) {
+    let clients = dataHelper.getClientsOfRoom(room_id)
+
+    for (let i in clients) {
+      console.log(clients[i], room_id)
+      this.pingUser(clients[i], data)
+    }
+  },
+  pingUser(user_id, data) {
+    let payload = {
+      command: data.command,
+      startOffset: data.startOffset,
+      startTime: Date.now(),
+      room_id: data.room_id
+    }
+
+    this.sendDataByUserID('pings', payload, user_id)
+  },
+  /**
+   * Steps
+   * 1) Save all the client latencies
+   * 2) Calculate all the client start times
+   * 3) Send all the start times with the data
+   * @param data
+   *        data.start
+   *        data.interval
+   * @param master_id
+   *        the user_id of a master in a room
+   */
+  handleCountDown(master_id, data) {
+    let startOffset = 200 // ms
+    let room_id = dataHelper.getUserRoom(master_id)
+    pingList[room_id] = {}
+
+    this.pingRoom(room_id, {
+      command: data,
+      startOffset: startOffset,
+      room_id: room_id
+    })
+  },
+  sendCountDown(room_id, data) {
+    console.log('send countDown')
+    let clients = dataHelper.getClientsOfRoom(room_id)
+
+    let clientPings = pingList[room_id]
+
+    let startOffset = 200 // ms
+
+    let payload = {
+      type: 'count-down',
+      data: data.command
+    }
+
+    let now = new Date().getTime()
+
+    for (let i in clients) {
+      payload.data.startTime =
+          now + clientPings[clients[i]].timeDelta + startOffset
+
+      this.sendDataByUserID('screenCommand', payload, clients[i])
+    }
+  }
 }

@@ -26,7 +26,11 @@ module.exports = {
     clientList[user_id] = {
       socket_id: -1,
       room: -1,
-      disconnect_time: -1
+      disconnect_time: -1,
+      size: {
+        width: -1,
+        height: -1
+      }
     }
     return 0
   },
@@ -287,5 +291,29 @@ module.exports = {
       }
     }
     return false
+  },
+  isRegisteredSocket(socket_id) {
+    for(let user_id in clientList) {
+      if(clientList[user_id].socket_id === socket_id) {
+        return true
+      }
+    }
+    return false
+  },
+  disableSocket(user_id) {
+    if(typeof clientList[user_id] !== 'undefined') {
+      clientList[user_id].socket_id = -1
+      return 0
+    }
+    return 1
+  },
+
+  getUserInfo(user_id) {
+    return clientList[user_id]
+  },
+
+  setSize(user_id, size) {
+    clientList[user_id].size = size
+    return 0
   }
 }

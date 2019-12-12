@@ -1,6 +1,8 @@
 const dataHelper = require('../helpers/dataHelper')
 const socketHelper = require('../helpers/socketHelper')
 
+// TODO Datastructure problem: Need to give an integer id to a client in a room
+
 /*
 
 the connected clients have a format
@@ -9,7 +11,11 @@ key: user_id
 	socket_id:
 	room:  (-1 not in room, >= 0 in a room)
 	(connected: (possible to know if socket_id exists))
-	disconnect_time: (time/date when the client was last connected, -1 if still connected, time/date if disconnected)
+	disconnect_time: (time/date when the client was last connected, -1 if still connected, time/date if disconnected),
+	size: {
+	                width: (screen width in pixels)
+	                height: (screen height in pixels)
+	              }
 }
 */
 clientList = {}
@@ -21,7 +27,7 @@ key: room_id
 value:
 {
 	master: (user_id of master)
-	clients:[] (user_id list of all clients of rooom)
+	clients:[] (user_id list of all clients of room)
 	name: (name of the room)
 	open: (true if open room, false if closed room)
 }
@@ -39,11 +45,39 @@ roomList = {}
  */
 registrationList = []
 
+/*
+  dictionary containing all the client pings
+
+  Dict
+  {
+    room_id: {
+      user_id: {
+        ping: [ping in ms],
+        timeDelta: [time in ms]
+        }
+      user_id2: {..}
+    }
+   }
+ */
+pingList = {}
+
 module.exports = io => {
   io.on('connect', socket => {
     console.log('client connected')
 
     socketHelper.updateAllRoomLists()
+
+    socket.use((packet, next) => {
+      if (
+        packet[0] !== 'registerUserSocket' &&
+        !dataHelper.isRegisteredSocket(socket.id)
+      ) {
+        console.log('socket not registered')
+        next(new Error('socket not registered'))
+      } else {
+        next()
+      }
+    })
 
     io.compress(true).emit('data', {
       message: 'welcome to the server'
@@ -75,9 +109,10 @@ module.exports = io => {
         console.log('failed registration')
         socketHelper.sendErrorMessageToSocket(socket.id, 'Failed to register socket')
       }*/
-      if(dataHelper.registerUserSocket(data.user_id, socket.id)) {
-        dataHelper.removeUser(data.user_id)
-        socketHelper.disconnectSocket(socket.id)
+      if (dataHelper.registerUserSocket(data.user_id, socket.id)) {
+        // dataHelper.removeUser(data.user_id)
+        dataHelper.disableSocket(data.user_id)
+        // socketHelper.disconnectSocket(socket.id)
         dataHelper.registerUserSocket(data.user_id, socket.id)
       }
     })
@@ -97,7 +132,7 @@ module.exports = io => {
       console.log('exiting room')
       try {
         dataHelper.exitRoom(dataHelper.getUserIDFromSocketID(socket.id))
-      } catch(e) {
+      } catch (e) {
         console.log(e)
       }
 
@@ -131,6 +166,36 @@ module.exports = io => {
       console.log(roomList)
       socketHelper.toggleRoom(dataHelper.getUserIDFromSocketID(socket.id))
       console.log(roomList)
+    })
+
+    /**
+     * Get the information related to the clients connected to the room
+     */
+    socket.on('getClientInfo', () => {
+      socketHelper.sendClientInfo(dataHelper.getUserIDFromSocketID(socket.id))
+    })
+
+    /**
+     * Set the screen size of a connected device
+     */
+    socket.on('setScreenSize', data => {
+      dataHelper.setSize(dataHelper.getUserIDFromSocketID(socket.id), data.size)
+    })
+
+    socket.on('updateRoomClientInfo', () => {
+      socketHelper.updateRoomClientInfo(
+        dataHelper.getUserIDFromSocketID(socket.id)
+      )
+    })
+
+    socket.on('pongs', data => {
+      console.log('received PONG !!')
+      console.log(pingList)
+      socketHelper.pong(dataHelper.getUserIDFromSocketID(socket.id), data)
+    })
+
+    socket.on('af', data => {
+      socketHelper.animationFrame(dataHelper.getUserIDFromSocketID(socket.id),data)
     })
   })
 }

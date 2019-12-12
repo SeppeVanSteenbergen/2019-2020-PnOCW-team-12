@@ -5,7 +5,17 @@ const AuthenticationPolicy = require('./policies/AuthenticationPolicy')
 const AuthenticationController = require('./controllers/AuthenticationController')
 const DataController = require('./controllers/DataController')
 const multer = require('multer')
-const upload = multer({dest: './uploads/images/'})
+
+let storage = multer.diskStorage({
+  destination: function(req, file, cb) {
+    cb(null, 'files')
+  },
+  filename: function(req, file, cb) {
+    cb(null, file.fieldname + '-' + Date.now())
+  }
+})
+
+let upload = multer({ storage: storage })
 
 module.exports = (app, passport) => {
   app.get('/test', (req, res) => {
@@ -38,11 +48,26 @@ module.exports = (app, passport) => {
     DataController.getAllRooms
   )
 
-  app.get('/auth/regSocketKey', AuthenticationController.getSocketRegistrationKey)
-  app.post('/upload', upload.single("file"), (req, res) => {
-    res.json({file: req.file});
+  app.get(
+    '/auth/regSocketKey',
+    AuthenticationController.getSocketRegistrationKey
+  )
+  app.post('/upload', upload.single('file'), (req, res) => {
+    res.json({ file: req.file })
   })
   app.use('/', serveStatic(path.join(__dirname, '../dist')))
+
+  app.get(
+    '/video/*',
+    AuthenticationPolicy.isAuthenticated,
+    DataController.streamVideo
+  )
+
+  app.post(
+    '/upload/video',
+    upload.single('videofile'),
+    DataController.videoUpload
+  )
 
   app.use((req, res) => {
     fs.readFile(

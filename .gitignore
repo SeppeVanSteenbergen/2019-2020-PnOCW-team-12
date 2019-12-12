@@ -1,6 +1,7 @@
-.idea/
-.vscode/
-
+**/node_modules
+**/.idea
+**/dist
+**/sessions
 .DS_Store
 
 server/uploads/images/
