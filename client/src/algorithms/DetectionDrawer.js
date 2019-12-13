@@ -75,7 +75,7 @@ export default class DetectionDrawer {
       even = true
     }
     if (even) {
-      amount = clientNb / 2 + 1
+      amount = clientNb / 2 + 2
     } else {
       amount = Math.round((clientNb + 2) / 2)
     }

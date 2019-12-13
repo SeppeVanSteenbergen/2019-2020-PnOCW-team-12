@@ -2,13 +2,11 @@ import ColorRange from './ColorRange'
 
 export default class BarcodeScanner {
   static scan(imageObject) {
-    let pixels = imageObject //anders worden pixel values aangepast in pre-process
 
-    this.preProcessBarcode(pixels)
-
-    //this.debugPixels(pixels)
-
-    let hor = this.scanHorizontal(pixels)
+    this.preProcessBarcode(imageObject)
+    //this.medianBlur(5, imageObject)
+    let pixels = imageObject.data
+    let hor = this.scanHorizontal(imageObject)
     //let ver = this.scanVertical(pixels)
     //let maxRatio = Math.max(hor[2], ver[2])
     // if (hor[2] === maxRatio && maxRatio >= 0) {
@@ -39,7 +37,7 @@ export default class BarcodeScanner {
           // zwart <-> wit
           scanned++
         }
-      } else if (scanning && (scanned !== 0 || white === true)) {
+      } else if (scanning && scanned !== 0) {
         //scanned !== 0 || white === true to skip the "black" barcode
         //geen grijswaarde
         scanning = false
@@ -80,9 +78,9 @@ export default class BarcodeScanner {
       return [0, 0, 0]
     } else {
       barcode *= 2
-      if (!highestWhite) {
-         barcode -= 1
-      }
+      if (highestWhite) {
+        barcode -= 2
+      } else barcode--
       console.log(barcode)
       console.log(detectRatio)
       return [barcode, ratio, detectRatio]
@@ -93,7 +91,7 @@ export default class BarcodeScanner {
     let length = list.length
     for (let i = 0; i < length; i++) {
       for (let j = 0; j < length - i - 1; j++) {
-        if(list[j][2] < list[j+1][2]) {
+        if (list[j][2] < list[j + 1][2]) {
           let tmp = list[j + 1]
           list[j + 1] = list[j]
           list[j] = tmp
@@ -120,10 +118,6 @@ export default class BarcodeScanner {
     console.log(result)
   }
 
-  static pixelToPosition(pixel, width) {
-    return (pixel[1] * width + pixel[0]) * 4
-  }
-
   /**
    * Pre-process the image for better barcode decoding
    *
@@ -131,8 +125,9 @@ export default class BarcodeScanner {
    */
   static preProcessBarcode(imageObject) {
     let [minl, maxl] = this.getMaxMinValues(imageObject, 2)
-
-    this.applyLevelsAdjustment(imageObject, minl, maxl)
+    let [mins, maxs] = this.getMaxMinValues(imageObject, 1)
+    let s = mins + (mins + maxs) * 0.7
+    this.applyLevelsAdjustment(imageObject, minl, maxl, s)
   }
 
   /**
@@ -145,11 +140,12 @@ export default class BarcodeScanner {
   static getMaxMinValues(imageObject, value) {
     let max = 0
     let min = 0
-
     let pixels = imageObject.data
     let grayList = []
     for (let i = 0; i < pixels.length; i += 4) {
+      if (pixels[i + 1] < 50 && (pixels[i + 2] < 20 || 75 < pixels[i + 2])) {
         grayList.push(pixels[i + value])
+      }
     }
     grayList.sort()
     let end = (grayList.length * 20) / 100
@@ -157,15 +153,12 @@ export default class BarcodeScanner {
       min += grayList[i]
     }
     min /= end
-
     for (let i = Math.round(grayList.length - end); i < grayList.length; i++) {
       max += grayList[i]
     }
     max /= end
-
     return [min, max]
   }
-
   /**
    * Apply Histogram equilization with extra CONTRAST constant
    *
@@ -173,16 +166,18 @@ export default class BarcodeScanner {
    * @param {int} min min grijswaarde : [0..100]
    * @param {int} max max grijswaarde : [0..100]
    */
-  static applyLevelsAdjustment(imageObject, min, max) {
-    const quart = min + (max - min) / 25
-    const quartUp = max - (max-min) / 25
+  static applyLevelsAdjustment(imageObject, min, max, s) {
+    const half = (max + min) / 2
+    console.log(half, max, min)
     let pixels = imageObject.data
     for (let i = 0; i < pixels.length; i += 4) {
-        if (pixels[i + 2] < quart) {
+      if (pixels[i + 1] < s) {
+        if (pixels[i + 2] < half) {
           pixels[i + 2] = 0
-        } else if(pixels[i+2] > quartUp) {
+        } else {
           pixels[i + 2] = 100
         }
+      }
     }
     return imageObject
   }
@@ -197,7 +192,7 @@ export default class BarcodeScanner {
     for (let x = 0; x < imageObject.width; x++) {
       for (let y = 0; y < imageObject.height; y++) {
         // Color + code: Red = 1; Yellow = 2; Green = 3; Blue = 4; Pink = 5
-        let i = this.pixelToPosition([x, y], imageObject.width)
+        let i = this.pixelToIndex([x, y], imageObject.width)
         let H = image[i] * 2
         let S = image[i + 1]
         let L = image[i + 2]
@@ -246,7 +241,13 @@ export default class BarcodeScanner {
       return [barcode, ratio, detectRatio]
     }
   }
-  static positionToPixel(position, width) {
+
+
+  static pixelToIndex(pixel, width) {
+    return (pixel[1] * width + pixel[0]) * 4
+  }
+
+  static indexToPixel(position, width) {
     position /= 4
     let x = position % width
     let y = (position - x) / width
