@@ -426,7 +426,7 @@ export default {
           title: 'floodfill'
         },
         {
-          title: 'drawSnow direction'
+          title: 'draw direction'
         },
         {
           title: 'countdown'
@@ -468,7 +468,7 @@ export default {
 
       videofile: null,
       animationInterval: null,
-      animationFramerate: 50
+      animationFramerate: 30
     }
   },
   components: {
@@ -544,7 +544,7 @@ export default {
     executeDirections(user_id = null) {
       let object = {
         payload: {
-          type: 'drawSnow-directions',
+          type: 'draw-directions',
           data: {
             command: [
               {
@@ -753,8 +753,8 @@ export default {
 
           // get all the data
           let info = this.analysedImage.createPictureCanvas(
-            this.analysedImage.width,
-              this.analysedImage.height,
+            this.$refs.vid.videoWidth,
+              this.$refs.vid.videoHeight,
           )
 
           for (let i = 0; i < this.analysedImage.screens.length; i++) {
@@ -891,7 +891,7 @@ export default {
       this.animation = new Animation(this.analysedImage.triangulation, {
         width: this.analysedImage.width,
         height: this.analysedImage.height
-      }, false)
+      })
     },
     executeStartVideo() {
       let obj = {
@@ -1072,7 +1072,7 @@ export default {
         this.drawingImg.height
       )
 
-      let base64 = this.imageToBase64(img)
+      let base64 = this.cutOutBase64(img, info.w, info.h)
 
       console.log(info)
 

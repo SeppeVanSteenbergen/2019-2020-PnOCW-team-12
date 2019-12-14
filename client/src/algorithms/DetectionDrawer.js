@@ -3,27 +3,17 @@ export default class DetectionDrawer {
     this.w = screen.width
     this.h = screen.height
     this.borderWidth = borderWidth
-    this.c2 = '#00ff00'
-    this.c1 = '#0000ff'
-    this.middleColor = '#ff0000'
+    this.c1 = '#00ff00'
+    this.c2 = '#0000ff'
     this.canvas = canvas
     this.canvas.width = this.w
     this.canvas.height = this.h
-    this.barcodeColorValues = [
-      '#00ffff',
-      '#ffff00',
-      '#00ff00',
-      '#0000ff',
-      '#ff00ff'
-    ]
+    this.barcodeColorValues = ['#000000', '#ffffff']
     this.ctx = this.canvas.getContext('2d')
   }
 
   drawBorder(l) {
     let ctx = this.ctx
-    let cornersize = this.w * 0.1
-    let h = this.h * 0.1
-
     ctx.beginPath()
     ctx.fillStyle = this.c1
     ctx.rect(0, 0, this.w, l)
@@ -39,24 +29,11 @@ export default class DetectionDrawer {
     ctx.fill()
   }
 
-  drawX(l, space) {
+  drawX(l) {
     let lineWidth = l
     let circleRadius = lineWidth * 1.2
 
     let ctx = this.ctx
-    ctx.lineWidth = lineWidth + 2 * space
-    ctx.beginPath()
-    ctx.strokeStyle = '#ffffff'
-    ctx.moveTo(0, 0)
-    ctx.lineTo(this.w / 2, this.h / 2)
-    ctx.lineTo(this.w, 0)
-    ctx.stroke()
-    ctx.beginPath()
-    ctx.strokeStyle = '#ffffff'
-    ctx.moveTo(0, this.h)
-    ctx.lineTo(this.w / 2, this.h / 2)
-    ctx.lineTo(this.w, this.h)
-    ctx.stroke()
     ctx.lineWidth = lineWidth
     ctx.beginPath()
     ctx.strokeStyle = this.c1
@@ -72,7 +49,7 @@ export default class DetectionDrawer {
     ctx.stroke()
 
     ctx.beginPath()
-    ctx.fillStyle = this.middleColor
+    ctx.fillStyle = '#ff0000'
     ctx.arc(this.w / 2, this.h / 2, circleRadius, 0, Math.PI * 2)
     ctx.fill()
   }
@@ -88,56 +65,51 @@ export default class DetectionDrawer {
     )
   }
 
-  clearScreen() {
-    const ctx = this.ctx
-    ctx.fillStyle = '#ffffff'
-    ctx.fillRect(
-        0,
-        0,
-        this.w,
-        this.h
-    )
-  }
-
-  barcode(code, sections) {
+  barcode(clientNb, sections) {
     //Only integers are allowed because otherwise the barcode is not complete at the end.
-    sections = Math.round(sections)
-    this.clearScreen()
-
     const ctx = this.ctx
-    code = code
-      .toString()
-      .split('')
-      .map(val => parseInt(val - 1))
-
-    const barWidth = (this.w - 2 * this.borderWidth) / (sections * 6 + 1)
+    let code = []
+    let even = false
+    let amount = 0
+    if (clientNb % 2 === 0){
+      even = true
+    }
+    if (even) {
+      amount = clientNb / 2 + 2
+    } else {
+      amount = Math.round((clientNb + 2) / 2)
+    }
+    for (let i = 0; i < amount; i++) {
+      if(even){
+        code.push(1)
+      } else{
+        code.push(0)
+      }
+      even = !even
+    }
+    console.log(code)
+    const barAmount = (sections*code.length)+(sections-1)
+    const barWidth = (this.canvas.width - 2 * this.borderWidth) / barAmount
+    let startAt = this.borderWidth
 
     //const amountOfIterations = Math.floor((this.w - 2 * this.borderWidth) / (6 * width))
-
-    for (let i = 0; i < sections * 6; i += 6) {
-      for (let j = 0; j < 5; j++) {
+    for (let i = 0; i < sections * (code.length + 1); i += (code.length + 1)) {
+      for (let j = 0; j < code.length; j++) {
         ctx.beginPath()
         ctx.fillStyle = this.barcodeColorValues[code[j]]
-        ctx.rect(
-          barWidth * (i + j) + this.borderWidth + barWidth,
-          this.borderWidth + barWidth,
-          barWidth,
-          this.h - 2 * this.borderWidth - 2 * barWidth
-        )
+        ctx.rect(startAt, 0, barWidth, this.h)
         ctx.fill()
+        startAt += barWidth
+        ctx.beginPath()
       }
       ctx.beginPath()
-      ctx.fillStyle = '#ffffff'
-      ctx.rect(
-        barWidth * (i + 5) + this.borderWidth + barWidth,
-        this.borderWidth,
-        barWidth,
-        this.h - 2 * this.borderWidth
-      )
+      ctx.fillStyle = '#ff00b6'
+      ctx.rect(startAt, 0, barWidth, this.h)
       ctx.fill()
+      startAt += barWidth
     }
 
-    this.drawX(this.borderWidth, barWidth/2)
+    this.drawX(this.borderWidth, barWidth)
     this.drawBorder(this.borderWidth)
 
     return barWidth

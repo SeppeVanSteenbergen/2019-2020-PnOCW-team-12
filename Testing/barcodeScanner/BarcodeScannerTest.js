@@ -1,3 +1,5 @@
+import BarcodeScanner from "../../client/src/algorithms/BarcodeScanner";
+
 let imgElement = document.createElement("img");
     imgElement = document.getElementById('imageSrc');
 let inputElement = document.getElementById('fileInput');
@@ -19,6 +21,6 @@ imgElement.onload = function() {
     inputContext.drawImage(imgElement, 0, 0, imgElement.width, imgElement.height);
     let inputImgData = inputContext.getImageData(0, 0, imgElement.width, imgElement.height);
     let image = rgbaToHsla(inputImgData.data);
-    let barcode = scanner(image, inputImgData.width, inputImgData.height, 15);
+    let barcode = BarcodeScanner.scanHorizontal(image);
     console.log(barcode);
 };

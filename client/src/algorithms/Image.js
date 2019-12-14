@@ -276,11 +276,11 @@ export default class Image {
       let pixel = this.positionToPixel(i)
       let x = pixel[0]
       let y = pixel[1]
-      if (ColorRange.inBlueRange(H, S, L)) {
+      if (ColorRange.inYellowRange(H, S, L)) {
         this.matrix[y][x] = 1
-      } else if (ColorRange.inGreenRange(H, S, L)) {
+      } else if (ColorRange.inPinkRange(H, S, L)) {
         this.matrix[y][x] = 2
-      } else if (ColorRange.inRedRange(H, S, L)) {
+      } else if (ColorRange.inMidRange(H, S, L)) {
         this.matrix[y][x] = 3
       } else {
         this.matrix[y][x] = 0
@@ -318,7 +318,7 @@ export default class Image {
   }
 
   /**
-   * Use the drawer class to drawSnow the corners and midpoint of this island on the original imageData.
+   * Use the drawer class to draw the corners and midpoint of this island on the original imageData.
    *
    * @param island
    *        the island to be drawn
@@ -328,7 +328,7 @@ export default class Image {
     this.drawer.drawCorners(island)
   }
 
-  findExtremeValues(width, height) {
+  findExtremeValues() {
     let points = {
       minx: null,
       maxx: null,
@@ -361,14 +361,6 @@ export default class Image {
     points['miny'] = allCorners[0][1]
     points['maxy'] = allCorners[allCorners.length - 1][1]
 
-    let scale = width / (points['maxx'] - points['minx'])
-
-    if(height * scale < (points['maxy'] - points['miny'])){
-      scale = height / (points['maxy'] - points['miny'])
-    }
-
-    points['scale'] = scale
-
     return points
   }
 
@@ -379,7 +371,7 @@ export default class Image {
    * @param {int} h image height
    */
   createPictureCanvas(w, h) {
-    let pictureCanvas = this.findExtremeValues(w, h)
+    let pictureCanvas = this.findExtremeValues()
 
     w = Math.abs(pictureCanvas.maxx - pictureCanvas.minx)
     h = Math.abs(pictureCanvas.maxy - pictureCanvas.miny)
@@ -390,15 +382,12 @@ export default class Image {
       minx: pictureCanvas.minx,
       miny: pictureCanvas.miny,
       maxx: pictureCanvas.maxx,
-      maxy: pictureCanvas.maxy,
-      scale: pictureCanvas.scale
+      maxy: pictureCanvas.maxy
     }
   }
 
   showTransformatedImage(image) {
     let info = this.createPictureCanvas(image.width, image.height)
-
-    let ratio = Math.max(info.w / image.width, info.h / image.height)
 
     let transformatedStyles = []
     for (let i = 0; i < this.screens.length; i++) {
@@ -418,7 +407,7 @@ export default class Image {
         info.w +
         'px; height: ' +
         info.h +
-        'px;'
+        'px; object-fit: none'
 
       transformatedStyles.push(t)
     }
@@ -434,8 +423,8 @@ export default class Image {
           image,
           0,
           0,
-          Math.round(image.width * ratio),
-          Math.round(image.height * ratio)
+          outputCanvas.width,
+          outputCanvas.height
         )
       }
     }

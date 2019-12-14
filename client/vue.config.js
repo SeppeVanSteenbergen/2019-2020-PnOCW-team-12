@@ -5,10 +5,5 @@ module.exports = {
       skipWaiting: true,
       clientsClaim: true
     }
-  },
-  devServer: {
-    //proxy: 'http://stylify.duckdns.org:8080',
-    //skipHostCheck: true,
-    //public: 'http://stylify.duckdns.org'
   }
 }

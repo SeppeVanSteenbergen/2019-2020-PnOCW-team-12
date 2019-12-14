@@ -2,7 +2,7 @@ const dev = true
 
 let secure = true // true for https, false for http
 
-let kuleuven = true
+let kuleuven = false
 
 if (dev) secure = false
 
