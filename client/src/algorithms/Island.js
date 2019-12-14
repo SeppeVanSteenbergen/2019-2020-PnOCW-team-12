@@ -39,18 +39,11 @@ export default class Island {
 
     this.imgOriginal = imgOriginal
     this.midPoint = this.calcMid()
-    this.barcode = BarcodeScanner.scan(
-      this.getScreenImg()
-    )
-    this.clientCode = PermutationConverter.decode(this.barcode)
-  }
-
-  getBarcode() {
-    return this.barcode
+    this.clientCode = null
   }
 
   isValid() {
-    return this.midPoint !== null && this.barcode !== 0
+    return this.midPoint !== null
   }
 
   setScreenMatrix(matrix) {
@@ -179,18 +172,14 @@ export default class Island {
 
   finishIsland() {
     this.findCorners()
-    if (this.islandIsFlipped()) {
-      this.barcode = parseInt(
-        this.barcode
-          .toString()
-          .split('')
-          .reverse()
-          .join('')
-      )
-    }
+    this.clientCode = BarcodeScanner.scan(
+      this.getScreenImg(),
+      this.corners.LU,
+      this.corners.RU
+    )
     this.localToWorld()
 
-    console.log('Detected screen: ' + this.barcode)
+    console.log('Detected screen: ' + this.clientCode)
   }
 
   islandIsFlipped() {
@@ -235,6 +224,10 @@ export default class Island {
       this.clientCode,
       this.imgOriginal
     )
+  }
+
+  getClientCode() {
+    return this.clientCode
   }
 
   getMatrix(x, y) {

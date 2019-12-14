@@ -59,9 +59,12 @@ export default class Image {
     ctx.drawImage(image, 0, 0, canvas.width, canvas.height)
 
     let resizedImage = document.createElement('img')
-    resizedImage.src = canvas.toDataURL()
-    resizedImage.width = canvas.width
-    resizedImage.height = canvas.height
+    resizedImage.setAttribute('src',canvas.toDataURL())
+    resizedImage.setAttribute('width', canvas.width.toString())
+    resizedImage.setAttribute('height', canvas.height.toString())
+    //resizedImage.src = canvas.toDataURL()
+    //resizedImage.width = canvas.width
+    //resizedImage.height = canvas.height
 
     return resizedImage
   }
@@ -87,9 +90,7 @@ export default class Image {
     copyCtx.putImageData(imgData, 0, 0)
 
     ctx.drawImage(copyCanvas, 0, 0, canvas.width, canvas.height)
-    let resizedImgData = ctx.getImageData(0, 0, canvas.width, canvas.height)
-
-    return resizedImgData
+    return ctx.getImageData(0, 0, canvas.width, canvas.height)
   }
 
   analyse() {
@@ -102,28 +103,6 @@ export default class Image {
     //this.createPictureCanvas(300, 500); //TODO: param meegeven
     //this.calcRelativeScreens(); //untested
     return this.screens
-  }
-
-  //TODO: check resolution ook
-  qualityCheck() {
-    let RGBA = false
-    if (this.getColorSpace() === 'RGBA') {
-      ColorSpace.rgbaToHsla(this.pixels)
-      this.setColorSpace('HSLA')
-      RGBA = true
-    }
-    if (this.getColorSpace() !== 'HSLA') {
-      console.error('Picture has to be in HSLA to do a quality check!')
-    } else {
-      let luminance = ColorSpace.calcLuminance(this.pixels)
-      if (luminance < 40 || luminance > 80) {
-        console.error('Take a better picture')
-      }
-    }
-    if (RGBA) {
-      ColorSpace.hslaToRgba(this.pixels)
-      this.setColorSpace('RGBA')
-    }
   }
 
   setCanvas(canvasName, width, height) {
@@ -168,7 +147,7 @@ export default class Image {
                 newIsland.finishIsland()
                 this.islands.push(newIsland)
               } catch (err) {
-                console.log(err + ' in screen: ' + newIsland.getBarcode())
+                console.log(err + ' in screen: ' + newIsland.getClientCode())
               }
             }
             this.islandID += 3

@@ -1,26 +1,29 @@
 import ColorRange from './ColorRange'
+import PixelIterator from './PixelIterator';
 
 export default class BarcodeScanner {
   static scan(imageObject) {
     this.preProcessBarcode(imageObject)
-    let hor = this.scanHorizontal(imageObject)
-    //let ver = this.scanVertical(pixels)
-    //let maxRatio = Math.max(hor[2], ver[2])
-    // if (hor[2] === maxRatio && maxRatio >= 0) {
-    //  return hor[0]
-    //} else if (maxRatio >= 0) return ver[0]
+    return this.scanHorizontal(imageObject)
   }
 
-  static scanHorizontal(imageObject) {
+  static scanHorizontal(imageObject, LU, RU) {
     let height = imageObject.height
     let image = imageObject.data
-
+    let iterator = new PixelIterator(
+      LU,
+      RU,
+      imageObject.width,
+      imageObject.height
+    )
     let barcodes = {}
     let scanned = 0
     let previous = image[2]
     let white
     let scanning = false
-    for (let i = 4; i < image.length; i += 4) {
+    let current = iterator.next()
+    while (current !== null) {
+      let i = this.pixelToIndex(current, imageObject.width)
       let H = image[i]
       let S = image[i + 1]
       let L = image[i + 2]
