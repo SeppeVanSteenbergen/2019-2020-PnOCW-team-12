@@ -2,10 +2,7 @@ import ColorRange from './ColorRange'
 
 export default class BarcodeScanner {
   static scan(imageObject) {
-
     this.preProcessBarcode(imageObject)
-    //this.medianBlur(5, imageObject)
-    let pixels = imageObject.data
     let hor = this.scanHorizontal(imageObject)
     //let ver = this.scanVertical(pixels)
     //let maxRatio = Math.max(hor[2], ver[2])
@@ -55,16 +52,8 @@ export default class BarcodeScanner {
     }
     console.log(barcodes)
     console.log('scanned')
-    let keys = Object.keys(barcodes)
-    let resultKeys = []
-    for (let i = 0; i < keys.length; i++) {
-      resultKeys.push([
-        parseInt(keys[i][0]),
-        keys[i].substring(2) === 'true',
-        barcodes[keys[i]]
-      ])
-    }
-    let filteredCode = this.filterBarcode(resultKeys)
+    let keys = this.calcKeys(barcodes)
+    let filteredCode = this.filterBarcode(keys)
     console.log(filteredCode)
     let barcode = filteredCode[0]
     let highestWhite = filteredCode[1]
@@ -87,6 +76,21 @@ export default class BarcodeScanner {
     }
   }
 
+  static calcKeys(dict) {
+    let keys = Object.keys(dict)
+    let resultKeys = []
+    for (let i = 0; i < keys.length; i++) {
+      if (dict[keys[i]] > 100) {
+        resultKeys.push([
+          parseInt(keys[i][0]),
+          keys[i].substring(2) === 'true',
+          dict[keys[i]]
+        ])
+      }
+    }
+    return resultKeys
+  }
+
   static filterBarcode(list) {
     let length = list.length
     for (let i = 0; i < length; i++) {
@@ -98,6 +102,7 @@ export default class BarcodeScanner {
         }
       }
     }
+    console.log(list)
     return list[0]
   }
 
@@ -136,6 +141,7 @@ export default class BarcodeScanner {
    * Optional: use start and end constants to limit search domain
    *
    * @param {ImageData} imageObject
+   * @param value
    */
   static getMaxMinValues(imageObject, value) {
     let max = 0
@@ -181,67 +187,6 @@ export default class BarcodeScanner {
     }
     return imageObject
   }
-
-  static scanVertical(imageObject) {
-    let height = imageObject.height
-    let image = imageObject.data
-
-    let scanned = []
-    let barcodes = {}
-
-    for (let x = 0; x < imageObject.width; x++) {
-      for (let y = 0; y < imageObject.height; y++) {
-        // Color + code: Red = 1; Yellow = 2; Green = 3; Blue = 4; Pink = 5
-        let i = this.pixelToIndex([x, y], imageObject.width)
-        let H = image[i] * 2
-        let S = image[i + 1]
-        let L = image[i + 2]
-
-        if (ColorRange.inWhiteRange(H, S, L)) {
-          if (scanned.length === 5) {
-            if (barcodes[scanned] === undefined) {
-              barcodes[scanned] = 1
-            } else {
-              barcodes[scanned] += 1
-            }
-          }
-          scanned = []
-        } else if (ColorRange.inRedRange(H, S, L) && !scanned.includes(1)) {
-          scanned.push(1)
-        } else if (ColorRange.inYellowRange(H, S, L) && !scanned.includes(2)) {
-          scanned.push(2)
-        } else if (ColorRange.inGreenRange(H, S, L) && !scanned.includes(3)) {
-          scanned.push(3)
-        } else if (ColorRange.inBlueRange(H, S, L) && !scanned.includes(4)) {
-          scanned.push(4)
-        } else if (ColorRange.inPinkRange(H, S, L) && !scanned.includes(5)) {
-          scanned.push(5)
-        }
-      }
-    }
-
-    let amounts = Object.values(barcodes)
-    let maxAmount = Math.max(...amounts)
-    let detectedAmount = amounts.reduce((a, b) => a + b, 0)
-
-    let detectRatio = maxAmount / detectedAmount
-    //TODO: Needs to be updated with the right amount of barcodes on screen.
-    let ratio = maxAmount / height / 10
-    if (detectRatio < 0.5) {
-      // console.log('Picture is not good enough to detect barcode vertical');
-      return [0, 0, 0]
-    } else {
-      // console.log(detectRatio, ratio);
-      let barcode = parseInt(
-        Object.keys(barcodes)
-          .find(key => barcodes[key] === maxAmount)
-          .toString()
-          .replace(/,/g, '')
-      )
-      return [barcode, ratio, detectRatio]
-    }
-  }
-
 
   static pixelToIndex(pixel, width) {
     return (pixel[1] * width + pixel[0]) * 4
