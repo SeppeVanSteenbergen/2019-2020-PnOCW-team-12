@@ -15,7 +15,7 @@
             <v-list v-if="roomList.length !== 0">
               <v-list>
                 <v-list-item
-                  v-for="room_id in Object.keys(roomList)"
+                 v-for="room_id in Object.keys(roomList)"
                   :key="room_id"
                   @click="joinRoom(room_id)"
                 >
@@ -59,6 +59,7 @@ import DetectionDrawer from '../algorithms/DetectionDrawer'
 import AlgorithmService from '../services/AlgorithmService'
 import NumberConverter from '../algorithms/PermutationConverter'
 import Animation from '../algorithms/Animations'
+import Image from '../algorithms/Image'
 
 export default {
   name: 'client',
@@ -102,7 +103,7 @@ export default {
           this.setDefaultCSS()
           this.countDownHandler(message.data)
           break
-        case 'draw-directions':
+        case 'drawSnow-directions':
           this.setDefaultCSS()
           this.drawDirectionsHandler(message.data)
           break
@@ -131,6 +132,7 @@ export default {
           this.restartVideoHandler()
           break
         case 'animation-init':
+          this.setDefaultCSS()
           this.animationInitHandler(message.data)
           break
         default:
@@ -242,12 +244,15 @@ export default {
       this.canvas.height = data.h
       this.canvas.style = data.css
 
+
+
       let image = new window.Image()
 
       let vue = this
 
       image.onload = function() {
-        vue.canvas.getContext('2d').drawImage(image, 0, 0, data.w, data.h)
+        let ratio = Math.max(data.w / image.width, data.h / image.height)
+        vue.canvas.getContext('2d').drawImage(image, 0, 0, Math.round(image.width * ratio), Math.round(image.height * ratio))
       }
       image.src = data.image
     },
@@ -408,7 +413,7 @@ export default {
       console.log(base64Image)
       const canvas = this.canvas
       let ctx = this.canvas.getContext('2d')
-      let image = new Image()
+      let image = new window.Image()
 
       image.onload = function() {
         let wRatio = canvas.width / image.width
@@ -436,7 +441,7 @@ export default {
     loadVideoHandler(data) {
       this.videoURL = data.videoURL
       this.canvas.style = data.css
-      this.canvas.width = data.h
+      this.canvas.height = data.h
       this.canvas.width = data.w
       this.$refs.vid.load()
       this.$refs.vid.style = 'display:none'
@@ -450,7 +455,8 @@ export default {
     },
     videoLoop(ctx) {
       if (!this.canvasMode) {
-        ctx.drawImage(this.$refs.vid, 0, 0, this.canvas.width, this.canvas.height, 0,0, this.canvas.width, this.canvas.height)
+        let ratio = Math.max(this.canvas.width / this.$refs.vid.videoWidth , this.canvas.height /this.$refs.vid.videoHeight)
+        ctx.drawImage(this.$refs.vid, 0,0, Math.round(this.$refs.vid.videoWidth * ratio ), Math.round(this.$refs.vid.videoHeight * ratio))
         setTimeout(this.videoLoop, 1000 / 30, ctx) // drawing at 30fps
       }
     },
@@ -466,35 +472,38 @@ export default {
 
     cutout(imgData, w, h, minx, miny) {
       let c = document.createElement('canvas')
-      c.width = w
-      c.height = h
+      c.width = imgData.width
+      c.height = imgData.height
       let ctx = c.getContext('2d')
-      ctx.drawImage(img, minx, miny, w, h, 0, 0, w, h)
-      return ctx.getImageData(0,0,w,h)
+
+
+      ctx.putImageData(imgData, 0,0)
+      return ctx.getImageData(minx,miny,w,h)
     },
     animationInitHandler(data) {
-      //create delaunay image and draw on canvas
+      //create delaunay image and drawSnow on canvas
       this.delaunayImage = AlgorithmService.delaunayImage(data.triangulation, data.midpoints, data.width, data.height)
 
       // cut right part out of delaunay image
-      this.delaunayImage = this.cutout(this.delaunayImage, data.w, data.h, data.minx, data.miny)
+      this.delaunayImage = this.cutout(this.delaunayImage, data.w, data.h, data.ox, data.oy)
+      //this.delaunayImage = Image.resizeImageData(this.delaunayImage, [data.w, data.h])
 
       //create animation object
-      this.animation = new Animation(null, this.delaunayImage)
+      this.animation = new Animation(null, this.delaunayImage, true)
 
 
       //display the image on the screen
       let c = document.createElement('canvas')
-      c.width = this.delaunayImage.width
-      c.height = this.delaunayImage.height
-      let ctx = c.getContext('2d')
-      ctx.putImageData(this.delaunayImage, 0,0)
+      //c.width = data.w
+      //c.height = data.h
       // add style to the output canvas
 
-      this.canvas.getContext('2d').putImageData(this.delaunayImage, 0,0)
+      let ctx = this.canvas.getContext('2d')
+
       this.canvas.style = data.css
       this.canvas.width = data.w
       this.canvas.height = data.h
+      ctx.putImageData(this.delaunayImage, 0,0)
 
       this.minx = data.ox
       this.miny = data.oy
@@ -508,7 +517,7 @@ export default {
     animationFrameHandler(data) {
       let ctx = this.canvas.getContext('2d')
       ctx.putImageData(this.delaunayImage, 0,0)
-      this.animation.drawCat(this.canvas, data[0] - this.minx, data[1] - this.miny, data[2], data[3], data[4])
+      this.animation.drawAnimals(5,150,this.canvas, data[0] - this.minx, data[1] - this.miny, data[2], data[3], data[4])
     }
   }
 }

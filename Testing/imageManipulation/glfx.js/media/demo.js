@@ -33,7 +33,7 @@ Filter.prototype.setCode = function(code) {
 }
 
 Filter.prototype.use = function() {
-  // Load the texture from the image and draw it to the canvas
+  // Load the texture from the image and drawSnow it to the canvas
   var image = images[this.imageFile || 'image.jpg']
   texture = image.texture
   $('#container').css({ width: texture._.width, height: texture._.height })
@@ -232,7 +232,7 @@ var filters = {
       },
       function() {
         this.setCode(
-          'canvas.draw(texture).brightnessContrast(' +
+          'canvas.drawSnow(texture).brightnessContrast(' +
             this.brightness +
             ', ' +
             this.contrast +
@@ -249,7 +249,7 @@ var filters = {
       },
       function() {
         this.setCode(
-          'canvas.draw(texture).hueSaturation(' +
+          'canvas.drawSnow(texture).hueSaturation(' +
             this.hue +
             ', ' +
             this.saturation +
@@ -265,7 +265,7 @@ var filters = {
       },
       function() {
         this.setCode(
-          'canvas.draw(texture).vibrance(' + this.amount + ').update();'
+          'canvas.drawSnow(texture).vibrance(' + this.amount + ').update();'
         )
       }
     ),
@@ -277,7 +277,7 @@ var filters = {
       },
       function() {
         this.setCode(
-          'canvas.draw(texture).denoise(' + this.exponent + ').update();'
+          'canvas.drawSnow(texture).denoise(' + this.exponent + ').update();'
         )
       }
     ),
@@ -290,7 +290,7 @@ var filters = {
       },
       function() {
         this.setCode(
-          'canvas.draw(texture).unsharpMask(' +
+          'canvas.drawSnow(texture).unsharpMask(' +
             this.radius +
             ', ' +
             this.strength +
@@ -306,7 +306,7 @@ var filters = {
       },
       function() {
         this.setCode(
-          'canvas.draw(texture).noise(' + this.amount + ').update();'
+          'canvas.drawSnow(texture).noise(' + this.amount + ').update();'
         )
       }
     ),
@@ -318,7 +318,7 @@ var filters = {
       },
       function() {
         this.setCode(
-          'canvas.draw(texture).sepia(' + this.amount + ').update();'
+          'canvas.drawSnow(texture).sepia(' + this.amount + ').update();'
         )
       }
     ),
@@ -331,7 +331,7 @@ var filters = {
       },
       function() {
         this.setCode(
-          'canvas.draw(texture).vignette(' +
+          'canvas.drawSnow(texture).vignette(' +
             this.size +
             ', ' +
             this.amount +
@@ -350,7 +350,7 @@ var filters = {
       },
       function() {
         this.setCode(
-          'canvas.draw(texture).zoomBlur(' +
+          'canvas.drawSnow(texture).zoomBlur(' +
             this.center.x +
             ', ' +
             this.center.y +
@@ -368,7 +368,7 @@ var filters = {
       },
       function() {
         this.setCode(
-          'canvas.draw(texture).triangleBlur(' + this.radius + ').update();'
+          'canvas.drawSnow(texture).triangleBlur(' + this.radius + ').update();'
         )
       }
     ),
@@ -383,7 +383,7 @@ var filters = {
       },
       function() {
         this.setCode(
-          'canvas.draw(texture).tiltShift(' +
+          'canvas.drawSnow(texture).tiltShift(' +
             this.start.x +
             ', ' +
             this.start.y +
@@ -409,7 +409,7 @@ var filters = {
       },
       function() {
         this.setCode(
-          'canvas.draw(texture).lensBlur(' +
+          'canvas.drawSnow(texture).lensBlur(' +
             this.radius +
             ', ' +
             this.brightness +
@@ -432,7 +432,7 @@ var filters = {
       },
       function() {
         this.setCode(
-          'canvas.draw(texture).swirl(' +
+          'canvas.drawSnow(texture).swirl(' +
             this.center.x +
             ', ' +
             this.center.y +
@@ -454,7 +454,7 @@ var filters = {
       },
       function() {
         this.setCode(
-          'canvas.draw(texture).bulgePinch(' +
+          'canvas.drawSnow(texture).bulgePinch(' +
             this.center.x +
             ', ' +
             this.center.y +
@@ -490,7 +490,7 @@ var filters = {
           this.d.y
         ]
         this.setCode(
-          'canvas.draw(texture).perspective([' +
+          'canvas.drawSnow(texture).perspective([' +
             before +
             '], [' +
             after +
@@ -509,7 +509,7 @@ var filters = {
       },
       function() {
         this.setCode(
-          'canvas.draw(texture).ink(' + this.strength + ').update();'
+          'canvas.drawSnow(texture).ink(' + this.strength + ').update();'
         )
       }
     ),
@@ -521,7 +521,7 @@ var filters = {
       },
       function() {
         this.setCode(
-          'canvas.draw(texture).edgeWork(' + this.radius + ').update();'
+          'canvas.drawSnow(texture).edgeWork(' + this.radius + ').update();'
         )
       }
     ),
@@ -534,7 +534,7 @@ var filters = {
       },
       function() {
         this.setCode(
-          'canvas.draw(texture).hexagonalPixelate(' +
+          'canvas.drawSnow(texture).hexagonalPixelate(' +
             this.center.x +
             ', ' +
             this.center.y +
@@ -554,7 +554,7 @@ var filters = {
       },
       function() {
         this.setCode(
-          'canvas.draw(texture).dotScreen(' +
+          'canvas.drawSnow(texture).dotScreen(' +
             this.center.x +
             ', ' +
             this.center.y +
@@ -576,7 +576,7 @@ var filters = {
       },
       function() {
         this.setCode(
-          'canvas.draw(texture).colorHalftone(' +
+          'canvas.drawSnow(texture).colorHalftone(' +
             this.center.x +
             ', ' +
             this.center.y +

@@ -65,7 +65,7 @@ class Line {
   }
 
   /**
-   * Get the start and end points to draw the line over the full canvas
+   * Get the start and end points to drawSnow the line over the full canvas
    */
   calcInfinitePoints(width, height) {
     let result = []

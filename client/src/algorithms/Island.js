@@ -2,7 +2,7 @@ import Screen from './Screen'
 import BarcodeScanner from './BarcodeScanner'
 import CornerDetector from './CornerDetector'
 import Line from './Line'
-import PermutationConverter from './PermutationConverter'
+// import PermutationConverter from './PermutationConverter'
 
 export default class Island {
   /**
@@ -180,14 +180,6 @@ export default class Island {
     this.localToWorld()
 
     console.log('Detected screen: ' + this.clientCode)
-  }
-
-  islandIsFlipped() {
-    let topLine = new Line(this.corners.LU, this.corners.RU)
-    let angle = topLine.angle
-
-    // TODO: Check randgevallen (45 en 255)
-    return angle > 45 && angle < 225
   }
 
   localToWorld() {

@@ -5,7 +5,7 @@ Meeting 1 (7/10/2019)
         device inloggen als master of slave
         functionaliteiten: 
             achtergrond clients veranderen
-            draw direction
+            drawSnow direction
             countdown
             picturemode, cameratoegang in orde
             picture upload, picture kiezen, uploaden zelf moet nog gebeuren

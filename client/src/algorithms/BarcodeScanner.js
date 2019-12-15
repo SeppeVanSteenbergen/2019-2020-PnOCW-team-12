@@ -1,21 +1,21 @@
 import ColorRange from './ColorRange'
-import PixelIterator from './PixelIterator';
+import PixelIterator from './PixelIterator'
 
 export default class BarcodeScanner {
-  static scan(imageObject) {
+  static scan(imageObject, LU, RU) {
     this.preProcessBarcode(imageObject)
-    return this.scanHorizontal(imageObject)
-  }
-
-  static scanHorizontal(imageObject, LU, RU) {
-    let height = imageObject.height
-    let image = imageObject.data
     let iterator = new PixelIterator(
       LU,
       RU,
       imageObject.width,
       imageObject.height
     )
+    let barcode = this.scanHorizontal(imageObject, iterator)
+    return barcode
+  }
+
+  static scanHorizontal(imageObject, iterator) {
+    let image = imageObject.data
     let barcodes = {}
     let scanned = 0
     let previous = image[2]
@@ -64,19 +64,13 @@ export default class BarcodeScanner {
     let maxAmount = Math.max(...amounts)
     let detectedAmount = amounts.reduce((a, b) => a + b, 0)
     let detectRatio = maxAmount / detectedAmount
-    let ratio = maxAmount / height / 10
-    if (detectRatio < 0) {
-      console.log('Picture is not good enough to detect barcode horizontal')
-      return [0, 0, 0]
-    } else {
-      barcode *= 2
-      if (highestWhite) {
-        barcode -= 2
-      } else barcode--
-      console.log(barcode)
-      console.log(detectRatio)
-      return [barcode, ratio, detectRatio]
-    }
+    barcode *= 2
+    if (highestWhite) {
+      barcode -= 2
+    } else barcode--
+    console.log(detectRatio)
+    console.log(barcode)
+    return barcode
   }
 
   static calcKeys(dict) {

@@ -99,7 +99,7 @@ export default class Drawer {
     return (pixel[1] * this.getWidth() + pixel[0]) * 4
   }
 
-  //TODO: infinite draw
+  //TODO: infinite drawSnow
   drawLine(line, infinite = false) {
     if (infinite) {
       let points = line.calcInfinitePoints(this.width, this.height)
