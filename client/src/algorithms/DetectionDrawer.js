@@ -1,10 +1,12 @@
+//cyan #00ffff
+//pink '#ff00b6'
 export default class DetectionDrawer {
   constructor(canvas, screen, borderWidth) {
     this.w = screen.width
     this.h = screen.height
     this.borderWidth = borderWidth
-    this.c1 = '#00ff00'
-    this.c2 = '#0000ff'
+    this.c1 = '#0000ff'
+    this.c2 = '#00ff00'
     this.canvas = canvas
     this.canvas.width = this.w
     this.canvas.height = this.h
@@ -88,9 +90,15 @@ export default class DetectionDrawer {
       even = !even
     }
     console.log(code)
-    const barAmount = (sections*code.length)+(sections-1)
+    const barAmount = (sections*code.length)+(sections+1)
     const barWidth = (this.canvas.width - 2 * this.borderWidth) / barAmount
     let startAt = this.borderWidth
+
+    ctx.beginPath()
+    ctx.fillStyle = '#00ffff'
+    ctx.rect(startAt, 0, barWidth, this.h)
+    ctx.fill()
+    startAt += barWidth
 
     //const amountOfIterations = Math.floor((this.w - 2 * this.borderWidth) / (6 * width))
     for (let i = 0; i < sections * (code.length + 1); i += (code.length + 1)) {
@@ -103,7 +111,7 @@ export default class DetectionDrawer {
         ctx.beginPath()
       }
       ctx.beginPath()
-      ctx.fillStyle = '#ff00b6'
+      ctx.fillStyle = '#00ffff'
       ctx.rect(startAt, 0, barWidth, this.h)
       ctx.fill()
       startAt += barWidth

@@ -1,26 +1,35 @@
 import ColorRange from './ColorRange'
+import PixelIterator from './PixelIterator'
 
 export default class BarcodeScanner {
-  static scan(imageObject) {
+  static scan(imageObject, LU, RU) {
     this.preProcessBarcode(imageObject)
-    let hor = this.scanHorizontal(imageObject)
-    return hor
+    let iterator = new PixelIterator(
+      LU,
+      RU,
+      imageObject.width,
+      imageObject.height
+    )
+    let barcode = this.scanHorizontal(imageObject, iterator)
+    return barcode
   }
 
-  static scanHorizontal(imageObject) {
+  static scanHorizontal(imageObject, iterator) {
     let image = imageObject.data
-
     let barcodes = {}
     let scanned = 0
     let previous = image[2]
     let white
     let scanning = false
-    for (let i = 4; i < image.length; i += 4) {
+    let pink = false
+    let current = iterator.next()
+    while (current !== null) {
+      let i = this.pixelToIndex(current, imageObject.width)
       let H = image[i]
       let S = image[i + 1]
       let L = image[i + 2]
       let contrast = previous - L
-      if (L < 25 || 75 < L) {
+      if ((L < 25 || 75 < L) && pink) {
         //grijswaarden (kan veranderd worden in 'geen bordercolor')
         if (!scanning) {
           scanning = true
@@ -29,22 +38,26 @@ export default class BarcodeScanner {
           // zwart <-> wit
           scanned++
         }
-      } else if (scanning && scanned !== 0) {
-        //scanned !== 0 || white === true to skip the "black" barcode
-        //geen grijswaarde
-        scanning = false
-        //scanned toevoegen aan barcodes
-        if (!ColorRange.inMaskRange(H, S, L)) {
+      } else if (!ColorRange.inMaskRange(H, S, L)) {
+        pink = true
+        if (scanning && scanned !== 0) {
+          scanning = false
           if (barcodes[[scanned, white]] === undefined) {
             barcodes[[scanned, white]] = 1
           } else {
             barcodes[[scanned, white]] += 1
           }
+          scanned = 0
         }
+      } else {
+        pink = false
+        scanning = false
         scanned = 0
       }
       previous = L
+      current = iterator.next()
     }
+
     console.log(barcodes)
     console.log('scanned')
     let keys = this.calcKeys(barcodes)
@@ -95,12 +108,6 @@ export default class BarcodeScanner {
     return list[0]
   }
 
-  static average(list) {
-    let tmpList = list.slice()
-    tmpList.sort()
-    return tmpList[Math.round(tmpList.length / 2)]
-  }
-
   static debugPixels(imageObject) {
     let image = imageObject.data
     let result = []
@@ -133,26 +140,18 @@ export default class BarcodeScanner {
    * @param value
    */
   static getMaxMinValues(imageObject, value) {
-    let max = 0
-    let min = 0
     let pixels = imageObject.data
     let grayList = []
     for (let i = 0; i < pixels.length; i += 4) {
-      if (pixels[i + 1] < 50 && (pixels[i + 2] < 20 || 75 < pixels[i + 2])) {
+      if (pixels[i + 2] < 25 || 75 < pixels[i + 2]) {
         grayList.push(pixels[i + value])
       }
     }
-    grayList.sort()
-    let end = (grayList.length * 20) / 100
-    for (let i = 0; i < end; i++) {
-      min += grayList[i]
-    }
-    min /= end
-    for (let i = Math.round(grayList.length - end); i < grayList.length; i++) {
-      max += grayList[i]
-    }
-    max /= end
-    return [min, max]
+    grayList.sort(function(a, b) {
+      return a - b
+    })
+
+    return [grayList[0], grayList[grayList.length - 1]]
   }
   /**
    * Apply Histogram equilization with extra CONTRAST constant

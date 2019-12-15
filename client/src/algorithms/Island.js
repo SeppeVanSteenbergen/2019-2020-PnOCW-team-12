@@ -1,7 +1,7 @@
 import Screen from './Screen'
 import BarcodeScanner from './BarcodeScanner'
 import CornerDetector from './CornerDetector'
-import Line from './Line'
+// import Line from './Line'
 // import PermutationConverter from './PermutationConverter'
 
 export default class Island {
@@ -33,15 +33,13 @@ export default class Island {
     this.width = this.screenMatrix[0].length
 
     this.id = id
-    this.yellow = id
-    this.pink = id + 1
+    this.blue = id
+    this.green = id + 1
     this.circle = id + 2
 
     this.imgOriginal = imgOriginal
     this.midPoint = this.calcMid()
-    // this.barcode = BarcodeScanner.scan(this.getScreenImg())
-    // this.clientCode = PermutationConverter.decode(this.barcode)
-    this.clientCode = BarcodeScanner.scan(this.getScreenImg())
+    this.clientCode = null
   }
 
   isValid() {
@@ -174,6 +172,11 @@ export default class Island {
 
   finishIsland() {
     this.findCorners()
+    this.clientCode = BarcodeScanner.scan(
+      this.getScreenImg(),
+      this.corners.LU,
+      this.corners.RU
+    )
     this.localToWorld()
 
     console.log('Detected screen: ' + this.clientCode)
@@ -213,6 +216,10 @@ export default class Island {
       this.clientCode,
       this.imgOriginal
     )
+  }
+
+  getClientCode() {
+    return this.clientCode
   }
 
   getMatrix(x, y) {

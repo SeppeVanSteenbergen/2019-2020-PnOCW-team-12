@@ -23,8 +23,8 @@ export default class CornerDetector {
     )
     this.radiusFactor = 0.25
     this.radius = null //will be set later
-    this.yellow = id
-    this.pink = id + 1
+    this.blue = id
+    this.green = id + 1
   }
 
   /**
@@ -70,29 +70,29 @@ export default class CornerDetector {
       let RD = pointList[2]
       let LD = pointList[3]
 
-      return RD[2] === this.pink && LD[2] === this.pink
+      return RD[2] === this.green && LD[2] === this.green
     } else if (LU === null) {
       let RD = pointList[2]
 
       if (RD !== null) {
-        return RU[2] === this.yellow && RD[2] === this.pink
+        return RU[2] === this.blue && RD[2] === this.green
       } else {
         let LD = pointList[3]
 
-        return RU[2] === this.yellow && LD[2] === this.pink
+        return RU[2] === this.blue && LD[2] === this.green
       }
     } else if (RU === null) {
       let RD = pointList[2]
 
       if (RD !== null) {
-        return LU[2] === this.yellow && RD[2] === this.pink
+        return LU[2] === this.blue && RD[2] === this.green
       } else {
         let LD = pointList[3]
 
-        return LU[2] === this.yellow && LD[2] === this.pink
+        return LU[2] === this.blue && LD[2] === this.green
       }
     } else {
-      return LU[2] === this.yellow && RU[2] === this.yellow
+      return LU[2] === this.blue && RU[2] === this.blue
     }
   }
 

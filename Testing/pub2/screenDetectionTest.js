@@ -9,6 +9,7 @@ inputElement.addEventListener(
   false
 );
 imgElement.onload = function() {
+  console.log("proces started")
   // Resize image to max full HD resolution
   let c = document.createElement('canvas')
   c.width = imgElement.width
@@ -28,4 +29,5 @@ imgElement.onload = function() {
   let imageTest = new Image(inputImgData, 'imageOutConcatenated', 'RGBA', null);
   ColorSpace.hslaToRgba(imageTest.pixels);
   imageTest.show();
+  console.log("proces finished")
 };
