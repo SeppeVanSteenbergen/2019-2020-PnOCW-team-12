@@ -3,8 +3,8 @@ export default class DetectionDrawer {
     this.w = screen.width
     this.h = screen.height
     this.borderWidth = borderWidth
-    this.c1 = '#00ff00'
-    this.c2 = '#0000ff'
+    this.c1 = '#0000ff'
+    this.c2 = '#00ff00'
     this.canvas = canvas
     this.canvas.width = this.w
     this.canvas.height = this.h
