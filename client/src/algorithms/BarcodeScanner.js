@@ -52,6 +52,7 @@ export default class BarcodeScanner {
         scanned = 0
       }
       previous = L
+      current = iterator.next()
     }
     console.log(barcodes)
     console.log('scanned')
