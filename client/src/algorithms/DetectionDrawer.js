@@ -88,9 +88,15 @@ export default class DetectionDrawer {
       even = !even
     }
     console.log(code)
-    const barAmount = (sections*code.length)+(sections-1)
+    const barAmount = (sections*code.length)+(sections+1)
     const barWidth = (this.canvas.width - 2 * this.borderWidth) / barAmount
     let startAt = this.borderWidth
+
+    ctx.beginPath()
+    ctx.fillStyle = '#ff00b6'
+    ctx.rect(startAt, 0, barWidth, this.h)
+    ctx.fill()
+    startAt += barWidth
 
     //const amountOfIterations = Math.floor((this.w - 2 * this.borderWidth) / (6 * width))
     for (let i = 0; i < sections * (code.length + 1); i += (code.length + 1)) {
