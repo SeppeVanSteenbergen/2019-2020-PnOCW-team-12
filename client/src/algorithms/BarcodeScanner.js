@@ -142,26 +142,18 @@ export default class BarcodeScanner {
    * @param value
    */
   static getMaxMinValues(imageObject, value) {
-    let max = 0
-    let min = 0
     let pixels = imageObject.data
     let grayList = []
     for (let i = 0; i < pixels.length; i += 4) {
-      if (pixels[i + 1] < 50 && (pixels[i + 2] < 20 || 75 < pixels[i + 2])) {
+      if (pixels[i + 2] < 25 || 75 < pixels[i + 2]) {
         grayList.push(pixels[i + value])
       }
     }
-    grayList.sort()
-    let end = (grayList.length * 20) / 100
-    for (let i = 0; i < end; i++) {
-      min += grayList[i]
-    }
-    min /= end
-    for (let i = Math.round(grayList.length - end); i < grayList.length; i++) {
-      max += grayList[i]
-    }
-    max /= end
-    return [min, max]
+    grayList.sort(function(a, b) {
+      return a - b
+    })
+
+    return [grayList[0], grayList[grayList.length - 1]]
   }
   /**
    * Apply Histogram equilization with extra CONTRAST constant
