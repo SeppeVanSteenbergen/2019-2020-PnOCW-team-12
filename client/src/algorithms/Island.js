@@ -33,8 +33,8 @@ export default class Island {
     this.width = this.screenMatrix[0].length
 
     this.id = id
-    this.yellow = id
-    this.pink = id + 1
+    this.blue = id
+    this.green = id + 1
     this.circle = id + 2
 
     this.imgOriginal = imgOriginal
