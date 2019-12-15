@@ -1,7 +1,7 @@
 import Screen from './Screen'
 import BarcodeScanner from './BarcodeScanner'
 import CornerDetector from './CornerDetector'
-import Line from './Line'
+// import Line from './Line'
 // import PermutationConverter from './PermutationConverter'
 
 export default class Island {
