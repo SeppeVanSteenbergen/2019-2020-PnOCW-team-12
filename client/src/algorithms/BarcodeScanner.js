@@ -4,15 +4,10 @@ export default class BarcodeScanner {
   static scan(imageObject) {
     this.preProcessBarcode(imageObject)
     let hor = this.scanHorizontal(imageObject)
-    //let ver = this.scanVertical(pixels)
-    //let maxRatio = Math.max(hor[2], ver[2])
-    // if (hor[2] === maxRatio && maxRatio >= 0) {
-    //  return hor[0]
-    //} else if (maxRatio >= 0) return ver[0]
+    return hor
   }
 
   static scanHorizontal(imageObject) {
-    let height = imageObject.height
     let image = imageObject.data
 
     let barcodes = {}
@@ -61,19 +56,13 @@ export default class BarcodeScanner {
     let maxAmount = Math.max(...amounts)
     let detectedAmount = amounts.reduce((a, b) => a + b, 0)
     let detectRatio = maxAmount / detectedAmount
-    let ratio = maxAmount / height / 10
-    if (detectRatio < 0) {
-      console.log('Picture is not good enough to detect barcode horizontal')
-      return [0, 0, 0]
-    } else {
-      barcode *= 2
-      if (highestWhite) {
-        barcode -= 2
-      } else barcode--
-      console.log(barcode)
-      console.log(detectRatio)
-      return [barcode, ratio, detectRatio]
-    }
+    barcode *= 2
+    if (highestWhite) {
+      barcode -= 2
+    } else barcode--
+    console.log(detectRatio)
+    console.log(barcode)
+    return barcode
   }
 
   static calcKeys(dict) {

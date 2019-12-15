@@ -3,29 +3,68 @@ import config from '../config/config'
 import Delaunay from './Delaunay'
 
 export default class Animations {
-  constructor(triangulation, canvas) {
+  constructor(triangulation, canvas, xmasMode) {
+    this.xmasMode = xmasMode
     this.catImage = new window.Image()
+    this.mouseImage = new window.Image()
     if (typeof config !== 'undefined') {
-      this.catImage.src = config.backend.url + '/img/cat3_trans.png'
+      if (xmasMode) {
+        this.catImage.src = config.backend.url + '/img/cat4_trans_xmas.png'
+        this.mouseImage.src = config.backend.url + '/img/mouse2_trans_xmas.png'
+      } else {
+        this.catImage.src = config.backend.url + '/img/cat4_trans.png'
+        this.mouseImage.src = config.backend.url + '/img/mouse2_trans.png'
+      }
     } else {
-      this.catImage.src = 'cat3_trans.png'
+      if (xmasMode) {
+        this.catImage.src = 'cat4_trans_xmas.png'
+        this.mouseImage.src = 'mouse2_trans_xmas.png'
+      } else {
+        this.catImage.src = 'cat4_trans.png'
+        this.mouseImage.src = 'mouse2_trans.png'
+      }
     }
 
-    this.nbFrames = 8
+    this.nbFrames = 7
     this.width = canvas.width
     this.height = canvas.height
     //this.ctx = canvas.getContext('2d')
     this.position = { x: 0, y: 0 }
     this.radius = 5
     this.fillStyle = 'red '
-    this.range = 5
-    this.speed = 10
+    this.range = 7
+    this.speed = 12
     this.frame = 0
     this.angle = 0
-    this.firstPoint
-    this.endPoint
+    this.snowAngle = 0
+    this.posStack = []
+
+    if (triangulation !== null) {
+      let firstPoint = triangulation[0].point1
+      let endPoint = triangulation[0].point2
+      this.setPosition(firstPoint[0], firstPoint[1])
+      this.setDirection(firstPoint, endPoint)
+      this.firstPoint = firstPoint
+      this.endPoint = endPoint
+    }
+
     this.triangulation = triangulation
-    this.edges = Delaunay.triangulationEdges(triangulation)
+    this.stack = []
+
+    this.mp = 250 //max particles
+    this.particles = []
+    for (let i = 0; i < this.mp; i++) {
+      this.particles.push({
+        x: Math.random() * this.height, //x-coordinate
+        y: Math.random() * this.width, //y-coordinate
+        r: Math.random() * 4 + 1, //radius
+        d: Math.random() * this.mp //density
+      })
+    }
+
+    if (triangulation !== null) {
+      this.edges = Delaunay.triangulationEdges(triangulation)
+    }
   }
 
   setPosition(x, y) {
@@ -53,31 +92,66 @@ export default class Animations {
     return this.getPosition()
   }
 
-  setDelaunay(delaunay) {
-    this.delaunay = delaunay
-  }
+  // setDelaunay(delaunay) {
+  //   this.delaunay = delaunay
+  // }
 
-  drawImage() {
-    this.updateFrame()
-    this.animateSprite(
-      this.position.x,
-      this.position.y,
-      this.catImage,
-      this.catImage.width,
-      this.catImage.height,
-      this.nbFrames
-    )
+  // drawImage() {
+  //   this.updateFrame()
+  //   this.animateSprite(
+  //     this.position.x,
+  //     this.position.y,
+  //     this.catImage,
+  //     this.catImage.width,
+  //     this.catImage.height,
+  //     this.nbFrames
+  //   )
+  //
+  //   return {
+  //     x: this.position.x,
+  //     y: this.position.y,
+  //     direction: this.angle,
+  //     frame: this.frame,
+  //     right: this.endPoint[0] >= this.firstPoint[0]
+  //   }
+  // }
 
-    return {
-      x: this.position.x,
-      y: this.position.y,
-      direction: this.angle,
-      frame: this.frame,
-      right: this.endPoint[0] >= this.firstPoint[0]
+  drawAnimals(nbCats, distCats, canvas, x, y, angle, frame, right) {
+    this.stack.push([x, y, angle, frame, right])
+    if (this.stack.length > distCats) {
+      for (let i = 0; i <= nbCats - 1; i++) {
+        if (i === 0) {
+          this.drawAnimal(
+            canvas,
+            this.stack[i * Math.round(distCats / nbCats)][0],
+            this.stack[i * Math.round(distCats / nbCats)][1],
+            this.stack[i * Math.round(distCats / nbCats)][2],
+            this.stack[i * Math.round(distCats / nbCats)][3],
+            this.stack[i * Math.round(distCats / nbCats)][4],
+            true
+          )
+        } else {
+          this.drawAnimal(
+            canvas,
+            this.stack[i * Math.round(distCats / nbCats)][0],
+            this.stack[i * Math.round(distCats / nbCats)][1],
+            this.stack[i * Math.round(distCats / nbCats)][2],
+            this.stack[i * Math.round(distCats / nbCats)][3],
+            this.stack[i * Math.round(distCats / nbCats)][4],
+            false
+          )
+        }
+      }
+      this.stack.shift()
     }
   }
 
-  drawCat(canvas, x, y, angle, frame, right) {
+  drawAnimal(canvas, x, y, angle, frame, right, cat) {
+    if (cat) {
+      var image = this.catImage
+    } else {
+      var image = this.mouseImage
+    }
     let ctx = canvas.getContext('2d')
     ctx.save()
     ctx.translate(x, y)
@@ -86,30 +160,30 @@ export default class Animations {
 
     if (right) {
       ctx.drawImage(
-        this.catImage,
-        (frame * this.catImage.width) / this.nbFrames,
+        image,
+        (frame * image.width) / this.nbFrames,
         0,
-        this.catImage.width / this.nbFrames,
-        this.catImage.height,
-        x - this.catImage.width / (2 * this.nbFrames),
-        y - this.catImage.height / 2,
-        this.catImage.width / this.nbFrames,
-        this.catImage.height
+        image.width / this.nbFrames,
+        image.height,
+        x - image.width / (2 * this.nbFrames),
+        y - image.height,
+        image.width / this.nbFrames,
+        image.height
       )
     } else {
       ctx.save()
       ctx.translate(canvas.width, 0)
       ctx.scale(-1, 1)
       ctx.drawImage(
-        this.catImage,
-        (frame * this.catImage.width) / this.nbFrames,
+        image,
+        (frame * image.width) / this.nbFrames,
         0,
-        this.catImage.width / this.nbFrames,
-        this.catImage.height,
-        -(x + this.catImage.width / (2 * this.nbFrames)) + this.width,
-        y - this.catImage.height / 2,
-        this.catImage.width / this.nbFrames,
-        this.catImage.height
+        image.width / this.nbFrames,
+        image.height,
+        -(x + image.width / (2 * this.nbFrames)) + this.width,
+        y - image.height,
+        image.width / this.nbFrames,
+        image.height
       )
       ctx.restore()
     }
@@ -179,6 +253,8 @@ export default class Animations {
   }
 
   inRange(endPoint) {
+    if (endPoint === null) return true
+
     return (
       Math.pow(endPoint[0] - this.position.x, 2) +
         Math.pow(endPoint[1] - this.position.y, 2) <
@@ -199,41 +275,110 @@ export default class Animations {
     return this.edges[point]
   }
 
-  animateSprite(x, y, image, spriteWidth, spriteHeight, nbFrames) {
-    this.ctx.save()
-    this.ctx.translate(x, y)
-    this.ctx.rotate((this.angle * Math.PI) / 180)
-    this.ctx.translate(-x, -y)
-
-    if (this.endPoint[0] >= this.firstPoint[0]) {
-      this.ctx.drawImage(
-        image,
-        (this.frame * spriteWidth) / nbFrames,
-        0,
-        spriteWidth / nbFrames,
-        spriteHeight,
-        x - spriteWidth / (2 * nbFrames),
-        y - spriteHeight / 2,
-        spriteWidth / nbFrames,
-        spriteHeight
-      )
-    } else {
-      this.ctx.save()
-      this.ctx.translate(this.width, 0)
-      this.ctx.scale(-1, 1)
-      this.ctx.drawImage(
-        image,
-        (this.frame * spriteWidth) / nbFrames,
-        0,
-        spriteWidth / nbFrames,
-        spriteHeight,
-        -(x + spriteWidth / (2 * nbFrames)) + this.width,
-        y - spriteHeight / 2,
-        spriteWidth / nbFrames,
-        spriteHeight
-      )
-      this.ctx.restore()
+  drawBackground(canvas) {
+    if (this.xmasMode) {
+      this.drawSnow(canvas)
     }
-    this.ctx.restore()
   }
+
+  drawSnow(canvas) {
+    let ctx = canvas.getContext('2d')
+
+    let grd = ctx.createLinearGradient(0, this.height, 0, 0)
+
+    // Add colors
+    grd.addColorStop(0.0, 'rgba(255, 255, 255, 1.000)')
+    grd.addColorStop(1.0, 'rgba(86, 170, 255, 1.000)')
+
+    ctx.fillStyle = grd
+    ctx.fillRect(0, 0, this.width, this.height)
+
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.8)'
+    ctx.beginPath()
+    for (let i = 0; i < this.mp; i++) {
+      let p = this.particles[i]
+      ctx.moveTo(p.x, p.y)
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2, true)
+    }
+    ctx.fill()
+    this.updateSnow()
+  }
+
+  updateSnow() {
+    this.snowAngle += 0.01
+    for (let i = 0; i < this.mp; i++) {
+      let p = this.particles[i]
+      p.y += Math.cos(this.snowAngle + p.d) + 1 + p.r / 2
+      p.x += Math.sin(this.snowAngle) * 2
+
+      if (p.x > this.width + 5 || p.x < -5 || p.y > this.height) {
+        if (i % 3 > 0) {
+          //66.67% of the flakes
+          this.particles[i] = {
+            x: Math.random() * this.width,
+            y: -10,
+            r: p.r,
+            d: p.d
+          }
+        } else {
+          //If the flake is exitting from the right
+          if (Math.sin(this.snowAngle) > 0) {
+            //Enter from the left
+            this.particles[i] = {
+              x: -5,
+              y: Math.random() * this.height,
+              r: p.r,
+              d: p.d
+            }
+          } else {
+            //Enter from the right
+            this.particles[i] = {
+              x: this.width + 5,
+              y: Math.random() * this.height,
+              r: p.r,
+              d: p.d
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // animateSprite(x, y, image, spriteWidth, spriteHeight, nbFrames) {
+  //   this.ctx.save()
+  //   this.ctx.translate(x, y)
+  //   this.ctx.rotate((this.angle * Math.PI) / 180)
+  //   this.ctx.translate(-x, -y)
+  //
+  //   if (this.endPoint[0] >= this.firstPoint[0]) {
+  //     this.ctx.drawImage(
+  //       image,
+  //       (this.frame * spriteWidth) / nbFrames,
+  //       0,
+  //       spriteWidth / nbFrames,
+  //       spriteHeight,
+  //       x - spriteWidth / (2 * nbFrames),
+  //       y - spriteHeight / 2,
+  //       spriteWidth / nbFrames,
+  //       spriteHeight
+  //     )
+  //   } else {
+  //     this.ctx.save()
+  //     this.ctx.translate(this.width, 0)
+  //     this.ctx.scale(-1, 1)
+  //     this.ctx.drawImage(
+  //       image,
+  //       (this.frame * spriteWidth) / nbFrames,
+  //       0,
+  //       spriteWidth / nbFrames,
+  //       spriteHeight,
+  //       -(x + spriteWidth / (2 * nbFrames)) + this.width,
+  //       y - spriteHeight / 2,
+  //       spriteWidth / nbFrames,
+  //       spriteHeight
+  //     )
+  //     this.ctx.restore()
+  //   }
+  //   this.ctx.restore()
+  // }
 }

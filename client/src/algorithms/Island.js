@@ -2,7 +2,7 @@ import Screen from './Screen'
 import BarcodeScanner from './BarcodeScanner'
 import CornerDetector from './CornerDetector'
 import Line from './Line'
-import PermutationConverter from './PermutationConverter'
+// import PermutationConverter from './PermutationConverter'
 
 export default class Island {
   /**
@@ -39,18 +39,13 @@ export default class Island {
 
     this.imgOriginal = imgOriginal
     this.midPoint = this.calcMid()
-    this.barcode = BarcodeScanner.scan(
-      this.getScreenImg()
-    )
-    this.clientCode = PermutationConverter.decode(this.barcode)
-  }
-
-  getBarcode() {
-    return this.barcode
+    // this.barcode = BarcodeScanner.scan(this.getScreenImg())
+    // this.clientCode = PermutationConverter.decode(this.barcode)
+    this.clientCode = BarcodeScanner.scan(this.getScreenImg())
   }
 
   isValid() {
-    return this.midPoint !== null && this.barcode !== 0
+    return this.midPoint !== null
   }
 
   setScreenMatrix(matrix) {
@@ -179,26 +174,9 @@ export default class Island {
 
   finishIsland() {
     this.findCorners()
-    if (this.islandIsFlipped()) {
-      this.barcode = parseInt(
-        this.barcode
-          .toString()
-          .split('')
-          .reverse()
-          .join('')
-      )
-    }
     this.localToWorld()
 
-    console.log('Detected screen: ' + this.barcode)
-  }
-
-  islandIsFlipped() {
-    let topLine = new Line(this.corners.LU, this.corners.RU)
-    let angle = topLine.angle
-
-    // TODO: Check randgevallen (45 en 255)
-    return angle > 45 && angle < 225
+    console.log('Detected screen: ' + this.clientCode)
   }
 
   localToWorld() {
