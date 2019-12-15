@@ -1,3 +1,5 @@
+//cyan #00ffff
+//pink '#ff00b6'
 export default class DetectionDrawer {
   constructor(canvas, screen, borderWidth) {
     this.w = screen.width
@@ -93,7 +95,7 @@ export default class DetectionDrawer {
     let startAt = this.borderWidth
 
     ctx.beginPath()
-    ctx.fillStyle = '#ff00b6'
+    ctx.fillStyle = '#00ffff'
     ctx.rect(startAt, 0, barWidth, this.h)
     ctx.fill()
     startAt += barWidth
@@ -109,7 +111,7 @@ export default class DetectionDrawer {
         ctx.beginPath()
       }
       ctx.beginPath()
-      ctx.fillStyle = '#ff00b6'
+      ctx.fillStyle = '#00ffff'
       ctx.rect(startAt, 0, barWidth, this.h)
       ctx.fill()
       startAt += barWidth

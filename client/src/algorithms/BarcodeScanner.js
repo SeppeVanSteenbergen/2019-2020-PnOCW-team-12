@@ -21,6 +21,7 @@ export default class BarcodeScanner {
     let previous = image[2]
     let white
     let scanning = false
+    let pink = false
     let current = iterator.next()
     while (current !== null) {
       let i = this.pixelToIndex(current, imageObject.width)
@@ -28,7 +29,7 @@ export default class BarcodeScanner {
       let S = image[i + 1]
       let L = image[i + 2]
       let contrast = previous - L
-      if (L < 25 || 75 < L) {
+      if ((L < 25 || 75 < L) && pink) {
         //grijswaarden (kan veranderd worden in 'geen bordercolor')
         if (!scanning) {
           scanning = true
@@ -37,23 +38,26 @@ export default class BarcodeScanner {
           // zwart <-> wit
           scanned++
         }
-      } else if (scanning && scanned !== 0) {
-        //scanned !== 0 || white === true to skip the "black" barcode
-        //geen grijswaarde
-        scanning = false
-        //scanned toevoegen aan barcodes
-        if (!ColorRange.inMaskRange(H, S, L)) {
+      } else if (!ColorRange.inMaskRange(H, S, L)) {
+        pink = true
+        if (scanning && scanned !== 0) {
+          scanning = false
           if (barcodes[[scanned, white]] === undefined) {
             barcodes[[scanned, white]] = 1
           } else {
             barcodes[[scanned, white]] += 1
           }
+          scanned = 0
         }
+      } else {
+        pink = false
+        scanning = false
         scanned = 0
       }
       previous = L
       current = iterator.next()
     }
+
     console.log(barcodes)
     console.log('scanned')
     let keys = this.calcKeys(barcodes)
@@ -102,12 +106,6 @@ export default class BarcodeScanner {
     }
     console.log(list)
     return list[0]
-  }
-
-  static average(list) {
-    let tmpList = list.slice()
-    tmpList.sort()
-    return tmpList[Math.round(tmpList.length / 2)]
   }
 
   static debugPixels(imageObject) {
