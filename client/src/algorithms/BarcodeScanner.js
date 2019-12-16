@@ -26,7 +26,7 @@ export default class BarcodeScanner {
     let current = iterator.next()
     while (current !== null) {
       let i = this.pixelToIndex(current, imageObject.width)
-      let H = image[i]
+      let H = image[i] * 2
       let S = image[i + 1]
       let L = image[i + 2]
       let contrast = previous - L
