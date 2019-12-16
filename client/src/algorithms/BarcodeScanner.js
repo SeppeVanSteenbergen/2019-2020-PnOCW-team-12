@@ -10,6 +10,7 @@ export default class BarcodeScanner {
       imageObject.width,
       imageObject.height
     )
+    console.log(imageObject)
     let barcode = this.scanHorizontal(imageObject, iterator)
     return barcode
   }
@@ -21,7 +22,7 @@ export default class BarcodeScanner {
     let previous = image[2]
     let white
     let scanning = false
-    let pink = false
+    let sep = false
     let current = iterator.next()
     while (current !== null) {
       let i = this.pixelToIndex(current, imageObject.width)
@@ -29,7 +30,7 @@ export default class BarcodeScanner {
       let S = image[i + 1]
       let L = image[i + 2]
       let contrast = previous - L
-      if ((L < 25 || 75 < L) && pink) {
+      if ((L === 0 || 100 === L) && sep) {
         //grijswaarden (kan veranderd worden in 'geen bordercolor')
         if (!scanning) {
           scanning = true
@@ -39,7 +40,7 @@ export default class BarcodeScanner {
           scanned++
         }
       } else if (!ColorRange.inMaskRange(H, S, L)) {
-        pink = true
+        sep = true
         if (scanning && scanned !== 0) {
           scanning = false
           if (barcodes[[scanned, white]] === undefined) {
@@ -50,7 +51,7 @@ export default class BarcodeScanner {
           scanned = 0
         }
       } else {
-        pink = false
+        sep = false
         scanning = false
         scanned = 0
       }
@@ -126,9 +127,7 @@ export default class BarcodeScanner {
    */
   static preProcessBarcode(imageObject) {
     let [minl, maxl] = this.getMaxMinValues(imageObject, 2)
-    let [mins, maxs] = this.getMaxMinValues(imageObject, 1)
-    let s = mins + (mins + maxs) * 0.7
-    this.applyLevelsAdjustment(imageObject, minl, maxl, s)
+    this.applyLevelsAdjustment(imageObject, minl, maxl)
   }
 
   /**
@@ -143,7 +142,13 @@ export default class BarcodeScanner {
     let pixels = imageObject.data
     let grayList = []
     for (let i = 0; i < pixels.length; i += 4) {
-      if (pixels[i + 2] < 25 || 75 < pixels[i + 2]) {
+      let H = pixels[i] * 2
+      let S = pixels[i + 1]
+      let L = pixels[i + 2]
+      if (
+        !ColorRange.inMaskRange(H, S, L) &&
+        !ColorRange.inBlueGreenRange(H, S, L)
+      ) {
         grayList.push(pixels[i + value])
       }
     }
@@ -153,6 +158,7 @@ export default class BarcodeScanner {
 
     return [grayList[0], grayList[grayList.length - 1]]
   }
+
   /**
    * Apply Histogram equilization with extra CONTRAST constant
    *
@@ -160,12 +166,18 @@ export default class BarcodeScanner {
    * @param {int} min min grijswaarde : [0..100]
    * @param {int} max max grijswaarde : [0..100]
    */
-  static applyLevelsAdjustment(imageObject, min, max, s) {
+  static applyLevelsAdjustment(imageObject, min, max) {
     const half = (max + min) / 2
     console.log(half, max, min)
     let pixels = imageObject.data
     for (let i = 0; i < pixels.length; i += 4) {
-      if (pixels[i + 1] < s) {
+      let H = pixels[i] * 2
+      let S = pixels[i + 1]
+      let L = pixels[i + 2]
+      if (
+        !ColorRange.inMaskRange(H, S, L) &&
+        !ColorRange.inBlueGreenRange(H, S, L)
+      ) {
         if (pixels[i + 2] < half) {
           pixels[i + 2] = 0
         } else {
