@@ -34,7 +34,7 @@ export default class Reconstructor {
 
     //missing LU
     if (corners.LU === null) {
-      if (helpMids.LU !== null) helpMid = helpMids.LU
+      if (helpMids.LU !== undefined) helpMid = helpMids.LU
         else helpMid = helpMids.RD
       if (corners.RU !== null) {
         helpPoints = this.reconstructCircle(
@@ -64,7 +64,7 @@ export default class Reconstructor {
     }
     //missing RU
     if (corners.RU === null) {
-      if (helpMids.RU !== null) helpMid = helpMids.RU
+      if (helpMids.RU !== undefined) helpMid = helpMids.RU
         else helpMid = helpMids.LD
       if (corners.LU !== null) {
         helpPoints = this.reconstructCircle(
@@ -95,7 +95,7 @@ export default class Reconstructor {
     //missing RD
     if (corners.RD === null) {
       helpMid = helpMids.RD
-      if (helpMids.RD !== null) helpMid = helpMids.RD
+      if (helpMids.RD !== undefined) helpMid = helpMids.RD
         else helpMid = helpMids.LU
       if (corners.RU !== null) {
         helpPoints = this.reconstructCircle(
