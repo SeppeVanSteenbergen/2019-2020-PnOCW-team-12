@@ -264,8 +264,12 @@ export default class Animations {
 
   setDirection(beginPoint, endPoint) {
     let line = new Line(beginPoint, endPoint)
+    if (line.dx === 0){
+      line.dx = 0.01
+    }
     this.dx = line.dx / Math.abs(line.dx)
     this.dy = line.slope * this.dx
+    console.log("bruh", line.dx, this.dy)
     let scale = Math.sqrt(Math.pow(this.dx, 2) + Math.pow(this.dy, 2))
     this.dx /= scale / this.speed
     this.dy /= scale / this.speed
