@@ -39,7 +39,7 @@ export default class BarcodeScanner {
           // zwart <-> wit
           scanned++
         }
-      } else if (!ColorRange.inMaskRange(H, S, L)) {
+      } else if (ColorRange.inBlueGreenRange(H, S, L)) {
         sep = true
         if (scanning && scanned !== 0) {
           scanning = false

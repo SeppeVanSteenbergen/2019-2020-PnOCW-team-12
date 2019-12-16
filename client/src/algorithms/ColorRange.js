@@ -13,14 +13,14 @@ export default class ColorRange {
       },
       green: {
         min: 80,
-        max: 140
+        max: 160
       },
       blue: {
         min: 200, //of 200
         max: 270
       },
       blueGreen: {
-        min: 140, //value max green
+        min: 160, //value max green
         max: 200 //value min blue
       }
     }
@@ -67,8 +67,8 @@ export default class ColorRange {
     return (
       this.checkColorRange(this.settings().blueGreen, H) &&
       S >= 40 &&
-      L >= 25 &&
-      L <= 75
+      L >= 40 &&
+      L <= 60
     )
   }
 
