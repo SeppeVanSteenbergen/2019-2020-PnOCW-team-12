@@ -7,6 +7,7 @@ export default class DetectionDrawer {
     this.borderWidth = borderWidth
     this.c1 = '#0000ff'
     this.c2 = '#00ff00'
+    this.white = '#ffffff'
     this.canvas = canvas
     this.canvas.width = this.w
     this.canvas.height = this.h
@@ -36,6 +37,21 @@ export default class DetectionDrawer {
     let circleRadius = lineWidth * 1.2
 
     let ctx = this.ctx
+
+    ctx.lineWidth = 2*lineWidth
+    ctx.beginPath()
+    ctx.strokeStyle = this.white
+    ctx.moveTo(0, 0)
+    ctx.lineTo(this.w / 2, this.h / 2)
+    ctx.lineTo(this.w, 0)
+    ctx.stroke()
+    ctx.beginPath()
+    ctx.strokeStyle = this.white
+    ctx.moveTo(0, this.h)
+    ctx.lineTo(this.w / 2, this.h / 2)
+    ctx.lineTo(this.w, this.h)
+    ctx.stroke()
+
     ctx.lineWidth = lineWidth
     ctx.beginPath()
     ctx.strokeStyle = this.c1

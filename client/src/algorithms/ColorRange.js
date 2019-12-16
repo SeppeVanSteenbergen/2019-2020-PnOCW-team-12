@@ -16,14 +16,14 @@ export default class ColorRange {
       },
       green: {
         min: 100,
-        max: 140
+        max: 180
       },
       lightblue: {
         min: 160,
         max: 200
       },
       blue: {
-        min: 216,
+        min: 180,
         max: 260
       },
       purple: {
