@@ -426,7 +426,7 @@ export default {
           title: 'floodfill'
         },
         {
-          title: 'drawSnow direction'
+          title: 'draw direction'
         },
         {
           title: 'countdown'

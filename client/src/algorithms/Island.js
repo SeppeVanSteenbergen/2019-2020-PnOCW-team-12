@@ -172,11 +172,12 @@ export default class Island {
 
   finishIsland() {
     this.findCorners()
-    this.clientCode = BarcodeScanner.scan(
-      this.getScreenImg(),
-      this.corners.LU,
-      this.corners.RU
-    )
+    this.clientCode =
+      BarcodeScanner.scan(
+        this.getScreenImg(),
+        this.corners.LU,
+        this.corners.RU
+      ) - 5
     this.localToWorld()
 
     console.log('Detected screen: ' + this.clientCode)

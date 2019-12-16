@@ -6,8 +6,8 @@ export default class ColorRange {
     return {
       red: {
         min: 0,
-        max: 20,
-        min2: 340,
+        max: 40,
+        min2: 320,
         max2: 360
       },
       yellow: {
@@ -15,16 +15,16 @@ export default class ColorRange {
         max: 80
       },
       green: {
-        min: 100,
-        max: 180
+        min: 80,
+        max: 160
       },
       lightblue: {
         min: 160,
         max: 200
       },
       blue: {
-        min: 180,
-        max: 260
+        min: 200,
+        max: 280
       },
       purple: {
         min: 280,
