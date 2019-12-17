@@ -28,12 +28,16 @@ export default class Screen {
       //this.clientCode = this.findClientCode(transformedTempImage)
       console.log('clientCode: ' + this.clientCode)
 
-      if (typeof this.clientInfo !== 'undefined' && this.clientCode !== null && this.clientCode < this.clientInfo.length) {
-        this.width = this.clientInfo[this.clientCode].size.width
-        this.height = this.clientInfo[this.clientCode].size.height
+      if (typeof this.clientInfo !== 'undefined' && this.clientCode !== null) {
+        try {
+          this.width = this.clientInfo[this.clientCode].size.width
+          this.height = this.clientInfo[this.clientCode].size.height
 
-        this.transMatrix = this.calcTranformationMatrix()
-        this.cssMatrix = this.cssTransMatrix(this.transMatrix)
+          this.transMatrix = this.calcTranformationMatrix()
+          this.cssMatrix = this.cssTransMatrix(this.transMatrix)
+        } catch (e) {
+          console.log(e)
+        }
       }
     }
   }
