@@ -315,15 +315,15 @@
                         min="0.05"
                         hide-details
                       ></v-slider>-->
-                      <v-btn color="primary" @click="sendCustomImage">
-                        Send Image
+                      <v-btn color="primary" @click="executeUploadImage">
+                        Image HTTPS
                       </v-btn>
                       <v-btn color="primary" @click="sendImageCSS">
-                        Send Image CSS
+                        Send Image Socket
                       </v-btn>
-                      <v-btn color="primary" @click="executeUploadImage">
-                        Send Image CSS
-                      </v-btn>
+                      <!--<v-btn color="primary" @click="sendCustomImage">
+                        Send Image
+                      </v-btn>-->
                       <canvas ref="drawCanvas"></canvas> </v-card
                   ></v-expansion-panel-content>
                 </v-expansion-panel>

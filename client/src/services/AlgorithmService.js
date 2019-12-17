@@ -3,7 +3,7 @@ import Delaunay from '../algorithms/Delaunay'
 
 export default {
   fullAnalysis(imgData, clientInfo) {
-    imgData = Image.resizeImageData(imgData, [1920, 1080])
+    //imgData = Image.resizeImageData(imgData, [1920, 1080])
     let inputImage = new Image(imgData, null, 'RGBA', clientInfo)
 
     return inputImage
