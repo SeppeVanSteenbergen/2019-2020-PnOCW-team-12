@@ -16,7 +16,7 @@ export default class BarcodeScanner {
     return barcode
   }
 
-  static scanHorizontal(imageObject, iterator) {
+  static scanHorizontal(imageObject, iterator, clients) {
     let image = imageObject.data
     let barcodes = {}
     let scanned = 0
@@ -62,7 +62,7 @@ export default class BarcodeScanner {
 
     console.log(barcodes)
     console.log('scanned')
-    let keys = this.calcKeys(barcodes)
+    let keys = this.calcKeys(barcodes, clients)
     let filteredCode = this.filterBarcode(keys)
     console.log(filteredCode)
     let barcode = filteredCode[0]
