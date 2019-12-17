@@ -15,7 +15,7 @@ export default class BarcodeScanner {
     return barcode
   }
 
-  static scanHorizontal(imageObject, iterator) {
+  static scanHorizontal(imageObject, iterator, clients) {
     let image = imageObject.data
     let barcodes = {}
     let scanned = 0
@@ -30,7 +30,7 @@ export default class BarcodeScanner {
       let S = image[i + 1]
       let L = image[i + 2]
       let contrast = previous - L
-      if ((L === 0 || 100 === L) && sep) {
+      if ((L <= 25 || 75 <= L) && sep) {
         //grijswaarden (kan veranderd worden in 'geen bordercolor')
         if (!scanning) {
           scanning = true
@@ -41,7 +41,7 @@ export default class BarcodeScanner {
         }
       } else if (ColorRange.inBlueGreenRange(H, S, L)) {
         sep = true
-        if (scanning && scanned !== 0) {
+        if (scanning && scanned !== 0 && scanned !== 1) {
           scanning = false
           if (barcodes[[scanned, white]] === undefined) {
             barcodes[[scanned, white]] = 1
@@ -61,7 +61,7 @@ export default class BarcodeScanner {
 
     console.log(barcodes)
     console.log('scanned')
-    let keys = this.calcKeys(barcodes)
+    let keys = this.calcKeys(barcodes, clients)
     let filteredCode = this.filterBarcode(keys)
     console.log(filteredCode)
     let barcode = filteredCode[0]
@@ -88,6 +88,7 @@ export default class BarcodeScanner {
         keys[i].substring(2) === 'true',
         dict[keys[i]]
       ])
+
     }
     return resultKeys
   }

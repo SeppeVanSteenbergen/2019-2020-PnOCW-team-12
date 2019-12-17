@@ -176,8 +176,8 @@ export default class Island {
       BarcodeScanner.scan(
         this.getScreenImg(),
         this.corners.LU,
-        this.corners.RU
-      )
+        this.corners.RU,
+      ) - 2
     this.localToWorld()
 
     console.log('Detected screen: ' + this.clientCode)
