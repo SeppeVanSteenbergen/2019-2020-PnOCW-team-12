@@ -94,7 +94,6 @@ export default class Reconstructor {
     }
     //missing RD
     if (corners.RD === null) {
-      helpMid = helpMids.RD
       if (helpMids.RD !== undefined) helpMid = helpMids.RD
         else helpMid = helpMids.LU
       if (corners.RU !== null) {
