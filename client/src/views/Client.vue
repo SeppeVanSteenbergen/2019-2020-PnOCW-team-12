@@ -191,7 +191,7 @@ export default {
 
       //drawer.drawBorder()
 
-      drawer.barcode(id, 7)
+      drawer.barcode(id + 2, 7)
     },
     runFloodScreenCommandList(list, startIndex) {
       for (let i = startIndex; i < list.length; i++) {

@@ -1006,8 +1006,10 @@ export default {
         img.onload = function() {
           let c = vue.$refs.canva
           let ctx = c.getContext('2d')
+          ctx.clearRect(0,0,c.width, c.height)
           c.width = img.width
           c.height = img.height
+
 
           ctx.drawImage(img, 0, 0)
 
