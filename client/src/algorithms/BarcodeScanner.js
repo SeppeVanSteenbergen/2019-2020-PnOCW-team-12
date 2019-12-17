@@ -31,7 +31,7 @@ export default class BarcodeScanner {
       let S = image[i + 1]
       let L = image[i + 2]
       let contrast = previous - L
-      if ((L === 0 || 100 === L) && sep) {
+      if ((L <= 25 || 75 <= L) && sep) {
         //grijswaarden (kan veranderd worden in 'geen bordercolor')
         if (!scanning) {
           scanning = true
