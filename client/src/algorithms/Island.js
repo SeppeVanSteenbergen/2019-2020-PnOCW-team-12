@@ -13,7 +13,7 @@ export default class Island {
    * @param imgOriginal
    * @param matrix
    */
-  constructor(leftUpperCoo, rightBottomCoo, id, imgOriginal, matrix, clientInfo) {
+  constructor(leftUpperCoo, rightBottomCoo, id, imgOriginal, matrix) {
     // coordinates seen from original matrix
     this.corners = {
       LU: null,
@@ -40,7 +40,6 @@ export default class Island {
     this.imgOriginal = imgOriginal
     this.midPoint = this.calcMid()
     this.clientCode = null
-    this.clientInfo = clientInfo
   }
 
   isValid() {
@@ -178,7 +177,6 @@ export default class Island {
         this.getScreenImg(),
         this.corners.LU,
         this.corners.RU,
-        this.clientInfo
       ) - 2
     this.localToWorld()
 

@@ -141,7 +141,6 @@ export default class Image {
               this.islandID,
               this.getImgData(),
               this.matrix,
-              this.clientInfo
             )
             if (newIsland.isValid()) {
               try {
