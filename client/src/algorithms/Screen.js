@@ -28,7 +28,7 @@ export default class Screen {
       //this.clientCode = this.findClientCode(transformedTempImage)
       console.log('clientCode: ' + this.clientCode)
 
-      if (typeof this.clientInfo !== 'undefined' && this.clientCode !== null && this.clientCode < this.clientInfo.length) {
+      if (typeof this.clientInfo !== 'undefined' && this.clientCode !== null && this.clientCode < this.clientInfo.length && this.clientCode >= 0) {
         this.width = this.clientInfo[this.clientCode].size.width
         this.height = this.clientInfo[this.clientCode].size.height
 
