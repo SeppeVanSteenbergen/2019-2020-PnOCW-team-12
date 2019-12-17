@@ -205,11 +205,10 @@ export default class Image {
     }
 
     let ids = matrix.flat()
-    if (
+    return (
       ids.includes(this.islandID) &&
       ids.includes(this.islandID + 1) & ids.includes(this.islandID + 2)
     )
-      return true
   }
 
   /**
