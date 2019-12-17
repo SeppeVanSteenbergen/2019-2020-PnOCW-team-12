@@ -264,9 +264,6 @@ export default class Animations {
 
   setDirection(beginPoint, endPoint) {
     let line = new Line(beginPoint, endPoint)
-    if (line.dx === 0){
-      line.dx = 0.01
-    }
     this.dx = line.dx / Math.abs(line.dx)
     this.dy = line.slope * this.dx
     console.log("bruh", line.dx, this.dy)

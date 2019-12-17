@@ -135,6 +135,13 @@ export default {
           this.setDefaultCSS()
           this.animationInitHandler(message.data)
           break
+        case 'delaunay-image':
+          this.setDefaultCSS()
+          this.delaunayHandler(message.data)
+          break
+        case 'load-image':
+          this.setDefaultCSS()
+          this.loadImageHandler(message.data)
         default:
           console.log('command not supported')
           break
@@ -184,7 +191,7 @@ export default {
 
       //drawer.drawBorder()
 
-      drawer.barcode(id + 5, 7)
+      drawer.barcode(id, 7)
     },
     runFloodScreenCommandList(list, startIndex) {
       for (let i = startIndex; i < list.length; i++) {
@@ -481,15 +488,20 @@ export default {
       return ctx.getImageData(minx,miny,w,h)
     },
     animationInitHandler(data) {
+      //create animation object
+      this.animation = new Animation(null, this.delaunayImage, true)
+
+      this.delaunayHandler(data)
+    },
+    delaunayHandler(data) {
       //create delaunay image and drawSnow on canvas
+      console.log("received triangulation")
+      console.log(data.triangulation)
       this.delaunayImage = AlgorithmService.delaunayImage(data.triangulation, data.midpoints, data.width, data.height)
 
       // cut right part out of delaunay image
       this.delaunayImage = this.cutout(this.delaunayImage, data.w, data.h, data.ox, data.oy)
       //this.delaunayImage = Image.resizeImageData(this.delaunayImage, [data.w, data.h])
-
-      //create animation object
-      this.animation = new Animation(null, this.delaunayImage, true)
 
 
       //display the image on the screen
@@ -507,7 +519,6 @@ export default {
 
       this.minx = data.ox
       this.miny = data.oy
-
     },
     /**
      *

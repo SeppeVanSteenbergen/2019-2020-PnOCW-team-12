@@ -321,6 +321,9 @@
                       <v-btn color="primary" @click="sendImageCSS">
                         Send Image CSS
                       </v-btn>
+                      <v-btn color="primary" @click="executeUploadImage">
+                        Send Image CSS
+                      </v-btn>
                       <canvas ref="drawCanvas"></canvas> </v-card
                   ></v-expansion-panel-content>
                 </v-expansion-panel>
@@ -329,7 +332,7 @@
                   <v-expansion-panel-content>
                     <v-card class="mb-12 fullheight" elevation="0">
                       <v-file-input
-                        v-model="displayFile"
+                        v-model="displayFileVideo"
                         color="deep-purple accent-4"
                         counter
                         label="Image input"
@@ -457,6 +460,7 @@ export default {
       pictureModeDialog: false,
       analysedImage: null,
       displayFile: null,
+      displayFileVideo: null,
       drawingImg: null,
       drawingImgScale: 1,
       x: 0,
@@ -675,6 +679,7 @@ export default {
       setTimeout(this.analyseImage, 0)
     },
     loadFile(file) {
+      this.imageFile = file
       let vue = this
       let reader = new FileReader()
       vue.drawingImg = new Image()
@@ -805,6 +810,71 @@ export default {
         })
     },
 
+    executeUploadImage() {
+      let formData = new FormData()
+      formData.append('imagefile', this.imageFile)
+
+      this.$axios
+          .post('upload/image', formData, {
+            headers: {
+              'Content-Type': 'multipart/formData'
+            }
+          })
+          .then(result => {
+            console.log('upload successful for video: ' + result.data.imageURL)
+
+
+            // get all the data
+            let info = this.analysedImage.createPictureCanvas(
+                this.drawingImg.width,
+                this.drawingImg.height
+            )
+
+            console.log(info)
+
+            console.log(this.analysedImage.screens)
+
+            for (let i = 0; i < this.analysedImage.screens.length; i++) {
+              console.log('looping through screens')
+              let cssMatrix = this.analysedImage.screens[i].cssMatrix
+
+              let user_id = this.myRoom.clients[
+                  this.analysedImage.screens[i].clientCode
+                  ]
+
+              let css =
+                  'position: absolute; left:' +
+                  info.minx +
+                  'px; top: ' +
+                  info.miny +
+                  'px; transform: matrix3d(' +
+                  cssMatrix.join(', ') +
+                  '); transform-origin: ' +
+                  -info.minx +
+                  'px ' +
+                  -info.miny +
+                  'px; width: ' +
+                  info.w +
+                  'px; height: ' +
+                  info.h +
+                  'px; object-fit: none'
+
+              this.executeDisplayImageCSS(
+                  user_id,
+                  result.data.imageURL,
+                  css,
+                  info.minx,
+                  info.miny,
+                  info.w,
+                  info.h
+              )
+            }
+          })
+          .catch(err => {
+            console.log(err)
+          })
+    },
+
     executeStartAnimation() {
       if(this.animationInterval !== null) {
         clearInterval(this.animationInterval)
@@ -830,6 +900,8 @@ export default {
       for (let i = 0; i < this.analysedImage.triangulation.length; i++) {
         tri.push(this.analysedImage.triangulation[i].toObject())
       }
+      console.log("Sent Triangulation")
+      console.log(tri)
 
       let midpoints = this.analysedImage.midPoints
 
@@ -1203,7 +1275,9 @@ export default {
         .getContext('2d')
         .putImageData(delaunayImgObject, 0, 0)
 
-      for (let i = 0; i < this.analysedImage.screens.length; i++) {
+      this.executeDelaunayImage()
+
+      /*for (let i = 0; i < this.analysedImage.screens.length; i++) {
         let code = this.analysedImage.screens[i].clientCode
         let img = this.analysedImage.screens[i].mapToScreenCV(delaunayImgObject)
         /*let screen = this.analysedImage.screens[i]
@@ -1212,7 +1286,7 @@ export default {
             screen.corners,
             screen.width,
             screen.height
-          )*/
+          )/
         this.sendImageToUser(
           img, // image
           this.myRoom.clients[code] // user ID
@@ -1223,6 +1297,70 @@ export default {
           this.$refs.delaunay.height = img.height
           this.$refs.delaunay.getContext('2d').putImageData(img, 0, 0)
         }
+      }*/
+    },
+    executeDelaunayImage() {
+      let tri = []
+      for (let i = 0; i < this.analysedImage.triangulation.length; i++) {
+        tri.push(this.analysedImage.triangulation[i].toObject())
+      }
+      console.log("Sent Triangulation")
+      console.log(tri)
+
+      let midpoints = this.analysedImage.midPoints
+
+      let width = this.analysedImage.width
+      let height = this.analysedImage.height
+
+      let info = this.analysedImage.createPictureCanvas(0,0)
+
+
+      for (let i = 0; i < this.analysedImage.screens.length; i++) {
+        console.log('looping through screens')
+        let cssMatrix = this.analysedImage.screens[i].cssMatrix
+
+        let user_id = this.myRoom.clients[
+            this.analysedImage.screens[i].clientCode
+            ]
+
+        let css =
+            'position: absolute; left:' +
+            info.minx +
+            'px; top: ' +
+            info.miny +
+            'px; transform: matrix3d(' +
+            cssMatrix.join(', ') +
+            '); transform-origin: ' +
+            -info.minx +
+            'px ' +
+            -info.miny +
+            'px; width: ' +
+            info.w +
+            'px; height: ' +
+            info.h +
+            'px; object-fit: none'
+
+
+        let obj = {
+          payload: {
+            type: 'delaunay-image',
+            data: {
+              triangulation: tri,
+              midpoints: midpoints,
+              width: width,
+              height: height,
+
+              css: css,
+              ox: info.minx,
+              oy: info.miny,
+              w: info.w,
+              h: info.h
+            }
+          },
+          to: user_id
+        }
+
+        this.$socket.emit('screenCommand', obj)
       }
     }
   },

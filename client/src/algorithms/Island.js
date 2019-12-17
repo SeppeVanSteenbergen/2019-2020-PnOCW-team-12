@@ -177,7 +177,7 @@ export default class Island {
         this.getScreenImg(),
         this.corners.LU,
         this.corners.RU
-      ) - 5
+      )
     this.localToWorld()
 
     console.log('Detected screen: ' + this.clientCode)

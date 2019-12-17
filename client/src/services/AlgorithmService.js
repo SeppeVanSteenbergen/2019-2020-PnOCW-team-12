@@ -31,8 +31,8 @@ export default {
     return dst
   },
 
-  delaunay(points) {
-    return Delaunay.triangulation(points)
+  delaunay(points, width, height) {
+    return Delaunay.triangulation(points, width, height)
   },
 
   delaunayImage(triangulation, midPoints, width, height) {

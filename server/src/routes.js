@@ -62,11 +62,21 @@ module.exports = (app, passport) => {
     AuthenticationPolicy.isAuthenticated,
     DataController.streamVideo
   )
+  app.get(
+      '/image/*',
+      AuthenticationPolicy.isAuthenticated,
+      DataController.getImage
+  )
 
   app.post(
     '/upload/video',
     upload.single('videofile'),
     DataController.videoUpload
+  )
+  app.post(
+      '/upload/image',
+      upload.single('imagefile'),
+      DataController.imageUpload
   )
 
   app.use((req, res) => {
