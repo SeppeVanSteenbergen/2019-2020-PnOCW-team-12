@@ -83,13 +83,11 @@ export default class BarcodeScanner {
     let keys = Object.keys(dict)
     let resultKeys = []
     for (let i = 0; i < keys.length; i++) {
-      if (dict[keys[i]] > 100) {
-        resultKeys.push([
-          parseInt(keys[i][0]),
-          keys[i].substring(2) === 'true',
-          dict[keys[i]]
-        ])
-      }
+      resultKeys.push([
+        parseInt(keys[i][0]),
+        keys[i].substring(2) === 'true',
+        dict[keys[i]]
+      ])
     }
     return resultKeys
   }
