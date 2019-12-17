@@ -353,16 +353,17 @@ export default class CornerDetector {
     let minDistance = Math.min(...distances)
     let maxDistance = Math.max(...distances)
 
-    if (minDistance / maxDistance < 0.1) {
+    if (minDistance / maxDistance < 0.05) {
       let i1 = distances.indexOf(minDistance)
+      let i2 = (i1 + 1) % tmpCorners.length
 
       let c1, c2
       if (i1 < tmpCorners.length - 1) {
-        c1 = tmpCorners.splice(i1, 1)[0]
-        c2 = tmpCorners.splice(i1, 1)[0]
+        c1 = tmpCorners[i1]
+        c2 = tmpCorners[i2]
       } else {
-        c1 = tmpCorners.splice(i1, 1)[0]
-        c2 = tmpCorners.splice(0, 1)[0]
+        c1 = tmpCorners[i1]
+        c2 = tmpCorners[i2]
       }
 
       let mid = [
@@ -370,10 +371,20 @@ export default class CornerDetector {
         Math.round((c1[1] + c2[1]) / 2),
         c1[2]
       ]
-      tmpCorners.push(mid)
-    }
 
-    console.log(tmpCorners)
+      let nextC = tmpCorners[(i2 + 1) % tmpCorners.length]
+      let newDistance = Math.sqrt(
+        Math.pow(nextC[0] - mid[0], 2) + Math.pow(nextC[1] - mid[1], 2)
+      )
+
+      if (newDistance > maxDistance) {
+        tmpCorners[i1] = mid
+        tmpCorners[i2] = null
+      } else {
+        tmpCorners[i1] = mid
+        tmpCorners[i2] = null
+      }
+    }
 
     let validCorners = []
     for (let c = 0; c < tmpCorners.length; c++) {
@@ -383,11 +394,7 @@ export default class CornerDetector {
           .length >= 3
       ) {
         validCorners.push(tmpCorner)
-      }
-    }
-
-    while (validCorners.length < 4) {
-      validCorners.push(null)
+      } else validCorners.push(null)
     }
 
     return validCorners
