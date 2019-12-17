@@ -42,7 +42,7 @@ export default class BarcodeScanner {
         }
       } else if (ColorRange.inBlueGreenRange(H, S, L)) {
         sep = true
-        if (scanning && scanned !== 0) {
+        if (scanning && scanned !== 0 && scanned !== 1) {
           scanning = false
           if (barcodes[[scanned, white]] === undefined) {
             barcodes[[scanned, white]] = 1
