@@ -140,7 +140,8 @@ export default class Image {
               [newIslandCoo[2], newIslandCoo[3]],
               this.islandID,
               this.getImgData(),
-              this.matrix
+              this.matrix,
+              this.clientInfo
             )
             if (newIsland.isValid()) {
               try {

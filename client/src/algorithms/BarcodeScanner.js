@@ -2,7 +2,8 @@ import ColorRange from './ColorRange'
 import PixelIterator from './PixelIterator'
 
 export default class BarcodeScanner {
-  static scan(imageObject, LU, RU) {
+  static scan(imageObject, LU, RU, clientInfo) {
+    let clients = clientInfo.length
     this.preProcessBarcode(imageObject)
     let iterator = new PixelIterator(
       LU,
@@ -11,7 +12,7 @@ export default class BarcodeScanner {
       imageObject.height
     )
     console.log(imageObject)
-    let barcode = this.scanHorizontal(imageObject, iterator)
+    let barcode = this.scanHorizontal(imageObject, iterator, clients)
     return barcode
   }
 
@@ -79,15 +80,17 @@ export default class BarcodeScanner {
     return barcode
   }
 
-  static calcKeys(dict) {
+  static calcKeys(dict, clients) {
     let keys = Object.keys(dict)
     let resultKeys = []
     for (let i = 0; i < keys.length; i++) {
-      resultKeys.push([
-        parseInt(keys[i][0]),
-        keys[i].substring(2) === 'true',
-        dict[keys[i]]
-      ])
+      if ([keys[i]] <= (clients / 2) + 2) { //aantal clients wordt + 2 gedaan bij creatie barcode om meer baren te hebben
+        resultKeys.push([
+          parseInt(keys[i][0]),
+          keys[i].substring(2) === 'true',
+          dict[keys[i]]
+        ])
+      }
     }
     return resultKeys
   }
