@@ -1,5 +1,6 @@
 import Reconstructor from './Reconstructor'
 import Algebra from './Algebra'
+import Line from './Line'
 
 export default class CornerDetector {
   constructor(screenMatrix, midPoint, id) {
@@ -338,17 +339,57 @@ export default class CornerDetector {
   }
 
   validateCorners(tmpCorners) {
+    let distances = []
+    for (let i = 0; i < tmpCorners.length; i++) {
+      let c1 = tmpCorners[i]
+      let c2 = tmpCorners[(i + 1) % tmpCorners.length]
+
+      let distance = Math.sqrt(
+        Math.pow(c2[0] - c1[0], 2) + Math.pow(c2[1] - c1[1], 2)
+      )
+      distances.push(distance)
+    }
+
+    let minDistance = Math.min(...distances)
+    let maxDistance = Math.max(...distances)
+
+    if (minDistance / maxDistance < 0.1) {
+      let i1 = distances.indexOf(minDistance)
+
+      let c1, c2
+      if (i1 < tmpCorners.length - 1) {
+        c1 = tmpCorners.splice(i1, 1)[0]
+        c2 = tmpCorners.splice(i1, 1)[0]
+      } else {
+        c1 = tmpCorners.splice(i1, 1)[0]
+        c2 = tmpCorners.splice(0, 1)[0]
+      }
+
+      let mid = [
+        Math.round((c1[0] + c2[0]) / 2),
+        Math.round((c1[1] + c2[1]) / 2),
+        c1[2]
+      ]
+      tmpCorners.push(mid)
+    }
+
+    console.log(tmpCorners)
+
     let validCorners = []
     for (let c = 0; c < tmpCorners.length; c++) {
       let tmpCorner = tmpCorners[c]
       if (
-        this.reconstructor.reconstructCircle(
-          [tmpCorner[0], tmpCorner[1]],
-        ).length >= 3
+        this.reconstructor.reconstructCircle([tmpCorner[0], tmpCorner[1]])
+          .length >= 3
       ) {
         validCorners.push(tmpCorner)
-      } else validCorners.push(null)
+      }
     }
+
+    while (validCorners.length < 4) {
+      validCorners.push(null)
+    }
+
     return validCorners
   }
 
@@ -366,7 +407,7 @@ export default class CornerDetector {
   farestToMid(corners) {
     let points = Object.values(corners)
     let distances = []
-    for(let i = 0; i < 4; i++) {
+    for (let i = 0; i < 4; i++) {
       if (points[i] !== null) {
         distances.push(Algebra.calcDist(points[i], this.midPoint))
       } else distances.push(null)
