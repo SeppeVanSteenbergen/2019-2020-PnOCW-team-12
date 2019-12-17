@@ -67,7 +67,7 @@ export default class ColorRange {
     return (
       this.checkColorRange(this.settings().blueGreen, H) &&
       S >= 40 &&
-      L >= 40 &&
+      L >= 35 &&
       L <= 60
     )
   }
