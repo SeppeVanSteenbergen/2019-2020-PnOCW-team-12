@@ -1,5 +1,5 @@
 import Triangle from './Triangle'
-import Point from "./Point"
+import Point from './Point'
 
 export default class Delaunay {
   static randomPointsGenerator(nbPoints, canvas) {
@@ -23,7 +23,7 @@ export default class Delaunay {
   sorts all points in points in function of distance to seedPoint in descending order to seedPoint
   */
   radialSort(points, point) {
-    points.sort(function (a, b) {
+    points.sort(function(a, b) {
       let distanceA = this.calcDistance(a, point)
       let distanceB = this.calcDistance(b, point)
       return distanceB - distanceA
@@ -33,7 +33,7 @@ export default class Delaunay {
   }
 
   static triangulationEdges(triangulation) {
-    let edges = new Set();
+    let edges = new Set()
     for (let i = 0; i < triangulation.length; i++) {
       let triangle = triangulation[i]
       edges.add([triangle.point1, triangle.point2])
@@ -44,12 +44,11 @@ export default class Delaunay {
       edges.add([triangle.point1, triangle.point3])
     }
     let edges2 = {}
-    for(let item of edges){
-      if(!(item[0] in edges2)){
+    for (let item of edges) {
+      if (!(item[0] in edges2)) {
         edges2[item[0]] = []
       }
-      if(!edges2[item[0]].includes(item[1]))
-        edges2[item[0]].push(item[1])
+      if (!edges2[item[0]].includes(item[1])) edges2[item[0]].push(item[1])
     }
     return edges2
   }
@@ -172,9 +171,9 @@ export default class Delaunay {
     let numerator = dist1 * dist2 * dist3
     let denumerator = Math.sqrt(
       (dist1 + dist2 + dist3) *
-      (dist2 + dist3 - dist1) *
-      (dist3 + dist1 - dist2) *
-      (dist1 + dist2 - dist3)
+        (dist2 + dist3 - dist1) *
+        (dist3 + dist1 - dist2) *
+        (dist1 + dist2 - dist3)
     )
     return numerator / denumerator
   }
@@ -204,12 +203,12 @@ export default class Delaunay {
     //crossProdcut is positive if point lays at same side of edgex and edgey
     if (
       this.crossProduct(edge1[1], point, edge1[0]) *
-      this.crossProduct(edge2[1], point, edge2[0]) >=
+        this.crossProduct(edge2[1], point, edge2[0]) >=
       0
     )
       if (
         this.crossProduct(edge2[1], point, edge2[0]) *
-        this.crossProduct(edge3[1], point, edge3[0]) >=
+          this.crossProduct(edge3[1], point, edge3[0]) >=
         0
       )
         //Same side of edge2 and edge3
@@ -228,10 +227,9 @@ export default class Delaunay {
   //correct
   static superTriangle(width, height) {
     let g = width > height ? width : height
-    g *= g
-    let p1 = [-500, -500]
-    let p2 = [0, Math.sqrt(g) * 2]
-    let p3 = [Math.sqrt(g) * 2, 0]
+    let p1 = [-g, -g]
+    let p2 = [0, g * 2]
+    let p3 = [g * 2, 0]
 
     return new Triangle(p1, p2, p3)
   }

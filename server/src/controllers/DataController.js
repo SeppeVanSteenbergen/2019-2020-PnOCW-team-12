@@ -54,6 +54,10 @@ module.exports = {
         })
     })
   },
+  getImage(req, res) {
+    let filename = req.url.replace('/image/', '').replace('/', '')
+    res.sendFile(path.resolve(path.join(__dirname, '../../', 'files', filename)))
+  },
   /**
    * downloads the video file as a
    * @param req
@@ -67,6 +71,15 @@ module.exports = {
     }
     res.send({
       videoURL: Config.server.url + '/video/' + file.filename
+    })
+  },
+  imageUpload(req, res) {
+    const file = req.file
+    if (!file) {
+      return res.status(404)
+    }
+    res.send({
+      imageURL: Config.server.url + '/image/' + file.filename
     })
   }
 }

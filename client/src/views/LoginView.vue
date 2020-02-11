@@ -20,6 +20,10 @@
                     >
                       Login as Guest
                     </v-btn>
+                    <br/>
+                    <p>
+                      By logging in you accept the use of cookies for the identification of the user. No personal information will be stored
+                    </p>
                   </div>
                 </v-col>
               </v-card-text>

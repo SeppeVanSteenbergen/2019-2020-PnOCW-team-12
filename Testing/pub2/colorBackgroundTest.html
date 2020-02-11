@@ -7,7 +7,7 @@
 </head>
 
 <body>
-  <canvas id="canv">
+  <canvas id="canv" style="width: 100%; height: 100%;">
     <div id="rand"></div>
   </canvas>
 </body>
@@ -20,14 +20,12 @@
     const c = document.getElementById("canv");
 
     let drawer = new DetectionDrawer(c, screen, borderWidth);
-    drawer.drawX(borderWidth, 0);
-    drawer.drawBorder(borderWidth);
 
     // for console use
     let barcode = (code, sections) => drawer.barcode(code, sections);
     let clearBarcode = () => drawer.clearBarcode();
 
-    barcode(12345, 7)
+    drawer.barcode(12, 7)
 
   </script>
   <style>

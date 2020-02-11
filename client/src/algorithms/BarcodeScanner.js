@@ -1,134 +1,200 @@
 import ColorRange from './ColorRange'
+import PixelIterator from './PixelIterator'
 
 export default class BarcodeScanner {
-  static scan(imageObject) {
-    let hor = this.scanHorizontal(imageObject)
-    let ver = this.scanVertical(imageObject)
-    if (hor[1] > ver[1] && hor[1] >= 0) {
-      return hor[0]
-    } else if (ver[1] >= 0) {
-      return ver[0]
-    }
+  static scan(imageObject, LU, RU) {
+    this.preProcessBarcode(imageObject)
+    let iterator = new PixelIterator(
+      LU,
+      RU,
+      imageObject.width,
+      imageObject.height
+    )
+    console.log(imageObject)
+    let barcode = this.scanHorizontal(imageObject, iterator)
+    return barcode
   }
 
-  static scanHorizontal(imageObject) {
-    let height = imageObject.height
+  static scanHorizontal(imageObject, iterator, clients) {
     let image = imageObject.data
-
-    let scanned = []
     let barcodes = {}
-
-    for (let i = 0; i < image.length; i += 4) {
-      // Color + code: Red = 1; Yellow = 2; Green = 3; Blue = 4; Pink = 5
+    let scanned = 0
+    let previous = image[2]
+    let white
+    let scanning = false
+    let sep = false
+    let current = iterator.next()
+    while (current !== null) {
+      let i = this.pixelToIndex(current, imageObject.width)
       let H = image[i] * 2
       let S = image[i + 1]
       let L = image[i + 2]
-
-      if (ColorRange.inBlueGreenRange(H, S, L) && !scanned.includes(1)) {
-        scanned.push(1)
-      } else if (ColorRange.inYellowRange(H, S, L) && !scanned.includes(2)) {
-        scanned.push(2)
-      } else if (ColorRange.inGreenRange(H, S, L) && !scanned.includes(3)) {
-        scanned.push(3)
-      } else if (ColorRange.inBlueRange(H, S, L) && !scanned.includes(4)) {
-        scanned.push(4)
-      } else if (ColorRange.inPinkRange(H, S, L) && !scanned.includes(5)) {
-        scanned.push(5)
-      } else if (ColorRange.inWhiteRange(H, S, L)) {
-        if (scanned.length === 5) {
-          if (barcodes[scanned] === undefined) {
-            barcodes[scanned] = 1
-          } else {
-            barcodes[scanned] += 1
-          }
+      let contrast = previous - L
+      if ((L <= 25 || 75 <= L) && sep) {
+        //grijswaarden (kan veranderd worden in 'geen bordercolor')
+        if (!scanning) {
+          scanning = true
+          white = L > 50
+        } else if (contrast > 70 || contrast < -70) {
+          // zwart <-> wit
+          scanned++
         }
-        scanned = []
+      } else if (ColorRange.inBlueGreenRange(H, S, L)) {
+        sep = true
+        if (scanning && scanned !== 0 && scanned !== 1) {
+          scanning = false
+          if (barcodes[[scanned, white]] === undefined) {
+            barcodes[[scanned, white]] = 1
+          } else {
+            barcodes[[scanned, white]] += 1
+          }
+          scanned = 0
+        }
+      } else {
+        sep = false
+        scanning = false
+        scanned = 0
       }
+      previous = L
+      current = iterator.next()
     }
 
+    console.log(barcodes)
+    console.log('scanned')
+    let keys = this.calcKeys(barcodes, clients)
+    let filteredCode = this.filterBarcode(keys)
+    console.log(filteredCode)
+    let barcode = filteredCode[0]
+    let highestWhite = filteredCode[1]
     let amounts = Object.values(barcodes)
     let maxAmount = Math.max(...amounts)
     let detectedAmount = amounts.reduce((a, b) => a + b, 0)
-
     let detectRatio = maxAmount / detectedAmount
-    //TODO: Needs to be updated with the right amount of barcodes on screen.
-    let ratio = maxAmount / height / 10
-    if (detectRatio < 0.5) {
-      // console.log('Picture is not good enough to detect barcode horizontal');
-      return [0, 0, 0]
-    } else {
-      // console.log(detectRatio, ratio);
-      let barcode = parseInt(
-        Object.keys(barcodes)
-          .find(key => barcodes[key] === maxAmount)
-          .toString()
-          .replace(/,/g, '')
-      )
-      return [barcode, ratio, detectRatio]
-    }
+    barcode *= 2
+    if (highestWhite) {
+      barcode -= 2
+    } else barcode--
+    console.log(detectRatio)
+    console.log(barcode)
+    return barcode
   }
 
-  static pixelToPosition(pixel, width) {
+  static calcKeys(dict) {
+    let keys = Object.keys(dict)
+    let resultKeys = []
+    for (let i = 0; i < keys.length; i++) {
+      resultKeys.push([
+        parseInt(keys[i][0]),
+        keys[i].substring(2) === 'true',
+        dict[keys[i]]
+      ])
+
+    }
+    return resultKeys
+  }
+
+  static filterBarcode(list) {
+    let length = list.length
+    for (let i = 0; i < length; i++) {
+      for (let j = 0; j < length - i - 1; j++) {
+        if (list[j][2] < list[j + 1][2]) {
+          let tmp = list[j + 1]
+          list[j + 1] = list[j]
+          list[j] = tmp
+        }
+      }
+    }
+    console.log(list)
+    return list[0]
+  }
+
+  static debugPixels(imageObject) {
+    let image = imageObject.data
+    let result = []
+    for (let i = 0; i < image.length; i += 4) {
+      let S = image[i + 1]
+      let L = image[i + 2]
+      result.push([S, L])
+    }
+    console.log(result)
+  }
+
+  /**
+   * Pre-process the image for better barcode decoding
+   *
+   * @param {ImageData} imageObject
+   */
+  static preProcessBarcode(imageObject) {
+    let [minl, maxl] = this.getMaxMinValues(imageObject, 2)
+    this.applyLevelsAdjustment(imageObject, minl, maxl)
+  }
+
+  /**
+   * Get max and min L values from the given image
+   *
+   * Optional: use start and end constants to limit search domain
+   *
+   * @param {ImageData} imageObject
+   * @param value
+   */
+  static getMaxMinValues(imageObject, value) {
+    let pixels = imageObject.data
+    let grayList = []
+    for (let i = 0; i < pixels.length; i += 4) {
+      let H = pixels[i] * 2
+      let S = pixels[i + 1]
+      let L = pixels[i + 2]
+      if (
+        !ColorRange.inMaskRange(H, S, L) &&
+        !ColorRange.inBlueGreenRange(H, S, L)
+      ) {
+        grayList.push(pixels[i + value])
+      }
+    }
+    grayList.sort(function(a, b) {
+      return a - b
+    })
+
+    return [grayList[0], grayList[grayList.length - 1]]
+  }
+
+  /**
+   * Apply Histogram equilization with extra CONTRAST constant
+   *
+   * @param {Array} arr pixel array TODO: uitbreiden naar matrix?
+   * @param {int} min min grijswaarde : [0..100]
+   * @param {int} max max grijswaarde : [0..100]
+   */
+  static applyLevelsAdjustment(imageObject, min, max) {
+    const half = (max + min) / 2
+    console.log(half, max, min)
+    let pixels = imageObject.data
+    for (let i = 0; i < pixels.length; i += 4) {
+      let H = pixels[i] * 2
+      let S = pixels[i + 1]
+      let L = pixels[i + 2]
+      if (
+        !ColorRange.inMaskRange(H, S, L) &&
+        !ColorRange.inBlueGreenRange(H, S, L)
+      ) {
+        if (pixels[i + 2] < half) {
+          pixels[i + 2] = 0
+        } else {
+          pixels[i + 2] = 100
+        }
+      }
+    }
+    return imageObject
+  }
+
+  static pixelToIndex(pixel, width) {
     return (pixel[1] * width + pixel[0]) * 4
   }
 
-  static scanVertical(imageObject) {
-    let height = imageObject.height
-    let image = imageObject.data
-
-    let scanned = []
-    let barcodes = {}
-
-    for (let x = 0; x < imageObject.width; x++) {
-      for (let y = 0; y < imageObject.height; y++) {
-        // Color + code: Red = 1; Yellow = 2; Green = 3; Blue = 4; Pink = 5
-        let i = this.pixelToPosition([x, y], imageObject.width)
-        let H = image[i] * 2
-        let S = image[i + 1]
-        let L = image[i + 2]
-
-        if (ColorRange.inRedRange(H, S, L) && !scanned.includes(1)) {
-          scanned.push(1)
-        } else if (ColorRange.inYellowRange(H, S, L) && !scanned.includes(2)) {
-          scanned.push(2)
-        } else if (ColorRange.inGreenRange(H, S, L) && !scanned.includes(3)) {
-          scanned.push(3)
-        } else if (ColorRange.inBlueRange(H, S, L) && !scanned.includes(4)) {
-          scanned.push(4)
-        } else if (ColorRange.inPinkRange(H, S, L) && !scanned.includes(5)) {
-          scanned.push(5)
-        } else if (ColorRange.inWhiteRange(H, S, L)) {
-          if (scanned.length === 5) {
-            if (barcodes[scanned] === undefined) {
-              barcodes[scanned] = 1
-            } else {
-              barcodes[scanned] += 1
-            }
-          }
-          scanned = []
-        }
-      }
-    }
-
-    let amounts = Object.values(barcodes)
-    let maxAmount = Math.max(...amounts)
-    let detectedAmount = amounts.reduce((a, b) => a + b, 0)
-
-    let detectRatio = maxAmount / detectedAmount
-    //TODO: Needs to be updated with the right amount of barcodes on screen.
-    let ratio = maxAmount / height / 10
-    if (detectRatio < 0.5) {
-      // console.log('Picture is not good enough to detect barcode vertical');
-      return [0, 0, 0]
-    } else {
-      // console.log(detectRatio, ratio);
-      let barcode = parseInt(
-        Object.keys(barcodes)
-          .find(key => barcodes[key] === maxAmount)
-          .toString()
-          .replace(/,/g, '')
-      )
-      return [barcode, ratio, detectRatio]
-    }
+  static indexToPixel(position, width) {
+    position /= 4
+    let x = position % width
+    let y = (position - x) / width
+    return [x, y]
   }
 }

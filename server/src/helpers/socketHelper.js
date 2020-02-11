@@ -149,7 +149,6 @@ module.exports = {
   // TODO check for message integrity
   screenCommand(user_id, message) {
     console.log('SCREEN COMMAND')
-    console.log(message)
     if (!dataHelper.isMasterUser(user_id)) {
       console.log('The user is not allowed to send this command')
       return 1
@@ -263,22 +262,51 @@ module.exports = {
    */
 
   pong(user_id, data) {
+    let pingTimes = 10
     let currentTime = Date.now()
     let ping = currentTime - data.startTime
     // time to add to server time to get client time
-    let timeDelta = (data.clientTime + ping / 2) - currentTime
-    if(typeof pingList[data.room_id] === 'undefined') pingList[data.room_id] = {}
-    pingList[data.room_id][user_id] = {
-      ping: ping,
-      timeDelta: timeDelta
+
+    if(typeof pingList[data.room_id] === 'undefined') {
+      pingList[data.room_id] = {}
+      pingList[data.room_id][user_id] = {
+        pingList: [],
+        ready: false
+      }
     }
 
-    if (
-        Object.keys(pingList[data.room_id]).length ===
-        dataHelper.getClientsOfRoom(data.room_id).length
-    ) {
-      this.sendCountDown(data.room_id, data)
+    pingList[data.room_id][user_id].pingList.append(ping)
+
+    /*pingList[data.room_id][user_id] = {
+      ping: ping,
+      timeDelta: timeDelta
+    }*/
+
+    if(pingList[data.room_id][user_id].pingList.length >= pingTimes) {
+      pingList[data.room_id][user_id].ready = true
+      pingList[data.room_id][user_id].ping = pingList[data.room_id][user_id].pingList.reduce((a,b) => a+b) / pingList[data.room_id][user_id].pingList.length
+      let timeDelta = (data.clientTime + pingList[data.room_id][user_id].ping / 2) - currentTime
+      pingList[data.room_id][user_id].timeDelta = timeDelta
+
+
+      let foundFalse = false
+      for(let i =0; i < Object.keys(pingList[data.room_id]).length; i++) {
+        if(!pingList[data.room_id][i].ready) {
+          foundFalse = true
+          break
+        }
+      }
+
+      if(!foundFalse && Object.keys(pingList[data.room_id]).length ===
+          dataHelper.getClientsOfRoom(data.room_id).length) {
+        this.sendCountDown(data.room_id, data)
+      }
+    } else {
+      pingUser(user_id, data)
     }
+
+
+
   },
   pingRoom(room_id, data) {
     let clients = dataHelper.getClientsOfRoom(room_id)
