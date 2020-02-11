@@ -29,11 +29,15 @@ export default class Screen {
       console.log('clientCode: ' + this.clientCode)
 
       if (typeof this.clientInfo !== 'undefined' && this.clientCode !== null) {
-        this.width = this.clientInfo[this.clientCode].size.width
-        this.height = this.clientInfo[this.clientCode].size.height
+        try {
+          this.width = this.clientInfo[this.clientCode].size.width
+          this.height = this.clientInfo[this.clientCode].size.height
 
-        this.transMatrix = this.calcTranformationMatrix()
-        this.cssMatrix = this.cssTransMatrix(this.transMatrix)
+          this.transMatrix = this.calcTranformationMatrix()
+          this.cssMatrix = this.cssTransMatrix(this.transMatrix)
+        } catch (e) {
+          console.log(e)
+        }
       }
     }
   }

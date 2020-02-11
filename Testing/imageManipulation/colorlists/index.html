@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>JS picker hsl range</title>
+</head>
+<body>
+<h1 id="txt"></h1>
+<textarea id="area" onchange="calc();"
+          onkeyup="calc()" onpaste="calc()" oninput="calc()" style="width:300px;height:300px">
+</textarea>
+</body>
+
+<script>
+
+
+
+  function calc() {
+
+    let input = document.getElementById('area').value
+
+
+    var outs = [1000,-1000,1000,-1000,1000,-1000]
+
+    var l = input.split('\n')
+        .map(e=> e.split(' ')
+            .map(e => parseInt(e,16))).map(e => {
+          //console.log(e)
+          return e
+        })
+        .map(e=> s.rh(e[0],e[1],e[2])).map(e=> {
+          for(i=0; i < 6; i++) {
+            if(e[Math.floor(i/2)] < outs[i] && i %2 === 0) outs[i] = Math.round(e[Math.floor(i/2)])
+            if(e[Math.floor(i/2)] > outs[i] && i % 2 === 1) outs[i] = Math.round(e[Math.floor(i/2)])
+          }
+          return e
+        })
+
+    document.getElementById('txt').innerHTML = 'H: ' + outs[0] + '-' + outs[1] + '    S: ' + outs[2] + '-' + outs[3] + '   L: ' + outs[4] + '-' + outs[5]
+
+    console.log('H: ' + outs[0] + '-' + outs[1] + '   S: ' + outs[2] + '-' + outs[3] + '   L: ' + outs[4] + '-' + outs[5])
+
+  }
+
+  var s = class ColorSpace {
+    /*
+        math from https://www.rapidtables.com/convert/color/rgb-to-hsl.html
+    */
+    static rh(r,g,b) {
+      //convert rgb spectrum to 0-1
+      let red = r/ 255
+      let green = g / 255
+      let blue = b / 255
+
+      let min = Math.min(red, green, blue)
+      let max = Math.max(red, green, blue)
+
+      let L = (min + max) / 2
+      let S = this.findSaturation(min, max, L)
+      let H = this.findHue(red, green, blue, max, min)
+
+      return[H,Math.round(S * 100),Math.round(L * 100)]
+    }
+
+    static findSaturation(min, max, L) {
+      if (L < 0.5) {
+        if (min + max === 0) {
+          return 0
+        }
+        return (max - min) / (max + min)
+      } else {
+        return (max - min) / (2.0 - max - min)
+      }
+    }
+
+    static findHue(red, green, blue, max, min) {
+      let hue = 0
+      if (max === min) {
+        return 0
+      } else if (red === max) {
+        hue = (green - blue) / (max - min)
+      } else if (green === max) {
+        hue = 2.0 + (blue - red) / (max - min)
+      } else if (blue === max) {
+        hue = 4.0 + (red - green) / (max - min)
+      }
+
+      hue *= 60
+      if (hue < 0) {
+        hue += 360
+      }
+      return hue
+    }
+  }
+
+
+
+
+</script>
+</html>

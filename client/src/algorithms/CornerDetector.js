@@ -1,5 +1,6 @@
 import Reconstructor from './Reconstructor'
 import Algebra from './Algebra'
+import Line from './Line'
 
 export default class CornerDetector {
   constructor(screenMatrix, midPoint, id) {
@@ -23,8 +24,8 @@ export default class CornerDetector {
     )
     this.radiusFactor = 0.25
     this.radius = null //will be set later
-    this.yellow = id
-    this.pink = id + 1
+    this.blue = id
+    this.green = id + 1
   }
 
   /**
@@ -70,29 +71,29 @@ export default class CornerDetector {
       let RD = pointList[2]
       let LD = pointList[3]
 
-      return RD[2] === this.pink && LD[2] === this.pink
+      return RD[2] === this.green && LD[2] === this.green
     } else if (LU === null) {
       let RD = pointList[2]
 
       if (RD !== null) {
-        return RU[2] === this.yellow && RD[2] === this.pink
+        return RU[2] === this.blue && RD[2] === this.green
       } else {
         let LD = pointList[3]
 
-        return RU[2] === this.yellow && LD[2] === this.pink
+        return RU[2] === this.blue && LD[2] === this.green
       }
     } else if (RU === null) {
       let RD = pointList[2]
 
       if (RD !== null) {
-        return LU[2] === this.yellow && RD[2] === this.pink
+        return LU[2] === this.blue && RD[2] === this.green
       } else {
         let LD = pointList[3]
 
-        return LU[2] === this.yellow && LD[2] === this.pink
+        return LU[2] === this.blue && LD[2] === this.green
       }
     } else {
-      return LU[2] === this.yellow && RU[2] === this.yellow
+      return LU[2] === this.blue && RU[2] === this.blue
     }
   }
 
@@ -338,17 +339,64 @@ export default class CornerDetector {
   }
 
   validateCorners(tmpCorners) {
+    let distances = []
+    for (let i = 0; i < tmpCorners.length; i++) {
+      let c1 = tmpCorners[i]
+      let c2 = tmpCorners[(i + 1) % tmpCorners.length]
+
+      let distance = Math.sqrt(
+        Math.pow(c2[0] - c1[0], 2) + Math.pow(c2[1] - c1[1], 2)
+      )
+      distances.push(distance)
+    }
+
+    let minDistance = Math.min(...distances)
+    let maxDistance = Math.max(...distances)
+
+    if (minDistance / maxDistance < 0.05) {
+      let i1 = distances.indexOf(minDistance)
+      let i2 = (i1 + 1) % tmpCorners.length
+
+      let c1, c2
+      if (i1 < tmpCorners.length - 1) {
+        c1 = tmpCorners[i1]
+        c2 = tmpCorners[i2]
+      } else {
+        c1 = tmpCorners[i1]
+        c2 = tmpCorners[i2]
+      }
+
+      let mid = [
+        Math.round((c1[0] + c2[0]) / 2),
+        Math.round((c1[1] + c2[1]) / 2),
+        c1[2]
+      ]
+
+      let nextC = tmpCorners[(i2 + 1) % tmpCorners.length]
+      let newDistance = Math.sqrt(
+        Math.pow(nextC[0] - mid[0], 2) + Math.pow(nextC[1] - mid[1], 2)
+      )
+
+      if (newDistance > maxDistance) {
+        tmpCorners[i1] = mid
+        tmpCorners[i2] = null
+      } else {
+        tmpCorners[i1] = mid
+        tmpCorners[i2] = null
+      }
+    }
+
     let validCorners = []
     for (let c = 0; c < tmpCorners.length; c++) {
       let tmpCorner = tmpCorners[c]
       if (
-        this.reconstructor.reconstructCircle(
-          [tmpCorner[0], tmpCorner[1]],
-        ).length >= 3
+        this.reconstructor.reconstructCircle([tmpCorner[0], tmpCorner[1]])
+          .length >= 3
       ) {
         validCorners.push(tmpCorner)
       } else validCorners.push(null)
     }
+
     return validCorners
   }
 
@@ -366,7 +414,7 @@ export default class CornerDetector {
   farestToMid(corners) {
     let points = Object.values(corners)
     let distances = []
-    for(let i = 0; i < 4; i++) {
+    for (let i = 0; i < 4; i++) {
       if (points[i] !== null) {
         distances.push(Algebra.calcDist(points[i], this.midPoint))
       } else distances.push(null)

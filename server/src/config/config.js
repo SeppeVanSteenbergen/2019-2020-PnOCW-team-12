@@ -2,7 +2,7 @@ const dev = true
 
 let secure = true // true for https, false for http
 
-let kuleuven = false
+let kuleuven = true
 
 const kuleuvenServer = {
   backend: {
@@ -55,7 +55,7 @@ if(kuleuven)
 
 module.exports = {
   server: {
-    domain: server.backend.domain, // This server
+    url: server.backend.url, // This server
     port: server.backend.port
   },
   session: {

@@ -20,7 +20,7 @@ export default class Reconstructor {
    * @returns {Array.<Array>} corners, array of array.
    */
   reconstructCorners(corners) {
-    let newCorners = { ...corners}
+    let newCorners = { ...corners }
 
     let helpMids = this.reconstructCircleMidPoint(this.midPoint)
     helpMids = this.orderCorners(helpMids)
@@ -34,11 +34,10 @@ export default class Reconstructor {
 
     //missing LU
     if (corners.LU === null) {
-      helpMid = helpMids.LU
+      if (helpMids.LU !== null) helpMid = helpMids.LU
+      else helpMid = helpMids.RD
       if (corners.RU !== null) {
-        helpPoints = this.reconstructCircle(
-          corners.RU,
-        )
+        helpPoints = this.reconstructCircle(corners.RU)
         if (helpPoints.length >= 3) {
           helpPoints = helpPoints.slice(0, 2)
           helpCorner = corners.RU
@@ -46,9 +45,7 @@ export default class Reconstructor {
           helpPoint = this.findHelpPoint(helpPoints, helpCorner, otherCorner)
         }
       } else if (this.corners.LD !== null) {
-        helpPoints = this.reconstructCircle(
-          corners.LD,
-        )
+        helpPoints = this.reconstructCircle(corners.LD)
         if (helpPoints.length >= 3) {
           helpPoints = helpPoints.slice(0, 2)
           helpCorner = corners.LD
@@ -63,11 +60,10 @@ export default class Reconstructor {
     }
     //missing RU
     if (corners.RU === null) {
-      helpMid = helpMids.RU
+      if (helpMids.RU !== null) helpMid = helpMids.RU
+      else helpMid = helpMids.LD
       if (corners.LU !== null) {
-        helpPoints = this.reconstructCircle(
-          corners.LU,
-        )
+        helpPoints = this.reconstructCircle(corners.LU)
         if (helpPoints.length >= 3) {
           helpPoints = helpPoints.slice(0, 2)
           helpCorner = corners.LU
@@ -75,9 +71,7 @@ export default class Reconstructor {
           helpPoint = this.findHelpPoint(helpPoints, helpCorner, otherCorner)
         }
       } else if (corners.RD !== null) {
-        helpPoints = this.reconstructCircle(
-          corners.RD,
-        )
+        helpPoints = this.reconstructCircle(corners.RD)
         if (helpPoints.length >= 3) {
           helpPoints = helpPoints.slice(0, 2)
           helpCorner = corners.RD
@@ -92,11 +86,10 @@ export default class Reconstructor {
     }
     //missing RD
     if (corners.RD === null) {
-      helpMid = helpMids.RD
+      if (helpMids.RD !== null) helpMid = helpMids.RD
+      else helpMid = helpMids.LU
       if (corners.RU !== null) {
-        helpPoints = this.reconstructCircle(
-          corners.RU,
-        )
+        helpPoints = this.reconstructCircle(corners.RU)
         if (helpPoints.length >= 3) {
           helpPoints = helpPoints.slice(0, 2)
           helpCorner = corners.RU
@@ -104,9 +97,7 @@ export default class Reconstructor {
           helpPoint = this.findHelpPoint(helpPoints, helpCorner, otherCorner)
         }
       } else if (corners.LD !== null) {
-        helpPoints = this.reconstructCircle(
-          corners.LD,
-        )
+        helpPoints = this.reconstructCircle(corners.LD)
         if (helpPoints.length >= 3) {
           helpPoints = helpPoints.slice(0, 2)
           helpCorner = corners.LD
@@ -121,11 +112,10 @@ export default class Reconstructor {
     }
     //missing LD
     if (corners.LD === null) {
-      helpMid = helpMids.LD
+      if (helpMids.LD !== null) helpMid = helpMids.LD
+      else helpMid = helpMids.RU
       if (corners.RD !== null) {
-        helpPoints = this.reconstructCircle(
-          corners.RD,
-        )
+        helpPoints = this.reconstructCircle(corners.RD)
         if (helpPoints.length >= 3) {
           helpPoints = helpPoints.slice(0, 2)
           helpCorner = corners.RD
@@ -133,9 +123,7 @@ export default class Reconstructor {
           helpPoint = this.findHelpPoint(helpPoints, helpCorner, otherCorner)
         }
       } else if (corners.LU !== null) {
-        helpPoints = this.reconstructCircle(
-          corners.LU,
-        )
+        helpPoints = this.reconstructCircle(corners.LU)
         if (helpPoints.length >= 3) {
           helpPoints = helpPoints.slice(0, 2)
           helpCorner = corners.LU
@@ -174,9 +162,9 @@ export default class Reconstructor {
     let helpLine1 = new Line(helpPoint, helpCorner)
     let helpLine2 = new Line(this.midPoint, helpMid)
     let missingCorner = helpLine1.calcIntersection(
-        helpLine2,
-        this.width,
-        this.height
+      helpLine2,
+      this.width,
+      this.height
     )
 
     return missingCorner
@@ -275,7 +263,6 @@ export default class Reconstructor {
     return result
   }
 
-
   /**
    * Calculates the 2 points (later called helpPoints) around a corner that lie along the edges of the screen.
    * Later used for corner reconstruction.
@@ -328,11 +315,25 @@ export default class Reconstructor {
    */
   reconstructCircleMidPoint(midPointCoo) {
     let lines = this.calcLinesCirc(midPointCoo)
+
+    while (lines.length > 4) {
+      let lengths = []
+      for (let i = 0; i < lines.length; i++) {
+        lengths.push(lines[i].length)
+      }
+
+      let minLength = Math.min(...lengths)
+      let index = lengths.indexOf(minLength)
+      lines.splice(index, 1)
+    }
+
     let reco = []
     for (let i = 0; i < lines.length; i++) {
       let midPoint = lines[i][Math.floor(lines[i].length / 2)]
       if (!this.crossesWhite(midPointCoo, midPoint)) {
         reco.push(midPoint)
+      } else {
+        reco.push(null)
       }
     }
 

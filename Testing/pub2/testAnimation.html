@@ -18,7 +18,8 @@
     <canvas id="canvas" width= "900" height= "900"></canvas>
     <script>
         var canvas = document.getElementById("canvas")
-        var triangulation = Delaunay.triangulation(Delaunay.randomPointsGenerator(3, canvas), canvas.width, canvas.height)
+        // var triangulation = Delaunay.triangulation(Delaunay.randomPointsGenerator(3, canvas), canvas.width, canvas.height)
+        var triangulation = Delaunay.triangulation([[500,700],[50,500],[50,50]], canvas.width, canvas.height)
         var animation1 = new Animations(triangulation, {width: canvas.width, height:canvas.height})
 
 

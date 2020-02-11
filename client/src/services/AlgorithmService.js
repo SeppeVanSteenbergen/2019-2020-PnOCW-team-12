@@ -31,8 +31,8 @@ export default {
     return dst
   },
 
-  delaunay(points) {
-    return Delaunay.triangulation(points)
+  delaunay(points, width, height) {
+    return Delaunay.triangulation(points, width, height)
   },
 
   delaunayImage(triangulation, midPoints, width, height) {
@@ -58,6 +58,43 @@ export default {
     }
 
     return ctx.getImageData(0, 0, c.width, c.height)
+  },
+  delaunayImageTransparent(triangulation, midPoints, width, height) {
+    let c = document.createElement('canvas')
+    c.width = width
+    c.height = height
+    let ctx = c.getContext('2d')
+    ctx.fillStyle = '#ffffff'
+    ctx.fillRect(0, 0, c.width, c.height)
+
+    for (let i = 0; i < triangulation.length; i++) {
+      this.drawTriangle(triangulation[i], ctx)
+    }
+    for (let i = 0; i < midPoints.length; i++) {
+      this.drawStar(
+        ctx,
+        midPoints[i][0],
+        midPoints[i][1],
+        5,
+        c.width / 60,
+        (c.width / 60) * 0.6
+      )
+    }
+
+    let imgData = ctx.getImageData(0, 0, c.width, c.height)
+
+    for (let i = 0; i < c.width * c.height; i++) {
+      if (
+        imgData.data[i * 4 + 0] === 255 &&
+        imgData.data[i * 4 + 1] === 255 &&
+        imgData.data[i * 4 + 2] === 255
+      ) {
+        imgData.data[i * 4 + 3] = 0
+      }
+
+    }
+
+    return imgData
   },
 
   drawTriangle(triangle, ctx) {
