@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        .column {
+            float: left;
+            width: 50%;
+            padding: 5px;
+        }
+
+        .output::after {
+            content: "";
+            clear: both;
+            display: table;
+        }
+    </style>
+    <title>Validate color</title>
+</head>
+
+<body>
+<h2>Validate color</h2>
+<div class="column">
+    <div class="input">
+        <canvas id="inputImage" style="max-width: 500px"></canvas>
+        <img id="imageSrc" style="display: none;" alt="No Image"/>
+        <div>
+            <div class="caption">imageSrc <input type="file" id="fileInput" name="file"/>
+                <div>
+                    <label for="color">Expected color: </label>
+                    <select name="Color" id="color">
+                        <option value="blue">Blue</option>
+                        <option value="blueGreen">BlueGreen</option>
+                        <option value="green">Green</option>
+                        <option value="pink">Pink</option>
+                        <option value="red">Red</option>
+                        <option value="white">White</option>
+                        <option value="yellow">Yellow</option>
+                    </select>
+                    <label for="env">Environment: </label>
+                    <select name="Environment" id="env">
+                        <option value="none">None</option>
+                        <option value="small">Small</option>
+                        <option value="medium">Medium</option>
+                        <option value="big">Big</option>
+                    </select>
+                    <div>
+                        <button onclick="inspectColor()">Validate color</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="column" id="result">
+    <p id="foundColor"></p>
+    <canvas id="guessedColor" style="width: 100px; height: 100px"></canvas>
+    <p id="coverage"></p>
+    <p id="distance"></p> <!-- TODO: dit moet nog distance tov gekozen kleur worden, nu is dit met gevonden kleur -->
+</div>
+<!-- <script src="ValidateColor.js" type="text/javascript"></script> -->
+<script>
+    let imgElement = document.createElement('img');
+    imgElement = document.getElementById('imageSrc');
+    let inputElement = document.getElementById('fileInput');
+    inputElement.addEventListener(
+        'change',
+        e => {
+            imgElement.src = URL.createObjectURL(e.target.files[0]);
+        },
+        false
+    );
+    imgElement.onload = function () {
+        let inputCanvas = document.getElementById('inputImage');
+        let inputContext = inputCanvas.getContext('2d');
+        inputContext.clearRect(0, 0, inputCanvas.width, inputCanvas.height);
+        inputCanvas.width = imgElement.width;
+        inputCanvas.height = imgElement.height;
+        inputContext.drawImage(imgElement, 0, 0, imgElement.width, imgElement.height);
+    };
+</script>
+<script src="InspectColor.js" type="text/javascript"></script>
+<script src="ColorSpace.js" type="text/javascript"></script>
+<script src="ColorRange.js" type="text/javascript"></script>
+</body>
+
+</html>
