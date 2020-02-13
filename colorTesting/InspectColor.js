@@ -85,6 +85,101 @@ function inspectColor() {
     setInspectedValues(maxColor, guessedColor[maxColor], coverage, "HSL")
 }
 
+/*
+Deze functie gaat de kleur zoeken met behulp van de kleurafstand
+ */
+function inspectColor2(){
+    let inputCanvas = document.getElementById('inputImage');
+    let inputContext = inputCanvas.getContext('2d');
+    let inputImgData = inputContext.getImageData(
+        0,
+        0,
+        imgElement.width,
+        imgElement.height
+    );
+    let pixels = inputImgData.data
+
+    let colorCount = {
+        'red':0,
+        'green':0,
+        'blue':0,
+        'purple':0,
+        'blueGreen':0,
+        'yellow':0,
+        'white':0,
+        'black':0,
+        'other':0
+    }
+
+    let guessedColor ={
+        'red': [0,0,0],
+        'green':[0,0,0],
+        'blue':[0,0,0],
+        'purple':[0,0,0],
+        'blueGreen':[0,0,0],
+        'yellow':[0,0,0],
+        'white':[0,0,0],
+        'black':[0,0,0],
+        'other':[0,0,0]
+    }
+
+    for(let i = 0; i < pixels.length; i +=4) {
+        let color = [pixels[i], pixels[i+1], pixels[i+2]]
+
+        let redDistance = calcColorDistance(nameToColor("red"), color)
+        let greenDistance = calcColorDistance(nameToColor("green"), color)
+        let blueDistance = calcColorDistance(nameToColor("blue"), color)
+        let purpleDistance = calcColorDistance(nameToColor("purple"), color)
+        let blueGreenDistance = calcColorDistance(nameToColor("blueGreen"), color)
+        let yellowDistance = calcColorDistance(nameToColor("yellow"), color)
+        let whiteDistance = calcColorDistance(nameToColor("white"), color)
+        let blackDistance = calcColorDistance(nameToColor("black"), color)
+
+        let min = Math.min(redDistance, greenDistance, blueDistance,
+            purpleDistance, blueGreenDistance, yellowDistance, whiteDistance, blackDistance)
+
+        switch(min){
+            case redDistance:
+                guessedColor.red = calcAverage(guessedColor.red, colorCount.red, color)
+                colorCount.red++
+                break
+            case greenDistance:
+                guessedColor.green = calcAverage(guessedColor.green, colorCount.green, color)
+                colorCount.green++
+                break
+            case blueDistance:
+                guessedColor.blue = calcAverage(guessedColor.blue, colorCount.blue, color)
+                colorCount.blue++
+                break
+            case purpleDistance:
+                guessedColor.purple = calcAverage(guessedColor.purple, colorCount.purple, color)
+                colorCount.purple++
+                break
+            case blueGreenDistance:
+                guessedColor.blueGreen = calcAverage(guessedColor.blueGreen, colorCount.blueGreen, color)
+                colorCount.blueGreen++
+                break
+            case yellowDistance:
+                guessedColor.yellow = calcAverage(guessedColor.yellow, colorCount.yellow, color)
+                colorCount.yellow++
+                break
+            case whiteDistance:
+                guessedColor.white = calcAverage(guessedColor.white, colorCount.white, color)
+                colorCount.white++
+                break
+            case blackDistance:
+                guessedColor.black = calcAverage(guessedColor.black, colorCount.black, color)
+                colorCount.black++
+                break
+        }
+    }
+
+    let max = Math.max(...Object.values(colorCount))
+    let maxColor = Object.keys(colorCount).find(key => colorCount[key] === max)
+    let coverage = max / (pixels.length / 4) * 100
+
+    setInspectedValues(maxColor, guessedColor[maxColor], coverage, "RGB")
+}
 function calcAverage(prevAverage, prevCount, newColor){
     return prevAverage.map((v, i) => ((v * prevCount) + newColor[i])/(prevCount+1))
 }
@@ -99,13 +194,18 @@ function setInspectedValues(colorName, color, coverage, colorSpace){
     document.getElementById("coverageI").value = coverage
 }
 
-function displayInspection(maxColorName, maxColorValue, coverage){
+function displayInspection(maxColorName, maxColorValue, coverage, colorSpace){
     document.getElementById('foundColor').innerText = "Found Color: " + maxColorName
     document.getElementById('coverage').innerText = "Coverage: " + coverage + "%"
 
-    maxColorValue[0] /= 2
-    let maxColorRgb = ColorSpace.hslaToRgba(maxColorValue)
-    maxColorValue[0] *= 2
+    let maxColorRgb
+    if(colorSpace === "HSL"){
+        maxColorValue[0] /= 2
+        maxColorRgb = ColorSpace.hslaToRgba(maxColorValue)
+        maxColorValue[0] *= 2
+    }else{
+        maxColorRgb = maxColorValue
+    }
 
     let previewColor = document.getElementById('guessedColor')
     let previewColorCtx = previewColor.getContext('2d')

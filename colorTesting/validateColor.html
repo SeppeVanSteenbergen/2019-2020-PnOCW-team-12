@@ -72,8 +72,15 @@
             onclick="inspectColor();
                 displayInspection(document.getElementById('colorName').value,
                 [document.getElementById('colorValue1').value,document.getElementById('colorValue2').value,document.getElementById('colorValue3').value],
-                document.getElementById('coverageI').value)">
+                document.getElementById('coverageI').value, document.getElementById('colorSpace').value)">
         Validate color without sending to database
+    </button>
+    <button
+            onclick="inspectColor2();
+                displayInspection(document.getElementById('colorName').value,
+                [document.getElementById('colorValue1').value,document.getElementById('colorValue2').value,document.getElementById('colorValue3').value],
+                document.getElementById('coverageI').value, document.getElementById('colorSpace').value)">
+        Validate color (distance method) without sending to database
     </button>
     <p id="foundColor"></p>
     <canvas id="guessedColor" style="width: 100px; height: 100px"></canvas>
