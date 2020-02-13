@@ -1,10 +1,10 @@
-Bij een live applicatie is het belangerijk dat de aangesloten apparaten de mogelijkheid hebben synchroon een beeld weer te geven. Dit is niet altijd vanzelfsprekend dankzij verschillende factoren, zoals vertraging op en snelheid van een apparaat. Hiervoor zijn er verschillende technieken om toch synchronisatie te bekomen.
+Bij een live applicatie is het belangrijk dat de aangesloten apparaten de mogelijkheid hebben synchroon een beeld weer te geven. Dit is niet altijd vanzelfsprekend dankzij verschillende factoren, zoals vertraging op en snelheid van een apparaat. Hiervoor zijn er verschillende technieken om toch synchronisatie te bekomen.
 
 \subsection{Vertraging berekenen}
 Er is een vertraging tussen een aangesloten client en de server, de {\it ping}. Dit is gemeten in miliseconden.
 Deze wordt gemeten door een bericht met de actuele tijd te verzenden van de server naar de client, en terug. De verzonden tijd wordt afgetrokken van de actuele tijd waarmee de ping verkregen is.
-In figuur \ref{diag} is de informatieoverdracht zichtbaar. In de server wordt de server tijd (TS1) berekend, verzonden naar de client en terug gekregen.
-Nu wordt de actuele tijd berekend in de server TS2. Dus de uiteindelijke ping is:
+In figuur \ref{diag} is de informatieoverdracht zichtbaar. In de server wordt de servertijd (TS1) berekent, verzonden naar de client en teruggekregen.
+Nu wordt de actuele tijd berekent in de server TS2. Dus de uiteindelijke ping is:
 \[ping = TS2 - TS1\]
 
 \tikzstyle{client} = [rectangle, rounded corners, minimum width=3cm, minimum height=2cm,text centered, draw=black, fill=blue!30]
@@ -51,8 +51,8 @@ Nu wordt de actuele tijd berekend in de server TS2. Dus de uiteindelijke ping is
 \end{figure}
 
 \subsection{Kloksynchronisatie}
-Het is niet gegarandeert dat de klok van de clients allemaal gesynchroniseerd zijn met de server. Daarom is het ook nodig om te weten wat het verschil is tussen de tijd aan de kant van de client en de server.
-Bij het terug verzenden van de client naar de server wordt de client tijd (TC) er bij het bericht gezet. Met deze TC en de berekende {\it ping}, is het mogelijk het tijdsverschil tussen de client en de server te bepalen ($DeltaTime$). Door dit verschil toe te voegen aan de servertijd is het mogelijk de correcte clienttijd te vinden. Dit wordt gebruikt om een starttijd te bepalen voor elke client dat op exact hetzelfde moment zal beginnen:
+Het is niet gegarandeerd dat de klokken van de clients allemaal gesynchroniseerd zijn met de server. Daarom is het ook nodig om te weten wat het verschil is tussen de tijd aan de kant van de client en de server.
+Bij het terug verzenden van de client naar de server wordt de clienttijd (TC) bij het bericht gezet. Met deze TC en de berekende {\it ping}, is het mogelijk het tijdsverschil tussen de client en de server te bepalen ($DeltaTime$). Door dit verschil toe te voegen aan de servertijd is het mogelijk de correcte clienttijd te vinden. Dit wordt gebruikt om een starttijd te bepalen voor elke client dat op exact hetzelfde moment zal beginnen:
 \[DeltaTime = (TC+ping/2) - TS2\]
 
 Zo is de tijd van de client ten opzichte van de server altijd:
@@ -60,8 +60,8 @@ Zo is de tijd van de client ten opzichte van de server altijd:
 
 
 \subsection{Aftelklok}
-Bij de naïve implementatie van de aftelklok is er gebruikt gemaakt van de {\it setTimer()} functie die recursief een getal aftelt en tekend op een canvas. Een probleem hierbij is dat apparaten niet even snel het getal kunnen tekenen op het scherm waardoor er apparaten kunnen zijn die sneller zijn dan anderen.
-Daarom is er gebruik gemaakt van {\it setInterval()} dat periodisch het getal berekend, relatief ten opzichte van de meegegeven starttijd. Als er een client trager is en niet optijd op het scherm kan tekenen, dan zal het getal worden overgeslagen omdat het apparaat het sowieso niet zou aankunnen. Hierdoor blijven de getallen op het scherm synchroon en zal het aftellen ook op het zelfde moment stoppen op elk scherm.
+Bij de naïeve implementatie van de aftelklok is er gebruik gemaakt van de {\it setTimer()}-functie die recursief een getal aftelt en tekent op een canvas. Een probleem hierbij is dat apparaten niet even snel het getal kunnen tekenen op het scherm waardoor er apparaten kunnen zijn die sneller zijn dan anderen.
+Daarom is er gebruik gemaakt van {\it setInterval()} dat periodisch het getal berekent, relatief ten opzichte van de meegegeven starttijd. Als er een client trager is en niet op tijd op het scherm kan tekenen, dan zal het getal worden overgeslagen omdat het apparaat het sowieso niet zou aankunnen. Hierdoor blijven de getallen op het scherm synchroon en zal het aftellen ook op hetzelfde moment stoppen op elk scherm.
 Het getal is als volgt berekend:
 \[number = startNum - Math.floor((actualTime - startTime) / interval)\]
 
