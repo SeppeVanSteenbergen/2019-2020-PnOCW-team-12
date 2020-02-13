@@ -82,16 +82,21 @@ function inspectColor() {
     let maxColor = Object.keys(colorCount).find(key => colorCount[key] === max)
     let coverage = max / (pixelsHsla.length / 4) * 100
 
-
-
-    let maxColorRgb = displayInspection(maxColor, guessedColor[maxColor], coverage)
-
-
-    return [maxColor, guessedColor[maxColor], maxColorRgb, max, coverage]
+    setInspectedValues(maxColor, guessedColor[maxColor], coverage, "HSL")
 }
 
 function calcAverage(prevAverage, prevCount, newColor){
     return prevAverage.map((v, i) => ((v * prevCount) + newColor[i])/(prevCount+1))
+}
+
+function setInspectedValues(colorName, color, coverage, colorSpace){
+    document.getElementById("colorName").value = colorName
+    document.getElementById("colorValue1").value = color[0]
+    document.getElementById("colorValue2").value = color[1]
+    document.getElementById("colorValue3").value = color[2]
+    document.getElementById("colorSpace").value = colorSpace
+    document.getElementById("distanceI").value = calcColorDistance(nameToColor(document.getElementById("color").value), color)
+    document.getElementById("coverageI").value = coverage
 }
 
 function displayInspection(maxColorName, maxColorValue, coverage){
@@ -108,7 +113,7 @@ function displayInspection(maxColorName, maxColorValue, coverage){
     previewColorCtx.rect(0, 0, 100, 100);
     previewColorCtx.fillStyle = 'rgb(' + maxColorRgb[0] + ', ' + maxColorRgb[1] + ', ' + maxColorRgb[2] + ')';
     previewColorCtx.fill();
-    let colorValue = nameToColor(maxColorName)
+    let colorValue = nameToColor(document.getElementById("color").value)
     let distance = calcColorDistance(maxColorValue, colorValue)
 
     document.getElementById('distance').innerText = "Colordistance: " + distance
