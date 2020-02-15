@@ -29,8 +29,8 @@
         <canvas id="inputImage" style="max-width: 500px"></canvas>
         <img id="imageSrc" style="display: none;" alt="No Image"/>
         <div>
-            <form id="form" action="database.php">
-            <div class="caption">imageSrc <input type="file" id="fileInput" name="file"/>
+            <form id="form">
+            <div class="caption">imageSrc <input type="file" id="fileInput" name="files[]" multiple="multiple"/>
                 <div>
                     <label for="color">Expected color: </label>
                     <select name="Color" id="color">
