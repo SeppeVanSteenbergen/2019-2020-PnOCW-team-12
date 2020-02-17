@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019) (preloaded format=pdflatex 2019.10.14)  13 FEB 2020 11:36
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019) (preloaded format=pdflatex 2019.10.14)  17 FEB 2020 15:11
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1276,13 +1276,13 @@ LaTeX Warning: There were multiply-defined labels.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 186.
  ) 
 Here is how much of TeX's memory you used:
- 23311 strings out of 492616
- 430630 string characters out of 6129480
+ 23302 strings out of 492616
+ 430523 string characters out of 6129480
  562547 words of memory out of 5000000
- 26474 multiletter control sequences out of 15000+600000
- 49609 words of font info for 95 fonts, out of 8000000 for 9000
+ 26467 multiletter control sequences out of 15000+600000
+ 49526 words of font info for 94 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 55i,8n,56p,2171b,1323s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 55i,8n,56p,2172b,1323s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2019/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{/usr/local/
 texlive/2019/texmf-dist/fonts/enc/dvips/lm/lm-mathex.enc}{/usr/local/texlive/20
 19/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/local/texlive/2019/texmf-d
@@ -1297,7 +1297,7 @@ ts/type1/public/lm/lmr8.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/pub
 lic/lm/lmri10.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/public/lm/lms
 y10.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/public/lm/lmsy8.pfb></u
 sr/local/texlive/2019/texmf-dist/fonts/type1/public/lm/lmtt10.pfb>
-Output written on Eindverslag.pdf (33 pages, 8353098 bytes).
+Output written on Eindverslag.pdf (33 pages, 8352992 bytes).
 PDF statistics:
  730 PDF objects out of 1000 (max. 8388607)
  589 compressed objects within 6 object streams
