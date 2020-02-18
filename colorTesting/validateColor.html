@@ -58,7 +58,7 @@
                     <input type="text" style="display: none" name="coverage" id="coverageI">
                     <input type="text" style="display: none" name="distance" id="distanceI">
                     <div>
-                        <button onclick="inspectColor()">add to database</button>
+                        <button onclick="inspector()">add to database</button>
                     </div>
                 </div>
             </div>
@@ -69,7 +69,7 @@
 </div>
 <div class="column" id="result">
     <button
-            onclick="inspectColor();
+            onclick="inspector();
                 displayInspection(document.getElementById('colorName').value,
                 [document.getElementById('colorValue1').value,document.getElementById('colorValue2').value,document.getElementById('colorValue3').value],
                 document.getElementById('coverageI').value, document.getElementById('colorSpace').value)">

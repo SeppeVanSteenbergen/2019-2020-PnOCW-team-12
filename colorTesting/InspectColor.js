@@ -4,75 +4,92 @@ Elke pixel sorteren in zijn/haar kleur mbv colorRange.
 ColorRange met meeste pixels in zich is de kleur
 Gemiddelde van alle kleuren in deze color range is benaderde kleur. En dus het verschil met de echte.
  */
-function inspectColor() {
-    let inputCanvas = document.getElementById('inputImage');
-    let inputContext = inputCanvas.getContext('2d');
-    let inputImgData = inputContext.getImageData(
+function inspector() {
+    let imageURLs = []
+    let filesInput = document.getElementById("fileInput");
+    let files = filesInput.files;
+
+    for(let i = 0; i< files.length; i++) {
+        let file = files[i];
+        let picReader = new FileReader();
+        picReader.addEventListener("load",function(event){
+            let picFile = event.target;
+            imageURLs.push(picFile.result)
+            inspectColor(picFile.result)
+        });
+        picReader.readAsDataURL(file);
+    }
+    console.log(imageURLs)
+}
+
+function  inspectColor(imgURL) {
+    let canvas = document.createElement("canvas")
+    let img = new Image()
+    let ctx = canvas.getContext("2d")
+    img.addEventListener("load", function() {
+        img.source = imgURL;
+        ctx.drawImage(img, 0, 0)
+    })
+
+
+    let imgData = ctx.getImageData(
         0,
         0,
         imgElement.width,
-        imgElement.height
-    );
-    let pixelsRgba = inputImgData.data
+        imgElement.height)
+    let pixelsRgba = imgData.data
     let pixelsHsla = ColorSpace.rgbaToHsla(pixelsRgba.slice())
 
     let colorCount = {
-        'red':0,
-        'green':0,
-        'blue':0,
-        'purple':0,
-        'blueGreen':0,
-        'yellow':0,
-        'white':0,
-        'black':0,
-        'other':0
+        'red': 0,
+        'green': 0,
+        'blue': 0,
+        'purple': 0,
+        'blueGreen': 0,
+        'yellow': 0,
+        'white': 0,
+        'black': 0,
+        'other': 0
     }
 
-    let guessedColor ={
-        'red': [0,0,0],
-        'green':[0,0,0],
-        'blue':[0,0,0],
-        'purple':[0,0,0],
-        'blueGreen':[0,0,0],
-        'yellow':[0,0,0],
-        'white':[0,0,0],
-        'black':[0,0,0],
-        'other':[0,0,0]
+    let guessedColor = {
+        'red': [0, 0, 0],
+        'green': [0, 0, 0],
+        'blue': [0, 0, 0],
+        'purple': [0, 0, 0],
+        'blueGreen': [0, 0, 0],
+        'yellow': [0, 0, 0],
+        'white': [0, 0, 0],
+        'black': [0, 0, 0],
+        'other': [0, 0, 0]
     }
 
-    for(let i = 0; i < pixelsHsla.length; i += 4){
+    for (let i = 0; i < pixelsHsla.length; i += 4) {
         let h = pixelsHsla[i] * 2
         let s = pixelsHsla[i + 1]
         let l = pixelsHsla[i + 2]
-        if(ColorRange.inRedRange(h, s, l)) {
+        if (ColorRange.inRedRange(h, s, l)) {
             guessedColor.red = calcAverage(guessedColor.red, colorCount.red, [h, s, l])
             colorCount.red++
-        }
-        else if(ColorRange.inGreenRange(h, s, l)){
+        } else if (ColorRange.inGreenRange(h, s, l)) {
             guessedColor.green = calcAverage(guessedColor.green, colorCount.green, [h, s, l])
             colorCount.green++
-        }
-        else if(ColorRange.inBlueRange(h, s, l)){
+        } else if (ColorRange.inBlueRange(h, s, l)) {
             guessedColor.blue = calcAverage(guessedColor.blue, colorCount.blue, [h, s, l])
             colorCount.blue++
-        }
-        else if(ColorRange.inBlueGreenRange(h, s, l)){
+        } else if (ColorRange.inBlueGreenRange(h, s, l)) {
             guessedColor.blueGreen = calcAverage(guessedColor.blueGreen, colorCount.blueGreen, [h, s, l])
             colorCount.blueGreen++
-        }
-        else if(ColorRange.inYellowRange(h, s, l)){
+        } else if (ColorRange.inYellowRange(h, s, l)) {
             guessedColor.yellow = calcAverage(guessedColor.yellow, colorCount.yellow, [h, s, l])
             colorCount.yellow++
-        }
-        else if(ColorRange.inWhiteRange(h, s, l)){
+        } else if (ColorRange.inWhiteRange(h, s, l)) {
             guessedColor.white = calcAverage(guessedColor.white, colorCount.white, [h, s, l])
             colorCount.white++
-        }
-        else if(ColorRange.inBlackRange(h, s, l)){
+        } else if (ColorRange.inBlackRange(h, s, l)) {
             guessedColor.black = calcAverage(guessedColor.black, colorCount.black, [h, s, l])
             colorCount.black++
-        }
-        else {
+        } else {
             guessedColor.other = calcAverage(guessedColor.other, colorCount.other, [h, s, l])
             colorCount.other++
         }
