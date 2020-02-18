@@ -8,29 +8,31 @@ function inspector() {
     let imageURLs = []
     let filesInput = document.getElementById("fileInput");
     let files = filesInput.files;
+    let list = []
+    inspecting(files, files.length - 1, list)
 
-    for(let i = 0; i< files.length; i++) {
-        let file = files[i];
-        let picReader = new FileReader();
-        picReader.addEventListener("load",function(event){
-            let picFile = event.target;
-            imageURLs.push(picFile.result)
-            inspectColor(picFile.result)
-        });
-        picReader.readAsDataURL(file);
-    }
-    console.log(imageURLs)
+    console.log(list)
 }
-
+function inspecting(fileList, nb, list){
+    if(nb < 0) return list
+    let file = fileList[nb]
+    let picReader = new FileReader()
+    picReader.addEventListener("load", function(event){
+        let picFile = event.target;
+        list.push(picFile.result)
+        inspectColor(picFile.result)
+        inspecting(fileList, nb - 1, list)
+    })
+    picReader.readAsDataURL(file);
+}
 function  inspectColor(imgURL) {
     let canvas = document.createElement("canvas")
     let img = new Image()
+    img.source = imgURL;
     let ctx = canvas.getContext("2d")
-    img.addEventListener("load", function() {
-        img.source = imgURL;
+    img.addEventListener("load", function(event) {
+        alert("image is loaded")
         ctx.drawImage(img, 0, 0)
-    })
-
 
     let imgData = ctx.getImageData(
         0,
@@ -100,6 +102,7 @@ function  inspectColor(imgURL) {
     let coverage = max / (pixelsHsla.length / 4) * 100
 
     setInspectedValues(maxColor, guessedColor[maxColor], coverage, "HSL")
+    })
 }
 
 /*
