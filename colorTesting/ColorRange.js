@@ -18,11 +18,17 @@ class ColorRange {
     return Object.keys(this.colors()).find(key => this.colors()[key] === closest);
   }
 
-  static colorDetected1(color, H, S, L) {
+  static colorDetected(color, H, S, L) {
+    if (L <= 10) {
+      return color === "black";
+    } else if (L >= 90) {
+      return color === "white";
+    }
+    
     return this.closestColor(H).includes(color);
   }
 
-  static colorDetected(color, H, S, L) {
+  static colorDetectedOld(color, H, S, L) {
     if (color === "blue") {
       return this.inBlueRange(H, S, L);
     } else if (color === "blueGreen") {
