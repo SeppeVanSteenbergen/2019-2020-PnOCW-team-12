@@ -14,13 +14,17 @@ function inspector() {
     console.log(list)
 }
 function inspecting(fileList, nb, list){
-    if(nb < 0) return list
+    if(nb < 0) {
+        alert("done")
+        return list
+    }
     let file = fileList[nb]
     let picReader = new FileReader()
     picReader.addEventListener("load", function(event){
         let picFile = event.target;
         list.push(picFile.result)
         inspectColor(picFile.result)
+        inspectColor2(picFile.result)
         inspecting(fileList, nb - 1, list)
     })
     picReader.readAsDataURL(file);
@@ -28,17 +32,19 @@ function inspecting(fileList, nb, list){
 function  inspectColor(imgURL) {
     let canvas = document.createElement("canvas")
     let img = new Image()
-    img.source = imgURL;
-    let ctx = canvas.getContext("2d")
-    img.addEventListener("load", function(event) {
-        alert("image is loaded")
+
+    img.onload = function (){
+
+        canvas.width = img.width
+        canvas.height = img.height
+        let ctx = canvas.getContext("2d")
         ctx.drawImage(img, 0, 0)
 
     let imgData = ctx.getImageData(
         0,
         0,
-        imgElement.width,
-        imgElement.height)
+        img.width,
+        img.height)
     let pixelsRgba = imgData.data
     let pixelsHsla = ColorSpace.rgbaToHsla(pixelsRgba.slice())
 
@@ -102,116 +108,140 @@ function  inspectColor(imgURL) {
     let coverage = max / (pixelsHsla.length / 4) * 100
 
     setInspectedValues(maxColor, guessedColor[maxColor], coverage, "HSL")
-    })
+    //displayInspection(maxColor, guessedColor[maxColor], coverage, "HSL")
+    }
+    img.src = imgURL;
 }
 
 /*
 Deze functie gaat de kleur zoeken met behulp van de kleurafstand
  */
-function inspectColor2(){
-    let inputCanvas = document.getElementById('inputImage');
-    let inputContext = inputCanvas.getContext('2d');
-    let inputImgData = inputContext.getImageData(
-        0,
-        0,
-        imgElement.width,
-        imgElement.height
-    );
-    let pixels = inputImgData.data
+function inspectColor2(imgURL){
+    let canvas = document.createElement("canvas")
+    let img = new Image()
 
-    let colorCount = {
-        'red':0,
-        'green':0,
-        'blue':0,
-        'purple':0,
-        'blueGreen':0,
-        'yellow':0,
-        'white':0,
-        'black':0,
-        'other':0
-    }
+    img.onload = function () {
 
-    let guessedColor ={
-        'red': [0,0,0],
-        'green':[0,0,0],
-        'blue':[0,0,0],
-        'purple':[0,0,0],
-        'blueGreen':[0,0,0],
-        'yellow':[0,0,0],
-        'white':[0,0,0],
-        'black':[0,0,0],
-        'other':[0,0,0]
-    }
+        canvas.width = img.width
+        canvas.height = img.height
+        let ctx = canvas.getContext("2d")
+        ctx.drawImage(img, 0, 0)
 
-    for(let i = 0; i < pixels.length; i +=4) {
-        let color = [pixels[i], pixels[i+1], pixels[i+2]]
+        let imgData = ctx.getImageData(
+            0,
+            0,
+            img.width,
+            img.height)
 
-        let redDistance = calcColorDistance(nameToColor("red"), color)
-        let greenDistance = calcColorDistance(nameToColor("green"), color)
-        let blueDistance = calcColorDistance(nameToColor("blue"), color)
-        let purpleDistance = calcColorDistance(nameToColor("purple"), color)
-        let blueGreenDistance = calcColorDistance(nameToColor("blueGreen"), color)
-        let yellowDistance = calcColorDistance(nameToColor("yellow"), color)
-        let whiteDistance = calcColorDistance(nameToColor("white"), color)
-        let blackDistance = calcColorDistance(nameToColor("black"), color)
+        let pixels = imgData.data
 
-        let min = Math.min(redDistance, greenDistance, blueDistance,
-            purpleDistance, blueGreenDistance, yellowDistance, whiteDistance, blackDistance)
-
-        switch(min){
-            case redDistance:
-                guessedColor.red = calcAverage(guessedColor.red, colorCount.red, color)
-                colorCount.red++
-                break
-            case greenDistance:
-                guessedColor.green = calcAverage(guessedColor.green, colorCount.green, color)
-                colorCount.green++
-                break
-            case blueDistance:
-                guessedColor.blue = calcAverage(guessedColor.blue, colorCount.blue, color)
-                colorCount.blue++
-                break
-            case purpleDistance:
-                guessedColor.purple = calcAverage(guessedColor.purple, colorCount.purple, color)
-                colorCount.purple++
-                break
-            case blueGreenDistance:
-                guessedColor.blueGreen = calcAverage(guessedColor.blueGreen, colorCount.blueGreen, color)
-                colorCount.blueGreen++
-                break
-            case yellowDistance:
-                guessedColor.yellow = calcAverage(guessedColor.yellow, colorCount.yellow, color)
-                colorCount.yellow++
-                break
-            case whiteDistance:
-                guessedColor.white = calcAverage(guessedColor.white, colorCount.white, color)
-                colorCount.white++
-                break
-            case blackDistance:
-                guessedColor.black = calcAverage(guessedColor.black, colorCount.black, color)
-                colorCount.black++
-                break
+        let colorCount = {
+            'red': 0,
+            'green': 0,
+            'blue': 0,
+            'purple': 0,
+            'blueGreen': 0,
+            'yellow': 0,
+            'white': 0,
+            'black': 0,
+            'other': 0
         }
+
+        let guessedColor = {
+            'red': [0, 0, 0],
+            'green': [0, 0, 0],
+            'blue': [0, 0, 0],
+            'purple': [0, 0, 0],
+            'blueGreen': [0, 0, 0],
+            'yellow': [0, 0, 0],
+            'white': [0, 0, 0],
+            'black': [0, 0, 0],
+            'other': [0, 0, 0]
+        }
+
+        for (let i = 0; i < pixels.length; i += 4) {
+            let color = [pixels[i], pixels[i + 1], pixels[i + 2]]
+
+            let redDistance = calcColorDistance(nameToColor("red"), color)
+            let greenDistance = calcColorDistance(nameToColor("green"), color)
+            let blueDistance = calcColorDistance(nameToColor("blue"), color)
+            let purpleDistance = calcColorDistance(nameToColor("purple"), color)
+            let blueGreenDistance = calcColorDistance(nameToColor("blueGreen"), color)
+            let yellowDistance = calcColorDistance(nameToColor("yellow"), color)
+            let whiteDistance = calcColorDistance(nameToColor("white"), color)
+            let blackDistance = calcColorDistance(nameToColor("black"), color)
+
+            let min = Math.min(redDistance, greenDistance, blueDistance,
+                purpleDistance, blueGreenDistance, yellowDistance, whiteDistance, blackDistance)
+
+            switch (min) {
+                case redDistance:
+                    guessedColor.red = calcAverage(guessedColor.red, colorCount.red, color)
+                    colorCount.red++
+                    break
+                case greenDistance:
+                    guessedColor.green = calcAverage(guessedColor.green, colorCount.green, color)
+                    colorCount.green++
+                    break
+                case blueDistance:
+                    guessedColor.blue = calcAverage(guessedColor.blue, colorCount.blue, color)
+                    colorCount.blue++
+                    break
+                case purpleDistance:
+                    guessedColor.purple = calcAverage(guessedColor.purple, colorCount.purple, color)
+                    colorCount.purple++
+                    break
+                case blueGreenDistance:
+                    guessedColor.blueGreen = calcAverage(guessedColor.blueGreen, colorCount.blueGreen, color)
+                    colorCount.blueGreen++
+                    break
+                case yellowDistance:
+                    guessedColor.yellow = calcAverage(guessedColor.yellow, colorCount.yellow, color)
+                    colorCount.yellow++
+                    break
+                case whiteDistance:
+                    guessedColor.white = calcAverage(guessedColor.white, colorCount.white, color)
+                    colorCount.white++
+                    break
+                case blackDistance:
+                    guessedColor.black = calcAverage(guessedColor.black, colorCount.black, color)
+                    colorCount.black++
+                    break
+            }
+        }
+
+        let max = Math.max(...Object.values(colorCount))
+        let maxColor = Object.keys(colorCount).find(key => colorCount[key] === max)
+        let coverage = max / (pixels.length / 4) * 100
+
+        setInspectedValues(maxColor, guessedColor[maxColor], coverage, "RGB")
+        //displayInspection(maxColor, guessedColor[maxColor], coverage, "RGB")
     }
-
-    let max = Math.max(...Object.values(colorCount))
-    let maxColor = Object.keys(colorCount).find(key => colorCount[key] === max)
-    let coverage = max / (pixels.length / 4) * 100
-
-    setInspectedValues(maxColor, guessedColor[maxColor], coverage, "RGB")
+    img.src = imgURL;
 }
 function calcAverage(prevAverage, prevCount, newColor){
     return prevAverage.map((v, i) => ((v * prevCount) + newColor[i])/(prevCount+1))
 }
 
 function setInspectedValues(colorName, color, coverage, colorSpace){
-    document.getElementById("colorName").value = colorName
-    document.getElementById("colorValue1").value = color[0]
-    document.getElementById("colorValue2").value = color[1]
-    document.getElementById("colorValue3").value = color[2]
-    document.getElementById("colorSpace").value = colorSpace
-    document.getElementById("distanceI").value = calcColorDistance(nameToColor(document.getElementById("color").value), color)
-    document.getElementById("coverageI").value = coverage
+    $.ajax({
+        type: 'post',
+        url: '../peno/database.php',
+        data: {
+            Color: '"'+document.getElementById("color").value+'"',
+            colorName: '"'+colorName+'"',
+            colorValue1: color[0],
+            colorValue2: color[1],
+            colorValue3: color[2],
+            distance: calcColorDistance(nameToColor(document.getElementById("color").value), color),
+            coverage: coverage,
+            colorSpace: '"'+colorSpace+'"',
+            Environment: '"'+document.getElementById("env").value+'"',
+            light: '"'+document.getElementById("light").value+'"',
+            brightness: document.getElementById("brightness").value
+        }
+    });
+
 }
 
 function displayInspection(maxColorName, maxColorValue, coverage, colorSpace){
