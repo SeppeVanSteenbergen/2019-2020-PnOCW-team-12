@@ -47,18 +47,20 @@ class ColorRange {
   }
 
   static inBlueRange(H, S, L) {
-    return (
-      (
-        this.inBlueBoxA1(H, S) ||
-        this.inBlueBoxA2(H, S) ||
-        this.inBlueBoxA3(H, S)
-      ) &&
-      (
-        this.inBlueBoxB1(H, L) ||
-        this.inBlueBoxB2(H, L) ||
-        this.inBlueBoxB3(H, L)
-      )
-    );
+    return this.colorDetected("blue", H, S, L);
+
+    // return (
+    //   (
+    //     this.inBlueBoxA1(H, S) ||
+    //     this.inBlueBoxA2(H, S) ||
+    //     this.inBlueBoxA3(H, S)
+    //   ) &&
+    //   (
+    //     this.inBlueBoxB1(H, L) ||
+    //     this.inBlueBoxB2(H, L) ||
+    //     this.inBlueBoxB3(H, L)
+    //   )
+    // );
   }
 
   static inBlueBoxA1(H, S) {
@@ -116,16 +118,18 @@ class ColorRange {
   }
 
   static inBlueGreenRange(H, S, L) {
-    return (
-      (
-        this.inBlueGreenBoxA1(H, S) ||
-        this.inBlueGreenBoxA2(H, S)
-      ) &&
-      (
-        this.inBlueGreenBoxB1(H, L) ||
-        this.inBlueGreenBoxB2(H, L)
-      )
-    );
+    return this.colorDetected("blueGreen", H, S, L);
+
+    // return (
+    //   (
+    //     this.inBlueGreenBoxA1(H, S) ||
+    //     this.inBlueGreenBoxA2(H, S)
+    //   ) &&
+    //   (
+    //     this.inBlueGreenBoxB1(H, L) ||
+    //     this.inBlueGreenBoxB2(H, L)
+    //   )
+    // );
   }
 
   static inBlueGreenBoxA1(H, S) {
@@ -165,18 +169,20 @@ class ColorRange {
   }
 
   static inGreenRange(H, S, L) {
-    return (
-      (
-        this.inGreenBoxA1(H, S) ||
-        this.inGreenBoxA2(H, S)
-      ) &&
-      (
-        this.inGreenBoxB1(H, L) ||
-        this.inGreenBoxB2(H, L) ||
-        this.inGreenBoxB3(H, L) ||
-        this.inGreenBoxB4(H, L)
-      )
-    );
+    return this.colorDetected("green", H, S, L);
+
+    // return (
+    //   (
+    //     this.inGreenBoxA1(H, S) ||
+    //     this.inGreenBoxA2(H, S)
+    //   ) &&
+    //   (
+    //     this.inGreenBoxB1(H, L) ||
+    //     this.inGreenBoxB2(H, L) ||
+    //     this.inGreenBoxB3(H, L) ||
+    //     this.inGreenBoxB4(H, L)
+    //   )
+    // );
   }
 
   static inGreenBoxA1(H, S) {
@@ -237,17 +243,19 @@ class ColorRange {
   }
 
   static inPinkRange(H, S, L) {
-    return (
-      (
-        this.inPinkBoxA1(H, S) ||
-        this.inPinkBoxA2(H, S)
-      ) &&
-      (
-        this.inPinkBoxB1(H, L) ||
-        this.inPinkBoxB2(H, L) ||
-        this.inPinkBoxB3(H, L)
-      )
-    );
+    return this.colorDetected("pink", H, S, L);
+
+    // return (
+    //   (
+    //     this.inPinkBoxA1(H, S) ||
+    //     this.inPinkBoxA2(H, S)
+    //   ) &&
+    //   (
+    //     this.inPinkBoxB1(H, L) ||
+    //     this.inPinkBoxB2(H, L) ||
+    //     this.inPinkBoxB3(H, L)
+    //   )
+    // );
   }
 
   static inPinkBoxA1(H, S) {
@@ -296,16 +304,18 @@ class ColorRange {
   }
 
   static inRedRange(H, S, L) {
-    return (
-      (
-        this.inRedBoxA1(H, S) ||
-        this.inRedBoxA2(H, S)
-      ) &&
-      (
-        this.inRedBoxB1(H, L) ||
-        this.inRedBoxB2(H, L)
-      )
-    );
+    return this.colorDetected("red", H, S, L);
+
+    // return (
+    //   (
+    //     this.inRedBoxA1(H, S) ||
+    //     this.inRedBoxA2(H, S)
+    //   ) &&
+    //   (
+    //     this.inRedBoxB1(H, L) ||
+    //     this.inRedBoxB2(H, L)
+    //   )
+    // );
   }
 
   static inRedBoxA1(H, S) {
@@ -345,18 +355,20 @@ class ColorRange {
   }
 
   static inYellowRange(H, S, L) {
-    return (
-      (
-        this.inYellowBoxA1(H, S) ||
-        this.inYellowBoxA2(H, S)
-      ) &&
-      (
-        this.inYellowBoxB1(H, L) ||
-        this.inYellowBoxB2(H, L) ||
-        this.inYellowBoxB3(H, L) ||
-        this.inYellowBoxB4(H, L)
-      )
-    );
+    return this.colorDetected("yellow", H, S, L);
+
+    // return (
+    //   (
+    //     this.inYellowBoxA1(H, S) ||
+    //     this.inYellowBoxA2(H, S)
+    //   ) &&
+    //   (
+    //     this.inYellowBoxB1(H, L) ||
+    //     this.inYellowBoxB2(H, L) ||
+    //     this.inYellowBoxB3(H, L) ||
+    //     this.inYellowBoxB4(H, L)
+    //   )
+    // );
   }
 
   static inYellowBoxA1(H, S) {
@@ -414,15 +426,17 @@ class ColorRange {
   }
 
   static inWhiteRange(H, S, L) {
-    return (
-      (
-        this.inWhiteBoxA1(H, S) &&
-        this.inWhiteBoxB1(H, L)
-      ) ||
-      (
-        this.inWhiteBoxB2(H, L)
-      )
-    );
+    return this.colorDetected("white", H, S, L);
+
+    // return (
+    //   (
+    //     this.inWhiteBoxA1(H, S) &&
+    //     this.inWhiteBoxB1(H, L)
+    //   ) ||
+    //   (
+    //     this.inWhiteBoxB2(H, L)
+    //   )
+    // );
   }
 
   static inWhiteBoxA1(H, S) {
@@ -454,7 +468,7 @@ class ColorRange {
 
   //TODO: black range opstellen!
   static inBlackRange(H, S, L){
-    return false
+    return this.colorDetected("black", H, S, L);
   }
 
   static inMidRange(H, S, L){
