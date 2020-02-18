@@ -1,4 +1,27 @@
 class ColorRange {
+  static colors() {
+    return {
+      red1: 0,
+      yellow: 60,
+      green: 120,
+      blueGreen: 180,
+      blue: 240,
+      pink: 300,
+      red2: 360
+    }
+  };
+
+  static closestColor(H) {
+    let closest = Object.values(this.colors()).reduce(function(prev, curr) {
+      return (Math.abs(curr - H) < Math.abs(prev - H) ? curr : prev);
+    });
+    return Object.keys(this.colors()).find(key => this.colors()[key] === closest);
+  }
+
+  static colorDetected1(color, H, S, L) {
+    return this.closestColor(H).includes(color);
+  }
+
   static colorDetected(color, H, S, L) {
     if (color === "blue") {
       return this.inBlueRange(H, S, L);
