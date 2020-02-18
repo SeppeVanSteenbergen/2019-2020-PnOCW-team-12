@@ -1,4 +1,5 @@
 const socket = io()
+let info = {}
 
 socket.on('connect', () => {
   socket.send('data', 'okay')
@@ -24,9 +25,12 @@ socket.on('getSystemInfo', () => {
   })
 })
 
-socket.on('info', info => {
+socket.on('info', inf => {
+  info = inf
   let area = document.getElementById('textDisplay')
-  area.innerHTML = JSON.stringify(JSON.parse(info), null, 4)
+  let summary = document.getElementById('summary')
+  summary.innerHTML = 'Time Diff:' + JSON.parse(inf)[socket.id].avgDelta + '\nPing: ' + JSON.parse(inf)[socket.id].avgPing
+  area.innerHTML = JSON.stringify(JSON.parse(inf), null, 4)
 })
 
 function start() {
@@ -48,3 +52,16 @@ function getOS() {
     return 'Computers'
   }
 }
+
+function updateTime() {
+  let timeElem = document.getElementById('time')
+  let time = new Date(
+    Date.now() - (info.avgDelta ? info.avgDelta : 0)
+  )
+  timeElem.innerText =
+    time.getSeconds() +
+    '.' +
+    time.getMilliseconds()
+}
+
+setInterval(updateTime, 10)
