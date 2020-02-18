@@ -72,34 +72,42 @@ function  inspectColor(imgURL) {
         'other': [0, 0, 0]
     }
 
-    for (let i = 0; i < pixelsHsla.length; i += 4) {
-        let h = pixelsHsla[i] * 2
-        let s = pixelsHsla[i + 1]
-        let l = pixelsHsla[i + 2]
-        if (ColorRange.inRedRange(h, s, l)) {
-            guessedColor.red = calcAverage(guessedColor.red, colorCount.red, [h, s, l])
-            colorCount.red++
-        } else if (ColorRange.inGreenRange(h, s, l)) {
-            guessedColor.green = calcAverage(guessedColor.green, colorCount.green, [h, s, l])
-            colorCount.green++
-        } else if (ColorRange.inBlueRange(h, s, l)) {
-            guessedColor.blue = calcAverage(guessedColor.blue, colorCount.blue, [h, s, l])
-            colorCount.blue++
-        } else if (ColorRange.inBlueGreenRange(h, s, l)) {
-            guessedColor.blueGreen = calcAverage(guessedColor.blueGreen, colorCount.blueGreen, [h, s, l])
-            colorCount.blueGreen++
-        } else if (ColorRange.inYellowRange(h, s, l)) {
-            guessedColor.yellow = calcAverage(guessedColor.yellow, colorCount.yellow, [h, s, l])
-            colorCount.yellow++
-        } else if (ColorRange.inWhiteRange(h, s, l)) {
-            guessedColor.white = calcAverage(guessedColor.white, colorCount.white, [h, s, l])
-            colorCount.white++
-        } else if (ColorRange.inBlackRange(h, s, l)) {
-            guessedColor.black = calcAverage(guessedColor.black, colorCount.black, [h, s, l])
-            colorCount.black++
-        } else {
-            guessedColor.other = calcAverage(guessedColor.other, colorCount.other, [h, s, l])
-            colorCount.other++
+    let widthStart = Math.floor(img.width/3)
+    let widthEnd = 2 * widthStart + 1
+    let heightStart = Math.floor(img.height/3)
+    let heightEnd = 2 * heightStart + 1
+
+    for (let i = heightStart; i < heightEnd; i++) {
+        for (let j = widthStart; j < widthEnd; j++) {
+            let pos = pixelToPosition(i, j, img.width)
+            let h = pixelsHsla[pos] * 2
+            let s = pixelsHsla[pos + 1]
+            let l = pixelsHsla[pos + 2]
+            if (ColorRange.inRedRange(h, s, l)) {
+                guessedColor.red = calcAverage(guessedColor.red, colorCount.red, [h, s, l])
+                colorCount.red++
+            } else if (ColorRange.inGreenRange(h, s, l)) {
+                guessedColor.green = calcAverage(guessedColor.green, colorCount.green, [h, s, l])
+                colorCount.green++
+            } else if (ColorRange.inBlueRange(h, s, l)) {
+                guessedColor.blue = calcAverage(guessedColor.blue, colorCount.blue, [h, s, l])
+                colorCount.blue++
+            } else if (ColorRange.inBlueGreenRange(h, s, l)) {
+                guessedColor.blueGreen = calcAverage(guessedColor.blueGreen, colorCount.blueGreen, [h, s, l])
+                colorCount.blueGreen++
+            } else if (ColorRange.inYellowRange(h, s, l)) {
+                guessedColor.yellow = calcAverage(guessedColor.yellow, colorCount.yellow, [h, s, l])
+                colorCount.yellow++
+            } else if (ColorRange.inWhiteRange(h, s, l)) {
+                guessedColor.white = calcAverage(guessedColor.white, colorCount.white, [h, s, l])
+                colorCount.white++
+            } else if (ColorRange.inBlackRange(h, s, l)) {
+                guessedColor.black = calcAverage(guessedColor.black, colorCount.black, [h, s, l])
+                colorCount.black++
+            } else {
+                guessedColor.other = calcAverage(guessedColor.other, colorCount.other, [h, s, l])
+                colorCount.other++
+            }
         }
     }
 
@@ -159,54 +167,62 @@ function inspectColor2(imgURL){
             'other': [0, 0, 0]
         }
 
-        for (let i = 0; i < pixels.length; i += 4) {
-            let color = [pixels[i], pixels[i + 1], pixels[i + 2]]
+        let widthStart = Math.floor(img.width/3)
+        let widthEnd = 2 * widthStart + 1
+        let heightStart = Math.floor(img.height/3)
+        let heightEnd = 2 * heightStart + 1
 
-            let redDistance = calcColorDistance(nameToColor("red"), color)
-            let greenDistance = calcColorDistance(nameToColor("green"), color)
-            let blueDistance = calcColorDistance(nameToColor("blue"), color)
-            let purpleDistance = calcColorDistance(nameToColor("purple"), color)
-            let blueGreenDistance = calcColorDistance(nameToColor("blueGreen"), color)
-            let yellowDistance = calcColorDistance(nameToColor("yellow"), color)
-            let whiteDistance = calcColorDistance(nameToColor("white"), color)
-            let blackDistance = calcColorDistance(nameToColor("black"), color)
+        for (let i = heightStart; i < heightEnd; i++) {
+            for (let j = widthStart; j < widthEnd; j++) {
+                let pos = pixelToPosition(i, j, img.width)
+                let color = [pixels[pos], pixels[pos + 1], pixels[pos + 2]]
 
-            let min = Math.min(redDistance, greenDistance, blueDistance,
-                purpleDistance, blueGreenDistance, yellowDistance, whiteDistance, blackDistance)
+                let redDistance = calcColorDistance(nameToColor("red"), color)
+                let greenDistance = calcColorDistance(nameToColor("green"), color)
+                let blueDistance = calcColorDistance(nameToColor("blue"), color)
+                let purpleDistance = calcColorDistance(nameToColor("purple"), color)
+                let blueGreenDistance = calcColorDistance(nameToColor("blueGreen"), color)
+                let yellowDistance = calcColorDistance(nameToColor("yellow"), color)
+                let whiteDistance = calcColorDistance(nameToColor("white"), color)
+                let blackDistance = calcColorDistance(nameToColor("black"), color)
 
-            switch (min) {
-                case redDistance:
-                    guessedColor.red = calcAverage(guessedColor.red, colorCount.red, color)
-                    colorCount.red++
-                    break
-                case greenDistance:
-                    guessedColor.green = calcAverage(guessedColor.green, colorCount.green, color)
-                    colorCount.green++
-                    break
-                case blueDistance:
-                    guessedColor.blue = calcAverage(guessedColor.blue, colorCount.blue, color)
-                    colorCount.blue++
-                    break
-                case purpleDistance:
-                    guessedColor.purple = calcAverage(guessedColor.purple, colorCount.purple, color)
-                    colorCount.purple++
-                    break
-                case blueGreenDistance:
-                    guessedColor.blueGreen = calcAverage(guessedColor.blueGreen, colorCount.blueGreen, color)
-                    colorCount.blueGreen++
-                    break
-                case yellowDistance:
-                    guessedColor.yellow = calcAverage(guessedColor.yellow, colorCount.yellow, color)
-                    colorCount.yellow++
-                    break
-                case whiteDistance:
-                    guessedColor.white = calcAverage(guessedColor.white, colorCount.white, color)
-                    colorCount.white++
-                    break
-                case blackDistance:
-                    guessedColor.black = calcAverage(guessedColor.black, colorCount.black, color)
-                    colorCount.black++
-                    break
+                let min = Math.min(redDistance, greenDistance, blueDistance,
+                    purpleDistance, blueGreenDistance, yellowDistance, whiteDistance, blackDistance)
+
+                switch (min) {
+                    case redDistance:
+                        guessedColor.red = calcAverage(guessedColor.red, colorCount.red, color)
+                        colorCount.red++
+                        break
+                    case greenDistance:
+                        guessedColor.green = calcAverage(guessedColor.green, colorCount.green, color)
+                        colorCount.green++
+                        break
+                    case blueDistance:
+                        guessedColor.blue = calcAverage(guessedColor.blue, colorCount.blue, color)
+                        colorCount.blue++
+                        break
+                    case purpleDistance:
+                        guessedColor.purple = calcAverage(guessedColor.purple, colorCount.purple, color)
+                        colorCount.purple++
+                        break
+                    case blueGreenDistance:
+                        guessedColor.blueGreen = calcAverage(guessedColor.blueGreen, colorCount.blueGreen, color)
+                        colorCount.blueGreen++
+                        break
+                    case yellowDistance:
+                        guessedColor.yellow = calcAverage(guessedColor.yellow, colorCount.yellow, color)
+                        colorCount.yellow++
+                        break
+                    case whiteDistance:
+                        guessedColor.white = calcAverage(guessedColor.white, colorCount.white, color)
+                        colorCount.white++
+                        break
+                    case blackDistance:
+                        guessedColor.black = calcAverage(guessedColor.black, colorCount.black, color)
+                        colorCount.black++
+                        break
+                }
             }
         }
 
@@ -289,4 +305,15 @@ function calcColorDistance(color1, color2){
     let g = Math.pow(color2[1] - color1[1], 2)
     let b = Math.pow(color2[2] - color1[2], 2)
     return Math.sqrt(r + g + b)
+}
+
+function positionToPixel(position, width) {
+    position /= 4
+    let x = position % width
+    let y = (position - x) / width
+    return [x, y]
+}
+
+function pixelToPosition(x, y, width) {
+    return width * y + x
 }

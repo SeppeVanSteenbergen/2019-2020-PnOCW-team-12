@@ -295,6 +295,10 @@ export default class Image {
     return [x, y]
   }
 
+  pixelToPosition(x,y) {
+    return this.getWidth() * y + x
+  }
+
   /**
    * Use the drawer class to drawSnow the corners and midpoint of this island on the original imageData.
    *
