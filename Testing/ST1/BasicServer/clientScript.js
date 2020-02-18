@@ -26,10 +26,10 @@ socket.on('getSystemInfo', () => {
 })
 
 socket.on('info', inf => {
-  info = inf
+  info = JSON.parse(inf)
   let area = document.getElementById('textDisplay')
   let summary = document.getElementById('summary')
-  summary.innerHTML = 'Time Diff:' + JSON.parse(inf)[socket.id].avgDelta + '\nPing: ' + JSON.parse(inf)[socket.id].avgPing
+  summary.innerHTML = 'Time Diff:' + info[socket.id].avgDelta + '\nPing: ' + info[socket.id].avgPing
   area.innerHTML = JSON.stringify(JSON.parse(inf), null, 4)
 })
 
@@ -56,7 +56,7 @@ function getOS() {
 function updateTime() {
   let timeElem = document.getElementById('time')
   let time = new Date(
-    Date.now() - (info.avgDelta ? info.avgDelta : 0)
+    Date.now() - (info[socket.id] ? info[socket.id].avgDelta : 0)
   )
   timeElem.innerText =
     time.getSeconds() +
