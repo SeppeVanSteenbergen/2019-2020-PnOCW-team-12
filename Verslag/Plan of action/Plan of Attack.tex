@@ -1,0 +1,95 @@
+\documentclass[a4paper,11pt]{article}
+
+\usepackage[margin=3cm]{geometry}
+
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage[colorlinks,allcolors=violet]{hyperref}
+\usepackage{url}
+
+\usepackage{multicol}
+\usepackage[dutch]{babel}
+
+
+% https://tex.stackexchange.com/questions/94032/fancy-tables-in-latex
+\usepackage[table]{xcolor}
+\usepackage{booktabs}
+
+\usepackage[utf8]{inputenc}
+
+
+\begin{document}
+
+\noindent
+\colorbox[HTML]{52BDEC}{\bfseries\parbox{\textwidth}{\centering\large
+  --- P\&O CW 2019--2020 Plan of Attack Semester 2---
+}}
+\\[-1mm]
+\colorbox[HTML]{00407A}{\bfseries\color{white}\parbox{\textwidth}{
+  Department Computerwetenschappen -- KU Leuven
+  \hfill
+  \today
+}}
+\\
+
+\smallskip
+
+\noindent
+
+\begin{tabular}{*4l}
+\toprule
+\multicolumn{2}{l}{\large\textbf{Team 12}} \\
+\midrule
+Frédéric Blondeel &  \\
+Martijn Debeuf &  \\
+Toon Sauvillers &  \\ % fill in the time spend on this task per team member who worked on it
+Dirk Vanbeveren &  \\
+Bert Van den Bosch &  \\ 
+Seppe Van Steenbergen &  \\
+
+\bottomrule
+\hline
+\end{tabular}\\
+\noindent
+
+
+{\color[HTML]{52BDEC} \rule{\linewidth}{1mm} }
+\tableofcontents
+
+\section{Rolverdeling}
+In het nieuwe semester zijn er nieuwe rollen verdeeld, de verdeling is als volgt:
+\begin{multicols}{2}
+\begin{itemize}
+	\item {\bf CEO:} Martijn Debeuf
+	\item {\bf CTO:} Dirk Vanbeveren
+	\item {\bf TC3:} Frédéric Blondeel
+	\item {\bf TC4:} Seppe Van Steenbergen
+	\item {\bf CR1:} Bert Van den Bosch
+	\item {\bf CR2:} Toon Sauvillers
+\end{itemize}
+\end{multicols}
+\section{TODO's}
+In het vorige semester hebben we heel wat functies geïmplementeerd, de TODO lijst is dus niet zo groot.
+\subsection{Structuur}
+We willen wat veranderen aan de structuur, deze bestaat uit twee onderdelen. Als eerste willen we gestructureerder gaan werken. Elke sessie gaan we daarom bij het begin samenzitten en vertellen wat er is gebeurd afgelopen week, waar iedereen staat met zijn taak, horen bij elkaar waar de problemen zitten en hoe we elkaar hierin kunnen helpen. Zo proberen we te vermijden impulsief te werken. De CEO en CTO hebben hier een belangrijke taak in. Zo gaat de CEO de vergaderingen leiden en het overzicht bewaren. De CTO zal zorgen dat alles mooi met elkaar geïntegreerd blijft.
+
+Dit leidt ons naar het tweede onderdeel van structuur. We zouden graag de structuur van ons project veranderen. Op dit moment is onze code zeer rommelig; verschillende objecten houden gegevens bij die niet meer nodig zijn, er worden parameters gevraagd die niet gebruikt worden... Deze verbetering wordt geleid door de CTO, Dirk Vanbeveren. Hij zal tegen het begin van taak F1.1 zorgen dat de structuur terug in orde is zodat we met een schone lei kunnen beginnen. Hij staat hier natuurlijk niet alleen voor, het is de bedoeling dat Dirk iedereen aan het werk zet om een deel van de code in orde te maken. Een goede coördinatie is nodig om niet terug in een chaos van code terecht te komen. De deadline hiervoor is {\bf 10 maart}, zo kunnen we na het uitvoeren van de {\it Scientific Tests} beginnen met het verder verbeteren van onze code.
+
+\subsection{Videosynchronisatie}
+Op dit moment staat de videosynchronisatie nog niet op punt. De video begint op éénzelfde moment af te spelen maar wordt tussendoor niet meer gesynchroniseerd.  Frédéric Blondeel en Dirk Vanbeveren houden zich hier mee bezig, dit tegen {\bf 17 maart}.
+
+\subsection{Identificatie}
+Vorig semester hebben we veel moeite gehad met het identificeren van schermen. We hebben verschillende methoden geprobeerd en zijn nog steeds niet op een ideale methode gebotst. We zouden dit graag verder onderzoeken en de huidige methode in vraag stellen. Kunnen we deze verbeteren of gaan we toch kiezen voor een andere methode? Hiervoor gebruiken we de testen die we hebben uitgevoerd omtrent kleuren. Zowel Seppe Van Steenbergen als Martijn Debeuf zullen zich hiermee bezighouden. Dit tegen {\bf 24 maart}.
+
+\section{Fixme's}
+\subsection{Eindverslag semester 1}
+Het eindverslag van het eerste semester stond vol met schrijffouten. Om hieruit te leren, zullen we dit verbeteren en terugsturen naar professor Jacobs. Martijn Debeuf houdt zich hiermee bezig met als deadline {\bf 18 februari}. Deze verbetering zal ook de 18de besproken worden in de groep zodat iedereen zijn zwaktes in het schrijven leert kennen.
+
+\subsection{User Interface}
+Er zitten hier en daar nog kleine fouten in de User Interface. Deze worden nog opgespoord en hersteld tegen {\bf 17 maart} door Toon Sauvillers en Bert Van den Bosch.
+
+\subsection {Optimalisatie}
+Van 17 maart tot {\bf 24 maart} zullen Bert Van den Bosch, Dirk Vanbeveren, Frédéric Blondeel en Toon Sauvillers zich bezighouden met optimalisatie van de algoritmen. Aangezien dat alle herkenning- en identificatiealgoritmen op het master device worden uitgevoerd en deze vaak een gsm is, is een snelle werking van groot belang.
+
+
+\end{document}
