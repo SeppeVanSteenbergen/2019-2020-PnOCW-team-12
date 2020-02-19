@@ -1,6 +1,6 @@
 socketList = {}
 
-const amountOfPings = 4
+const amountOfPings = 10
 
 module.exports = io => {
   io.on('connect', socket => {

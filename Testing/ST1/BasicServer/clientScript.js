@@ -64,4 +64,4 @@ function updateTime() {
     time.getMilliseconds()
 }
 
-setInterval(updateTime, 10)
+setInterval(updateTime, 5)
