@@ -1,3 +1,5 @@
+const axios = require('axios')
+
 socketList = {}
 
 const amountOfPings = 10
@@ -22,7 +24,7 @@ module.exports = io => {
     socket.on('pongs', dat => {
       const TS2 = Date.now()
       const D2 = dat.TC2 - TS2
-      const timeOffset = (D2 + dat.D) / 2
+      const timeOffset = -(D2 + dat.D) / 2
       const ping = TS2 - dat.TS1 - (dat.TC2 - dat.TC1)
       socketList[socket.id].deltas.push(timeOffset)
       socketList[socket.id].pings.push(ping)
@@ -35,6 +37,7 @@ module.exports = io => {
 
     socket.on('systemInfo', info => {
       console.log('got system info')
+      console.log(info)
       socketList[socket.id].system = info
       pingSocket(socket.id)
     })
@@ -48,7 +51,11 @@ module.exports = io => {
   }
   function checkFinished() {
     for (let socket_id in socketList) {
-      if (socketList[socket_id].deltas.length !== amountOfPings) return
+      if (
+        typeof socketList[socket_id].deltas !== 'undefined' &&
+        socketList[socket_id].deltas.length !== amountOfPings
+      )
+        return
     }
 
     for (let socket_id in socketList) {
@@ -61,8 +68,13 @@ module.exports = io => {
     }
 
     console.log(socketList)
-
-    sendInfoToClients()
+    calcServerOffset()
+      .then(() => {
+        sendInfoToClients()
+      })
+      .catch(error => {
+        console.log(error.message)
+      })
   }
 
   function sendInfoToClients() {
@@ -71,5 +83,19 @@ module.exports = io => {
 
   function getSystemInfo(socket_id) {
     io.to(socket_id).emit('getSystemInfo')
+  }
+
+  async function calcServerOffset() {
+    let result = await axios.get(
+      'http://worldtimeapi.org/api/timezone/Europe/Brussels'
+    )
+    let serverTime = Date.now()
+    let worldTime = new Date(result.data.datetime)
+    let deltaTime = worldTime - serverTime
+    console.log(serverTime)
+    console.log(worldTime)
+    socketList['server'] = {
+      deltaTime: deltaTime
+    }
   }
 }
