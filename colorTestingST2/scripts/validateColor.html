@@ -29,7 +29,6 @@
         <canvas id="inputImage" style="max-width: 500px"></canvas>
         <img id="imageSrc" style="display: none;" alt="No Image"/>
         <div>
-            <form id="form">
             <div class="caption">imageSrc <input type="file" id="fileInput" name="files[]" multiple="multiple"/>
                 <div>
                     <label for="color">Expected color: </label>
@@ -64,29 +63,30 @@
                         <option value="75">semi+</option>
                         <option value="100">full option</option>
                     </select>
-                    <input type="text" style="display: none" name="colorName" id="colorName">
-                    <input type="text" style="display: none" name="colorSpace" id="colorSpace">
-                    <input type="text" style="display: none" name="colorValue1" id="colorValue1">
-                    <input type="text" style="display: none" name="colorValue2" id="colorValue2">
-                    <input type="text" style="display: none" name="colorValue3" id="colorValue3">
-                    <input type="text" style="display: none" name="coverage" id="coverageI">
-                    <input type="text" style="display: none" name="distance" id="distanceI">
-                    <div>
-
-                    </div>
                 </div>
             </div>
-            </form>
-
         </div>
     </div>
+    <label for="color2">Color 2: </label>
+    <select name="color2" id="color2">
+        <option value='blue'>Blue</option>
+        <option value='blueGreen'>BlueGreen</option>
+        <option value="green">Green</option>
+        <option value="pink">Pink</option>
+        <option value="red">Red</option>
+        <option value="white">White</option>
+        <option value="yellow">Yellow</option>
+        <option value="black">Black</option>
+    </select>
+    <label for="colorCount">Nb Colors: </label>
+    <select name="colorCount" id="colorCount">
+        <option value="one">one</option>
+        <option value="two">two</option>
+    </select>
 </div>
 <div class="column" id="result">
     <button
-            onclick="inspector();
-                displayInspection(document.getElementById('colorName').value,
-                [document.getElementById('colorValue1').value,document.getElementById('colorValue2').value,document.getElementById('colorValue3').value],
-                document.getElementById('coverageI').value, document.getElementById('colorSpace').value)">
+            onclick="inspector()">
         add to database
     </button>
     <p id="foundColor"></p>

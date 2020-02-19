@@ -9,21 +9,24 @@
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     }
-    $light = json_decode($_POST["light"]);
-    $method = json_decode($_POST["method"]);
-    $expColor = json_decode($_POST["Color"]);
-    $detColor = json_decode($_POST["colorName"]);
-    $colorSpace = json_decode($_POST["colorSpace"]);
+
+    $expColor = json_decode($_POST["expColor"]);
+    $foundColor = json_decode($_POST["foundColor"]);
     $detColor1 = json_decode($_POST["colorValue1"]);
     $detColor2 = json_decode($_POST["colorValue2"]);
     $detColor3 = json_decode($_POST["colorValue3"]);
+    $colorSpace = json_decode($_POST["colorSpace"]);
     $distance = json_decode($_POST["distance"]);
-    $coverage = json_decode($_POST["coverage"]);
-    $environment = json_decode($_POST["Environment"]);
+    $coverageExp = json_decode($_POST["coverageExp"]);
+    $coverageFound = json_decode($_POST["coverageFound"]);
+    $environment = json_decode($_POST["environment"]);
+    $light = json_decode($_POST["light"]);
     $brightness = json_decode($_POST["brightness"]);
 
-    $sql = "INSERT INTO `onecolor`(`ExpColor`, `DetColor`, `ColorSpace`, `DetColor1`, `DetColor2`, `DetColor3`, `Distance`, `Coverage`, `Environment`, `Light`, `Brightness`)
-    VALUES ('$expColor', '$detColor', '$colorSpace', '$detColor1', '$detColor2', '$detColor3', '$distance', '$coverage', '$environment', '$light', '$brightness')";
+    $sql = "INSERT INTO `onecolor`(`ExpColor`, `DetColor`, `ColorSpace`, `DetColor1`, `DetColor2`, `DetColor3`,
+                                    `Distance`, `CoverageExpColor`, `CoverageDetectedColor`, `Environment`, `Light`, `Brightness`)
+    VALUES ('$expColor','$foundColor','$colorSpace','$detColor1','$detColor2','$detColor3',
+            '$distance','$coverageExp','$coverageFound','$environment','$light','brightness')";
 
     if ($conn->query($sql) === TRUE) {
         $conn->close();

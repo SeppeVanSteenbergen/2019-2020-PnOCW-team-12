@@ -11,7 +11,9 @@ class ColorRange {
     }
   };
 
-  static closestColor(H) {
+  static closestColor(H, S, L) {
+    if(L <= 10) return "black"
+    if(L >= 90) return "white"
     let closest = Object.values(this.colors()).reduce(function(prev, curr) {
       return (Math.abs(curr - H) < Math.abs(prev - H) ? curr : prev);
     });
