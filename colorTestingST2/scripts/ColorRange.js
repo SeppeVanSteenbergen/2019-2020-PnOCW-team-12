@@ -6,7 +6,7 @@ class ColorRange {
       green: 120,
       blueGreen: 180,
       blue: 240,
-      pink: 300,
+      purple: 300,
       red2: 360
     }
   };
@@ -37,7 +37,7 @@ class ColorRange {
       return this.inBlueGreenRange(H, S, L);
     } else if (color === "green") {
       return this.inGreenRange(H, S, L);
-    } else if (color === "pink") {
+    } else if (color === "purple") {
       return this.inPinkRange(H, S, L);
     } else if (color === "red") {
       return this.inRedRange(H, S, L);
@@ -245,7 +245,7 @@ class ColorRange {
   }
 
   static inPinkRange(H, S, L) {
-    return this.colorDetected("pink", H, S, L);
+    return this.colorDetected("purple", H, S, L);
 
     // return (
     //   (
