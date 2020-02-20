@@ -29,7 +29,15 @@ socket.on('info', inf => {
   info = JSON.parse(inf)
   let area = document.getElementById('textDisplay')
   let summary = document.getElementById('summary')
-  summary.innerHTML = 'Time Diff:' + info[socket.id].avgDelta + '\nPing: ' + info[socket.id].avgPing
+  summary.innerHTML =
+    'Time Diff:' +
+    -info[socket.id].avgDelta +
+    '\nPing: ' +
+    info[socket.id].avgPing +
+    '\nWorld Diff: ' +
+    (info['server'].deltaTime + info[socket.id].avgDelta) +
+    '\nServer Diff: ' +
+    info['server'].deltaTime
   area.innerHTML = JSON.stringify(JSON.parse(inf), null, 4)
 })
 
@@ -38,30 +46,14 @@ function start() {
   socket.emit('startSync', '')
 }
 
-function getOS() {
-  var ua = navigator.userAgent.toLowerCase()
-  if (ua.indexOf('win') != -1) {
-    return 'Windows'
-  } else if (ua.indexOf('mac') != -1) {
-    return 'Macintosh'
-  } else if (ua.indexOf('linux') != -1) {
-    return 'Linux'
-  } else if (ua.indexOf('x11') != -1) {
-    return 'Unix'
-  } else {
-    return 'Computers'
-  }
-}
-
 function updateTime() {
   let timeElem = document.getElementById('time')
   let time = new Date(
-    Date.now() - (info[socket.id] ? info[socket.id].avgDelta : 0)
+    Date.now() +
+      (info[socket.id] ? info[socket.id].avgDelta + info['server'].deltaTime : 0)
+
   )
-  timeElem.innerText =
-    time.getSeconds() +
-    '.' +
-    time.getMilliseconds()
+  timeElem.innerText = time.getSeconds() + '.' + time.getMilliseconds()
 }
 
 setInterval(updateTime, 5)
