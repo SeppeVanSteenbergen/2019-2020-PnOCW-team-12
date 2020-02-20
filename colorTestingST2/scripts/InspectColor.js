@@ -229,7 +229,7 @@ function setInspectedValues(expColor, colorName, color, coverageExp, coverageFou
             colorSpace: '"' + colorSpace + '"',
             environment: '"' + document.getElementById("env").value + '"',
             light: '"' + document.getElementById("light").value + '"',
-            brightness: document.getElementById("brightness").value
+            brightness:'"' + document.getElementById("brightness").value + '"'
         }
     });
 
@@ -299,5 +299,5 @@ function positionToPixel(position, width) {
 }
 
 function pixelToPosition(x, y, width) {
-    return width * y + x
+    return (width * y + x) * 4
 }

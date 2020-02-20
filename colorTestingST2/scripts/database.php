@@ -26,7 +26,7 @@
     $sql = "INSERT INTO `onecolor`(`ExpColor`, `DetColor`, `ColorSpace`, `DetColor1`, `DetColor2`, `DetColor3`,
                                     `Distance`, `CoverageExpColor`, `CoverageDetectedColor`, `Environment`, `Light`, `Brightness`)
     VALUES ('$expColor','$foundColor','$colorSpace','$detColor1','$detColor2','$detColor3',
-            '$distance','$coverageExp','$coverageFound','$environment','$light','brightness')";
+            '$distance','$coverageExp','$coverageFound','$environment','$light','$brightness')";
 
     if ($conn->query($sql) === TRUE) {
         $conn->close();
