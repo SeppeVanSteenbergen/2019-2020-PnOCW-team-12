@@ -16,6 +16,9 @@ app.get('/socketio', (req, res) => {
 app.get('/client_script.js', (req, res) => {
   res.sendFile(__dirname + '/clientScript.js')
 })
+app.get('/dgram.min.js', (req,res) => {
+  res.sendFile(__dirname + '/files/dgram.min.js')
+})
 
 httpServer.listen(3000, () => {
   console.log('listening on port 3000')

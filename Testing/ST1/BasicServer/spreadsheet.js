@@ -7,9 +7,9 @@ const creds = require('./SheetsAccessData.json')
  * Voeg een resultaat toe aan de spreadsheet
  *
  * @param {string} sheetName name van de sheet voor verschillende testen
- * @param {*} result het toe te voegen resultaat van de test (nog te formateren)
+ * @param {*} worldTimeDiff het toe te voegen resultaat van de test (nog te formateren)
  */
-async function addResult(sheetName, result) {
+async function addResult(sheetName, worldTimeDiff, platform) {
   const doc = new GoogleSpreadsheet(
     '1EmCMgxQU1lcrSWjA_ZNNX56SQm4W5Tn7bzrSKo85rqw'
   )
@@ -22,9 +22,9 @@ async function addResult(sheetName, result) {
   const sheet = await doc.sheetsByIndex[sheetToId(sheetName)]
 
   //TODO: laat result al geformateerd als param zijn!
-  await sheet.addRow({ time: result, os: 'Windows' })
+  await sheet.addRow({ time: worldTimeDiff, os: platform})
 
-  console.log('Added %s to spreadsheet', result)
+  console.log('Added %s to spreadsheet', worldTimeDiff)
 }
 
 function sheetToId(sheet) {
@@ -43,4 +43,4 @@ function sheetToId(sheet) {
 exports.addResult = addResult
 
 //testcall
-addResult('TCP', 200)
+//addResult('TCP', 200)

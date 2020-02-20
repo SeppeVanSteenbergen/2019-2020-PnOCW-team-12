@@ -38,7 +38,9 @@ socket.on('info', inf => {
     '\nWorld Diff: ' +
     (info['server'].deltaTime + info[socket.id].avgDelta) +
     '\nServer Diff: ' +
-    info['server'].deltaTime
+    info['server'].deltaTime +
+    '\nPlatform: ' +
+    info[socket.id].system.platform
   area.innerHTML = JSON.stringify(JSON.parse(inf), null, 4)
 })
 
