@@ -89,7 +89,8 @@ module.exports = io => {
         api.addResult(
             'TCP',
             socketList[socket_id].avgDelta + socketList['server'].deltaTime,
-            socketList[socket_id].system.platform
+            socketList[socket_id].system.platform,
+            socketList[socket_id].system.browser
         )
       }
     }

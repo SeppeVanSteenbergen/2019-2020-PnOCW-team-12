@@ -9,7 +9,7 @@ const creds = require('./SheetsAccessData.json')
  * @param {string} sheetName name van de sheet voor verschillende testen
  * @param {*} worldTimeDiff het toe te voegen resultaat van de test (nog te formateren)
  */
-async function addResult(sheetName, worldTimeDiff, platform) {
+async function addResult(sheetName, worldTimeDiff, platform, software) {
   const doc = new GoogleSpreadsheet(
     '1EmCMgxQU1lcrSWjA_ZNNX56SQm4W5Tn7bzrSKo85rqw'
   )
@@ -22,7 +22,7 @@ async function addResult(sheetName, worldTimeDiff, platform) {
   const sheet = await doc.sheetsByIndex[sheetToId(sheetName)]
 
   //TODO: laat result al geformateerd als param zijn!
-  await sheet.addRow({ time: worldTimeDiff, os: platform})
+  await sheet.addRow({ time: worldTimeDiff, os: platform, browser: software})
 
   console.log('Added %s to spreadsheet', worldTimeDiff)
 }
