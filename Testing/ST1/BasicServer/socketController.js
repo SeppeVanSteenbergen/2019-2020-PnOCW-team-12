@@ -1,4 +1,5 @@
 const axios = require('axios')
+const addResult = require('./spreadsheet').addResult
 
 socketList = {}
 
@@ -68,6 +69,7 @@ module.exports = io => {
     }
 
     console.log(socketList)
+
     calcServerOffset()
       .then(() => {
         sendInfoToClients()
@@ -83,6 +85,14 @@ module.exports = io => {
 
   function getSystemInfo(socket_id) {
     io.to(socket_id).emit('getSystemInfo')
+    for (let i = 0; i < socketList.length; i++) {
+      if (socketList[i] !== socketList['server']) {
+        addResult(
+          socketList[i].system.platform,
+          socketList[i].avgDelta + socketList['server'].deltaTime
+        )
+      }
+    }
   }
 
   async function calcServerOffset() {
