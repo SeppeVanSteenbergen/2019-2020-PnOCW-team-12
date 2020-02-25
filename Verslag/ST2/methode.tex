@@ -1,0 +1,19 @@
+Verschillende componenten zijn nodig om kleuren te vergelijken. Als eerste wordt de kleur bijgehouden die op de foto staat. Daarnaast is ook de herkende kleur belangrijk. Zowel voor HSL als voor RGB kijkt het algoritme naar de kleurafstand. Bij RGB is dit de Euclidische kleurafstand. 
+$$ \mid RGB \mid = \sqrt{(R_1 - R_2)^2 + (G_1 - G_2)^2 + (B_1 - B_2)^2}$$
+De methode vergelijkt zo elke pixel met de {\it perfecte}, te detecteren kleuren. De gedetecteerde kleur zal de kleur zijn met kleinste afstand tot de pixel. Op dezelfde manier zal ook HSL werken. Deze zal echter enkel kijken naar de hue-waarde, enkel voor zwart en wit kijkt het algoritme naar de lightness. In tabel \ref{tab:kleuren}  staan de genomen waarden.
+
+
+\begin{tabular}{ | r | c | c | }
+\hline
+Kleur & [R, G, B] & Hue \\
+\hline
+Rood & [255, 0, 0] & 0 en 360 \\
+Groen & [0, 255, 0] & 120 \\
+Blauw & [0, 0, 255] & 240 \\
+Geel & [128, 128, 0] & 60 \\
+Blauwgroen & [0, 128, 128] & 180 \\
+Paars & [128, 0, 128] & 300 \\
+Wit & [255, 255, 255] & $L <= 10$ \\
+Zwart & [0, 0, 0]] & $L >= 90$ \\
+\hline
+\end{tabular}
