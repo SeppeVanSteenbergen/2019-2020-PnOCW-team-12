@@ -1,0 +1,3 @@
+Uit de testen is het bewezen dat er een groot verschil kan zijn tussen de klok van de clients en de wereldtijd. Er moet er dus mee rekening gehouden worden bij de synchronisatie van apparaten. In het project van pno is dit probleem opgelost door het NTP-protocol in te voeren waarmee deze verschillen gecorrigeerd worden.
+
+Vervolgens zijn er ook fluctuaties in het netwerk dat er voor kunnen zorgen dat de synchronisatie een slechte benadering heeft dat zelfs tot een halve seconde kan oplopen. Dit kan dan opgelost worden door 10 keer de ping te berekenen, vervolgens de standaarddeviatie berekenen en dan zal de client zich opnieuw moeten synchroniseren wanneer de berekende standaarddeviatie zich boven een vooraf gekozen waarde bevindt.
