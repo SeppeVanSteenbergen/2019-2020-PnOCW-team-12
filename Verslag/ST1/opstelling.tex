@@ -22,4 +22,19 @@ Hiermee is het makkelijk de server tijd te berekenen door de vergelijking:
 
 \[ timeServer = timeClient - timeDiff \]
 
+Om vervolgens de tijdsverschil tussen de server en de wereld tijd te berekenen is er gebruikt gemaakt van een externe api van worldtimeapi.org. Het tijdsverschil is als volgt berekend:
+
+\[ serverWorldOffset = (TW - TS4) + \frac{TS4 - TS3}{2} \]
+
+Uiteindelijk is de volgende informatie opgeslagen:
+
+\begin{itemize}
+  \item lijst van ping tussen client en server
+  \item tijdsverschil tussen client en server tijd
+  \item tijdsverschil server en wereld tijd
+  \item tijdsverschil client en wereld tijd
+\end{itemize}
+
+
+
 
