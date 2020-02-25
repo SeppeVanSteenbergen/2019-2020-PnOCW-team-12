@@ -1,5 +1,5 @@
-Uit de testen is het bewezen dat er een groot verschil kan zijn tussen de klok van de clients en de wereldtijd. Er moet er dus mee rekening gehouden worden bij de synchronisatie van apparaten. In het project van pno is dit probleem opgelost door het NTP-protocol in te voeren waarmee deze verschillen gecorrigeerd worden.
+Uit de testen is bewezen dat er een groot verschil kan zijn tussen de klok van de clients en de wereldtijd. Bijgevolg moet er dus rekening mee gehouden worden bij de synchronisatie van apparaten. In het project van pno is dit probleem opgelost door het NTP-protocol in te voeren waarmee deze verschillen gecorrigeerd worden.
 
-Vervolgens zijn er ook fluctuaties in het netwerk dat er voor kunnen zorgen dat de synchronisatie een slechte benadering heeft dat zelfs tot een halve seconde kan oplopen. Dit kan dan opgelost worden door 10 keer de ping te berekenen, vervolgens de standaarddeviatie berekenen en dan zal de client zich opnieuw moeten synchroniseren wanneer de berekende standaarddeviatie zich boven een vooraf gekozen waarde bevindt.
+Vervolgens zijn er ook fluctuaties in het netwerk dat er voor kunnen zorgen dat de synchronisatie een slechte benadering heeft dat zelfs tot een halve seconde kan oplopen. Dit kan dan opgelost worden door 10 keer de ping te berekenen, vervolgens de standaarddeviatie af te leiden en dan zal de client zich opnieuw moeten synchroniseren wanneer de berekende standaarddeviatie zich boven een vooraf gekozen waarde bevindt.
 
-Uit de tests is het dan ook te concluderen dat de klok drift weinig invloed heeft op een korte tijd en is daardoor verwaarloosbaar.
+Uit de tests is het dan ook duidelijk dat de klokdrift weinig impact heeft over een korte tijdsspanne en is daardoor verwaarloosbaar.
