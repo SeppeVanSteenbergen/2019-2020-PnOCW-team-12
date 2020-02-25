@@ -1,5 +1,5 @@
-In de opstelling is er een server gebruikt waaraan alle clienten zich aansluiten via een socket protocol. Met een knop op de pagina worden alle klokken gesynchroniseerd met de server door het tijdsverschil en de vertraging (ping) tussen de laatste twee te berekenen.
-Het tijdsverschil wordt namelijk 10 keer herberekend om daar uit mogelijke verbindingsfluctuaties uit te kunnen filteren (meer hierover in sectie [IN TE VULLEN]).
+In de opstelling is er een server gebruikt waaraan alle clienten zich aansluiten via sockets. Met een knop op de pagina worden alle klokken gesynchroniseerd met de server door het tijdsverschil en de vertraging (ping) tussen de laatste twee te berekenen.
+Het tijdsverschil wordt namelijk 10 keer herberekend om daar uit mogelijke verbindingsfluctuaties uit te kunnen filteren (meer hierover bij de analyse van de data).
 
 \begin{figure}[h]
 \centering
@@ -8,7 +8,7 @@ Het tijdsverschil wordt namelijk 10 keer herberekend om daar uit mogelijke verbi
 \end{figure}
 
 Voor de synchronisatie is het NTP protocol geïmplementeerd. 
-Het schema van het NTP protocol is te vinden in figuur \ref{serv-client}. TSx en TCx zijn de tijden gemeten door de server en de client.
+Het schema van het systeem is te vinden in figuur \ref{serv-client}. TSx en TCx zijn de tijden gemeten door de server en de client.
 Het tijdsverschil wordt gemeten door.
 \newline
 \[ timeDiff = \frac{(TC1 - TS1) + (TS2 - TC2)}{2}  \]
