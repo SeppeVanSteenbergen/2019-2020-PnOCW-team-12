@@ -22,6 +22,7 @@ async function addResult(sheetName, info) {
   const sheet = await doc.sheetsByIndex[sheetToId(sheetName)]
 
   //TODO: laat result al geformateerd als param zijn!
+  console.log(info)
   await sheet.addRow(info)
 
   console.log('Added %s to spreadsheet', info.time)

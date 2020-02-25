@@ -90,7 +90,6 @@ module.exports = io => {
         let maxPing = maximum(socketList[socket_id].pings)
         let sdPing = getSD(socketList[socket_id].pings)
         let avgPing = socketList[socket_id].avgPing
-        console.log('minping: ' + minPing)
 
         api.addResult('TCP', {
           time: socketList[socket_id].avgDelta + socketList['server'].deltaTime,
