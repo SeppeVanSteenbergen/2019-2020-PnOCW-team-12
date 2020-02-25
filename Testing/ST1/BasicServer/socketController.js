@@ -79,7 +79,7 @@ module.exports = io => {
       })
   }
 
-  function sendInfoToClients() {
+  async function sendInfoToClients() {
     io.emit('info', JSON.stringify(socketList))
 
     console.log('UPLOADING ' + Object.keys(socketList).length + ' DEVICES')
@@ -91,7 +91,7 @@ module.exports = io => {
         let sdPing = getSD(socketList[socket_id].pings)
         let avgPing = socketList[socket_id].avgPing
 
-        api.addResult('TCP', {
+        await api.addResult('TCP', {
           time: socketList[socket_id].avgDelta + socketList['server'].deltaTime,
           os: socketList[socket_id].system.platform,
           browser: socketList[socket_id].system.browser,
