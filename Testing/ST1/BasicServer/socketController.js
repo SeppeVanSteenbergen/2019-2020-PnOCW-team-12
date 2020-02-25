@@ -127,7 +127,7 @@ module.exports = io => {
     )*/
     console.log()
     let serverTime = Date.now()
-    let worldTime = result.data.datetime
+    let worldTime = new Date(result.data.datetime)
     let ping = serverTime - timeSend
     let deltaTime = worldTime - serverTime - ping / 2
     console.log(serverTime)

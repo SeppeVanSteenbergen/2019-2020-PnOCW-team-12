@@ -4,7 +4,6 @@ const httpServer = require('http').createServer(app)
 const io = require('socket.io')(httpServer, { origins: '*:*' })
 const socketController = require('./socketController')
 
-
 socketController(io)
 
 app.get('/', (req, res) => {
@@ -17,14 +16,13 @@ app.get('/socketio', (req, res) => {
 app.get('/client_script.js', (req, res) => {
   res.sendFile(__dirname + '/clientScript.js')
 })
-app.get('/dgram.min.js', (req,res) => {
+app.get('/dgram.min.js', (req, res) => {
   res.sendFile(__dirname + '/files/dgram.min.js')
 })
 
 httpServer.listen(3000, () => {
   console.log('listening on port 3000')
 })
-
 
 process.stdin.resume()
 process.stdin.setEncoding('utf8')
