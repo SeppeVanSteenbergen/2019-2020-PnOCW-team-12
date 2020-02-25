@@ -10,7 +10,7 @@ socket.on('pings', TS1 => {
   const D = TC1 - TS1
 
   const TC2 = Date.now()
-  console.log('got ping message')
+  //console.log('got ping message')
   socket.emit('pongs', {
     TC2: TC2,
     TC1: TC1,
@@ -45,7 +45,7 @@ socket.on('info', inf => {
 })
 
 function start() {
-  console.log('sending data')
+  //console.log('sending data')
   socket.emit('startSync', '')
 }
 
@@ -77,7 +77,7 @@ function getBrowser() {
         (typeof safari !== 'undefined' && safari.pushNotification)
     )
   // Internet Explorer 6-11
-  var isIE = /*@cc_on!@*/ false || !!document.documentMode
+  var isIE = /*@cc_on!@*/ !!document.documentMode
   // Edge 20+
   var isEdge = !isIE && !!window.StyleMedia
   // Chrome 1 - 79

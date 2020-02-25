@@ -4,6 +4,7 @@ const httpServer = require('http').createServer(app)
 const io = require('socket.io')(httpServer, { origins: '*:*' })
 const socketController = require('./socketController')
 
+
 socketController(io)
 
 app.get('/', (req, res) => {
