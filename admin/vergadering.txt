@@ -1,0 +1,9 @@
+st1
+    verslag afwerken tegen 18u
+    testen deel2 loopt stroef
+
+st2
+
+    statistieken voor distances toevoegen
+    overal hsl en rgb toevoegen
+    verslag
