@@ -1,0 +1,18 @@
+\paragraph{Blauw en groen masker}
+Uit de hsl image data matrix wordt een selectie van pixels gemaakt aan de hand van de doorgegeven parameters die als threshold gebruikt worden. De pixels die aan deze voorwaarden voldoen, worden opgeslagen in een matrix die maar één enkelvoudige waarde per pixel bevat. Dit resulteert in twee binaire matrices; voor een groene- en een blauwe threshold. 
+\paragraph{Maskers combineren}
+Het groene en blauwe masker vormen samen de border van een scherm, maar moeten nog samengevoegd worden door een envoudige matrix optelling van beide maskers.
+Het maskeren en samenvoegen van deze maskers gebeurd telkens één iteratie door de volledige image matrix. Het totale maskeer proces gebeurd dan ook in $O(m*n)$ tijdscomplexiteit.
+
+\paragraph{Median blur}
+https://docs.opencv.org
+Onze implementatie van median blur is gebasseerd op de documentatie van OpenCV. Elke pixel wordt vervangen door de mediaan van zijn geburige pixels. De range van deze buren wordt bepaald van de kernel size parameter k. Het algoritme gaat voor elke pixel in de matrix van de afbeelding nog eens door een subset van grootte k op k van deze matrix om een nieuwe waarde voor deze pixel te bepalen. Dit leidt tot een complexiteit van $O(k^2*m*2)$ met k de kernel size parameter en m en n de dimensie van de afbeelding.
+
+\paragraph{Find islands}
+De eerste implementatie was gebaseerd op een blob detection algoritme door The Coding Train, maar dit algoritme verreiste te veel manuele thresholds en was dus niet universeel genoeg voor te veel verschillende gevallen. Als bijvoorbeeld de resolutie van de foto niet groot was, dan moest er een hogere ‘afstandsthreshold’ gebruikt worden, maar dit gaf als bijwerking dat er soms meerdere schermen als enkel scherm werden aanschouwd.
+Onze huidige implementatie is gebaseerd op een standaard 4-way floodfill algoritme met gebruik van een array als stack. Deze methode zorgt voor een veel nauwkeuriger resultaat dan het vorige algoritme. Vanaf dat er een witte pixel gevonden wordt, zal de selectie zich blijven uitbreiden via alle verbonden witte pixels. Het geïmplementeerde algoritme breidt zich uit volgens zijn 4 aanliggende buren en zo zal dus elke witte pixel maximaal vier maal in de stack terecht komen. In het slechtste geval is heel de foto wit en zal dit algoritme zich gedragen volgens $O(4mn)=O(mn)$. Maar dit zal gemiddeld veel lager zijn. Deze implementatie houdt net zoals in het blob detection algoritme een bounding box bij van de gevonden witte eilanden.
+
+\paragraph{Find corners}
+Find corners wordt uitgevoerd per gevonden eiland van het vorig algoritme. Aangezien er in deze fase nog gewerkt wordt met niet overlappende schermen, zullen de hoekpunten van een vierhoek altijd de grenzen aan zijn bounding box. Onze implementatie gaat dan ook de rand van de gevonden boundingbox (zie island detection) af om de vier hoekpunten te te bepalen.
+
+

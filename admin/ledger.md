@@ -46,5 +46,45 @@ Meeting 2 (14/10/2019)
             - rotatie herkennen
             - begin verslag    
             - Martijn verder code reviewen
-        
 
+Meeting 3 (21/10/2019)
+	Task 2 --> finished
+	Task 3, device recognition (iedereen):
+		identificatie met kleurenbarcode, werkt
+		rotatie werkt
+		Vandaag:
+			- verslag
+			- automatische testen schrijven
+	Task 4-5, vanaf morgen aan beginnen
+
+Meeting 4 (28/10/2019)
+    Task 4: (Martijn, Seppe en Bert)
+        - Heel veel werk
+        - Er is nog niet zoveel, moeten even samenzitten en samendenken
+        Tegen volgende week:
+            - zien dat het af is
+            - zelf zodadelijk met 3 deadlines afspreken
+    Task 5: (Dirk, Frédéric, Toon)
+        - Triangulation goed begonnen, lastig maar zal wel lukken
+        - Image beetje aangepast en screen om gemakkelijker te communiceren
+        - Bezig met implementeren client
+        - Triangulation is voor Frédéric en Toon
+        - Dirk houdt zich vooral bezig met implementatie screen detection
+
+Meeting 5 (04/11/2019)
+    Task 4: (Martijn, Seppe en Bert)
+        - Overlap hoeken zoeken werkt
+        - nu
+            - testen maken
+            - verslag schrijven
+    Task 5: (Dirk, Frédéric, Toon)
+        - Delaunay triangulatie is perfect
+        - nu
+            - triangulatie displayen (Dirk)
+            - verslag schrijven
+    Algemeen:
+        - 21u verslagen klaar om na te lezen
+        - Tegen volgende week:
+            - task 6 (Dirk, Seppe)
+            - task 7 (Martijn, Bert)
+            - Opruimen en optimaliseren (Toon, Frédéric)

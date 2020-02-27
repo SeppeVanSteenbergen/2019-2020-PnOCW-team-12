@@ -1,0 +1,54 @@
+In dit project wordt gebruik gemaakt van het \textit{VueJS framework} voor de frontend. Hierdoor is het eenvoudiger om de code in verschillende bestanden te verdelen. Ook is het handig om hiermee de user interface te ontwerpen en implementeren. 
+
+
+\subsection{Masters en clients}
+Bij het openen van de webpagina is er een knop om zich aan te melden bij het platform.
+Dit zorgt ervoor dat later een loginsysteem met wachtwoord gemakkelijk kan worden toegevoegd indien dit gewenst is.
+Hierna heeft men de keuze om master of client te worden. Deze informatie wordt opgeslagen in het geheugen van de server. 
+
+\paragraph{Kamers} Elke master heeft zijn eigen kamer waarbij clients zich kunnen aansluiten. Door het gebruik van kamers kunnen tegelijkertijd meerdere masters op verschillende plaatsen hun groep clients aansturen.  Telkens wanneer een commando wordt verstuurd krijgen enkel de clients in die specifieke kamer dat signaal. Omdat deze functionaliteit later toevoegen voor moeilijkheden kan zorgen, is dit nu alreeds geïmplementeerd.
+
+\subsection{Communicatieprotocollen}
+%hoe en waarom de commando's voor het scherm worden verstuurd
+Om de communicatie tussen master en clients gestructureerd te laten verlopen zijn er enkele mogelijkheden.
+Hieronder worden de verschillende gebruikte protocollen om data te verzenden uitgelegd.
+\subsubsection{Commando's}
+Elke client kan op de canvas van zijn scherm pijlen tekenen, de achtergrond van kleur laten veranderen of een afbeelding weergeven. De commando's om de schermen te controleren via de master worden allemaal doorgestuurd via \textit{SocketIO}. Deze techniek is gekozen over het \textit{http-protocol} omdat de hoeveelheid te verzenden data niet zo groot is en SocketIO ook op constante basis de client, master en server aangesloten houdt. Hierdoor worden alle berichten onmiddellijk ontvangen. Een voorbeeld van wat er wordt verstuurd word weergegeven in figuur \ref{jsonScreenCommand}.
+Enkel het payload-gedeelte wordt verstuurd naar de clients vanaf de server.
+
+\begin{figure} [h]
+    \begin{lstlisting}[language=json,firstnumber=1]
+    {
+    payload:{
+    type: "flood-screen",
+    data: {
+    command: [{
+    type: "color"/"interval",
+    value: "[255,0,0]" / "200" }] (integer or rgb list)
+    }
+    }
+    to: [user_id or "all"](to single user or all users in room)
+    }
+
+    \end{lstlisting}
+    \caption{Voorbeeld van een JSON commando om schermen van kleur te laten veranderen, verzonden naar de server} \label{jsonScreenCommand}
+\end{figure}
+
+\subsubsection{Video verzenden}
+De video's worden niet direct verstuurd naar elke client om af te spelen. Dit zou een lange wachttijd vereisen vooraleer het videobestand helemaal verzonden is en ontvangen door elke client.
+Het uploaden van video is zo geïmplementeerd dat deze eerst naar de server wordt verstuurd via een HTTPS POST request (door middel van een HTML Form) en opgeslagen als een bestand op de server. Vervolgens wordt naar elke client de link doorgestuurd vanwaar ze de video kunnen streamen via een HTML Video element. De video wordt dan gebufferd en kan onmiddellijk worden afgespeeld zonder dat het hele bestand al gedownload is.
+\newpage
+\subsection{Beveiliging}
+\paragraph{HTTPS} Staat voor Hypertext Transfer Protocol Secure. Door dit protocol zijn alle berichten geëncrypteerd waardoor het voor buitenstaanders niet zomaar mogelijk is verzonden berichten te lezen.
+\paragraph{Login security} Naast HTTPS is het ook belangrijk dat een aangesloten gebruiker zich niet zomaar kan voordoen als een andere gebruiker. Of eender wie zomaar aan alle informatie kan. Om deze redenen hebben alle ingelogde gebruikers een geëncrypteerde \textit{cookie} die hun gebruikers\_id bevat. Dit maakt het mogelijk om elke verschillende gebruiker te identificeren in de backend-server door deze te decrypteren. Hierdoor is het mogelijk om bepaalde server endpoints, met bijvoorbeeld video- of fotobestanden, enkel aan ingelogde gebruikers bloot te stellen en niet aan andere gebruikers die geen inlogcookie hebben.
+Vervolgens is veiligheid ook een probleem bij sockets. Als sockets hun aansluiting verliezen worden ze automatisch opnieuw aangesloten. Hierbij verandert enkel hun id. Om te kunnen zien tot welke client een socket toebehoort, moet elke gebruiker zijn gebruikers\_id verzenden via de socket om deze aan zijn gebruikers\_id te kunnen linken. Deze informatie wordt allemaal in de server opgeslaan.
+
+\subsection{Uitbreidingsmogelijkheden}
+\paragraph{Loginsysteem} Momenteel is er een anoniem loginsysteem ingebouwd waar geen wachtwoord voor vereist is. Doordat dit nu al ingewerkt zit, kan dit later makkelijk omgevormd worden naar een login met inloggegevens.
+\paragraph{Foto-upload met https} Nu worden de foto's doorgestuurd via sockets. Later is het de bedoeling om net zoals bij video de afbeeldingen ook door te sturen via https. Zodat de master slechts één keer de foto moet uploaden en de clients dan zelf de foto aanvragen.
+\paragraph{SocketIO-beveiliging} Om nu de socket te identificeren moet elke gebruiker zijn gebruikers\_id versturen. Dit kan voor problemen zorgen als een mogelijke hacker een andere gebruikers\_id verzendt via de socket om zich als iemand anders voor te doen. Om dit te voorkomen kan een tijdelijk inlogwachtwoord aangemaakt worden dat de gebruiker kan verzenden om zich te identificeren via de socket. 
+ 
+ 
+ 
+ 
+ 

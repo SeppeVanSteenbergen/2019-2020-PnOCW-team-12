@@ -189,9 +189,9 @@ module.exports = {
 
   sendDataByUserID(name, data, user_id) {
     this.sendDataBySocketID(
-        name,
-        data,
-        dataHelper.getSocketIDFromUserID(user_id)
+      name,
+      data,
+      dataHelper.getSocketIDFromUserID(user_id)
     )
   },
 
@@ -209,7 +209,7 @@ module.exports = {
       return 1
     }
     const clientList = dataHelper.getClientsOfRoom(
-        dataHelper.getUserRoom(master_user_id)
+      dataHelper.getUserRoom(master_user_id)
     )
     console.log('CLIENTS IN ROOM')
     console.log(clientList)
@@ -225,11 +225,11 @@ module.exports = {
     }
 
     const clientList = dataHelper.getClientsOfRoom(
-        dataHelper.getUserRoom(master_user_id)
+      dataHelper.getUserRoom(master_user_id)
     )
 
     const clientInfo = clientList.map(user_id =>
-        dataHelper.getUserInfo(user_id)
+      dataHelper.getUserInfo(user_id)
     )
 
     this.sendDataByUserID('roomClientInfo', clientInfo, master_user_id)
@@ -241,7 +241,7 @@ module.exports = {
     }
 
     const clientList = dataHelper.getClientsOfRoom(
-        dataHelper.getUserRoom(master_user_id)
+      dataHelper.getUserRoom(master_user_id)
     )
     for (let i = 0; i < clientList.length; i++) {
       this.sendDataByUserID('updateScreenSize', null, clientList[i])
@@ -267,7 +267,7 @@ module.exports = {
     let ping = currentTime - data.startTime
     // time to add to server time to get client time
 
-    if(typeof pingList[data.room_id] === 'undefined') {
+    if (typeof pingList[data.room_id] === 'undefined') {
       pingList[data.room_id] = {}
       pingList[data.room_id][user_id] = {
         pingList: [],
@@ -282,31 +282,33 @@ module.exports = {
       timeDelta: timeDelta
     }*/
 
-    if(pingList[data.room_id][user_id].pingList.length >= pingTimes) {
+    if (pingList[data.room_id][user_id].pingList.length >= pingTimes) {
       pingList[data.room_id][user_id].ready = true
-      pingList[data.room_id][user_id].ping = pingList[data.room_id][user_id].pingList.reduce((a,b) => a+b) / pingList[data.room_id][user_id].pingList.length
-      let timeDelta = (data.clientTime + pingList[data.room_id][user_id].ping / 2) - currentTime
+      pingList[data.room_id][user_id].ping =
+        pingList[data.room_id][user_id].pingList.reduce((a, b) => a + b) /
+        pingList[data.room_id][user_id].pingList.length
+      let timeDelta =
+        data.clientTime + pingList[data.room_id][user_id].ping / 2 - currentTime
       pingList[data.room_id][user_id].timeDelta = timeDelta
 
-
       let foundFalse = false
-      for(let i =0; i < Object.keys(pingList[data.room_id]).length; i++) {
-        if(!pingList[data.room_id][i].ready) {
+      for (let i = 0; i < Object.keys(pingList[data.room_id]).length; i++) {
+        if (!pingList[data.room_id][i].ready) {
           foundFalse = true
           break
         }
       }
 
-      if(!foundFalse && Object.keys(pingList[data.room_id]).length ===
-          dataHelper.getClientsOfRoom(data.room_id).length) {
+      if (
+        !foundFalse &&
+        Object.keys(pingList[data.room_id]).length ===
+          dataHelper.getClientsOfRoom(data.room_id).length
+      ) {
         this.sendCountDown(data.room_id, data)
       }
     } else {
       pingUser(user_id, data)
     }
-
-
-
   },
   pingRoom(room_id, data) {
     let clients = dataHelper.getClientsOfRoom(room_id)
@@ -365,7 +367,7 @@ module.exports = {
 
     for (let i in clients) {
       payload.data.startTime =
-          now + clientPings[clients[i]].timeDelta + startOffset
+        now + clientPings[clients[i]].timeDelta + startOffset
 
       this.sendDataByUserID('screenCommand', payload, clients[i])
     }
