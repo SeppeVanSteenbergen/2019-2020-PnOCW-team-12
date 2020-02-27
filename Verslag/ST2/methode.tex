@@ -2,6 +2,8 @@ Verschillende componenten zijn nodig om kleuren te vergelijken. Als eerste wordt
 $$ \mid RGB \mid = \sqrt{(R_1 - R_2)^2 + (G_1 - G_2)^2 + (B_1 - B_2)^2}$$
 De methode vergelijkt zo elke pixel met de ``{\it perfecte}'', te detecteren kleuren. De gedetecteerde kleur zal deze zijn met kleinste afstand tot de pixel. Op dezelfde manier zal ook HSL werken. Deze zal echter enkel kijken naar de hue-waarde, voor zwart en wit kijkt het algoritme naar de lichtheid. In tabel \ref{tab:kleuren}  staan de genomen waarden van de ``{\it perfecte}'' kleuren.
 
+Een database houdt de waarden van alle getrokken foto's bij. Het onderzoek gebruikt de verschillende eigenschappen van deze foto's. De bijgehouden eigenschappen zijn: gedetecteerde kleur, dekking van de gedetecteerde kleur, alsook de dekking van de verwachte kleur, afstand van de perfecte tot de gedetecteerde kleur, grootte van omgeving rond het scherm, soort lichtinval en de helderheid van het getrokken scherm.
+
 \begin{center}
 \begin{table}
 \label{tab:kleuren}
@@ -23,5 +25,3 @@ Zwart & [0, 0, 0]] & $L >= 90$ \\
 \caption{De RGB en hue waarden van de ``{\it perfecte}'' kleuren.}
 \end{table}
 \end{center}
-
-Een database houdt de waarden van alle getrokken foto's bij. Het onderzoek gebruikt de verschillende eigenschappen van deze foto's. De bijgehouden eigenschappen zijn: gedetecteerde kleur, dekking van de gedetecteerde kleur, alsook de dekking van de verwachte kleur, afstand van de perfecte tot de gedetecteerde kleur, grootte van omgeving rond het scherm, soort lichtinval en de helderheid van het getrokken scherm.
