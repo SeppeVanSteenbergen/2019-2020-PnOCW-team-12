@@ -1,14 +1,15 @@
-Dit verslag kijkt ook naar of verschillende omgevingsfactoren een effect hebben op het herkennen van kleuren. Zo zou de grootte van de omgeving de herkenning kunnen verbeteren of verslechteren, meer omgeving betekent namelijk dat de camera meer omgevingslicht binnenkrijgt. Alsook het licht kan een beïnvloedende factor zijn, de foto's behandelen twee soorten lichtinval: geen en artificieel licht. Buitenlicht zal niet besproken worden, de {\it Screen Caster} gaat ervan uit dat de schermen binnenshuis staan. Laatste omgevingsfactor is de helderheid van het scherm zelf. Heeft dit een grote invloed op de detectie? En hebben verschillende factoren een invloed op elkaar?
+Een van de grote onderzoeksvragen is welke omgevingsfactoren een effect hebben op het herkennen van kleuren. Zo zou de grootte van de omgeving de herkenning positief of negatief kunnen beïnvloeden, meer omgeving betekent namelijk dat de camera meer omgevingslicht binnenkrijgt. Alsook het licht kan een beïnvloedende factor zijn, de foto's behandelen twee soorten lichtinval: geen en artificieel licht. Buitenlicht zal niet besproken worden, de {\it Screencaster} gaat ervan uit dat de schermen binnenshuis staan. Laatste omgevingsfactor is de helderheid van het scherm zelf. Heeft dit een grote invloed op de detectie? En hebben verschillende factoren een invloed op elkaar?
 
 \subsubsection{Omgeving}
-De foto's hebben verschillende groottes van omgeving. De omgeving kan groot ($\approx 80\%$), gemiddeld ($\approx 40\%$), klein ($\approx 10\%$) of niet aanwezig zijn. In figuur \ref{fig:omgeving}(a) zijn de bevindingen weergegeven. Per grootte van omgeving staat er weergegeven hoeveel procent van elke kleur juist werd gedetecteerd.
+De foto's hebben verschillende groottes van omgeving. De omgeving kan groot ($\approx 80\%$), gemiddeld ($\approx 40\%$), klein ($\approx 10\%$) of niet aanwezig zijn. In figuur \ref{fig:omgeving}(a) zijn de bevindingen weergegeven. Per grootte van omgeving is weergegeven hoeveel procent van elke kleur juist werd gedetecteerd.
 
-De detectie van kleuren gebeurd het beste bij een gemiddelde of kleine omgevingsgrootte. Wanneer de omgeving groot is, scoort de herkenning het slechtst. In figuur \ref{fig:omgeving}(b) staat per kleur welke kleur foutief is herkent, enkel en alleen bij een grote omgeving. Wat opvalt is dat vooral zwart als foute kleur naar voor komt en dan vooral bij groen, wit en geel. Dit is toe te wijzen aan het feit dat met meer lichtinval de schermen donkerder tonen op de foto. Door een grotere omgeving zal de artificiële inteligentie in de camera de focus niet meer op het scherm leggen. Als zwart niet meer nodig is en de restrictie op de lichtheid bij HSL niet meer geldt, kan dit probleem opgelost zijn, dit vergt echter verder onderzoek.
+De detectie van kleuren gebeurd het beste bij een gemiddelde of kleine omgevingsgrootte. Wanneer de omgeving groot is, scoort de herkenning het slechtst. In figuur \ref{fig:omgeving}(b) staat per kleur welke kleur foutief is herkent, enkel en alleen bij een grote omgeving. Wat opvalt is dat vooral zwart als foute kleur naar voren treedt en dan vooral bij groen, wit en geel. Dit is toe te wijzen aan het feit dat met meer lichtinval de schermen donkerder tonen op de foto. Door een grotere omgeving zal de artificiële intelligentie in de camera de focus niet meer op het scherm leggen. Indien zwart niet meer gebruikt zou worden en de restrictie op de lichtsterkte bij HSL niet meer geldt, kan dit probleem opgelost worden, dit vergt echter verder onderzoek.
+
 \begin{figure}
 	\begin{subfigure}{0.5\textwidth}
 	\centering
 	\includegraphics[scale=0.6]{img/Environment}
-	\caption{Per kleur correct gedetecteerd met gegeven omgevingsgrootte.}
+	\caption{Per kleur correct gedetecteerd gegeven de omgevingsgrootte.}
 	\end{subfigure}
 	\begin{subfigure}{0.5\textwidth}
 	\centering
@@ -20,9 +21,9 @@ De detectie van kleuren gebeurd het beste bij een gemiddelde of kleine omgevings
 \end{figure}
 
 \subsubsection{Lichtinval}
-Dit verslag behandelt twee soorten lichtinval, artificieel en helemaal geen lichtinval. In figuren \ref{fig:lichtinval}(a) en \ref{fig:lichtinval}(b) staan de gedetecteerde kleuren per kleur bij respectievelijk artificieel en geen lichtinval. Rood komt bij artificieel licht in elke kleur voor, dit is toe te wijzen aan het licht dat een rode schijn achterlaat op de schermen. Zonder achtergrondverlichting  komt vooral zwart terug foutief terug. Dit is te wijten aan het algoritme dat naast het scherm gedetecteerd heeft.
+Twee soorten lichtinval worden behandeld, artificieel licht en helemaal geen lichtinval met andere woorden een donkere kamer. In figuren \ref{fig:lichtinval}(a) en \ref{fig:lichtinval}(b) staan de gedetecteerde kleuren per kleur bij respectievelijk artificieel licht en geen lichtinval. Rood komt bij artificieel licht in elke kleur voor, dit is toe te wijzen aan het licht dat een rode schijn achterlaat op de schermen. Zonder achtergrondverlichting  komt vooral zwart terug foutief terug. Dit is te wijten aan het algoritme dat naast het scherm gedetecteerd heeft.
 
-Zwart detecteren is opvallend slecht bij artificieel licht, door de strenge herkenning ($L < 10$) en reflectie is deze niet herkent bij artificieel licht. Geel en cyaan komen veel voor bij detectie van wit, ook hier is de strenge herkenning ($L > 90$) de oorzaak.
+Zwart detecteren is opvallend slecht bij artificieel licht, door de strenge restrictie ($L < 10$) en reflectie wordt deze amper herkent bij artificieel licht. Geel en cyaan komen veel voor bij detectie van wit, ook hier is de strenge conditie ($L > 90$) de oorzaak.
 
 \begin{figure}
 	\begin{subfigure}{0.5\textwidth}
@@ -40,7 +41,7 @@ Zwart detecteren is opvallend slecht bij artificieel licht, door de strenge herk
 \end{figure}
 
 \subsubsection{Helderheid scherm}
-In figuur \ref{fig:helderheid} staat het aantal procent correct gedetecteerde kleur per helderheid van het scherm. De laagste helderheid scoort het slechts, kleuren zijn donkerder en minder goed zichtbaar. Bij de drie andere helderheden is geen groot verschil op te merken. De schermhelderheid heeft geen grote invloed op de detectie van de schermen.
+In figuur \ref{fig:helderheid} staat het procent correct gedetecteerde kleur per helderheid van het scherm. De laagste helderheid heeft het slechtste resultaat, kleuren zijn donkerder en minder goed detecteerbaar. Bij de drie andere helderheden zijn geen significante verschillen op te merken. De schermhelderheid heeft geen grote invloed op de detectie van de schermen.
 \begin{figure}
 	\centering
 	\includegraphics[scale=0.7]{img/brightness}
