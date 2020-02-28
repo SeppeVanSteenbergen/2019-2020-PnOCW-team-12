@@ -1,28 +1,32 @@
 Dit verslag kijkt ook naar of verschillende omgevingsfactoren een effect hebben op het herkennen van kleuren. Zo zou de grootte van de omgeving de herkenning kunnen verbeteren of verslechteren, meer omgeving betekent namelijk dat de camera meer omgevingslicht binnenkrijgt. Alsook het licht kan een beïnvloedende factor zijn, de foto's behandelen twee soorten lichtinval: geen en artificieel licht. Buitenlicht zal niet besproken worden, de {\it Screen Caster} gaat ervan uit dat de schermen binnenshuis staan. Laatste omgevingsfactor is de helderheid van het scherm zelf. Heeft dit een grote invloed op de detectie? En hebben verschillende factoren een invloed op elkaar?
 
 \subsubsection{Omgeving}
-De foto's hebben verschillende groottes van omgeving. De omgeving kan groot ($\approx 80\%$), gemiddeld ($\approx 40\%$), klein ($\approx 10\%$) of niet aanwezig zijn. In figuur \ref{fig:omgeving} zijn de bevindingen weergegeven. Per grootte van omgeving staat er weergegeven hoeveel procent van elke kleur juist werd gedetecteerd.
+De foto's hebben verschillende groottes van omgeving. De omgeving kan groot ($\approx 80\%$), gemiddeld ($\approx 40\%$), klein ($\approx 10\%$) of niet aanwezig zijn. In figuur \ref{fig:omgeving} (a) zijn de bevindingen weergegeven. Per grootte van omgeving staat er weergegeven hoeveel procent van elke kleur juist werd gedetecteerd.
 
-De detectie van kleuren gebeurd het beste bij een gemiddelde of kleine omgevingsgrootte. Wanneer de omgeving groot is, scoort de herkenning het slechtst. In figuur \ref{fig:groteOmgevingFoutHerkent} staat per kleur welke kleur foutief is herkent, enkel en alleen bij een grote omgeving. Wat opvalt is dat vooral zwart als foute kleur naar voor komt en dan vooral bij groen, rood, wit en geel. Dit is toe te wijzen aan het feit dat met meer lichtinval de schermen donkerder tonen op de foto. Door een grotere omgeving zal de artificiële inteligentie in de camera de focus niet meer op het scherm leggen. Als zwart niet meer nodig is en de restrictie op de lichtheid bij HSL niet meer geldt, kan dit probleem opgelost zijn, dit vergt echter verder onderzoek.
+De detectie van kleuren gebeurd het beste bij een gemiddelde of kleine omgevingsgrootte. Wanneer de omgeving groot is, scoort de herkenning het slechtst. In figuur \ref{fig:omgeving} (b) staat per kleur welke kleur foutief is herkent, enkel en alleen bij een grote omgeving. Wat opvalt is dat vooral zwart als foute kleur naar voor komt en dan vooral bij groen, rood, wit en geel. Dit is toe te wijzen aan het feit dat met meer lichtinval de schermen donkerder tonen op de foto. Door een grotere omgeving zal de artificiële inteligentie in de camera de focus niet meer op het scherm leggen. Als zwart niet meer nodig is en de restrictie op de lichtheid bij HSL niet meer geldt, kan dit probleem opgelost zijn, dit vergt echter verder onderzoek.
 \begin{figure}
 	\begin{subfigure}{0.5\textwidth}
 	\centering
 	\includegraphics{img/Environment}
-	\label{fig:omgeving}
 	\caption{Per kleur correct gedetecteerd met gegeven omgevingsgrootte.}
 	\end{subfigure}
 	
 	\begin{subfigure}{0.5\textwidth}
 	\centering
 	\includegraphics{img/BigEnvPerColor}
-	\label{fig:groteOmgevingFoutHerkent}
 	\caption{Per kleur de foutief herkende kleur in grote omgeving.}
 	\end{subfigure}
 	\caption{Grafieken met betrekking tot de omgevingsgrootte.}
+	\label{fig:omgeving}
 \end{figure}
 
 \subsubsection{Lichtinval}
-Dit verslag behandelt twee soorten lichtinval, artificieel en helemaal geen lichtinval. Een zeer opmerkelijk resultaat bij vergelijking HSL en RGB, zie figuren \ref{fig:hslrgbnone} en \ref{fig:hslrgbart} waaruit blijkt dat HSL en RGB dezelfde trend vertonen bij andere helderheid van het scherm. Aangezien HSL niet naar de lichtheid en saturatie van de kleur kijkt, lijkt het dat deze geen grote verschillen zal tonen bij verschillende lichtinval. %Ik denk dat ik hier ergens foute conclusies trek dus, moet even nagekeken worden!!
-%ook nog figuren aan toevoegen x
+Dit verslag behandelt twee soorten lichtinval, artificieel en helemaal geen lichtinval. 
 
+\begin{figure}
+	\centering
+	\includegraphics{img/Lightning}
+	\label{fig:lichtinval}
+	\caption{Procent correct gedecteerd per kleur gegeven de belichting.}
+\end{figure}
 \subsubsection{Helderheid scherm}
