@@ -1,5 +1,5 @@
 import random
-from ImageFiltering import rgb_to_hsl
+from colorTestingST2.scripts.ImageFiltering import rgb_to_hsl
 
 
 def scoreImg(Rmatrix, Gmatrix, Bmatrix, origColor, nbBlocks):
@@ -27,7 +27,7 @@ def scoreBlock(Rmatrix, Gmatrix, Bmatrix, origValue):
         pixelG = Gmatrix[y][x]
         pixelB = Bmatrix[y][x]
         pixelH, pixelS, pixelL = rgb_to_hsl(pixelR, pixelG, pixelB)
-        blockScore += ([pixelH,pixelS,pixelL], origValue)
+        blockScore += calcScore([pixelH, pixelS, pixelL], origValue)
     return blockScore / (area * 0.05)
 
 
