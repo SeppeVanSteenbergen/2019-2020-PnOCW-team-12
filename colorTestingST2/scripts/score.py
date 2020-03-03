@@ -1,6 +1,5 @@
 import random
 import numpy as np
-from colorTestingST2.scripts.ImageFiltering import rgb_to_hsl
 
 
 def scoreImg(Rmatrix, Gmatrix, Bmatrix, origColor, nbBlocks):
