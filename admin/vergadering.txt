@@ -7,3 +7,13 @@ st2
     statistieken voor distances toevoegen
     overal hsl en rgb toevoegen
     verslag
+
+
+3/02/20
+
+    st1: na tc meer duidelijkheid over wat moet gebeuren
+         boards invullen op kraken
+
+    st2: scripts maken en runnen
+
+    deadline verslagen maandag

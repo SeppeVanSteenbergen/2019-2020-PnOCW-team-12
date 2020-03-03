@@ -40,7 +40,15 @@ sheet = wb.active
 sheet.title = "results"
 sheet.cell(1, 1, "Id")
 sheet.cell(1, 2, "Original color")
-sheet.cell(1, 3, "Environment")
+sheet.cell(1, 8, "Environment")
+sheet.cell(1, 9, "Light")
+sheet.cell(1, 10, "Brightness")
+sheet.cell(1, 11, "no blur score")
+sheet.cell(1, 12, "gaussian blur score")
+sheet.cell(1, 13, "median blur score")
+sheet.cell(1, 14, "mean blur score")
+sheet.cell(1, 15, "fastNM denoising score")
+
 
 path = os.getcwd()
 files = [file for file in glob.glob(os.path.join(path, "**/*.jpg"), recursive=True)]
