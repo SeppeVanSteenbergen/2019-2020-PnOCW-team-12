@@ -1,3 +1,4 @@
+import openpyxl
 import colorsys
 import cv2
 import glob
@@ -34,8 +35,22 @@ def prep_image(file):
     return r, g, b
 
 
+wb = openpyxl.Workbook()
+sheet = wb.active
+sheet.title = "results"
+sheet.cell(1, 1, "Id")
+sheet.cell(1, 2, "Original color")
+sheet.cell(1, 3, "Environment")
+
 path = os.getcwd()
 files = [file for file in glob.glob(os.path.join(path, "**/*.jpg"), recursive=True)]
-for file in files:
+for i in range(len(files)):
+    file = files[i]
     originalColor = file.split("/")[-1].split(".")[0].split("_")[-2]
     R, G, B = prep_image(file)
+
+    sheet.cell(i + 2, 1, i)
+    sheet.cell(i + 2, 2, originalColor)
+
+file = os.path.join(os.getcwd(), "test.xls")
+wb.save(file)
