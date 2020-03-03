@@ -1,0 +1,103 @@
+\documentclass[a4paper,11pt]{article}
+
+\usepackage[margin=3cm]{geometry}
+
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage[colorlinks,allcolors=violet]{hyperref}
+\usepackage{url}
+\usepackage{lmodern}
+\usepackage[dutch]{babel}
+
+% https://tex.stackexchange.com/questions/94032/fancy-tables-in-latex
+\usepackage[table]{xcolor}
+\usepackage{booktabs}
+
+\usepackage[utf8]{inputenc}
+
+% https://tex.stackexchange.com/questions/664/why-should-i-use-usepackaget1fontenc
+\usepackage[T1]{fontenc}
+\usepackage{microtype} % good font tricks
+
+\newcommand{\note}[1]{{\colorbox{yellow!40!white}{#1}}}
+\newcommand{\exampletext}[1]{{\color{blue!60!black}#1}}
+
+\begin{document}
+
+\noindent
+\colorbox[HTML]{52BDEC}{\bfseries\parbox{\textwidth}{\centering\large
+  --- Verslag P\&O CW 2019--2020 Taak 3 ---
+}}
+\\[-1mm]
+\colorbox[HTML]{00407A}{\bfseries\color{white}\parbox{\textwidth}{
+  Department Computerwetenschappen -- KU Leuven
+  \hfill
+  \today
+}}
+\\
+
+\smallskip
+
+\noindent
+%\mbox{}\hfill
+\begin{tabular}{*4l}
+\toprule
+\multicolumn{2}{l}{\large\textbf{Team 12}} \\
+\midrule
+Frédéric Blondeel & 20h \\
+Martijn Debeuf & 45h \\
+Toon Sauvillers & 60h \\ % fill in the time spend on this task per team member who worked on it
+Dirk Vanbeveren & 12h \\
+Bert Van den Bosch & 52h \\
+Seppe Van Steenbergen & 54h \\
+
+
+\bottomrule
+\hline
+\end{tabular}\\
+
+\noindent
+{\color[HTML]{52BDEC} \rule{\linewidth}{1mm} }
+
+\section{Introductie}\label{sec:introductie}
+\input{introduction}
+
+\section{Algoritmen}\label{sec:technical-analysis}
+
+
+\subsection{Scherm identificatie met barcodes}
+
+\subsubsection{Algemene uitleg}
+
+Voor de verschillende schermen te identificeren wordt gebruik gemaakt van een kleuren barcode. De barcode bestaat uit een herhalend patroon van 5 unieke kleuren telkens gevolgd door een witte lijn. Door het gebruik van deze witte lijn weet het algoritme waar het patroon eindigt en de volgende sequentie terug opnieuw begint. De 5 kleuren zijn speciaal gekozen om zo ver mogelijk van elkaar verwijderd te zijn in het HSL spectrum. Op deze manier is de kans op foute detectie zo klein mogelijk gemaakt. Voor de identificatie van de slaves wordt er dus een unieke combinatie van deze 5 kleuren weergegeven. Deze vormt dan een unieke vijfcijferige code die gelinkt kan worden aan de bijhorende slave. Dit zorgt ervoor dat we in theorie een totaal van $5!$ ($=120$) verschillende schermen op één moment kunnen detecteren. Herhaling van het patroon heeft als resultaat dat bij overlap het scherm nog steeds geïdentificeerd kan worden. Het algoritme zal van links naar rechts over de pixels, die zich in het midden van het scherm bevinden, itereren (complexiteit N). Vervolgens worden de HSL waarden van deze pixels bekeken om de overeenkomstige kleur van elke pixel te achterhalen. Wanneer een HSL waarde binnen de gewenste range valt, wordt het overeenkomstig cijfer opgeslaan in een lijst. Bij het bereiken van een witte lijn weet het algoritme dat het aan het einde van het patroon is. Wanneer dit het geval is wordt het inlezen van de volledige vijfcijferige code gecontroleerd op volledigheid. Zo niet wordt de lijst leeg gehaald en zoekt het algoritme verder. Het herhalend patroon is dus essentieel aan het correct inlezen van de barcode. Bijgevolg werd het aantal herhalingen van het patroon bekeken in een aantal testen. Uit deze testen werd een aantal van 7 herhalingen als optimaal resultaat bekomen. Een groter aantal herhalingen stemt overeen met meer kansen op een mogelijke detectie, maar stemt ook overeen met een kleinere oppervlakte per herhaling. Deze kleinere oppervlakte is dan weer nadelig voor detectie. 
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.1]{barcode}
+\caption{Voorbeeld van een barcode met 6 herhalingen.} 
+\label{fig:barcode}
+\end{figure}
+
+
+
+\subsubsection{Data set}
+
+Tijdens de testfase van het algoritme werden een aantal foto's genomen. Deze foto's verschilden in afstand tot het scherm, het scherm zelf (kleuren kunnen afwijken van scherm tot scherm) en het aantal herhalingen van het patroon (barcode).
+
+\subsubsection{Experiments}\label{sec:experimenten}
+
+\subsection{Schermherkenning}
+Volgende algoritmen zijn toegepast op de input image file volgens uitgeschreven volgorde. Zo worden de schermen herkend.
+\input{schermdetectie}
+
+\section{Testen}
+\input{testen}
+\section{Besluit}\label{sec:besluit}
+\input{besluit}
+
+\bibliographystyle{plain}
+\bibliography{bibliography}
+
+
+
+\end{document}
