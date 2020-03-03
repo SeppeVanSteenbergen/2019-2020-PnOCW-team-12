@@ -1,5 +1,16 @@
+import colorsys
 import random
 import numpy as np
+
+
+def rgb_to_hsl(red, green, blue):
+    h, l, s = colorsys.rgb_to_hls(red / 255, green / 255, blue / 255)
+
+    h *= 360
+    s *= 100
+    l *= 100
+
+    return h, s, l
 
 
 def scoreImg(Rmatrix, Gmatrix, Bmatrix, origColor, nbBlocks):
@@ -24,14 +35,14 @@ def scoreBlockColor(Rmatrix, Gmatrix, Bmatrix, origValue):
     blockScore = 0
     area = height * width
     # 5% random pixels out of block as samples
-    for i in range(area * 0.05):
-        x = random.randint(width)
-        y = random.randint(height)
+    for i in range(int(np.floor(area * 0.05))):
+        x = random.randint(0, width)
+        y = random.randint(0, height)
         pixelR = Rmatrix[y][x]
         pixelG = Gmatrix[y][x]
         pixelB = Bmatrix[y][x]
         pixelH, pixelS, pixelL = rgb_to_hsl(pixelR, pixelG, pixelB)
-        blockScore += ([pixelH,pixelS,pixelL], origValue)
+        blockScore += ([pixelH, pixelS, pixelL], origValue)
     return blockScore / (area * 0.05)
 
 
@@ -39,9 +50,9 @@ def scoreBlockNonColor(Rmatrix, Gmatrix, Bmatrix, black):
     height, width = Rmatrix.shape
     blockScore = 0
     area = height * width
-    for i in range(area * 0.05):
-        x = random.randint(width)
-        y = random.randint(height)
+    for i in range(int(np.floor(area * 0.05))):
+        x = random.randint(0, width)
+        y = random.randint(0, height)
         pixelR = Rmatrix[y][x]
         pixelG = Gmatrix[y][x]
         pixelB = Bmatrix[y][x]

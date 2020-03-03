@@ -9,21 +9,6 @@ import os
 from colorTestingST2.scripts import score
 
 
-def rgb_to_hsl(red, green, blue):
-    hue = []
-    saturation = []
-    lightness = []
-
-    for red, green, blue in zip(red, green, blue):
-        h, l, s = colorsys.rgb_to_hls(red / 255, green / 255, blue / 255)
-
-        hue.append(h * 360)
-        saturation.append(s * 100)
-        lightness.append(l * 100)
-
-    return hue, saturation, lightness
-
-
 def cut_image(file):
     image = cv2.imread(file)
     row, column, channels = image.shape
