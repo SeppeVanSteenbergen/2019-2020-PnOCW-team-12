@@ -35,9 +35,7 @@ def prep_image(file):
 
 
 path = os.getcwd()
-
 files = [file for file in glob.glob(os.path.join(path, "**/*.jpg"), recursive=True)]
 for file in files:
+    originalColor = file.split("/")[-1].split(".")[0].split("_")[-2]
     R, G, B = prep_image(file)
-    # H, S, L = rgb_to_hsl(R, G, B)
-    # print(H, S, L)
