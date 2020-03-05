@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Animation URL</title>
+</head>
+<body>
+<canvas id="canvas" width= "900" height= "900"></canvas>
+
+<script>
+
+    var canvas = document.getElementById("canvas")
+    var frameHeight = 102;
+    var frames = 15;
+    var frame = 0;
+    let ctx = canvas.getContext('2d');
+
+    function getURLimage() {
+        let image = new window.Image();
+        let timestamp = new Date().getTime();
+        image.src = "http://jumpingfishes.com/dancingpurpleunicorns/charging.png?t="+timestamp;
+        console.log(image.src)
+        var frameOffset = (++frame % frames) * frameHeight;
+
+        // console.log("1")
+        //
+        // ctx.clearRect(0,0,canvas.width, canvas.height)
+        //
+        // ctx.drawImage(image, 0, frameOffset,200, frameHeight,0,0, 200, frameHeight  );
+
+        if (image.complete) {
+            console.log("1")
+            ctx.clearRect(0,0,canvas.width, canvas.height)
+
+            ctx.drawImage(image, 0, frameOffset,200, frameHeight,0,0, 200, frameHeight  );
+        } else {
+            image.onload = function () {
+                console.log("2")
+                ctx.clearRect(0,0,canvas.width, canvas.height)
+
+                ctx.drawImage(image, 0, frameOffset,200, frameHeight,0,0, 200, frameHeight);
+            };
+        }
+    }
+    // onload= function startAnimation() {
+    //     requestAnimationFrame(getURLimage);
+    // }
+    onload= function startAnimation() {
+        setInterval(getURLimage, 1000/1);
+    }
+</script>
+
+
+
+</body>
+</html>
