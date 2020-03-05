@@ -1,4 +1,5 @@
 import colorsys
+import math
 import random
 import numpy as np
 
@@ -13,77 +14,83 @@ def rgb_to_hsl(red, green, blue):
     return h, s, l
 
 
-def scoreImg(Rmatrix, Gmatrix, Bmatrix, origColor, nbBlocks):
-    origHeight, origWidth = Rmatrix.shape
-    blocksR = split(Rmatrix, origHeight // nbBlocks, origWidth // nbBlocks)
-    blocksG = split(Gmatrix, origHeight // nbBlocks, origWidth // nbBlocks)
-    blocksB = split(Bmatrix, origHeight // nbBlocks, origWidth // nbBlocks)
+def scoreImg(Rmatrix, Gmatrix, Bmatrix, origColor, nbBlocks, randomPixels):
+    nbBlockSplit = int(math.sqrt(nbBlocks))
+    blocksR = split(Rmatrix, nbBlockSplit)
+    blocksG = split(Gmatrix, nbBlockSplit)
+    blocksB = split(Bmatrix, nbBlockSplit)
     totalScore = 0
     if origColor != "Black" and origColor != "White":
         origValue = colors.get(origColor)
-        for i in range(nbBlocks):
-            totalScore += scoreBlockColor(blocksR[i], blocksG[i], blocksB[i], origValue)
+        for i in range(nbBlockSplit):
+            totalScore += scoreBlockColor(blocksR[i], blocksG[i], blocksB[i], origValue, randomPixels)
     else:
         black = "Black" == origColor
-        for i in range(nbBlocks):
-            totalScore += scoreBlockNonColor(blocksR[i], blocksG[i], blocksB[i], black)
-    return totalScore / nbBlocks
+        for i in range(nbBlockSplit):
+            totalScore += scoreBlockNonColor(blocksR[i], blocksG[i], blocksB[i], black, randomPixels)
+    return totalScore / nbBlockSplit
 
 
-def scoreBlockColor(Rmatrix, Gmatrix, Bmatrix, origValue):
+def scoreBlockColor(Rmatrix, Gmatrix, Bmatrix, origValue, randomPixels):
     height, width = Rmatrix.shape
     blockScore = 0
     area = height * width
     # 5% random pixels out of block as samples
-    for i in range(int(np.floor(area * 0.05))):
-        x = random.randint(0, width)
-        y = random.randint(0, height)
+    for pixel in randomPixels:
+        x = pixel[0]
+        y = pixel[1]
         pixelR = Rmatrix[y][x]
         pixelG = Gmatrix[y][x]
         pixelB = Bmatrix[y][x]
         pixelH, pixelS, pixelL = rgb_to_hsl(pixelR, pixelG, pixelB)
-        blockScore += ([pixelH, pixelS, pixelL], origValue)
-    return blockScore / (area * 0.05)
+        blockScore += calcScoreColor([pixelH, pixelS, pixelL], origValue)
+    return blockScore / len(randomPixels)
 
 
-def scoreBlockNonColor(Rmatrix, Gmatrix, Bmatrix, black):
+def scoreBlockNonColor(Rmatrix, Gmatrix, Bmatrix, origValue, randomPixels):
     height, width = Rmatrix.shape
     blockScore = 0
     area = height * width
-    for i in range(int(np.floor(area * 0.05))):
-        x = random.randint(0, width)
-        y = random.randint(0, height)
+    for pixel in randomPixels:
+        x = pixel[0]
+        y = pixel[1]
         pixelR = Rmatrix[y][x]
         pixelG = Gmatrix[y][x]
         pixelB = Bmatrix[y][x]
-        blockScore += calcScoreNonColor([pixelR, pixelG, pixelB], black)
-    return blockScore / (area * 0.05)
+        blockScore += calcScoreNonColor([pixelR, pixelG, pixelB], origValue)
+    return blockScore / len(randomPixels)
 
 
 def calcScoreColor(pixel, origValue):
     h = pixel[0]
     l = pixel[2]
     if 10 < l < 90:
-        return 1 - ((h - origValue) % 360)/180
+        return 1 - (min(abs(h - origValue), 360 - abs(h - origValue))) / 180
     else:
         return 0
 
 
 def calcScoreNonColor(pixel, black):
+    maxDistance = 441.6729559300637
     if black:
         dist = np.sqrt(pixel[0]**2 + pixel[1]**2 + pixel[2]**2)
-        return 1 - dist / 255
+        return 1 - dist / maxDistance
     else:
         dist = np.sqrt((pixel[0]-255)**2 + (pixel[1]-255)**2 + (pixel[2]-255)**2)
-        return 1 - dist / 255
+        return 1 - dist / maxDistance
 
 
-# Author: Dat Nguyen
-def split(array, nRows, nCols):
-    r, h = array.shape
-    return (array.reshape(h//nRows, nRows, -1, nCols)
-                 .swapaxes(1, 2)
-                 .reshape(-1, nRows, nCols))
+def split(array, nbSplit):
+    orHeight, orWidth = array.shape
+    newHeight = orHeight - orHeight % nbSplit
+    newWidth = orWidth - orWidth % nbSplit
+    subArray = array[:newHeight, :newWidth]
+    hSplitArray = np.hsplit(subArray, nbSplit)
+    splitArray = []
+    for subA in hSplitArray:
+        splitArray += np.vsplit(subA, nbSplit)
+    return splitArray
+
 
 
 colors = {
