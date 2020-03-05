@@ -1,0 +1,13 @@
+Kunnen we onderzoeken:
+- Bij slechte detectie -> beter of slechter met filter?
+	=> Wanneer slechte detectie?
+- Gemiddeld verschil tussen noblur en elke filter
+- Welke filter over algemeen beter
+- Wanneer welke filter beter?
+- Doet ksize iets met resultaten
+	=> positief/negatief
+	=> Wanneer positief/negatief (vanaf welke score bij no Blur vermoed ik)
+- Gaan we filter toepassen?
+- Welke filter zouden we toepassen
+- Welke filter heeft het meeste tijd nodig
+- Welke filter heeft het beste rendement (afweging tijd en verbetering)
