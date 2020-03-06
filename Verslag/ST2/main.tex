@@ -69,7 +69,7 @@ Seppe Van Steenbergen & 38h\\
 	\input{inleiding}
 
 \section{Achtergrond}\label{sec:achtergrond}
-	\input{achtergrond}
+	\input{achtergrond} %Alle gebruikte filters bespreken
 
 \section{Methode}\label{sec:methode}
 	\input{methode}
@@ -77,10 +77,12 @@ Seppe Van Steenbergen & 38h\\
 \section{Bevindingen}\label{sec:bevindingen}
 	\input{bevindingen}
 
-	\subsection{Kleurruimte}\label{subsec:kleurruimte}
-		\input{kleurruimte}
-	\subsection{Omgevingsfactoren}\label{subsec:omgevingsfactoren}
-		\input{omgevingsfactoren}
+	\subsection{Tijdsconsumptie}\label{subsec:tijd}
+		\input{tijdsconsumptie}
+	\subsection{Juiste herkenning}\label{subsec:juisteherkenning}
+		\input{juisteherkenning}
+	\subsection{filter vs no filter} %titel etc nog aanpassen
+	
 	
 
 \section{Besluit}\label{sec:besluit}
@@ -89,63 +91,9 @@ Seppe Van Steenbergen & 38h\\
 	\subsection{Toepassingen op het project}\label{subsec:toepassingen}
 		\input{toepassingen}
 
-\newpage
-\addcontentsline{toc}{section}{Referenties}
-\bibliographystyle{unsrt}
-\bibliography{Bibliography}
-
-\newpage
-\appendix 
-\section{Percentage verkeerd geïnterpreteerde kleur per kleur}	
-\bigskip	
-		\begin{figure} [H]
-			\center
-			\includegraphics{img/WrongBlue}
-			\caption{Percentage van de verkeerd gedetecteerde kleuren bij een blauw scherm.}
-		\end{figure}
-	\bigskip		
-		\begin{figure} [H]
-			\center
-			\includegraphics{img/WrongGreen}
-			\caption{Percentage van de verkeerd gedetecteerde kleuren bij een groen scherm.}
-		\end{figure}
-	\bigskip		
-		\begin{figure} [H]
-			\center
-			\includegraphics{img/WrongRed}
-			\caption{Percentage van de verkeerd gedetecteerde kleuren bij een rood scherm.}
-		\end{figure}
-	\bigskip		
-		\begin{figure} [H]
-			\center
-			\includegraphics{img/WrongYellow}
-			\caption{Percentage van de verkeerd gedetecteerde kleuren bij een geel scherm.}
-		\end{figure}
-	\bigskip		
-		\begin{figure} [H]
-			\center
-			\includegraphics{img/WrongPurple}
-			\caption{Percentage van de verkeerd gedetecteerde kleuren bij een magenta scherm.}
-		\end{figure}
-		\bigskip	
-		\begin{figure} [H]
-			\center
-			\includegraphics{img/WrongBlueGreen}
-			\caption{Percentage van de verkeerd gedetecteerde kleuren bij een cyaan scherm.}
-		\end{figure}
-	\bigskip		
-		\begin{figure} [H]
-			\center
-			\includegraphics{img/WrongBlack}
-			\caption{Percentage van de verkeerd gedetecteerde kleuren bij een zwart scherm.}
-		\end{figure}
-	\bigskip		
-		\begin{figure} [H]
-			\center
-			\includegraphics{img/WrongWhite}
-			\caption{Percentage van de verkeerd gedetecteerde kleuren bij een wit scherm.}
-		\end{figure}
-\section{Spectrum plots}
-\input{AppendixKleurenPlots.tex}
+%\newpage
+%\addcontentsline{toc}{section}{Referenties}
+%\bibliographystyle{unsrt}
+%\bibliography{Bibliography}
 
 \end{document}
