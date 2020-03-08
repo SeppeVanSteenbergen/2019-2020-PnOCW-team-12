@@ -15,7 +15,6 @@
     var frames = 15;
     let ctx = canvas.getContext('2d');
 
-
     function getURLimageBuffer() {
         let image = new window.Image();
         let timestamp = new Date().getTime();
@@ -52,9 +51,12 @@
         }
     }
 
+    // onload = function startAnimation() {
+    //     setInterval(getURLimageBuffer, 500);
+    // }
 
     onload = function startAnimation() {
-        setInterval(getURLimageBuffer, 500);
+        setInterval(getURLimage, 1000/30);
     }
 </script>
 
