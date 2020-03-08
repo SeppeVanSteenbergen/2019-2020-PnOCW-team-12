@@ -1,13 +1,13 @@
-Er bestaat natuurlijk een breed gamma aan fotofilters. De benodigde code voor dit onderzoek is geschreven geweest in Python. Daarom is gekozen om vier filters uit de bibliotheek van OpenCV te gebruiken ( zie sectie \ref{sec:methode}).  Een eerste toegepaste filter is de \textit{Gaussian Blur}. Gevolgd door \textit{Median Blur} en \textit{Mean Blur}. Bij deze methodes wordt gekeken naar de pixels rond een centrale pixel om zijn waarde te bepalen. Ten slotte is er ook een minder gekende ontruismethode gebruikt namelijk de \textit{Fast Non-Local Mean Denoising}. Deze werkt anders dan de eerste drie.
+Er bestaat natuurlijk een breed gamma aan fotofilters. De benodigde code voor dit onderzoek is geschreven geweest in Python. Daarom is gekozen om vier filters uit de bibliotheek van OpenCV te gebruiken (zie sectie \ref{sec:methode}).  Een eerste toegepaste filter is de \textit{Gaussian Blur}. Gevolgd door \textit{Median Blur} en \textit{Mean Blur}. Bij deze methodes wordt gekeken naar de pixels rond een centrale pixel om zijn waarde te bepalen. Ten slotte is er ook een minder gekende ontruismethode gebruikt namelijk de \textit{Fast Non-Local Mean Denoising}. Deze werkt anders dan de eerste drie.
 
 \subsection{Gaussian Blur}
-Deze methode filtert de hoge frequenties uit de foto en heeft dus het effect van een laagdoorlaatfilter. Er wordt een kernel grootte vooropgesteld. Deze grootte is de lengte van de matrix van pixels die bekeken wordt. Bijvoorbeeld indien de grootte 3 is zal de foto onderverdeeld worden in vierkanten van 3x3 pixels. Op elk van deze vierkanten wordt de methode dan toegepast. NOG UITLEGGEN HOE GAUSSIAN PRECIES WERKT!!!!!!!!!!!!!!!!!!!!
+Deze methode filtert de hoge frequenties uit de foto en heeft dus het effect van een laagdoorlaatfilter. Er wordt een kerngrootte vooropgesteld. Deze grootte is de lengte van de matrix van pixels die bekeken wordt. Bijvoorbeeld indien de grootte 3 is zal voor elke pixel die gefilterd wordt een vierkant rond deze pixel opgesteld worden met zijde 3. Op elk van dit vierkant wordt de methode dan toegepast. NOG UITLEGGEN HOE GAUSSIAN PRECIES WERKT!!!!!!!!!!!!!!!!!!!!
 
 \subsection{Median Blur}
-Binnen de kernel van pixels worden de waarden van de pixels gesorteerd van klein naar groot, daarna wordt de middelste waarde (mediaan) geselecteerd. De kleur van de centrale pixel van de kernel wordt dan op deze waarde geplaatst.
+Binnen de kern van pixels worden de waarden van de pixels gesorteerd van klein naar groot, daarna wordt de middelste waarde (mediaan) geselecteerd. De kleur van de centrale pixel van de kernel wordt dan op deze waarde geplaatst.
 
 \subsection{Mean Blur}
-Bepaald binnen de kernel de gemiddelde waarde van de pixels. Daarna wordt de kleur van de centrale pixel op deze waarde geplaatst.
+Bepaald binnen de kern de gemiddelde waarde van de pixels. Daarna wordt de kleur van de centrale pixel op deze waarde geplaatst.
 
 \subsection{Fast Non-Local Mean Denoising}
-Aan  de hand van de kernel worden binnen de afbeelding gelijkende kernels gezocht. Gelijkende kernels worden bij elkaar geplaatst. Van elk van deze groepen wordt dan het gemiddelde bepaald. Daarna wordt elke kernel binnen die groep op de gemiddelde waarde geplaatst. 
+Aan  de hand van de kern worden binnen de afbeelding gelijkende kernels gezocht. Gelijkende kernen worden bij elkaar geplaatst. Van elk van deze groepen wordt dan het gemiddelde bepaald. Daarna wordt elke pixel in elke kern binnen die groep op de gemiddelde waarde geplaatst. 
