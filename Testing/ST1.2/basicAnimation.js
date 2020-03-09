@@ -16,9 +16,8 @@ function step(timestamp) {
   // busy waiting (fake workload van frame)
   // sleep(30)
 
-  if (progress < 4000) {
-    window.requestAnimationFrame(step);
-  }
+  window.requestAnimationFrame(step);
+
 }
 
 // busy wait loop
@@ -112,7 +111,7 @@ function testDrift() {
 
     drifts.push(driftT)
 
-    if(drifts.length == 20){
+    if (drifts.length == 20) {
       console.log(drifts)
     }
 
@@ -120,13 +119,36 @@ function testDrift() {
   }, 1000);
 }
 
+//based on: https://medium.com/javascript-in-plain-english/better-understanding-of-timers-in-javascript-settimeout-vs-requestanimationframe-bf7f99b9ff9b
+function testUitstel() {
+
+  function print() {
+    console.log('print');
+  }
+
+  function busy() {
+    //dosomething
+    let cnt = 0;
+    for (let i = 0; i < 10e8; i += 1) {
+      cnt += 1;
+    }
+  }
+
+  setTimeout(print, 100);
+
+  // busy();
+
+}
+
 
 // initial start of animations
 // moveBox();
-// window.requestAnimationFrame(step);
+// req = window.requestAnimationFrame(step);
 // moveBox()
 
 // animateTextTimeout()
 // animateLayout()
 
-testDrift()
+testUitstel();
+
+// testDrift()
