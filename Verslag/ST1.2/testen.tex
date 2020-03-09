@@ -13,13 +13,17 @@ Bij het gebruik maken van timers wordt er verondersteld van een playback van 60f
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.8\textwidth]{img/Timer drift.png}
+\includegraphics[width=0.7\textwidth]{img/Timer drift.png}
 \caption{Timer drift over verschillende populaire browsers} \label{drift}
 \end{figure}
 
 Door het continu opschuiven van frame verandering, kan er een framedrop voorkomen door redundante stappen in te laden tijdens de foute frame waardoor de animatie stappen verliest en haperend ervaren word. 
 
-\textbf{hier kleine illustratie van drift op timeline}
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.6\textwidth]{img/drift-framedrop.png}
+\caption{Framedrop door gebruik van setTimeout} \label{drift-framedrop}
+\end{figure}
 
 \paragraph{Single threaded}
 Javascript wordt single-threaded in de browser uitgevoerd. Door deze limitatie kan een taak die getimed staat over x aantal miliseconden pas uitgevoerd worden op de main thread als de event loop op dat moment beschikbaar is om die functie dan uit te voeren. Als er tussen het initialiseren van de timer en het uitvoeren van deze geplande taak een andere taak tussenbeide komt die langere executietijd heeft dan de geplande tijd zal de uitvoering uitgesteld worden tot de event loop terug vrij komt. Ook dit is een deuk in de betrouwbaarheid van timers.

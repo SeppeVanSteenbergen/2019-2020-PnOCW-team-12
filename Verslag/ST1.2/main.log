@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 2.9.7300 64-bit) (preloaded format=pdflatex 2020.2.25)  9 MAR 2020 19:01
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 2.9.7300 64-bit) (preloaded format=pdflatex 2020.2.25)  9 MAR 2020 19:12
 entering extended mode
 **./main.tex
 (main.tex
@@ -571,42 +571,47 @@ Package microtype Info: Loading generic protrusion settings for font family
 File: img/Timer drift.png Graphic file (type png)
 <use img/Timer drift.png>
 Package pdftex.def Info: img/Timer drift.png  used on input line 16.
-(pdftex.def)             Requested size: 341.43437pt x 211.48744pt.
+(pdftex.def)             Requested size: 298.75264pt x 185.04596pt.
  [2 <./img/Timer drift.png>]
-<img/charging.png, id=53, 243.91125pt x 614.295pt>
+<img/drift-framedrop.png, id=52, 891.33pt x 380.42125pt>
+File: img/drift-framedrop.png Graphic file (type png)
+<use img/drift-framedrop.png>
+Package pdftex.def Info: img/drift-framedrop.png  used on input line 24.
+(pdftex.def)             Requested size: 256.07741pt x 109.29189pt.
+<img/charging.png, id=54, 243.91125pt x 614.295pt>
 File: img/charging.png Graphic file (type png)
 <use img/charging.png>
-Package pdftex.def Info: img/charging.png  used on input line 37.
+Package pdftex.def Info: img/charging.png  used on input line 41.
 (pdftex.def)             Requested size: 170.7367pt x 430.00356pt.
- [3]
-<img/draadloos.png, id=62, 347.2975pt x 214.8025pt>
+ [3 <./img/drift-framedrop.png (PNG copy)>]
+<img/draadloos.png, id=64, 347.2975pt x 214.8025pt>
 File: img/draadloos.png Graphic file (type png)
 <use img/draadloos.png>
-Package pdftex.def Info: img/draadloos.png  used on input line 47.
+Package pdftex.def Info: img/draadloos.png  used on input line 51.
 (pdftex.def)             Requested size: 192.0548pt x 118.78743pt.
-<img/ethernet.png, id=63, 351.3125pt x 214.8025pt>
+<img/ethernet.png, id=65, 351.3125pt x 214.8025pt>
 File: img/ethernet.png Graphic file (type png)
 <use img/ethernet.png>
-Package pdftex.def Info: img/ethernet.png  used on input line 52.
+Package pdftex.def Info: img/ethernet.png  used on input line 56.
 (pdftex.def)             Requested size: 192.0548pt x 117.4305pt.
  [4 <./img/charging.png> <./img/draadloos.png> <./img/ethernet.png>]
-<img/inladen.png, id=74, 1155.56718pt x 306.39468pt>
+<img/inladen.png, id=76, 1155.56718pt x 306.39468pt>
 File: img/inladen.png Graphic file (type png)
 <use img/inladen.png>
-Package pdftex.def Info: img/inladen.png  used on input line 61.
+Package pdftex.def Info: img/inladen.png  used on input line 65.
 (pdftex.def)             Requested size: 346.67284pt x 91.91911pt.
-<img/reset.png, id=75, 444.15938pt x 24.09pt>
+<img/reset.png, id=77, 444.15938pt x 24.09pt>
 File: img/reset.png Graphic file (type png)
 <use img/reset.png>
-Package pdftex.def Info: img/reset.png  used on input line 67.
+Package pdftex.def Info: img/reset.png  used on input line 71.
 (pdftex.def)             Requested size: 310.90944pt x 16.86287pt.
-<img/inladen2.png, id=77, 654.19406pt x 65.49469pt>
+<img/inladen2.png, id=79, 654.19406pt x 65.49469pt>
 File: img/inladen2.png Graphic file (type png)
 <use img/inladen2.png>
-Package pdftex.def Info: img/inladen2.png  used on input line 75.
+Package pdftex.def Info: img/inladen2.png  used on input line 79.
 (pdftex.def)             Requested size: 457.93272pt x 45.84595pt.
 
-Overfull \hbox (31.14137pt too wide) in paragraph at lines 75--76
+Overfull \hbox (31.14137pt too wide) in paragraph at lines 79--80
  [][] 
  []
 
@@ -627,10 +632,10 @@ Package rerunfilecheck Info: File `main.out' has not changed.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 74.
  ) 
 Here is how much of TeX's memory you used:
- 10080 strings out of 481545
- 159823 string characters out of 2923256
- 468512 words of memory out of 3000000
- 25067 multiletter control sequences out of 15000+200000
+ 10088 strings out of 481545
+ 160010 string characters out of 2923256
+ 468581 words of memory out of 3000000
+ 25073 multiletter control sequences out of 15000+200000
  566872 words of font info for 66 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
  48i,8n,46p,678b,535s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -641,9 +646,9 @@ nc/dvips/lm/lm-ec.enc}<C:/Program Files/MiKTeX 2.9/fonts/type1/public/lm/lmbx10
 Files/MiKTeX 2.9/fonts/type1/public/lm/lmmi8.pfb><C:/Program Files/MiKTeX 2.9/f
 onts/type1/public/lm/lmr10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/
 lm/lmr8.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/lm/lmtt10.pfb>
-Output written on main.pdf (6 pages, 330570 bytes).
+Output written on main.pdf (6 pages, 395239 bytes).
 PDF statistics:
- 123 PDF objects out of 1000 (max. 8388607)
- 23 named destinations out of 1000 (max. 500000)
- 11860 words of extra memory for PDF output out of 12000 (max. 10000000)
+ 125 PDF objects out of 1000 (max. 8388607)
+ 24 named destinations out of 1000 (max. 500000)
+ 11865 words of extra memory for PDF output out of 12000 (max. 10000000)
 
