@@ -6,4 +6,4 @@
 \contentsline {paragraph}{Drift in timers}{2}{section*.2}%
 \contentsline {paragraph}{Single threaded}{3}{section*.4}%
 \contentsline {subsection}{\numberline {2.3}HTTP request frames}{3}{subsection.2.3}%
-\contentsline {section}{\numberline {3}Besluit}{4}{section.3}%
+\contentsline {section}{\numberline {3}Besluit}{5}{section.3}%
