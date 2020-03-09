@@ -1,0 +1,151 @@
+\documentclass[a4paper,11pt]{article}
+
+\usepackage[margin=3cm]{geometry}
+
+
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage[colorlinks,allcolors=violet]{hyperref}
+\usepackage{url}
+\usepackage[dutch]{babel}
+\usepackage{gensymb}
+\usepackage{listings}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows}
+\usepackage[margin=3cm]{geometry}
+\usepackage{amsmath}
+\usepackage{float}
+\usepackage{lmodern}
+\usepackage{hyperref}
+\usepackage{subcaption}
+\usetikzlibrary{shapes.geometric, arrows, positioning}
+
+% https://tex.stackexchange.com/questions/94032/fancy-tables-in-latex
+\usepackage[table]{xcolor}
+\usepackage{booktabs}
+
+\usepackage[utf8]{inputenc}
+
+% https://tex.stackexchange.com/questions/664/why-should-i-use-usepackaget1fontenc
+
+
+\newcommand{\note}[1]{{\colorbox{yellow!40!white}{#1}}}
+\newcommand{\exampletext}[1]{{\color{blue!60!black}#1}}
+
+\begin{document}
+
+\noindent
+\colorbox[HTML]{52BDEC}{\bfseries\parbox{\textwidth}{\centering\large
+  --- Report P\&O CW 2019--2020 Task ST2.1 ---
+}}
+\\[-1mm]
+\colorbox[HTML]{00407A}{\bfseries\color{white}\parbox{\textwidth}{
+  Department of Computer Science -- KU Leuven
+  \hfill
+  \today
+}}
+\\
+
+\smallskip
+
+\noindent
+\begin{tabular}{*4l}
+\toprule
+\multicolumn{2}{l}{\large\textbf{Team 12}} \\
+\midrule
+Martijn Debeuf &  44h\\ % fill in the time spend on this task per team member who worked on it
+Toon Sauvillers &  38h\\
+Seppe Van Steenbergen & 38h\\
+\bottomrule
+\hline
+\end{tabular}\\
+
+\noindent
+{\color[HTML]{52BDEC} \rule{\linewidth}{1mm} }
+
+\tableofcontents
+\newpage
+\section{Inleiding}\label{sec:inleiding}
+	\input{inleiding}
+
+\section{Achtergrond}\label{sec:achtergrond}
+	\input{achtergrond}
+
+\section{Methode}\label{sec:methode}
+	\input{methode}
+
+\section{Bevindingen}\label{sec:bevindingen}
+	\input{bevindingen}
+
+	\subsection{Kleurruimte}\label{subsec:kleurruimte}
+		\input{kleurruimte}
+	\subsection{Omgevingsfactoren}\label{subsec:omgevingsfactoren}
+		\input{omgevingsfactoren}
+	
+
+\section{Besluit}\label{sec:besluit}
+	\input{besluit}
+	
+	\subsection{Toepassingen op het project}\label{subsec:toepassingen}
+		\input{toepassingen}
+
+\newpage
+\addcontentsline{toc}{section}{Referenties}
+\bibliographystyle{unsrt}
+\bibliography{Bibliography}
+
+\newpage
+\appendix 
+\section{Percentage verkeerd geïnterpreteerde kleur per kleur}	
+\bigskip	
+		\begin{figure} [H]
+			\center
+			\includegraphics{img/WrongBlue}
+			\caption{Percentage van de verkeerd gedetecteerde kleuren bij een blauw scherm.}
+		\end{figure}
+	\bigskip		
+		\begin{figure} [H]
+			\center
+			\includegraphics{img/WrongGreen}
+			\caption{Percentage van de verkeerd gedetecteerde kleuren bij een groen scherm.}
+		\end{figure}
+	\bigskip		
+		\begin{figure} [H]
+			\center
+			\includegraphics{img/WrongRed}
+			\caption{Percentage van de verkeerd gedetecteerde kleuren bij een rood scherm.}
+		\end{figure}
+	\bigskip		
+		\begin{figure} [H]
+			\center
+			\includegraphics{img/WrongYellow}
+			\caption{Percentage van de verkeerd gedetecteerde kleuren bij een geel scherm.}
+		\end{figure}
+	\bigskip		
+		\begin{figure} [H]
+			\center
+			\includegraphics{img/WrongPurple}
+			\caption{Percentage van de verkeerd gedetecteerde kleuren bij een magenta scherm.}
+		\end{figure}
+		\bigskip	
+		\begin{figure} [H]
+			\center
+			\includegraphics{img/WrongBlueGreen}
+			\caption{Percentage van de verkeerd gedetecteerde kleuren bij een cyaan scherm.}
+		\end{figure}
+	\bigskip		
+		\begin{figure} [H]
+			\center
+			\includegraphics{img/WrongBlack}
+			\caption{Percentage van de verkeerd gedetecteerde kleuren bij een zwart scherm.}
+		\end{figure}
+	\bigskip		
+		\begin{figure} [H]
+			\center
+			\includegraphics{img/WrongWhite}
+			\caption{Percentage van de verkeerd gedetecteerde kleuren bij een wit scherm.}
+		\end{figure}
+\section{Spectrum plots}
+\input{AppendixKleurenPlots.tex}
+
+\end{document}
