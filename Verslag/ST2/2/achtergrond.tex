@@ -1,13 +1,16 @@
-Er bestaat natuurlijk een breed gamma aan fotofilters. De benodigde code voor dit onderzoek is geschreven geweest in Python. Daarom is gekozen om vier filters uit de bibliotheek van OpenCV te gebruiken (zie sectie \ref{sec:methode}).  Een eerste toegepaste filter is de \textit{Gaussian Blur}. Gevolgd door \textit{Median Blur} en \textit{Mean Blur}. Bij deze methodes wordt gekeken naar de pixels rond een centrale pixel om zijn waarde te bepalen. Ten slotte is er ook een minder gekende ontruismethode gebruikt namelijk de \textit{Fast Non-Local Mean Denoising}. Deze werkt anders dan de eerste drie.
+Er bestaat natuurlijk een breed gamma aan fotofilters. De benodigde code voor dit onderzoek is geschreven in Python. Daarom is gekozen om vier filters uit de bibliotheek van OpenCV te gebruiken (zie sectie \ref{sec:methode}).  Een eerste toegepaste filter is de \textit{Gaussian Blur}, gevolgd door \textit{Median Blur} en \textit{Mean Blur}. Deze methodes kijken naar de pixels rond een centrale pixel om zijn kleurwaarde te bepalen. Ten slotte is er ook een minder gekende ontruismethode gebruikt namelijk de \textit{Fast Non-Local Mean Denoising}. Deze werkt anders dan de eerste drie, zie sectie \ref{subsec:fnlmd}.
 
-\subsection{Gaussian Blur}
-Deze methode filtert de hoge frequenties uit de foto en heeft dus het effect van een laagdoorlaatfilter. Er wordt een kerngrootte vooropgesteld. Deze grootte is de lengte van de matrix van pixels die bekeken wordt. Bijvoorbeeld indien de grootte 3 is zal voor elke pixel die gefilterd wordt een vierkant rond deze pixel opgesteld worden met zijde 3. Op elk van dit vierkant wordt de methode dan toegepast. NOG UITLEGGEN HOE GAUSSIAN PRECIES WERKT!!!!!!!!!!!!!!!!!!!!
+\subsection{Methodes met kernelgrootte}
+De volgende methodes maken gebruik van een kernelgrootte, concreet betekend dit dat het algoritme gaat kijken naar een aantal rondomliggende pixels om de nieuwe kleurwaarde te bepalen. Bij een kernelgrootte van drie zal er een vierkant met zijde drie rond de pixel getrokken worden. Elk algoritme gaat deze pixels anders interpreteren om een nieuwe waarde toe te kennen.
+\subsubsection{Gaussian Blur}
+De {\it Gaussian Blur} gaat kijken naar de omliggende pixels. Degenen die verder liggen, zullen minder invloed hebben dan degenen die dichterbij liggen. Een pure {\it Gaussian Blur} zou naar alle omliggende pixels kijken, ze gaan namelijk allemaal een bijdrage leveren. Door de zware berekeningen die hiermee gepaard gaan, kijkt deze blur enkel naar de omliggende pixels binnenin de door de kernelgrootte gedefinieerde omgeving. \cite{gaussianBlur}
 
-\subsection{Median Blur}
-Binnen de kern van pixels worden de waarden van de pixels gesorteerd van klein naar groot, daarna wordt de middelste waarde (mediaan) geselecteerd. De kleur van de centrale pixel van de kernel wordt dan op deze waarde geplaatst.
+\subsubsection{Median Blur}
+Binnen de kern sorteert dit algortime de pixels van klein naar groot, vervolgens wordt de middelste waarde (mediaan) geselecteerd. De kleur van de centrale pixel van de kernel wordt dan op deze waarde geplaatst.
 
-\subsection{Mean Blur}
-Bepaald binnen de kern de gemiddelde waarde van de pixels. Daarna wordt de kleur van de centrale pixel op deze waarde geplaatst.
+\subsubsection{Mean Blur}
+Hier gebeurt hetzelfde als bij de {\it Median Blur} enkel neemt het algoritme hier het gemiddelde in plaats van de mediaan.
 
 \subsection{Fast Non-Local Mean Denoising}
-Aan  de hand van de kern worden binnen de afbeelding gelijkende kernels gezocht. Gelijkende kernen worden bij elkaar geplaatst. Van elk van deze groepen wordt dan het gemiddelde bepaald. Daarna wordt elke pixel in elke kern binnen die groep op de gemiddelde waarde geplaatst. 
+\label{subsec:fnlmd}
+Aan  de hand van de kern worden binnen de afbeelding gelijkende kernels gezocht. Gelijkende kernen worden bij elkaar geplaatst. Van elk van deze groepen wordt dan het gemiddelde bepaald. Daarna wordt elke pixel in elke kern binnen die groep op de gemiddelde waarde geplaatst. HIER MOET NOG EEN CITE KOMEN!!! VAN WAAR HEBBEN WE DIT?
