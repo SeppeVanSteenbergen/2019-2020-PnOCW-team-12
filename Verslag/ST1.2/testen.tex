@@ -30,12 +30,17 @@ Javascript wordt single-threaded in de browser uitgevoerd. Door deze limitatie k
 
 \subsection{RequestAnimationFrame}
 
-Een methode die moderne browsers bieden om animaties te updaten met javascript is \texttt{requestAnimationFrame()}. Het wordt in dezelfde context gebruikt als \texttt{setTimeout()}, maar lost enkele cruciale problemen op. Ten eerste moet er geen tijdsinterval meer gespecifieerd worden als parameter, maar synced de browser de executie van deze taak met de refreshrate van de monitor. De opgegeven callback functie wordt door de event loop net voor de repaint van de pagina uitgevoerd. Hierdoor worden enkel frames geupdate voor een repaint en zullen er geen redundante taken uitgevoerd worden per frame of framedrops voorkomen.
+Een methode die moderne browsers bieden om animaties te updaten met javascript is \texttt{requestAnimationFrame()}. Het wordt in dezelfde context gebruikt als \texttt{setTimeout()}, maar lost enkele cruciale problemen op. Ten eerste moet er geen tijdsinterval meer gespecifieerd worden als parameter, maar synced de browser de executie van deze taak met de refreshrate van de monitor. De opgegeven callback functie wordt door de event loop net voor de repaint van de pagina uitgevoerd. Hierdoor worden enkel frames geupdate voor een repaint en zullen er geen redundante taken uitgevoerd worden per frame of framedrops voorkomen. ref:https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame
 
 \textbf{eventueel kleine illustratie settimeout vs requestframe op tijdlijn}
 
 \subsection{Performance}
-Deze methode lost een groot deel van globale timing op, maar garandeerd daarom geen smooth animation playback.
+Deze methode lost een groot deel van globale timing op, maar garandeerd daarom geen smooth animation playback. We gaan er verder vanuit dat er geen devices een hogere refresh rate dan 60Hz verwachten en mikken dus op een playback snelheid van 60fps. Als de methode om de frame te updaten langer duurt dan 16.7ms zal de frame niet gedropt worden, maar uitgerokken. Alle frames worden wel weergegeven, maar niet aan een snelheid van 60fps wat dus ook oogt als een niet vloeiende animatie.
+
+TODO: performance bekijken met artif. workload (busy wait) en fps.
+
+TODO: kleine ref naar DOM-tree en reflow updates, zeggen niet toepasselijk bij singulier animatie en eenvoudige webpage. ref: https://www.sitepoint.com/10-ways-minimize-reflows-improve-performance/
+https://gist.github.com/faressoft/36cdd64faae21ed22948b458e6bf04d5
 
 
 \subsection{HTTP request frames}
