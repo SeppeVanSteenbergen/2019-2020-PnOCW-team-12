@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sync test Team 12</title>
+
+</head>
+<body>
+
+<h1>Sync page</h1>
+<H2 id="time"></H2>
+<div>
+    <p>frame count:</p>
+    <p id="frameCount"></p>
+</div>
+<pre id="summary">
+
+</pre>
+<input type="button" onclick="start()" value="sync"/>
+<input type="button" onclick="socketAnimation()" value="animation"/>
+<pre id="textDisplay"></pre>
+<canvas id="game"></canvas>
+
+</body>
+<footer>
+    <script type='text/javascript' src='/socketio'></script>
+    <script type="text/javascript" src="/client_script.js"></script>
+</footer>
+</html>
