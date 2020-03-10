@@ -1,0 +1,23 @@
+\begin{thebibliography}{1}
+
+\bibitem{improvePerformance}
+{Craig Buckler}.
+\newblock 10 ways to minimize reflows and improve performance, 2015.
+\newblock
+  \url{https://www.sitepoint.com/10-ways-minimize-reflows-improve-performance/},
+  Last accessed on 09-02-2020.
+
+\bibitem{testDrift}
+{cTn-dev}.
+\newblock setinterval keeps drifting over time, 2018.
+\newblock \url{https://github.com/nodejs/node/issues/21822}, Last accessed on
+  08-02-2020.
+
+\bibitem{requestFrameDocs}
+{Mozilla}.
+\newblock Window.requestanimationframe(), 2020.
+\newblock
+  \url{https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame},
+  Last accessed on 08-02-2020.
+
+\end{thebibliography}
