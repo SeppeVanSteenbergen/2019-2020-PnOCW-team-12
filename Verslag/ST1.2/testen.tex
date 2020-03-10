@@ -37,9 +37,10 @@ Een methode die moderne browsers bieden om animaties te updaten met javascript i
 \subsection{Performance} \label{performance}
 Deze methode lost een groot deel van globale timing op, maar garandeerd daarom geen smooth animation playback. We gaan er verder vanuit dat er geen devices een hogere refresh rate dan 60Hz verwachten en mikken dus op een playback snelheid van 60fps. Als de methode om de frame te updaten langer duurt dan 16.7ms zal de frame niet gedropt worden, maar uitgerokken. Alle frames worden wel weergegeven, maar niet aan een snelheid van 60fps wat dus ook oogt als een niet vloeiende animatie.
 
-TODO: performance bekijken met artif. workload (busy wait) en fps.
+\textbf{TODO}: performance bekijken met artif. workload (busy wait) en fps.
 
-TODO: kleine ref naar DOM-tree en reflow updates, zeggen niet toepasselijk bij singulier animatie en eenvoudige webpage. \cite{improvePerformance}
+Om een pagina zo responsief mogelijk te houden, moet het aantal reflows geminimaliseerd worden. Er zijn nog verscheidene elementen die de reflow snelheid beïnvloeden zoals de diepte en afhankelijkheden van nodes in de DOM-tree van de webpagina. Aangezien er in dit geval enkel gewerkt wordt met een enkelvoudige animatie op een webpagina gaan we hier niet verder op in.
+\cite{improvePerformance}
 
 
 \subsection{HTTP request frames}
