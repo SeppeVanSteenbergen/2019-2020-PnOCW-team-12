@@ -27,4 +27,11 @@
   \url{https://developers.google.com/web/fundamentals/performance/rendering/optimize-javascript-execution},
   Last accessed on 08-02-2020.
 
+\bibitem{stackoverflow}
+{StackOverflow}.
+\newblock Sprite sheet van stackoverflow, 2019.
+\newblock
+  \url{https://stackoverflow.com/questions/9486961/animated-image-with-javascript},
+  Last accessed on 10-03-2020.
+
 \end{thebibliography}
