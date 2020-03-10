@@ -1,16 +1,16 @@
-Er bestaat natuurlijk een breed gamma aan fotofilters. De benodigde code voor dit onderzoek is geschreven in Python. Daarom is gekozen om vier filters uit de bibliotheek van OpenCV te gebruiken (zie sectie \ref{sec:methode}).  Een eerste toegepaste filter is de \textit{Gaussian Blur}, gevolgd door \textit{Median Blur} en \textit{Mean Blur}. Deze methodes kijken naar de pixels rond een centrale pixel om zijn kleurwaarde te bepalen. Ten slotte is er ook een minder gekende ontruismethode gebruikt namelijk de \textit{Fast Non-Local Mean Denoising}. Deze werkt anders dan de eerste drie, zie sectie \ref{subsec:fnlmd}.
+Er bestaat natuurlijk een breed assortiment aan fotofilters. De benodigde code voor dit onderzoek is geschreven in Python. Daarom is gekozen om vier filters uit de bibliotheek van OpenCV te gebruiken (zie sectie \ref{sec:methode}).  Een eerste toegepaste filter is de \textit{Gaussian Blur}, gevolgd door \textit{Median Blur} en \textit{Mean Blur}. Deze methodes kijken naar de pixels rond een centrale pixel om zijn kleurwaarde te bepalen. Ten slotte is er ook een minder bekende ontruismethode gebruikt namelijk de \textit{Fast Non-Local Mean Denoising}. Deze werkt anders dan de eerste drie, zie sectie \ref{subsec:fnlmd}.
 
-\subsection{Methodes met kernelgrootte}
-De volgende methodes maken gebruik van een kernelgrootte, concreet betekend dit dat het algoritme gaat kijken naar een aantal rondomliggende pixels om de nieuwe kleurwaarde te bepalen. Bij een kernelgrootte van drie zal er een vierkant met zijde drie rond de pixel getrokken worden. Elk algoritme gaat deze pixels anders interpreteren om een nieuwe waarde toe te kennen.
+\subsection{Methodes met kerngrootte}
+De volgende methodes maken gebruik van een kerngrootte, concreet betekend dit dat het algoritme zal kijken naar een aantal rondomliggende pixels om de nieuwe kleurwaarde te bepalen. Bij een kerngrootte van drie zal er een vierkant met zijde drie rond de pixel getrokken worden. Elk algoritme gaat deze pixels anders interpreteren om een nieuwe waarde toe te kennen.
 \subsubsection{Gaussian Blur}
-De {\it Gaussian Blur} gaat kijken naar de omliggende pixels. Degenen die verder liggen, zullen minder invloed hebben dan degenen die dichterbij liggen. Een pure {\it Gaussian Blur} zou naar alle omliggende pixels kijken, ze gaan namelijk allemaal een bijdrage leveren. Door de zware berekeningen die hiermee gepaard gaan, kijkt deze blur enkel naar de omliggende pixels binnenin de door de kernelgrootte gedefinieerde omgeving. \cite{gaussianBlur}
+De {\it Gaussian Blur} zal kijken naar de omliggende pixels. Degenen die verder liggen, zullen minder invloed hebben dan degenen die dichterbij liggen. Een pure {\it Gaussian Blur} zou naar alle omliggende pixels kijken, ze zullen namelijk allemaal een bijdrage leveren. Door de zware berekeningen die hiermee gepaard gaan, kijkt deze blur enkel naar de omliggende pixels binnenin de door de kerngrootte gedefinieerde omgeving. \cite{gaussianBlur}
 
 \subsubsection{Median Blur}
-Binnen de kern sorteert dit algortime de pixels van klein naar groot, vervolgens wordt de middelste waarde (mediaan) geselecteerd. De kleur van de centrale pixel van de kernel wordt dan op deze waarde geplaatst.
+Binnen de kern sorteert dit algoritme de pixels van klein naar groot, vervolgens wordt de middelste waarde (mediaan) geselecteerd. De kleur van de centrale pixel van de kernel krijgt deze waarde vervolgens toegeschreven.
 
 \subsubsection{Mean Blur}
 Hier gebeurt hetzelfde als bij de {\it Median Blur} enkel neemt het algoritme hier het gemiddelde in plaats van de mediaan.
 
 \subsection{Fast Non-Local Mean Denoising}
 \label{subsec:fnlmd}
-Aan  de hand van de kern worden binnen de afbeelding gelijkende kernels gezocht. Gelijkende kernen worden bij elkaar geplaatst. Van elk van deze groepen wordt dan het gemiddelde bepaald. Daarna wordt elke pixel in elke kern binnen die groep op de gemiddelde waarde geplaatst. \cite{fastExplanation}
+Dit algoritme verdeeld de afbeelding in gelijke blokken, deze worden met elkaar vergeleken. Gelijkende blokken worden bij elkaar geplaatst in elk van deze groepen wordt dan het gemiddelde bepaald. Vervolgens krijgt elke pixel, in elke kern, de gemiddelde waarde toegekend. \cite{fastExplanation}
