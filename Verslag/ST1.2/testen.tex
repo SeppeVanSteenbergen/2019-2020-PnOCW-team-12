@@ -14,7 +14,7 @@ Bij het gebruik maken van timers wordt er verondersteld van een playback van 60f
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\textwidth]{img/Timer drift.png}
-\caption{Timer drift over verschillende populaire browsers} \label{drift}
+\caption{Timer drift van verschillende populaire browsers} \label{drift}
 \end{figure}
 
 Door het continu opschuiven van frame updates kan er een framedrop voorkomen door redundante stappen van de animatie in te laden tijdens de foute frame waardoor de animatie stappen verliest en haperend ervaren wordt.
@@ -26,13 +26,12 @@ Javascript wordt single-threaded in de browser uitgevoerd. Door deze limitatie k
 	\centering
 	\includegraphics[width=0.6\textwidth]{img/drift-framedrop.png}
 	\caption{Framedrop door gebruik van setTimeout} \label{drift-framedrop}
+	\source{https://developers.google.com/web/fundamentals/performance/rendering/optimize-javascript-execution}
 \end{figure}
 
 \subsection{RequestAnimationFrame}
 
 Een methode die moderne browsers bieden om animaties te updaten met javascript is \texttt{requestAnimationFrame()}. Het wordt in dezelfde context gebruikt als \texttt{setTimeout()}, maar lost enkele cruciale problemen op. Ten eerste moet er geen tijdsinterval meer gespecifieerd worden als parameter, maar synced de browser de executie van deze taak met de refreshrate van de monitor. De opgegeven callback functie wordt door de event loop net voor de repaint van de pagina uitgevoerd. Hierdoor worden enkel frames geupdate voor een repaint en zullen er geen redundante taken uitgevoerd worden per frame of framedrops voorkomen. \cite{requestFrameDocs}
-
-\textbf{eventueel kleine illustratie settimeout vs requestframe op tijdlijn}
 
 \subsection{Performance} \label{performance}
 Deze methode lost een groot deel van globale timing op, maar garandeerd daarom geen smooth animation playback. We gaan er verder vanuit dat er geen devices een hogere refresh rate dan 60Hz verwachten en mikken dus op een playback snelheid van 60fps. Als de methode om de frame te updaten langer duurt dan 16.7ms zal de frame niet gedropt worden, maar uitgerokken. Alle frames worden wel weergegeven, maar niet aan een snelheid van 60fps wat dus ook oogt als een niet vloeiende animatie.
