@@ -10,14 +10,19 @@
 <h1>Sync page</h1>
 <H2 id="time"></H2>
 <div>
-    <p>frame count:</p>
+    <pre>frame count:</pre>
     <p id="frameCount"></p>
+</div>
+<div>
+    <pre>timing:</pre>
+    <p id="timing"></p>
 </div>
 <pre id="summary">
 
 </pre>
 <input type="button" onclick="start()" value="sync"/>
 <input type="button" onclick="socketAnimation()" value="animation"/>
+<input type="button" onclick="socketReload()" value="reload"/>
 <pre id="textDisplay"></pre>
 <canvas id="game"></canvas>
 

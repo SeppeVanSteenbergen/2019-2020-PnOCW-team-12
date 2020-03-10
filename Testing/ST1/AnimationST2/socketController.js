@@ -43,6 +43,10 @@ module.exports = io => {
     socket.on('startAnimation', () => {
       io.emit('startAnimation', { startTime: Date.now() + 2000 })
     })
+
+    socket.on('reload', () => {
+      io.emit('reload', '')
+    })
   })
 
   function pingSocket(socket_id) {
