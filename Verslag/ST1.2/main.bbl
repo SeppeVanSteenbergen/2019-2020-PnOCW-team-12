@@ -20,4 +20,11 @@
   \url{https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame},
   Last accessed on 08-02-2020.
 
+\bibitem{frameDrop:img}
+{Paul Lewis}.
+\newblock Optimize javascript execution, 2019.
+\newblock
+  \url{https://developers.google.com/web/fundamentals/performance/rendering/optimize-javascript-execution},
+  Last accessed on 08-02-2020.
+
 \end{thebibliography}

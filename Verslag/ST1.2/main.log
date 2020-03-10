@@ -1,8 +1,12 @@
+<<<<<<< Updated upstream
 <<<<<<< HEAD
 This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 2.9.7300 64-bit) (preloaded format=pdflatex 2020.2.25)  10 MAR 2020 12:05
 =======
 This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 2.9.7300 64-bit) (preloaded format=pdflatex 2020.2.25)  10 MAR 2020 14:09
 >>>>>>> ST1.2
+=======
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (MiKTeX 2.9.7300 64-bit) (preloaded format=pdflatex 2020.2.25)  10 MAR 2020 15:27
+>>>>>>> Stashed changes
 entering extended mode
 **./main.tex
 (main.tex
@@ -647,51 +651,51 @@ File: img/drift-framedrop.png Graphic file (type png)
 <use img/drift-framedrop.png>
 Package pdftex.def Info: img/drift-framedrop.png  used on input line 27.
 (pdftex.def)             Requested size: 256.07741pt x 109.29189pt.
-
-Overfull \hbox (42.20322pt too wide) in paragraph at lines 29--29
-[]|\T1/lmr/m/n/10.95 (-20) Af-beel-ding van: https://developers.google.com/web/
-fundamentals/performance/rendering/optimize-
- []
-
-<img/charging.png, id=69, 243.91125pt x 614.295pt>
+<img/charging.png, id=71, 243.91125pt x 614.295pt>
 File: img/charging.png Graphic file (type png)
 <use img/charging.png>
-Package pdftex.def Info: img/charging.png  used on input line 50.
+Package pdftex.def Info: img/charging.png  used on input line 49.
 (pdftex.def)             Requested size: 170.7367pt x 430.00356pt.
-[3 <./img/drift-framedrop.png (PNG copy)>]
-<img/draadloos.png, id=80, 347.2975pt x 214.8025pt>
+ [3 <./img/drift-framedrop.png (PNG copy)>]
+<img/draadloos.png, id=83, 347.2975pt x 214.8025pt>
 File: img/draadloos.png Graphic file (type png)
 <use img/draadloos.png>
-Package pdftex.def Info: img/draadloos.png  used on input line 60.
+Package pdftex.def Info: img/draadloos.png  used on input line 59.
 (pdftex.def)             Requested size: 192.0548pt x 118.78743pt.
-<img/ethernet.png, id=81, 351.3125pt x 214.8025pt>
+<img/ethernet.png, id=84, 351.3125pt x 214.8025pt>
 File: img/ethernet.png Graphic file (type png)
 <use img/ethernet.png>
-Package pdftex.def Info: img/ethernet.png  used on input line 65.
+Package pdftex.def Info: img/ethernet.png  used on input line 64.
 (pdftex.def)             Requested size: 192.0548pt x 117.4305pt.
  [4 <./img/charging.png>]
-<img/inladen.png, id=91, 1155.56718pt x 306.39468pt>
+<img/inladen.png, id=94, 1155.56718pt x 306.39468pt>
 File: img/inladen.png Graphic file (type png)
 <use img/inladen.png>
-Package pdftex.def Info: img/inladen.png  used on input line 74.
+Package pdftex.def Info: img/inladen.png  used on input line 73.
 (pdftex.def)             Requested size: 346.67284pt x 91.91911pt.
-<img/reset.png, id=92, 444.15938pt x 24.09pt>
+<img/reset.png, id=95, 444.15938pt x 24.09pt>
 File: img/reset.png Graphic file (type png)
 <use img/reset.png>
-Package pdftex.def Info: img/reset.png  used on input line 80.
+Package pdftex.def Info: img/reset.png  used on input line 79.
 (pdftex.def)             Requested size: 310.90944pt x 16.86287pt.
-<img/inladen2.png, id=94, 654.19406pt x 65.49469pt>
+<img/inladen2.png, id=97, 654.19406pt x 65.49469pt>
 File: img/inladen2.png Graphic file (type png)
 <use img/inladen2.png>
-Package pdftex.def Info: img/inladen2.png  used on input line 88.
+Package pdftex.def Info: img/inladen2.png  used on input line 87.
 (pdftex.def)             Requested size: 457.93272pt x 45.84595pt.
 
-Overfull \hbox (31.14137pt too wide) in paragraph at lines 88--89
+Overfull \hbox (31.14137pt too wide) in paragraph at lines 87--88
  [][] 
  []
 
 ) (besluit.tex) [5 <./img/draadloos.png> <./img/ethernet.png> <./img/inladen.pn
-g> <./img/reset.png> <./img/inladen2.png>] (main.bbl)
+g> <./img/reset.png> <./img/inladen2.png>] (main.bbl
+Underfull \hbox (badness 10000) in paragraph at lines 24--29
+\T1/lmtt/m/n/10.95 web / fundamentals / performance / rendering / optimize-[]ja
+vascript-[]execution$[][]\T1/lmr/m/n/10.95 (+20) ,
+ []
+
+)
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 77.
  [6]
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 77.
@@ -703,6 +707,7 @@ Package rerunfilecheck Info: File `main.out' has not changed.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 77.
  ) 
 Here is how much of TeX's memory you used:
+<<<<<<< Updated upstream
  10109 strings out of 481545
 <<<<<<< HEAD
  162568 string characters out of 2923221
@@ -714,8 +719,15 @@ Here is how much of TeX's memory you used:
  25080 multiletter control sequences out of 15000+200000
 >>>>>>> ST1.2
  567287 words of font info for 71 fonts, out of 3000000 for 9000
+=======
+ 10113 strings out of 481545
+ 160343 string characters out of 2923256
+ 469855 words of memory out of 3000000
+ 25081 multiletter control sequences out of 15000+200000
+ 567370 words of font info for 72 fonts, out of 3000000 for 9000
+>>>>>>> Stashed changes
  1141 hyphenation exceptions out of 8191
- 41i,8n,43p,709b,535s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 41i,8n,48p,709b,535s stack positions out of 5000i,500n,10000p,200000b,50000s
 {C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/lm/lm-rm.enc}{C:/Program Files/M
 iKTeX 2.9/fonts/enc/dvips/lm/lm-mathit.enc}{C:/Program Files/MiKTeX 2.9/fonts/e
 nc/dvips/lm/lm-ec.enc}<C:/Program Files/MiKTeX 2.9/fonts/type1/public/lm/lmbx10
@@ -723,9 +735,9 @@ nc/dvips/lm/lm-ec.enc}<C:/Program Files/MiKTeX 2.9/fonts/type1/public/lm/lmbx10
 Files/MiKTeX 2.9/fonts/type1/public/lm/lmmi8.pfb><C:/Program Files/MiKTeX 2.9/f
 onts/type1/public/lm/lmr10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/
 lm/lmr8.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/lm/lmtt10.pfb>
-Output written on main.pdf (6 pages, 407557 bytes).
+Output written on main.pdf (6 pages, 408846 bytes).
 PDF statistics:
- 149 PDF objects out of 1000 (max. 8388607)
- 29 named destinations out of 1000 (max. 500000)
+ 154 PDF objects out of 1000 (max. 8388607)
+ 30 named destinations out of 1000 (max. 500000)
  11881 words of extra memory for PDF output out of 12000 (max. 10000000)
 
