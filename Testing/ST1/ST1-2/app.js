@@ -17,8 +17,8 @@ app.get('/client_script.js', (req, res) => {
   res.sendFile(__dirname + '/clientScript.js')
 })
 
-httpServer.listen(4000, () => {
-  console.log('listening on port 4000')
+httpServer.listen(3000, () => {
+  console.log('listening on port 3000')
 })
 
 process.stdin.resume()

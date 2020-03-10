@@ -100,16 +100,19 @@ function getBrowser() {
 function getServerTime() {
   return Date.now() - avgDelta //TODO: + or - delta???
 }
-
+let animID = null
 socket.on('startAnimation', data => {
   animationStartTime = data.startTime
   frameCount = 0
+  if (animID !== null) cancelAnimationFrame(animID)
   startAnimation()
 })
 
 let animationStartTime = null
 let speed = 10
 let frameNum = 0
+let limitFrameCount = 180
+let startTime = null
 
 let state = {
   x: 0,
@@ -132,8 +135,16 @@ function resetAnimation() {
 }
 function calcAnimationData() {
   if (getServerTime() < animationStartTime) return
+  if (startTime === null) {
+    startTime = performance.now()
+  }
+  if (frameCount === limitFrameCount) {
+    document.getElementById('timing').innerText = (
+      performance.now() - startTime
+    ).toString()
+  }
   // total of 1200
-  //frameNum = getServerTime() % 1200
+  //frameNum = Math.round((getServerTime() * 0.5) % 1200)
   frameNum = (frameNum + speed) % 1200
   state2 = getStateFromFrame(frameNum >= 600 ? frameNum - 600 : frameNum + 600)
   state = getStateFromFrame(frameNum)
@@ -174,6 +185,8 @@ function drawAnimation() {
   ctx.fillRect(state.x, state.y, 100, 100)
   ctx.fillStyle = 'white'
   ctx.fillRect(state2.x, state2.y, 100, 100)
+  ctx.font = '100px Arial'
+  ctx.fillText(frameNum.toString(), 200, 300)
 
   frameCount += 1
   document.getElementById('frameCount').innerText = frameCount
@@ -183,11 +196,18 @@ function startAnimation() {
   resetAnimation()
   calcAnimationData()
   drawAnimation()
-  requestAnimationFrame(startAnimation)
+  animID = requestAnimationFrame(startAnimation)
 }
 
 function socketAnimation() {
   socket.emit('startAnimation', '')
 }
+
+function socketReload() {
+  socket.emit('reload', '')
+}
+socket.on('reload', () => {
+  location.reload()
+})
 
 setInterval(updateTime, 5)
