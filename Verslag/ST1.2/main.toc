@@ -6,6 +6,6 @@
 \contentsline {paragraph}{Drift in timers}{2}{section*.2}%
 \contentsline {paragraph}{Single threaded}{3}{section*.4}%
 \contentsline {subsection}{\numberline {2.3}RequestAnimationFrame}{3}{subsection.2.3}%
-\contentsline {subsection}{\numberline {2.4}Performance}{4}{subsection.2.4}%
+\contentsline {subsection}{\numberline {2.4}Performance}{3}{subsection.2.4}%
 \contentsline {subsection}{\numberline {2.5}HTTP request frames}{4}{subsection.2.5}%
-\contentsline {section}{\numberline {3}Besluit}{6}{section.3}%
+\contentsline {section}{\numberline {3}Besluit}{5}{section.3}%
