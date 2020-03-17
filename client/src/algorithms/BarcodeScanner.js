@@ -2,6 +2,7 @@ import ColorRange from './ColorRange'
 import PixelIterator from './PixelIterator'
 
 export default class BarcodeScanner {
+
   static scan(imageObject, LU, RU) {
     this.preProcessBarcode(imageObject)
     let iterator = new PixelIterator(

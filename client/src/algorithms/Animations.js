@@ -344,7 +344,7 @@ export default class Animations {
       }
     }
   }
-
+// TODO: weg??
   // animateSprite(x, y, image, spriteWidth, spriteHeight, nbFrames) {
   //   this.ctx.save()
   //   this.ctx.translate(x, y)

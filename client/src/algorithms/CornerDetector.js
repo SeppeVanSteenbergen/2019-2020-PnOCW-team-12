@@ -1,6 +1,5 @@
 import Reconstructor from './Reconstructor'
 import Algebra from './Algebra'
-import Line from './Line'
 
 export default class CornerDetector {
   constructor(screenMatrix, midPoint, id) {
