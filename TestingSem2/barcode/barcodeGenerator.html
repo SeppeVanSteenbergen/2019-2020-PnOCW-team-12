@@ -25,7 +25,7 @@
         this.canvas = canvas;
         this.canvas.width = this.w
         this.canvas.height = this.h
-        this.barcodeColorValues = ['#000000', '#999999'];
+        this.barcodeColorValues = ['#ffffff', '#000000'];
         this.ctx = this.canvas.getContext('2d')
       }
 
@@ -58,29 +58,37 @@
 
         let ctx = this.ctx
         ctx.lineWidth = lineWidth + 2 * space
-        ctx.beginPath()
-        ctx.strokeStyle = '#ffffff'
-        ctx.moveTo(0, 0)
-        ctx.lineTo(this.w / 2, this.h / 2)
-        ctx.lineTo(this.w, 0)
-        ctx.stroke()
-        ctx.beginPath()
-        ctx.strokeStyle = '#ffffff'
-        ctx.moveTo(0, this.h)
-        ctx.lineTo(this.w / 2, this.h / 2)
-        ctx.lineTo(this.w, this.h)
-        ctx.stroke()
-        ctx.lineWidth = lineWidth
+        // ctx.beginPath()
+        // ctx.strokeStyle = '#ffffff'
+        // ctx.moveTo(0, 0)
+        // ctx.lineTo(this.w / 2, this.h / 2)
+        // ctx.lineTo(this.w, 0)
+        // ctx.stroke()
+        // ctx.beginPath()
+        // ctx.strokeStyle = '#ffffff'
+        // ctx.moveTo(0, this.h)
+        // ctx.lineTo(this.w / 2, this.h / 2)
+        // ctx.lineTo(this.w, this.h)
+        // ctx.stroke()
+        // ctx.lineWidth = lineWidth
         ctx.beginPath()
         ctx.strokeStyle = colors[1]
         ctx.moveTo(0, 0)
-        ctx.lineTo(this.w / 2, this.h / 2)
+        ctx.lineTo(this.w * 1/6, this.h * 1/6)
+        ctx.moveTo(this.w * 2/6, this.h * 2/6)
+        ctx.lineTo(this.w * 3/6, this.h * 3/6)
+        ctx.lineTo(this.w * 4/6, this.h * 2/6)
+        ctx.moveTo(this.w * 5/6, this.h * 1/6)
         ctx.lineTo(this.w, 0)
         ctx.stroke()
         ctx.beginPath()
         ctx.strokeStyle = colors[2]
         ctx.moveTo(0, this.h)
-        ctx.lineTo(this.w / 2, this.h / 2)
+        ctx.lineTo(this.w * 1/6, this.h * 5/6)
+        ctx.moveTo(this.w * 2/6, this.h * 4/6)
+        ctx.lineTo(this.w * 3/6, this.h * 3/6)
+        ctx.lineTo(this.w * 4/6, this.h * 4/6)
+        ctx.moveTo(this.w * 5/6, this.h * 5/6)
         ctx.lineTo(this.w, this.h)
         ctx.stroke()
 
@@ -99,7 +107,8 @@
       clearBarcode() {
         const ctx = this.ctx
         ctx.fillStyle = '#ffffff';
-        ctx.fillRect(this.borderWidth, this.borderWidth, this.w - 2 * this.borderWidth, this.h - 2 * this.borderWidth);
+        ctx.fillRect(0, 0, this.w, this.h)
+        this.drawBorder(options[number], 0)
       }
 
       barcode(clientNb, sections) {
@@ -108,57 +117,40 @@
         sections = Math.round(sections);
 
         const ctx = this.ctx
-        const sepSize = 10
-        let codeString = clientNb.toString(2)
-        let nbZero = 0
+
         let code = []
-        for(let i = 0; i < codeString.length; i++){
-          code.push(codeString.charAt(i))
-          // if(codeString.charAt(i) == 1)
-          //   nbZero++
-          // else
-          //   nbZero = 0
-          
-          // if(nbZero == 2){
-          //   code.push(0)
-          //   nbZero = 0
-          // }
-          
+        let value = clientNb % 2 == 0 ? 0 : 1
+        for (let i = 0; i < Math.floor(clientNb / 2) + 2; i++) {
+          code.push(value)
+          value = (value + 1) % 2
         }
-        console.log(code)
 
-        
+        const codeWidth = this.w - 2 * this.borderWidth
+        const barWidth = codeWidth / (sections * (code.length + 1) + 1)
+        let startAt = this.borderWidth
 
-        const codeWidth = (this.w - 3*this.borderWidth) / (sections+1);
-        const barWidth = (codeWidth - sepSize)/code.length
-        let startAt = 2* this.borderWidth
-        
-        //const amountOfIterations = Math.floor((this.w - 2 * this.borderWidth) / (6 * width))
+        ctx.beginPath();
+        ctx.fillStyle = "#808080"
+        ctx.rect(startAt, this.borderWidth, barWidth, this.h - 2 * this.borderWidth)
+        ctx.fill()
+        startAt += barWidth
 
-        for (let i = 0; i < sections * (code.length + 1); i += (code.length + 1)) {
+        for (let i = 0; i < sections; i++) {
           for (let j = 0; j < code.length; j++) {
             ctx.beginPath();
-            ctx.fillStyle = this.barcodeColorValues[code[j]];
-            ctx.rect(startAt, this.borderWidth + barWidth, barWidth,
-                this.h - 2*this.borderWidth - 2*barWidth);
-            ctx.fill();
-            startAt += barWidth
-            ctx.beginPath();
-            ctx.fillStyle = "#ffffff"
-            ctx.rect(startAt, this.borderWidth + barWidth, 10,
-                this.h - 2*this.borderWidth - 2*barWidth);
+            ctx.fillStyle = this.barcodeColorValues[code[j]]
+            ctx.rect(startAt, this.borderWidth, barWidth, this.h - 2 * this.borderWidth)
             ctx.fill()
-            startAt += sepSize
+            startAt += barWidth
           }
           ctx.beginPath();
-          ctx.fillStyle = '#ff0000';
-          ctx.rect(startAt - sepSize, this.borderWidth, 10,
-            this.h - 2*this.borderWidth);
-          ctx.fill();
+          ctx.fillStyle = "#808080"
+          ctx.rect(startAt, this.borderWidth, barWidth, this.h - 2 * this.borderWidth)
+          ctx.fill()
+          startAt += barWidth
         }
 
-        this.drawX(this.borderWidth, barWidth);
-        this.drawBorder(this.borderWidth);
+        this.drawX(options[number], 0)
 
         return barWidth;
       }
