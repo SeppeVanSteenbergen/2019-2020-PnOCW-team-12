@@ -25,7 +25,7 @@ imgElement.onload = function() {
   filteredCanvas.height = imgElement.height
   let filteredContext = filteredCanvas.getContext("2d")
   let filteredImgData = filteredContext.createImageData(imgElement.width, imgElement.height)
-  filteredImgData.set(Uint8ClampedArray.from(noiseFilter(maskedImgData)))
+  filteredImgData.data.set(Uint8ClampedArray.from(noiseFilter(maskedImgData)))
   filteredContext.putImageData(filteredImgData,0,0)
 };
 
@@ -76,11 +76,12 @@ function noiseFilter(imageData) {
   let black = [0, 0, 0];
   let white = [255, 255, 255]
   let grey = [128, 128, 128]
+  let size = 3;
+  let half = Math.floor(size/2);
+  let divisor = size*size;
 
   for (let i = 0; i < imageData.data.length; i += 4) {
     let c;
-    let size = 3;
-    let half = Math.floor(size/2);
     let pixel = positionToPixel(i, imageData);
     let sum = [0,0,0];
     let toSearch = [];
@@ -100,9 +101,9 @@ function noiseFilter(imageData) {
       sum[1] += imageData.data[pos+1]
       sum[2] += imageData.data[pos+2]
     }
-    sum[0] = sum[0]/49;
-    sum[1] = sum[1]/49;
-    sum[2] = sum[2]/49;
+    sum[0] = sum[0]/divisor;
+    sum[1] = sum[1]/divisor;
+    sum[2] = sum[2]/divisor;
 
     let distanceBlack = distance(sum, black)
     let distanceWhite = distance(sum, white)
@@ -124,7 +125,7 @@ function noiseFilter(imageData) {
         break
     }
     outputData.push(c,c,c,255)
-    console.log("pixel " + pixel[0] + ", " + pixel[1] + " value of : " + c)
+    //console.log("pixel " + pixel[0] + ", " + pixel[1] + " value of : " + c)
   }
   return outputData
 }
@@ -134,16 +135,16 @@ function getMatrix(x, y, data) {
   else if (x > data.width) x = data.width;
   if (y < 0) y = 0;
   else if (y > data.height) y = data.height;
-  return pixelToPosition(x,y, data)
+  return pixelToPosition(x, y, data)
 }
 
-function pixelToPosition(x,y, pixels) {
+function pixelToPosition(x, y, pixels) {
   return pixels.width * y + x
 }
 
 function positionToPixel(position, data) {
-  position /= 4
+  position = Math.floor(position/4)
   let x = position % data.width
-  let y = Math.floor((position - x) / data.height)
+  let y = Math.floor(position/data.width)
   return [x, y]
 }
