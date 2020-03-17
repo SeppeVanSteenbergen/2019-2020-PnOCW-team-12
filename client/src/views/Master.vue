@@ -355,7 +355,8 @@
                       <v-btn color="primary" @click="executePauseVideo">
                         Pause Video
                       </v-btn>
-                      <canvas ref="drawCanvas"></canvas> </v-card></v-expansion-panel-content>
+                      <canvas ref="drawCanvas"></canvas> </v-card
+                  ></v-expansion-panel-content>
                 </v-expansion-panel>
                 <v-expansion-panel>
                   <v-expansion-panel-header>Animation</v-expansion-panel-header>
@@ -468,7 +469,6 @@ export default {
       Xpos: 0,
       Ypos: 0,
       drawCanvasScale: 1,
-      displayFileVideo: null,
 
       videofile: null,
       animationInterval: null,
@@ -759,7 +759,7 @@ export default {
           // get all the data
           let info = this.analysedImage.createPictureCanvas(
             this.analysedImage.width,
-              this.analysedImage.height,
+            this.analysedImage.height
           )
 
           for (let i = 0; i < this.analysedImage.screens.length; i++) {
@@ -793,8 +793,8 @@ export default {
                 data: {
                   videoURL: result.data.videoURL,
                   css: css,
-                  w:info.w,
-                  h:info.h,
+                  w: info.w,
+                  h: info.h,
                   ox: info.minx,
                   oy: info.miny
                 }
@@ -815,82 +815,84 @@ export default {
       formData.append('imagefile', this.imageFile)
 
       this.$axios
-          .post('upload/image', formData, {
-            headers: {
-              'Content-Type': 'multipart/formData'
-            }
-          })
-          .then(result => {
-            console.log('upload successful for video: ' + result.data.imageURL)
+        .post('upload/image', formData, {
+          headers: {
+            'Content-Type': 'multipart/formData'
+          }
+        })
+        .then(result => {
+          console.log('upload successful for video: ' + result.data.imageURL)
 
+          // get all the data
+          let info = this.analysedImage.createPictureCanvas(
+            this.drawingImg.width,
+            this.drawingImg.height
+          )
 
-            // get all the data
-            let info = this.analysedImage.createPictureCanvas(
-                this.drawingImg.width,
-                this.drawingImg.height
+          console.log(info)
+
+          console.log(this.analysedImage.screens)
+
+          for (let i = 0; i < this.analysedImage.screens.length; i++) {
+            console.log('looping through screens')
+            let cssMatrix = this.analysedImage.screens[i].cssMatrix
+
+            let user_id = this.myRoom.clients[
+              this.analysedImage.screens[i].clientCode
+            ]
+
+            let css =
+              'position: absolute; left:' +
+              info.minx +
+              'px; top: ' +
+              info.miny +
+              'px; transform: matrix3d(' +
+              cssMatrix.join(', ') +
+              '); transform-origin: ' +
+              -info.minx +
+              'px ' +
+              -info.miny +
+              'px; width: ' +
+              info.w +
+              'px; height: ' +
+              info.h +
+              'px; object-fit: none'
+
+            this.executeDisplayImageCSS(
+              user_id,
+              result.data.imageURL,
+              css,
+              info.minx,
+              info.miny,
+              info.w,
+              info.h
             )
-
-            console.log(info)
-
-            console.log(this.analysedImage.screens)
-
-            for (let i = 0; i < this.analysedImage.screens.length; i++) {
-              console.log('looping through screens')
-              let cssMatrix = this.analysedImage.screens[i].cssMatrix
-
-              let user_id = this.myRoom.clients[
-                  this.analysedImage.screens[i].clientCode
-                  ]
-
-              let css =
-                  'position: absolute; left:' +
-                  info.minx +
-                  'px; top: ' +
-                  info.miny +
-                  'px; transform: matrix3d(' +
-                  cssMatrix.join(', ') +
-                  '); transform-origin: ' +
-                  -info.minx +
-                  'px ' +
-                  -info.miny +
-                  'px; width: ' +
-                  info.w +
-                  'px; height: ' +
-                  info.h +
-                  'px; object-fit: none'
-
-              this.executeDisplayImageCSS(
-                  user_id,
-                  result.data.imageURL,
-                  css,
-                  info.minx,
-                  info.miny,
-                  info.w,
-                  info.h
-              )
-            }
-          })
-          .catch(err => {
-            console.log(err)
-          })
+          }
+        })
+        .catch(err => {
+          console.log(err)
+        })
     },
 
     executeStartAnimation() {
-      if(this.animationInterval !== null) {
+      if (this.animationInterval !== null) {
         clearInterval(this.animationInterval)
       }
-      this.animationInterval = setInterval(this.sendAnimation, this.animationFramerate)
+      this.animationInterval = setInterval(
+        this.sendAnimation,
+        this.animationFramerate
+      )
     },
 
     sendAnimation() {
       let info = this.animation.getNextFrame()
 
-      let obj = [info.x,info.y, info.angle, info.frame, info.right?1:0]
+      let obj = [info.x, info.y, info.angle, info.frame, info.right ? 1 : 0]
 
       this.$socket.emit('af', obj)
     },
-    executeStopAnimation(){
-      if(this.animationInterval !== null) {
+    executeStopAnimation() {
+      if (this.animationInterval !== null) {
         clearInterval(this.animationInterval)
       }
       this.animationInterval = null
@@ -900,7 +902,7 @@ export default {
       for (let i = 0; i < this.analysedImage.triangulation.length; i++) {
         tri.push(this.analysedImage.triangulation[i].toObject())
       }
-      console.log("Sent Triangulation")
+      console.log('Sent Triangulation')
       console.log(tri)
 
       let midpoints = this.analysedImage.midPoints
@@ -908,34 +910,32 @@ export default {
       let width = this.analysedImage.width
       let height = this.analysedImage.height
 
-      let info = this.analysedImage.createPictureCanvas(0,0)
-
+      let info = this.analysedImage.createPictureCanvas(0, 0)
 
       for (let i = 0; i < this.analysedImage.screens.length; i++) {
         console.log('looping through screens')
         let cssMatrix = this.analysedImage.screens[i].cssMatrix
 
         let user_id = this.myRoom.clients[
-            this.analysedImage.screens[i].clientCode
-            ]
+          this.analysedImage.screens[i].clientCode
+        ]
 
         let css =
-            'position: absolute; left:' +
-            info.minx +
-            'px; top: ' +
-            info.miny +
-            'px; transform: matrix3d(' +
-            cssMatrix.join(', ') +
-            '); transform-origin: ' +
-            -info.minx +
-            'px ' +
-            -info.miny +
-            'px; width: ' +
-            info.w +
-            'px; height: ' +
-            info.h +
-            'px; object-fit: none'
-
+          'position: absolute; left:' +
+          info.minx +
+          'px; top: ' +
+          info.miny +
+          'px; transform: matrix3d(' +
+          cssMatrix.join(', ') +
+          '); transform-origin: ' +
+          -info.minx +
+          'px ' +
+          -info.miny +
+          'px; width: ' +
+          info.w +
+          'px; height: ' +
+          info.h +
+          'px; object-fit: none'
 
         let obj = {
           payload: {
@@ -960,10 +960,14 @@ export default {
       }
 
       // create animation object
-      this.animation = new Animation(this.analysedImage.triangulation, {
-        width: this.analysedImage.width,
-        height: this.analysedImage.height
-      }, false)
+      this.animation = new Animation(
+        this.analysedImage.triangulation,
+        {
+          width: this.analysedImage.width,
+          height: this.analysedImage.height
+        },
+        false
+      )
     },
     executeStartVideo() {
       let obj = {
@@ -1006,10 +1010,9 @@ export default {
         img.onload = function() {
           let c = vue.$refs.canva
           let ctx = c.getContext('2d')
-          ctx.clearRect(0,0,c.width, c.height)
+          ctx.clearRect(0, 0, c.width, c.height)
           c.width = img.width
           c.height = img.height
-
 
           ctx.drawImage(img, 0, 0)
 
@@ -1306,7 +1309,7 @@ export default {
       for (let i = 0; i < this.analysedImage.triangulation.length; i++) {
         tri.push(this.analysedImage.triangulation[i].toObject())
       }
-      console.log("Sent Triangulation")
+      console.log('Sent Triangulation')
       console.log(tri)
 
       let midpoints = this.analysedImage.midPoints
@@ -1314,34 +1317,32 @@ export default {
       let width = this.analysedImage.width
       let height = this.analysedImage.height
 
-      let info = this.analysedImage.createPictureCanvas(0,0)
-
+      let info = this.analysedImage.createPictureCanvas(0, 0)
 
       for (let i = 0; i < this.analysedImage.screens.length; i++) {
         console.log('looping through screens')
         let cssMatrix = this.analysedImage.screens[i].cssMatrix
 
         let user_id = this.myRoom.clients[
-            this.analysedImage.screens[i].clientCode
-            ]
+          this.analysedImage.screens[i].clientCode
+        ]
 
         let css =
-            'position: absolute; left:' +
-            info.minx +
-            'px; top: ' +
-            info.miny +
-            'px; transform: matrix3d(' +
-            cssMatrix.join(', ') +
-            '); transform-origin: ' +
-            -info.minx +
-            'px ' +
-            -info.miny +
-            'px; width: ' +
-            info.w +
-            'px; height: ' +
-            info.h +
-            'px; object-fit: none'
-
+          'position: absolute; left:' +
+          info.minx +
+          'px; top: ' +
+          info.miny +
+          'px; transform: matrix3d(' +
+          cssMatrix.join(', ') +
+          '); transform-origin: ' +
+          -info.minx +
+          'px ' +
+          -info.miny +
+          'px; width: ' +
+          info.w +
+          'px; height: ' +
+          info.h +
+          'px; object-fit: none'
 
         let obj = {
           payload: {

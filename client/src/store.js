@@ -15,7 +15,13 @@ export default new Vuex.Store({
     },
     userLoggedIn: false,
     roomList: {},
-    roomClientInfo:[]
+    roomClientInfo: [],
+    snackbar: {
+      active: false,
+      text: '',
+      color: 'blue',
+      time: 2500
+    }
   },
   mutations: {
     SOCKET_CONNECT(state) {
@@ -33,7 +39,7 @@ export default new Vuex.Store({
       console.log(roomList)
       state.roomList = roomList
     },
-    SOCKET_roomClientInfo(state, roomClientInfo){
+    SOCKET_roomClientInfo(state, roomClientInfo) {
       state.roomClientInfo = roomClientInfo
     },
     drawerOpen(state) {
@@ -44,14 +50,38 @@ export default new Vuex.Store({
     },
     setDrawer: set('drawer'),
     toggleDrawer: toggle('drawer'),
+    setSnackbarActive(state, value) {
+      state.snackbar.active = value
+    },
     setLoggedIn(state, payload) {
       state.userLoggedIn = payload
     },
     setUser(state, payload) {
       state.user = payload
+    },
+    setSnackbar(state, payload) {
+      console.log(payload)
+      state.snackbar.text = payload.text ? payload.text : ''
+      state.snackbar.color = payload.color ? payload.color : 'blue'
+      state.snackbar.time = payload.time ? payload.time : 2500
+      state.snackbar.active = true
     }
   },
-  actions: {},
+  actions: {
+    /**
+     *
+     * @param state
+     * @param payload
+     *        {
+     *          text: '',
+     *          time: '',
+     *          color: ''
+     *        }
+     */
+    showSnackbar({ commit }, payload) {
+      commit('setSnackbar', payload)
+    }
+  },
   getters: {
     getRole(state) {
       if (state.roomList !== {}) {
@@ -94,6 +124,9 @@ export default new Vuex.Store({
         room: -1,
         client_id: -1
       }
+    },
+    getSnackbarInfo(state) {
+      return state.snackbar
     }
   }
 })
