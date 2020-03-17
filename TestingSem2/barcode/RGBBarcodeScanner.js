@@ -19,43 +19,56 @@ class RGBBarcodeScanner {
     let image = imageObject.data
     let barcodes = {}
     let scanned = 0
-    let previous = image[2]
-    let white
-    let scanning = false
-    let sep = false
+
+    let whiteStart = false;
+
+    let whiteScan = false;
+    let blackScan = false;
+    let grayScan = false;
+
     let current = iterator.next()
     while (current !== null) {
       let i = this.pixelToIndex(current, imageObject.width)
-      let H = image[i] * 2
-      let S = image[i + 1]
-      let L = image[i + 2]
-      let contrast = previous - L
-      if ((L <= 25 || 75 <= L) && sep) {
-        //grijswaarden (kan veranderd worden in 'geen bordercolor')
-        if (!scanning) {
-          scanning = true
-          white = L > 50
-        } else if (contrast > 70 || contrast < -70) {
-          // zwart <-> wit
-          scanned++
-        }
-      } else if (ColorRange.inBlueGreenRange(H, S, L)) {
-        sep = true
-        if (scanning && scanned !== 0 && scanned !== 1) {
-          scanning = false
-          if (barcodes[[scanned, white]] === undefined) {
-            barcodes[[scanned, white]] = 1
-          } else {
-            barcodes[[scanned, white]] += 1
-          }
-          scanned = 0
-        }
-      } else {
-        sep = false
-        scanning = false
-        scanned = 0
+      let value = image[i];
+      if(grayScan && value != 128){
+        if(value = 255)
+          whiteStart = true;
+        else
+          whiteStart = false;
       }
-      previous = L
+      if(value == 255 && !whiteScan){
+        scanned++
+        whiteScan = true;
+        blackScan = false;
+        grayScan = false;
+      } else if(value == 0 && !blackScan){
+        scanned++;
+        whiteScan = false;
+        blackScan = true;
+        grayScan = false;
+      } else if (value == 128 && !grayScan){
+        scanned *= 2;
+        if(!whiteStart)
+          scanned -= 1
+        if(barcodes.has(scanned))
+          barcodes[scanned]++
+        else
+          barcodes[scanned] = 1
+      }else{
+        switch(value):
+          case 0:
+            blackScan = true;
+            whiteStart = false;
+            break;
+          case 128:
+            grayScan = true;
+            break;
+          case 255:
+            whiteScan = true;
+            whiteStart = true;
+            break;
+      }
+
       current = iterator.next()
     }
 
