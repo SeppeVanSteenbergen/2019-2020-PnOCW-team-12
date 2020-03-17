@@ -8,20 +8,20 @@ class RGBBarcodeScanner {
         new Uint8ClampedArray(imageObjectOrig.data),
         imageObjectOrig.width,
         imageObjectOrig.height
-    )
-    this.noiseFilter(imageData) //the effective imageData.data will be changed!!!!!.
+    );
+    this.noiseFilter(imageData) ;//the effective imageData.data will be changed!!!!!.
     let iterator = new PixelIterator(
         LU,
         RU,
         imageData.width,
         imageData.height
-    )
-    console.log(imageData)
+    );
+    console.log(imageData);
     return this.scanHorizontal(imageData, iterator)
   }
 
   static scanHorizontal(imageObject, iterator, clients) { //TODO: set to RGB
-    let image = imageObject.data
+    let image = imageObject.data;
     let barcodes = {}
     let scanned = 0
 
@@ -31,36 +31,36 @@ class RGBBarcodeScanner {
     let blackScan = false;
     let grayScan = false;
 
-    let current = iterator.next()
+    let current = iterator.next();
     while (current !== null) {
       let i = this.pixelToIndex(current, imageObject.width)
       let value = image[i];
-      if(grayScan && value != 128){
-        if(value = 255)
+      if(grayScan && value !== 128){
+        if (value === 255)
           whiteStart = true;
         else
           whiteStart = false;
       }
-      if(value == 255 && !whiteScan){
+      if (value === 255 && !whiteScan){
         scanned++
         whiteScan = true;
         blackScan = false;
         grayScan = false;
-      } else if(value == 0 && !blackScan){
+      } else if (value === 0 && !blackScan){
         scanned++;
         whiteScan = false;
         blackScan = true;
         grayScan = false;
-      } else if (value == 128 && !grayScan){
+      } else if (value === 128 && !grayScan){
         scanned *= 2;
-        if(!whiteStart)
+        if (!whiteStart)
           scanned -= 1
-        if(barcodes.has(scanned))
+        if (barcodes.has(scanned))
           barcodes[scanned]++
         else
           barcodes[scanned] = 1
-      }else{
-        switch(value):
+      } else {
+        switch(value) {
           case 0:
             blackScan = true;
             whiteStart = false;
@@ -72,11 +72,12 @@ class RGBBarcodeScanner {
             whiteScan = true;
             whiteStart = true;
             break;
+        }
+
       }
 
       current = iterator.next()
     }
-
     console.log(barcodes)
     console.log('scanned')
     let keys = this.calcKeys(barcodes, clients)
