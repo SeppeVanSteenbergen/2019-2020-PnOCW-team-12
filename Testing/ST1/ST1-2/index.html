@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Animation</title>
+    <script type='text/javascript' src='/socketio'></script>
+</head>
+<body>
+<section id="box">
+<button onclick="start()">start</button>
+<label>circle #
+    <input type="text" value="1000" onchange="setCircles(this.value)"/>
+</label>
+
+<label>
+    <input type="checkbox" value="some" onchange="setDivided(this.value)"/>
+    divided
+</label>
+<ul id="dataList"></ul>
+<br/>
+    <input type="radio" id="rFrame" value="0" name="animationType" onchange="setAnimType(this.value)" checked="checked" />
+    <label for="rFrame">requestAnimationFrame</label><br>
+    <input type="radio" id="rSetTimeout" value="1" name="animationType" onchange="setAnimType(this.value)"/>
+    <label for="rSetTimeout">setTimeout</label><br>
+    <input type="radio" id="rSetInterval" value="2" name="animationType" onchange="setAnimType(this.value)"/>
+    <label for="rSetInterval">setInterval</label><br>
+
+
+</section>
+
+<canvas id="game"></canvas>
+
+</body>
+
+<footer>
+    <script type="text/javascript" src="/client_script.js"></script>
+</footer>
+</html>
