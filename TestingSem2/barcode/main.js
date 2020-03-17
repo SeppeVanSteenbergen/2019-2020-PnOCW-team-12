@@ -17,16 +17,8 @@ imgElement.onload = function() {
   maskedCanvas.height = inputImgData.height
   let maskedContext = maskedCanvas.getContext("2d")
   let maskedImgData = maskedContext.createImageData(inputImgData.width, inputImgData.height)
-  maskedImgData.data.set(Uint8ClampedArray.from(noiseFilter(inputImgData)))
+  maskedImgData = this.noiseFilter(inputImgData);
   maskedContext.putImageData(maskedImgData, 0, 0)
-  console.log(maskedImgData)
-  let filteredCanvas = document.getElementById("filteredMask")
-  filteredCanvas.width = maskedImgData.width
-  filteredCanvas.height = maskedImgData.height
-  let filteredContext = filteredCanvas.getContext("2d")
-  let filteredImgData = filteredContext.createImageData(maskedImgData.width, maskedImgData.height)
-  filteredImgData.data.set(Uint8ClampedArray.from(noiseFilter(maskedImgData)))
-  filteredContext.putImageData(filteredImgData,0,0)
 };
 
 function distance(first, second) {

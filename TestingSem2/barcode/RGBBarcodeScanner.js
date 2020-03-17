@@ -2,17 +2,22 @@ import ColorRange from './ColorRange'
 import PixelIterator from './PixelIterator'
 
 class RGBBarcodeScanner {
-  static scan(imageObject, LU, RU) {
-    this.preProcessBarcode(imageObject)
+  //The imageObject must be a copy bcs it will be changed!!!!.
+  static scan(imageObjectOrig, LU, RU) {
+    let imageData = new ImageData(
+        new Uint8ClampedArray(imageObjectOrig.data),
+        imageObjectOrig.width,
+        imageObjectOrig.height
+    )
+    this.noiseFilter(imageData) //the effective imageData.data will be changed!!!!!.
     let iterator = new PixelIterator(
         LU,
         RU,
-        imageObject.width,
-        imageObject.height
+        imageData.width,
+        imageData.height
     )
-    console.log(imageObject)
-    let barcode = this.scanHorizontal(imageObject, iterator)
-    return barcode
+    console.log(imageData)
+    return this.scanHorizontal(imageData, iterator)
   }
 
   static scanHorizontal(imageObject, iterator, clients) { //TODO: set to RGB
@@ -121,40 +126,20 @@ class RGBBarcodeScanner {
     return list[0]
   }
 
-  static debugPixels(imageObject) {
-    let image = imageObject.data
-    let result = []
-    for (let i = 0; i < image.length; i += 4) {
-      let S = image[i + 1]
-      let L = image[i + 2]
-      result.push([S, L])
-    }
-    console.log(result)
-  }
-
-  /**
-   * Pre-process the image for better barcode decoding
-   *
-   * @param {ImageData} imageObject
-   */
-  static preProcessBarcode(imageObject) {
-    this.noisFilter()
-  }
-
-  distance(first, second) {
+  static distance(first, second) {
     return Math.sqrt((second[0]-first[0])**2 + (second[1]-first[1])**2 + (second[2]-first[2])**2 )
   }
 
-  noiseFilter(imageDataOrig) {
+  static noiseFilter(imageDataOrig) {
     let imageData = new ImageData(
         new Uint8ClampedArray(imageDataOrig.data),
         imageDataOrig.width,
         imageDataOrig.height
-    )
-    let outputData =  []
+    );
+    let outputData =  [];
     let black = [0, 0, 0];
-    let white = [255, 255, 255]
-    let grey = [128, 128, 128]
+    let white = [255, 255, 255];
+    let grey = [128, 128, 128];
     let size = 7;
     let half = Math.floor(size/2);
 
@@ -163,13 +148,13 @@ class RGBBarcodeScanner {
       let blackCounter = 0;
       let whiteCounter = 0;
       let greyCounter = 0;
-      let pixel = positionToPixel(i, imageData);
+      let pixel = this.positionToPixel(i, imageData);
       let toSearch = [];
       for (let yBox = -half; yBox <= half; yBox++) {
         for (let xBox = -half; xBox <= half; xBox++) {
           let y = pixel[1] + yBox;
           let x = pixel[0] + xBox;
-          let pos = getMatrix(x, y, imageData);
+          let pos = this.getMatrix(x, y, imageData);
           if (!toSearch.includes(pos)) {
             toSearch.push(pos);
           }
@@ -177,28 +162,28 @@ class RGBBarcodeScanner {
       }
       for (let j = 0; j < toSearch.length; j++) {
         let pos = toSearch[j];
-        let R = imageData.data[pos]
-        let G = imageData.data[pos+1]
-        let B = imageData.data[pos+2]
+        let R = imageData.data[pos];
+        let G = imageData.data[pos+1];
+        let B = imageData.data[pos+2];
 
-        let color = [R, G, B]
-        let distanceBlack = distance(color, black)
-        let distanceWhite = distance(color, white)
-        let distanceGrey = distance(color, grey)
+        let color = [R, G, B];
+        let distanceBlack = this.distance(color, black);
+        let distanceWhite = this.distance(color, white);
+        let distanceGrey = this.distance(color, grey);
 
-        let correction = Math.min(distanceBlack, distanceWhite, distanceGrey)
+        let correction = Math.min(distanceBlack, distanceWhite, distanceGrey);
 
         switch (correction) {
           case distanceBlack:
-            blackCounter++
+            blackCounter++;
             break;
 
           case distanceWhite:
-            whiteCounter++
+            whiteCounter++;
             break;
 
           case distanceGrey:
-            greyCounter++
+            greyCounter++;
             break;
         }
       }
@@ -213,75 +198,25 @@ class RGBBarcodeScanner {
 
       outputData.push(c,c,c,255)
     }
-    return outputData
+    imageDataOrig.data.set(Uint8ClampedArray.from(outputData))
   }
 
-  /**
-   * Get max and min L values from the given image
-   *
-   * Optional: use start and end constants to limit search domain
-   *
-   * @param {ImageData} imageObject
-   * @param value
-   */
-  static getMaxMinValues(imageObject, value) {
-    let pixels = imageObject.data
-    let grayList = []
-    for (let i = 0; i < pixels.length; i += 4) {
-      let H = pixels[i] * 2
-      let S = pixels[i + 1]
-      let L = pixels[i + 2]
-      if (
-          !ColorRange.inMaskRange(H, S, L) &&
-          !ColorRange.inBlueGreenRange(H, S, L)
-      ) {
-        grayList.push(pixels[i + value])
-      }
-    }
-    grayList.sort(function(a, b) {
-      return a - b
-    })
-
-    return [grayList[0], grayList[grayList.length - 1]]
+  static getMatrix(x, y, data) {
+    if (x < 0) x = 0;
+    else if (x > data.width) x = data.width;
+    if (y < 0) y = 0;
+    else if (y > data.height) y = data.height;
+    return pixelToPosition(x, y, data)
   }
 
-  /**
-   * Apply Histogram equilization with extra CONTRAST constant
-   *
-   * @param {Array} arr pixel array TODO: uitbreiden naar matrix?
-   * @param {int} min min grijswaarde : [0..100]
-   * @param {int} max max grijswaarde : [0..100]
-   */
-  static applyLevelsAdjustment(imageObject, min, max) {
-    const half = (max + min) / 2
-    console.log(half, max, min)
-    let pixels = imageObject.data
-    for (let i = 0; i < pixels.length; i += 4) {
-      let H = pixels[i] * 2
-      let S = pixels[i + 1]
-      let L = pixels[i + 2]
-      if (
-          !ColorRange.inMaskRange(H, S, L) &&
-          !ColorRange.inBlueGreenRange(H, S, L)
-      ) {
-        if (pixels[i + 2] < half) {
-          pixels[i + 2] = 0
-        } else {
-          pixels[i + 2] = 100
-        }
-      }
-    }
-    return imageObject
+  static positionToPixel(position, data) {
+    position = Math.floor(position/4);
+    let x = position % data.width;
+    let y = Math.floor(position/data.width);
+    return [x, y]
   }
 
   static pixelToIndex(pixel, width) {
     return (pixel[1] * width + pixel[0]) * 4
-  }
-
-  static indexToPixel(position, width) {
-    position /= 4
-    let x = position % width
-    let y = (position - x) / width
-    return [x, y]
   }
 }
