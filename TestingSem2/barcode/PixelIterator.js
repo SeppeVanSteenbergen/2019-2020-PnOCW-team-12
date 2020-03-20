@@ -39,7 +39,7 @@ class PixelIterator {
       this.xoffset = 0
     }
     if (this.xoffset >= this.width) {
-      this.terminated = true
+      this.terminated = true;
       return null
     }
     if (this.left) {

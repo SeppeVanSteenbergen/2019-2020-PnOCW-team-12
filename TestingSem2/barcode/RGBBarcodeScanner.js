@@ -6,7 +6,8 @@ class RGBBarcodeScanner {
         imageObjectOrig.width,
         imageObjectOrig.height
     );
-    this.noiseFilter(imageData) ;//the effective imageData.data will be changed!!!!!.
+    console.log(imageData);
+    this.noiseFilter(imageData, LU, RU) ;//the effective imageData.data will be changed!!!!!.
     let maskedCanvas = document.getElementById("masked")
     maskedCanvas.width = imageData.width
     maskedCanvas.height = imageData.height
@@ -71,26 +72,28 @@ class RGBBarcodeScanner {
     return Math.sqrt((second[0]-first[0])**2 + (second[1]-first[1])**2 + (second[2]-first[2])**2 )
   }
 
-  static noiseFilter(imageDataOrig) {
+  static noiseFilter(imageDataOrig, LU, RU) {
     let imageData = new ImageData(
         new Uint8ClampedArray(imageDataOrig.data),
         imageDataOrig.width,
         imageDataOrig.height
     )
+    let iterator = new PixelIterator(LU, RU, imageData.width, imageData.height)
     let outputData =  []
     let black = [0, 0, 0];
     let white = [255, 255, 255]
     let grey = [128, 128, 128]
     let size = 15;
-    let HSize = 4;   //TODO: implement with pixeliterator!!!!!
+    let pixel = iterator.next()
     let half = Math.floor(size/2);
+    let counter = 0;
 
-    for (let i = 0; i < imageData.data.length; i += 4) {
+    while(pixel !== null) {
+      counter++
       let c;
       let blackCounter = 0;
       let whiteCounter = 0;
       let greyCounter = 0;
-      let pixel = this.positionToPixel(i, imageData);
       let toSearch = [];
       for (let xBox = -half; xBox <= half; xBox++) {
         let y = pixel[1];
@@ -135,9 +138,10 @@ class RGBBarcodeScanner {
       } else {
         c = 0;
       }
-
       outputData.push(c,c,c,255)
+      pixel = iterator.next()
     }
+    console.log(counter)
     imageDataOrig.data.set(Uint8ClampedArray.from(outputData))
   }
 
