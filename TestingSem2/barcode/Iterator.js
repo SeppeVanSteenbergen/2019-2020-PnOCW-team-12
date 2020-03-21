@@ -8,8 +8,8 @@ class Iterator {
             this.rightPoint = LU
           }
         
-        this.width = width--
-        this.height = height--
+        this.width = width-1
+        this.height = height-1
 
         this.a = (this.rightPoint[1] - this.leftPoint[1]) /
         (this.rightPoint[0] - this.leftPoint[0])
@@ -42,9 +42,8 @@ class Iterator {
             if (this.y > this.height || this.y < 0) {
                 this.x = Math.round((this.y - this.b) / this.a)
                 this.y = this.height
-                }
                 this.isTerminated = true
-
+            }
         } else {
             this.y = Math.round(this.a * this.x + this.b)
 

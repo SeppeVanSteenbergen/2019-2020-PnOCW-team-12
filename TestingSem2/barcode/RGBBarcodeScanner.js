@@ -14,26 +14,26 @@ class RGBBarcodeScanner {
     let maskedContext = maskedCanvas.getContext("2d")
     maskedContext.putImageData(imageData, 0, 0)
     console.log("filtered")
-
-    let iterator = new PixelIterator(
-        LU,
-        RU,
-        imageData.width,
-        imageData.height
-    );
     console.log(imageData);
-    return this.scanHorizontal(imageData, iterator)
+    return this.scanHorizontal(imageData, LU, RU)
   }
 
-  static scanHorizontal(imageObject, iterator, clients) { //TODO: set to RGB
+  static scanHorizontal(imageObject, LU, RU) {
     let pixels = imageObject.data;
     let barcodes = {}
     let scanned = []
 
+    let iterator = new Iterator(
+        LU,
+        RU,
+        pixels.width,
+        pixels.height
+    );
+
     let greyScan = false;
 
-    let current = iterator.next();
-    while (current !== null) {
+    while (iterator.hasNext()) {
+      let current = iterator.next()
       let i = this.pixelToIndex(current, imageObject.width)
       let value = pixels[i];
 
@@ -63,7 +63,6 @@ class RGBBarcodeScanner {
         scanned.push(value/255);  // set to ones and zeros
         greyScan = false
       }
-      current = iterator.next()
     }
     return this.getHighestCode(barcodes)
   }
@@ -84,11 +83,11 @@ class RGBBarcodeScanner {
     let white = [255, 255, 255]
     let grey = [128, 128, 128]
     let size = 15;
-    let pixel = iterator.next()
     let half = Math.floor(size/2);
     let counter = 0;
 
     while(iterator.hasNext()) {
+      let pixel = iterator.next()
       counter++
       let c;
       let blackCounter = 0;
@@ -139,8 +138,6 @@ class RGBBarcodeScanner {
         c = 0;
       }
       outputData.push(c,c,c,255)
-      pixel = iterator.next()
-      console.log(pixel)
     }
     console.log(counter)
     imageDataOrig.data.set(Uint8ClampedArray.from(outputData))
