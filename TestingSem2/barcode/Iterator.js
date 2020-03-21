@@ -11,7 +11,7 @@ class Iterator {
         this.width = width
         this.height = height
 
-        this.a = (this.rightPoint[1] - this.leftPoint[1]) /
+        this.a = (his.rightPoint[1] - this.leftPoint[1]) /
         (this.rightPoint[0] - this.leftPoint[0])
 
         if (this.a >= 0) {
@@ -19,20 +19,18 @@ class Iterator {
         } else {
             this.y = this.height
         }
-        this.x = 0
+        this.x = -1
 
-        this.terminated = false
+        this.hasNext = true
     }
 
     hasNext() {
-        return !this.terminated
-    }
-
-    current() {
-        return [this.x, this.y]
+        return this.hasNext
     }
 
     next() {
+        this.x++
+
         if (this.x === 0) {
             if (this.a >= 0) {
                 this.y++
@@ -40,17 +38,23 @@ class Iterator {
                 this.y--
             }
             this.b = this.y - this.a * this.x
+            
 
             if (this.y > this.height) {
-                this.terminated = true
+                this.y = this.height
+                if (this.a > 0) {
+
+                }
+                this.hasNext = false
             }
 
+            
+
         } else {
-            this.x++
             this.y = Math.round(this.a * this.x + this.b)
 
             if (this.y > this.height || this.y < 0 || this.x > this.width) {
-                this.x = 0
+                this.x = -1
                 this.y = Math.round(this.a * this.x + this.b)
                 this.next()
             }
