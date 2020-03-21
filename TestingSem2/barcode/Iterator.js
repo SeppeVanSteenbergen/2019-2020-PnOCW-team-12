@@ -11,7 +11,7 @@ class Iterator {
         this.width = width
         this.height = height
 
-        this.a = (his.rightPoint[1] - this.leftPoint[1]) /
+        this.a = (this.rightPoint[1] - this.leftPoint[1]) /
         (this.rightPoint[0] - this.leftPoint[0])
 
         if (this.a >= 0) {
