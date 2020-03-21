@@ -1,7 +1,7 @@
 const dataHelper = require('./dataHelper')
 const io = require('../app').io
 
-let pingAmount = 4
+let pingAmount = 100
 
 module.exports = {
   updateAllRoomLists() {

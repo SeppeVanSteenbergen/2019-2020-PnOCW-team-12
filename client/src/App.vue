@@ -45,19 +45,18 @@
         <!--<H1>TEST {{socketMessage}}</H1>-->
         <router-view />
       </v-content>
+      <v-snackbar
+        v-model="snackbar"
+        :bottom="true"
+        :color="$store.state.snackbar.color"
+        :timeout="getSnackbarInfo.time"
+      >
+        {{ getSnackbarInfo.text }}
+      </v-snackbar>
     </v-app>
 
     <LoginView v-if="!$store.state.userLoggedIn" />
-    <!-- :color="$store.state.snackbar.color" -->
-    <v-snackbar
-      v-model="snackbar"
-      :bottom="true"
-      color="green"
-      :timeout="getSnackbarInfo.time"
-      dark="false"
-    >
-      {{ getSnackbarInfo.text }}
-    </v-snackbar>
+    <!-- -->
   </div>
 </template>
 

@@ -73,7 +73,7 @@ export default new Vuex.Store({
       console.log(payload)
       state.snackbar.text = payload.text ? payload.text : ''
       state.snackbar.color = payload.color ? payload.color : 'blue'
-      state.snackbar.time = payload.time ? payload.time : 30000
+      state.snackbar.time = payload.time ? payload.time : 3000
       state.snackbar.active = true
     }
   },
@@ -99,7 +99,7 @@ export default new Vuex.Store({
           Math.round(payload.delta) +
           'ms offset',
         color: 'success',
-        time: 30000
+        time: 4000
       })
     }
   },
