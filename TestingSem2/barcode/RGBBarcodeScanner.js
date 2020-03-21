@@ -78,17 +78,17 @@ class RGBBarcodeScanner {
         imageDataOrig.width,
         imageDataOrig.height
     )
-    let iterator = new PixelIterator(LU, RU, imageData.width, imageData.height)
+    let iterator = new Iterator(LU, RU, imageData.width, imageData.height)
     let outputData =  []
     let black = [0, 0, 0];
     let white = [255, 255, 255]
     let grey = [128, 128, 128]
     let size = 15;
-    let pixel = iterator.next()
+    let pixel = iterator.current()
     let half = Math.floor(size/2);
     let counter = 0;
 
-    while(pixel !== null) {
+    while(iterator.hasNext()) {
       counter++
       let c;
       let blackCounter = 0;
@@ -139,7 +139,8 @@ class RGBBarcodeScanner {
         c = 0;
       }
       outputData.push(c,c,c,255)
-      pixel = iterator.next()
+      iterator.next()
+      pixel = iterator.current()
     }
     console.log(counter)
     imageDataOrig.data.set(Uint8ClampedArray.from(outputData))
