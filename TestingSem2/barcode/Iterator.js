@@ -40,9 +40,12 @@ class Iterator {
             this.b = this.y - this.a * this.x
             
             if (this.y > this.height || this.y < 0) {
+                if (this.a === 0) {
+                    this.isTerminated = true
+                }
+
                 this.x = Math.round((this.y - this.b) / this.a)
                 this.y = this.height
-                this.isTerminated = true
             }
         } else {
             this.y = Math.round(this.a * this.x + this.b)
