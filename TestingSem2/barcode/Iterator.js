@@ -20,6 +20,12 @@ class Iterator {
             this.y = this.height
         }
         this.x = 0
+
+        this.hasNext = true
+    }
+
+    hasNext() {
+        return this.hasNext
     }
 
     current() {
@@ -27,8 +33,6 @@ class Iterator {
     }
 
     next() {
-        if (this.terminated) throw 'The iterator has been terminated'
-
         if (this.x === 0) {
             if (this.a >= 0) {
                 this.y++
@@ -36,6 +40,11 @@ class Iterator {
                 this.y--
             }
             this.b = this.y - this.a * this.x
+
+            if (this.y > this.height) {
+                this.hasNext = false
+            }
+
         } else {
             this.x++
             this.y = Math.round(this.a * this.x + this.b)
