@@ -158,11 +158,28 @@ module.exports = {
 
     if (message.payload.type === 'count-down') {
       this.handleCountDown(user_id, message.payload.data)
+    } else if (message.payload.type === 'start-video') {
+      this.handleStartVideo(user_id)
     } else if (message.to !== 'all') {
       this.sendDataByUserID('screenCommand', message.payload, message.to)
     } else {
       this.sendDataToRoomOfMaster('screenCommand', message.payload, user_id)
     }
+  },
+
+  handleStartVideo(master_id) {
+    let startOffset = 400 // ms
+    let room_id = dataHelper.getUserRoom(master_id)
+
+    let payload = {
+      type: 'start-video',
+      data: {
+        startTime: Date.now() + startOffset
+      }
+    }
+
+
+    this.sendDataToRoom('screenCommand', payload, room_id)
   },
   /**
    *

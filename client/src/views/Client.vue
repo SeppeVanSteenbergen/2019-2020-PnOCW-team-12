@@ -72,7 +72,10 @@ export default {
       videoURL: '',
       canvasMode: true,
       videoTimeout: null,
-      delaunayImage: null
+      delaunayImage: null,
+      videoStartTime: null,
+      videoSpeedupDelta: 0.05,
+      videoSyncThreshold: 16 // how many ms difference from clock before speeding up/slowing down video
     }
   },
   mounted() {
@@ -124,7 +127,7 @@ export default {
           this.loadVideoHandler(message.data)
           break
         case 'start-video':
-          this.startVideoHandler()
+          this.startVideoHandler(message.data)
           break
         case 'pause-video':
           this.pauseVideoHandler()
@@ -169,6 +172,7 @@ export default {
   },
   methods: {
     setDefaultCSS() {
+      clearInterval(this.videoInterval)
       this.canvas.style = this.defaultCSS
       this.canvasMode = true
     },
@@ -484,7 +488,21 @@ export default {
         setTimeout(this.videoLoop, 1000 / 30, ctx) // drawing at 30fps
       }
     },
-    startVideoHandler() {
+    syncVideo() {
+      let time = Date.now() + this.$store.state.sync.delta
+      let videoTime = this.videoStartTime + this.$refs.vid.currentTime * 1000
+      if (Math.abs(videoTime - time) < this.videoSyncThreshold) {
+        this.$refs.vid.playbackRate = 1
+      } else if (videoTime < time) {
+        this.$refs.vid.playbackRate = 1 + this.videoSpeedupDelta
+      } else {
+        this.$refs.vid.playbackRate = 1 - this.videoSpeedupDelta
+      }
+    },
+    startVideoHandler(data) {
+      clearInterval(this.videoInterval)
+      this.videoInterval = setInterval(this.syncVideo, 30)
+      this.videoStartTime = data.startTime
       this.$refs.vid.play()
     },
     pauseVideoHandler() {
