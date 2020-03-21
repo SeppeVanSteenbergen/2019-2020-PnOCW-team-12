@@ -195,6 +195,7 @@ module.exports = io => {
     })
 
     socket.on('startSync', () => {
+      console.log('starting synchronisation')
       socketHelper.syncRoomOfMaster(dataHelper.getUserIDFromSocketID(socket.id))
     })
 

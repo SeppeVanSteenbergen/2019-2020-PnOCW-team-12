@@ -390,17 +390,26 @@ module.exports = {
     }
     // reset all sync data
     // TODO: this will remove data from all rooms tho
+    let room_id = dataHelper.getUserRoom(user_id)
     pingList = {}
     pingList[room_id] = {}
 
-    let room_id = dataHelper.getUserRoom(user_id)
     let user_ids = dataHelper.getClientsOfRoom(room_id)
+
+    // master sync
+    pingList[room_id][user_id] = {
+      deltas: [],
+      ready: false
+    }
+    this.pingUser(user_id)
+
+    // client sync
     for (let i = 0; i < user_ids.length; i++) {
-      pingList[room_id][user_id[i]] = {
+      pingList[room_id][user_ids[i]] = {
         deltas: [],
         ready: false
       }
-      this.pingUser(user_id)
+      this.pingUser(user_ids[i])
     }
   },
   pingUser(user_id) {
@@ -445,7 +454,7 @@ module.exports = {
   checkPingFinished(room_id) {
     if (typeof pingList[room_id] === 'undefined') return
     for (let user_id in Object.keys(pingList[room_id])) {
-      if (!pingList[room_id][user_id].ready) return
+      if (typeof pingList[room_id][user_id] === 'undefined' || !pingList[room_id][user_id].ready) return
     }
     this.sendDataToRoom('syncReady', '', room_id)
 

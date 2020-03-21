@@ -35,6 +35,14 @@ Vue.use(
   })
 )
 
+Vue.prototype.startSync = function() {
+  this.$store.dispatch('showSnackbar', {
+    text: 'Starting synchronisation',
+    color: 'info'
+  })
+  this.$socket.emit('startSync', '')
+}
+
 new Vue({
   router,
   store,

@@ -10,6 +10,15 @@
           <span class="font-weight-light">Caster</span>
         </v-toolbar-title>
         <v-spacer></v-spacer>
+
+        <v-btn
+          icon
+          color="grey"
+          v-if="getRole().role === 1"
+          @click="startSync()"
+        >
+          <v-icon>mdi-cached</v-icon>
+        </v-btn>
         <v-icon>{{
           getRole().role === 1
             ? 'mdi-account-tie'
@@ -39,13 +48,13 @@
     </v-app>
 
     <LoginView v-if="!$store.state.userLoggedIn" />
-
+    <!-- :color="$store.state.snackbar.color" -->
     <v-snackbar
       v-model="snackbar"
       :bottom="true"
-      :color="$store.state.snackbar.color"
+      color="green"
       :timeout="getSnackbarInfo.time"
-      dark
+      dark="false"
     >
       {{ getSnackbarInfo.text }}
     </v-snackbar>
@@ -128,6 +137,9 @@ export default {
         TS1: TS1,
         D: D
       })
+    },
+    syncInfo: function(data) {
+      this.$store.dispatch('setSyncInfo', data)
     }
   },
   computed: {
@@ -155,6 +167,7 @@ export default {
     }
   },
   async mounted() {
+    this.$vuetify.theme.dark = true
     this.loggingIn = true
     await this.$auth.sessionLogin()
     if (this.$store.state.userLoggedIn)

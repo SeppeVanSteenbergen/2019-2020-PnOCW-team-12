@@ -46,12 +46,8 @@ export default new Vuex.Store({
     SOCKET_roomClientInfo(state, roomClientInfo) {
       state.roomClientInfo = roomClientInfo
     },
-    SOCKET_syncInfo(state, info) {
+    syncInfo(state, info) {
       state.sync.delta = info.delta
-      this.mutations.setSnackbar(state, {
-        text: 'successfully synced browser',
-        color: 'success'
-      })
     },
     SOCKET_syncReady(state) {
       state.sync.ready = true
@@ -77,7 +73,7 @@ export default new Vuex.Store({
       console.log(payload)
       state.snackbar.text = payload.text ? payload.text : ''
       state.snackbar.color = payload.color ? payload.color : 'blue'
-      state.snackbar.time = payload.time ? payload.time : 2500
+      state.snackbar.time = payload.time ? payload.time : 30000
       state.snackbar.active = true
     }
   },
@@ -94,6 +90,17 @@ export default new Vuex.Store({
      */
     showSnackbar({ commit }, payload) {
       commit('setSnackbar', payload)
+    },
+    setSyncInfo({ commit }, payload) {
+      commit('syncInfo', payload)
+      commit('setSnackbar', {
+        text:
+          'successfully synced browser with ' +
+          Math.round(payload.delta) +
+          'ms offset',
+        color: 'success',
+        time: 30000
+      })
     }
   },
   getters: {
@@ -141,6 +148,9 @@ export default new Vuex.Store({
     },
     getSnackbarInfo(state) {
       return state.snackbar
+    },
+    getTimeDelta(state) {
+      return state.sync.delta
     }
   }
 })
