@@ -39,9 +39,8 @@ class Iterator {
             }
             this.b = this.y - this.a * this.x
             
-
-            if (this.y > this.height) {
-                this.y = this.height
+            if (this.y >= this.height) {
+                this.y = this.height -1
                 if (this.a > 0) {
 
                 }
@@ -51,9 +50,9 @@ class Iterator {
         } else {
             this.y = Math.round(this.a * this.x + this.b)
 
-            if (this.y > this.height || this.y < 0 || this.x > this.width) {
+            if (this.y >= this.height || this.y < 0 || this.x >= this.width) {
                 this.x = -1
-                this.y = Math.round(this.a * (this.x + 1) + this.b)
+                this.y = Math.round(this.b)
                 this.next()
             }
         }
