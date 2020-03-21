@@ -21,6 +21,10 @@ export default new Vuex.Store({
       text: '',
       color: 'blue',
       time: 2500
+    },
+    sync: {
+      delta: 0,
+      ready: false
     }
   },
   mutations: {
@@ -41,6 +45,16 @@ export default new Vuex.Store({
     },
     SOCKET_roomClientInfo(state, roomClientInfo) {
       state.roomClientInfo = roomClientInfo
+    },
+    SOCKET_syncInfo(state, info) {
+      state.sync.delta = info.delta
+      this.mutations.setSnackbar(state, {
+        text: 'successfully synced browser',
+        color: 'success'
+      })
+    },
+    SOCKET_syncReady(state) {
+      state.sync.ready = true
     },
     drawerOpen(state) {
       state.drawer = true

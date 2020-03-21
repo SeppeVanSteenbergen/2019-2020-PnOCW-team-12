@@ -115,6 +115,19 @@ export default {
       } catch (e) {
         console.log(e)
       }
+    },
+    pings: function(TS1) {
+      const TC1 = Date.now()
+      const D = TC1 - TS1
+
+      const TC2 = Date.now()
+      //console.log('got ping message')
+      this.$socket.emit('pongs', {
+        TC2: TC2,
+        TC1: TC1,
+        TS1: TS1,
+        D: D
+      })
     }
   },
   computed: {

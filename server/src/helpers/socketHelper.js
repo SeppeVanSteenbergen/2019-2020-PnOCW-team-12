@@ -1,6 +1,8 @@
 const dataHelper = require('./dataHelper')
 const io = require('../app').io
 
+let pingAmount = 4
+
 module.exports = {
   updateAllRoomLists() {
     console.log('updating all roomlists')
@@ -218,6 +220,15 @@ module.exports = {
       this.sendDataByUserID(name, data, clientList[i])
     }
   },
+  sendDataToRoom(name, data, room_id) {
+    const clientList = dataHelper.getClientsOfRoom(room_id)
+    console.log('CLIENTS IN ROOM')
+    console.log(clientList)
+
+    for (let i in clientList) {
+      this.sendDataByUserID(name, data, clientList[i])
+    }
+  },
   sendClientInfo(master_user_id) {
     if (!dataHelper.isMasterUser(master_user_id)) {
       console.log('The given user is not a master user')
@@ -261,13 +272,13 @@ module.exports = {
     on receiving pong data,
    */
 
-  pong(user_id, data) {
+  /*pong(user_id, data) {
     let pingTimes = 10
     let currentTime = Date.now()
     let ping = currentTime - data.startTime
     // time to add to server time to get client time
 
-    if (typeof pingList[data.room_id] === 'undefined') {
+    if (typeof pingList[data.room_id] === 'undefined' || typeof pingList[data.room_id][user_id] === 'undefined') {
       pingList[data.room_id] = {}
       pingList[data.room_id][user_id] = {
         pingList: [],
@@ -275,14 +286,14 @@ module.exports = {
       }
     }
 
-    pingList[data.room_id][user_id].pingList.append(ping)
+    pingList[data.room_id][user_id].pingList.push(ping)*/
 
-    /*pingList[data.room_id][user_id] = {
+  /*pingList[data.room_id][user_id] = {
       ping: ping,
       timeDelta: timeDelta
     }*/
 
-    if (pingList[data.room_id][user_id].pingList.length >= pingTimes) {
+  /*if (pingList[data.room_id][user_id].pingList.length >= pingTimes) {
       pingList[data.room_id][user_id].ready = true
       pingList[data.room_id][user_id].ping =
         pingList[data.room_id][user_id].pingList.reduce((a, b) => a + b) /
@@ -307,9 +318,9 @@ module.exports = {
         this.sendCountDown(data.room_id, data)
       }
     } else {
-      pingUser(user_id, data)
+      this.pingUser(user_id, data)
     }
-  },
+  },*/
   pingRoom(room_id, data) {
     let clients = dataHelper.getClientsOfRoom(room_id)
 
@@ -318,7 +329,7 @@ module.exports = {
       this.pingUser(clients[i], data)
     }
   },
-  pingUser(user_id, data) {
+  /*pingUser(user_id, data) {
     let payload = {
       command: data.command,
       startOffset: data.startOffset,
@@ -327,7 +338,7 @@ module.exports = {
     }
 
     this.sendDataByUserID('pings', payload, user_id)
-  },
+  },*/
   /**
    * Steps
    * 1) Save all the client latencies
@@ -371,5 +382,74 @@ module.exports = {
 
       this.sendDataByUserID('screenCommand', payload, clients[i])
     }
+  },
+  syncRoomOfMaster(user_id) {
+    if (!dataHelper.isMasterUser(user_id)) {
+      console.log('The user is not allowed to send the sync command')
+      return 1
+    }
+    // reset all sync data
+    // TODO: this will remove data from all rooms tho
+    pingList = {}
+    pingList[room_id] = {}
+
+    let room_id = dataHelper.getUserRoom(user_id)
+    let user_ids = dataHelper.getClientsOfRoom(room_id)
+    for (let i = 0; i < user_ids.length; i++) {
+      pingList[room_id][user_id[i]] = {
+        deltas: [],
+        ready: false
+      }
+      this.pingUser(user_id)
+    }
+  },
+  pingUser(user_id) {
+    this.sendDataByUserID('pings', Date.now(), user_id)
+  },
+  /**
+   *
+   * @param user_id
+   * @param data
+   * {
+   * TC2: ,
+   * TC1: ,
+   * TS1: ,
+   * D: D
+   * }
+   *
+   */
+  pong(user_id, dat) {
+    const TS2 = Date.now()
+    const D2 = dat.TC2 - TS2
+    const timeOffset = -(D2 + dat.D) / 2
+    let room_id = dataHelper.getUserRoom(user_id)
+    pingList[room_id][user_id].deltas.push(timeOffset)
+    if (pingList[room_id][user_id].deltas.length >= pingAmount) {
+      let delta =
+        pingList[room_id][user_id].deltas.reduce((a, b) => a + b) /
+        pingList[room_id][user_id].deltas.length
+
+      pingList[room_id][user_id].ready = true
+
+      this.sendDataByUserID('syncInfo', { delta: delta }, user_id)
+      this.checkPingFinished(room_id)
+    } else {
+      this.pingUser(user_id)
+    }
+  },
+  /**
+   *  Checks if all users from the given room have all theri pings received
+   *
+   * @param room_id
+   */
+  checkPingFinished(room_id) {
+    if (typeof pingList[room_id] === 'undefined') return
+    for (let user_id in Object.keys(pingList[room_id])) {
+      if (!pingList[room_id][user_id].ready) return
+    }
+    this.sendDataToRoom('syncReady', '', room_id)
+
+    //TODO remove only the room_id from the list
+    pingList[room_id] = {}
   }
 }
