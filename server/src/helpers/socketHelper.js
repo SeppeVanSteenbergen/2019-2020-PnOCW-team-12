@@ -1,7 +1,7 @@
 const dataHelper = require('./dataHelper')
 const io = require('../app').io
 
-let pingAmount = 100
+let pingAmount = 10
 
 module.exports = {
   updateAllRoomLists() {
@@ -351,15 +351,17 @@ module.exports = {
    *        the user_id of a master in a room
    */
   handleCountDown(master_id, data) {
-    let startOffset = 200 // ms
+    let startOffset = 400 // ms
     let room_id = dataHelper.getUserRoom(master_id)
-    pingList[room_id] = {}
 
-    this.pingRoom(room_id, {
-      command: data,
-      startOffset: startOffset,
-      room_id: room_id
-    })
+    let payload = {
+      type: 'count-down',
+      data: data
+    }
+
+    payload.data.startTime = Date.now() + startOffset
+
+    this.sendDataToRoom('screenCommand', payload, room_id)
   },
   sendCountDown(room_id, data) {
     console.log('send countDown')
@@ -454,7 +456,11 @@ module.exports = {
   checkPingFinished(room_id) {
     if (typeof pingList[room_id] === 'undefined') return
     for (let user_id in Object.keys(pingList[room_id])) {
-      if (typeof pingList[room_id][user_id] === 'undefined' || !pingList[room_id][user_id].ready) return
+      if (
+        typeof pingList[room_id][user_id] === 'undefined' ||
+        !pingList[room_id][user_id].ready
+      )
+        return
     }
     this.sendDataToRoom('syncReady', '', room_id)
 

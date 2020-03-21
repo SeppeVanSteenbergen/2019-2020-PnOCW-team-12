@@ -36,6 +36,7 @@ Vue.use(
 )
 
 Vue.prototype.startSync = function() {
+  this.$store.state.sync.active = true
   this.$store.dispatch('showSnackbar', {
     text: 'Starting synchronisation',
     color: 'info'

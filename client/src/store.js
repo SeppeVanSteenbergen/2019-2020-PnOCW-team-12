@@ -24,7 +24,7 @@ export default new Vuex.Store({
     },
     sync: {
       delta: 0,
-      ready: false
+      active: false
     }
   },
   mutations: {
@@ -50,7 +50,7 @@ export default new Vuex.Store({
       state.sync.delta = info.delta
     },
     SOCKET_syncReady(state) {
-      state.sync.ready = true
+      state.sync.active = false
     },
     drawerOpen(state) {
       state.drawer = true
@@ -151,6 +151,9 @@ export default new Vuex.Store({
     },
     getTimeDelta(state) {
       return state.sync.delta
+    },
+    serverTime(state) {
+      return Date.now() + state.sync.delta
     }
   }
 })

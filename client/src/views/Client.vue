@@ -15,7 +15,7 @@
             <v-list v-if="roomList.length !== 0">
               <v-list>
                 <v-list-item
-                 v-for="room_id in Object.keys(roomList)"
+                  v-for="room_id in Object.keys(roomList)"
                   :key="room_id"
                   @click="joinRoom(room_id)"
                 >
@@ -252,20 +252,27 @@ export default {
       this.canvas.height = data.h
       this.canvas.style = data.css
 
-
-
       let image = new window.Image()
 
       let vue = this
 
       image.onload = function() {
         let ratio = Math.max(data.w / image.width, data.h / image.height)
-        vue.canvas.getContext('2d').drawImage(image, 0, 0, Math.round(image.width * ratio), Math.round(image.height * ratio))
+        vue.canvas
+          .getContext('2d')
+          .drawImage(
+            image,
+            0,
+            0,
+            Math.round(image.width * ratio),
+            Math.round(image.height * ratio)
+          )
       }
       image.src = data.image
     },
     countDownInterval(start, interval, startTime) {
-      let time = new Date().getTime()
+      let time = this.$store.state.sync.delta + Date.now()
+      console.log('server time: ' + time)
       if (time < startTime) return
       let number = start - Math.floor((time - startTime) / interval)
 
@@ -463,8 +470,17 @@ export default {
     },
     videoLoop(ctx) {
       if (!this.canvasMode) {
-        let ratio = Math.max(this.canvas.width / this.$refs.vid.videoWidth , this.canvas.height /this.$refs.vid.videoHeight)
-        ctx.drawImage(this.$refs.vid, 0,0, Math.round(this.$refs.vid.videoWidth * ratio ), Math.round(this.$refs.vid.videoHeight * ratio))
+        let ratio = Math.max(
+          this.canvas.width / this.$refs.vid.videoWidth,
+          this.canvas.height / this.$refs.vid.videoHeight
+        )
+        ctx.drawImage(
+          this.$refs.vid,
+          0,
+          0,
+          Math.round(this.$refs.vid.videoWidth * ratio),
+          Math.round(this.$refs.vid.videoHeight * ratio)
+        )
         setTimeout(this.videoLoop, 1000 / 30, ctx) // drawing at 30fps
       }
     },
@@ -484,9 +500,8 @@ export default {
       c.height = imgData.height
       let ctx = c.getContext('2d')
 
-
-      ctx.putImageData(imgData, 0,0)
-      return ctx.getImageData(minx,miny,w,h)
+      ctx.putImageData(imgData, 0, 0)
+      return ctx.getImageData(minx, miny, w, h)
     },
     cutoutTrans(imgData, w, h, minx, miny) {
       let c = document.createElement('canvas')
@@ -494,19 +509,17 @@ export default {
       c.height = imgData.height
       let ctx = c.getContext('2d')
 
-
-      ctx.putImageData(imgData, 0,0)
-      imgData = ctx.getImageData(minx,miny,w,h)
+      ctx.putImageData(imgData, 0, 0)
+      imgData = ctx.getImageData(minx, miny, w, h)
 
       for (let i = 0; i < c.width * c.height; i++) {
         if (
-            imgData.data[i * 4 + 0] === 255 &&
-            imgData.data[i * 4 + 1] === 255 &&
-            imgData.data[i * 4 + 2] === 255
+          imgData.data[i * 4 + 0] === 255 &&
+          imgData.data[i * 4 + 1] === 255 &&
+          imgData.data[i * 4 + 2] === 255
         ) {
           imgData.data[i * 4 + 3] = 0
         }
-
       }
 
       return imgData
@@ -519,14 +532,24 @@ export default {
     },
     delaunayHandler(data) {
       //create delaunay image and drawSnow on canvas
-      console.log("received triangulation")
+      console.log('received triangulation')
       console.log(data.triangulation)
-      this.delaunayImage = AlgorithmService.delaunayImageTransparent(data.triangulation, data.midpoints, data.width, data.height)
+      this.delaunayImage = AlgorithmService.delaunayImageTransparent(
+        data.triangulation,
+        data.midpoints,
+        data.width,
+        data.height
+      )
 
       // cut right part out of delaunay image
-      this.delaunayImage = this.cutoutTrans(this.delaunayImage, data.w, data.h, data.ox, data.oy)
+      this.delaunayImage = this.cutoutTrans(
+        this.delaunayImage,
+        data.w,
+        data.h,
+        data.ox,
+        data.oy
+      )
       //this.delaunayImage = Image.resizeImageData(this.delaunayImage, [data.w, data.h])
-
 
       //display the image on the screen
       let c = document.createElement('canvas')
@@ -540,7 +563,7 @@ export default {
       this.canvas.width = data.w
       this.canvas.height = data.h
       ctx.fillStyle = 'white'
-      ctx.fillRect(0,0,this.canvas.width,this.canvas.height)
+      ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
 
       let c2 = document.createElement('canvas')
       let ctx2 = c2.getContext('2d')
@@ -548,8 +571,8 @@ export default {
       c2.width = this.delaunayImage.width
       c2.height = this.delaunayImage.height
 
-      ctx2.putImageData(this.delaunayImage, 0,0)
-      ctx.drawImage(c2, 0,0)
+      ctx2.putImageData(this.delaunayImage, 0, 0)
+      ctx.drawImage(c2, 0, 0)
 
       //ctx.putImageData(this.delaunayImage, 0,0)
 
@@ -568,9 +591,18 @@ export default {
       let ctx2 = c.getContext('2d')
       c.width = this.delaunayImage.width
       c.height = this.delaunayImage.height
-      ctx2.putImageData(this.delaunayImage, 0,0)
-      ctx.drawImage(c, 0,0)
-      this.animation.drawAnimals(5,150,this.canvas, data[0] - this.minx, data[1] - this.miny, data[2], data[3], data[4])
+      ctx2.putImageData(this.delaunayImage, 0, 0)
+      ctx.drawImage(c, 0, 0)
+      this.animation.drawAnimals(
+        5,
+        150,
+        this.canvas,
+        data[0] - this.minx,
+        data[1] - this.miny,
+        data[2],
+        data[3],
+        data[4]
+      )
     }
   }
 }
