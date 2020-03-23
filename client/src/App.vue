@@ -10,6 +10,15 @@
           <span class="font-weight-light">Caster</span>
         </v-toolbar-title>
         <v-spacer></v-spacer>
+
+        <v-btn
+          icon
+          color="grey"
+          v-if="getRole().role === 1"
+          @click="startSync()"
+        >
+          <v-icon>mdi-cached</v-icon>
+        </v-btn>
         <v-icon>{{
           getRole().role === 1
             ? 'mdi-account-tie'
@@ -36,9 +45,18 @@
         <!--<H1>TEST {{socketMessage}}</H1>-->
         <router-view />
       </v-content>
+      <v-snackbar
+        v-model="snackbar"
+        :bottom="true"
+        :color="$store.state.snackbar.color"
+        :timeout="getSnackbarInfo.time"
+      >
+        {{ getSnackbarInfo.text }}
+      </v-snackbar>
     </v-app>
 
     <LoginView v-if="!$store.state.userLoggedIn" />
+    <!-- -->
   </div>
 </template>
 
@@ -61,7 +79,7 @@ export default {
   },
   methods: {
     ...mapMutations(['drawerOpen', 'drawerClose']),
-    ...mapMutations(['setDrawer', 'toggleDrawer']),
+    ...mapMutations(['setDrawer', 'toggleDrawer', 'setSnackbarActive']),
     ...mapGetters(['getRole']),
     pingServer() {
       // Send the "pingServer" event to the server.
@@ -100,15 +118,31 @@ export default {
       this.socketMessage = data.message
     },
     disconnect: function() {
-      try{
+      try {
         //this.$router.push('/')
-      } catch(e) {
+      } catch (e) {
         console.log(e)
       }
-    }
+    },
+    pings: function(TS1) {
+      const TC1 = Date.now()
+      const D = TC1 - TS1
 
+      const TC2 = Date.now()
+      //console.log('got ping message')
+      this.$socket.emit('pongs', {
+        TC2: TC2,
+        TC1: TC1,
+        TS1: TS1,
+        D: D
+      })
+    },
+    syncInfo: function(data) {
+      this.$store.dispatch('setSyncInfo', data)
+    }
   },
   computed: {
+    ...mapGetters(['getSnackbarInfo']),
     drawer: {
       get() {
         return this.$store.state.drawer
@@ -121,9 +155,18 @@ export default {
       get() {
         return this.$store.state.user
       }
+    },
+    snackbar: {
+      get() {
+        return this.$store.state.snackbar.active
+      },
+      set(val) {
+        this.setSnackbarActive(val)
+      }
     }
   },
   async mounted() {
+    this.$vuetify.theme.dark = true
     this.loggingIn = true
     await this.$auth.sessionLogin()
     if (this.$store.state.userLoggedIn)
@@ -139,7 +182,7 @@ export default {
       } else {
         this.$router.push('/')
       }
-    } catch(e) {
+    } catch (e) {
       console.log(e)
     }
     this.loggingIn = false

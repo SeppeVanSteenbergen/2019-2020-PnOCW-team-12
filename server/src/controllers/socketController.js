@@ -194,8 +194,16 @@ module.exports = io => {
       socketHelper.pong(dataHelper.getUserIDFromSocketID(socket.id), data)
     })
 
+    socket.on('startSync', () => {
+      console.log('starting synchronisation')
+      socketHelper.syncRoomOfMaster(dataHelper.getUserIDFromSocketID(socket.id))
+    })
+
     socket.on('af', data => {
-      socketHelper.animationFrame(dataHelper.getUserIDFromSocketID(socket.id),data)
+      socketHelper.animationFrame(
+        dataHelper.getUserIDFromSocketID(socket.id),
+        data
+      )
     })
   })
 }

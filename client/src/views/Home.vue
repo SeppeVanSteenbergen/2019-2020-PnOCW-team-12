@@ -38,19 +38,26 @@ export default {
           console.log(err)
         })*/
     },
+    showSnack() {
+      this.$store.dispatch('showSnackbar', {
+        text: 'hello there',
+        color: 'red',
+        time: 10000
+      })
+    },
     master() {
       console.log('master')
       this.$socket.emit('createRoom')
       try {
         this.$router.push({ name: 'master' })
-      } catch(e) {
+      } catch (e) {
         console.log(e)
       }
     },
     client() {
       try {
         this.$router.push({ name: 'client' })
-      } catch(e) {
+      } catch (e) {
         console.log(e)
       }
     }
