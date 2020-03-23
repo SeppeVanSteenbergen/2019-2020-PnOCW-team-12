@@ -7,7 +7,7 @@ class RGBBarcodeScanner {
         imageObjectOrig.height
     );
     console.log(imageData);
-    let spectrum = this.getSpectrum(imageData.data)
+    let spectrum = this.channelAvgs(imageData.data)
     this.noiseFilter(imageData, LU, RU, spectrum) ;//the effective imageData.data will be changed!!!!!.
     let maskedCanvas = document.getElementById("masked")
     maskedCanvas.width = imageData.width
@@ -165,6 +165,19 @@ class RGBBarcodeScanner {
     }
     console.log(counter)
     imageDataOrig.data.set(Uint8ClampedArray.from(outputData))
+  }
+
+  static channelAvgs(pixels) {
+    let R = 0;
+    let G = 0;
+    let B = 0;
+    for (let i = 0; i < pixels.length; i += 4) {
+      R += pixels[i]
+      G += pixels[i+1]
+      B += pixels[i+2]
+    }
+    let pixelNb = pixels.length/4
+    return [R/pixelNb, G/pixelNb, B/pixelNb]
   }
 
   static calcListAvg(listOf2lists) {
