@@ -42,16 +42,18 @@ class RGBBarcodeScanner {
         if (value === 128) {
           greyScan = true;
           if (scanned.length > 0) {
-            let code = (scanned.length - 1) * 2
-            if (scanned[0] === 1) {
-              code -= 2
-            } else {
-              code--
-            }
-            if (code in barcodes) {
-              barcodes[code]++
-            } else {
-              barcodes[code] = 1
+            if (scanned.length > 1) {
+              let code = (scanned.length - 1) * 2
+              if (scanned[0] === 1) {
+                code -= 2
+              } else {
+                code--
+              }
+              if (code in barcodes) {
+                barcodes[code]++
+              } else {
+                barcodes[code] = 1
+              }
             }
             scanned = []
           }
@@ -66,14 +68,22 @@ class RGBBarcodeScanner {
       }
       current = iterator.next()
     }
-    return this.getHighestCode(barcodes)
+    let highest = this.getHighestCode(barcodes)
+    let values = Object.keys(barcodes).map(function(key){
+      return barcodes[key];
+    });
+    let totalScanned = values.reduce((a,b) => a + b, 0)
+    console.log(barcodes[highest])
+    console.log(barcodes[highest]/totalScanned)
+    console.log(barcodes)
+    return highest
   }
 
   static distance(first, second) {
     return Math.sqrt((second[0]-first[0])**2 + (second[1]-first[1])**2 + (second[2]-first[2])**2 )
   }
 
-  static getSpectrum(pixels) {
+  static getMax(pixels) {
     let black  = [0,0,0]
     let white = [255,255,255]
     let closestBlack = [255,255,255]
@@ -94,6 +104,7 @@ class RGBBarcodeScanner {
     return [closestBlack, closestWhite]
   }
 
+  //spectrum = [[R/pixelNb, G/pixelNb, B/pixelNb], closestWhite, closestBlack]
   static noiseFilter(imageDataOrig, LU, RU, spectrum) {
     let imageData = new ImageData(
         new Uint8ClampedArray(imageDataOrig.data),
@@ -102,9 +113,10 @@ class RGBBarcodeScanner {
     )
     let iterator = new Iterator(LU, RU, imageData.width, imageData.height)
     let outputData =  []
-    let black = spectrum[0];
-    let white = spectrum[1]
-    let grey = this.calcListAvg(spectrum)
+    let grey = spectrum[0]
+    let distance = Math.round((spectrum[1]-spectrum[2])/2)
+    let black = [grey[0]-distance, grey[1]-distance, grey[2]-distance];
+    let white = [grey[0]+distance, grey[1]+distance, grey[2]+distance];
     let size = 15;
     let half = Math.floor(size/2);
     let counter = 0;
@@ -171,13 +183,24 @@ class RGBBarcodeScanner {
     let R = 0;
     let G = 0;
     let B = 0;
+    let black  = [0,0,0]
+    let white = [255,255,255]
+    let closestBlack = [255,255,255]
+    let closestWhite = [0,0,0]
     for (let i = 0; i < pixels.length; i += 4) {
       R += pixels[i]
       G += pixels[i+1]
       B += pixels[i+2]
+      let pixel = [R, G, B]
+      if (this.distance(pixel, white) < this.distance(closestWhite, white)) {
+        closestWhite = pixel;
+      }
+      if (this.distance(pixel, black) < this.distance(closestBlack, black)) {
+        closestBlack = pixel;
+      }
     }
     let pixelNb = pixels.length/4
-    return [R/pixelNb, G/pixelNb, B/pixelNb]
+    return [[R/pixelNb, G/pixelNb, B/pixelNb], closestWhite.reduce((a,b) => a + b, 0)/3, closestBlack.reduce((a,b) => a + b, 0)/3]
   }
 
   static calcListAvg(listOf2lists) {
