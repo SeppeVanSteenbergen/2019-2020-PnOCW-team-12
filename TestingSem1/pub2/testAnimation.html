@@ -17,60 +17,78 @@
 <!--    <h2>Animation Test</h2>-->
     <canvas id="canvas" width= "900" height= "900"></canvas>
     <script>
-        var canvas = document.getElementById("canvas")
-        // var triangulation = Delaunay.triangulation(Delaunay.randomPointsGenerator(3, canvas), canvas.width, canvas.height)
-        var triangulation = Delaunay.triangulation([[500,700],[50,500],[50,50]], canvas.width, canvas.height)
-        var animation1 = new Animations(triangulation, {width: canvas.width, height:canvas.height})
+        var canvas = document.getElementById("canvas");
+        // var triangulation = Delaunay.triangulation(Delaunay.randomPointsGenerator(4, canvas), canvas.width, canvas.height);
+        var triangulation = Delaunay.triangulation([[201,700],[51,500],[50,50]], canvas.width, canvas.height)
+        // var animation1 = new Animations(triangulation, {width: canvas.width, height:canvas.height})
+
+        var list = [1,7,5,8,7,4];
+        var frame = 0;
+        var startTime = null;
 
 
-        var animationClient = new Animations(null, {width: canvas.width, height:canvas.height}, true)
+        var animationClient = new Animations(triangulation, {width: canvas.width, height:canvas.height}, true, list);
         // catImage  = new Image()
         // catImage.src = "catsmall2.png"
 
 
         //animation loop
 
-        setInterval(function(){
-          canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height)
-
-            animationClient.drawBackground(canvas)
+        function drawDelaunay(){
 
             for(let tri = 0; tri < triangulation.length; tri++){
-            let ctx = canvas.getContext("2d")
-            let triangle = triangulation[tri]
-            ctx.beginPath()
-            ctx.moveTo(triangle.point1[0], triangle.point1[1])
-            ctx.lineTo(triangle.point2[0], triangle.point2[1])
-            ctx.lineTo(triangle.point3[0], triangle.point3[1])
-            ctx.lineTo(triangle.point1[0], triangle.point1[1])
-            ctx.closePath()
-            ctx.lineWidth = 2
-            ctx.strokeStyle = '#000'
-            ctx.stroke()
-          }
+                let ctx = canvas.getContext("2d");
+                let triangle = triangulation[tri];
+                ctx.beginPath();
+                ctx.moveTo(triangle.point1[0], triangle.point1[1]);
+                ctx.lineTo(triangle.point2[0], triangle.point2[1]);
+                ctx.lineTo(triangle.point3[0], triangle.point3[1]);
+                ctx.lineTo(triangle.point1[0], triangle.point1[1]);
+                ctx.closePath();
+                ctx.lineWidth = 2;
+                ctx.strokeStyle = '#000';
+                ctx.stroke();
+            }
 
-            //master side
-            let info1 = animation1.getNextFrame()
-
-            // client side
-            animationClient.drawAnimals(5, 50, canvas, info1.x, info1.y, info1.angle, info1.frame, info1.right)
-            // animationClient.drawAnimal(canvas, info1.x, info1.y, info1.angle, info1.frame, info1.right)
-            // if (posStack.length > 20){
-            //     animationClient.drawAnimal(canvas, posStack[0].x, posStack[0].y, posStack[0].angle, posStack[0].frame, posStack[0].right)
-            //     animationClient.drawAnimal(canvas, posStack[10].x, posStack[10].y, posStack[10].angle, posStack[10].frame, posStack[10].right)
-            //
-            //     posStack.shift()
-            // }
-            // animation.animateSprite(pos[0],pos[1],catImage, 400, 25, 8)
-
-
-
-        }, 50)
+        }
         // setInterval(function(){
-        //     animation.animateSprite(25,25,catImage, canvas, 400, 25, 8)
         //
+        //     canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
         //
-        // }, 75)
+        //     animationClient.drawBackground(canvas);
+        //     drawDelaunay();
+        //     let info1 = animationClient.getNextFrame();
+        //     animationClient.drawAnimal(canvas, info1.x, info1.y, info1.angle, info1.frame, info1.right, true);
+        //
+        // }, 50);
+
+        function startAnimation(){
+
+            canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
+
+            animationClient.drawBackground(canvas);
+            drawDelaunay();
+
+
+            if (frame>5){
+                if(startTime ===null){
+                    startTime = Date.now()
+                }
+                let info1 = animationClient.getNextFrame(frame, startTime);
+                animationClient.drawAnimal(canvas, info1.x, info1.y, info1.angle, info1.frame, info1.right, true);
+                frame += info1.extraFrame
+
+            }
+            frame++;
+
+
+
+            requestAnimationFrame(startAnimation);
+
+        }
+        requestAnimationFrame(startAnimation);
+
+
     </script>
 	
 
