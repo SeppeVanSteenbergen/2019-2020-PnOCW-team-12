@@ -7,6 +7,7 @@ class RGBBarcodeScanner {
         imageObjectOrig.height
     );
     console.log(imageData);
+    //let Spectrum = this.getSpectrum(imageData.data)
     this.noiseFilter(imageData, LU, RU) ;//the effective imageData.data will be changed!!!!!.
     let maskedCanvas = document.getElementById("masked")
     maskedCanvas.width = imageData.width
@@ -26,14 +27,14 @@ class RGBBarcodeScanner {
     let iterator = new Iterator(
         LU,
         RU,
-        pixels.width,
-        pixels.height
+        imageObject.width,
+        imageObject.height
     );
 
     let greyScan = false;
+    let current = iterator.next()
 
     while (iterator.hasNext()) {
-      let current = iterator.next()
       let i = this.pixelToIndex(current, imageObject.width)
       let value = pixels[i];
 
@@ -63,12 +64,34 @@ class RGBBarcodeScanner {
         scanned.push(value/255);  // set to ones and zeros
         greyScan = false
       }
+      current = iterator.next()
     }
     return this.getHighestCode(barcodes)
   }
 
   static distance(first, second) {
     return Math.sqrt((second[0]-first[0])**2 + (second[1]-first[1])**2 + (second[2]-first[2])**2 )
+  }
+
+  static getSpectrum(pixels) {
+    let black  = [0,0,0]
+    let white = [255,255,255]
+    let closestWhite = [255,255,255]
+    let closestBlack = [0,0,0]
+    for (let i = 0; i < pixels.length; i + 4) {
+      let R = pixels[i]
+      let G = pixels[i+1]
+      let B = pixels[i+2]
+      let pixel = [R, G, B]
+      if (this.distance(pixel, white) < this.distance(closestWhite, white)) {
+        closestWhite = pixel;
+      }
+      if (this.distance(pixel, black) < this.distance(closestBlack, black)) {
+        closestBlack = pixel;
+      }
+    }
+    console.log(closestWhite, closestBlack)
+    return [closestBlack, closestWhite]
   }
 
   static noiseFilter(imageDataOrig, LU, RU) {
@@ -85,9 +108,9 @@ class RGBBarcodeScanner {
     let size = 15;
     let half = Math.floor(size/2);
     let counter = 0;
+    let pixel = iterator.next()
 
     while(iterator.hasNext()) {
-      let pixel = iterator.next()
       counter++
       let c;
       let blackCounter = 0;
@@ -138,6 +161,7 @@ class RGBBarcodeScanner {
         c = 0;
       }
       outputData.push(c,c,c,255)
+      pixel = iterator.next()
     }
     console.log(counter)
     imageDataOrig.data.set(Uint8ClampedArray.from(outputData))
