@@ -7,8 +7,8 @@ class RGBBarcodeScanner {
         imageObjectOrig.height
     );
     console.log(imageData);
-    //let Spectrum = this.getSpectrum(imageData.data)
-    this.noiseFilter(imageData, LU, RU) ;//the effective imageData.data will be changed!!!!!.
+    let spectrum = this.getSpectrum(imageData.data)
+    this.noiseFilter(imageData, LU, RU, spectrum) ;//the effective imageData.data will be changed!!!!!.
     let maskedCanvas = document.getElementById("masked")
     maskedCanvas.width = imageData.width
     maskedCanvas.height = imageData.height
@@ -76,9 +76,9 @@ class RGBBarcodeScanner {
   static getSpectrum(pixels) {
     let black  = [0,0,0]
     let white = [255,255,255]
-    let closestWhite = [255,255,255]
-    let closestBlack = [0,0,0]
-    for (let i = 0; i < pixels.length; i + 4) {
+    let closestBlack = [255,255,255]
+    let closestWhite = [0,0,0]
+    for (let i = 0; i < pixels.length; i += 4) {
       let R = pixels[i]
       let G = pixels[i+1]
       let B = pixels[i+2]
@@ -94,7 +94,7 @@ class RGBBarcodeScanner {
     return [closestBlack, closestWhite]
   }
 
-  static noiseFilter(imageDataOrig, LU, RU) {
+  static noiseFilter(imageDataOrig, LU, RU, spectrum) {
     let imageData = new ImageData(
         new Uint8ClampedArray(imageDataOrig.data),
         imageDataOrig.width,
@@ -102,9 +102,9 @@ class RGBBarcodeScanner {
     )
     let iterator = new Iterator(LU, RU, imageData.width, imageData.height)
     let outputData =  []
-    let black = [0, 0, 0];
-    let white = [255, 255, 255]
-    let grey = [128, 128, 128]
+    let black = spectrum[0];
+    let white = spectrum[1]
+    let grey = this.calcListAvg(spectrum)
     let size = 15;
     let half = Math.floor(size/2);
     let counter = 0;
@@ -167,6 +167,13 @@ class RGBBarcodeScanner {
     imageDataOrig.data.set(Uint8ClampedArray.from(outputData))
   }
 
+  static calcListAvg(listOf2lists) {
+    let avg = []
+    avg[0] = (listOf2lists[0][0] + listOf2lists[1][0]) / 2
+    avg[1] = (listOf2lists[0][1] + listOf2lists[1][1]) / 2
+    avg[2] = (listOf2lists[0][2] + listOf2lists[1][2]) / 2
+    return avg
+  }
   static getMatrix(x, y, data) {
     if (x < 0) x = 0;
     else if (x > data.width) x = data.width;

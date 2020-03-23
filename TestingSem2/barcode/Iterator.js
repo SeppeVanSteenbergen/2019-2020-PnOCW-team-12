@@ -41,7 +41,7 @@ class Iterator {
             
             if (this.y > this.height || this.y < 0) {
                 this.x = Math.round((this.y - this.b) / this.a)
-                if (this.a === NaN || this.x > this.width) {
+                if (isNaN(this.x) || this.x > this.width) {
                     this.isTerminated = true
                     this.x = null
                     this.y = null
