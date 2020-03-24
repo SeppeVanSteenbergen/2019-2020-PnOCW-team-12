@@ -17,7 +17,7 @@ export default class Image {
     this.offSet = 1
 
     if (colorSpace === 'RGBA') {
-      this.imgOriginal = Image.copyImageData(imgData)
+      this.imgOriginalRGB = Image.copyImageData(imgData)
     }
 
     this.setPixels(imgData.data)
@@ -43,34 +43,8 @@ export default class Image {
     this.analyse()
   }
 
-  setCommunicator(communicator){
-    this.communicator = communicator;
-  }
-
-  static resizeImage(image, border) {
-    let scaleWidth = border[0] / image.width
-    let scaleHeight = border[1] / image.height
-    let scale = Math.min(scaleWidth, scaleHeight)
-
-    if (scale >= 1) {
-      return image
-    }
-
-    let canvas = document.createElement('canvas')
-    let ctx = canvas.getContext('2d')
-    canvas.width = image.width * scale
-    canvas.height = image.height * scale
-    ctx.drawImage(image, 0, 0, canvas.width, canvas.height)
-
-    let resizedImage = document.createElement('img')
-    resizedImage.setAttribute('src',canvas.toDataURL())
-    resizedImage.setAttribute('width', canvas.width.toString())
-    resizedImage.setAttribute('height', canvas.height.toString())
-    //resizedImage.src = canvas.toDataURL()
-    //resizedImage.width = canvas.width
-    //resizedImage.height = canvas.height
-
-    return resizedImage
+  setCommunicator(communicator) {
+    this.communicator = communicator
   }
 
   static resizeImageData(imgData, border) {
@@ -98,15 +72,17 @@ export default class Image {
   }
 
   analyse() {
-    this.communicator.sendInfoMessage("-----Start analysis-----");
+    this.communicator.sendInfoMessage('-----Start analysis-----')
     ColorSpace.rgbaToHsla(this.pixels)
     this.setColorSpace('HSLA')
-    this.communicator.sendSuccessMessage("Changed color space to HSLA")
+    this.communicator.sendSuccessMessage('Changed color space to HSLA')
     this.createBigMask()
-    this.communicator.sendSuccessMessage("Filtered the non-screen colours out of picture")
+    this.communicator.sendSuccessMessage(
+      'Filtered the non-screen colours out of picture'
+    )
     this.createOffset(this.offSet)
     this.createScreens()
-    this.communicator.sendInfoMessage("-----End analysis-----")
+    this.communicator.sendInfoMessage('-----End analysis-----')
     //this.createPictureCanvas(300, 500); //TODO: param meegeven
     //this.calcRelativeScreens(); //untested
     return this.screens
@@ -142,25 +118,32 @@ export default class Image {
         if (this.checkId(x, y)) {
           let newIslandCoo = this.floodfill(x, y, this.islandID)
           if (this.isPossibleIsland(newIslandCoo)) {
-            this.communicator.sendInfoMessage("Island " + this.islandID + " is a possible Island")
+            this.communicator.sendInfoMessage(
+              'Island ' + this.islandID + ' is a possible Island'
+            )
             let newIsland = new Island(
               [newIslandCoo[0], newIslandCoo[1]],
               [newIslandCoo[2], newIslandCoo[3]],
               this.islandID,
               this.getImgData(),
+              this.imgOriginalRGB,
               this.matrix,
-                this.communicator
+              this.communicator
             )
             if (newIsland.isValid()) {
-              this.communicator.sendInfoMessage("Island " + this.islandID + "is valid");
+              this.communicator.sendInfoMessage(
+                'Island ' + this.islandID + 'is valid'
+              )
               try {
                 newIsland.finishIsland()
                 this.islands.push(newIsland)
               } catch (err) {
                 console.log(err + ' in screen: ' + newIsland.getClientCode())
               }
-            } else{
-              this.communicator.sendInfoMessage("Island " + this.islandID + "is not valid, no island created");
+            } else {
+              this.communicator.sendInfoMessage(
+                'Island ' + this.islandID + 'is not valid, no island created'
+              )
             }
             this.islandID += 3
           }
@@ -178,7 +161,7 @@ export default class Image {
     let minY = yPos
     let maxX = xPos
     let maxY = yPos
-    this.communicator.sendInfoMessage("Start floodfill with ID " + islandID)
+    this.communicator.sendInfoMessage('Start floodfill with ID ' + islandID)
     while (stack.length > 0) {
       pixel = stack.pop()
       x = pixel[0]
@@ -220,7 +203,8 @@ export default class Image {
     let ids = matrix.flat()
     return (
       ids.includes(this.islandID) &&
-      ids.includes(this.islandID + 1) && ids.includes(this.islandID + 2)
+      ids.includes(this.islandID + 1) &&
+      ids.includes(this.islandID + 2)
     )
   }
 
@@ -242,7 +226,7 @@ export default class Image {
    * Creates the screens by detecting them in the image using the floodfill algorithm.
    */
   createScreens() {
-    this.communicator.sendInfoMessage("Start screen search")
+    this.communicator.sendInfoMessage('Start screen search')
     this.screens = []
     this.calcIslandsFloodfill()
     for (let i = 0; i < this.islands.length; i++) {
@@ -252,7 +236,7 @@ export default class Image {
       let newScreen = this.islands[i].createScreen(this.clientInfo)
       this.screens.push(newScreen)
     }
-    this.communicator.sendInfoMessage("End screen search")
+    this.communicator.sendInfoMessage('End screen search')
   }
 
   /**
@@ -260,7 +244,7 @@ export default class Image {
    */
   createBigMask() {
     if (this.getColorSpace() !== 'HSLA') {
-      console.error('createGreenBlueMask only with HSLA as colorspace!')
+      console.error('createBigMask only with HSLA as colorspace!')
     }
     for (let i = 0; i < this.pixels.length; i += 4) {
       let H = this.pixels[i] * 2
@@ -269,11 +253,11 @@ export default class Image {
       let pixel = this.positionToPixel(i)
       let x = pixel[0]
       let y = pixel[1]
-      if (ColorRange.inBlueRange(H, S, L)) {
+      if (ColorRange.checkColor(H, S, L, 'blueGreen')) {
         this.matrix[y][x] = 1
-      } else if (ColorRange.inGreenRange(H, S, L)) {
+      } else if (ColorRange.checkColor(H, S, L, 'yellow')) {
         this.matrix[y][x] = 2
-      } else if (ColorRange.inRedRange(H, S, L)) {
+      } else if (ColorRange.checkColor(H, S, L, 'purple')) {
         this.matrix[y][x] = 3
       } else {
         this.matrix[y][x] = 0
@@ -310,7 +294,7 @@ export default class Image {
     return [x, y]
   }
 
-  pixelToPosition(x,y) {
+  pixelToPosition(x, y) {
     return this.getWidth() * y + x
   }
 
@@ -360,7 +344,7 @@ export default class Image {
 
     let scale = width / (points['maxx'] - points['minx'])
 
-    if(height * scale < (points['maxy'] - points['miny'])){
+    if (height * scale < points['maxy'] - points['miny']) {
       scale = height / (points['maxy'] - points['miny'])
     }
 
@@ -507,10 +491,7 @@ export default class Image {
     canvas.width = this.width
     canvas.height = this.height
     let context = canvas.getContext('2d')
-    let imgData = context.createImageData(
-      this.width,
-      this.height
-    )
+    let imgData = context.createImageData(this.width, this.height)
     imgData.data.set(this.pixels)
     return imgData
   }
