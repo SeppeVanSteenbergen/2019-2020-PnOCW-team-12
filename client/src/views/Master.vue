@@ -1417,19 +1417,6 @@ export default {
     },
     drawingImage(n) {
       this.drawingImageLoaded
-    },
-    printToConsole(message, color, time){
-      this.$store.dispatch('showSnackbar', {
-        text: message,
-        color: color,
-        time: time
-      })
-    },
-    printToConsole(message, color){
-      this.$store.dispatch('showSnackbar', {
-        text: message,
-        color: color,
-      })
     }
   }
 }

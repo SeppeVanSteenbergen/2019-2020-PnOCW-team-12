@@ -44,6 +44,21 @@ Vue.prototype.startSync = function() {
   this.$socket.emit('startSync', '')
 }
 
+Vue.prototype.printToConsole = function(message, color, time) {
+  this.$store.dispatch('showSnackbar', {
+    text: message,
+    color: color,
+    time: time
+  })
+}
+
+Vue.prototype.printToConsole = function(message, color) {
+  this.$store.dispatch('showSnackbar', {
+    text: message,
+    color: color
+  })
+}
+
 new Vue({
   router,
   store,
