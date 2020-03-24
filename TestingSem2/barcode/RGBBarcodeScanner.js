@@ -160,7 +160,7 @@ class RGBBarcodeScanner {
       R += pixels[i]
       G += pixels[i+1]
       B += pixels[i+2]
-      let pixel = [R, G, B]
+      let pixel = [pixels[i], pixels[i+1], pixels[i+2]]
       if (this.distance(pixel, white) < this.distance(closestWhite, white)) {
         closestWhite = pixel;
       }
