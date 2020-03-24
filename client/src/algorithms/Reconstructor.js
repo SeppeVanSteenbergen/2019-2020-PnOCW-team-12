@@ -380,6 +380,7 @@ export default class Reconstructor {
     ) {
       let x = cornerCoo[0] + Math.floor(this.radius * Math.cos(theta))
       let y = cornerCoo[1] + Math.floor(this.radius * Math.sin(theta))
+
       if (newLine[newLine.length - 1] !== [x, y]) {
         if (this.isFromIsland(x, y)) {
           white = true

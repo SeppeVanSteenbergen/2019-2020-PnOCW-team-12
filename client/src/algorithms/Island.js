@@ -9,6 +9,7 @@ export default class Island {
    * @param rightBottomCoo
    * @param {int} id
    * @param HSLImage
+   * @param RGBImage
    * @param matrix
    * @param communicator
    */
@@ -37,14 +38,14 @@ export default class Island {
     this.miny = leftUpperCoo[1]
     this.maxy = rightBottomCoo[1]
 
-    this.setScreenMatrix(matrix)
-    this.height = this.screenMatrix.length
-    this.width = this.screenMatrix[0].length
-
     this.id = id
     this.blue = id
     this.green = id + 1
     this.circle = id + 2
+
+    this.setScreenMatrix(matrix)
+    this.height = this.screenMatrix.length
+    this.width = this.screenMatrix[0].length
 
     this.HSLImage = HSLImage
     this.RGBImage = RGBImage
@@ -63,6 +64,15 @@ export default class Island {
     this.screenMatrix = matrix.slice(this.miny, this.maxy)
     for (let i = 0; i < this.maxy - this.miny; i++) {
       this.screenMatrix[i] = this.screenMatrix[i].slice(this.minx, this.maxx)
+    }
+
+    for (let y = 0; y < this.screenMatrix.length; y++) {
+      for (let x = 0; x < this.screenMatrix[0].length; x++) {
+        let id = this.screenMatrix[y][x]
+        if (id > 0 && id <= 3) {
+          this.screenMatrix[y][x] = id + this.id - 1
+        }
+      }
     }
   }
 
