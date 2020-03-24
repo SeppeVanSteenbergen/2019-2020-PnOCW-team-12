@@ -1,10 +1,12 @@
 import Image from '../algorithms/Image'
 import Delaunay from '../algorithms/Delaunay'
+import Communicator from "../algorithms/Communicator";
 
 export default {
-  fullAnalysis(imgData, clientInfo) {
+  fullAnalysis(imgData, clientInfo, masterVue) {
     imgData = Image.resizeImageData(imgData, [1920, 1080])
-    let inputImage = new Image(imgData, null, 'RGBA', clientInfo)
+    let communicator = new Communicator(masterVue);
+    let inputImage = new Image(imgData, null, 'RGBA', clientInfo, communicator)
 
     return inputImage
   },
