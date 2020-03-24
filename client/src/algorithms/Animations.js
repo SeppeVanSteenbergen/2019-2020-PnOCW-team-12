@@ -35,11 +35,10 @@ export default class Animations {
     this.radius = 5;
     this.fillStyle = 'red ';
     this.range = 7;
-    this.speed = 12;
+    this.speed = 7;
     this.frame = 0;
     this.angle = 0;
     this.snowAngle = 0;
-    this.posStack = [];
     this.fps = 60;
 
     if (triangulation !== null) {
@@ -197,9 +196,9 @@ export default class Animations {
 
   getNextFrame(frame, startTime) {
 
-    console.log(frame-6)
-    console.log(Math.round((Date.now()-startTime)/(1000/this.fps)))
-    console.log("-----")
+    // console.log(frame-6)
+    // console.log(Math.round((Date.now()-startTime)/(1000/this.fps)))
+    // console.log("-----")
 
     if (frame-6 < Math.round((Date.now()-startTime)/(1000/this.fps))){
       this.updateFrame();
@@ -208,7 +207,7 @@ export default class Animations {
         x: this.position.x,
         y: this.position.y,
         angle: this.angle,
-        frame: this.frame,
+        frame: Math.floor(this.frame),
         right: this.endPoint[0] >= this.firstPoint[0],
         extraFrame: 1
       }
@@ -219,7 +218,7 @@ export default class Animations {
         x: this.position.x,
         y: this.position.y,
         angle: this.angle,
-        frame: this.frame,
+        frame: Math.floor(this.frame),
         right: this.endPoint[0] >= this.firstPoint[0],
         extraFrame: -1
       }
@@ -230,7 +229,7 @@ export default class Animations {
         x: this.position.x,
         y: this.position.y,
         angle: this.angle,
-        frame: this.frame,
+        frame: Math.floor(this.frame),
         right: this.endPoint[0] >= this.firstPoint[0],
         extraFrame: 0
       }
@@ -296,7 +295,8 @@ export default class Animations {
       this.angle += 180;
     }
 
-    this.frame += 1;
+    this.frame = this.frame+this.speed/23; //TODO
+
     if (this.frame >= this.nbFrames) {
       this.frame = 0;
     }
