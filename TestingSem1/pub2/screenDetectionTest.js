@@ -1,3 +1,5 @@
+import Communicator from "../../client/src/algorithms/Communicator";
+
 let imgElement = document.createElement('img');
 imgElement = document.getElementById('imageSrc');
 let inputElement = document.getElementById('fileInput');
@@ -26,7 +28,7 @@ imgElement.onload = function() {
   inputCanvas.height = imgDataResized.height;
   inputContext.putImageData(imgDataResized, 0, 0);
   let inputImgData = inputContext.getImageData(0, 0, imgDataResized.width, imgDataResized.height);
-  let imageTest = new Image(inputImgData, 'imageOutConcatenated', 'RGBA', null);
+  let imageTest = new Image(inputImgData, 'imageOutConcatenated', 'RGBA', null, new Communicator(null));
   ColorSpace.hslaToRgba(imageTest.pixels);
   imageTest.show();
   console.log("proces finished")

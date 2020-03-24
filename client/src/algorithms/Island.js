@@ -1,8 +1,6 @@
 import Screen from './Screen'
-import BarcodeScanner from './BarcodeScanner'
+import RGBBarcodeScanner from './RGBBarcodeScanner'
 import CornerDetector from './CornerDetector'
-// import Line from './Line'
-// import PermutationConverter from './PermutationConverter'
 
 export default class Island {
   /**
@@ -10,13 +8,22 @@ export default class Island {
    * @param leftUpperCoo
    * @param rightBottomCoo
    * @param {int} id
-   * @param imgOriginal
+   * @param HSLImage
    * @param matrix
+   * @param communicator
    */
-  constructor(leftUpperCoo, rightBottomCoo, id, imgOriginal, matrix, communicator) {
+  constructor(
+    leftUpperCoo,
+    rightBottomCoo,
+    id,
+    HSLImage,
+    RGBImage,
+    matrix,
+    communicator
+  ) {
     // coordinates seen from original matrix
     this.setCommunicator(communicator)
-    this.communicator.sendInfoMessage("Start creating island with ID " + id);
+    this.communicator.sendInfoMessage('Start creating island with ID ' + id)
     this.corners = {
       LU: null,
       RU: null,
@@ -39,15 +46,16 @@ export default class Island {
     this.green = id + 1
     this.circle = id + 2
 
-    this.imgOriginal = imgOriginal
+    this.HSLImage = HSLImage
+    this.RGBImage = RGBImage
     this.midPoint = this.calcMid()
     this.clientCode = null
-    this.communicator.sendInfoMessage("Island " + id + " created");
+    this.communicator.sendInfoMessage('Island ' + id + ' created')
   }
 
   isValid() {
-    if(this.midPoint == null)
-      this.communicator.sendInfoMessage("No midpoint in island " + this.id)
+    if (this.midPoint == null)
+      this.communicator.sendInfoMessage('No midpoint in island ' + this.id)
     return this.midPoint !== null
   }
 
@@ -63,7 +71,7 @@ export default class Island {
       this.screenMatrix,
       this.midPoint,
       this.id,
-        this.communicator
+      this.communicator
     )
     let detectedCorners = cornerDetector.cornerDetection()
     this.corners.LU = [
@@ -87,7 +95,9 @@ export default class Island {
       detectedCorners.RD[2]
     ]
 
-    this.communicator.sendSuccessMessage("Corners of screen in island " + this.id + " are all set")
+    this.communicator.sendSuccessMessage(
+      'Corners of screen in island ' + this.id + ' are all set'
+    )
   }
 
   calcMid() {
@@ -110,7 +120,9 @@ export default class Island {
     xValues = Island.filterPoints(xValues)
     yValues = Island.filterPoints(yValues)
 
-    this.communicator.sendSuccessMessage("Midpoint of island " + this.id + " calculated")
+    this.communicator.sendSuccessMessage(
+      'Midpoint of island ' + this.id + ' calculated'
+    )
     return [
       xValues[Math.round(xValues.length / 2)],
       yValues[Math.round(yValues.length / 2)]
@@ -180,18 +192,21 @@ export default class Island {
   }
 
   finishIsland() {
-    this.communicator.sendInfoMessage("Try to identify island " + this.id)
+    this.communicator.sendInfoMessage('Try to identify island ' + this.id)
     this.findCorners()
-    this.communicator.sendInfoMessage("Try to identify screen in island " + this.id)
-    this.clientCode =
-      BarcodeScanner.scan(
-        this.getScreenImg(),
-        this.corners.LU,
-        this.corners.RU
-      ) - 2
+    this.communicator.sendInfoMessage(
+      'Try to identify screen in island ' + this.id
+    )
+    this.clientCode = RGBBarcodeScanner.scan(
+      this.getScreenImg(this.RGBImage),
+      this.corners.LU,
+      this.corners.RU
+    )
     this.localToWorld()
 
-    this.communicator.sendSuccessMessage("Detected screen: " + this.clientCode + "in island " + this.id)
+    this.communicator.sendSuccessMessage(
+      'Detected screen: ' + this.clientCode + 'in island ' + this.id
+    )
     console.log('Detected screen: ' + this.clientCode)
   }
 
@@ -227,7 +242,7 @@ export default class Island {
       this.midPoint,
       clientInfo,
       this.clientCode,
-      this.imgOriginal
+      this.HSLImage
     )
   }
 
@@ -241,12 +256,12 @@ export default class Island {
     return this.screenMatrix[y][x]
   }
 
-  getScreenImg() {
+  getScreenImg(image) {
     let canvas = document.createElement('canvas')
-    canvas.width = this.imgOriginal.width
-    canvas.height = this.imgOriginal.height
+    canvas.width = image.width
+    canvas.height = image.height
     let context = canvas.getContext('2d')
-    context.putImageData(this.imgOriginal, 0, 0)
+    context.putImageData(image, 0, 0)
     return context.getImageData(
       this.minx,
       this.miny,
