@@ -1,33 +1,39 @@
-import Master from '../views/Master'
-
 export default class Communicator {
+  constructor(masterVue) {
+    this.masterVue = masterVue
+  }
 
-    constructor(masterVue) {
-        this.masterVue = masterVue;
-    }
+  runnable() {
+    return this.masterVue !== null
+  }
 
-    sendSuccessMessage(message, time){
-        this.masterVue.printToConsole(message, "success", time);
-    }
+  sendSuccessMessage(message, time) {
+    if (!this.runnable()) return
+    this.masterVue.printToConsole(message, 'success', time)
+  }
 
-    sendSuccessMessage(message){
-        this.masterVue.printToConsole(message, "success");
-    }
+  sendSuccessMessage(message) {
+    if (!this.runnable()) return
+    this.masterVue.printToConsole(message, 'success')
+  }
 
-    sendErrorMessage(message, time){
-        this.masterVue.printToConsole(message, "error", time);
-    }
+  sendErrorMessage(message, time) {
+    if (!this.runnable()) return
+    this.masterVue.printToConsole(message, 'error', time)
+  }
 
-    sendErrorMessage(message){
-        this.masterVue.printToConsole(message, "error");
-    }
+  sendErrorMessage(message) {
+    if (!this.runnable()) return
+    this.masterVue.printToConsole(message, 'error')
+  }
 
-    sendInfoMessage(message, time){
-        this.masterVue.printToConsole(message, "info", time);
-    }
+  sendInfoMessage(message, time) {
+    if (!this.runnable()) return
+    this.masterVue.printToConsole(message, 'info', time)
+  }
 
-    sendInfoMessage(message)
-    {
-        this.masterVue.printToConsole(message, "info");
-    }
+  sendInfoMessage(message) {
+    if (!this.runnable()) return
+    this.masterVue.printToConsole(message, 'info')
+  }
 }

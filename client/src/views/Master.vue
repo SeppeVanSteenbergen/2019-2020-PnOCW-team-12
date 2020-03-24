@@ -688,11 +688,11 @@ export default {
           let c = vue.$refs.drawCanvas
 
           vue.drawCanvasScale =
-            window.innerWidth / vue.analysedImage.imgOriginal.width
+            window.innerWidth / vue.analysedImage.imgOriginalRGB.width
 
           let ctx = c.getContext('2d')
-          c.width = vue.analysedImage.imgOriginal.width
-          c.height = vue.analysedImage.imgOriginal.height
+          c.width = vue.analysedImage.imgOriginalRGB.width
+          c.height = vue.analysedImage.imgOriginalRGB.height
 
           let imgWidth = screen.width - 10
           let ratio = c.height / c.width
@@ -1417,19 +1417,6 @@ export default {
     },
     drawingImage(n) {
       this.drawingImageLoaded
-    },
-    printToConsole(message, color, time){
-      this.$store.dispatch('showSnackbar', {
-        text: message,
-        color: color,
-        time: time
-      })
-    },
-    printToConsole(message, color){
-      this.$store.dispatch('showSnackbar', {
-        text: message,
-        color: color,
-      })
     }
   }
 }
