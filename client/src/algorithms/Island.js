@@ -13,8 +13,10 @@ export default class Island {
    * @param imgOriginal
    * @param matrix
    */
-  constructor(leftUpperCoo, rightBottomCoo, id, imgOriginal, matrix) {
+  constructor(leftUpperCoo, rightBottomCoo, id, imgOriginal, matrix, communicator) {
     // coordinates seen from original matrix
+    this.setCommunicator(communicator)
+    this.communicator.sendInfoMessage("Start creating island with ID " + id);
     this.corners = {
       LU: null,
       RU: null,
@@ -40,9 +42,12 @@ export default class Island {
     this.imgOriginal = imgOriginal
     this.midPoint = this.calcMid()
     this.clientCode = null
+    this.communicator.sendInfoMessage("Island " + id + " created");
   }
 
   isValid() {
+    if(this.midPoint == null)
+      this.communicator.sendInfoMessage("No midpoint in island " + this.id)
     return this.midPoint !== null
   }
 
@@ -57,7 +62,8 @@ export default class Island {
     let cornerDetector = new CornerDetector(
       this.screenMatrix,
       this.midPoint,
-      this.id
+      this.id,
+        this.communicator
     )
     let detectedCorners = cornerDetector.cornerDetection()
     this.corners.LU = [
@@ -80,6 +86,8 @@ export default class Island {
       detectedCorners.RD[1],
       detectedCorners.RD[2]
     ]
+
+    this.communicator.sendSuccessMessage("Corners of screen in island " + this.id + " are all set")
   }
 
   calcMid() {
@@ -102,6 +110,7 @@ export default class Island {
     xValues = Island.filterPoints(xValues)
     yValues = Island.filterPoints(yValues)
 
+    this.communicator.sendSuccessMessage("Midpoint of island " + this.id + " calculated")
     return [
       xValues[Math.round(xValues.length / 2)],
       yValues[Math.round(yValues.length / 2)]
@@ -171,15 +180,18 @@ export default class Island {
   }
 
   finishIsland() {
+    this.communicator.sendInfoMessage("Try to identify island " + this.id)
     this.findCorners()
+    this.communicator.sendInfoMessage("Try to identify screen in island " + this.id)
     this.clientCode =
       BarcodeScanner.scan(
         this.getScreenImg(),
         this.corners.LU,
-        this.corners.RU,
+        this.corners.RU
       ) - 2
     this.localToWorld()
 
+    this.communicator.sendSuccessMessage("Detected screen: " + this.clientCode + "in island " + this.id)
     console.log('Detected screen: ' + this.clientCode)
   }
 
@@ -258,5 +270,9 @@ export default class Island {
   print() {
     console.log('starting co: ' + this.minx + ', ' + this.miny)
     console.log('ending co: ' + this.maxx + ', ' + this.maxy)
+  }
+
+  setCommunicator(communicator) {
+    this.communicator = communicator
   }
 }

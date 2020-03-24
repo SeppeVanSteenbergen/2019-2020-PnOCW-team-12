@@ -2,7 +2,8 @@ import Reconstructor from './Reconstructor'
 import Algebra from './Algebra'
 
 export default class CornerDetector {
-  constructor(screenMatrix, midPoint, id) {
+  constructor(screenMatrix, midPoint, id, communicator) {
+    this.setCommunicator(communicator)
     this.matrix = screenMatrix
     this.midPoint = midPoint
     this.id = id
@@ -19,7 +20,8 @@ export default class CornerDetector {
       this.matrix,
       this.id,
       this.width,
-      this.height
+      this.height,
+        this.communicator
     )
     this.radiusFactor = 0.25
     this.radius = null //will be set later
@@ -43,8 +45,11 @@ export default class CornerDetector {
       nonPositionCorners.filter(function(point) {
         return point != null
       }).length < 2
-    )
+    ){
+      this.communicator.sendErrorMessage("Not enough good corners detected for reconstruction of screen")
       throw 'Not enough good corners detected for reconstruction'
+    }
+
 
     this.corners = this.orderCorners(nonPositionCorners)
     nonPositionCorners = nonPositionCorners.filter(function(point) {
@@ -53,6 +58,7 @@ export default class CornerDetector {
     if (nonPositionCorners.length < 4) {
       let corners = this.corners
       this.corners = this.reconstructor.reconstructCorners(corners)
+      this.communicator.sendSuccessMessage("Corner(s) are reconstructed");
     }
     return this.corners
   }
@@ -153,10 +159,12 @@ export default class CornerDetector {
 
     let corners = []
     if (diagonalSearch) {
+      this.communicator.sendInfoMessage("Search corners with diagonal search")
       console.log('diagonal search')
       // Diagonal search
       corners = this.diagonalSearch()
     } else {
+      this.communicator.sendInfoMessage("Search corners with perpendicular search")
       console.log('perpendicular search')
       // Perpendicular search
       corners = this.perpendicularSearch()
@@ -425,5 +433,9 @@ export default class CornerDetector {
     if (x < 0 || x >= this.matrix[0].length) return 0
     if (y < 0 || y >= this.matrix.length) return 0
     return this.matrix[y][x]
+  }
+
+  setCommunicator(communicator) {
+    this.communicator = communicator;
   }
 }

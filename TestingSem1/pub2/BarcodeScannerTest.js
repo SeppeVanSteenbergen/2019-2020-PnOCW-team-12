@@ -23,10 +23,9 @@ imgElement.onload = function() {
 
     let inputImgData = inputContext.getImageData(0, 0, imgElement.width, imgElement.height);
     let colors1 = {}
-    ColorSpace.rgbaToHsla(inputImgData.data);
     console.log("start scan")
 
-    let barcode = BarcodeScanner.scan(inputImgData);
+    let barcode = RGBBarcodeScanner.scan(inputImgData);
     ColorSpace.hslaToRgba(inputImgData.data);
     inputContext.putImageData(inputImgData, 0, 0);
 

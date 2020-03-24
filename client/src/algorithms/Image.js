@@ -4,9 +4,9 @@ import ColorSpace from './ColorSpace'
 import ColorRange from './ColorRange'
 
 export default class Image {
-  constructor(imgData, canvasName, colorSpace, clientInfo) {
+  constructor(imgData, canvasName, colorSpace, clientInfo, communicator) {
     this.clientInfo = clientInfo
-
+    this.setCommunicator(communicator)
     this.colorSpaces = ['RGBA', 'HSLA', 'BW']
     this.islandID = 4 //jumps per three so we can save green and blue within an island.
     this.screens = []
@@ -41,6 +41,10 @@ export default class Image {
     }
 
     this.analyse()
+  }
+
+  setCommunicator(communicator){
+    this.communicator = communicator;
   }
 
   static resizeImage(image, border) {
@@ -94,12 +98,15 @@ export default class Image {
   }
 
   analyse() {
+    this.communicator.sendInfoMessage("-----Start analysis-----");
     ColorSpace.rgbaToHsla(this.pixels)
     this.setColorSpace('HSLA')
-
+    this.communicator.sendSuccessMessage("Changed color space to HSLA")
     this.createBigMask()
+    this.communicator.sendSuccessMessage("Filtered the non-screen colours out of picture")
     this.createOffset(this.offSet)
     this.createScreens()
+    this.communicator.sendInfoMessage("-----End analysis-----")
     //this.createPictureCanvas(300, 500); //TODO: param meegeven
     //this.calcRelativeScreens(); //untested
     return this.screens
@@ -135,20 +142,25 @@ export default class Image {
         if (this.checkId(x, y)) {
           let newIslandCoo = this.floodfill(x, y, this.islandID)
           if (this.isPossibleIsland(newIslandCoo)) {
+            this.communicator.sendInfoMessage("Island " + this.islandID + " is a possible Island")
             let newIsland = new Island(
               [newIslandCoo[0], newIslandCoo[1]],
               [newIslandCoo[2], newIslandCoo[3]],
               this.islandID,
               this.getImgData(),
               this.matrix,
+                this.communicator
             )
             if (newIsland.isValid()) {
+              this.communicator.sendInfoMessage("Island " + this.islandID + "is valid");
               try {
                 newIsland.finishIsland()
                 this.islands.push(newIsland)
               } catch (err) {
                 console.log(err + ' in screen: ' + newIsland.getClientCode())
               }
+            } else{
+              this.communicator.sendInfoMessage("Island " + this.islandID + "is not valid, no island created");
             }
             this.islandID += 3
           }
@@ -166,6 +178,7 @@ export default class Image {
     let minY = yPos
     let maxX = xPos
     let maxY = yPos
+    this.communicator.sendInfoMessage("Start floodfill with ID " + islandID)
     while (stack.length > 0) {
       pixel = stack.pop()
       x = pixel[0]
@@ -207,7 +220,7 @@ export default class Image {
     let ids = matrix.flat()
     return (
       ids.includes(this.islandID) &&
-      ids.includes(this.islandID + 1) & ids.includes(this.islandID + 2)
+      ids.includes(this.islandID + 1) && ids.includes(this.islandID + 2)
     )
   }
 
@@ -229,6 +242,7 @@ export default class Image {
    * Creates the screens by detecting them in the image using the floodfill algorithm.
    */
   createScreens() {
+    this.communicator.sendInfoMessage("Start screen search")
     this.screens = []
     this.calcIslandsFloodfill()
     for (let i = 0; i < this.islands.length; i++) {
@@ -238,6 +252,7 @@ export default class Image {
       let newScreen = this.islands[i].createScreen(this.clientInfo)
       this.screens.push(newScreen)
     }
+    this.communicator.sendInfoMessage("End screen search")
   }
 
   /**
