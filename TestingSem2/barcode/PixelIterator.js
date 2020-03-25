@@ -3,17 +3,17 @@ class PixelIterator {
     this.line = new Line([LU[0], -LU[1]], [RU[0], -RU[1]])
 
     this.horizontalMode = this.line.normalAngle <= 45 || (this.line.normalAngle >= 135 && this.line.normalAngle <= 225) || this.line.normalAngle >= 315
-    this.reversed = this.horizontalMode ? this.line.normalAngle > 45 && this.line.normalAngle < 315 : this.line.normalAngle < 225
+    this.reversed = this.horizontalMode ? this.line.normalAngle > 45 && this.line.normalAngle < 315 : this.line.normalAngle > 135
 
     this.width = width
     this.height = height
 
     if (this.horizontalMode) {
-      this.b = 1
+      this.b = this.line.slope >= 0 ? 1 : -this.line.slope * (this.width - 1) + 1
       this.x = 0
     } else {
-      this.intersectionWidthAxis = -1
       this.y = -(this.height - 1)
+      this.intersectionWidthAxis = this.line.slope >= 0 ? (this.y / this.line.slope) - 1 : -1
     }
 
     this.isTerminated = false
@@ -45,28 +45,25 @@ class PixelIterator {
 
       this.x = 0
     } else {
-      this.intersectionXAxis ++
-      this.x = this.intersectionXAxis
-      this.b = Math.round(-this.line.slope * this.x)
+      this.intersectionWidthAxis ++
+      this.x = this.intersectionWidthAxis
+      this.b = Math.round(this.y - this.line.slope * this.x)
 
-      while (-this.y >= 0 || this.x >= 0) {
-        if (-this.y < this.height && this.x < this.width) {
+      while (-this.y >= 0) {
+        if (this.x >= 0 && this.x < this.width) {
           row.push([this.x, -this.y])
-
         }
-
         this.y++
-        this.x = Math.round((this.y - this.b) / this.line.slope)
+        if (isFinite(this.b)) {
+          this.x = Math.round((this.y - this.b) / this.line.slope)
+        }
       }
 
-      this.y = -(this.height - 1)
-      this.x = Math.round((this.y - this.b) / this.line.slope)
-
-      if (this.x >= this.width - 1) {
+      if (this.intersectionWidthAxis >= this.width - 1 && this.x >= this.width - 1) {
         this.isTerminated = true
       }
 
-      this.y = 0
+      this.y = -(this.height - 1)
     }
 
     if (this.reversed) {
