@@ -7,14 +7,31 @@ class RGBBarcodeScanner {
         imageObjectOrig.height
     )
     let spectrum = this.channelAvg(imageData.data)
-    let filtered = this.noiseFilter(imageData, LU, RU, spectrum) //the effective imageData.data will be changed!!!!!.
-    return this.scanHorizontal(filtered, LU, RU, imageData.width, imageData.height)
+    let iterator = new PixelIterator(
+        LU,
+        RU,
+        imageData.width,
+        imageData.height
+    )
+    let row = iterator.nextRow()
+    let barcodes = {}
+    while (iterator.hasNextRow()) {
+      let filteredRow = this.noiseFilter(imageData, row, spectrum)
+      barcodes = this.scanRow(filteredRow, barcodes)
+      row = iterator.nextRow()
+    }
+    let highest = this.getHighestCode(barcodes)
+    let values = Object.keys(barcodes).map(function(key) {
+      return barcodes[key]
+    })
+    let totalScanned = values.reduce((a, b) => a + b, 0)
+    console.log(barcodes[highest] / totalScanned)
+    console.log(barcodes)
+    return highest
   }
 
-  static scanHorizontal(pixels) {
-    let barcodes = {}
+  static scanRow(pixels, barcodes) {
     let scanned = []
-
     let greyScan = false
 
     for (let value of pixels) {
@@ -47,14 +64,7 @@ class RGBBarcodeScanner {
         greyScan = false
       }
     }
-    let highest = this.getHighestCode(barcodes)
-    let values = Object.keys(barcodes).map(function(key) {
-      return barcodes[key]
-    })
-    let totalScanned = values.reduce((a, b) => a + b, 0)
-    console.log(barcodes[highest] / totalScanned)
-    console.log(barcodes)
-    return highest
+    return barcodes
   }
 
   static distance(first, second) {
@@ -66,77 +76,63 @@ class RGBBarcodeScanner {
   }
 
   //spectrum = [[R/pixelNb, G/pixelNb, B/pixelNb], closestWhite, closestBlack]
-  static noiseFilter(imageDataOrig, LU, RU, spectrum) {
-    let pixels = imageDataOrig.data
-    let iterator = new PixelIterator(
-        LU,
-        RU,
-        imageDataOrig.width,
-        imageDataOrig.height
-    )
-    let filteredRow = []
+  static noiseFilter(imgData, row, spectrum) {
+    let pixels = imgData.data
     let grey = spectrum[0]
     let distance = Math.round((spectrum[1] - spectrum[2]) / 2)
     let black = [grey[0] - distance, grey[1] - distance, grey[2] - distance]
     let white = [grey[0] + distance, grey[1] + distance, grey[2] + distance]
-    let size = 15
-    let half = Math.floor(size / 2)
-    let row = iterator.nextRow()
+    let kSize = 15
+    let half = Math.floor(kSize / 2)
+    let filteredRow = []
 
-    while (iterator.hasNextRow()) {
-      for (let i = 0; i < row.length; i++) {
-        let c
-        let blackCounter = 0
-        let whiteCounter = 0
-        let greyCounter = 0
-        let toSearch = []
-        for (let rowKernel = -half; rowKernel <= half; rowKernel++) {
-          let rowPos = this.getRow(i, rowKernel, row)
-          if (!toSearch.includes(row[rowPos])) {
-            toSearch.push(row[rowPos])
-          }
+    for (let i = 0; i < row.length; i++) {
+      let c
+      let blackCounter = 0
+      let whiteCounter = 0
+      let greyCounter = 0
+      let toSearch = []
+      for (let rowKernel = -half; rowKernel <= half; rowKernel++) {
+        let rowPos = this.getRow(i, rowKernel, row)
+        if (!toSearch.includes(row[rowPos])) {
+          toSearch.push(row[rowPos])  //per pixel van de rij alle pixels die binnen kernel va
         }
-        for (let j = 0; j < toSearch.length; j++) {
-          let pixel = toSearch[j]
-          let dataIndex = this.getMatrix(pixel[0], pixel[1], pixels)
-          let R = pixels[dataIndex]
-          let G = pixels[dataIndex + 1]
-          let B = pixels[dataIndex + 2]
-
-          let color = [R, G, B]
-          let distanceBlack = this.distance(color, black)
-          let distanceWhite = this.distance(color, white)
-          let distanceGrey = this.distance(color, grey)
-
-          let correction = Math.min(distanceBlack, distanceWhite, distanceGrey)
-
-          switch (correction) {
-            case distanceBlack:
-              blackCounter++
-              break
-
-            case distanceWhite:
-              whiteCounter++
-              break
-
-            case distanceGrey:
-              greyCounter++
-              break
-          }
-        }
-
-        if (greyCounter > whiteCounter && greyCounter > blackCounter) {
-          c = 128
-        } else if (whiteCounter > blackCounter) {
-          c = 255
-        } else {
-          c = 0
-        }
-        filteredRow.push(c)
-        row = iterator.nextRow()
       }
+      for (let pixel of toSearch) {
+        let dataIndex = this.getMatrix(pixel[0], pixel[1], imgData)
+        let R = pixels[dataIndex]
+        let G = pixels[dataIndex + 1]
+        let B = pixels[dataIndex + 2]
+
+        let color = [R, G, B]
+        let distanceBlack = this.distance(color, black)
+        let distanceWhite = this.distance(color, white)
+        let distanceGrey = this.distance(color, grey)
+
+        let correction = Math.min(distanceBlack, distanceWhite, distanceGrey)
+
+        switch (correction) {
+          case distanceBlack:
+            blackCounter++
+            break
+          case distanceWhite:
+            whiteCounter++
+            break
+          case distanceGrey:
+            greyCounter++
+            break
+        }
+      }
+      if (greyCounter > whiteCounter && greyCounter > blackCounter) {
+        c = 128
+      } else if (whiteCounter > blackCounter) {
+        c = 255
+      } else {
+        c = 0
+      }
+      filteredRow.push(c)
     }
-    return outputData
+    return filteredRow
   }
 
   static channelAvg(pixels) {
