@@ -13,12 +13,11 @@ class RGBBarcodeScanner {
         imageData.width,
         imageData.height
     )
-    let row = iterator.nextRow()
     let barcodes = {}
     while (iterator.hasNextRow()) {
+      let row = iterator.nextRow()
       let filteredRow = this.noiseFilter(imageData, row, spectrum)
       barcodes = this.scanRow(filteredRow, barcodes)
-      row = iterator.nextRow()
     }
     let highest = this.getHighestCode(barcodes)
     let values = Object.keys(barcodes).map(function(key) {

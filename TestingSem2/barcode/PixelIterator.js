@@ -12,53 +12,11 @@ class PixelIterator {
       this.b = 1
       this.x = 0
     } else {
-      this.b = -LU[1] - this.line.slope * LU[0]
-      this.intersectionXAxis = Math.round(-this.b / this.line.slope) - 1
-      this.y = 0
+      this.intersectionWidthAxis = -1
+      this.y = -(this.height - 1)
     }
 
     this.isTerminated = false
-  }
-
-  hasNext() {
-    return !this.isTerminated
-  }
-
-  next() {
-    this.x++
-
-    if (this.x === 0) {
-      if (this.a >= 0) {
-        this.y++
-      } else {
-        this.y--
-      }
-      this.b = this.y
-
-      if (this.y > this.height || this.y < 0) {
-        if (this.a >= 0) {
-          this.y = this.height
-        } else {
-          this.y = 0
-        }
-        this.x = Math.round((this.y - this.b) / -this.a)
-        if (!isFinite(this.x) || this.x > this.width) {
-          this.isTerminated = true
-          this.x = null
-          this.y = null
-        }
-      }
-
-    } else {
-      this.y = Math.round(-this.a * this.x + this.b)
-
-      if (this.y > this.height || this.y < 0 || this.x > this.width) {
-        this.x = -1
-        this.y = this.b
-        this.next()
-      }
-    }
-    return [this.x, this.y]
   }
 
   hasNextRow() {
@@ -88,18 +46,18 @@ class PixelIterator {
 
       this.x = 0
     } else {
-      this.intersectionXAxis ++
-      this.x = this.intersectionXAxis
-      this.b = Math.round(-this.line.slope * this.x)
+      this.intersectionWidthAxis ++
+      this.x = this.intersectionWidthAxis
+      this.b = Math.round(-this.y - this.line.slope * this.x)
       console.log(this.b)
 
-      while (this.x >= 0 || -this.y < this.height) {
+      while (-this.y >= 0 || this.x >= 0) {
         if (-this.y < this.height && this.x < this.width) {
           row.push([this.x, -this.y])
 
         }
 
-        this.y--
+        this.y++
         this.x = Math.round((this.y - this.b) / this.line.slope)
       }
 
