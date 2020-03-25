@@ -28,7 +28,7 @@ imgElement.onload = function() {
 
     console.log("start scan")
 
-    let barcode = RGBBarcodeScanner.scan(inputImgData, [0,0], [inputImgData.width, 0]);
+    let barcode = RGBBarcodeScanner.scan(inputImgData, [inputImgData.width,0], [inputImgData.width, inputImgData.height]);
     inputContext.putImageData(inputImgData, 0, 0);
     console.log(barcode);
 };

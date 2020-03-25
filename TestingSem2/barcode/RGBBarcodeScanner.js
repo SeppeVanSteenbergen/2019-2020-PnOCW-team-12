@@ -6,15 +6,32 @@ class RGBBarcodeScanner {
         imageObjectOrig.width,
         imageObjectOrig.height
     )
+    let iterator = new PixelIterator(
+        LU,
+        RU,
+        imageData.width,
+        imageData.height
+    )
+
+    let barcodes = {}
     let spectrum = this.channelAvg(imageData.data)
-    let filtered = this.noiseFilter(imageData, LU, RU, spectrum) //the effective imageData.data will be changed!!!!!.
-    return this.scanHorizontal(filtered, LU, RU, imageData.width, imageData.height)
+    while (iterator.hasNextRow()) {
+      let row = iterator.nextRow()
+      let filteredRow = this.noiseFilter(imageData, row, spectrum)
+      barcodes = this.scanRow(filteredRow, barcodes)
+    }
+    let highest = this.getHighestCode(barcodes)
+    let values = Object.keys(barcodes).map(function(key) {
+      return barcodes[key]
+    })
+    let totalScanned = values.reduce((a, b) => a + b, 0)
+    console.log(barcodes[highest] / totalScanned)
+    console.log(barcodes)
+    return highest
   }
 
-  static scanHorizontal(pixels) {
-    let barcodes = {}
+  static scanRow(pixels, barcodes) {
     let scanned = []
-
     let greyScan = false
 
     for (let value of pixels) {
@@ -47,14 +64,7 @@ class RGBBarcodeScanner {
         greyScan = false
       }
     }
-    let highest = this.getHighestCode(barcodes)
-    let values = Object.keys(barcodes).map(function(key) {
-      return barcodes[key]
-    })
-    let totalScanned = values.reduce((a, b) => a + b, 0)
-    console.log(barcodes[highest] / totalScanned)
-    console.log(barcodes)
-    return highest
+    return barcodes
   }
 
   static distance(first, second) {
@@ -66,42 +76,33 @@ class RGBBarcodeScanner {
   }
 
   //spectrum = [[R/pixelNb, G/pixelNb, B/pixelNb], closestWhite, closestBlack]
-  static noiseFilter(imageDataOrig, LU, RU, spectrum) {
-    let pixels = imageDataOrig.data
-    let iterator = new PixelIterator(
-        LU,
-        RU,
-        imageDataOrig.width,
-        imageDataOrig.height
-    )
-    let outputData = []
+  static noiseFilter(imgData, row, spectrum) {
+    let pixels = imgData.data
     let grey = spectrum[0]
     let distance = Math.round((spectrum[1] - spectrum[2]) / 2)
     let black = [grey[0] - distance, grey[1] - distance, grey[2] - distance]
     let white = [grey[0] + distance, grey[1] + distance, grey[2] + distance]
-    let size = 15
-    let half = Math.floor(size / 2)
-    let pixel = iterator.next()
+    let kSize = 15
+    let half = Math.floor(kSize / 2)
+    let filteredRow = []
 
-    while (iterator.hasNext()) {
+    for (let i = 0; i < row.length; i++) {
       let c
       let blackCounter = 0
       let whiteCounter = 0
       let greyCounter = 0
       let toSearch = []
-      for (let xBox = -half; xBox <= half; xBox++) {
-        let y = pixel[1]
-        let x = pixel[0] + xBox
-        let pos = this.getMatrix(x, y, imageDataOrig)
-        if (!toSearch.includes(pos)) {
-          toSearch.push(pos)
+      for (let rowKernel = -half; rowKernel <= half; rowKernel++) {
+        let rowPos = this.getRow(i, rowKernel, row)
+        if (!toSearch.includes(row[rowPos])) {
+          toSearch.push(row[rowPos])  //per pixel van de rij alle pixels die binnen kernel va
         }
       }
-      for (let j = 0; j < toSearch.length; j++) {
-        let pos = toSearch[j]
-        let R = pixels[pos]
-        let G = pixels[pos + 1]
-        let B = pixels[pos + 2]
+      for (let pixel of toSearch) {
+        let dataIndex = this.getMatrix(pixel[0], pixel[1], imgData)
+        let R = pixels[dataIndex]
+        let G = pixels[dataIndex + 1]
+        let B = pixels[dataIndex + 2]
 
         let color = [R, G, B]
         let distanceBlack = this.distance(color, black)
@@ -114,17 +115,14 @@ class RGBBarcodeScanner {
           case distanceBlack:
             blackCounter++
             break
-
           case distanceWhite:
             whiteCounter++
             break
-
           case distanceGrey:
             greyCounter++
             break
         }
       }
-
       if (greyCounter > whiteCounter && greyCounter > blackCounter) {
         c = 128
       } else if (whiteCounter > blackCounter) {
@@ -132,10 +130,9 @@ class RGBBarcodeScanner {
       } else {
         c = 0
       }
-      outputData.push(c)
-      pixel = iterator.next()
+      filteredRow.push(c)
     }
-    return outputData
+    return filteredRow
   }
 
   static channelAvg(pixels) {
@@ -164,6 +161,13 @@ class RGBBarcodeScanner {
       closestWhite.reduce((a, b) => a + b, 0) / 3,
       closestBlack.reduce((a, b) => a + b, 0) / 3
     ]
+  }
+
+  static getRow(index, offset, row) {
+    let pos = index + offset
+    if (0 <= pos && pos < row.length) {
+      return pos
+    } else return index
   }
 
   static getMatrix(x, y, data) {

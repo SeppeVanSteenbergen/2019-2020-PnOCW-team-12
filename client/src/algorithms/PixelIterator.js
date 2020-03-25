@@ -1,68 +1,84 @@
+import Line from './Line'
+
 export default class PixelIterator {
   constructor(LU, RU, width, height) {
-    if (LU[0] <= RU[0]) {
-      this.leftPoint = LU
-      this.rightPoint = RU
+    this.line = new Line([LU[0], -LU[1]], [RU[0], -RU[1]])
+    this.angle = this.line.normalAngle
+    this.horizontalMode = this.angle <= 45 || (this.angle >= 135 && this.angle <= 225) || this.angle >= 315
+    this.reversed = this.horizontalMode ? this.line.normalAngle > 45 && this.line.normalAngle < 315 : this.line.normalAngle > 135
+
+    this.width = width
+    this.height = height
+
+    if (this.horizontalMode) {
+      this.b = this.line.slope >= 0 ? 1 : -this.line.slope * (this.width - 1) + 1
+      this.x = 0
     } else {
-      this.leftPoint = RU
-      this.rightPoint = LU
+      this.y = -(this.height - 1)
+      this.intersectionWidthAxis = this.line.slope >= 0 ? (this.y / this.line.slope) - 1 : -1
     }
-
-    this.width = width - 1
-    this.height = height - 1
-
-    this.a =
-      -(this.rightPoint[1] - this.leftPoint[1]) /
-      (this.rightPoint[0] - this.leftPoint[0])
-
-    if (this.a >= 0) {
-      this.y = -1
-    } else {
-      this.y = this.height + 1
-    }
-    this.x = -1
 
     this.isTerminated = false
   }
 
-  hasNext() {
+  hasNextRow() {
     return !this.isTerminated
   }
 
-  next() {
-    this.x++
+  nextRow() {
+    let row = []
+    if (this.horizontalMode) {
+      this.b--
+      this.y = Math.round(this.line.slope * this.x + this.b)
 
-    if (this.x === 0) {
-      if (this.a >= 0) {
-        this.y++
-      } else {
-        this.y--
+      while (this.x < this.width) {
+        if (this.y <= 0 && -this.y < this.height) {
+          row.push([this.x, -this.y])
+        }
+        this.x++
+        this.y = Math.round(this.line.slope * this.x + this.b)
       }
-      this.b = this.y
 
-      if (this.y > this.height || this.y < 0) {
-        if (this.a >= 0) {
-          this.y = this.height
-        } else {
-          this.y = 0
-        }
-        this.x = Math.round((this.y - this.b) / -this.a)
-        if (!isFinite(this.x) || this.x > this.width) {
-          this.isTerminated = true
-          this.x = null
-          this.y = null
-        }
+      this.x--
+      this.y = Math.round(this.line.slope * this.x + this.b)
+      if (-this.y >= this.height - 1 && -this.b >= this.height - 1) {
+        this.isTerminated = true
       }
+
+      this.x = 0
     } else {
-      this.y = Math.round(-this.a * this.x + this.b)
+      this.intersectionWidthAxis ++
+      this.x = this.intersectionWidthAxis
+      this.b = Math.round(this.y - this.line.slope * this.x)
 
-      if (this.y > this.height || this.y < 0 || this.x > this.width) {
-        this.x = -1
-        this.y = this.b
-        this.next()
+      while (-this.y >= 0) {
+        if (this.x >= 0 && this.x < this.width) {
+          row.push([this.x, -this.y])
+        }
+        this.y++
+        if (isFinite(this.b)) {
+          this.x = Math.round((this.y - this.b) / this.line.slope)
+        }
       }
+
+      if (this.intersectionWidthAxis >= this.width - 1 && this.x >= this.width - 1) {
+        this.isTerminated = true
+      }
+
+      this.y = -(this.height - 1)
     }
 
-    return [this.x, this.y]
+    if (this.reversed) {
+      row = row.reverse()
+    }
+
+    return row
+  }
+
+  test() {
+    while (this.hasNextRow()) {
+      console.log(this.nextRow())
+      console.log(this.b)
+    }
   }
 }
