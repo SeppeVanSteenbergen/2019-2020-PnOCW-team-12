@@ -74,66 +74,67 @@ class RGBBarcodeScanner {
         imageDataOrig.width,
         imageDataOrig.height
     )
-    let outputData = []
+    let filteredRow = []
     let grey = spectrum[0]
     let distance = Math.round((spectrum[1] - spectrum[2]) / 2)
     let black = [grey[0] - distance, grey[1] - distance, grey[2] - distance]
     let white = [grey[0] + distance, grey[1] + distance, grey[2] + distance]
     let size = 15
     let half = Math.floor(size / 2)
-    let pixel = iterator.next()
+    let row = iterator.nextRow()
 
-    while (iterator.hasNext()) {
-      let c
-      let blackCounter = 0
-      let whiteCounter = 0
-      let greyCounter = 0
-      let toSearch = []
-      for (let xBox = -half; xBox <= half; xBox++) {
-        let y = pixel[1]
-        let x = pixel[0] + xBox
-        let pos = this.getMatrix(x, y, imageDataOrig)
-        if (!toSearch.includes(pos)) {
-          toSearch.push(pos)
+    while (iterator.hasNextRow()) {
+      for (let i = 0; i < row.length; i++) {
+        let c
+        let blackCounter = 0
+        let whiteCounter = 0
+        let greyCounter = 0
+        let toSearch = []
+        for (let rowKernel = -half; rowKernel <= half; rowKernel++) {
+          let rowPos = this.getRow(i, rowKernel, row)
+          if (!toSearch.includes(row[rowPos])) {
+            toSearch.push(row[rowPos])
+          }
         }
-      }
-      for (let j = 0; j < toSearch.length; j++) {
-        let pos = toSearch[j]
-        let R = pixels[pos]
-        let G = pixels[pos + 1]
-        let B = pixels[pos + 2]
+        for (let j = 0; j < toSearch.length; j++) {
+          let pixel = toSearch[j]
+          let dataIndex = this.getMatrix(pixel[0], pixel[1], pixels)
+          let R = pixels[dataIndex]
+          let G = pixels[dataIndex + 1]
+          let B = pixels[dataIndex + 2]
 
-        let color = [R, G, B]
-        let distanceBlack = this.distance(color, black)
-        let distanceWhite = this.distance(color, white)
-        let distanceGrey = this.distance(color, grey)
+          let color = [R, G, B]
+          let distanceBlack = this.distance(color, black)
+          let distanceWhite = this.distance(color, white)
+          let distanceGrey = this.distance(color, grey)
 
-        let correction = Math.min(distanceBlack, distanceWhite, distanceGrey)
+          let correction = Math.min(distanceBlack, distanceWhite, distanceGrey)
 
-        switch (correction) {
-          case distanceBlack:
-            blackCounter++
-            break
+          switch (correction) {
+            case distanceBlack:
+              blackCounter++
+              break
 
-          case distanceWhite:
-            whiteCounter++
-            break
+            case distanceWhite:
+              whiteCounter++
+              break
 
-          case distanceGrey:
-            greyCounter++
-            break
+            case distanceGrey:
+              greyCounter++
+              break
+          }
         }
-      }
 
-      if (greyCounter > whiteCounter && greyCounter > blackCounter) {
-        c = 128
-      } else if (whiteCounter > blackCounter) {
-        c = 255
-      } else {
-        c = 0
+        if (greyCounter > whiteCounter && greyCounter > blackCounter) {
+          c = 128
+        } else if (whiteCounter > blackCounter) {
+          c = 255
+        } else {
+          c = 0
+        }
+        filteredRow.push(c)
+        row = iterator.nextRow()
       }
-      outputData.push(c)
-      pixel = iterator.next()
     }
     return outputData
   }
@@ -164,6 +165,13 @@ class RGBBarcodeScanner {
       closestWhite.reduce((a, b) => a + b, 0) / 3,
       closestBlack.reduce((a, b) => a + b, 0) / 3
     ]
+  }
+
+  static getRow(index, offset, row) {
+    let pos = index + offset
+    if (0 <= pos && pos < row.length) {
+      return pos
+    } else return index
   }
 
   static getMatrix(x, y, data) {
