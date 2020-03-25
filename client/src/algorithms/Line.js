@@ -1,10 +1,10 @@
-export default /**
+/**
  * A quality of life helper class for screen reconstruction
  */
 /**
  * A quality of life helper class for screen reconstruction
  */
-class Line {
+export default class Line {
   /**
    * Initiate the line trough 2  random points
    *
@@ -38,7 +38,7 @@ class Line {
    * Get the rico of this line
    */
   get slope() {
-    if (this.dx === 0) {
+    if (this.dy === 0) {
       return 0
     }
 
@@ -53,7 +53,7 @@ class Line {
   }
 
   /**
-   * Get the angle of this line with the x axis in degrees
+   * Get the angle of this line with the x axis in degrees when working with inverted axis
    */
   get angle() {
     let angle = (Math.atan2(-this.dy, this.dx) * 180) / Math.PI
@@ -61,7 +61,19 @@ class Line {
       angle += 360
     }
 
-    return Math.round(angle)
+    return Math.round(Math.abs(angle))
+  }
+
+  /**
+   * Get the angle of this line with the x axis in degrees when working with normal axis
+   */
+  get normalAngle() {
+    let angle = (Math.atan2(this.dy, this.dx) * 180) / Math.PI
+    if (angle < 0) {
+      angle += 360
+    }
+
+    return Math.round(Math.abs(angle))
   }
 
   /**
@@ -113,11 +125,11 @@ class Line {
       let y4 = line.b[1]
 
       let x =
-        ((x1 * y2 - y1 * x2) * (x3 - x4) - (x1 - x2) * (x3 * y4 - y3 * x4)) /
-        ((x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4))
+          ((x1 * y2 - y1 * x2) * (x3 - x4) - (x1 - x2) * (x3 * y4 - y3 * x4)) /
+          ((x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4))
       let y =
-        ((x1 * y2 - y1 * x2) * (y3 - y4) - (y1 - y2) * (x3 * y4 - y3 * x4)) /
-        ((x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4))
+          ((x1 * y2 - y1 * x2) * (y3 - y4) - (y1 - y2) * (x3 * y4 - y3 * x4)) /
+          ((x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4))
 
       intersection = [Math.floor(x), Math.floor(y)]
     }

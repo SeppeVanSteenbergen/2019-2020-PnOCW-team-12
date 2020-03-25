@@ -14,7 +14,6 @@ class RGBBarcodeScanner {
     )
 
     let barcodes = {}
-    let row = iterator.nextRow()
     let spectrum = this.channelAvg(imageData.data)
     while (iterator.hasNextRow()) {
       let row = iterator.nextRow()
