@@ -89,11 +89,12 @@ class PixelIterator {
       this.x = 0
     } else {
       this.intersectionXAxis ++
-      this.b = Math.round(-this.line.slope * this.intersectionXAxis)
+      this.x = this.intersectionXAxis
+      this.b = Math.round(-this.line.slope * this.x)
       console.log(this.b)
 
       while (this.x >= 0 || -this.y < this.height) {
-        if (-this.y < this.height) {
+        if (-this.y < this.height && this.x < this.width) {
           row.push([this.x, -this.y])
 
         }
@@ -102,16 +103,13 @@ class PixelIterator {
         this.x = Math.round((this.y - this.b) / this.line.slope)
       }
 
-      this.y++
+      this.y = -(this.height - 1)
       this.x = Math.round((this.y - this.b) / this.line.slope)
 
-
-
-      if (this.b < -100) {
+      if (this.x >= this.width - 1) {
         this.isTerminated = true
       }
 
-      this.x = Math.round(-this.b / this.line.slope) - 1
       this.y = 0
     }
 
