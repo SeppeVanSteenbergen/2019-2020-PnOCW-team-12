@@ -9,7 +9,7 @@ class PixelIterator {
     this.height = height
 
     if (this.horizontalMode) {
-      this.b = -LU[1] - this.line.slope * LU[0] + 1
+      this.b = 1
       this.x = 0
     } else {
       this.b = -LU[1] - this.line.slope * LU[0]
