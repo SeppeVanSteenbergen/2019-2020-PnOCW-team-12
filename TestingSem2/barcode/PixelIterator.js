@@ -28,7 +28,6 @@ class PixelIterator {
     if (this.horizontalMode) {
       this.b--
       this.y = Math.round(this.line.slope * this.x + this.b)
-      console.log(this.b)
 
       while (this.x < this.width) {
         if (this.y <= 0 && -this.y < this.height) {
@@ -46,10 +45,9 @@ class PixelIterator {
 
       this.x = 0
     } else {
-      this.intersectionWidthAxis ++
-      this.x = this.intersectionWidthAxis
-      this.b = Math.round(-this.y - this.line.slope * this.x)
-      console.log(this.b)
+      this.intersectionXAxis ++
+      this.x = this.intersectionXAxis
+      this.b = Math.round(-this.line.slope * this.x)
 
       while (-this.y >= 0 || this.x >= 0) {
         if (-this.y < this.height && this.x < this.width) {
@@ -81,6 +79,7 @@ class PixelIterator {
   test() {
     while (this.hasNextRow()) {
       console.log(this.nextRow())
+      console.log(this.b)
     }
   }
 }

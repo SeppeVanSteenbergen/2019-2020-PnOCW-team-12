@@ -6,14 +6,16 @@ class RGBBarcodeScanner {
         imageObjectOrig.width,
         imageObjectOrig.height
     )
-    let spectrum = this.channelAvg(imageData.data)
     let iterator = new PixelIterator(
         LU,
         RU,
         imageData.width,
         imageData.height
     )
+
     let barcodes = {}
+    let row = iterator.nextRow()
+    let spectrum = this.channelAvg(imageData.data)
     while (iterator.hasNextRow()) {
       let row = iterator.nextRow()
       let filteredRow = this.noiseFilter(imageData, row, spectrum)
