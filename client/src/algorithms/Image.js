@@ -17,7 +17,12 @@ export default class Image {
     this.offSet = 1
 
     if (colorSpace === 'RGBA') {
-      this.imgOriginalRGB = Image.copyImageData(imgData)
+      if (typeof ImageAlg !== 'undefined') {
+        // eslint-disable-next-line no-undef
+        this.imgOriginalRGB = ImageAlg.copyImageData(imgData)
+      } else {
+        this.imgOriginalRGB = Image.copyImageData(imgData)
+      }
     }
 
     this.setPixels(imgData.data)

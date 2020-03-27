@@ -89,8 +89,6 @@ import RGBBarcodeScanner from './algorithms/RGBBarcodeScanner'
 import Screen from './algorithms/Screen'
 import Triangle from './algorithms/Triangle'
 
-// avoid window.Image removal
-window.ImageW = window.Image
 
 window.Algebra = Algebra
 window.Animations = Animations
@@ -101,7 +99,7 @@ window.CornerDetector = CornerDetector
 window.Delaunay = Delaunay
 window.DetectionDrawer = DetectionDrawer
 window.Drawer = Drawer
-window.Image = Image
+window.ImageAlg = Image
 window.Island = Island
 window.Line = Line
 window.PermutationConverter = PermutationConverter
