@@ -682,7 +682,7 @@ export default {
       this.imageFile = file
       let vue = this
       let reader = new FileReader()
-      vue.drawingImg = new Image()
+      vue.drawingImg = new ImageW()
       reader.onload = function(event) {
         vue.drawingImg.onload = function() {
           let c = vue.$refs.drawCanvas

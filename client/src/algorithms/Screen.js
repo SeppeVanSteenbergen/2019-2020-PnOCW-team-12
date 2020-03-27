@@ -1,4 +1,3 @@
-import BarcodeScanner from './BarcodeScanner'
 import PermutationConverter from './PermutationConverter'
 import Algebra from './Algebra'
 
