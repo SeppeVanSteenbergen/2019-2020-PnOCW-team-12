@@ -4,11 +4,35 @@ import Communicator from '../algorithms/Communicator'
 
 export default {
   fullAnalysis(imgData, clientInfo, masterVue) {
-    imgData = Image.resizeImageData(imgData, [1920, 1080])
-    let communicator = new Communicator(masterVue)
-    let inputImage = new Image(imgData, null, 'RGBA', clientInfo, communicator)
+    // imgData = Image.resizeImageData(imgData, [1920, 1080])
+    // let communicator = new Communicator(masterVue)
+    // let inputImage = new Image(imgData, null, 'RGBA', clientInfo, communicator)
 
-    return inputImage
+    // return inputImage
+
+    let result = null;
+    let analysed = false
+
+    let analyseWorker = new Worker("worker.js")
+    
+    analyseWorker.onmessage = function(m) {
+      if(m.data.text === "DONE"){
+        console.log(m.data.result)
+        result = m.data.result
+        analysed = true
+        analyseWorker.terminate()
+      }
+    }
+
+    analyseWorker.postMessage({
+      text: "START",
+      param: [imgData, clientInfo, masterVue]
+    })
+
+    //busy wait om te testen nog
+    // while(!analysed){}
+
+    return result;
   },
 
   drawScreenOutlines(c, aImage) {
