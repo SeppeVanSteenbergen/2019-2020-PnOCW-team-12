@@ -14,19 +14,24 @@ export default {
     let analysed = false
 
     let analyseWorker = new Worker("worker.js")
+
+    let comm = new Communicator(masterVue)
+    comm.sendSuccessMessage("Started Analyse on a worker!")
     
-    analyseWorker.onmessage = function(m) {
-      if(m.data.text === "DONE"){
-        console.log(m.data.result)
-        result = m.data.result
-        analysed = true
-        analyseWorker.terminate()
-      }
-    }
+    // analyseWorker.onmessage = function(m) {
+    //   if(m.data.text === "DONE"){
+    //     console.log(m.data.result)
+    //     result = m.data.result
+    //     analysed = true
+    //     analyseWorker.terminate()
+    //   }
+    // }
+
+    let sizedImgData = Image.resizeImageData(imgData, [1920, 1080])
 
     analyseWorker.postMessage({
       text: "START",
-      param: [imgData, clientInfo, masterVue]
+      param: [sizedImgData, clientInfo]
     })
 
     //busy wait om te testen nog

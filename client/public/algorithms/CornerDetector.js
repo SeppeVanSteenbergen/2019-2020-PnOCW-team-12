@@ -43,7 +43,7 @@ class CornerDetector {
         return point != null
       }).length < 2
     ){
-      this.communicator.sendErrorMessage("Not enough good corners detected for reconstruction of screen")
+      // this.communicator.sendErrorMessage("Not enough good corners detected for reconstruction of screen")
       throw 'Not enough good corners detected for reconstruction'
     }
 
@@ -55,7 +55,7 @@ class CornerDetector {
     if (nonPositionCorners.length < 4) {
       let corners = this.corners
       this.corners = this.reconstructor.reconstructCorners(corners)
-      this.communicator.sendSuccessMessage("Corner(s) are reconstructed");
+      // this.communicator.sendSuccessMessage("Corner(s) are reconstructed");
     }
     return this.corners
   }
@@ -156,12 +156,12 @@ class CornerDetector {
 
     let corners = []
     if (diagonalSearch) {
-      this.communicator.sendInfoMessage("Search corners with diagonal search")
+      // this.communicator.sendInfoMessage("Search corners with diagonal search")
       console.log('diagonal search')
       // Diagonal search
       corners = this.diagonalSearch()
     } else {
-      this.communicator.sendInfoMessage("Search corners with perpendicular search")
+      // this.communicator.sendInfoMessage("Search corners with perpendicular search")
       console.log('perpendicular search')
       // Perpendicular search
       corners = this.perpendicularSearch()

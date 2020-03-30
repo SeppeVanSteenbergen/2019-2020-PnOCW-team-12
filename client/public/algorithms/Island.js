@@ -20,7 +20,8 @@ class Island {
   ) {
     // coordinates seen from original matrix
     this.setCommunicator(communicator)
-    this.communicator.sendInfoMessage('Start creating island with ID ' + id)
+    console.log('Start creating island with ID ' + id)
+    // console.log('Start creating island with ID ' + id)
     this.corners = {
       LU: null,
       RU: null,
@@ -47,12 +48,14 @@ class Island {
     this.RGBImage = RGBImage
     this.midPoint = this.calcMid()
     this.clientCode = null
-    this.communicator.sendInfoMessage('Island ' + id + ' created')
+    console.log('Island ' + id + ' created')
+    // console.log('Island ' + id + ' created')
   }
 
   isValid() {
     if (this.midPoint == null)
-      this.communicator.sendInfoMessage('No midpoint in island ' + this.id)
+      // this.communicator.sendInfoMessage('No midpoint in island ' + this.id)
+      console.log('No midpoint in island ' + this.id)
     return this.midPoint !== null
   }
 
@@ -101,9 +104,9 @@ class Island {
       detectedCorners.RD[2]
     ]
 
-    this.communicator.sendSuccessMessage(
-      'Corners of screen in island ' + this.id + ' are all set'
-    )
+    // this.communicator.sendSuccessMessage(
+    //   'Corners of screen in island ' + this.id + ' are all set'
+    // )
   }
 
   calcMid() {
@@ -126,9 +129,10 @@ class Island {
     xValues = Island.filterPoints(xValues)
     yValues = Island.filterPoints(yValues)
 
-    this.communicator.sendSuccessMessage(
-      'Midpoint of island ' + this.id + ' calculated'
-    )
+    // this.communicator.sendSuccessMessage(
+    //   'Midpoint of island ' + this.id + ' calculated'
+    // )
+    console.log('Midpoint of island ' + this.id + ' calculated')
     return [
       xValues[Math.round(xValues.length / 2)],
       yValues[Math.round(yValues.length / 2)]
@@ -198,11 +202,11 @@ class Island {
   }
 
   finishIsland() {
-    this.communicator.sendInfoMessage('Try to identify island ' + this.id)
+    console.log('Try to identify island ' + this.id)
     this.findCorners()
-    this.communicator.sendInfoMessage(
-      'Try to identify screen in island ' + this.id
-    )
+    // console.log(
+    //   'Try to identify screen in island ' + this.id
+    // )
     this.clientCode = RGBBarcodeScanner.scan(
       this.getScreenImg(this.RGBImage),
       this.corners.LU,
@@ -210,9 +214,9 @@ class Island {
     )
     this.localToWorld()
 
-    this.communicator.sendSuccessMessage(
-      'Detected screen: ' + this.clientCode + 'in island ' + this.id
-    )
+    // this.communicator.sendSuccessMessage(
+    //   'Detected screen: ' + this.clientCode + 'in island ' + this.id
+    // )
     console.log('Detected screen: ' + this.clientCode)
   }
 
@@ -263,6 +267,7 @@ class Island {
   }
 
   getScreenImg(image) {
+    console.log("trying to get screen img from doc...")
     let canvas = document.createElement('canvas')
     canvas.width = image.width
     canvas.height = image.height

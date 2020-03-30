@@ -1234,7 +1234,7 @@ export default {
       try {
         this.analysedImage = AlgorithmService.fullAnalysis(
           inputImageData,
-          clientInfo
+          clientInfo, this
         )
       } catch (e) {
         console.log(e)
