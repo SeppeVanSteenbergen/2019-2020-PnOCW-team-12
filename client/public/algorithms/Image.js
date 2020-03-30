@@ -1,6 +1,6 @@
 class Image {
 
-  constructor(imgData, canvasName, colorSpace, clientInfo, communicator) {
+  constructor(imgData, canvasName, colorSpace, clientInfo) {
     this.clientInfo = clientInfo
     // this.setCommunicator(communicator)
     this.colorSpaces = ['RGBA', 'HSLA', 'BW']

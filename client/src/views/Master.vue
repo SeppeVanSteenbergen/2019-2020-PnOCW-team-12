@@ -419,6 +419,9 @@
 import PictureUpload from '../components/PictureUpload'
 import AlgorithmService from '../services/AlgorithmService'
 import Animation from '../algorithms/Animations'
+import Communicator from '../algorithms/Communicator'
+import AnalyseEnv from '../env/AnalyseEnv'
+import WaitEnv from '../env/WaitEnv'
 
 export default {
   name: 'master',
@@ -1211,11 +1214,14 @@ export default {
 
       this.$socket.compress(true).emit('screenCommand', object)
     },
-    analyseImage() {
+    async analyseImage() {
       console.log('starting analysis')
 
       let inC = this.$refs.canva
       let outC = this.$refs.resultCanvas
+
+      // console.log("parent: " + outC.parentElement)
+
       let inctx = inC.getContext('2d')
       let outctx = outC.getContext('2d')
 
@@ -1232,18 +1238,45 @@ export default {
 // TODO: null on localhost??
       let clientInfo = this.$store.state.roomClientInfo
 
-      console.log("CLIENT INFO: " + clientInfo)
 
-      try {
-        this.analysedImage = AlgorithmService.fullAnalysis(
-          inputImageData,
-          clientInfo,
-          this
-        )
-      } catch (e) {
-        console.log(e)
-      }
-      console.log(this.analysedImage)
+      let communicator = new Communicator(this)
+      communicator.sendInfoMessage('Started Image Analysation')
+
+      let analysationEnv = new AnalyseEnv(inputImageData, clientInfo, communicator)
+      let worker = analysationEnv.getWorker()
+
+      let waitEnv = new WaitEnv(worker, communicator, outC.parentElement)
+
+      console.log("Start waiting for result from worker:")
+      await new Promise(resolve => {
+
+        const CHECKWORKERINTERVAL = 500
+
+        function checkWorker(){
+          if(waitEnv.isFinished()){
+            resolve()
+          }else{
+            setInterval(checkWorker, CHECKWORKERINTERVAL)
+          }
+        }
+
+        setInterval(checkWorker, CHECKWORKERINTERVAL)
+      })
+
+      // this.analyseResult = waitEnv.getResult()
+
+      this.analysedImage = waitEnv.getResult()
+
+      // try {
+      //   this.analysedImage = AlgorithmService.fullAnalysis(
+      //     inputImageData,
+      //     clientInfo,
+      //     this
+      //   )
+      // } catch (e) {
+      //   console.log(e)
+      // }
+      // console.log("RESULT: " + this.analysedImage.screens)
 
       outC.width = inC.width
       outC.height = inC.height
@@ -1254,7 +1287,8 @@ export default {
       outC.style.width = imgWidth + 'px'
       outC.style.height = Math.round(imgWidth * ratio) + 'px'
 
-      outctx.putImageData(this.analysedImage.imgOriginal, 0, 0)
+      // outctx.putImageData(this.analysedImage.imgOriginal, 0, 0)
+      outctx.putImageData(imgCopy, 0, 0)
 
       AlgorithmService.drawScreenOutlines(outC, this.analysedImage)
 

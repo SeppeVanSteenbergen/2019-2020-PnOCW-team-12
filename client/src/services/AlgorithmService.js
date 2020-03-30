@@ -4,19 +4,21 @@ import Communicator from '../algorithms/Communicator'
 
 export default {
   fullAnalysis(imgData, clientInfo, masterVue) {
+// DEPRECATED, MOVED TO workerEnv AND waitEnv
+
     // imgData = Image.resizeImageData(imgData, [1920, 1080])
     // let communicator = new Communicator(masterVue)
     // let inputImage = new Image(imgData, null, 'RGBA', clientInfo, communicator)
 
     // return inputImage
 
-    let result = null;
-    let analysed = false
+    // let result = null;
+    // let analysed = false
 
-    let analyseWorker = new Worker("worker.js")
+    // let analyseWorker = new Worker("worker.js")
 
-    let comm = new Communicator(masterVue)
-    comm.sendSuccessMessage("Started Analyse on a worker!")
+    // let comm = new Communicator(masterVue)
+    // comm.sendSuccessMessage("Started Analyse on a worker!")
     
     // analyseWorker.onmessage = function(m) {
     //   if(m.data.text === "DONE"){
@@ -27,17 +29,17 @@ export default {
     //   }
     // }
 
-    let sizedImgData = Image.resizeImageData(imgData, [1920, 1080])
+    // let sizedImgData = Image.resizeImageData(imgData, [1920, 1080])
 
-    analyseWorker.postMessage({
-      text: "START",
-      param: [sizedImgData, clientInfo]
-    })
+    // analyseWorker.postMessage({
+    //   text: "START",
+    //   param: [sizedImgData, clientInfo]
+    // })
 
     //busy wait om te testen nog
     // while(!analysed){}
 
-    return result;
+    // return result;
   },
 
   drawScreenOutlines(c, aImage) {
