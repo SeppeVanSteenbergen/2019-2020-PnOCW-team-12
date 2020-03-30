@@ -144,7 +144,7 @@ class Island {
       return input
     }
 
-    let values = input.sort(function(a, b) {
+    let values = input.sort(function (a, b) {
       return a - b
     })
 
@@ -208,7 +208,8 @@ class Island {
     //   'Try to identify screen in island ' + this.id
     // )
     this.clientCode = RGBBarcodeScanner.scan(
-      this.getScreenImg(this.RGBImage),
+      // this.getScreenImg(this.RGBImage),
+      this.getScreenImgData(this.RGBImage),
       this.corners.LU,
       this.corners.RU
     )
@@ -279,6 +280,27 @@ class Island {
       this.maxx - this.minx,
       this.maxy - this.miny
     )
+  }
+
+  getScreenImgData(image) {
+    const w = image.width
+
+    let result = []
+    let rowCnt = 0
+    for (let i = 0; i < image.data.length; i += 4 * w) {
+      rowCnt++
+
+      if (rowCnt >= this.miny) {
+        const curRow = image.data.slice(i, i + (w * 4) - 1);
+        result = result.concat(Array.from(curRow.slice(this.minx * 4, this.maxx * 4)))
+      }
+
+      if (rowCnt >= this.maxy) {
+        break
+      }
+    }
+
+    return new ImageData(new Uint8ClampedArray(result), this.maxx - this.minx, this.maxy - this.miny)
   }
 
   getHeight() {

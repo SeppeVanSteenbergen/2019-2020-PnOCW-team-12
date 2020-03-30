@@ -1229,12 +1229,16 @@ export default {
       //let imgCopy = AlgorithmService.copyImageData(inctx, inputImageData)
       let imgCopy = inputImageData
 
+// TODO: null on localhost??
       let clientInfo = this.$store.state.roomClientInfo
+
+      console.log("CLIENT INFO: " + clientInfo)
 
       try {
         this.analysedImage = AlgorithmService.fullAnalysis(
           inputImageData,
-          clientInfo, this
+          clientInfo,
+          this
         )
       } catch (e) {
         console.log(e)
