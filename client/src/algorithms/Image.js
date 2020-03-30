@@ -208,8 +208,7 @@ export default class Image {
     let ids = matrix.flat()
     return (
       ids.includes(this.islandID) &&
-      ids.includes(this.islandID + 1) &&
-      ids.includes(this.islandID + 2)
+      ids.includes(this.islandID + 1)
     )
   }
 
