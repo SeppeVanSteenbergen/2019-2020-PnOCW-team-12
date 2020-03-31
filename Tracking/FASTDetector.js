@@ -67,16 +67,19 @@ function bresenhamCircle(midPointCoo) {
   }
 }
 
-function grayScaleMatrix(rgbaPixels, width) {
-  let x = 0;
-  let y = 0;
-  let matrix = [[]];
-  for (let i = 0; i < rgbaPixels.length; i += 4) {
-    let grayScale = (rgbaPixels[i] + rgbaPixels[i + 1] + rgbaPixels[i + 1]) / 3;
-    if (x >= width - 1) {
-      x = 0;
-      y++
-      matrix.push([]);
+function grayScaleMatrix(rgbaPixels, width){
+    let x = 0;
+    let y = 0;
+    let matrix = [[]];
+    for(let i = 0; i < rgbaPixels.length; i += 4){
+        let grayScale = (rgbaPixels[i] + rgbaPixels[i + 1] + rgbaPixels[i + 1]) / 3;
+        if(x >= width - 1){
+            x = 0;
+            y++;
+            matrix.push([]);
+        }
+        matrix[y].push([]);
+        matrix[y][x] = grayScale;
     }
     matrix[y][x] = grayScale;
   }
