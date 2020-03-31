@@ -1,7 +1,7 @@
-function FASTDetector(rgbaPixels, width) {
-  let threshold = 2;
-  let nbContiguous = 2;
-  let interestingPoints = [];
+function FASTDetector(rgbaPixels, width){
+    let threshold = 2;
+    let nbContiguous = 12;
+    let interestingPoints = [];
 
   let grayMatrix = grayScaleMatrix(rgbaPixels, width);
 
@@ -67,18 +67,18 @@ function bresenhamCircle(midPointCoo) {
   }
 }
 
-function grayScaleMatrix(rgbaPixels, width) {
-  let x = 0;
-  let y = 0;
-  let matrix = [[]];
-  for (let i = 0; i < rgbaPixels.length; i += 4) {
-    let grayScale = (rgbaPixels[i] + rgbaPixels[i + 1] + rgbaPixels[i + 1]) / 3;
-    if (x >= width - 1) {
-      x = 0;
-      y++
-      matrix.push([]);
-    }
-    matrix[y][x] = grayScale;
+function grayScaleMatrix(rgbaPixels, width){
+    let x = 0;
+    let y = 0;
+    let matrix = [[]];
+    for(let i = 0; i < rgbaPixels.length; i += 4){
+        let grayScale = (rgbaPixels[i] + rgbaPixels[i + 1] + rgbaPixels[i + 1]) / 3;
+        if(x >= width - 1){
+            x = 0;
+            y++;
+            matrix.push([]);
+        }
+        matrix[y].push(grayScale);
   }
 
   return matrix;
