@@ -81,12 +81,21 @@ class Image {
     // this.communicator.sendInfoMessage('-----Start analysis-----')
     ColorSpace.rgbaToHsla(this.pixels)
     this.setColorSpace('HSLA')
+
+    self.postMessage({text: 'UPDATE', pct: 10, msg: 'Converted Colorspace To HSLA'})
+
     // this.communicator.sendSuccessMessage('Changed color space to HSLA')
     this.createBigMask()
+
+    self.postMessage({text: 'UPDATE', pct: 10, msg: 'Created Value Matrix from Image'})
+
     // this.communicator.sendSuccessMessage(
     //   'Filtered the non-screen colours out of picture')
     this.createOffset(this.offSet)
     this.createScreens()
+
+    self.postMessage({text: 'UPDATE', pct: 60, msg: 'Created Screens'})
+
     // this.communicator.sendInfoMessage('-----End analysis-----')
     //this.createPictureCanvas(300, 500); //TODO: param meegeven
     //this.calcRelativeScreens(); //untested
@@ -236,6 +245,9 @@ class Image {
     // this.communicator.sendInfoMessage('Start screen search')
     this.screens = []
     this.calcIslandsFloodfill()
+
+    self.postMessage({text: 'UPDATE', pct: 20, msg: 'Floodfill done: found ' + this.islands.length + " islands"})
+
     for (let i = 0; i < this.islands.length; i++) {
       //Not allowed in a worker thread
       // if (this.canvas !== null) {

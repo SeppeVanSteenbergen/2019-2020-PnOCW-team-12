@@ -278,6 +278,8 @@
 
             <v-stepper-content step="3" class="fullheight overflow-y-auto">
               <v-card class="mb-12 fullheight" elevation="0">
+                <div ref="progressBarcontainer"><div></div></div>
+                <div ref="messageBoxContainer"><ul></ul></div>
                 <canvas ref="resultCanvas"></canvas>
                 <canvas ref="delaunay"></canvas>
                 <canvas ref="delaunay2"></canvas>
@@ -1220,6 +1222,13 @@ export default {
       let inC = this.$refs.canva
       let outC = this.$refs.resultCanvas
 
+      outC.style.visibility = "hidden"
+      // this.$refs.delaunay.visibility = "hidden"
+      // this.$refs.delaunay2.visibility = "hidden"
+
+      let progressBarContainer = this.$refs.progressBarcontainer
+      let messageBoxContainer = this.$refs.messageBoxContainer
+
       // console.log("parent: " + outC.parentElement)
 
       let inctx = inC.getContext('2d')
@@ -1238,14 +1247,13 @@ export default {
 // TODO: null on localhost??
       let clientInfo = this.$store.state.roomClientInfo
 
-
       let communicator = new Communicator(this)
       communicator.sendInfoMessage('Started Image Analysation')
 
       let analysationEnv = new AnalyseEnv(inputImageData, clientInfo, communicator)
       let worker = analysationEnv.getWorker()
 
-      let waitEnv = new WaitEnv(worker, communicator, outC.parentElement)
+      let waitEnv = new WaitEnv(worker, communicator, progressBarContainer, progressBarContainer)
 
       console.log("Start waiting for result from worker:")
       await new Promise(resolve => {

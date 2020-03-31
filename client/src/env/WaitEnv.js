@@ -2,23 +2,47 @@ import '../algorithms/Communicator'
 
 export default class WaitEnv{
 
-    constructor(worker, communicator, parentDiv){
+    constructor(worker, communicator, barContainer, msgBoxContainer){
         this.worker = worker
         this.communicator = communicator
+
+        console.log("DOM ELEM: " + barContainer)
+        this.barContainer = barContainer
+        this.bar = barContainer.children[0]
+
+        this.msgBoxContainer = msgBoxContainer
+        this.msgList = msgBoxContainer.children[0]
 
         this.workerFinished = false
 
         worker.addEventListener('message', this, false)
 
         this.initUI()
+
+        this.progress = 0
     }
 
     initUI(parent){
-        // TODO
+
+        this.barContainer.style.width = "100%"
+        this.barContainer.style.height = "35px"
+        this.barContainer.style.backgroundColor = "#b3d4fc"
+
+        this.bar.style.width = "0%";
+        this.bar.style.height = "100%"
+        this.bar.style.backgroundColor = "#2196f3"
     }
 
-    updateUI(){
-        // TODO
+    updateBar(pct){
+
+        this.progress = Math.min(this.progress + pct, 100)
+
+        this.bar.style.width = this.progress + "%"
+
+        if(this.progress == 100){
+            this.bar.style.backgroundColor = "green"
+        }
+        
     }
 
      handleEvent(evt){
@@ -35,14 +59,16 @@ export default class WaitEnv{
         
                     this.communicator.sendSuccessMessage('Analyse Done')
                 }
+
+                if(evt.data.text === 'UPDATE'){
+                    this.updateBar(evt.data.pct)
+                }
                 
                 break;
         
             default:
                 break;
         }
-
-
     }
 
     getResult(){
@@ -51,21 +77,5 @@ export default class WaitEnv{
 
     isFinished(){
         return this.workerFinished
-    }
-
-    setFinished(){
-        this.workerFinished = true
-    }
-
-    terminateWorker(){
-        this.worker.terminate()
-    }
-
-    getCommunicator(){
-        return this.communicator
-    }
-
-    setResult(result){
-        this.result = result
     }
 }
