@@ -1,8 +1,8 @@
 import '../algorithms/Communicator'
 
-export default class WaitEnv{
+export default class WaitEnv {
 
-    constructor(worker, communicator, barContainer, msgBoxContainer){
+    constructor(worker, communicator, barContainer, msgBoxContainer) {
         this.worker = worker
         this.communicator = communicator
 
@@ -10,8 +10,8 @@ export default class WaitEnv{
         this.barContainer = barContainer
         this.bar = barContainer.children[0]
 
-        this.msgBoxContainer = msgBoxContainer
-        this.msgList = msgBoxContainer.children[0]
+        this.msgBoxContainer = msgBoxContainer //div
+        this.msgList = msgBoxContainer.children[0] //ul
 
         this.workerFinished = false
 
@@ -22,7 +22,7 @@ export default class WaitEnv{
         this.progress = 0
     }
 
-    initUI(parent){
+    initUI(parent) {
 
         this.barContainer.style.width = "100%"
         this.barContainer.style.height = "35px"
@@ -33,49 +33,59 @@ export default class WaitEnv{
         this.bar.style.backgroundColor = "#2196f3"
     }
 
-    updateBar(pct){
+    updateBar(pct) {
 
         this.progress = Math.min(this.progress + pct, 100)
 
         this.bar.style.width = this.progress + "%"
 
-        if(this.progress == 100){
+        if (this.progress == 100) {
             this.bar.style.backgroundColor = "green"
         }
-        
+
     }
 
-     handleEvent(evt){
+    // TODO: overlap met progressbar nu 
+    addMessage(str) {
+        var node = document.createElement("LI");                 // Create a <li> node
+        var textnode = document.createTextNode(str);
+
+        node.appendChild(textnode)
+        this.msgList.appendChild(node)
+    }
+
+    handleEvent(evt) {
 
         switch (evt.type) {
             case "message":
-                if(evt.data.text === 'DONE'){
+                if (evt.data.text === 'DONE') {
                     console.log("ending the worker and saving result and stuff")
                     this.result = evt.data.result
-        
+
                     this.workerFinished = true
-        
+
                     this.worker.terminate()
-        
+
                     this.communicator.sendSuccessMessage('Analyse Done')
                 }
 
-                if(evt.data.text === 'UPDATE'){
+                if (evt.data.text === 'UPDATE') {
                     this.updateBar(evt.data.pct)
+                    // this.addMessage(evt.data.msg)
                 }
-                
+
                 break;
-        
+
             default:
                 break;
         }
     }
 
-    getResult(){
+    getResult() {
         return this.result
     }
 
-    isFinished(){
+    isFinished() {
         return this.workerFinished
     }
 }
