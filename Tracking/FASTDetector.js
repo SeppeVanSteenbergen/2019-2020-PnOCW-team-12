@@ -6,7 +6,7 @@ function FASTDetector(rgbaPixels, width){
     let grayMatrix = grayScaleMatrix(rgbaPixels, width);
 
     for(let y = 3; y < grayMatrix.length - 3; y++){
-        for(let x = 3; x < grayMatrix[0].length; x++){
+        for(let x = 3; x < grayMatrix[0].length - 3; x++){
             let intensity = grayMatrix[y][x];
             let circle = bresenhamCircle([x, y]);
             for(let point in circle)
