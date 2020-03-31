@@ -53,6 +53,12 @@ class Drawer {
       this.makeBlue(posy)
       i++
     }
+    this.ctx.lineWidth = size;
+    this.ctx.strokeRect(x, y, size, size);
+    this.ctx.fillRect(x,y,size,size);
+    this.ctx.stroke();
+
+
   }
 
   /**

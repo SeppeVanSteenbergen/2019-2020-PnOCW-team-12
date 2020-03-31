@@ -1,6 +1,6 @@
 function FASTDetector(rgbaPixels, width){
-    let threshold = 2;
-    let nbContiguous = 12;
+    let threshold = 50;
+    let nbContiguous = 14;
     let interestingPoints = [];
 
   let grayMatrix = grayScaleMatrix(rgbaPixels, width);
@@ -74,7 +74,8 @@ function grayScaleMatrix(rgbaPixels, width){
     let y = 0;
     let matrix = [[]];
     for(let i = 0; i < rgbaPixels.length; i += 4){
-        let grayScale = 0.3 * rgbaPixels[i] + 0.59 * rgbaPixels[i + 1] + 0.11 * rgbaPixels[i + 1];
+        //let grayScale = 0.3 * rgbaPixels[i] + 0.59 * rgbaPixels[i + 1] + 0.11 * rgbaPixels[i + 1];
+        let grayScale = (rgbaPixels[i] + rgbaPixels[i + 1] + rgbaPixels[i + 2]) / 3;
         if(matrix[y].length >= width - 1){
             x = 0;
             y++;
