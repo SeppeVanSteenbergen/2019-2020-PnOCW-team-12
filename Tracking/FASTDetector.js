@@ -80,8 +80,6 @@ function grayScaleMatrix(rgbaPixels, width){
         }
         matrix[y].push([]);
         matrix[y][x] = grayScale;
-    }
-    matrix[y][x] = grayScale;
   }
 
   return matrix;
