@@ -74,7 +74,7 @@
                 if(startTime ===null){
                     startTime = Date.now()
                 }
-                let info1 = animationClient.getNextFrame(frame, startTime);
+                let info1 = animationClient.getNextFrame(frame, startTime, Date.now());
                 animationClient.drawAnimal(canvas, info1.x, info1.y, info1.angle, info1.frame, info1.right, true);
                 frame += info1.extraFrame
 
