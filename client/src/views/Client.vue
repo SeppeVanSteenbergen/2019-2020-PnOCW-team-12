@@ -491,7 +491,11 @@ export default {
     syncVideo() {
       let time = Date.now() + this.$store.state.sync.delta
       let videoTime = this.videoStartTime + this.$refs.vid.currentTime * 1000
-      if (Math.abs(videoTime - time) < this.videoSyncThreshold) {
+      if (Math.abs(videoTime - time) > 1000) {
+        this.$refs.vid.currentTime = Math.round(
+          (time - this.videoStartTime) / 1000
+        )
+      } else if (Math.abs(videoTime - time) < this.videoSyncThreshold) {
         this.$refs.vid.playbackRate = 1
       } else if (videoTime < time) {
         this.$refs.vid.playbackRate = 1 + this.videoSpeedupDelta
