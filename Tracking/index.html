@@ -7,8 +7,9 @@
 <body>
 <div>
     <label><input type="checkbox" id="checkboxCompare" onchange="firstCompare = this.checked">compareWithFirst</label><br/>
-    <label><input type="text"  id="framerate" oninput="framerate = this.value">frameWait</label><br/>
-    <label><input type="text"  id="hold" oninput="hold = this.value">threshold</label><br/>
+    <label><input type="text"  id="framerate" oninput="framerate = this.value"> frameWait</label><br/>
+    <label><input type="text"  id="hold" oninput="hold = this.value"> threshold</label><br/>
+    <label><input type="text"  id="confidence" oninput="confidence = this.value"> confidenceThreshold</label><br/>
     <button onclick="player = {x:200,y:200}">Reset Position</button>
 </div>
 <p id="out"></p>
@@ -31,6 +32,7 @@
         let framerate = 300 // ms wait time
         let own = false  // own implementatin of trackerjs
         let firstCompare = false  // only compare next frames with first, or compare with previous frame
+        let confidence = 0.7 // how sure when matching keypoints
 
 
         let video = document.getElementById('vid')
@@ -40,6 +42,7 @@
         document.getElementById('checkboxCompare').checked = firstCompare
         document.getElementById('framerate').value = framerate
         document.getElementById('hold').value = hold
+        document.getElementById('confidence').value = confidence
 
         let game = document.getElementById('game')
         let ctg = game.getContext('2d')
@@ -81,6 +84,9 @@
       video.addEventListener('play', function() {
 
       }, false);
+
+
+
         function draw() {
           tracking.Fast.THRESHOLD = hold
           ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
@@ -106,13 +112,19 @@
             let descriptor = tracking.Brief.getDescriptors(gray, canvas.width, corners);
             if(previousDescriptor !== null) {
               matches = tracking.Brief.reciprocalMatch(previousCorners, previousDescriptor, corners, descriptor);
-
+                let selectedCount = 0
               for(let i = 0; i < matches.length; i++) {
-                trans.x += matches[i].keypoint2[0] - matches[i].keypoint1[0]
-                trans.y += matches[i].keypoint2[1] - matches[i].keypoint1[1]
+                if(matches[i].confidence > confidence) {
+                  selectedCount++
+                  trans.x += matches[i].keypoint2[0] - matches[i].keypoint1[0]
+                  trans.y += matches[i].keypoint2[1] - matches[i].keypoint1[1]
+                }
               }
-                trans.x = trans.x / matches.length
-                trans.y = trans.y / matches.length
+              if(selectedCount > 0) {
+                trans.x = trans.x / selectedCount
+                trans.y = trans.y / selectedCount
+              }
+
 
               out.innerText = "x: " + trans.x + " y: " + trans.y
             }
@@ -120,8 +132,6 @@
               previousDescriptor = descriptor
               previousCorners = corners
             }
-
-
 
             //draw game
             if(firstCompare) {
@@ -131,7 +141,6 @@
               player.x += trans.x
               player.y += trans.y
             }
-
 
 
             ctg.clearRect(0, 0, game.width, game.height)
