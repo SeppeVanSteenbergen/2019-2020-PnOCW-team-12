@@ -19,11 +19,11 @@ imgElement.onload = function() {
   inputCanvas.height = inputImgData.height;
   inputContext.putImageData(inputImgData, 0, 0);
 
-  let points = FASTDetector(inputImgData.data,inputImgData.width)
+  let points = FASTDetector(inputImgData.data, inputImgData.width)
   console.log(points)
   let drawer = new Drawer(inputImgData.data, inputImgData.width, inputImgData.height, inputContext)
   for (let point in points) {
-    drawer.drawPoint(point[0],point[1],5)
+    drawer.drawPoint(points[point][0],points[point][1],5)
   }
 };
 

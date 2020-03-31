@@ -9,7 +9,8 @@ function FASTDetector(rgbaPixels, width){
     for (let x = 3; x < grayMatrix[0].length - 3; x++) {
       let intensity = grayMatrix[y][x];
       let circle = bresenhamCircle([x, y]);
-      for (let point in circle) point = grayMatrix[point[1]][point[0]];
+      for (let i = 0; i < circle.length; i++)
+          circle[i] = grayMatrix[circle[i][1]][circle[i][0]];
       let nbOutOfThreshold = 0;
 
       if (outOfThreshold(intensity, circle[0], threshold)) nbOutOfThreshold++;
@@ -22,7 +23,7 @@ function FASTDetector(rgbaPixels, width){
       if (nbOutOfThreshold >= 3) {
         nbOutOfThreshold = 0;
         for (let i in circle) {
-          if (outOfThreshold(intensity, i, threshold)) {
+          if (outOfThreshold(intensity, circle[i], threshold)) {
             nbOutOfThreshold++;
           } else {
             intensityStreak = Math.max(intensityStreak, nbOutOfThreshold);
@@ -61,19 +62,20 @@ function bresenhamCircle(midPointCoo) {
     [-2, -2],
     [-1, -3]
   ];
-  for (let point in circle) {
-    point[0] += midPointCoo[0];
-    point[1] += midPointCoo[1];
+  for (let i = 0; i < circle.length; i++) {
+    circle[i][0] += midPointCoo[0];
+    circle[i][1] += midPointCoo[1];
   }
+
+  return circle;
 }
 
 function grayScaleMatrix(rgbaPixels, width){
-    let x = 0;
     let y = 0;
     let matrix = [[]];
     for(let i = 0; i < rgbaPixels.length; i += 4){
-        let grayScale = (rgbaPixels[i] + rgbaPixels[i + 1] + rgbaPixels[i + 1]) / 3;
-        if(x >= width - 1){
+        let grayScale = 0.3 * rgbaPixels[i] + 0.59 * rgbaPixels[i + 1] + 0.11 * rgbaPixels[i + 1];
+        if(matrix[y].length >= width - 1){
             x = 0;
             y++;
             matrix.push([]);
