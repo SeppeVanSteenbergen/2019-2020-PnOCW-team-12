@@ -5,7 +5,9 @@
     <title>Title</title>
 </head>
 <body>
+<p id="out"></p>
     <canvas id="canv"></canvas>
+<canvas style="border: 3px solid black" id="game"></canvas>
 <video id="vid"></video>
 </body>
 
@@ -21,7 +23,25 @@
         let canvas = document.getElementById('canv')
         let ctx = canvas.getContext('2d')
 
+        let game = document.getElementById('game')
+        let ctg = game.getContext('2d')
+        game.width = 400
+        game.height = 400
+
+        let player = {
+          x:200,
+          y:200
+        }
+
         video.style.display = 'none'
+
+        let previousDescriptor = null
+        let previousCorners = null
+        let hold = 80
+        let framerate = 300
+        let matches = null
+        let trans
+        let out = document.getElementById('out')
       // Javascript
       navigator.mediaDevices.getUserMedia({
           video: true,
@@ -33,7 +53,7 @@
           video.play();
           canvas.width = video.videoWidth
           canvas.height = video.videoHeight
-          draw(5)
+          draw()
         };
       }).catch(function(err) {
         // deal with an error (such as no webcam)
@@ -44,7 +64,8 @@
       video.addEventListener('play', function() {
 
       }, false);
-        function draw(frameRate) {
+        function draw() {
+          tracking.Fast.THRESHOLD = hold
           ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
           let own = false
           //own
@@ -60,13 +81,44 @@
             let gray = tracking.Image.grayscale(imageData.data, canvas.width, canvas.height);
             let corners = tracking.Fast.findCorners(gray, canvas.width, canvas.height);
 
+            trans = {
+              x: 0,
+              y: 0
+            }
+
+            let descriptor = tracking.Brief.getDescriptors(gray, canvas.width, corners);
+            if(previousDescriptor !== null) {
+              matches = tracking.Brief.reciprocalMatch(previousCorners, previousDescriptor, corners, descriptor);
+
+              for(let i = 0; i < matches.length; i++) {
+                trans.x += matches[i].keypoint2[0] - matches[i].keypoint1[0]
+                trans.y += matches[i].keypoint2[1] - matches[i].keypoint1[1]
+              }
+                trans.x = trans.x / matches.length
+                trans.y = trans.y / matches.length
+
+              out.innerText = "x: " + trans.x + " y: " + trans.y
+            }
+            previousDescriptor = descriptor
+            previousCorners = corners
+
+
+            //draw game
+            player.x += trans.x
+            player.y += trans.y
+
+            ctg.clearRect(0, 0, game.width, game.height)
+            ctg.fillStyle = '#f00';
+            ctg.fillRect(player.x, player.y, 20, 20);
+
+
             for (let i = 0; i < corners.length; i += 2) {
               ctx.fillStyle = '#f00';
               ctx.fillRect(corners[i], corners[i + 1], 3, 3);
             }
           }
 
-          setTimeout(draw, 1/frameRate, frameRate);
+          setTimeout(draw, framerate);
         }
     </script>
 </footer>
