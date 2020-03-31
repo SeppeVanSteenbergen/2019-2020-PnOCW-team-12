@@ -15,11 +15,16 @@ imgElement.onload = function() {
 
   let inputImgData = resizeImageData(inputContext.getImageData(0, 0, imgElement.width, imgElement.height));
   inputContext.clearRect(0, 0, inputCanvas.width, inputCanvas.height);
-  inputCanvas.width = inputImgData.width/2;
-  inputCanvas.height = inputImgData.height/2;
-  inputContext.drawImage(inputImgData, 0, 0, inputCanvas.width, inputCanvas.height);
+  inputCanvas.width = inputImgData.width;
+  inputCanvas.height = inputImgData.height;
+  inputContext.putImageData(inputImgData, 0, 0);
 
-  //code to start tracking comes here...
+  let points = FASTDetector(inputImgData.data,inputImgData.width)
+  console.log(points)
+  let drawer = new Drawer(inputImgData.data, inputImgData.width, inputImgData.height, inputContext)
+  for (let point in points) {
+    drawer.drawPoint(point[0],point[1],5)
+  }
 };
 
 function resizeImageData(imgData) {

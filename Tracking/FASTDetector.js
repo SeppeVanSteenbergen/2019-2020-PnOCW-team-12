@@ -1,7 +1,7 @@
-function FASTDetector(rgbaPixels, width) {
-  let threshold = 2;
-  let nbContiguous = 2;
-  let interestingPoints = [];
+function FASTDetector(rgbaPixels, width){
+    let threshold = 2;
+    let nbContiguous = 12;
+    let interestingPoints = [];
 
   let grayMatrix = grayScaleMatrix(rgbaPixels, width);
 
