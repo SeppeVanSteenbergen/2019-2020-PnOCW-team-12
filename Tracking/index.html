@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <canvas id="canv"></canvas>
+<video id="vid"></video>
+</body>
+
+<footer>
+    <script src="/Fast.js"></script>
+    <script src="/pageScript.js"></script>
+    <script src="/tracking.js"></script>
+    <script src="/Fast.js"></script>
+
+    <script lang="text/javascript">
+
+        let video = document.getElementById('vid')
+        let canvas = document.getElementById('canv')
+        let ctx = canvas.getContext('2d')
+
+        video.style.display = 'none'
+      // Javascript
+      navigator.mediaDevices.getUserMedia({
+          video: true,
+        audio:false
+        }
+      ).then(function(stream) {
+        video.srcObject = stream;
+        video.onloadedmetadata = function(e) {
+          video.play();
+          canvas.width = video.videoWidth
+          canvas.height = video.videoHeight
+          draw(5)
+        };
+      }).catch(function(err) {
+        // deal with an error (such as no webcam)
+      });
+
+
+
+      video.addEventListener('play', function() {
+
+      }, false);
+        function draw(frameRate) {
+          ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            let corners = FASTDetector(ctx.getImageData(0,0,canvas.width, canvas.height), canvas.width)
+          console.log(corners)
+          for (let i = 0; i < corners.length; i++) {
+            ctx.fillStyle = '#f00';
+            ctx.fillRect(corners[i][0], corners[i][1], 3, 3);
+
+          }
+          setTimeout(draw, 1/frameRate, frameRate);
+        }
+    </script>
+</footer>
+</html>

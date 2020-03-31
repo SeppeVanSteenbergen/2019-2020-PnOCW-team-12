@@ -1,0 +1,25 @@
+const express = require('express')
+const path = require('path')
+const fs = require('fs')
+
+const app = express()
+
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'))
+})
+
+app.get('/tracking.js', (req, res) => {
+  res.sendFile(path.join(__dirname, '/build/tracking-min.js'))
+})
+
+app.get('/Fast.js', (req, res) => {
+  res.sendFile(path.join(__dirname, 'FastDetector.js'))
+})
+
+app.get('/pageScript.js', (req, res) => {
+  res.sendFile(path.join(__dirname, 'pageScript.js'))
+})
+
+app.listen(3050, () => {
+  console.log('listening on port 3050')
+})
