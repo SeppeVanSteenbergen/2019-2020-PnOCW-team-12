@@ -59,6 +59,13 @@ Vue.prototype.printToConsole = function(message, color) {
   })
 }
 
+Vue.prototype.$notif = function(message, color) {
+  this.$store.dispatch('showSnackbar', {
+    text: message,
+    color: color
+  })
+}
+
 new Vue({
   router,
   store,
@@ -69,7 +76,7 @@ new Vue({
   }
 }).$mount('#app')
 
-import Algebra from './algorithms/Algebra'
+/*import Algebra from './algorithms/Algebra'
 import Animations from './algorithms/Animations'
 import ColorRange from './algorithms/ColorRange'
 import ColorSpace from './algorithms/ColorSpace'
@@ -109,4 +116,4 @@ window.Reconstructor = Reconstructor
 window.RGBBarcodeScanner = RGBBarcodeScanner
 window.Screen = Screen
 window.Triangle = Triangle
-// Adding all algorithm classes to window
+// Adding all algorithm classes to window*/

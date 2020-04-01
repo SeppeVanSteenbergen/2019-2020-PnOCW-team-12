@@ -57,15 +57,12 @@
 <script>
 import DetectionDrawer from '../algorithms/DetectionDrawer'
 import AlgorithmService from '../services/AlgorithmService'
-import NumberConverter from '../algorithms/PermutationConverter'
 import Animation from '../algorithms/Animations'
-import Image from '../algorithms/Image'
 
 export default {
   name: 'client',
   data() {
     return {
-      fullscreen: false,
       canvas: null,
       intervalObj: null,
       defaultCSS: 'width:100%;height:100%',
@@ -90,6 +87,13 @@ export default {
   computed: {
     roomList() {
       return this.$store.state.roomList
+    },
+    fullscreen() {
+      return !!(
+        document.fullscreenElement ||
+        document.webkitFullscreenElement ||
+        document.mozFullScreenElement
+      )
     }
   },
   sockets: {
@@ -146,6 +150,7 @@ export default {
         case 'load-image':
           this.setDefaultCSS()
           this.loadImageHandler(message.data)
+          break
         default:
           console.log('command not supported')
           break
@@ -379,7 +384,6 @@ export default {
       this.$router.push({ params: { room_id: room_id } })
     },
     goFullscreen() {
-      this.fullscreen = true
       //this.$refs['full'].toggle()
       //this.fullscreen = !this.fullscreen
 
@@ -401,25 +405,28 @@ export default {
 
       this.canvas.style.display = 'block'
     },
-    openFullscreen(elem) {
-      if (elem.requestFullscreen) {
-        elem.requestFullscreen()
-      } else if (elem.mozRequestFullScreen) {
-        /* Firefox */
-        elem.mozRequestFullScreen()
-      } else if (elem.webkitRequestFullscreen) {
-        /* Chrome, Safari and Opera */
-        elem.webkitRequestFullscreen()
-      } else if (elem.msRequestFullscreen) {
-        /* IE/Edge */
-        elem.msRequestFullscreen()
+    async openFullscreen(elem) {
+      try {
+        if (elem.requestFullscreen) {
+          await elem.requestFullscreen()
+        } else if (elem.mozRequestFullScreen) {
+          /* Firefox */
+          await elem.mozRequestFullScreen()
+        } else if (elem.webkitRequestFullscreen) {
+          /* Chrome, Safari and Opera */
+          await elem.webkitRequestFullscreen()
+        } else if (elem.msRequestFullscreen) {
+          /* IE/Edge */
+          await elem.msRequestFullscreen()
+        }
+      } catch (err) {
+        console.log(err)
+        this.$notif('cannot open fullscreen without user gesture', 'error')
       }
     },
     exitHandler() {
       if (!this.fullscreen) {
         this.canvas.style.display = 'none'
-      } else {
-        this.fullscreen = false
       }
     },
     exitRoom() {
@@ -509,7 +516,8 @@ export default {
       this.$refs.vid.pause()
     },
     restartVideoHandler() {
-      this.$refs.vid.load()
+      this.$refs.vid.currentTime = 0
+      //this.$refs.vid.load()
     },
 
     cutout(imgData, w, h, minx, miny) {
