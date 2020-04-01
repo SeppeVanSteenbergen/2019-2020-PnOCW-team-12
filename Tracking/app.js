@@ -20,6 +20,14 @@ app.get('/pageScript.js', (req, res) => {
   res.sendFile(path.join(__dirname, 'pageScript.js'))
 })
 
+app.get('/jsfeat.js', (req, res) => {
+  res.sendFile(path.join(__dirname, '/build/jsfeat-min.js'))
+})
+
+app.get('/homer.jpg', (req, res) => {
+  res.sendFile(path.join(__dirname, '/build/homer.jpg'))
+})
+
 app.listen(3050, () => {
   console.log('listening on port 3050')
 })
