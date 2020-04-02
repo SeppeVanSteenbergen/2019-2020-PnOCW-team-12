@@ -32,14 +32,29 @@
     <script lang="text/javascript">
 
         // config
-
-        let hold = 80 // threshold
-        let framerate = 300 // ms wait time
+        let framerate = 0 // ms wait time
         let own = false  // own implementatin of trackerjs
         let firstCompare = false  // only compare next frames with first, or compare with previous frame
-        let confidence = 0.7 // how sure when matching keypoints
+
         let matrix3d = false  // using 3D matrix or 2D matrix
         let onlyTranslation = false
+
+        //Fast config
+        let hold = 30 // threshold
+
+        // Brief settings
+        tracking.Brief.N = 512   //  128,256,512. (4,8,16)  N/32 descriptor words per keypoint
+        let confidence = 0.9 // how sure when matching keypoints
+
+        // ransac settings
+        let model_size = 4; // minimum points to estimate motion
+        let thresh = 4; // max error to classify as inlier
+        let eps = 0.5; // max outliers ratio
+        let prob = 0.99; // probability of success
+        let max_iters = 1000; // max iterations
+
+
+        //// end config ////
 
 
         let video = document.getElementById('vid')
@@ -85,7 +100,9 @@
         let out = document.getElementById('out')
       // Javascript
       navigator.mediaDevices.getUserMedia({
-          video: true,
+          video: {
+            facingMode: 'environment'
+          },
         audio:false
         }
       ).then(function(stream) {
@@ -115,7 +132,7 @@
           //own
           if(own) {
             let corners = FASTDetector(ctx.getImageData(0,0,canvas.width, canvas.height).data, canvas.width)
-            console.log(corners)
+            //console.log(corners)
             for (let i = 0; i < corners.length; i++) {
               ctx.fillStyle = '#f00';
               ctx.fillRect(corners[i][0], corners[i][1], 3, 3);
@@ -246,13 +263,10 @@
             // each point will be marked as good(1) or bad(0)
           let mask = new jsfeat.matrix_t(count, 1, jsfeat.U8_t | jsfeat.C1_t);
 
-          let model_size = 4; // minimum points to estimate motion
-          let thresh = 3; // max error to classify as inlier
-          let eps = 0.5; // max outliers ratio
-          let prob = 0.99; // probability of success
+
           let params = new jsfeat.ransac_params_t(model_size, thresh, eps, prob);
 
-          let max_iters = 1000;
+
 
           let ok =  ransac(params, homo_kernel, from, to, count, transform, mask, max_iters);
 
