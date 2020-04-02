@@ -26,7 +26,7 @@ export default class Reconstructor {
 
     let helpMids = this.reconstructCircleMidPoint(this.midPoint)
     helpMids = this.orderCorners(helpMids)
-    this.fixMids(helpMids)
+    helpMids = this.fixMids(helpMids)
 
     let helpMid = null
     let helpPoint = null
@@ -150,11 +150,18 @@ export default class Reconstructor {
     let points = Object.values(helpMids)
     for (let i = 0; i < points.length; i++) {
       let point = points[i]
-      if (point === null) {
+      if (point === null || point === undefined) {
         //Plaats overstaand punt ipv null
         points[i] = points[(i + 2) % 4]
       }
     }
+    return {
+      LU: points[0],
+      RU: points[1],
+      RD: points[2],
+      LD: points[3]
+    }
+
   }
 
   /**

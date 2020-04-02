@@ -23,7 +23,7 @@ export default class CornerDetector {
       this.height,
         this.communicator
     )
-    this.radiusFactor = 1/6
+    this.radiusFactor = 1/4
     this.radius = null //will be set later
     this.blue = id
     this.green = id + 1
