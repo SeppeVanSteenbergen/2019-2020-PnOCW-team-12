@@ -108,20 +108,20 @@
 	      let b2 = -b1
 
 	      //first section
-          let sectionEnd = startAt+sectionWidth-this.barWidth/2
-          let section1High = rico1*sectionEnd + b1
-          this.fillStroke(startAt,-section1High,this.barWidth/2, this.h+2*section1High,"#808080")
+          let sectionEnd1 = this.borderWidth+sectionWidth-this.barWidth/2
+          let sectionHigh = rico1*sectionEnd1 + b1
+          this.fillStroke(startAt,-sectionHigh,this.barWidth/2, this.h+2*sectionHigh,"#808080")
 	      startAt += this.barWidth/2
           for (let j = 0; j < code.length; j++) {
-            this.fillStroke(startAt, -section1High, this.barWidth, this.h+2*section1High,code[j])
+            this.fillStroke(startAt, -sectionHigh, this.barWidth, this.h+2*sectionHigh,code[j])
             startAt += this.barWidth
           }
-          this.fillStroke(startAt,-section1High,this.barWidth,this.h + 2 * section1High,"#808080")
+          this.fillStroke(startAt,-sectionHigh,this.barWidth,this.h + 2 * sectionHigh,"#808080")
           startAt += this.barWidth
 
           //section 2
-          sectionEnd += sectionWidth
-          let section2High = rico1*sectionEnd + b1
+          let sectionEnd2 = sectionEnd1 + sectionWidth
+          let section2High = rico1*sectionEnd2 + b1
           for (let j = 0; j < code.length; j++) {
             this.fillStroke(startAt, -section2High, this.barWidth, this.h+2*section2High,code[j])
             startAt += this.barWidth
@@ -139,13 +139,13 @@
           }
 
           //section 4
-          this.fillStroke(startAt,-section1High,this.barWidth,this.h + 2 * section1High,"#808080")
+          this.fillStroke(startAt,-sectionHigh,this.barWidth,this.h + 2 * sectionHigh,"#808080")
           startAt += this.barWidth
           for (let j = 0; j < code.length; j++) {
-            this.fillStroke(startAt, -section1High, this.barWidth, this.h+2*section1High,code[j])
+            this.fillStroke(startAt, -sectionHigh, this.barWidth, this.h+2*sectionHigh,code[j])
             startAt += this.barWidth
           }
-          this.fillStroke(startAt,-section1High,this.barWidth/2,this.h + 2 * section1High,"#808080")
+          this.fillStroke(startAt,-sectionHigh,this.barWidth/2,this.h + 2 * sectionHigh,"#808080")
 
           //first up and down section
           startAt = this.borderWidth +sectionWidth + this.barWidth/2
