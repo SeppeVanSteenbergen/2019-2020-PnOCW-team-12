@@ -95,7 +95,19 @@ Files reviewed: RGBBarcodeScanner.js; PixelIterator.js; Animation.js
 
 \section{Animation.js}
 
-
+\begin{itemize}
+	\item Over de triangulatie van de verschillende schermen lopen dieren achter elkaar om de synchrone animatie over de verschillende schermen te tonen. Dit was deel van de opdracht van het eerste semester, maar werd geupdate in het begin van dit semester.
+	
+	\item Over het algemeen mist de gehele klasse documentatie. Van de instructor tot grote methodes. Enkele functies zijn van zelfsprekend, maar het grotendeel is het voor een gebruiker dat de code nog nooit heeft gezien een gokwerk van de verschillende parameters en resultaat van de functie in kwestie.
+	
+	\item De functie $go(dx, dy)$ gebruikt twee function calls om eerst verticaal te verplaatsen en vervolgens horizontaal. Dit oogt mooi, maar is niet efficiënt aangezien deze methodes om volgens de x- en respectievelijke y-as te transleren enkel door de algemene $go()$ functie worden opgeroepen. Dit maakt dat deze extra methodes redundant zijn en de algemen functie efficiënter kan door de volledige translatie in één keer uit te voeren. TODO: zie figuur
+	
+	\item De code om de verschillende dieren af te beelden is niet voorbedachte raden geschreven op uitbreiding. De afbeelding van de twee gebruikte dieren worden geïnisialiseerd in de constructor. Beide dieren hebben een standaard en een kerst versie. Voor twee dieren gaat dit nog net in de constructor, maar de verschillende $if-statements$ maken de constructor onnodig lang. Deze initialisatie zou zich beter in een eigen methode bevinden om de constructor niet storend lang te maken bij het toevoegen van meerdere dieren.\\
+	Ook de methode $drawAnimal()$ is nu gebasseerd op een boolean van welk dier er getekend moet worden en heeft dus een herschrijving nodig om meer dan twee dieren aan te kunnen. TODO: zie afbeeldingen.\\
+	Om de verschillende dieren hun frame te updaten wordt er nu een groot deel code twee maal met maar een minimale aanpassing gebruikt in $drawAnimals()$. Ook hier kan er gerefactord worden om meerdere dieren aan te kunnen zonder dat er veel aangepast moet worden en repetitieve code te vermijden. TODO: zie afbeelding
+	
+	\item De hele klasse kan ook een opkuis gebruiken. Er zijn hier en daar nog overtollige $console.log$ restanten van het debuggen, volledig gecommentarieerde functies en redundante parameters in een methode. AFBEELDING?
+\end{itemize}
 
 
 
