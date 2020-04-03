@@ -86,6 +86,10 @@ export default class DetectionDrawer {
   barcode(clientNb, sections) {
     //Only integers are allowed because otherwise the barcode is not complete at the end.
     const ctx = this.ctx
+    ctx.beginPath()
+    ctx.fillStyle = '#808080'
+    ctx.rect(0, 0, this.w, this.h)
+    ctx.fill()
     let code = []
     let even = false
     let amount = 0
