@@ -40,16 +40,16 @@
 %\mbox{}\hfill
 \begin{tabular}{*4l}
 \toprule
-\multicolumn{3}{l}{\large\textbf{Team <number>}} \\
+\multicolumn{3}{l}{\large\textbf{Team 12}} \\
 \midrule
 Toon Sauvillers & 2h & 270 LOC \\ % fill in the time spend on this task per team member who worked on it and the amount of lines of code (LOC) reviewed
-<team member 2> & 15h & 30 LOC \\
+Bert Van den Bosch & 2h & 389 LOC \\
 \bottomrule
 \hline
 \end{tabular}\\
 \\
 Demo: \url{https://penocw.cs.kotnet.kuleuven.be:80##/demo-task-44?0xjwkkslam9} \\
-Files reviewed: RGBBarcodeScanner.js; PixelIterator.js	
+Files reviewed: RGBBarcodeScanner.js; PixelIterator.js; Animation.js	
 
 \noindent
 {\color[HTML]{52BDEC} \rule{\linewidth}{1mm} }
@@ -58,13 +58,13 @@ Files reviewed: RGBBarcodeScanner.js; PixelIterator.js
 
 \section{RGBBarcodeScanner.js}
 \begin{itemize}
-	\item Om de gehele afbeelding te scannen wordt er gebruik gemaakt van een iterator. Dit is een goede keuze om een {\it nulpointer exception} te vermeiden. Het wordt gebruikt om, ook al staat het scherm niet gelijk met de afbeelding, toch de het scherm van links naar rechts horizontaal te overlopen. Het in een iterator te schrijven vergroot de leesbaarheid en correctheid.
+	\item Om de gehele afbeelding te scannen wordt er gebruik gemaakt van een iterator. Dit is een goede keuze om een {\it nulpointer exception} te vermijden. Het wordt gebruikt om, ook al staat het scherm niet gelijk met de afbeelding, toch  het scherm van links naar rechts horizontaal te overlopen. Het in een iterator te schrijven vergroot de leesbaarheid en correctheid.
 	\item Voor het filteren van noise wordt er gebruikt gemaakt van een while loop om elke rij (volgens de iterator) apart te filteren. Zie figuur \ref{startFilter} Duidelijker zou zijn dat de foto in zijn geheel wordt gefilterd in een aparte functie. Deze functie zou dan deze while lus bevatten.
-	\item Vervolgens wordt in de noiseFilter voor elke rij dezelfde bewerking gedaan, met dezelfde gegevens van spectrum. Zie figuur \ref{noiseFilter}. Aangezien het spectrum steeds hetzelfde is, kunnen deze bewerkingen éénmalig worden gedaan en worden meegegeven.
+	\item Vervolgens wordt in de noiseFilter voor elke rij dezelfde bewerking gedaan, met dezelfde gegevens van het spectrum. Zie figuur \ref{noiseFilter}. Aangezien het spectrum steeds hetzelfde is, kunnen deze bewerkingen éénmalig worden gedaan en worden meegegeven.
 	\item Ook in de while-lus in figuur \ref{startFilter} wordt er gekeken naar de barcodes per rij. Dit lijkt ook beter en duidelijker moest er eerst gefilterd worden en vervolgens, in een aparte lus, gescanned worden op barcodes. Deze verandering maakt het ook mogelijk om in de toekomst gemakkelijker aanpassingen te doen voor het filteren en het scannen van barcodes apart.
 	\item In scanRow, waar de barcodes worden gescanned, wordt heel vaak $ value / 255$ gedaan. Dit is echter redundant, het oogt mooier doordat je later kan checken op $==1$, waarden zijn namelijk of 0 of 255. Als men echter controleert op $==255$ moet men niet steeds hierdoor delen.
 	\item Voor het vinden van het procentueel aantal juiste barcodes wordt er gebruikt gemaakt van lambdafuncties. Dit oogt zeer mooi en overzichtelijk! Zie figuur \ref{lambda}. Hier zou echter wel mogen bijstaan in de comments om dit eventueel weg te halen. Het wordt nu enkel gebruikt om te loggen.
-	\item Ook voor {\it getHighestCode} wordt er ook gebruikt gemaatk van een lambdafunctie. Zie figuur \ref{getHighestCode}
+	\item Ook voor {\it getHighestCode} wordt er ook gebruikt gemaakt van een lambdafunctie. Zie figuur \ref{getHighestCode}
 \end{itemize}
 
 \begin{figure}
@@ -92,6 +92,10 @@ Files reviewed: RGBBarcodeScanner.js; PixelIterator.js
 	\caption{Lambdafuncties in {\it getHighestCode}}
 	\label{getHighestCode}
 \end{figure}
+
+\section{Animation.js}
+
+
 
 
 
