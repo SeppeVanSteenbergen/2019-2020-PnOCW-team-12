@@ -211,6 +211,7 @@ export default class Island {
     this.communicator.sendInfoMessage(
       'Try to identify screen in island ' + this.id
     )
+    var data = this.getScreenImg(this.RGBImage)
     this.clientCode = RGBBarcodeScanner.scan(
       this.getScreenImg(this.RGBImage),
       this.corners.LU,

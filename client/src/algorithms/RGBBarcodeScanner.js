@@ -15,6 +15,7 @@ export default class RGBBarcodeScanner {
     while (iterator.hasNextRow()) {
       let row = iterator.nextRow()
       let filteredRow = this.noiseFilter(imageData, row, spectrum)
+      imageData = this.getMaskRow(imageData, row, filteredRow)
       barcodes = this.scanRow(filteredRow, barcodes)
     }
     let highest = this.getHighestCode(barcodes)
@@ -183,5 +184,13 @@ export default class RGBBarcodeScanner {
     return Object.keys(barcodes).reduce((a, b) =>
       barcodes[a] > barcodes[b] ? a : b
     )
+  }
+
+  static getMaskRow(imgData, row, filteredRow) {
+    for (let i = 0; i < row.length; i++) {
+      let index = this.pixelToIndex(row[i], imgData.width)
+      imgData.data[index] = filteredRow[i]
+    }
+    return imgData
   }
 }
