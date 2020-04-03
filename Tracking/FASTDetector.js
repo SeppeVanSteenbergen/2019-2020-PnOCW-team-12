@@ -1,5 +1,4 @@
-function FASTDetector(rgbaPixels, width){
-    let threshold = 10;
+function FASTDetector(rgbaPixels, width, threshold){
     let nbContiguous = 12;
     let interestingPoints = [];
 

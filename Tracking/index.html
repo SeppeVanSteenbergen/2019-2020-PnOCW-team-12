@@ -33,7 +33,7 @@
 
         // config
         let framerate = 0 // ms wait time
-        let own = false  // own implementatin of trackerjs
+        let own = true  // own implementatin of trackerjs
         let firstCompare = false  // only compare next frames with first, or compare with previous frame
 
         let matrix3d = false  // using 3D matrix or 2D matrix
@@ -131,7 +131,7 @@
 
           //own
           if(own) {
-            let corners = FASTDetector(ctx.getImageData(0,0,canvas.width, canvas.height).data, canvas.width)
+            let corners = FASTDetector(ctx.getImageData(0,0,canvas.width, canvas.height).data, canvas.width, hold)
             //console.log(corners)
             for (let i = 0; i < corners.length; i++) {
               ctx.fillStyle = '#f00';
