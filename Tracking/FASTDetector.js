@@ -77,9 +77,9 @@ function grayScaleMatrix(rgbaPixels, width){
         //Verschil zie: https://www.tutorialspoint.com/dip/grayscale_to_rgb_conversion.htm
         let grayScale = 0.3 * rgbaPixels[i] + 0.59 * rgbaPixels[i + 1] + 0.11 * rgbaPixels[i + 1];
         //let grayScale = (rgbaPixels[i] + rgbaPixels[i + 1] + rgbaPixels[i + 2]) / 3;
-        if(matrix[y].length >= width - 1){
-            x = 0;
+        if(matrix[y].length >= width){
             y++;
+            if(i != rgbaPixels.length - 1)
             matrix.push([]);
         }
         matrix[y].push(grayScale);
