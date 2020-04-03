@@ -22,6 +22,8 @@ export default class DetectionDrawer {
 
   drawBorder(colors, space) {
     this.clearAll()
+    //turn background grey
+    this.fillStroke(0, 0, this.w, this.h, '#808080')
     this.drawX(colors, space)
 
     let ctx = this.ctx
@@ -68,21 +70,21 @@ export default class DetectionDrawer {
     ctx.beginPath()
     ctx.strokeStyle = colors[1]
     ctx.moveTo(0, 0)
-    ctx.lineTo((this.w * 1) / 6, (this.h * 1) / 6)
-    ctx.moveTo((this.w * 2) / 6, (this.h * 2) / 6)
+    //ctx.lineTo((this.w * 1) / 6, (this.h * 1) / 6)
+    //ctx.moveTo((this.w * 2) / 6, (this.h * 2) / 6)
     ctx.lineTo((this.w * 3) / 6, (this.h * 3) / 6)
-    ctx.lineTo((this.w * 4) / 6, (this.h * 2) / 6)
-    ctx.moveTo((this.w * 5) / 6, (this.h * 1) / 6)
+    //ctx.lineTo((this.w * 4) / 6, (this.h * 2) / 6)
+    //ctx.moveTo((this.w * 5) / 6, (this.h * 1) / 6)
     ctx.lineTo(this.w, 0)
     ctx.stroke()
     ctx.beginPath()
     ctx.strokeStyle = colors[2]
     ctx.moveTo(0, this.h)
-    ctx.lineTo((this.w * 1) / 6, (this.h * 5) / 6)
-    ctx.moveTo((this.w * 2) / 6, (this.h * 4) / 6)
+    //ctx.lineTo((this.w * 1) / 6, (this.h * 5) / 6)
+    //ctx.moveTo((this.w * 2) / 6, (this.h * 4) / 6)
     ctx.lineTo((this.w * 3) / 6, (this.h * 3) / 6)
-    ctx.lineTo((this.w * 4) / 6, (this.h * 4) / 6)
-    ctx.moveTo((this.w * 5) / 6, (this.h * 5) / 6)
+    //ctx.lineTo((this.w * 4) / 6, (this.h * 4) / 6)
+    //ctx.moveTo((this.w * 5) / 6, (this.h * 5) / 6)
     ctx.lineTo(this.w, this.h)
     ctx.stroke()
 
@@ -107,56 +109,252 @@ export default class DetectionDrawer {
 
   barcode(clientNb, sections) {
     //Only integers are allowed because otherwise the barcode is not complete at the end.
-    sections = Math.round(sections)
-
-    this.drawBorder(this.options[this.number], 0)
-
-    const ctx = this.ctx
-
     let code = []
-    let value = clientNb % 2 == 0 ? 0 : 1
+    let value = clientNb % 2 === 0 ? 0 : 1
     for (let i = 0; i < Math.floor(clientNb / 2) + 2; i++) {
       code.push(value)
       value = (value + 1) % 2
     }
 
     const codeWidth = this.w - 2 * this.borderWidth
-    const barWidth = codeWidth / (sections * (code.length + 1) + 1)
+    this.barWidth = codeWidth / (sections * (code.length + 1) + 0.5)
     let startAt = this.borderWidth
+    let sectionWidth = (this.w - 2 * this.borderWidth) / 6
+    let rico1 = -this.h / this.w
+    let b1 = -this.borderWidth / (2 * Math.cos(Math.atan(this.h / this.w)))
+    let b2 = -b1
 
-    ctx.beginPath()
-    ctx.fillStyle = '#808080'
-    ctx.rect(startAt, this.borderWidth, barWidth, this.h - 2 * this.borderWidth)
-    ctx.fill()
-    startAt += barWidth
+    //first section
+    let sectionEnd1 = this.borderWidth + sectionWidth - this.barWidth / 2
+    let sectionHigh = rico1 * sectionEnd1 + b1
+    this.fillStroke(
+      startAt,
+      -sectionHigh,
+      this.barWidth / 2,
+      this.h + 2 * sectionHigh,
+      '#808080'
+    )
+    startAt += this.barWidth / 2
+    for (let j = 0; j < code.length; j++) {
+      this.fillStroke(
+        startAt,
+        -sectionHigh,
+        this.barWidth,
+        this.h + 2 * sectionHigh,
+        code[j]
+      )
+      startAt += this.barWidth
+    }
+    this.fillStroke(
+      startAt,
+      -sectionHigh,
+      this.barWidth,
+      this.h + 2 * sectionHigh,
+      '#808080'
+    )
+    startAt += this.barWidth
 
-    for (let i = 0; i < sections; i++) {
-      for (let j = 0; j < code.length; j++) {
-        ctx.beginPath()
-        ctx.fillStyle = this.barcodeColorValues[code[j]]
-        ctx.rect(
-          startAt,
-          this.borderWidth,
-          barWidth,
-          this.h - 2 * this.borderWidth
-        )
-        ctx.fill()
-        startAt += barWidth
-      }
-      ctx.beginPath()
-      ctx.fillStyle = '#808080'
-      ctx.rect(
+    //section 2
+    let sectionEnd2 = sectionEnd1 + sectionWidth
+    let section2High = rico1 * sectionEnd2 + b1
+    for (let j = 0; j < code.length; j++) {
+      this.fillStroke(
+        startAt,
+        -section2High,
+        this.barWidth,
+        this.h + 2 * section2High,
+        code[j]
+      )
+      startAt += this.barWidth
+    }
+    this.fillStroke(
+      startAt,
+      -section2High,
+      this.barWidth,
+      this.h + 2 * section2High,
+      '#808080'
+    )
+    startAt += this.barWidth
+
+    // Section 3
+    startAt = this.w - startAt
+    this.fillStroke(
+      startAt,
+      -section2High,
+      this.barWidth,
+      this.h + 2 * section2High,
+      '#808080'
+    )
+    startAt += this.barWidth
+    for (let j = 0; j < code.length; j++) {
+      this.fillStroke(
+        startAt,
+        -section2High,
+        this.barWidth,
+        this.h + 2 * section2High,
+        code[j]
+      )
+      startAt += this.barWidth
+    }
+
+    //section 4
+    this.fillStroke(
+      startAt,
+      -sectionHigh,
+      this.barWidth,
+      this.h + 2 * sectionHigh,
+      '#808080'
+    )
+    startAt += this.barWidth
+    for (let j = 0; j < code.length; j++) {
+      this.fillStroke(
+        startAt,
+        -sectionHigh,
+        this.barWidth,
+        this.h + 2 * sectionHigh,
+        code[j]
+      )
+      startAt += this.barWidth
+    }
+    this.fillStroke(
+      startAt,
+      -sectionHigh,
+      this.barWidth / 2,
+      this.h + 2 * sectionHigh,
+      '#808080'
+    )
+
+    //first up and down section
+    startAt = this.borderWidth + sectionWidth + this.barWidth / 2
+    let sectionUpHigh = rico1 * (startAt - 2 * this.barWidth) + b2
+    for (let j = 0; j < code.length; j++) {
+      this.fillStroke(
         startAt,
         this.borderWidth,
-        barWidth,
-        this.h - 2 * this.borderWidth
+        this.barWidth,
+        -sectionUpHigh,
+        code[j]
       )
-      ctx.fill()
-      startAt += barWidth
+      this.fillStroke(
+        startAt,
+        this.h - this.borderWidth,
+        this.barWidth,
+        sectionUpHigh,
+        code[j]
+      )
+      startAt += this.barWidth
+    }
+    this.fillStroke(
+      startAt,
+      this.borderWidth,
+      this.barWidth,
+      -sectionUpHigh,
+      '#808080'
+    )
+    this.fillStroke(
+      startAt,
+      this.h - this.borderWidth,
+      this.barWidth,
+      sectionUpHigh,
+      '#808080'
+    )
+    startAt += this.barWidth
+    let sectionUpHigh2 = rico1 * (startAt - 2 * this.barWidth) + b2
+    for (let j = 0; j < code.length; j++) {
+      this.fillStroke(
+        startAt,
+        this.borderWidth,
+        this.barWidth,
+        -sectionUpHigh2,
+        code[j]
+      )
+      this.fillStroke(
+        startAt,
+        this.h - this.borderWidth,
+        this.barWidth,
+        sectionUpHigh2,
+        code[j]
+      )
+      startAt += this.barWidth
+    }
+    this.fillStroke(
+      startAt,
+      this.borderWidth,
+      this.barWidth,
+      -sectionUpHigh2,
+      '#808080'
+    )
+    this.fillStroke(
+      startAt,
+      this.h - this.borderWidth,
+      this.barWidth,
+      sectionUpHigh2,
+      '#808080'
+    )
+    startAt += this.barWidth
+    for (let j = 0; j < code.length; j++) {
+      this.fillStroke(
+        startAt,
+        this.borderWidth,
+        this.barWidth,
+        -sectionUpHigh2,
+        code[j]
+      )
+      this.fillStroke(
+        startAt,
+        this.h - this.borderWidth,
+        this.barWidth,
+        sectionUpHigh2,
+        code[j]
+      )
+      startAt += this.barWidth
+    }
+    this.fillStroke(
+      startAt,
+      this.borderWidth,
+      this.barWidth,
+      -sectionUpHigh,
+      '#808080'
+    )
+    this.fillStroke(
+      startAt,
+      this.h - this.borderWidth,
+      this.barWidth,
+      sectionUpHigh,
+      '#808080'
+    )
+    startAt += this.barWidth
+    for (let j = 0; j < code.length; j++) {
+      this.fillStroke(
+        startAt,
+        this.borderWidth,
+        this.barWidth,
+        -sectionUpHigh,
+        code[j]
+      )
+      this.fillStroke(
+        startAt,
+        this.h - this.borderWidth,
+        this.barWidth,
+        sectionUpHigh,
+        code[j]
+      )
+      startAt += this.barWidth
     }
 
     this.drawX(this.options[this.number], 0)
 
-    return barWidth
+    return this.barWidth
+  }
+
+  fillStroke(x, y, dx, dy, colorCode) {
+    this.ctx.beginPath()
+    if (typeof colorCode === 'string') {
+      this.ctx.fillStyle = '#808080'
+    } else {
+      this.ctx.fillStyle = this.barcodeColorValues[colorCode]
+    }
+    this.ctx.rect(x, y, dx, dy)
+    this.ctx.fill()
   }
 }
