@@ -1,3 +1,4 @@
+
 class RGBBarcodeScanner {
   //The imageObject must be a copy bcs it will be changed!!!!.
   static scan(imageObjectOrig, LU, RU) {
@@ -6,18 +7,14 @@ class RGBBarcodeScanner {
         imageObjectOrig.width,
         imageObjectOrig.height
     )
-    let iterator = new PixelIterator(
-        LU,
-        RU,
-        imageData.width,
-        imageData.height
-    )
+    let iterator = new PixelIterator(LU, RU, imageData.width, imageData.height)
 
     let barcodes = {}
     let spectrum = this.channelAvg(imageData.data)
     while (iterator.hasNextRow()) {
       let row = iterator.nextRow()
       let filteredRow = this.noiseFilter(imageData, row, spectrum)
+      imageData = this.getMaskRow(imageData, row, filteredRow)
       barcodes = this.scanRow(filteredRow, barcodes)
     }
     let highest = this.getHighestCode(barcodes)
@@ -27,7 +24,7 @@ class RGBBarcodeScanner {
     let totalScanned = values.reduce((a, b) => a + b, 0)
     console.log(barcodes[highest] / totalScanned)
     console.log(barcodes)
-    return highest
+    return [imageData,highest]
   }
 
   static scanRow(pixels, barcodes) {
@@ -95,7 +92,7 @@ class RGBBarcodeScanner {
       for (let rowKernel = -half; rowKernel <= half; rowKernel++) {
         let rowPos = this.getRow(i, rowKernel, row)
         if (!toSearch.includes(row[rowPos])) {
-          toSearch.push(row[rowPos])  //per pixel van de rij alle pixels die binnen kernel va
+          toSearch.push(row[rowPos]) //per pixel van de rij alle pixels die binnen kernel va
         }
       }
       for (let pixel of toSearch) {
@@ -147,7 +144,7 @@ class RGBBarcodeScanner {
       R += pixels[i]
       G += pixels[i + 1]
       B += pixels[i + 2]
-      let pixel = [pixels[i], pixels[i+1], pixels[i+2]]
+      let pixel = [pixels[i], pixels[i + 1], pixels[i + 2]]
       if (this.distance(pixel, white) < this.distance(closestWhite, white)) {
         closestWhite = pixel
       }
@@ -186,5 +183,15 @@ class RGBBarcodeScanner {
     return Object.keys(barcodes).reduce((a, b) =>
         barcodes[a] > barcodes[b] ? a : b
     )
+  }
+
+  static getMaskRow(imgData, row, filteredRow) {
+    for (let i = 0; i < row.length; i++) {
+      let index = this.pixelToIndex(row[i], imgData.width)
+      imgData.data[index] = filteredRow[i]
+      imgData.data[index+1] = filteredRow[i]
+      imgData.data[index+2] = filteredRow[i]
+    }
+    return imgData
   }
 }

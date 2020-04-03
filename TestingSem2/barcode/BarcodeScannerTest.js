@@ -28,8 +28,14 @@ imgElement.onload = function() {
 
     console.log("start scan")
 
-    let barcode = RGBBarcodeScanner.scan(inputImgData, [inputImgData.width,0], [inputImgData.width, inputImgData.height]);
-    inputContext.putImageData(inputImgData, 0, 0);
+    let [maskData,barcode] = RGBBarcodeScanner.scan(inputImgData, [1,2], [194,2]);
+
+    let maskedCanvas = document.getElementById("masked");
+    let maskCtx = inputCanvas.getContext("2d");
+    maskCtx.clearRect(0, 0, maskedCanvas.width, maskedCanvas.height);
+    maskedCanvas.width = inputImgData.width;
+    maskedCanvas.height = inputImgData.height;
+    maskCtx.putImageData(maskData, 0, 0);
     console.log(barcode);
 };
 

@@ -199,8 +199,6 @@ export default {
 
       let drawer = new DetectionDrawer(this.canvas, screen, borderWidth)
 
-      //drawer.drawBorder()
-
       drawer.barcode(id, 6)
     },
     runFloodScreenCommandList(list, startIndex) {
