@@ -1251,7 +1251,7 @@ export default {
       outC.style.width = imgWidth + 'px'
       outC.style.height = Math.round(imgWidth * ratio) + 'px'
 
-      outctx.putImageData(this.analysedImage.imgOriginal, 0, 0)
+      outctx.putImageData(this.analysedImage.imgOriginalRGB, 0, 0)
 
       AlgorithmService.drawScreenOutlines(outC, this.analysedImage)
 
