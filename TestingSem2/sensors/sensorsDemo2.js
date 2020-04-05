@@ -1,5 +1,5 @@
-const options = { frequency: 60, referenceFrame: 'screen' };
-const sensor = new RelativeOrientationSensor(options);
+const sensor = new AbsoluteOrientationSensor();
+let axisOffset = new THREE.Quaternion(0, 0, 0, 1);
 let offset = null;
 Promise.all([navigator.permissions.query({ name: "accelerometer" }),
     navigator.permissions.query({ name: "gyroscope" })])
@@ -7,22 +7,19 @@ Promise.all([navigator.permissions.query({ name: "accelerometer" }),
         if (results.every(result => result.state === "granted")) {
             sensor.addEventListener('reading', () => {
                 let [x, y, z, w] = sensor.quaternion;
-
-                let quaternion = new THREE.Quaternion;
+                let quaternion = new THREE.Quaternion(x, y, z, w);
 
                 if (offset === null) {
-                   offset = [-1 / x, -1 / y, -1 / z, 1 / w];
+                   offset = quaternion
                 } else {
-                    x *= offset[0];
-                    y *= offset[1];
-                    z *= offset[2];
-                    w *= offset[3];
-
-                    let length = Math.sqrt(x * x + y * y + z * z + w * w);
-                    x /= length;
-                    y /= length;
-                    z /= length;
-                    w /= length;
+                    quaternion.multiplyQuaternions(quaternion, offset.inverse())
+                    quaternion.multiplyQuaternions(quaternion, axisOffset.inverse())
+                    x = quaternion.x;
+                    y = quaternion.y;
+                    z = quaternion.z;
+                    w = quaternion.w;
+                    offset.inverse()
+                    axisOffset.inverse()
                 }
 
                 let a1 = 1 - 2 * y * y - 2 * z * z;
@@ -43,9 +40,9 @@ Promise.all([navigator.permissions.query({ name: "accelerometer" }),
                 let d4 = 1;
 
                 var logo = document.getElementById("imgLogo");
-                logo.style.webkitTransform = `matrix3d(${a1}, ${b1}, ${c1}, ${d1}, ${a2}, ${b2}, ${c2}, ${d2}, ${a3}, ${b3}, ${c3}, ${d3}, ${a4}, ${b4}, ${c4}, ${d4})`;
-                logo.style.MozTransform = `matrix3d(${a1}, ${b1}, ${c1}, ${d1}, ${a2}, ${b2}, ${c2}, ${d2}, ${a3}, ${b3}, ${c3}, ${d3}, ${a4}, ${b4}, ${c4}, ${d4})`;
-                logo.style.transform = `matrix3d(${a1}, ${b1}, ${c1}, ${d1}, ${a2}, ${b2}, ${c2}, ${d2}, ${a3}, ${b3}, ${c3}, ${d3}, ${a4}, ${b4}, ${c4}, ${d4})`;
+                logo.style.webkitTransform = `matrix3d(${b1}, ${-c1}, ${a1}, ${d1}, ${b2}, ${-c2}, ${a2}, ${d2}, ${b3}, ${-c3}, ${a3}, ${d3}, ${b4}, ${-c4}, ${a4}, ${d4})` + "rotate(90deg)";
+                logo.style.MozTransform = `matrix3d(${b1}, ${-c1}, ${a1}, ${d1}, ${b2}, ${-c2}, ${a2}, ${d2}, ${b3}, ${-c3}, ${a3}, ${d3}, ${b4}, ${-c4}, ${a4}, ${d4})` + "rotate(90deg)";
+                logo.style.transform = `matrix3d(${b1}, ${-c1}, ${a1}, ${d1}, ${b2}, ${-c2}, ${a2}, ${d2}, ${b3}, ${-c3}, ${a3}, ${d3}, ${b4}, ${-c4}, ${a4}, ${d4})` + "rotate(90deg)";
             });
             sensor.addEventListener('error', error => {
                 if (event.error.name == 'NotReadableError') {
