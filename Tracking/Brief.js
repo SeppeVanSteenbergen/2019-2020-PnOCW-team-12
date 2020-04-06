@@ -1,7 +1,7 @@
 
 // https://trackingjs.com/api/Brief.js.html
 class Brief {
-  static N = 128
+  static N = 512
   static randomImageOffsets = {}
   static randomWindowOffsets = null
 

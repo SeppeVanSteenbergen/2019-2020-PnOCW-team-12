@@ -90,11 +90,22 @@ function grayScaleMatrix(rgbaPixels, width) {
   return matrix;
 }
 
-function grayScaleImgData(rgbaPixels) {
-    let gray = []
-    for(let i = 0; i < rgbaPixels.length; i += 4) {
-        let grayScale = 0.3 * rgbaPixels[i] + 0.59 * rgbaPixels[i + 1] + 0.11 * rgbaPixels[i + 1];
-        gray.push(grayScale, grayScale, grayScale, 255)
+function grayScaleImgData(imgData,fillRGBA) {
+    let pixels = imgData.data
+    let gray = new Uint8ClampedArray(pixels.length);
+    let p = 0;
+    let w = 0;
+    for (let i = 0; i < imgData.height; i++) {
+        for (let j = 0; j < imgData.width; j++) {
+            let value = pixels[w] * 0.299 + pixels[w + 1] * 0.587 + pixels[w + 2] * 0.114;
+            gray[p++] = value;
+            if (fillRGBA) {
+                gray[p++] = value;
+                gray[p++] = value;
+                gray[p++] = pixels[w + 3];
+            }
+            w += 4;
+        }
     }
-    return gray
+    return gray;
 }

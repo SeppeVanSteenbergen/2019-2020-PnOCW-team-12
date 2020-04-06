@@ -34,18 +34,18 @@
 
         // config
         let framerate = 0 // ms wait time
-        let own = true  // own implementatin of trackerjs
+        let own = false  // own implementation of trackerjs
         let firstCompare = false  // only compare next frames with first, or compare with previous frame
 
         let matrix3d = false  // using 3D matrix or 2D matrix
         let onlyTranslation = false
 
         //Fast config
-        let hold = 30 // threshold
+        let hold = 50 // threshold
 
         // Brief settings
         tracking.Brief.N = 512   //  128,256,512. (4,8,16)  N/32 descriptor words per keypoint
-        let confidence = 0.9 // how sure when matching keypoints
+        let confidence = 0.7 // how sure when matching keypoints
 
         // ransac settings
         let model_size = 4; // minimum points to estimate motion
@@ -95,6 +95,7 @@
 
         let previousDescriptor = null
         let previousCorners = null
+        let previousVariance = null
 
         let matches = null
         let trans
@@ -130,7 +131,7 @@
             tracking.Fast.THRESHOLD = hold
             ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
             let imgData = ctx.getImageData(0,0,canvas.width, canvas.height)
-            let grayPixels = grayScaleImgData(imgData.data)
+            let grayPixels = grayScaleImgData(imgData,false)
             //own
             if(own) {
                 let corners = FASTDetector(imgData.data, canvas.width, hold)
@@ -162,31 +163,11 @@
                     }
                     out.innerText = "x: " + trans.x + " y: " + trans.y
 	            }
-                try {
-                    if (previousCorners !== null && !onlyTranslation) {
-                        let k1 = []
-                        let k2 = []
-
-                        for(let i = 0; i < matches.length; i++) {
-                            k1[i] = {x:matches[i].keypoint1[0], y: matches[i].keypoint1[1]}
-                            k2[i] = {x:matches[i].keypoint2[0], y: matches[i].keypoint2[1]}
-                        }
-                        //mtx
-                        let m = estimateTransformation(k1, k2)
-                    } else {
-                        game.style.transform = ''
-                    }
-                }catch(e) {
-                    console.log(e)
-                }
-
 
                 if(!firstCompare || previousDescriptor === null) {
                     previousDescriptor = descriptor
                     previousCorners = corners
                 }
-
-
 
                 //draw game
                 if(firstCompare) {

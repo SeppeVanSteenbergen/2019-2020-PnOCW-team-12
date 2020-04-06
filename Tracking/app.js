@@ -16,10 +16,6 @@ app.get('/FASTDetector.js', (req, res) => {
   res.sendFile(path.join(__dirname, 'FastDetector.js'))
 })
 
-app.get('/Fast.js', (req, res) => {
-  res.sendFile(path.join(__dirname, 'Fast.js'))
-})
-
 app.get('/Brief.js', (req, res) => {
   res.sendFile(path.join(__dirname, 'Brief.js'))
 })
