@@ -257,11 +257,11 @@ export default class Image {
       let pixel = this.positionToPixel(i)
       let x = pixel[0]
       let y = pixel[1]
-      if (ColorRange.checkColor(H, S, L, 'blueGreen')) {
+      if (ColorRange.checkColor(H, S, L, 'blue')) {
         this.matrix[y][x] = 1
-      } else if (ColorRange.checkColor(H, S, L, 'yellow')) {
+      } else if (ColorRange.checkColor(H, S, L, 'green')) {
         this.matrix[y][x] = 2
-      } else if (ColorRange.checkColor(H, S, L, 'purple')) {
+      } else if (ColorRange.checkColor(H, S, L, 'red')) {
         this.matrix[y][x] = 3
       } else {
         this.matrix[y][x] = 0
