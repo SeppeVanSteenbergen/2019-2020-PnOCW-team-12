@@ -12,8 +12,16 @@ app.get('/tracking.js', (req, res) => {
   res.sendFile(path.join(__dirname, '/build/tracking-min.js'))
 })
 
-app.get('/Fast.js', (req, res) => {
+app.get('/FASTDetector.js', (req, res) => {
   res.sendFile(path.join(__dirname, 'FastDetector.js'))
+})
+
+app.get('/Fast.js', (req, res) => {
+  res.sendFile(path.join(__dirname, 'Fast.js'))
+})
+
+app.get('/Brief.js', (req, res) => {
+  res.sendFile(path.join(__dirname, 'Brief.js'))
 })
 
 app.get('/pageScript.js', (req, res) => {

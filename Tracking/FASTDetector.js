@@ -72,7 +72,7 @@ function bresenhamCircle(midPointCoo) {
   return circle;
 }
 
-function grayScaleMatrix(rgbaPixels, width){
+function grayScaleMatrix(rgbaPixels, width) {
     let y = 0;
     let matrix = [[]];
     for(let i = 0; i < rgbaPixels.length; i += 4){
@@ -81,11 +81,20 @@ function grayScaleMatrix(rgbaPixels, width){
         //let grayScale = (rgbaPixels[i] + rgbaPixels[i + 1] + rgbaPixels[i + 2]) / 3;
         if(matrix[y].length >= width){
             y++;
-            if(i != rgbaPixels.length - 1)
+            if(i !== rgbaPixels.length - 1)
             matrix.push([]);
         }
         matrix[y].push(grayScale);
   }
 
   return matrix;
+}
+
+function grayScaleImgData(rgbaPixels) {
+    let gray = []
+    for(let i = 0; i < rgbaPixels.length; i += 4) {
+        let grayScale = 0.3 * rgbaPixels[i] + 0.59 * rgbaPixels[i + 1] + 0.11 * rgbaPixels[i + 1];
+        gray.push(grayScale, grayScale, grayScale, 255)
+    }
+    return gray
 }

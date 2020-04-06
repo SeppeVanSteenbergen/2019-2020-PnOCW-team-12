@@ -1,35 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+	<meta charset="UTF-8">
+	<title>Title</title>
 </head>
 <body>
 <button onclick="toggleSettings()">toggle settings</button>
 <div id="settings">
-    <label><input type="checkbox" id="checkboxCompare" onchange="firstCompare = this.checked">compareWithFirst</label><br/>
-    <label><input type="text"  id="framerate" oninput="framerate = this.value"> frameWait</label><br/>
-    <label><input type="text"  id="hold" oninput="hold = this.value"> threshold</label><br/>
-    <label><input type="text"  id="confidence" oninput="confidence = this.value"> confidenceThreshold</label><br/>
-    <label><input type="checkbox" id="onlytrans" onchange="onlyTranslation = this.checked; this.checked?matrixlabel.style.display = 'none':matrixlabel.style.display = 'block'">Only Translation</label><br/>
-    <label id="matrixlabel"><input type="checkbox" id="matrix3d" onchange="matrix3d = this.checked">use 3D matrix</label><br/>
-    <button onclick="player = {x:200,y:200}">Reset Position</button>
+	<label><input type="checkbox" id="checkboxCompare" onchange="firstCompare = this.checked">compareWithFirst</label><br/>
+	<label><input type="text"  id="framerate" oninput="framerate = this.value"> frameWait</label><br/>
+	<label><input type="text"  id="hold" oninput="hold = this.value"> threshold</label><br/>
+	<label><input type="text"  id="confidence" oninput="confidence = this.value"> confidenceThreshold</label><br/>
+	<label><input type="checkbox" id="onlytrans" onchange="onlyTranslation = this.checked; this.checked?matrixlabel.style.display = 'none':matrixlabel.style.display = 'block'">Only Translation</label><br/>
+	<label id="matrixlabel"><input type="checkbox" id="matrix3d" onchange="matrix3d = this.checked">use 3D matrix</label><br/>
+	<button onclick="player = {x:200,y:200}">Reset Position</button>
 </div>
 <p id="out"></p>
-    <canvas id="canv"></canvas>
+<canvas id="canv"></canvas>
 <canvas style="border: 3px solid black" id="game"></canvas>
 <video id="vid"></video>
 <img id="homer" src="/homer.jpg" style="display:none"/>
 </body>
 
 <footer>
-    <script src="/FASTDetector.js"></script>
-    <script src="/pageScript.js"></script>
-    <script src="/tracking.js"></script>
-    <script src="/Fast.js"></script>
-    <script src="/jsfeat.js"></script>
+	<script src="/FASTDetector.js"></script>
+	<script src="/Brief.js"></script>
+	<script src="/pageScript.js"></script>
+	<script src="/tracking.js"></script>
+	<script src="/Fast.js"></script>
+	<script src="/jsfeat.js"></script>
 
-    <script lang="text/javascript">
+	<script lang="text/javascript">
 
         // config
         let framerate = 0 // ms wait time
@@ -73,11 +74,11 @@
         document.getElementById('onlytrans').checked = onlyTranslation
 
         function toggleSettings() {
-          if(settings.style.display === 'none') {
-            settings.style.display = 'block'
-          } else {
-            settings.style.display = 'none'
-          }
+            if(settings.style.display === 'none') {
+                settings.style.display = 'block'
+            } else {
+                settings.style.display = 'none'
+            }
         }
 
         let game = document.getElementById('game')
@@ -86,8 +87,8 @@
         game.height = 400
 
         let player = {
-          x:200,
-          y:200
+            x:200,
+            y:200
         }
 
         video.style.display = 'none'
@@ -98,135 +99,204 @@
         let matches = null
         let trans
         let out = document.getElementById('out')
-      // Javascript
-      navigator.mediaDevices.getUserMedia({
-          video: {
-            facingMode: 'environment'
-          },
-        audio:false
-        }
-      ).then(function(stream) {
-        video.srcObject = stream;
-        video.onloadedmetadata = function(e) {
-          video.play();
-          canvas.width = video.videoWidth
-          canvas.height = video.videoHeight
-          draw()
-        };
-      }).catch(function(err) {
-        // deal with an error (such as no webcam)
-      });
+        // Javascript
+        navigator.mediaDevices.getUserMedia({
+                video: {
+                    facingMode: 'environment'
+                },
+                audio:false
+            }
+        ).then(function(stream) {
+            video.srcObject = stream;
+            video.onloadedmetadata = function(e) {
+                video.play();
+                canvas.width = video.videoWidth
+                canvas.height = video.videoHeight
+                draw()
+            };
+        }).catch(function(err) {
+            // deal with an error (such as no webcam)
+        });
 
 
 
-      video.addEventListener('play', function() {
+        video.addEventListener('play', function() {
 
-      }, false);
+        }, false);
 
 
 
         function draw() {
-          tracking.Fast.THRESHOLD = hold
-          ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-          //own
-          if(own) {
-            let corners = FASTDetector(ctx.getImageData(0,0,canvas.width, canvas.height).data, canvas.width, hold)
-            //console.log(corners)
-            for (let i = 0; i < corners.length; i++) {
-              ctx.fillStyle = '#f00';
-              ctx.fillRect(corners[i][0], corners[i][1], 3, 3);
-            }
-          } else {
-            let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-            let gray = tracking.Image.grayscale(imageData.data, canvas.width, canvas.height);
-            let corners = tracking.Fast.findCorners(gray, canvas.width, canvas.height);
-
-            trans = {
-              x: 0,
-              y: 0
-            }
-
-            let descriptor = tracking.Brief.getDescriptors(gray, canvas.width, corners);
-            if(previousDescriptor !== null) {
-              matches = tracking.Brief.reciprocalMatch(previousCorners, previousDescriptor, corners, descriptor);
-                let selectedCount = 0
-              for(let i = 0; i < matches.length; i++) {
-                if(matches[i].confidence > confidence) {
-                  selectedCount++
-                  trans.x += matches[i].keypoint2[0] - matches[i].keypoint1[0]
-                  trans.y += matches[i].keypoint2[1] - matches[i].keypoint1[1]
+            tracking.Fast.THRESHOLD = hold
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            let imgData = ctx.getImageData(0,0,canvas.width, canvas.height)
+            let grayPixels = grayScaleImgData(imgData.data)
+            //own
+            if(own) {
+                let corners = FASTDetector(imgData.data, canvas.width, hold)
+                //console.log(corners)
+                for (let i = 0; i < corners.length; i++) {
+                    ctx.fillStyle = '#f00';
+                    ctx.fillRect(corners[i][0], corners[i][1], 3, 3);
                 }
-              }
-              if(selectedCount > 0) {
-                trans.x = trans.x / selectedCount
-                trans.y = trans.y / selectedCount
-              }
 
-
-              out.innerText = "x: " + trans.x + " y: " + trans.y
-            }
-            try {
-              if (previousCorners !== null && !onlyTranslation) {
-                let k1 = []
-                let k2 = []
-
-                for(let i = 0; i < matches.length; i++) {
-                  k1[i] = {x:matches[i].keypoint1[0], y: matches[i].keypoint1[1]}
-                  k2[i] = {x:matches[i].keypoint2[0], y: matches[i].keypoint2[1]}
+                trans = {
+                    x: 0,
+                    y: 0
                 }
-                //mtx
-                let m = estimateTransformation(k1, k2)
 
-                if(matrix3d){
-                  game.style.transform = 'matrix3d('+m[0]+','+m[3]+',0,'+m[6]+','+
-                                                m[1]+','+m[4]+',0,'+m[7]+','+
-                                                '0,0,1,0,'+
-                                                m[2]+','+m[5]+',0,'+m[8]+')'
+                let descriptor = Brief.getDescriptors(grayPixels, canvas.width, corners)
+	            if(previousDescriptor !== null) {
+	                matches = Brief.reciprocalMatch(previousCorners, previousDescriptor, corners, descriptor)
+		            let selectedCount = 0
+		            for(let i = 0; i < matches.length; i++) {
+		                if(matches[i].confidence > confidence) {
+		                    selectedCount++
+			                trans.x += matches[i].keypoint2[0] - matches[i].keypoint1[0]
+                            trans.y += matches[i].keypoint2[1] - matches[i].keypoint1[1]
+		                }
+		            }
+                    if(selectedCount > 0) {
+                        trans.x = trans.x / selectedCount
+                        trans.y = trans.y / selectedCount
+                    }
+                    out.innerText = "x: " + trans.x + " y: " + trans.y
+	            }
+                try {
+                    if (previousCorners !== null && !onlyTranslation) {
+                        let k1 = []
+                        let k2 = []
+
+                        for(let i = 0; i < matches.length; i++) {
+                            k1[i] = {x:matches[i].keypoint1[0], y: matches[i].keypoint1[1]}
+                            k2[i] = {x:matches[i].keypoint2[0], y: matches[i].keypoint2[1]}
+                        }
+                        //mtx
+                        let m = estimateTransformation(k1, k2)
+                    } else {
+                        game.style.transform = ''
+                    }
+                }catch(e) {
+                    console.log(e)
+                }
+
+
+                if(!firstCompare || previousDescriptor === null) {
+                    previousDescriptor = descriptor
+                    previousCorners = corners
+                }
+
+
+
+                //draw game
+                if(firstCompare) {
+                    player.x = trans.x + 200
+                    player.y = trans.y + 200
                 } else {
-                  game.style.transform = 'matrix('+m[0]+','+m[3]+','+
-                    m[1]+','+m[4]+','+
-                    m[2]+','+m[5]+')'
+                    player.x += trans.x
+                    player.y += trans.y
+                }
+                ctg.clearRect(0, 0, game.width, game.height)
+                ctg.drawImage(homer, -130,0, 700,400)
+                ctg.fillStyle = '#f00';
+                ctg.fillRect(player.x, player.y, 20, 20);
+
+
+                // draw keypoints
+                for (let i = 0; i < corners.length; i += 2) {
+                    ctx.fillStyle = '#f00';
+                    ctx.fillRect(corners[i], corners[i + 1], 3, 3);
+                }
+            } else {
+                let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                let gray = tracking.Image.grayscale(imageData.data, canvas.width, canvas.height);
+                let corners = tracking.Fast.findCorners(gray, canvas.width, canvas.height);
+
+                trans = {
+                    x: 0,
+                    y: 0
                 }
 
-                console.log(m)
-              } else {
-                game.style.transform = ''
-              }
-            }catch(e) {
-              console.log(e)
+                let descriptor = tracking.Brief.getDescriptors(gray, canvas.width, corners);
+                if(previousDescriptor !== null) {
+                    matches = tracking.Brief.reciprocalMatch(previousCorners, previousDescriptor, corners, descriptor);
+                    let selectedCount = 0
+                    for(let i = 0; i < matches.length; i++) {
+                        if(matches[i].confidence > confidence) {
+                            selectedCount++
+                            trans.x += matches[i].keypoint2[0] - matches[i].keypoint1[0]
+                            trans.y += matches[i].keypoint2[1] - matches[i].keypoint1[1]
+                        }
+                    }
+                    if(selectedCount > 0) {
+                        trans.x = trans.x / selectedCount
+                        trans.y = trans.y / selectedCount
+                    }
+
+
+                    out.innerText = "x: " + trans.x + " y: " + trans.y
+                }
+                try {
+                    if (previousCorners !== null && !onlyTranslation) {
+                        let k1 = []
+                        let k2 = []
+
+                        for(let i = 0; i < matches.length; i++) {
+                            k1[i] = {x:matches[i].keypoint1[0], y: matches[i].keypoint1[1]}
+                            k2[i] = {x:matches[i].keypoint2[0], y: matches[i].keypoint2[1]}
+                        }
+                        //mtx
+                        let m = estimateTransformation(k1, k2)
+
+                        if(matrix3d){
+                            game.style.transform = 'matrix3d('+m[0]+','+m[3]+',0,'+m[6]+','+
+                                m[1]+','+m[4]+',0,'+m[7]+','+
+                                '0,0,1,0,'+
+                                m[2]+','+m[5]+',0,'+m[8]+')'
+                        } else {
+                            game.style.transform = 'matrix('+m[0]+','+m[3]+','+
+                                m[1]+','+m[4]+','+
+                                m[2]+','+m[5]+')'
+                        }
+
+                        console.log(m)
+                    } else {
+                        game.style.transform = ''
+                    }
+                }catch(e) {
+                    console.log(e)
+                }
+
+
+                if(!firstCompare || previousDescriptor === null) {
+                    previousDescriptor = descriptor
+                    previousCorners = corners
+                }
+
+
+
+                //draw game
+                if(firstCompare) {
+                    player.x = trans.x + 200
+                    player.y = trans.y + 200
+                } else {
+                    player.x += trans.x
+                    player.y += trans.y
+                }
+                ctg.clearRect(0, 0, game.width, game.height)
+                ctg.drawImage(homer, -130,0, 700,400)
+                ctg.fillStyle = '#f00';
+                ctg.fillRect(player.x, player.y, 20, 20);
+
+
+                // draw keypoints
+                for (let i = 0; i < corners.length; i += 2) {
+                    ctx.fillStyle = '#f00';
+                    ctx.fillRect(corners[i], corners[i + 1], 3, 3);
+                }
             }
 
-
-            if(!firstCompare || previousDescriptor === null) {
-              previousDescriptor = descriptor
-              previousCorners = corners
-            }
-
-
-
-            //draw game
-            if(firstCompare) {
-              player.x = trans.x + 200
-              player.y = trans.y + 200
-            } else {
-              player.x += trans.x
-              player.y += trans.y
-            }
-            ctg.clearRect(0, 0, game.width, game.height)
-            ctg.drawImage(homer, -130,0, 700,400)
-            ctg.fillStyle = '#f00';
-            ctg.fillRect(player.x, player.y, 20, 20);
-
-
-            // draw keypoints
-            for (let i = 0; i < corners.length; i += 2) {
-              ctx.fillStyle = '#f00';
-              ctx.fillRect(corners[i], corners[i + 1], 3, 3);
-            }
-          }
-
-          setTimeout(draw, framerate);
+            setTimeout(draw, framerate);
         }
 
         /**
@@ -235,42 +305,42 @@
          * @param to
          */
         function estimateTransformation(from, to) {
-          // this class allows you to use above Motion Kernels
+            // this class allows you to use above Motion Kernels
             // to estimate motion even with wrong correspondences
-          let ransac = jsfeat.motion_estimator.ransac;
+            let ransac = jsfeat.motion_estimator.ransac;
 
             // create homography kernel
             // you can reuse it for different point sets
-          let homo_kernel = new jsfeat.motion_model.homography2d();
-          let transform = new jsfeat.matrix_t(3, 3, jsfeat.F32_t | jsfeat.C1_t);
-          let count = from.length;
-          //let from = [];
-          //let to = [];
+            let homo_kernel = new jsfeat.motion_model.homography2d();
+            let transform = new jsfeat.matrix_t(3, 3, jsfeat.F32_t | jsfeat.C1_t);
+            let count = from.length;
+            //let from = [];
+            //let to = [];
 
-          /*for(let i = 0; i < count; ++i) {
-            // you can use keypoint_t structure
-            // or just provide object with x and y properties
-            from[i] = { "x":Math.random()*320, "y":Math.random()*240 };
-            to[i] = { "x":from[i].x + Math.random()*5, "y":from[i].y+Math.random()*5 };
-          }*/
+            /*for(let i = 0; i < count; ++i) {
+			  // you can use keypoint_t structure
+			  // or just provide object with x and y properties
+			  from[i] = { "x":Math.random()*320, "y":Math.random()*240 };
+			  to[i] = { "x":from[i].x + Math.random()*5, "y":from[i].y+Math.random()*5 };
+			}*/
 
-          /*for(let i = 0; i < keypoints1.length; i += 2) {
-            from[i/2] = {x:keypoints1[i], y:keypoints1[i+1]}
-            to[i/2] = {x:keypoints2[i], y:keypoints2[i+1]}
-          }*/
+            /*for(let i = 0; i < keypoints1.length; i += 2) {
+			  from[i/2] = {x:keypoints1[i], y:keypoints1[i+1]}
+			  to[i/2] = {x:keypoints2[i], y:keypoints2[i+1]}
+			}*/
 
 
             // each point will be marked as good(1) or bad(0)
-          let mask = new jsfeat.matrix_t(count, 1, jsfeat.U8_t | jsfeat.C1_t);
+            let mask = new jsfeat.matrix_t(count, 1, jsfeat.U8_t | jsfeat.C1_t);
 
 
-          let params = new jsfeat.ransac_params_t(model_size, thresh, eps, prob);
+            let params = new jsfeat.ransac_params_t(model_size, thresh, eps, prob);
 
 
 
-          let ok =  ransac(params, homo_kernel, from, to, count, transform, mask, max_iters);
+            let ok =  ransac(params, homo_kernel, from, to, count, transform, mask, max_iters);
 
-          return transform.data
+            return transform.data
         }
 
         /**
@@ -280,21 +350,21 @@
          * @returns {any[]}
          */
         function multiply(a, b) {
-          var aNumRows = a.length, aNumCols = a[0].length,
-            bNumRows = b.length, bNumCols = b[0].length,
-            m = new Array(aNumRows);  // initialize array of rows
-          for (var r = 0; r < aNumRows; ++r) {
-            m[r] = new Array(bNumCols); // initialize the current row
-            for (var c = 0; c < bNumCols; ++c) {
-              m[r][c] = 0;             // initialize the current cell
-              for (var i = 0; i < aNumCols; ++i) {
-                m[r][c] += a[r][i] * b[i][c];
-              }
+            var aNumRows = a.length, aNumCols = a[0].length,
+                bNumRows = b.length, bNumCols = b[0].length,
+                m = new Array(aNumRows);  // initialize array of rows
+            for (var r = 0; r < aNumRows; ++r) {
+                m[r] = new Array(bNumCols); // initialize the current row
+                for (var c = 0; c < bNumCols; ++c) {
+                    m[r][c] = 0;             // initialize the current cell
+                    for (var i = 0; i < aNumCols; ++i) {
+                        m[r][c] += a[r][i] * b[i][c];
+                    }
+                }
             }
-          }
-          return m;
+            return m;
         }
 
-    </script>
+	</script>
 </footer>
 </html>
