@@ -29,8 +29,11 @@ function FASTDetector(rgbaPixels, width, threshold){
             nbOutOfThreshold = 0;
           }
         }
-
-        if (nbOutOfThreshold >= nbContiguous) interestingPoints.push([x, y]);
+        //x en y apart, dit is efficiënter qua geheugen
+        if (nbOutOfThreshold >= nbContiguous) {
+          interestingPoints.push(x);
+          interestingPoints.push(y);
+        }
       }
     }
   }
