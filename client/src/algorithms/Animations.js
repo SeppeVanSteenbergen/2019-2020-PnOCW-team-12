@@ -192,12 +192,12 @@ export default class Animations {
     ctx.restore()
   }
 
-  getNextFrame(frame, startTime) {
+  getNextFrame(frame, startTime, currentTime) {
     // console.log(frame-6)
     // console.log(Math.round((Date.now()-startTime)/(1000/this.fps)))
     // console.log("-----")
 
-    if (frame - 6 < Math.round((Date.now() - startTime) / (1000 / this.fps))) {
+    if (frame - 6 < Math.round((currentTime - startTime) / (1000 / this.fps))) {
       this.updateFrame()
       this.updateFrame()
       return {
@@ -210,7 +210,7 @@ export default class Animations {
       }
     } else if (
       frame - 6 >
-      Math.round((Date.now() - startTime) / (1000 / this.fps))
+      Math.round((currentTime - startTime) / (1000 / this.fps))
     ) {
       return {
         x: this.position.x,
