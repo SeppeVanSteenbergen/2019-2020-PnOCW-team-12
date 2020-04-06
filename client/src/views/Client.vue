@@ -202,7 +202,7 @@ export default {
     },
     displayDetectionScreenHandler(data) {
       const id = this.$store.getters.getRole.client_id
-      let factor = 0.03
+      let factor = 0.06
       const borderWidth =
         screen.width < screen.height
           ? screen.width * factor
