@@ -75,7 +75,9 @@ export default {
       delaunayImage: null,
       videoStartTime: null,
       videoSpeedupDelta: 0.05,
-      videoSyncThreshold: 16 // how many ms difference from clock before speeding up/slowing down video
+      videoSyncThreshold: 16, // how many ms difference from clock before speeding up/slowing down video
+      animationRunning: false, // if the animation is currently running
+      animationFrame: 0
     }
   },
   mounted() {
@@ -139,6 +141,14 @@ export default {
           this.setDefaultCSS()
           this.animationInitHandler(message.data)
           break
+        case 'animation-start':
+          this.setDefaultCSS()
+          this.animationRunning = true
+          this.animationStartHandler(message.data)
+          break
+        case 'animation-stop':
+          this.setDefaultCSS()
+          break
         case 'delaunay-image':
           this.setDefaultCSS()
           this.delaunayHandler(message.data)
@@ -146,6 +156,7 @@ export default {
         case 'load-image':
           this.setDefaultCSS()
           this.loadImageHandler(message.data)
+          break
         default:
           console.log('command not supported')
           break
@@ -175,6 +186,7 @@ export default {
       clearInterval(this.videoInterval)
       this.canvas.style = this.defaultCSS
       this.canvasMode = true
+      this.animationRunning = false
     },
     setVideoMode() {
       this.canvasMode = false
@@ -548,9 +560,32 @@ export default {
     },
     animationInitHandler(data) {
       //create animation object
-      this.animation = new Animation(null, this.delaunayImage, true)
+      this.animation = new Animation(
+        data.triangulation,
+        this.delaunayImage,
+        true,
+        data.list
+      )
 
       this.delaunayHandler(data)
+    },
+    animationStartHandler(data) {
+      if (!this.animationRunning) return
+      let info = this.animation.getNextFrame(
+        this.animationFrame,
+        data.startTime,
+        Date.now() + this.$store.state.sync.delta
+      )
+      this.animation.drawAnimal(
+        this.canvas,
+        info.x,
+        info.y,
+        info.angle,
+        info.frame,
+        info.right,
+        true
+      )
+      requestAnimationFrame(this.animationStartHandler)
     },
     delaunayHandler(data) {
       //create delaunay image and drawSnow on canvas

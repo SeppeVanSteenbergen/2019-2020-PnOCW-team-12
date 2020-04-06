@@ -875,13 +875,25 @@ export default {
     },
 
     executeStartAnimation() {
-      if (this.animationInterval !== null) {
+      // old animation way
+      /*if (this.animationInterval !== null) {
         clearInterval(this.animationInterval)
       }
       this.animationInterval = setInterval(
         this.sendAnimation,
         this.animationFramerate
-      )
+      )*/
+
+      // new way
+      let obj = {
+        payload: {
+          type: 'animation-start',
+          data: {}
+        },
+        to: 'all'
+      }
+
+      this.$socket.emit('screenCommand', obj)
     },
 
     sendAnimation() {
@@ -892,10 +904,21 @@ export default {
       this.$socket.emit('af', obj)
     },
     executeStopAnimation() {
-      if (this.animationInterval !== null) {
+      //old way
+      /*if (this.animationInterval !== null) {
         clearInterval(this.animationInterval)
       }
-      this.animationInterval = null
+      this.animationInterval = null*/
+
+      // new way
+      let obj = {
+        payload: {
+          type: 'animation-stop',
+          data: {}
+        },
+        to: 'all'
+      }
+      this.$socket.emit('screenCommand', obj)
     },
     executeInitAnimation() {
       let tri = []
@@ -911,6 +934,11 @@ export default {
       let height = this.analysedImage.height
 
       let info = this.analysedImage.createPictureCanvas(0, 0)
+
+      let list = []
+      for (let i = 0; i < 20; i++) {
+        list.push(Math.round(Math.random() * 30))
+      }
 
       for (let i = 0; i < this.analysedImage.screens.length; i++) {
         console.log('looping through screens')
@@ -945,6 +973,7 @@ export default {
               midpoints: midpoints,
               width: width,
               height: height,
+              list: list,
 
               css: css,
               ox: info.minx,
@@ -1235,7 +1264,7 @@ export default {
         this.analysedImage = AlgorithmService.fullAnalysis(
           inputImageData,
           clientInfo,
-                this
+          this
         )
       } catch (e) {
         console.log(e)

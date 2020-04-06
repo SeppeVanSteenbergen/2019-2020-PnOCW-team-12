@@ -22,7 +22,7 @@ module.exports = {
   getSocketFromID(socket_id) {
     return io.eio.clients[socket_id]
   },
-  /*
+  /**
 	a screen command is of form
 	{
 		payload: {
@@ -146,7 +146,21 @@ module.exports = {
           h: (height in px, integer value for transformation)
       }
      }
-	*/
+     
+     startAnimation
+     {
+      type: 'animation-start'
+      data: {
+        startTime: [DateTime in ms]
+      }
+
+      stopAnimation
+      {
+        type: 'animation-stop'
+        data: {}
+      }
+     
+	**/
 
   // TODO check for message integrity
   screenCommand(user_id, message) {
@@ -160,7 +174,18 @@ module.exports = {
       this.handleCountDown(user_id, message.payload.data)
     } else if (message.payload.type === 'start-video') {
       this.handleStartVideo(user_id)
+    } else if (message.payload.type === 'animation-start') {
+      this.handleAnimationStart(user_id, message)
     } else if (message.to !== 'all') {
+      this.sendDataByUserID('screenCommand', message.payload, message.to)
+    } else {
+      this.sendDataToRoomOfMaster('screenCommand', message.payload, user_id)
+    }
+  },
+
+  handleAnimationStart(user_id, message) {
+    message.payload.data.startTime = Date.now() + 200
+    if (message.to !== 'all') {
       this.sendDataByUserID('screenCommand', message.payload, message.to)
     } else {
       this.sendDataToRoomOfMaster('screenCommand', message.payload, user_id)
@@ -177,7 +202,6 @@ module.exports = {
         startTime: Date.now() + startOffset
       }
     }
-
 
     this.sendDataToRoom('screenCommand', payload, room_id)
   },
