@@ -261,7 +261,7 @@ export default class Image {
         this.matrix[y][x] = 1
       } else if (ColorRange.checkColor(H, S, L, 'yellow')) {
         this.matrix[y][x] = 2
-      } else if (ColorRange.checkColor(H, S, L, 'pink')) {
+      } else if (ColorRange.checkColor(H, S, L, 'purple')) {
         this.matrix[y][x] = 3
       } else {
         this.matrix[y][x] = 0
