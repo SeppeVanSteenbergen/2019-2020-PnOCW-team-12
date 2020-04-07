@@ -148,31 +148,35 @@ class Island {
       return a - b
     })
 
-    let slices = []
+    let index = []
     let prev = values[0]
     for (let i = 0; i < values.length; i++) {
       const v = values[i]
 
       if (v - prev > 3) {
-        slices.push(i)
+        index.push(i)
       }
 
       prev = v
     }
 
     let result = []
-
+    let slices = []
+    slices.push(values)
     let startSlice = 0
-    for (let i = 0; i < slices.length; i++) {
-      const s = slices[i]
-      let tmp = values.slice(startSlice, s)
+    for (let i = 0; i < index.length; i++) {
+      let s = index[i]
+      let piece = slices.pop()
+      let tmp = piece.slice(startSlice, s)
+      slices.push(piece.slice(s, piece.length - 1))
       if (tmp.length > result.length) {
         result = tmp
       }
-
       startSlice = s
     }
-
+    if (slices[slices.length-1].length > result.length) {
+      result = slices[slices.length-1]
+    }
     if (result.length === 0) {
       return values
     }

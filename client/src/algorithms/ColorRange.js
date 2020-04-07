@@ -12,6 +12,7 @@ export default class ColorRange {
   }
 
   static closestColor(H, S, L) {
+    if (S <= 30) return 'grey'
     if (L <= 10) return 'black'
     if (L >= 90) return 'white'
     let closest = Object.values(this.colors()).reduce(function(prev, curr) {
