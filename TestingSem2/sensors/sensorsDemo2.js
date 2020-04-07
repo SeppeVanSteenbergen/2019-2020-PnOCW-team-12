@@ -40,9 +40,8 @@ Promise.all([navigator.permissions.query({ name: "accelerometer" }),
                 let d4 = 1;
 
                 var logo = document.getElementById("imgLogo");
-                logo.style.webkitTransform = `matrix3d(${b1}, ${-c1}, ${a1}, ${d1}, ${b2}, ${-c2}, ${a2}, ${d2}, ${b3}, ${-c3}, ${a3}, ${d3}, ${b4}, ${-c4}, ${a4}, ${d4})` + "rotate(90deg)";
-                logo.style.MozTransform = `matrix3d(${b1}, ${-c1}, ${a1}, ${d1}, ${b2}, ${-c2}, ${a2}, ${d2}, ${b3}, ${-c3}, ${a3}, ${d3}, ${b4}, ${-c4}, ${a4}, ${d4})` + "rotate(90deg)";
-                logo.style.transform = `matrix3d(${b1}, ${-c1}, ${a1}, ${d1}, ${b2}, ${-c2}, ${a2}, ${d2}, ${b3}, ${-c3}, ${a3}, ${d3}, ${b4}, ${-c4}, ${a4}, ${d4})` + "rotate(90deg)";
+                logo.style.MozTransform = `matrix3d(${b1}, ${-c1}, ${a1}, ${d1}, ${b2}, ${-c2}, ${a2}, ${d2}, ${b3}, ${-c3}, ${a3}, ${d3}, ${a4}, ${b4}, ${c4}, ${d4})` + "rotate(90deg)";
+                logo.style.transform = `matrix3d(${b1}, ${-c1}, ${a1}, ${d1}, ${b2}, ${-c2}, ${a2}, ${d2}, ${b3}, ${-c3}, ${a3}, ${d3}, ${a4}, ${b4}, ${c4}, ${d4})` + "rotate(90deg)";
             });
             sensor.addEventListener('error', error => {
                 if (event.error.name == 'NotReadableError') {
