@@ -34,8 +34,8 @@
 
         // config
         let framerate = 0 // ms wait time
-        let own = false  // own implementation of trackerjs
-        let firstCompare = false  // only compare next frames with first, or compare with previous frame
+        let own = true  // own implementation of trackerjs
+        let firstCompare = true  // only compare next frames with first, or compare with previous frame
 
         let matrix3d = false  // using 3D matrix or 2D matrix
         let onlyTranslation = false
@@ -95,7 +95,8 @@
 
         let previousDescriptor = null
         let previousCorners = null
-        let previousVariance = null
+        let previousVarianceX = null
+        let previousVarianceY = null
 
         let matches = null
         let trans
@@ -135,6 +136,10 @@
             //own
             if(own) {
                 let corners = FASTDetector(imgData.data, canvas.width, hold)
+                let meanX = 0
+                let meanY = 0
+                let varianceX = 0
+                let varianceY = 0
                 //console.log(corners)
                 for (let i = 0; i < corners.length; i++) {
                     ctx.fillStyle = '#f00';
@@ -143,7 +148,8 @@
 
                 trans = {
                     x: 0,
-                    y: 0
+                    y: 0,
+	                z: 0
                 }
 
                 let descriptor = Brief.getDescriptors(grayPixels, canvas.width, corners)
@@ -157,9 +163,27 @@
                             trans.y += matches[i].keypoint2[1] - matches[i].keypoint1[1]
 		                }
 		            }
+                    for (let i = 0; i < matches.length; i +=1) { //TODO: make variance based on matches instead of corners
+                        meanX += matches[i].keypoint2[0]
+                        meanY += matches[i].keypoint2[1]
+                    }
+                    meanX = meanX/(matches.length)
+                    meanY = meanY/(matches.length)
+                    for (let i = 0; i < matches.length; i+=1) {
+                        varianceX += (matches[i].keypoint2[0]-meanX)^2
+                        varianceY += (matches[i].keypoint2[1]-meanY)^2
+                    }
+                    varianceX = varianceX/(matches.length)
+                    varianceY = varianceY/(matches.length)
                     if(selectedCount > 0) {
                         trans.x = trans.x / selectedCount
                         trans.y = trans.y / selectedCount
+                    }
+                    let diff = previousVarianceX-varianceX
+                    if(diff < 0) {
+                        console.log("zoom in: " + diff)
+                    } else if (diff > 0) {
+                        console.log("zoom out: "+ diff)
                     }
                     out.innerText = "x: " + trans.x + " y: " + trans.y
 	            }
@@ -186,7 +210,7 @@
                                 m[2]+','+m[5]+')'
                         }
 
-                        console.log(m)
+                        //console.log(m)
                     } else {
                         game.style.transform = ''
                     }
@@ -197,6 +221,8 @@
                 if(!firstCompare || previousDescriptor === null) {
                     previousDescriptor = descriptor
                     previousCorners = corners
+	                previousVarianceX = varianceX
+	                previousVarianceY = varianceY
                 }
 
                 //draw game
@@ -268,7 +294,7 @@
                                 m[2]+','+m[5]+')'
                         }
 
-                        console.log(m)
+                       // console.log(m)
                     } else {
                         game.style.transform = ''
                     }
