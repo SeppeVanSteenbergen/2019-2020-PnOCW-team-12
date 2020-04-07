@@ -19,7 +19,7 @@ imgElement.onload = function() {
   ctx.drawImage(imgElement, 0, 0, c.width, c.height)
   
   let imgData = ctx.getImageData(0, 0, c.width, c.height)
-  let imgDataResized = Image.resizeImageData(imgData, [1920, 1080])
+  let imgDataResized = Image.resizeImageData(imgData, [2560, 1440])
   let inputCanvas = document.getElementById('inputImage');
   let inputContext = inputCanvas.getContext('2d');
   inputContext.clearRect(0, 0, inputCanvas.width, inputCanvas.height);

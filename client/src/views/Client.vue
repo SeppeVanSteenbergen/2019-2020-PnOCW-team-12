@@ -553,7 +553,7 @@ export default {
 
       for (let i = 0; i < c.width * c.height; i++) {
         if (
-          imgData.data[i * 4 + 0] === 255 &&
+          imgData.data[i * 4] === 255 &&
           imgData.data[i * 4 + 1] === 255 &&
           imgData.data[i * 4 + 2] === 255
         ) {
