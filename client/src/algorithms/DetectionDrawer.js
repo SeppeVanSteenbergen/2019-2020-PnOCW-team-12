@@ -12,8 +12,8 @@ export default class DetectionDrawer {
     this.canvas.height = this.h
     this.barcodeColorValues = ['#ffffff', '#000000']
     this.ctx = this.canvas.getContext('2d')
-    //this.colors = ['#ff00ff', '#00ffff', '#ffff00']
-    this.colors = ['#ff0000', '#0000ff', '#00ff00']
+    this.colors = ['#ff00ff', '#00ffff', '#ffff00']
+    //this.colors = ['#ff0000', '#0000ff', '#00ff00']
     this.drawBorder(this.colors)
   }
 
