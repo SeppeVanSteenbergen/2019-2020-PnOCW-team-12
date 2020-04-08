@@ -10,8 +10,8 @@ export default class Animations {
     this.mouseImage = new window.Image()
     if (typeof config !== 'undefined') {
       if (xmasMode) {
-        this.catImage.src = config.backend.url + '/img/cat4_trans_xmas.png'
-        this.mouseImage.src = config.backend.url + '/img/mouse2_trans_xmas.png'
+        this.catImage.src = config.frontend.url + '/img/cat4_trans_xmas.png'
+        this.mouseImage.src = config.frontend.url + '/img/mouse2_trans_xmas.png'
       } else {
         this.catImage.src = config.backend.url + '/img/cat4_trans.png'
         this.mouseImage.src = config.backend.url + '/img/mouse2_trans.png'

@@ -321,9 +321,6 @@
                       <v-btn color="primary" @click="sendImageCSS">
                         Send Image Socket
                       </v-btn>
-                      <!--<v-btn color="primary" @click="sendCustomImage">
-                        Send Image
-                      </v-btn>-->
                       <canvas ref="drawCanvas"></canvas> </v-card
                   ></v-expansion-panel-content>
                 </v-expansion-panel>
@@ -1117,34 +1114,6 @@ export default {
           this.$refs.drawCanvas,
           this.analysedImage
         )
-      }
-    },
-    sendCustomImage() {
-      // create new image
-      let c = document.createElement('canvas')
-      c.width = this.$refs.drawCanvas.width
-      c.height = this.$refs.drawCanvas.height
-      let ctx = c.getContext('2d')
-
-      ctx.drawImage(
-        this.drawingImg,
-        this.x * this.drawCanvasScale,
-        this.y * this.drawCanvasScale,
-        this.drawingImg.width * this.drawCanvasScale,
-        this.drawingImg.height * this.drawCanvasScale,
-        0,
-        0,
-        this.drawingImgScale * this.drawingImg.width * this.drawCanvasScale,
-        this.drawingImgScale * this.drawingImg.height * this.drawCanvasScale
-      )
-      let img = ctx.getImageData(0, 0, c.width, c.height)
-
-      for (let i = 0; i < this.analysedImage.screens.length; i++) {
-        let s = this.analysedImage.screens[i].mapToScreenCV(img)
-        let user_id = this.myRoom.clients[
-          this.analysedImage.screens[i].clientCode
-        ]
-        this.sendImageToUser(s, user_id)
       }
     },
     imageToBase64(img) {

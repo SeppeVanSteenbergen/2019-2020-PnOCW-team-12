@@ -146,12 +146,11 @@ export default {
           this.animationInitHandler(message.data)
           break
         case 'animation-start':
-          this.setDefaultCSS()
           this.animationRunning = true
           this.animationStartHandler(message.data)
           break
         case 'animation-stop':
-          this.setDefaultCSS()
+          this.animationRunning = false
           break
         case 'delaunay-image':
           this.setDefaultCSS()
@@ -526,9 +525,11 @@ export default {
       this.$refs.vid.play()
     },
     pauseVideoHandler() {
+      clearInterval(this.videoInterval)
       this.$refs.vid.pause()
     },
     restartVideoHandler() {
+      clearInterval(this.videoInterval)
       this.$refs.vid.currentTime = 0
       //this.$refs.vid.load()
     },
@@ -576,6 +577,15 @@ export default {
     },
     animationStartHandler(data) {
       if (!this.animationRunning) return
+
+      let ctx = this.canvas.getContext('2d')
+      this.animation.drawSnow(this.canvas)
+      let c = document.createElement('canvas')
+      let ctx2 = c.getContext('2d')
+      c.width = this.delaunayImage.width
+      c.height = this.delaunayImage.height
+      ctx2.putImageData(this.delaunayImage, 0, 0)
+      ctx.drawImage(c, 0, 0)
       let info = this.animation.getNextFrame(
         this.animationFrame,
         data.startTime,
@@ -590,7 +600,7 @@ export default {
         info.right,
         true
       )
-      requestAnimationFrame(this.animationStartHandler)
+      requestAnimationFrame(() => this.animationStartHandler(data))
     },
     delaunayHandler(data) {
       //create delaunay image and drawSnow on canvas
