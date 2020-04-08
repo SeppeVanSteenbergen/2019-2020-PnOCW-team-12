@@ -4,6 +4,11 @@ import ColorSpace from './ColorSpace'
 import ColorRange from './ColorRange'
 
 export default class Image {
+  //Make a copy of an Image send by a worker to acces these function (current workaround, this class could be optimized to only use main thread used functions)
+  // constructor(image) {
+  //   img && Object.assign(this, image);
+  // }
+
   constructor(imgData, canvasName, colorSpace, clientInfo, communicator) {
     this.clientInfo = clientInfo
     this.setCommunicator(communicator)
@@ -313,7 +318,7 @@ export default class Image {
     this.drawer.drawCorners(island)
   }
 
-  findExtremeValues(width, height) {
+  static findExtremeValues(width, height, img) {
     let points = {
       minx: null,
       maxx: null,
@@ -324,14 +329,14 @@ export default class Image {
 
     let allCorners = []
 
-    this.screens.forEach(function(e) {
+    img.screens.forEach(function (e) {
       for (let key in e.corners) {
         allCorners.push(e.corners[key])
       }
     })
 
     //sort on x co
-    allCorners.sort(function(a, b) {
+    allCorners.sort(function (a, b) {
       return a[0] - b[0]
     })
 
@@ -339,7 +344,7 @@ export default class Image {
     points['maxx'] = allCorners[allCorners.length - 1][0]
 
     //sort on y co
-    allCorners.sort(function(a, b) {
+    allCorners.sort(function (a, b) {
       return a[1] - b[1]
     })
 
@@ -363,8 +368,8 @@ export default class Image {
    * @param {int} w image width
    * @param {int} h image height
    */
-  createPictureCanvas(w, h) {
-    let pictureCanvas = this.findExtremeValues(w, h)
+  static createPictureCanvas(w, h, img) {
+    let pictureCanvas = Image.findExtremeValues(w, h, img)
 
     w = Math.abs(pictureCanvas.maxx - pictureCanvas.minx)
     h = Math.abs(pictureCanvas.maxy - pictureCanvas.miny)
@@ -381,7 +386,7 @@ export default class Image {
   }
 
   showTransformatedImage(image) {
-    let info = this.createPictureCanvas(image.width, image.height)
+    let info = Image.createPictureCanvas(image.width, image.height, image)
 
     let ratio = Math.max(info.w / image.width, info.h / image.height)
 
@@ -432,7 +437,7 @@ export default class Image {
   calcRelativeScreens() {
     let originX = this.pictureCanvas.minx
     let originY = this.pictureCanvas.miny
-    this.screens.forEach(function(s) {
+    this.screens.forEach(function (s) {
       for (let key in s.corners) {
         if (s.corners.hasOwnProperty(key)) {
           s.relativeCorners[key][0] = s.corners[key][0] - originX
@@ -518,5 +523,9 @@ export default class Image {
 
   getPixels() {
     return this.pixels
+  }
+
+  static fromObject(image){
+    return Image.class(image);
   }
 }

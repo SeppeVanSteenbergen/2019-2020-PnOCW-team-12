@@ -150,12 +150,14 @@ class Image {
               //   'Island ' + this.islandID + 'is valid'
               // )
               console.log('Island ' + this.islandID + 'is valid')
-              try {
-                newIsland.finishIsland()
-                this.islands.push(newIsland)
-              } catch (err) {
-                console.log(err + ' in screen: ' + newIsland.getClientCode())
-              }
+              newIsland.finishIsland()
+              this.islands.push(newIsland)
+              // try {
+              //   newIsland.finishIsland()
+              //   this.islands.push(newIsland)
+              // } catch (err) {
+              //   console.log(err + ' in screen: ' + newIsland.getClientCode())
+              // }
             } else {
               // this.communicator.sendInfoMessage(
               //   'Island ' + this.islandID + 'is not valid, no island created'
@@ -246,7 +248,7 @@ class Image {
     this.screens = []
     this.calcIslandsFloodfill()
 
-    self.postMessage({text: 'UPDATE', pct: 20, msg: 'Floodfill done: found ' + this.islands.length + " islands"})
+    self.postMessage({text: 'UPDATE', pct: 20, msg: 'Floodfill done: found ' + this.islands.length + " island(s)"})
 
     for (let i = 0; i < this.islands.length; i++) {
       //Not allowed in a worker thread
@@ -329,7 +331,7 @@ class Image {
     this.drawer.drawCorners(island)
   }
 
-  findExtremeValues(width, height) {
+  static findExtremeValues(width, height, screens) {
     let points = {
       minx: null,
       maxx: null,
@@ -340,7 +342,7 @@ class Image {
 
     let allCorners = []
 
-    this.screens.forEach(function(e) {
+    screens.forEach(function(e) {
       for (let key in e.corners) {
         allCorners.push(e.corners[key])
       }
@@ -379,8 +381,8 @@ class Image {
    * @param {int} w image width
    * @param {int} h image height
    */
-  createPictureCanvas(w, h) {
-    let pictureCanvas = this.findExtremeValues(w, h)
+  static createPictureCanvas(w, h, screens) {
+    let pictureCanvas = Image.findExtremeValues(w, h, screens)
 
     w = Math.abs(pictureCanvas.maxx - pictureCanvas.minx)
     h = Math.abs(pictureCanvas.maxy - pictureCanvas.miny)
@@ -397,7 +399,7 @@ class Image {
   }
 
   showTransformatedImage(image) {
-    let info = this.createPictureCanvas(image.width, image.height)
+    let info = Image.createPictureCanvas(image.width, image.height, image.screens)
 
     let ratio = Math.max(info.w / image.width, info.h / image.height)
 
@@ -508,7 +510,8 @@ class Image {
    * @returns {*|ImageData}
    */
   getImgData() {
-    return Image.copyImageData(this.imgData);
+    // return Image.copyImageData(this.imgData);
+    return this.imgData;
     // let canvas = document.createElement('canvas')
     // canvas.width = this.width
     // canvas.height = this.height

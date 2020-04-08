@@ -424,6 +424,7 @@ import Animation from '../algorithms/Animations'
 import Communicator from '../algorithms/Communicator'
 import AnalyseEnv from '../env/AnalyseEnv'
 import WaitEnv from '../env/WaitEnv'
+import ImageAlg from '../algorithms/Image'
 
 export default {
   name: 'master',
@@ -1222,7 +1223,7 @@ export default {
       let inC = this.$refs.canva
       let outC = this.$refs.resultCanvas
 
-      outC.style.visibility = "hidden"
+      // outC.style.visibility = "hidden"
       // this.$refs.delaunay.visibility = "hidden"
       // this.$refs.delaunay2.visibility = "hidden"
 
@@ -1275,16 +1276,7 @@ export default {
 
       this.analysedImage = waitEnv.getResult()
 
-      // try {
-      //   this.analysedImage = AlgorithmService.fullAnalysis(
-      //     inputImageData,
-      //     clientInfo,
-      //     this
-      //   )
-      // } catch (e) {
-      //   console.log(e)
-      // }
-      // console.log("RESULT: " + this.analysedImage.screens)
+      console.log("found screens: " + this.analysedImage.screens)
 
       outC.width = inC.width
       outC.height = inC.height
@@ -1363,7 +1355,7 @@ export default {
       let width = this.analysedImage.width
       let height = this.analysedImage.height
 
-      let info = this.analysedImage.createPictureCanvas(0, 0)
+      let info = ImageAlg.createPictureCanvas(0, 0, this.analysedImage)
 
       for (let i = 0; i < this.analysedImage.screens.length; i++) {
         console.log('looping through screens')

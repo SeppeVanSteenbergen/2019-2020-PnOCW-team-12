@@ -80,7 +80,7 @@ class Island {
       this.screenMatrix,
       this.midPoint,
       this.id,
-      this.communicator
+      null
     )
     let detectedCorners = cornerDetector.cornerDetection()
     this.corners.LU = [
@@ -174,8 +174,8 @@ class Island {
       }
       startSlice = s
     }
-    if (slices[slices.length-1].length > result.length) {
-      result = slices[slices.length-1]
+    if (slices[slices.length - 1].length > result.length) {
+      result = slices[slices.length - 1]
     }
     if (result.length === 0) {
       return values
@@ -295,16 +295,18 @@ class Island {
       rowCnt++
 
       if (rowCnt >= this.miny) {
-        const curRow = image.data.slice(i, i + (w * 4) - 1);
-        result = result.concat(Array.from(curRow.slice(this.minx * 4, this.maxx * 4)))
+        const curRow = image.data.slice(i, i + (w * 4));
+        const part = Array.from(curRow.slice(this.minx * 4, ((this.maxx - 1) * 4) + 4))
+        result = result.concat(part)
       }
 
-      if (rowCnt >= this.maxy) {
+      if (rowCnt >= this.maxy - 1) {
         break
       }
     }
 
-    return new ImageData(new Uint8ClampedArray(result), this.maxx - this.minx, this.maxy - this.miny)
+    let arr = new Uint8ClampedArray(result)
+    return new ImageData(arr, this.maxx - this.minx, this.maxy - this.miny)
   }
 
   getHeight() {

@@ -71,7 +71,7 @@ export default class WaitEnv {
 
                 if (evt.data.text === 'UPDATE') {
                     this.updateBar(evt.data.pct)
-                    // this.addMessage(evt.data.msg)
+                    this.addMessage(evt.data.msg)
                 }
 
                 break;

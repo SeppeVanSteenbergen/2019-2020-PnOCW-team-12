@@ -18,7 +18,7 @@ class Reconstructor {
    * @returns {Array.<Array>} corners, array of array.
    */
   reconstructCorners(corners) {
-    this.communicator.sendInfoMessage("Start reconstruction of corner(s)")
+    // this.communicator.sendInfoMessage("Start reconstruction of corner(s)")
     let newCorners = { ...corners }
 
     let helpMids = this.reconstructCircleMidPoint(this.midPoint)
@@ -33,7 +33,7 @@ class Reconstructor {
 
     //missing LU
     if (corners.LU === null) {
-      this.communicator.sendInfoMessage("Left upper corner is missing")
+      // this.communicator.sendInfoMessage("Left upper corner is missing")
       if (helpMids.LU !== null) helpMid = helpMids.LU
       else helpMid = helpMids.RD
       if (corners.RU !== null) {
@@ -60,7 +60,7 @@ class Reconstructor {
     }
     //missing RU
     if (corners.RU === null) {
-      this.communicator.sendInfoMessage("Right upper corner is missing")
+      // this.communicator.sendInfoMessage("Right upper corner is missing")
       if (helpMids.RU !== null) helpMid = helpMids.RU
       else helpMid = helpMids.LD
       if (corners.LU !== null) {
@@ -87,7 +87,7 @@ class Reconstructor {
     }
     //missing RD
     if (corners.RD === null) {
-      this.communicator.sendInfoMessage("Right down corner is missing")
+      // this.communicator.sendInfoMessage("Right down corner is missing")
       if (helpMids.RD !== null) helpMid = helpMids.RD
       else helpMid = helpMids.LU
       if (corners.RU !== null) {
@@ -114,7 +114,7 @@ class Reconstructor {
     }
     //missing LD
     if (corners.LD === null) {
-      this.communicator.sendInfoMessage("Left down corner is missing")
+      // this.communicator.sendInfoMessage("Left down corner is missing")
       if (helpMids.LD !== null) helpMid = helpMids.LD
       else helpMid = helpMids.RU
       if (corners.RD !== null) {
