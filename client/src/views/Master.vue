@@ -1258,7 +1258,7 @@ export default {
       let analysationEnv = new AnalyseEnv(inputImageData, clientInfo, communicator)
       let worker = analysationEnv.getWorker()
 
-      let waitEnv = new WaitEnv(worker, communicator, progressBarContainer, progressBarContainer)
+      let waitEnv = new WaitEnv(worker, communicator, progressBarContainer, messageBoxContainer)
 
       console.log("Start waiting for result from worker:")
       await new Promise(resolve => {

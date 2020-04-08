@@ -95,6 +95,8 @@ class Island {
       detectedCorners.RD[2]
     ]
 
+    self.postMessage({text: 'MESSAGE', msg: 'Corners of screen in island ' + this.id + ' are all set'})
+
     // this.communicator.sendSuccessMessage(
     //   'Corners of screen in island ' + this.id + ' are all set'
     // )
@@ -213,6 +215,9 @@ class Island {
     // this.communicator.sendSuccessMessage(
     //   'Detected screen: ' + this.clientCode + 'in island ' + this.id
     // )
+
+    self.postMessage({text: 'MESSAGE', msg: 'Detected client code for screen ' + this.id + ': ' + this.clientCode})
+
     console.log('Detected screen: ' + this.clientCode)
   }
 

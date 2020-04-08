@@ -10,7 +10,7 @@ export default class WaitEnv {
         this.barContainer = barContainer
         this.bar = barContainer.children[0]
 
-        this.msgBoxContainer = msgBoxContainer //div
+        this.msgContainter = msgBoxContainer //div
         this.msgList = msgBoxContainer.children[0] //ul
 
         this.workerFinished = false
@@ -22,7 +22,7 @@ export default class WaitEnv {
         this.progress = 0
     }
 
-    initUI(parent) {
+    initUI() {
 
         this.barContainer.style.width = "100%"
         this.barContainer.style.height = "35px"
@@ -31,6 +31,11 @@ export default class WaitEnv {
         this.bar.style.width = "0%";
         this.bar.style.height = "100%"
         this.bar.style.backgroundColor = "#2196f3"
+
+        this.msgContainter.style.width = "100%"
+        this.msgContainter.style.height = "100px"
+        this.msgContainter.style.overflowX = "hidden"
+        this.msgContainter.style.overflowY = "auto"
     }
 
     updateBar(pct) {
@@ -45,7 +50,6 @@ export default class WaitEnv {
 
     }
 
-    // TODO: overlap met progressbar nu 
     addMessage(str) {
         var node = document.createElement("LI");                 // Create a <li> node
         var textnode = document.createTextNode(str);
@@ -71,6 +75,10 @@ export default class WaitEnv {
 
                 if (evt.data.text === 'UPDATE') {
                     this.updateBar(evt.data.pct)
+                    this.addMessage(evt.data.msg)
+                }
+
+                if(evt.data.text === 'MESSAGE'){
                     this.addMessage(evt.data.msg)
                 }
 

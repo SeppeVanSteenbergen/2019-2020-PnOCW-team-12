@@ -13,19 +13,10 @@ function handleMessage(m) {
 function analyseImage(imgData, clientInfo) {
     console.log("start analyse image on worker")
 
-    console.log("received image data: ")
-    console.log(imgData)
-
     let resultImg = new Image(imgData, null, 'RGBA', clientInfo, null)
 
     console.log("worker done!")
 
-    // console.log(inputImage.screens)
-
-    console.log("Found screens before send: " + resultImg.screens)
-    console.log(resultImg)
-
     self.postMessage({ text: "DONE", result: resultImg})
-
 }
 

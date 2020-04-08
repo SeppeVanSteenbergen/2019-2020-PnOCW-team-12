@@ -44,6 +44,7 @@ class Image {
       this.matrix[i] = new Array(this.getWidth())
     }
 
+    self.postMessage({text: 'MESSAGE', msg: 'Converted Colorspace To HSLA'})
     this.analyse()
   }
 

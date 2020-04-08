@@ -53,6 +53,7 @@ class CornerDetector {
       return point != null
     })
     if (nonPositionCorners.length < 4) {
+      self.postMessage({text: 'MESSAGE', msg: 'Found ' + nonPositionCorners.length +' corners, reconstructing missing corners' })
       let corners = this.corners
       this.corners = this.reconstructor.reconstructCorners(corners)
       // this.communicator.sendSuccessMessage("Corner(s) are reconstructed");
