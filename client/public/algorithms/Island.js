@@ -64,15 +64,6 @@ class Island {
     for (let i = 0; i < this.maxy - this.miny; i++) {
       this.screenMatrix[i] = this.screenMatrix[i].slice(this.minx, this.maxx)
     }
-
-    for (let y = 0; y < this.screenMatrix.length; y++) {
-      for (let x = 0; x < this.screenMatrix[0].length; x++) {
-        let id = this.screenMatrix[y][x]
-        if (id > 0 && id <= 3) {
-          this.screenMatrix[y][x] = id + this.id - 1
-        }
-      }
-    }
   }
 
   findCorners() {
