@@ -694,11 +694,11 @@ export default {
           let c = vue.$refs.drawCanvas
 
           vue.drawCanvasScale =
-            window.innerWidth / vue.analysedImage.imgOriginal.width
+            window.innerWidth / vue.imgCopy.width
 
           let ctx = c.getContext('2d')
-          c.width = vue.analysedImage.imgOriginal.width
-          c.height = vue.analysedImage.imgOriginal.height
+          c.width = vue.imgCopy.width
+          c.height = vue.imgCopy.height
 
           let imgWidth = screen.width - 10
           let ratio = c.height / c.width
@@ -763,9 +763,10 @@ export default {
           console.log('upload successful for video: ' + result.data.videoURL)
 
           // get all the data
-          let info = this.analysedImage.createPictureCanvas(
+          let info = ImageAlg.createPictureCanvas(
             this.analysedImage.width,
-            this.analysedImage.height
+            this.analysedImage.height,
+            this.analysedImage
           )
 
           for (let i = 0; i < this.analysedImage.screens.length; i++) {
@@ -830,9 +831,10 @@ export default {
           console.log('upload successful for video: ' + result.data.imageURL)
 
           // get all the data
-          let info = this.analysedImage.createPictureCanvas(
+          let info = ImageAlg.createPictureCanvas(
             this.drawingImg.width,
-            this.drawingImg.height
+            this.drawingImg.height,
+            this.analysedImage
           )
 
           console.log(info)
@@ -916,7 +918,7 @@ export default {
       let width = this.analysedImage.width
       let height = this.analysedImage.height
 
-      let info = this.analysedImage.createPictureCanvas(0, 0)
+      let info = ImageAlg.createPictureCanvas(0, 0, this.analysedImage)
 
       for (let i = 0; i < this.analysedImage.screens.length; i++) {
         console.log('looping through screens')
@@ -1150,9 +1152,10 @@ export default {
       console.log('base64 image')
 
       // get all the data
-      let info = this.analysedImage.createPictureCanvas(
+      let info = ImageAlg.createPictureCanvas(
         this.drawingImg.width,
-        this.drawingImg.height
+        this.drawingImg.height,
+        this.analysedImage
       )
 
       let base64 = this.imageToBase64(img)
@@ -1243,7 +1246,7 @@ export default {
       )
 
       //let imgCopy = AlgorithmService.copyImageData(inctx, inputImageData)
-      let imgCopy = inputImageData
+      this.imgCopy = inputImageData
 
 // TODO: null on localhost??
       let clientInfo = this.$store.state.roomClientInfo
@@ -1288,7 +1291,7 @@ export default {
       outC.style.height = Math.round(imgWidth * ratio) + 'px'
 
       // outctx.putImageData(this.analysedImage.imgOriginal, 0, 0)
-      outctx.putImageData(imgCopy, 0, 0)
+      outctx.putImageData(this.imgCopy, 0, 0)
 
       AlgorithmService.drawScreenOutlines(outC, this.analysedImage)
 
