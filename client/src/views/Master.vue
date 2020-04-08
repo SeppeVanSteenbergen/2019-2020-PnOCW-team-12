@@ -1243,10 +1243,11 @@ export default {
         0,
         this.$refs.canva.width,
         this.$refs.canva.height
+        
       )
 
       //let imgCopy = AlgorithmService.copyImageData(inctx, inputImageData)
-      this.imgCopy = inputImageData
+      this.imgCopy = inputImageData;
 
 // TODO: null on localhost??
       let clientInfo = this.$store.state.roomClientInfo
@@ -1290,8 +1291,7 @@ export default {
       outC.style.width = imgWidth + 'px'
       outC.style.height = Math.round(imgWidth * ratio) + 'px'
 
-      // outctx.putImageData(this.analysedImage.imgOriginal, 0, 0)
-      outctx.putImageData(this.imgCopy, 0, 0)
+      outctx.putImageData(this.analysedImage.imgOriginalRGB, 0, 0)
 
       AlgorithmService.drawScreenOutlines(outC, this.analysedImage)
 

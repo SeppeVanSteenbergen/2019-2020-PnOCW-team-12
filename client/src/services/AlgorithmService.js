@@ -4,7 +4,7 @@ import Communicator from '../algorithms/Communicator'
 
 export default {
   fullAnalysis(imgData, clientInfo, masterVue) {
-// DEPRECATED, MOVED TO workerEnv AND waitEnv
+    // DEPRECATED, MOVED TO workerEnv AND waitEnv
 
     // imgData = Image.resizeImageData(imgData, [1920, 1080])
     // let communicator = new Communicator(masterVue)
@@ -19,7 +19,7 @@ export default {
 
     // let comm = new Communicator(masterVue)
     // comm.sendSuccessMessage("Started Analyse on a worker!")
-    
+
     // analyseWorker.onmessage = function(m) {
     //   if(m.data.text === "DONE"){
     //     console.log(m.data.result)
