@@ -7,7 +7,6 @@ class Island {
    * @param HSLImage
    * @param RGBImage
    * @param matrix
-   * @param communicator
    */
   constructor(
     leftUpperCoo,
@@ -15,11 +14,8 @@ class Island {
     id,
     HSLImage,
     RGBImage,
-    matrix,
-    communicator
+    matrix
   ) {
-    // coordinates seen from original matrix
-    this.setCommunicator(communicator)
     console.log('Start creating island with ID ' + id)
     // console.log('Start creating island with ID ' + id)
     this.corners = {
@@ -54,7 +50,6 @@ class Island {
 
   isValid() {
     if (this.midPoint == null)
-      // this.communicator.sendInfoMessage('No midpoint in island ' + this.id)
       console.log('No midpoint in island ' + this.id)
     return this.midPoint !== null
   }
@@ -97,9 +92,6 @@ class Island {
 
     self.postMessage({text: 'MESSAGE', msg: 'Corners of screen in island ' + this.id + ' are all set'})
 
-    // this.communicator.sendSuccessMessage(
-    //   'Corners of screen in island ' + this.id + ' are all set'
-    // )
   }
 
   calcMid() {
@@ -122,9 +114,6 @@ class Island {
     xValues = Island.filterPoints(xValues)
     yValues = Island.filterPoints(yValues)
 
-    // this.communicator.sendSuccessMessage(
-    //   'Midpoint of island ' + this.id + ' calculated'
-    // )
     console.log('Midpoint of island ' + this.id + ' calculated')
     return [
       xValues[Math.round(xValues.length / 2)],
@@ -211,10 +200,6 @@ class Island {
       this.corners.RU
     )
     this.localToWorld()
-
-    // this.communicator.sendSuccessMessage(
-    //   'Detected screen: ' + this.clientCode + 'in island ' + this.id
-    // )
 
     self.postMessage({text: 'MESSAGE', msg: 'Detected client code for screen ' + this.id + ': ' + this.clientCode})
 
@@ -320,9 +305,5 @@ class Island {
   print() {
     console.log('starting co: ' + this.minx + ', ' + this.miny)
     console.log('ending co: ' + this.maxx + ', ' + this.maxy)
-  }
-
-  setCommunicator(communicator) {
-    this.communicator = communicator
   }
 }

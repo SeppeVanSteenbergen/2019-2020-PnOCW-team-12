@@ -13,7 +13,7 @@ function handleMessage(m) {
 function analyseImage(imgData, clientInfo) {
     console.log("start analyse image on worker")
 
-    let resultImg = new Image(imgData, null, 'RGBA', clientInfo, null)
+    let resultImg = new Image(imgData, 'RGBA', clientInfo)
 
     console.log("worker done!")
 

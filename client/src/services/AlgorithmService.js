@@ -1,6 +1,4 @@
-import Image from '../algorithms/Image'
 import Delaunay from '../algorithms/Delaunay'
-import Communicator from '../algorithms/Communicator'
 
 export default {
   fullAnalysis(imgData, clientInfo, masterVue) {

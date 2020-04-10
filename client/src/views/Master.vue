@@ -199,6 +199,7 @@
             <v-stepper-content step="2" class="fullheight overflow-y-auto">
               <v-card class="mb-12" elevation="0">
                 <!-- <video :autoplay="true" id="videoElement" ref="video" class="flex-wrap"></video> -->
+                <div style="height: 25px"></div> 
                 <v-file-input
                   v-model="displayFileVideo"
                   color="deep-purple accent-4"
@@ -362,7 +363,7 @@ import Animation from '../algorithms/Animations'
 import Communicator from '../algorithms/Communicator'
 import AnalyseEnv from '../env/AnalyseEnv'
 import WaitEnv from '../env/WaitEnv'
-import ImageAlg from '../algorithms/Image'
+import ImageTools from '../algorithms/ImageTools'
 
 export default {
   name: 'master',
@@ -685,7 +686,7 @@ export default {
           console.log('upload successful for video: ' + result.data.videoURL)
 
           // get all the data
-          let info = ImageAlg.createPictureCanvas(
+          let info = ImageTools.createPictureCanvas(
             this.analysedImage.width,
             this.analysedImage.height,
             this.analysedImage
@@ -753,7 +754,7 @@ export default {
           console.log('upload successful for video: ' + result.data.imageURL)
 
           // get all the data
-          let info = ImageAlg.createPictureCanvas(
+          let info = ImageTools.createPictureCanvas(
             this.drawingImg.width,
             this.drawingImg.height,
             this.analysedImage
@@ -840,7 +841,7 @@ export default {
       let width = this.analysedImage.width
       let height = this.analysedImage.height
 
-      let info = ImageAlg.createPictureCanvas(0, 0, this.analysedImage)
+      let info = ImageTools.createPictureCanvas(0, 0, this.analysedImage)
 
       for (let i = 0; i < this.analysedImage.screens.length; i++) {
         console.log('looping through screens')
@@ -1072,7 +1073,7 @@ export default {
       console.log('base64 image')
 
       // get all the data
-      let info = ImageAlg.createPictureCanvas(
+      let info = ImageTools.createPictureCanvas(
         this.drawingImg.width,
         this.drawingImg.height,
         this.analysedImage
@@ -1257,7 +1258,7 @@ export default {
       let width = this.analysedImage.width
       let height = this.analysedImage.height
 
-      let info = ImageAlg.createPictureCanvas(0, 0, this.analysedImage)
+      let info = ImageTools.createPictureCanvas(0, 0, this.analysedImage)
 
       for (let i = 0; i < this.analysedImage.screens.length; i++) {
         console.log('looping through screens')

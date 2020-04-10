@@ -59,7 +59,7 @@ import DetectionDrawer from '../algorithms/DetectionDrawer'
 import AlgorithmService from '../services/AlgorithmService'
 import NumberConverter from '../algorithms/PermutationConverter'
 import Animation from '../algorithms/Animations'
-import Image from '../algorithms/Image'
+import ImageTools from '../algorithms/ImageTools'
 
 export default {
   name: 'client',

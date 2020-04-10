@@ -1,11 +1,11 @@
-import Image from '../algorithms/Image'
+import ImageTools from '../algorithms/ImageTools'
 import '../algorithms/Communicator'
 
 export default class AnalyseEnv {
 
     constructor(inputImageData, clientInfo, communicator) {
         this.communicator = communicator;
-        this.imgData = Image.resizeImageData(inputImageData, [1920, 1080])
+        this.imgData = ImageTools.resizeImageData(inputImageData, [1920, 1080])
         this.clientInfo = clientInfo
 
         console.log("STARTING CLIENTINFO: ")
