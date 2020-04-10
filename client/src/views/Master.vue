@@ -1239,6 +1239,8 @@ export default {
         .getContext('2d')
         .putImageData(delaunayImgObject, 0, 0)
 
+      this.$refs.delaunay2.style.width = "100%"
+
       this.executeDelaunayImage()
     },
 
