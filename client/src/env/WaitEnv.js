@@ -56,6 +56,9 @@ export default class WaitEnv {
 
         node.appendChild(textnode)
         this.msgList.appendChild(node)
+
+        // Keep scroll to the bottom when new item is added to the list
+        this.msgContainter.scrollTop = this.msgContainter.scrollHeight
     }
 
     handleEvent(evt) {

@@ -1362,6 +1362,10 @@ export default {
 
       for (let i = 0; i < this.analysedImage.screens.length; i++) {
         console.log('looping through screens')
+
+        console.log("Found screen obj:")
+        console.log(this.analysedImage.screens[i])
+
         let cssMatrix = this.analysedImage.screens[i].cssMatrix
 
         let user_id = this.myRoom.clients[

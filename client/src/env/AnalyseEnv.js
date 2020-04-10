@@ -8,6 +8,9 @@ export default class AnalyseEnv {
         this.imgData = Image.resizeImageData(inputImageData, [1920, 1080])
         this.clientInfo = clientInfo
 
+        console.log("STARTING CLIENTINFO: ")
+        console.log(this.clientInfo)
+
         this.worker = new Worker('./worker.js')
 
         this.startExecution()
