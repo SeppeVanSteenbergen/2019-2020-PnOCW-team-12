@@ -152,10 +152,6 @@ class Reconstructor {
       RD: points[2],
       LD: points[3]
     }
-<<<<<<< HEAD:client/src/algorithms/Reconstructor.js
-
-=======
->>>>>>> makeitthreaded:client/public/algorithms/Reconstructor.js
   }
 
   /**

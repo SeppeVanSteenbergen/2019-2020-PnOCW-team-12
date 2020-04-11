@@ -1,4 +1,7 @@
-importScripts('algorithms/Algebra.js', 'algorithms/ColorRange.js', 'algorithms/ColorSpace.js', 'algorithms/CornerDetector.js', 'algorithms/Image.js', 'algorithms/Island.js', 'algorithms/Line.js', 'algorithms/PermutationConverter.js', 'algorithms/PixelIterator.js', 'algorithms/Reconstructor.js', 'algorithms/RGBBarcodeScanner.js', 'algorithms/Screen.js')
+importScripts('algorithms/Algebra.js', 'algorithms/ColorRange.js', 'algorithms/ColorSpace.js',
+ 'algorithms/CornerDetector.js', 'algorithms/Image.js', 'algorithms/Island.js', 'algorithms/Line.js',
+  'algorithms/PermutationConverter.js', 'algorithms/PixelIterator.js', 'algorithms/Reconstructor.js',
+   'algorithms/RGBBarcodeScanner.js', 'algorithms/Screen.js')
 
 console.log('Worker Created')
 
