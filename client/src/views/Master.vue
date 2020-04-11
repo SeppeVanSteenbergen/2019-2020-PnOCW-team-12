@@ -239,6 +239,11 @@
                 <div ref="messageBoxContainer">
                   <ul></ul>
                 </div>
+
+                <div style="height: 15px"></div>
+                <v-divider :inset="true" ></v-divider>
+                <div style="height: 15px"></div>
+
                 <canvas ref="resultCanvas"></canvas>
                 <canvas ref="delaunay"></canvas>
                 <canvas ref="delaunay2"></canvas>
