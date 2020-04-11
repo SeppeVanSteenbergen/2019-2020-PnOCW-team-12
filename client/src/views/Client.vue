@@ -58,6 +58,7 @@
 import DetectionDrawer from '../algorithms/DetectionDrawer'
 import AlgorithmService from '../services/AlgorithmService'
 import Animation from '../algorithms/Animations'
+import ImageTools from '../algorithms/ImageTools'
 
 export default {
   name: 'client',

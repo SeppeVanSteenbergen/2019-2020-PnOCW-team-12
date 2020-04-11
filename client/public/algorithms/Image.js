@@ -1,16 +1,13 @@
-import Island from './Island'
-import Drawer from './Drawer'
-import ColorSpace from './ColorSpace'
-import ColorRange from './ColorRange'
+class Image {
 
-export default class Image {
-  constructor(imgData, canvasName, colorSpace, clientInfo, communicator) {
+  constructor(imgData, colorSpace, clientInfo) {
     this.clientInfo = clientInfo
-    this.setCommunicator(communicator)
+    // this.setCommunicator(communicator)
     this.colorSpaces = ['RGBA', 'HSLA', 'BW']
     this.islandID = 4 //jumps per three so we can save green and blue within an island.
     this.screens = []
     this.pictureCanvas = null
+    this.imgData = imgData
     this.width = imgData.width
     this.height = imgData.height
     this.islands = []
@@ -26,19 +23,7 @@ export default class Image {
     }
 
     this.setPixels(imgData.data)
-    this.setCanvas(canvasName, imgData.width, imgData.height)
     this.setColorSpace(colorSpace)
-
-    if (this.canvas !== null) {
-      let context = this.canvas.getContext('2d')
-      context.putImageData(imgData, 0, 0)
-      this.drawer = new Drawer(
-        this.getPixels(),
-        this.getWidth(),
-        this.getHeight(),
-        this.canvas.getContext('2d')
-      )
-    }
 
     this.matrix = new Array(this.getHeight())
     for (let i = 0; i < this.getHeight(); i++) {
@@ -48,48 +33,21 @@ export default class Image {
     this.analyse()
   }
 
-  setCommunicator(communicator) {
-    this.communicator = communicator
-  }
-
-  static resizeImageData(imgData, border) {
-    let scaleWidth = border[0] / imgData.width
-    let scaleHeight = border[1] / imgData.height
-    let scale = Math.min(scaleWidth, scaleHeight)
-
-    if (scale >= 1) {
-      return imgData
-    }
-
-    let canvas = document.createElement('canvas')
-    canvas.width = imgData.width * scale
-    canvas.height = imgData.height * scale
-    let ctx = canvas.getContext('2d')
-
-    let copyCanvas = document.createElement('canvas')
-    copyCanvas.width = imgData.width
-    copyCanvas.height = imgData.height
-    let copyCtx = copyCanvas.getContext('2d')
-    copyCtx.putImageData(imgData, 0, 0)
-
-    ctx.drawImage(copyCanvas, 0, 0, canvas.width, canvas.height)
-    return ctx.getImageData(0, 0, canvas.width, canvas.height)
-  }
-
   analyse() {
-    this.communicator.sendInfoMessage('-----Start analysis-----')
     ColorSpace.rgbaToHsla(this.pixels)
     this.setColorSpace('HSLA')
-    this.communicator.sendSuccessMessage('Changed color space to HSLA')
+
+    self.postMessage({text: 'UPDATE', pct: 10, msg: 'Converted Colorspace To HSLA'})
+
     this.createBigMask()
-    this.communicator.sendSuccessMessage(
-      'Filtered the non-screen colours out of picture'
-    )
+
+    self.postMessage({text: 'UPDATE', pct: 10, msg: 'Created Value Matrix from Image'})
+
     this.createOffset(this.offSet)
     this.createScreens()
-    this.communicator.sendInfoMessage('-----End analysis-----')
-    //this.createPictureCanvas(300, 500); //TODO: param meegeven
-    //this.calcRelativeScreens(); //untested
+
+    self.postMessage({text: 'UPDATE', pct: 60, msg: 'Created Screens'})
+
     return this.screens
   }
 
@@ -108,6 +66,7 @@ export default class Image {
     this.colorSpace = newColorSpace
   }
 
+  //only call on mainthread!
   show() {
     if (this.canvas !== null) {
       let context = this.canvas.getContext('2d')
@@ -123,32 +82,28 @@ export default class Image {
         if (this.checkId(x, y)) {
           let newIslandCoo = this.floodfill(x, y, this.islandID)
           if (this.isPossibleIsland(newIslandCoo)) {
-            this.communicator.sendInfoMessage(
-              'Island ' + this.islandID + ' is a possible Island'
-            )
             let newIsland = new Island(
               [newIslandCoo[0], newIslandCoo[1]],
               [newIslandCoo[2], newIslandCoo[3]],
               this.islandID,
               this.getImgData(),
               this.imgOriginalRGB,
-              this.matrix,
-              this.communicator
+              this.matrix
             )
             if (newIsland.isValid()) {
-              this.communicator.sendInfoMessage(
-                'Island ' + this.islandID + 'is valid'
-              )
-              try {
-                newIsland.finishIsland()
-                this.islands.push(newIsland)
-              } catch (err) {
-                console.log(err + ' in screen: ' + newIsland.getClientCode())
-              }
+              console.log('Island ' + this.islandID + 'is valid')
+              newIsland.finishIsland()
+              this.islands.push(newIsland)
+              // try {
+              //   newIsland.finishIsland()
+              //   this.islands.push(newIsland)
+              // } catch (err) {
+              //   console.log(err + ' in screen: ' + newIsland.getClientCode())
+              // }
             } else {
-              this.communicator.sendInfoMessage(
-                'Island ' + this.islandID + 'is not valid, no island created'
-              )
+              //   'Island ' + this.islandID + 'is not valid, no island created'
+              // )
+              console.log('Island ' + this.islandID + 'is not valid, no island created')
             }
             this.islandID += 3
           }
@@ -166,7 +121,6 @@ export default class Image {
     let minY = yPos
     let maxX = xPos
     let maxY = yPos
-    this.communicator.sendInfoMessage('Start floodfill with ID ' + islandID)
     while (stack.length > 0) {
       pixel = stack.pop()
       x = pixel[0]
@@ -230,17 +184,16 @@ export default class Image {
    * Creates the screens by detecting them in the image using the floodfill algorithm.
    */
   createScreens() {
-    this.communicator.sendInfoMessage('Start screen search')
     this.screens = []
     this.calcIslandsFloodfill()
+
+    self.postMessage({text: 'UPDATE', pct: 20, msg: 'Floodfill done: found ' + this.islands.length + " island(s)"})
+
     for (let i = 0; i < this.islands.length; i++) {
-      if (this.canvas !== null) {
-        this.drawIsland(this.islands[i])
-      }
+
       let newScreen = this.islands[i].createScreen(this.clientInfo)
       this.screens.push(newScreen)
     }
-    this.communicator.sendInfoMessage('End screen search')
   }
 
   /**
@@ -313,7 +266,7 @@ export default class Image {
     this.drawer.drawCorners(island)
   }
 
-  findExtremeValues(width, height) {
+  static findExtremeValues(width, height, screens) {
     let points = {
       minx: null,
       maxx: null,
@@ -324,7 +277,7 @@ export default class Image {
 
     let allCorners = []
 
-    this.screens.forEach(function(e) {
+    screens.forEach(function(e) {
       for (let key in e.corners) {
         allCorners.push(e.corners[key])
       }
@@ -363,8 +316,8 @@ export default class Image {
    * @param {int} w image width
    * @param {int} h image height
    */
-  createPictureCanvas(w, h) {
-    let pictureCanvas = this.findExtremeValues(w, h)
+  static createPictureCanvas(w, h, screens) {
+    let pictureCanvas = Image.findExtremeValues(w, h, screens)
 
     w = Math.abs(pictureCanvas.maxx - pictureCanvas.minx)
     h = Math.abs(pictureCanvas.maxy - pictureCanvas.miny)
@@ -377,52 +330,6 @@ export default class Image {
       maxx: pictureCanvas.maxx,
       maxy: pictureCanvas.maxy,
       scale: pictureCanvas.scale
-    }
-  }
-
-  showTransformatedImage(image) {
-    let info = this.createPictureCanvas(image.width, image.height)
-
-    let ratio = Math.max(info.w / image.width, info.h / image.height)
-
-    let transformatedStyles = []
-    for (let i = 0; i < this.screens.length; i++) {
-      let h = this.screens[i].cssMatrix
-      let t =
-        'position: absolute; left:' +
-        info.minx +
-        'px; top: ' +
-        info.miny +
-        'px; transform: matrix3d(' +
-        h.join(', ') +
-        '); transform-origin: ' +
-        -info.minx +
-        'px ' +
-        -info.miny +
-        'px; width: ' +
-        info.w +
-        'px; height: ' +
-        info.h +
-        'px;'
-
-      transformatedStyles.push(t)
-    }
-
-    if (this.canvas !== null) {
-      for (let i = 0; i < transformatedStyles.length; i++) {
-        let outputCanvas = document.getElementById('output' + (i + 1))
-        outputCanvas.style = transformatedStyles[i]
-        let outputContext = outputCanvas.getContext('2d')
-        outputCanvas.width = info.w
-        outputCanvas.height = info.h
-        outputContext.drawImage(
-          image,
-          0,
-          0,
-          Math.round(image.width * ratio),
-          Math.round(image.height * ratio)
-        )
-      }
     }
   }
 
@@ -444,6 +351,7 @@ export default class Image {
 
   /**
    * Makes
+   * 
    * @param factor
    */
   createOffset(factor) {
@@ -491,13 +399,7 @@ export default class Image {
    * @returns {*|ImageData}
    */
   getImgData() {
-    let canvas = document.createElement('canvas')
-    canvas.width = this.width
-    canvas.height = this.height
-    let context = canvas.getContext('2d')
-    let imgData = context.createImageData(this.width, this.height)
-    imgData.data.set(this.pixels)
-    return imgData
+    return this.imgData;
   }
 
   getColorSpace() {

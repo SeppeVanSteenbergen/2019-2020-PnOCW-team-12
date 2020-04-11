@@ -1,4 +1,4 @@
-export default class ColorRange {
+class ColorRange {
   static colors() {
     return {
       red1: 0,

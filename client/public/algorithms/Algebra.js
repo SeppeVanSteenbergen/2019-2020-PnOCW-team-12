@@ -1,4 +1,4 @@
-export default class Algebra {
+class Algebra {
   /**
    * Linear algebra code from https://github.com/jlouthan/perspective-transform/blob/master/dist/perspective-transform.js
    */

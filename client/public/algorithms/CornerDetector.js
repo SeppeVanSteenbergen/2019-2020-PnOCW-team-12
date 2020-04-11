@@ -1,9 +1,5 @@
-import Reconstructor from './Reconstructor'
-import Algebra from './Algebra'
-
-export default class CornerDetector {
-  constructor(screenMatrix, midPoint, id, communicator) {
-    this.setCommunicator(communicator)
+class CornerDetector {
+  constructor(screenMatrix, midPoint, id) {
     this.matrix = screenMatrix
     this.midPoint = midPoint
     this.id = id
@@ -20,8 +16,7 @@ export default class CornerDetector {
       this.matrix,
       this.id,
       this.width,
-      this.height,
-        this.communicator
+      this.height
     )
     this.radiusFactor = 1/4
     this.radius = null //will be set later
@@ -46,7 +41,6 @@ export default class CornerDetector {
         return point != null
       }).length < 2
     ){
-      this.communicator.sendErrorMessage("Not enough good corners detected for reconstruction of screen")
       throw 'Not enough good corners detected for reconstruction'
     }
 
@@ -56,9 +50,9 @@ export default class CornerDetector {
       return point != null
     })
     if (nonPositionCorners.length < 4) {
+      self.postMessage({text: 'MESSAGE', msg: 'Found ' + nonPositionCorners.length +' corners, reconstructing missing corners' })
       let corners = this.corners
       this.corners = this.reconstructor.reconstructCorners(corners)
-      this.communicator.sendSuccessMessage("Corner(s) are reconstructed");
     }
     return this.corners
   }
@@ -159,12 +153,10 @@ export default class CornerDetector {
 
     let corners = []
     if (diagonalSearch) {
-      this.communicator.sendInfoMessage("Search corners with diagonal search")
       console.log('diagonal search')
       // Diagonal search
       corners = this.diagonalSearch()
     } else {
-      this.communicator.sendInfoMessage("Search corners with perpendicular search")
       console.log('perpendicular search')
       // Perpendicular search
       corners = this.perpendicularSearch()
@@ -435,7 +427,4 @@ export default class CornerDetector {
     return this.matrix[y][x]
   }
 
-  setCommunicator(communicator) {
-    this.communicator = communicator;
-  }
 }

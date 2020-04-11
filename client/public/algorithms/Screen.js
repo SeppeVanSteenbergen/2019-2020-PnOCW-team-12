@@ -1,7 +1,4 @@
-import PermutationConverter from './PermutationConverter'
-import Algebra from './Algebra'
-
-export default class Screen {
+class Screen {
   constructor(corners, midPoint, clientInfo, clientCode, screenImgOriginal) {
     this.corners = []
     this.corners.push(corners.LU)

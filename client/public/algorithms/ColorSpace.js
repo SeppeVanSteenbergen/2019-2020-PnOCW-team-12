@@ -1,4 +1,4 @@
-export default class ColorSpace {
+class ColorSpace {
   /**
    * pixels as array in rgba colorspace
    * math from https://www.rapidtables.com/convert/color/rgb-to-hsl.html

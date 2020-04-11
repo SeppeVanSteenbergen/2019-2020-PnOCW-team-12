@@ -1,6 +1,4 @@
-import Line from './Line'
-
-export default class PixelIterator {
+class PixelIterator {
   constructor(LU, RU, width, height) {
     this.line = new Line([LU[0], -LU[1]], [RU[0], -RU[1]])
     this.angle = this.line.normalAngle

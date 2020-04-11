@@ -1,6 +1,4 @@
-import PixelIterator from './PixelIterator'
-
-export default class RGBBarcodeScanner {
+class RGBBarcodeScanner {
   //The imageObject must be a copy bcs it will be changed!!!!.
   static scan(imageObjectOrig, LU, RU) {
     let imageData = new ImageData(

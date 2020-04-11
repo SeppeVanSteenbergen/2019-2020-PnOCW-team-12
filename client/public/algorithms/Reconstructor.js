@@ -1,9 +1,5 @@
-import Algebra from './Algebra'
-import Line from './Line'
-
-export default class Reconstructor {
-  constructor(midPoint, matrix, id, width, height, communicator) {
-    this.setCommunicator(communicator)
+class Reconstructor {
+  constructor(midPoint, matrix, id, width, height) {
     this.midPoint = midPoint
     this.matrix = matrix
     this.id = id
@@ -21,7 +17,6 @@ export default class Reconstructor {
    * @returns {Array.<Array>} corners, array of array.
    */
   reconstructCorners(corners) {
-    this.communicator.sendInfoMessage("Start reconstruction of corner(s)")
     let newCorners = { ...corners }
 
     let helpMids = this.reconstructCircleMidPoint(this.midPoint)
@@ -36,7 +31,6 @@ export default class Reconstructor {
 
     //missing LU
     if (corners.LU === null) {
-      this.communicator.sendInfoMessage("Left upper corner is missing")
       if (helpMids.LU !== null) helpMid = helpMids.LU
       else helpMid = helpMids.RD
       if (corners.RU !== null) {
@@ -63,7 +57,6 @@ export default class Reconstructor {
     }
     //missing RU
     if (corners.RU === null) {
-      this.communicator.sendInfoMessage("Right upper corner is missing")
       if (helpMids.RU !== null) helpMid = helpMids.RU
       else helpMid = helpMids.LD
       if (corners.LU !== null) {
@@ -90,7 +83,6 @@ export default class Reconstructor {
     }
     //missing RD
     if (corners.RD === null) {
-      this.communicator.sendInfoMessage("Right down corner is missing")
       if (helpMids.RD !== null) helpMid = helpMids.RD
       else helpMid = helpMids.LU
       if (corners.RU !== null) {
@@ -117,7 +109,6 @@ export default class Reconstructor {
     }
     //missing LD
     if (corners.LD === null) {
-      this.communicator.sendInfoMessage("Left down corner is missing")
       if (helpMids.LD !== null) helpMid = helpMids.LD
       else helpMid = helpMids.RU
       if (corners.RD !== null) {
@@ -161,7 +152,10 @@ export default class Reconstructor {
       RD: points[2],
       LD: points[3]
     }
+<<<<<<< HEAD:client/src/algorithms/Reconstructor.js
 
+=======
+>>>>>>> makeitthreaded:client/public/algorithms/Reconstructor.js
   }
 
   /**
@@ -530,9 +524,5 @@ export default class Reconstructor {
     if (x < 0 || x >= this.matrix[0].length) return 0
     if (y < 0 || y >= this.matrix.length) return 0
     return this.matrix[y][x]
-  }
-
-  setCommunicator(communicator) {
-    this.communicator = communicator;
   }
 }

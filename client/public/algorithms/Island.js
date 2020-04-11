@@ -1,8 +1,4 @@
-import Screen from './Screen'
-import RGBBarcodeScanner from './RGBBarcodeScanner'
-import CornerDetector from './CornerDetector'
-
-export default class Island {
+class Island {
   /**
    * Create and Island starting with this pixel
    * @param leftUpperCoo
@@ -11,7 +7,6 @@ export default class Island {
    * @param HSLImage
    * @param RGBImage
    * @param matrix
-   * @param communicator
    */
   constructor(
     leftUpperCoo,
@@ -19,12 +14,10 @@ export default class Island {
     id,
     HSLImage,
     RGBImage,
-    matrix,
-    communicator
+    matrix
   ) {
-    // coordinates seen from original matrix
-    this.setCommunicator(communicator)
-    this.communicator.sendInfoMessage('Start creating island with ID ' + id)
+    console.log('Start creating island with ID ' + id)
+    // console.log('Start creating island with ID ' + id)
     this.corners = {
       LU: null,
       RU: null,
@@ -51,12 +44,13 @@ export default class Island {
     this.RGBImage = RGBImage
     this.midPoint = this.calcMid()
     this.clientCode = null
-    this.communicator.sendInfoMessage('Island ' + id + ' created')
+    console.log('Island ' + id + ' created')
+    // console.log('Island ' + id + ' created')
   }
 
   isValid() {
     if (this.midPoint == null)
-      this.communicator.sendInfoMessage('No midpoint in island ' + this.id)
+      console.log('No midpoint in island ' + this.id)
     return this.midPoint !== null
   }
 
@@ -72,7 +66,7 @@ export default class Island {
       this.screenMatrix,
       this.midPoint,
       this.id,
-      this.communicator
+      null
     )
     let detectedCorners = cornerDetector.cornerDetection()
     this.corners.LU = [
@@ -96,9 +90,8 @@ export default class Island {
       detectedCorners.RD[2]
     ]
 
-    this.communicator.sendSuccessMessage(
-      'Corners of screen in island ' + this.id + ' are all set'
-    )
+    self.postMessage({text: 'MESSAGE', msg: 'Corners of screen in island ' + this.id + ' are all set'})
+
   }
 
   calcMid() {
@@ -121,9 +114,7 @@ export default class Island {
     xValues = Island.filterPoints(xValues)
     yValues = Island.filterPoints(yValues)
 
-    this.communicator.sendSuccessMessage(
-      'Midpoint of island ' + this.id + ' calculated'
-    )
+    console.log('Midpoint of island ' + this.id + ' calculated')
     return [
       xValues[Math.round(xValues.length / 2)],
       yValues[Math.round(yValues.length / 2)]
@@ -135,7 +126,7 @@ export default class Island {
       return input
     }
 
-    let values = input.sort(function(a, b) {
+    let values = input.sort(function (a, b) {
       return a - b
     })
 
@@ -165,8 +156,13 @@ export default class Island {
       }
       startSlice = s
     }
+<<<<<<< HEAD:client/src/algorithms/Island.js
     if (slices[slices.length-1].length > result.length) {
       result = slices[slices.length-1]
+=======
+    if (slices[slices.length - 1].length > result.length) {
+      result = slices[slices.length - 1]
+>>>>>>> makeitthreaded:client/public/algorithms/Island.js
     }
     if (result.length === 0) {
       return values
@@ -197,22 +193,28 @@ export default class Island {
   }
 
   finishIsland() {
-    this.communicator.sendInfoMessage('Try to identify island ' + this.id)
+    console.log('Try to identify island ' + this.id)
     this.findCorners()
+<<<<<<< HEAD:client/src/algorithms/Island.js
     this.communicator.sendInfoMessage(
       'Try to identify screen in island ' + this.id
     )
     var data = this.getScreenImg(this.RGBImage)
+=======
+    // console.log(
+    //   'Try to identify screen in island ' + this.id
+    // )
+>>>>>>> makeitthreaded:client/public/algorithms/Island.js
     this.clientCode = RGBBarcodeScanner.scan(
-      this.getScreenImg(this.RGBImage),
+      // this.getScreenImg(this.RGBImage),
+      this.getScreenImgData(this.RGBImage),
       this.corners.LU,
       this.corners.RU
     )
     this.localToWorld()
 
-    this.communicator.sendSuccessMessage(
-      'Detected screen: ' + this.clientCode + 'in island ' + this.id
-    )
+    self.postMessage({text: 'MESSAGE', msg: 'Detected client code for screen ' + this.id + ': ' + this.clientCode})
+
     console.log('Detected screen: ' + this.clientCode)
   }
 
@@ -263,6 +265,7 @@ export default class Island {
   }
 
   getScreenImg(image) {
+    console.log("trying to get screen img from doc...")
     let canvas = document.createElement('canvas')
     canvas.width = image.width
     canvas.height = image.height
@@ -274,6 +277,29 @@ export default class Island {
       this.maxx - this.minx,
       this.maxy - this.miny
     )
+  }
+
+  getScreenImgData(image) {
+    const w = image.width
+
+    let result = []
+    let rowCnt = 0
+    for (let i = 0; i < image.data.length; i += 4 * w) {
+      rowCnt++
+
+      if (rowCnt >= this.miny) {
+        const curRow = image.data.slice(i, i + (w * 4));
+        const part = Array.from(curRow.slice(this.minx * 4, ((this.maxx - 1) * 4) + 4))
+        result = result.concat(part)
+      }
+
+      if (rowCnt >= this.maxy - 1) {
+        break
+      }
+    }
+
+    let arr = new Uint8ClampedArray(result)
+    return new ImageData(arr, this.maxx - this.minx, this.maxy - this.miny)
   }
 
   getHeight() {
@@ -291,9 +317,5 @@ export default class Island {
   print() {
     console.log('starting co: ' + this.minx + ', ' + this.miny)
     console.log('ending co: ' + this.maxx + ', ' + this.maxy)
-  }
-
-  setCommunicator(communicator) {
-    this.communicator = communicator
   }
 }

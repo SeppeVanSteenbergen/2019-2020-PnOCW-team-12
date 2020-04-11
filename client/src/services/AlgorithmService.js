@@ -1,19 +1,49 @@
-import Image from '../algorithms/Image'
 import Delaunay from '../algorithms/Delaunay'
-import Communicator from '../algorithms/Communicator'
 
 export default {
   fullAnalysis(imgData, clientInfo, masterVue) {
-    imgData = Image.resizeImageData(imgData, [1920, 1080])
-    let communicator = new Communicator(masterVue)
-    let inputImage = new Image(imgData, null, 'RGBA', clientInfo, communicator)
+    // DEPRECATED, MOVED TO workerEnv AND waitEnv
 
-    return inputImage
+    // imgData = Image.resizeImageData(imgData, [1920, 1080])
+    // let communicator = new Communicator(masterVue)
+    // let inputImage = new Image(imgData, null, 'RGBA', clientInfo, communicator)
+
+    // return inputImage
+
+    // let result = null;
+    // let analysed = false
+
+    // let analyseWorker = new Worker("worker.js")
+
+    // let comm = new Communicator(masterVue)
+    // comm.sendSuccessMessage("Started Analyse on a worker!")
+
+    // analyseWorker.onmessage = function(m) {
+    //   if(m.data.text === "DONE"){
+    //     console.log(m.data.result)
+    //     result = m.data.result
+    //     analysed = true
+    //     analyseWorker.terminate()
+    //   }
+    // }
+
+    // let sizedImgData = Image.resizeImageData(imgData, [1920, 1080])
+
+    // analyseWorker.postMessage({
+    //   text: "START",
+    //   param: [sizedImgData, clientInfo]
+    // })
+
+    //busy wait om te testen nog
+    // while(!analysed){}
+
+    // return result;
   },
 
   drawScreenOutlines(c, aImage) {
     let ctx = c.getContext('2d')
     ctx.strokeStyle = '#ff0000'
+    ctx.lineWidth = 4
     let s = aImage.screens
     for (let i = 0; i < s.length; i++) {
       ctx.beginPath()
