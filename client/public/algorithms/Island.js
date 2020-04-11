@@ -156,13 +156,8 @@ class Island {
       }
       startSlice = s
     }
-<<<<<<< HEAD:client/src/algorithms/Island.js
-    if (slices[slices.length-1].length > result.length) {
-      result = slices[slices.length-1]
-=======
     if (slices[slices.length - 1].length > result.length) {
       result = slices[slices.length - 1]
->>>>>>> makeitthreaded:client/public/algorithms/Island.js
     }
     if (result.length === 0) {
       return values
@@ -195,16 +190,9 @@ class Island {
   finishIsland() {
     console.log('Try to identify island ' + this.id)
     this.findCorners()
-<<<<<<< HEAD:client/src/algorithms/Island.js
-    this.communicator.sendInfoMessage(
-      'Try to identify screen in island ' + this.id
-    )
-    var data = this.getScreenImg(this.RGBImage)
-=======
     // console.log(
     //   'Try to identify screen in island ' + this.id
     // )
->>>>>>> makeitthreaded:client/public/algorithms/Island.js
     this.clientCode = RGBBarcodeScanner.scan(
       // this.getScreenImg(this.RGBImage),
       this.getScreenImgData(this.RGBImage),
