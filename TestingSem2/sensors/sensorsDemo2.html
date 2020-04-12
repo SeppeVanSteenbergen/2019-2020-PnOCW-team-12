@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sensors demo</title>
+
+    <style>
+        .container {
+            perspective: 300;
+            -webkit-perspective: 300;
+        }
+
+        #imgLogo {
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+<table>
+    <tr>
+        <td>Tilt Left/Right [gamma]</td>
+        <td id="doTiltLR"></td>
+    </tr>
+    <tr>
+        <td>Tilt Front/Back [beta]</td>
+        <td id="doTiltFB"></td>
+    </tr>
+    <tr>
+        <td>Direction [alpha]</td>
+        <td id="doDirection"></td>
+    </tr>
+</table>
+
+<div id="logoContainer">
+    <img src="screencast_icon_512_blue.png" id="imgLogo">
+</div>
+
+<script src="https://threejs.org/build/three.js"></script>
+<script src="sensorsDemo2.js" type="text/javascript"></script>
+</body>
+</html>
