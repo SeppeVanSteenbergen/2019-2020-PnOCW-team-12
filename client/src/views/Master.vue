@@ -247,9 +247,9 @@
                 <canvas ref="resultCanvas"></canvas>
                 <canvas ref="delaunay"></canvas>
                 <canvas ref="delaunay2"></canvas>
-              </v-card>
 
-              <v-btn color="primary" @click="nextStep(3)">Continue</v-btn>
+                <v-btn color="primary" @click="nextStep(3)">Continue</v-btn>
+              </v-card>
 
               <v-btn text @click="pictureModeDialog = false">Cancel</v-btn>
             </v-stepper-content>
