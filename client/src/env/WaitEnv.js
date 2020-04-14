@@ -50,12 +50,17 @@ export default class WaitEnv {
 
     }
 
-    addMessage(str) {
+    addMessage(str, error=false) {
         var node = document.createElement("LI");                 // Create a <li> node
+        str = (error ? "ERROR: " : "") + str
         var textnode = document.createTextNode(str);
 
         node.appendChild(textnode)
         this.msgList.appendChild(node)
+
+        if(error){
+            node.style.color = "red"
+        }
 
         // Keep scroll to the bottom when new item is added to the list
         this.msgContainter.scrollTop = this.msgContainter.scrollHeight
@@ -86,7 +91,7 @@ export default class WaitEnv {
                         this.communicator.sendSuccessMessage('Analyse Done')
                     } else {
                         this.updateBar(0, true) //make bar error!
-                        this.addMessage('ERROR: Numer of Screens and Number of Clients do not match!')
+                        this.addMessage('Numer of Screens and Number of Clients do not match:', true)
                         this.addMessage('Connected Clients: ' + this.result.clientInfo.length)
                         this.addMessage('Found Screens: ' + this.result.screens.length)
 
@@ -97,6 +102,10 @@ export default class WaitEnv {
                 if (evt.data.text === 'UPDATE') {
                     this.updateBar(evt.data.pct)
                     this.addMessage(evt.data.msg)
+                }
+
+                if(evt.data.text === 'ERROR'){
+                    this.addMessage(evt.data.msg, true)
                 }
 
                 if (evt.data.text === 'MESSAGE') {
