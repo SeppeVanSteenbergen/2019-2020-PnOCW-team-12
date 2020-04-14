@@ -96,18 +96,11 @@ class Image {
                 newIsland.finishIsland()
                 this.islands.push(newIsland)
               } catch (err) {
-                self.postMessage({text:'ERROR', msg:err})
+                self.postMessage({text:'ERROR', msg:err + this.getRealIslandID()})
+                console.log('Error :' + err + this.getRealIslandID())
               }
-              // try {
-              //   newIsland.finishIsland()
-              //   this.islands.push(newIsland)
-              // } catch (err) {
-              //   console.log(err + ' in screen: ' + newIsland.getClientCode())
-              // }
             } else {
-              //   'Island ' + this.islandID + 'is not valid, no island created'
-              // )
-              console.log('Island ' + this.islandID + 'is not valid, no island created')
+              throw 'No midpoint in island ' + this.getRealIslandID()
             }
             this.islandID += 3
           }
@@ -189,8 +182,11 @@ class Image {
    */
   createScreens() {
     this.screens = []
-    this.calcIslandsFloodfill()
-
+    try {
+      this.calcIslandsFloodfill()
+    } catch (err) {
+      self.postMessage({text:'ERROR', msg: err})
+    }
     self.postMessage({text: 'UPDATE', pct: 20, msg: 'Floodfill done: found ' + this.islands.length + " island(s)"})
 
     for (let i = 0; i < this.islands.length; i++) {
@@ -404,6 +400,10 @@ class Image {
    */
   getImgData() {
     return this.imgData;
+  }
+
+  getRealIslandID() {
+    return parseInt(Math.floor(this.islandID/3))-1
   }
 
   getColorSpace() {

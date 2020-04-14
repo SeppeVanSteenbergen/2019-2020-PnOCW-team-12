@@ -42,7 +42,6 @@ class Island {
   }
 
   isValid() {
-    if (this.midPoint == null) console.log('No midpoint in island ' + this.id)
     return this.midPoint !== null
   }
 
@@ -84,7 +83,7 @@ class Island {
 
     self.postMessage({
       text: 'MESSAGE',
-      msg: 'Corners of screen in island ' + this.id + ' are all set'
+      msg: 'Corners of screen in island ' + this.getRealID() + ' are all set'
     })
   }
 
@@ -108,7 +107,8 @@ class Island {
     xValues = Island.filterPoints(xValues)
     yValues = Island.filterPoints(yValues)
 
-    console.log('Midpoint of island ' + this.id + ' calculated')
+    console.log('Midpoint of island ' + this.getRealID() + ' calculated')
+    self.postMessage({text: 'UPDATE', msg:'Midpoint of island ' + this.getRealID() + ' calculated'})
     return [
       xValues[Math.round(xValues.length / 2)],
       yValues[Math.round(yValues.length / 2)]
@@ -193,9 +193,8 @@ class Island {
 
     self.postMessage({
       text: 'MESSAGE',
-      msg: 'Detected client code for screen ' + this.id + ': ' + this.clientCode
+      msg: 'Detected client code for screen ' + this.getRealID() + ': ' + this.clientCode
     })
-
     console.log('Detected screen: ' + this.clientCode)
   }
 
@@ -285,6 +284,10 @@ class Island {
     return new ImageData(arr, this.maxx - this.minx, this.maxy - this.miny)
   }
 
+  getRealID() {
+    return parseInt(Math.floor(this.id/3))-1
+  }
+
   getHeight() {
     return this.height
   }
@@ -302,3 +305,4 @@ class Island {
     console.log('ending co: ' + this.maxx + ', ' + this.maxy)
   }
 }
+

@@ -41,7 +41,7 @@ class CornerDetector {
         return point != null
       }).length < 2
     ){
-      throw 'Not enough good corners to make reconstruction of island ' + this.id
+      throw 'Not enough good corners to make reconstruction of island '
     }
 
     this.corners = this.orderCorners(nonPositionCorners)
