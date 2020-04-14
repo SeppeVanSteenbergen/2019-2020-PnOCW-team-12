@@ -104,7 +104,7 @@
 
           <v-tab-item>
             <v-content>
-              <v-btn @click="pictureModeDialog = true; nextStep(0)" class="mx-auto">open dialog</v-btn>
+              <v-btn @click="screenDetectionDialog = true; nextStep(0)" class="mx-auto">open dialog</v-btn>
             </v-content>
           </v-tab-item>
 
@@ -166,7 +166,7 @@
 
     <!-- PICTURE MODE DIALOG -->
 
-    <v-dialog v-model="pictureModeDialog" fullscreen>
+    <v-dialog v-model="screenDetectionDialog" fullscreen>
       <v-stepper v-model="pictureStepper" class="fullheight">
         <template>
           <v-stepper-header>
@@ -193,7 +193,7 @@
 
               <v-btn color="primary" @click="nextStep(1)">Continue</v-btn>
 
-              <v-btn text @click="pictureModeDialog = false">Cancel</v-btn>
+              <v-btn text @click="screenDetectionDialog = false">Cancel</v-btn>
             </v-stepper-content>
 
             <v-stepper-content step="2" class="fullheight overflow-y-auto">
@@ -227,7 +227,7 @@
                   "
                 >Analyse image</v-btn>
 
-                <v-btn text @click="pictureModeDialog = false">Cancel</v-btn>
+                <v-btn text @click="screenDetectionDialog = false">Cancel</v-btn>
               </v-card>
             </v-stepper-content>
 
@@ -251,7 +251,7 @@
                 <v-btn color="primary" @click="nextStep(3)">Continue</v-btn>
               </v-card>
 
-              <v-btn text @click="pictureModeDialog = false">Cancel</v-btn>
+              <v-btn text @click="screenDetectionDialog = false">Cancel</v-btn>
             </v-stepper-content>
             <v-stepper-content step="4" class="fullheight overflow-y-auto">
               <v-expansion-panels>
@@ -322,7 +322,7 @@
                 </v-expansion-panel>
               </v-expansion-panels>
 
-              <v-btn text @click="pictureModeDialog = false">Cancel</v-btn>
+              <v-btn text @click="screenDetectionDialog = false">Cancel</v-btn>
             </v-stepper-content>
           </v-stepper-items>
         </template>
@@ -353,7 +353,7 @@
           <v-btn color="success" @click="executeDisplayImage()">
             Send To All</v-btn
           >
-          <v-btn @click="pictureModeDialog = false" color="error" text>
+          <v-btn @click="screenDetectionDialog = false" color="error" text>
             close</v-btn
           >
         </v-card-actions>
@@ -377,19 +377,19 @@ export default {
       tab: null,
       tabs: [
         {
-          title: 'floodfill'
+          title: 'Floodfill'
         },
         {
-          title: 'draw direction'
+          title: 'Draw Direction'
         },
         {
-          title: 'countdown'
+          title: 'Countdown'
         },
         {
-          title: 'PictureMode'
+          title: 'Screen Detection'
         },
         {
-          title: 'PictureUpload'
+          title: 'Picture Upload'
         }
       ],
       color: { r: 200, g: 100, b: 0, a: 1 },
@@ -405,10 +405,10 @@ export default {
       videoSendInterval: null,
       facingUser: true,
 
-      // picture mode
+      // screen detection mode
       pictureStepper: 0,
       steps: 4,
-      pictureModeDialog: false,
+      screenDetectionDialog: false,
       analysedImage: null,
       displayFile: null,
       displayFileVideo: null,
@@ -1344,7 +1344,7 @@ export default {
         this.colorClient()
       }
     },
-    pictureModeDialog(n) {
+    screenDetectionDialog(n) {
       console.log('exit picture ' + n)
       if (!n && this.videoStream !== null) {
         this.videoStream.getTracks().forEach(track => {
