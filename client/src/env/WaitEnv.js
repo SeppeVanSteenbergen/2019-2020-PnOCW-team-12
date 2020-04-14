@@ -66,6 +66,14 @@ export default class WaitEnv {
         this.msgContainter.scrollTop = this.msgContainter.scrollHeight
     }
 
+    addSeparator(){
+        var textnode = document.createTextNode("______________________");
+
+        this.msgList.appendChild(textnode)
+
+        this.msgContainter.scrollTop = this.msgContainter.scrollHeight
+    }
+
     handleEvent(evt) {
 
         switch (evt.type) {
@@ -97,6 +105,9 @@ export default class WaitEnv {
 
                         this.communicator.sendErrorMessage('Problem with Analysation')
                     }
+
+                    // this.addMessage("--------------------------------")
+                    this.addSeparator()
                 }
 
                 if (evt.data.text === 'UPDATE') {
