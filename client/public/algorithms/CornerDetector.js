@@ -41,9 +41,8 @@ class CornerDetector {
         return point != null
       }).length < 2
     ){
-      throw 'Not enough good corners detected for reconstruction'
+      self.postMessage({text: 'ERROR', msg: 'Not enough good corners detected for reconstruction in island: ' + this.id})
     }
-
 
     this.corners = this.orderCorners(nonPositionCorners)
     nonPositionCorners = nonPositionCorners.filter(function(point) {

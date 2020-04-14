@@ -82,7 +82,7 @@ class Image {
         if (this.checkId(x, y)) {
           let newIslandCoo = this.floodfill(x, y, this.islandID)
           if (this.isPossibleIsland(newIslandCoo)) {
-            let newIsland = new Island(
+            let newIsland = new Island (
               [newIslandCoo[0], newIslandCoo[1]],
               [newIslandCoo[2], newIslandCoo[3]],
               this.islandID,

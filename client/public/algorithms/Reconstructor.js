@@ -303,7 +303,6 @@ class Reconstructor {
     if (biggest != null) {
       reco.push(biggest[Math.floor(biggest.length / 2)])
     }
-
     return reco
   }
 
