@@ -244,6 +244,21 @@
                 <v-divider :inset="true" ></v-divider>
                 <div style="height: 15px"></div>
 
+                <v-btn
+                  :disabled="isBusyAnalysing()"
+                  color="primary"
+                  @click="
+                    nextStep(1)
+                  "
+                >Retake Picture</v-btn>
+                <v-btn
+                  :disabled="isBusyAnalysing()"
+                  color="primary"
+                  @click="
+                    analyseImageAsync()
+                  "
+                >Re-Analyse Image</v-btn>
+
                 <canvas ref="resultCanvas"></canvas>
                 <canvas ref="delaunay"></canvas>
                 <canvas ref="delaunay2"></canvas>
@@ -419,6 +434,8 @@ export default {
       Xpos: 0,
       Ypos: 0,
       drawCanvasScale: 1,
+
+      isAnalysing: false,
 
       videofile: null,
       animationInterval: null,
@@ -603,6 +620,9 @@ export default {
       } else {
         this.pictureStepper = n + 1
       }
+    },
+    isBusyAnalysing(){
+      return this.isAnalysing;
     },
     takePicture() {
       this.$refs.canva.width = this.$refs.video.videoWidth
@@ -1150,6 +1170,8 @@ export default {
     async analyseImage() {
       console.log('starting analysis')
 
+      this.isAnalysing = true
+
       let inC = this.$refs.canva
       let outC = this.$refs.resultCanvas
 
@@ -1209,6 +1231,8 @@ export default {
       })
 
       this.analysedImage = waitEnv.getResult()
+
+      this.isAnalysing = false;
 
       outC.width = this.analysedImage.imgOriginalRGB.width
       outC.height = this.analysedImage.imgOriginalRGB.height
