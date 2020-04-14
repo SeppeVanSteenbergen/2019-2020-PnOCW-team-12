@@ -164,7 +164,7 @@
       </v-card>
     </v-dialog>
 
-    <!-- PICTURE MODE DIALOG -->
+    <!-- SCREEN DETECTION DIALOG -->
 
     <v-dialog v-model="screenDetectionDialog" fullscreen>
       <v-stepper v-model="pictureStepper" class="fullheight">

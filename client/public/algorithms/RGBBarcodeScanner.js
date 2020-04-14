@@ -179,6 +179,8 @@ class RGBBarcodeScanner {
   }
 
   static getHighestCode(barcodes) {
+    if (Object.keys(barcodes).length === 0)
+      throw 'Barcode was not readable in island '
     return Object.keys(barcodes).reduce((a, b) =>
       barcodes[a] > barcodes[b] ? a : b
     )
