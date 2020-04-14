@@ -43,7 +43,7 @@
       <v-card
         class
         v-if="myRoom !== null && !myRoom.open"
-        style="width:40vw;height:50vh; min-width:400px"
+        style="width:40vw;height:50vh; min-width:320px"
       >
         <v-toolbar color="primary" dark flat>
           <v-toolbar-title>Commands</v-toolbar-title>
@@ -63,7 +63,7 @@
           <v-tab v-for="i in tabs" :key="tabs.indexOf(i)" vertical>{{ i.title }}</v-tab>
 
           <v-tab-item>
-            <v-btn @click="floodFillDialog = true">open</v-btn>
+            <v-btn @click="floodFillDialog = true">open dialog</v-btn>
           </v-tab-item>
 
           <v-tab-item>
