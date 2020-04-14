@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+</head>
+<body>
+<button onclick="toggleSettings()">toggle settings</button>
+<div id="settings">
+	<label><input type="checkbox" id="checkboxCompare" onchange="firstCompare = this.checked">compareWithFirst</label><br/>
+	<label><input type="text"  id="framerate" oninput="framerate = this.value"> frameWait</label><br/>
+	<label><input type="text"  id="hold" oninput="hold = this.value"> threshold</label><br/>
+	<label><input type="text"  id="confidence" oninput="confidence = this.value"> confidenceThreshold</label><br/>
+	<label><input type="checkbox" id="sensors" onchange="sensors = this.checked">Sensors</label><br/>
+	<label><input type="checkbox" id="translation" onchange="translation = this.checked">Translation</label><br/>
+	<button onclick="player = {x:200,y:200};">Reset Position</button>
+</div>
+<p id="out"></p>
+<canvas id="canv"></canvas>
+<canvas style="border: 3px solid black" id="game"></canvas>
+<video id="vid"></video>
+<img id="homer" src="build/homer.jpg" style="display:none"/>
+</body>
+
+<footer>
+	<script src="FASTDetector.js"></script>
+	<script src="Brief.js"></script>
+	<script src="https://threejs.org/build/three.js"></script>
+
+	<script lang="text/javascript">
+        // config
+        let framerate = 300 // ms wait time
+        let firstCompare = true  // only compare next frames with first, or compare with previous frame
+
+        let translation = false;
+		let sensors = false;
+
+        //Fast config
+        let hold = 50 // threshold
+
+        // Brief settings
+        let confidence = 0.7 // how sure when matching keypoints
+
+        //// end config ////
+
+
+        let video = document.getElementById('vid')
+        let canvas = document.getElementById('canv')
+        let ctx = canvas.getContext('2d')
+        let settings = document.getElementById('settings')
+
+        let homer = document.getElementById('homer')
+
+        document.getElementById('checkboxCompare').checked = firstCompare
+        document.getElementById('framerate').value = framerate
+        document.getElementById('hold').value = hold
+        document.getElementById('confidence').value = confidence
+        document.getElementById('translation').checked = translation
+		document.getElementById('sensors').checked = sensors
+
+        function toggleSettings() {
+            if(settings.style.display === 'none') {
+                settings.style.display = 'block'
+            } else {
+                settings.style.display = 'none'
+            }
+        }
+
+        let game = document.getElementById('game')
+        let ctg = game.getContext('2d')
+        game.width = 400
+        game.height = 400
+
+        let player = {
+            x:200,
+            y:200
+        }
+
+        video.style.display = 'none'
+
+        let previousDescriptor = null
+        let previousCorners = null
+
+        let matches = null
+        let trans
+        let out = document.getElementById('out')
+
+		const sensor = new AbsoluteOrientationSensor();
+		let axisOffset = new THREE.Quaternion(0, 0, 0, 1);
+		let offset = null;
+		Promise.all([navigator.permissions.query({ name: "accelerometer" }),
+			navigator.permissions.query({ name: "gyroscope" })])
+				.then(results => {
+					if (results.every(result => result.state === "granted")) {
+						sensor.addEventListener('reading', () => {
+							let [x, y, z, w] = sensor.quaternion;
+							let quaternion = new THREE.Quaternion(x, y, z, w);
+
+							if (offset === null) {
+								offset = quaternion
+							} else {
+								quaternion.multiplyQuaternions(quaternion, offset.inverse())
+								quaternion.multiplyQuaternions(quaternion, axisOffset.inverse())
+								x = quaternion.x;
+								y = quaternion.y;
+								z = quaternion.z;
+								w = quaternion.w;
+								offset.inverse()
+								axisOffset.inverse()
+							}
+
+							let a1 = 1 - 2 * y * y - 2 * z * z;
+							let a2 = 2 * x * y - 2 * z * w;
+							let a3 = 2 * x * z + 2 * w * y;
+							let a4 = 0;
+							let b1 = 2 * x * y + 2 * w * z;
+							let b2 = 1 - 2 * x * x - 2 * z * z;
+							let b3 = 2 * y * z - 2 * w * x;
+							let b4 = 0;
+							let c1 = 2 * x * z - 2 * w * y;
+							let c2 = 2 * y * z + 2 * w * x;
+							let c3 = 1 - 2 * x * x - 2 * y * y;
+							let c4 = 0;
+							let d1 = 0;
+							let d2 = 0;
+							let d3 = 0;
+							let d4 = 1;
+
+							if(sensors) {
+								game.style.MozTransform = `matrix3d(${b1}, ${-c1}, ${a1}, ${d1}, ${b2}, ${-c2}, ${a2}, ${d2}, ${b3}, ${-c3}, ${a3}, ${d3}, ${a4}, ${b4}, ${c4}, ${d4})` + "rotate(90deg)";
+								game.style.transform = `matrix3d(${b1}, ${-c1}, ${a1}, ${d1}, ${b2}, ${-c2}, ${a2}, ${d2}, ${b3}, ${-c3}, ${a3}, ${d3}, ${a4}, ${b4}, ${c4}, ${d4})` + "rotate(90deg)";
+							}
+							});
+						sensor.addEventListener('error', error => {
+							if (event.error.name == 'NotReadableError') {
+								console.log("Sensor is not available.");
+							}
+						});
+
+						sensor.start();
+					} else {
+						console.log("No permissions to use AbsoluteOrientationSensor.");
+					}
+				});
+        // Javascript
+        navigator.mediaDevices.getUserMedia({
+                video: {
+                    facingMode: 'environment'
+                },
+                audio:false
+            }
+        ).then(function(stream) {
+            video.srcObject = stream;
+            video.onloadedmetadata = function(e) {
+                video.play();
+                canvas.width = video.videoWidth
+                canvas.height = video.videoHeight
+                draw()
+            };
+        }).catch(function(err) {
+            // deal with an error (such as no webcam)
+        });
+
+
+        function draw() {
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            let imgData = ctx.getImageData(0,0,canvas.width, canvas.height)
+			if(translation){
+				let grayPixels = grayScaleImgData(imgData,false)
+				let corners = FASTDetector(imgData.data, canvas.width, hold)
+				for (let i = 0; i < corners.length; i++) {
+					ctx.fillStyle = '#f00';
+					ctx.fillRect(corners[i][0], corners[i][1], 3, 3);
+				}
+				trans = {
+					x: 0,
+					y: 0
+				}
+
+				let descriptor = Brief.getDescriptors(grayPixels, canvas.width, corners)
+				if(previousDescriptor !== null) {
+					matches = Brief.reciprocalMatch(previousCorners, previousDescriptor, corners, descriptor)
+					let selectedCount = 0
+					for (let i = 0; i < matches.length; i++) {
+						if (matches[i].confidence > confidence) {
+							selectedCount++
+							trans.x += matches[i].keypoint2[0] - matches[i].keypoint1[0]
+							trans.y += matches[i].keypoint2[1] - matches[i].keypoint1[1]
+						}
+					}
+					if (selectedCount > 0) {
+						trans.x = trans.x / selectedCount
+						trans.y = trans.y / selectedCount
+					}
+					out.innerText = "x: " + trans.x + " y: " + trans.y
+				}
+
+
+				if(!firstCompare || previousDescriptor === null) {
+					previousDescriptor = descriptor
+					previousCorners = corners
+				}
+
+				//draw game
+				if(firstCompare) {
+					player.x = trans.x + 200
+					player.y = trans.y + 200
+				} else {
+					player.x += trans.x
+					player.y += trans.y
+				}
+				ctg.clearRect(0, 0, game.width, game.height)
+				ctg.drawImage(homer, -130,0, 700,400)
+				ctg.fillStyle = '#f00';
+				ctg.fillRect(player.x, player.y, 20, 20);
+
+
+				// draw keypoints
+				for (let i = 0; i < corners.length; i += 2) {
+					ctx.fillStyle = '#f00';
+					ctx.fillRect(corners[i], corners[i + 1], 3, 3);
+				}
+			}
+
+            setTimeout(draw, framerate);
+        }
+
+
+        /**
+         * multiply matrix. as matrix[row][col]
+         * @param matrixA
+         * @param matrixB
+         * @returns {any[]}
+         */
+        function multiply(a, b) {
+            var aNumRows = a.length, aNumCols = a[0].length,
+                bNumRows = b.length, bNumCols = b[0].length,
+                m = new Array(aNumRows);  // initialize array of rows
+            for (var r = 0; r < aNumRows; ++r) {
+                m[r] = new Array(bNumCols); // initialize the current row
+                for (var c = 0; c < bNumCols; ++c) {
+                    m[r][c] = 0;             // initialize the current cell
+                    for (var i = 0; i < aNumCols; ++i) {
+                        m[r][c] += a[r][i] * b[i][c];
+                    }
+                }
+            }
+            return m;
+        }
+
+	</script>
+</footer>
+</html>
