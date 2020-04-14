@@ -38,14 +38,14 @@ export default class WaitEnv {
         this.msgContainter.style.overflowY = "auto"
     }
 
-    updateBar(pct) {
+    updateBar(pct, error = false) {
 
-        this.progress = Math.min(this.progress + pct, 100)
+        this.progress = error ? 100 : Math.min(this.progress + pct, 100)
 
         this.bar.style.width = this.progress + "%"
 
         if (this.progress == 100) {
-            this.bar.style.backgroundColor = "green"
+            this.bar.style.backgroundColor = error ? "red" : "green"
         }
 
     }
@@ -73,7 +73,25 @@ export default class WaitEnv {
 
                     this.worker.terminate()
 
-                    this.communicator.sendSuccessMessage('Analyse Done')
+                    // console.log(this.result.clientInfo)
+                    // this.addMessage(this.result.clientInfo.length)
+
+                    let success = true;
+
+                    if (this.result.clientInfo.length != this.result.screens.length) {
+                        success = false
+                    }
+
+                    if (success) {
+                        this.communicator.sendSuccessMessage('Analyse Done')
+                    } else {
+                        this.updateBar(0, true) //make bar error!
+                        this.addMessage('ERROR: Numer of Screens and Number of Clients do not match!')
+                        this.addMessage('Connected Clients: ' + this.result.clientInfo.length)
+                        this.addMessage('Found Screens: ' + this.result.screens.length)
+
+                        this.communicator.sendErrorMessage('Problem with Analysation')
+                    }
                 }
 
                 if (evt.data.text === 'UPDATE') {
@@ -81,7 +99,7 @@ export default class WaitEnv {
                     this.addMessage(evt.data.msg)
                 }
 
-                if(evt.data.text === 'MESSAGE'){
+                if (evt.data.text === 'MESSAGE') {
                     this.addMessage(evt.data.msg)
                 }
 
