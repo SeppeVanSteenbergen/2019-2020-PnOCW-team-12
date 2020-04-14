@@ -41,7 +41,7 @@ class CornerDetector {
         return point != null
       }).length < 2
     ){
-      self.postMessage({text: 'ERROR', msg: 'Not enough good corners detected for reconstruction in island: ' + this.id})
+      throw 'Not enough good corners to make reconstruction of island ' + this.id
     }
 
     this.corners = this.orderCorners(nonPositionCorners)

@@ -8,14 +8,7 @@ class Island {
    * @param RGBImage
    * @param matrix
    */
-  constructor(
-    leftUpperCoo,
-    rightBottomCoo,
-    id,
-    HSLImage,
-    RGBImage,
-    matrix
-  ) {
+  constructor(leftUpperCoo, rightBottomCoo, id, HSLImage, RGBImage, matrix) {
     console.log('Start creating island with ID ' + id)
     // console.log('Start creating island with ID ' + id)
     this.corners = {
@@ -49,8 +42,7 @@ class Island {
   }
 
   isValid() {
-    if (this.midPoint == null)
-      console.log('No midpoint in island ' + this.id)
+    if (this.midPoint == null) console.log('No midpoint in island ' + this.id)
     return this.midPoint !== null
   }
 
@@ -90,8 +82,10 @@ class Island {
       detectedCorners.RD[2]
     ]
 
-    self.postMessage({text: 'MESSAGE', msg: 'Corners of screen in island ' + this.id + ' are all set'})
-
+    self.postMessage({
+      text: 'MESSAGE',
+      msg: 'Corners of screen in island ' + this.id + ' are all set'
+    })
   }
 
   calcMid() {
@@ -126,7 +120,7 @@ class Island {
       return input
     }
 
-    let values = input.sort(function (a, b) {
+    let values = input.sort(function(a, b) {
       return a - b
     })
 
@@ -190,18 +184,17 @@ class Island {
   finishIsland() {
     console.log('Try to identify island ' + this.id)
     this.findCorners()
-    // console.log(
-    //   'Try to identify screen in island ' + this.id
-    // )
     this.clientCode = RGBBarcodeScanner.scan(
-      // this.getScreenImg(this.RGBImage),
       this.getScreenImgData(this.RGBImage),
       this.corners.LU,
       this.corners.RU
     )
     this.localToWorld()
 
-    self.postMessage({text: 'MESSAGE', msg: 'Detected client code for screen ' + this.id + ': ' + this.clientCode})
+    self.postMessage({
+      text: 'MESSAGE',
+      msg: 'Detected client code for screen ' + this.id + ': ' + this.clientCode
+    })
 
     console.log('Detected screen: ' + this.clientCode)
   }
@@ -253,7 +246,7 @@ class Island {
   }
 
   getScreenImg(image) {
-    console.log("trying to get screen img from doc...")
+    console.log('trying to get screen img from doc...')
     let canvas = document.createElement('canvas')
     canvas.width = image.width
     canvas.height = image.height
@@ -276,8 +269,10 @@ class Island {
       rowCnt++
 
       if (rowCnt >= this.miny) {
-        const curRow = image.data.slice(i, i + (w * 4));
-        const part = Array.from(curRow.slice(this.minx * 4, ((this.maxx - 1) * 4) + 4))
+        const curRow = image.data.slice(i, i + w * 4)
+        const part = Array.from(
+          curRow.slice(this.minx * 4, (this.maxx - 1) * 4 + 4)
+        )
         result = result.concat(part)
       }
 

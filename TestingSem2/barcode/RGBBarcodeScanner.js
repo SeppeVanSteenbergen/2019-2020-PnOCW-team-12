@@ -24,7 +24,7 @@ class RGBBarcodeScanner {
     let totalScanned = values.reduce((a, b) => a + b, 0)
     console.log(barcodes[highest] / totalScanned)
     console.log(barcodes)
-    return [imageData,highest]
+    return highest
   }
 
   static scanRow(pixels, barcodes) {
@@ -180,6 +180,7 @@ class RGBBarcodeScanner {
   }
 
   static getHighestCode(barcodes) {
+    if (Object.keys(barcodes).length === 0) throw "Couldn't read barcode of screen "
     return Object.keys(barcodes).reduce((a, b) =>
         barcodes[a] > barcodes[b] ? a : b
     )

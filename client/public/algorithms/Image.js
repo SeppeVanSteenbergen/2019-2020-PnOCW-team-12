@@ -92,8 +92,12 @@ class Image {
             )
             if (newIsland.isValid()) {
               console.log('Island ' + this.islandID + 'is valid')
-              newIsland.finishIsland()
-              this.islands.push(newIsland)
+              try {
+                newIsland.finishIsland()
+                this.islands.push(newIsland)
+              } catch (err) {
+                self.postMessage({text:'ERROR', msg:err})
+              }
               // try {
               //   newIsland.finishIsland()
               //   this.islands.push(newIsland)
