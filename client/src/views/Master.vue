@@ -104,7 +104,7 @@
 
           <v-tab-item>
             <v-content>
-              <v-btn @click="pictureModeDialog = true" class="mx-auto">open dialog</v-btn>
+              <v-btn @click="pictureModeDialog = true; nextStep(0)" class="mx-auto">open dialog</v-btn>
             </v-content>
           </v-tab-item>
 
