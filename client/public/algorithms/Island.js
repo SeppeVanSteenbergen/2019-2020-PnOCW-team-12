@@ -108,7 +108,7 @@ class Island {
     yValues = Island.filterPoints(yValues)
 
     console.log('Midpoint of island ' + this.getRealID() + ' calculated')
-    self.postMessage({text: 'UPDATE', msg:'Midpoint of island ' + this.getRealID() + ' calculated'})
+    self.postMessage({text: 'MESSAGE', msg:'Midpoint of island ' + this.getRealID() + ' calculated'})
     return [
       xValues[Math.round(xValues.length / 2)],
       yValues[Math.round(yValues.length / 2)]
