@@ -262,8 +262,7 @@ export default class Animations {
         newNeighbour[0] === this.firstPoint[0] &&
         newNeighbour[1] === this.firstPoint[1]
       ) {
-        random = Math.floor(Math.random() * newNeighbours.length)
-        newNeighbour = newNeighbours[random]
+        newNeighbour = newNeighbours[++random % newNeighbour.length]
       }
       this.setPosition(this.endPoint[0], this.endPoint[1])
       this.setDirection(this.endPoint, newNeighbour)
