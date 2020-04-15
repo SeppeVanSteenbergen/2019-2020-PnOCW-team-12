@@ -294,7 +294,7 @@
                         hide-details
                       ></v-slider>-->
                       <v-btn color="primary" @click="executeUploadImage">Image HTTPS</v-btn>
-                      <v-btn color="primary" @click="sendImageCSS">Send Image Socket</v-btn>
+                      <!-- <v-btn color="primary" @click="sendImageCSS">Send Image Socket</v-btn> -->
                       <!--<v-btn color="primary" @click="sendCustomImage">
                         Send Image
                       </v-btn>-->
