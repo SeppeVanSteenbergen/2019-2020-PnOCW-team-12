@@ -437,9 +437,6 @@ export default {
       videoSendInterval: null,
       facingUser: true,
 
-      // resultPanels: [0, 1],
-      // multipleResults: true,
-
       // screen detection mode
       pictureStepper: 0,
       steps: 4,
@@ -675,8 +672,9 @@ export default {
           let c = vue.$refs.drawCanvas
 
           let scale = 1
+          let info = null
           if(vue.analysedImage != null){
-            let info = ImageTools.createPictureCanvas(vue.drawingImg.width, vue.drawingImg.height, vue.analysedImage)
+            info = ImageTools.createPictureCanvas(vue.drawingImg.width, vue.drawingImg.height, vue.analysedImage)
             scale = info.scale
           }
 
@@ -708,7 +706,7 @@ export default {
 
           ctx.drawImage(vue.drawingImg, 0, 0, c.width, c.height)
 
-          if (vue.analysedImage != null) {
+          if (info != null) {
             AlgorithmService.drawScreenOutlines(c, vue.analysedImage, info.minx, info.miny)
           }
 
