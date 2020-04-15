@@ -302,14 +302,31 @@
                   >Re-Analyse Image</v-btn
                 >
 
-                <canvas ref="resultCanvas"></canvas>
-                <canvas ref="delaunay"></canvas>
-                <canvas ref="delaunay2"></canvas>
+                <v-expansion-panels :value=[0,1] :multiple=true>
+                  <v-expansion-panel>
+                    <v-expansion-panel-header>Result</v-expansion-panel-header>
+                    <v-expansion-panel-content>
+                      <canvas ref="resultCanvas"></canvas>
+                    </v-expansion-panel-content>
+                  </v-expansion-panel>
+                  <v-expansion-panel>
+                    <v-expansion-panel-header>Delaunay</v-expansion-panel-header>
+                    <v-expansion-panel-content>
+                      <canvas ref="delaunay2"></canvas>
+                    </v-expansion-panel-content>
+                  </v-expansion-panel>
+                </v-expansion-panels>
+
+                <!-- <canvas ref="resultCanvas"></canvas> -->
+                <!-- <canvas ref="delaunay"></canvas> -->
+                <!-- <canvas ref="delaunay2"></canvas> -->
 
                 <v-btn color="primary" @click="nextStep(3)">Continue</v-btn>
+              
               </v-card>
 
               <v-btn text @click="screenDetectionDialog = false">Cancel</v-btn>
+            
             </v-stepper-content>
             <v-stepper-content step="4" class="fullheight overflow-y-auto">
               <v-expansion-panels>
@@ -1369,6 +1386,10 @@ export default {
         .putImageData(delaunayImgObject, 0, 0)
 
       this.$refs.delaunay2.style.width = '100%'
+
+      console.log("DIT IS DE PANELS")
+      this.resultPanels = [1,0]
+      console.log(this.resultPanels)
 
       this.executeDelaunayImage()
     },

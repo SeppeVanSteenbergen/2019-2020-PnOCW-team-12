@@ -19,11 +19,11 @@ if (dev) secure = false
 
 const devServ = {
   backend: {
-    url: 'http://192.168.0.10:8012',
+    url: 'http://localhost:8012',
     port: 8012
   },
   frontend: {
-    url: 'http://192.168.0.10:8080',
+    url: 'http://localhost:8080',
     port: 8080
   }
 }

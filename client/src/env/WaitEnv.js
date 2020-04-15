@@ -33,7 +33,7 @@ export default class WaitEnv {
         this.bar.style.backgroundColor = "#2196f3"
 
         this.msgContainter.style.width = "100%"
-        this.msgContainter.style.height = "100px"
+        this.msgContainter.style.height = "180px"
         this.msgContainter.style.overflowX = "hidden"
         this.msgContainter.style.overflowY = "auto"
     }
