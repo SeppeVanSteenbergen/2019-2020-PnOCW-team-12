@@ -40,18 +40,18 @@ export default {
     // return result;
   },
 
-  drawScreenOutlines(c, aImage) {
+  drawScreenOutlines(c, aImage, dx = 0, dy = 0) {
     let ctx = c.getContext('2d')
     ctx.strokeStyle = '#ff0000'
     ctx.lineWidth = 4
     let s = aImage.screens
     for (let i = 0; i < s.length; i++) {
       ctx.beginPath()
-      ctx.moveTo(s[i].corners[0][0], s[i].corners[0][1])
-      ctx.lineTo(s[i].corners[1][0], s[i].corners[1][1])
-      ctx.lineTo(s[i].corners[2][0], s[i].corners[2][1])
-      ctx.lineTo(s[i].corners[3][0], s[i].corners[3][1])
-      ctx.lineTo(s[i].corners[0][0], s[i].corners[0][1])
+      ctx.moveTo(s[i].corners[0][0] - dx, s[i].corners[0][1] - dy)
+      ctx.lineTo(s[i].corners[1][0] - dx, s[i].corners[1][1] - dy)
+      ctx.lineTo(s[i].corners[2][0] - dx, s[i].corners[2][1] - dy)
+      ctx.lineTo(s[i].corners[3][0] - dx, s[i].corners[3][1] - dy)
+      ctx.lineTo(s[i].corners[0][0] - dx, s[i].corners[0][1] - dy)
       ctx.closePath()
       ctx.stroke()
     }

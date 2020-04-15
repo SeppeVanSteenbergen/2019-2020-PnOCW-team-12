@@ -98,10 +98,10 @@ export default class ImageTools {
     points['miny'] = allCorners[0][1]
     points['maxy'] = allCorners[allCorners.length - 1][1]
 
-    let scale = width / (points['maxx'] - points['minx'])
+    let scale = (points['maxx'] - points['minx']) / width
 
     if (height * scale < points['maxy'] - points['miny']) {
-      scale = height / (points['maxy'] - points['miny'])
+      scale = (points['maxy'] - points['miny']) / height
     }
 
     points['scale'] = scale
@@ -112,8 +112,9 @@ export default class ImageTools {
   /**
    * map the the given image size around the found screens
    *
-   * @param {int} w image width
-   * @param {int} h image height
+   * @param {int} w image width to display over screens
+   * @param {int} h image height to display over screens
+   * @param {Image} img Analysed Image Object
    */
   static createPictureCanvas(w, h, img) {
     let pictureCanvas = ImageTools.findExtremeValues(w, h, img)

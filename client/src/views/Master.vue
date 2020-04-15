@@ -199,7 +199,7 @@
             <v-stepper-content step="2" class="fullheight overflow-y-auto">
               <v-card class="mb-12" elevation="0">
                 <!-- <video :autoplay="true" id="videoElement" ref="video" class="flex-wrap"></video> -->
-                <div style="height: 25px"></div> 
+                <div style="height: 25px"></div>
                 <v-file-input
                   v-model="displayFileVideo"
                   color="deep-purple accent-4"
@@ -215,7 +215,7 @@
                 <br />
                 <!-- <v-btn @click="startVideo">start video</v-btn>
                 <v-btn @click="switchCamera">switch camera</v-btn>
-                <v-btn @click="takePicture">Capture Image</v-btn> -->
+                <v-btn @click="takePicture">Capture Image</v-btn>-->
 
                 <br />
 
@@ -241,7 +241,7 @@
                 </div>
 
                 <div style="height: 15px"></div>
-                <v-divider :inset="true" ></v-divider>
+                <v-divider :inset="true"></v-divider>
                 <div style="height: 15px"></div>
 
                 <v-btn
@@ -621,8 +621,8 @@ export default {
         this.pictureStepper = n + 1
       }
     },
-    isBusyAnalysing(){
-      return this.isAnalysing;
+    isBusyAnalysing() {
+      return this.isAnalysing
     },
     takePicture() {
       this.$refs.canva.width = this.$refs.video.videoWidth
@@ -654,11 +654,15 @@ export default {
         vue.drawingImg.onload = function() {
           let c = vue.$refs.drawCanvas
 
-          vue.drawCanvasScale = window.innerWidth / vue.imgCopy.width
+          let scale = 1
+          if(vue.analysedImage != null){
+            let info = ImageTools.createPictureCanvas(vue.drawingImg.width, vue.drawingImg.height, vue.analysedImage)
+            scale = info.scale
+          }
 
           let ctx = c.getContext('2d')
-          c.width = vue.imgCopy.width
-          c.height = vue.imgCopy.height
+          c.width = vue.drawingImg.width * scale
+          c.height = vue.drawingImg.height * scale
 
           console.log('canv', c.width, c.height)
 
@@ -683,6 +687,10 @@ export default {
           c.addEventListener('touchmove', vue.mouseMoveHandler, false)
 
           ctx.drawImage(vue.drawingImg, 0, 0, c.width, c.height)
+
+          if (vue.analysedImage != null) {
+            AlgorithmService.drawScreenOutlines(c, vue.analysedImage, info.minx, info.miny)
+          }
 
           c.style.width = '100%'
         }
@@ -1001,13 +1009,13 @@ export default {
 
           ctx.drawImage(img, 0, 0)
 
-          c.style.width = "100%"
+          c.style.width = '100%'
         }
 
         img.src = reader.result
       }
 
-      if(file){
+      if (file) {
         reader.readAsDataURL(file)
       }
     },
@@ -1232,7 +1240,7 @@ export default {
 
       this.analysedImage = waitEnv.getResult()
 
-      this.isAnalysing = false;
+      this.isAnalysing = false
 
       outC.width = this.analysedImage.imgOriginalRGB.width
       outC.height = this.analysedImage.imgOriginalRGB.height
@@ -1270,7 +1278,7 @@ export default {
         .getContext('2d')
         .putImageData(delaunayImgObject, 0, 0)
 
-      this.$refs.delaunay2.style.width = "100%"
+      this.$refs.delaunay2.style.width = '100%'
 
       this.executeDelaunayImage()
     },
