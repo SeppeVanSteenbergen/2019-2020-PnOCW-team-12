@@ -95,7 +95,7 @@ export default class WaitEnv {
           } else {
             this.updateBar(0, true) //make bar error!
             this.addMessage(
-              'Numer of Screens and Number of Clients do not match:',
+              'Number of Screens and Number of Clients do not match:',
               true
             )
             this.addMessage(
