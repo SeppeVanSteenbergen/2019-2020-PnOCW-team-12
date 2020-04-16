@@ -41,7 +41,7 @@
         <v-btn @click="goFullscreen()">
           Go Fullscreen
         </v-btn>
-        <div ref="canvWrap" class="fullscreen">
+        <div ref="canvWrap" id="canvWrap" style="display:none" class="fullscreen">
           <canvas ref="canvas"> </canvas>
           <video ref="vid">
             <source :src="videoURL" />
@@ -65,6 +65,7 @@ export default {
   data() {
     return {
       canvas: null,
+      canvWrap: null,
       intervalObj: null,
       defaultCSS: 'width:100%;height:100%',
       videoURL: '',
@@ -81,6 +82,8 @@ export default {
   mounted() {
     console.log('updateRoomList')
     this.$socket.emit('updateRoomList')
+
+    this.canvWrap = this.$refs.canvWrap
 
     document.addEventListener('fullscreenchange', this.exitHandler, false)
     document.addEventListener('mozfullscreenchange', this.exitHandler, false)
@@ -397,12 +400,12 @@ export default {
       //this.fullscreen = !this.fullscreen
 
       this.canvas = this.$refs['canvas']
-      this.openFullscreen(this.$refs.canvWrap)
       const width = window.screen.width
       const height = window.screen.height
-
       this.canvas.height = height
       this.canvas.width = width
+      this.openFullscreen(this.$refs.canvWrap)
+
       /*
         let ctx = this.canvas.getContext('2d')
         ctx.fillStyle = 'white'
@@ -412,7 +415,8 @@ export default {
         ctx.arc(width / 2, height / 2, width / 4, 0, 2 * Math.PI)
         ctx.stroke()*/
 
-      this.canvas.style.display = 'block'
+      //this.canvas.style.display = 'block'
+      //this.$refs.canvWrap.style.display = 'block'
     },
     async openFullscreen(elem) {
       try {
@@ -434,8 +438,16 @@ export default {
       }
     },
     exitHandler() {
-      if (!this.fullscreen) {
-        this.canvas.style.display = 'none'
+      if (
+        !(
+          document.fullscreenElement ||
+          document.webkitFullscreenElement ||
+          document.mozFullScreenElement
+        )
+      ) {
+        document.getElementById('canvWrap').style.display = 'none'
+      } else {
+        document.getElementById('canvWrap').style.display = 'block'
       }
     },
     exitRoom() {
@@ -566,6 +578,8 @@ export default {
       return imgData
     },
     animationInitHandler(data) {
+      console.log('animation init data')
+      console.log(data)
       //create animation object
       this.animation = new Animation(
         data.triangulation,
@@ -574,33 +588,39 @@ export default {
         data.list
       )
 
+      this.animationFrame = 0
+
       this.delaunayHandler(data)
     },
     animationStartHandler(data) {
       if (!this.animationRunning) return
+      if (this.animationFrame > 5) {
+        let ctx = this.canvas.getContext('2d')
+        this.animation.drawSnow(this.canvas)
+        let c = document.createElement('canvas')
+        let ctx2 = c.getContext('2d')
+        c.width = this.delaunayImage.width
+        c.height = this.delaunayImage.height
+        ctx2.putImageData(this.delaunayImage, 0, 0)
+        ctx.drawImage(c, 0, 0)
+        let info = this.animation.getNextFrame(
+          this.animationFrame,
+          data.startTime,
+          Date.now() + this.$store.state.sync.delta
+        )
+        this.animation.drawAnimal(
+          this.canvas,
+          info.x,
+          info.y,
+          info.angle,
+          info.frame,
+          info.right,
+          true
+        )
+        this.animationFrame += info.extraFrame
+      }
 
-      let ctx = this.canvas.getContext('2d')
-      this.animation.drawSnow(this.canvas)
-      let c = document.createElement('canvas')
-      let ctx2 = c.getContext('2d')
-      c.width = this.delaunayImage.width
-      c.height = this.delaunayImage.height
-      ctx2.putImageData(this.delaunayImage, 0, 0)
-      ctx.drawImage(c, 0, 0)
-      let info = this.animation.getNextFrame(
-        this.animationFrame,
-        data.startTime,
-        Date.now() + this.$store.state.sync.delta
-      )
-      this.animation.drawAnimal(
-        this.canvas,
-        info.x,
-        info.y,
-        info.angle,
-        info.frame,
-        info.right,
-        true
-      )
+      this.animationFrame++
       requestAnimationFrame(() => this.animationStartHandler(data))
     },
     delaunayHandler(data) {
