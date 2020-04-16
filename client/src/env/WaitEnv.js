@@ -91,7 +91,7 @@ export default class WaitEnv {
 
                     let success = true;
 
-                    if (this.result.clientInfo.length != this.result.screens.length) {
+                    if (this.result.clientInfo.length !== this.result.screens.length) {
                         success = false
                     }
 

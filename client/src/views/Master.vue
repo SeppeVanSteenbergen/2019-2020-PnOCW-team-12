@@ -808,6 +808,10 @@ export default {
       this.videoUploadProgress = Math.round((evt.loaded / evt.total) * 100)
     },
     async executeUploadVideo() {
+      if (this.analysedImage.screens.length !== this.myRoom.clients.length) {
+        this.$notif('Detection was not succesful','error')
+        return
+      }
       let formData = new FormData()
       formData.append('videofile', this.videoFile)
       this.$notif('uploading video..', 'info')
@@ -882,6 +886,10 @@ export default {
     },
 
     executeUploadImage() {
+      if (this.analysedImage.screens.length !== this.myRoom.clients.length) {
+        this.$notif('Detection was not succesful','error')
+        return
+      }
       let formData = new FormData()
       formData.append('imagefile', this.imageFile)
 
