@@ -743,8 +743,9 @@ export default {
           let c = vue.$refs.drawCanvas
 
           let scale = 1
+          let info = null
           if (vue.analysedImage != null) {
-            let info = ImageTools.createPictureCanvas(
+            info = ImageTools.createPictureCanvas(
               vue.drawingImg.width,
               vue.drawingImg.height,
               vue.analysedImage
@@ -780,7 +781,7 @@ export default {
 
           ctx.drawImage(vue.drawingImg, 0, 0, c.width, c.height)
 
-          if (vue.analysedImage != null) {
+          if (info != null) {
             AlgorithmService.drawScreenOutlines(
               c,
               vue.analysedImage,
