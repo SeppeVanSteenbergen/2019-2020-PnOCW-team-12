@@ -41,7 +41,7 @@
         <v-btn @click="goFullscreen()">
           Go Fullscreen
         </v-btn>
-        <div ref="canvWrap" id="canvWrap" class="fullscreen">
+        <div ref="canvWrap" id="canvWrap" style="display:none" class="fullscreen">
           <canvas ref="canvas"> </canvas>
           <video ref="vid">
             <source :src="videoURL" />
