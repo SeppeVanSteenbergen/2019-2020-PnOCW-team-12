@@ -1368,7 +1368,6 @@ export default {
         progressBarContainer,
         messageBoxContainer
       )
-
       console.log('Start waiting for result from worker:')
       await new Promise(resolve => {
         const CHECKWORKERINTERVAL = 500
@@ -1377,14 +1376,16 @@ export default {
           if (waitEnv.isFinished()) {
             resolve()
           } else {
-            setInterval(checkWorker, CHECKWORKERINTERVAL)
+            setTimeout(checkWorker, CHECKWORKERINTERVAL)
           }
         }
 
-        setInterval(checkWorker, CHECKWORKERINTERVAL)
+        setTimeout(checkWorker, CHECKWORKERINTERVAL)
       })
 
       this.analysedImage = waitEnv.getResult()
+
+
 
       this.isAnalysing = false
 
