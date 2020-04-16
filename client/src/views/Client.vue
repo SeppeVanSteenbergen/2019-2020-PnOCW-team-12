@@ -38,7 +38,7 @@
           </v-container>
         </v-card>
         <br />
-        <v-btn @click="goFullscreen()">
+        <v-btn fixed @click="goFullscreen()">
           Go Fullscreen
         </v-btn>
         <div ref="canvWrap" class="fullscreen">
