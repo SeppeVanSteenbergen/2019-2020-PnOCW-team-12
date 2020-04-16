@@ -510,14 +510,16 @@ module.exports = {
   },
 
   updateSendControllerData(data, socket_id) {
+    if (typeof controllerList[data.room_id] === 'undefined') return
+    if (typeof controllerList[data.room_id][socket_id] === 'undefined') return
     let width = 500
     let height = 500
     let size = {
       x: 40,
       y: 40
     }
-    controllerList[data.room_id][socket_id].pos.x += data.pos.x * 4
-    controllerList[data.room_id][socket_id].pos.y += data.pos.y * 4
+    controllerList[data.room_id][socket_id].pos.x += data.pos.x * 6
+    controllerList[data.room_id][socket_id].pos.y += data.pos.y * 6
 
     if (data.dir !== null)
       controllerList[data.room_id][socket_id].dir = data.dir
@@ -539,19 +541,35 @@ module.exports = {
     )
   },
   connectController(room_id, socket_id) {
+    if(room_id < 0) return
     if (typeof controllerList[room_id] === 'undefined') {
       controllerList[room_id] = {}
     }
     controllerList[room_id][socket_id] = {
       pos: {
         x: 200,
-        y:200
+        y: 200
       },
       dir: 0,
-      id:'player'
+      id: 'player'
     }
+
+    this.sendDataToRoom('playerPositions', controllerList[room_id], room_id)
   },
   removeController(socket_id) {
+    for (let room_id in controllerList) {
+      for (let sock in controllerList[room_id]) {
+        if (typeof controllerList[room_id][socket_id] !== 'undefined') {
+          delete controllerList[room_id][socket_id]
 
+          this.sendDataToRoom(
+            'playerPositions',
+            controllerList[room_id],
+            room_id
+          )
+          return
+        }
+      }
+    }
   }
 }

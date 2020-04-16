@@ -695,6 +695,7 @@ export default {
       this.transHeight = data.h
     },
     initGame() {
+      this.players = {}
       this.gameInterval = setInterval(this.gameUpdate, 30)
     },
     gameUpdate() {

@@ -133,6 +133,7 @@ module.exports = {
     console.log('try disconnecting master')
     if (roomList[room_id].master === user_id) {
       this.disconnectAllClientsFromRoom(room_id)
+      delete controllerList[room_id]
       console.log('removing master')
       console.log(roomList)
       delete roomList[room_id]
@@ -275,6 +276,9 @@ module.exports = {
   },
 
   getClientsOfRoom(room_id) {
+    if (typeof roomList[room_id] === 'undefined'){
+      return []
+    }
     return roomList[room_id].clients
   },
   addUserRegistration(user_id, key) {

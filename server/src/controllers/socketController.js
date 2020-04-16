@@ -230,6 +230,7 @@ module.exports = io => {
     })
 
     socket.on('connectController', room_id => {
+      socketHelper.removeController(socket.id)
       socketHelper.connectController(room_id, socket.id)
     })
   })

@@ -99,7 +99,7 @@ export default {
   methods: {
     exitRoom() {
       clearInterval(this.interval)
-      this.$socket.emit('exitRoom')
+      this.joinControllerRoom(-1)
       this.$router.push({ name: 'home' })
     },
     joinControllerRoom(room_id) {
