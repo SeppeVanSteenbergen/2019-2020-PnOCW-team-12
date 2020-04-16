@@ -400,7 +400,8 @@ export default {
       this.openFullscreen(this.$refs.canvWrap)
       const width = window.screen.width
       const height = window.screen.height
-
+      this.origWidth = this.canvas.width
+      this.origHeight = this.canvas.height
       this.canvas.height = height
       this.canvas.width = width
       /*
@@ -436,6 +437,11 @@ export default {
     exitHandler() {
       if (!this.fullscreen) {
         this.canvas.style.display = 'none'
+        this.fullscreen = true
+      }
+      else {
+        this.canvas.height = this.origHeight
+        this.canvas.width = this.origWidth
       }
     },
     exitRoom() {
