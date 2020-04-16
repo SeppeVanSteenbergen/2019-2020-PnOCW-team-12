@@ -38,10 +38,10 @@
           </v-container>
         </v-card>
         <br />
-        <v-btn fixed @click="goFullscreen()">
+        <v-btn @click="goFullscreen()">
           Go Fullscreen
         </v-btn>
-        <div ref="canvWrap" class="fullscreen">
+        <div ref="canvWrap" id="canvWrap" class="fullscreen">
           <canvas ref="canvas"> </canvas>
           <video ref="vid">
             <source :src="videoURL" />
@@ -65,6 +65,7 @@ export default {
   data() {
     return {
       canvas: null,
+      canvWrap: null,
       intervalObj: null,
       defaultCSS: 'width:100%;height:100%',
       videoURL: '',
@@ -81,6 +82,8 @@ export default {
   mounted() {
     console.log('updateRoomList')
     this.$socket.emit('updateRoomList')
+
+    this.canvWrap = this.$refs.canvWrap
 
     document.addEventListener('fullscreenchange', this.exitHandler, false)
     document.addEventListener('mozfullscreenchange', this.exitHandler, false)
@@ -397,13 +400,12 @@ export default {
       //this.fullscreen = !this.fullscreen
 
       this.canvas = this.$refs['canvas']
-      this.openFullscreen(this.$refs.canvWrap)
       const width = window.screen.width
       const height = window.screen.height
-      this.origWidth = this.canvas.width
-      this.origHeight = this.canvas.height
       this.canvas.height = height
       this.canvas.width = width
+      this.openFullscreen(this.$refs.canvWrap)
+
       /*
         let ctx = this.canvas.getContext('2d')
         ctx.fillStyle = 'white'
@@ -413,7 +415,8 @@ export default {
         ctx.arc(width / 2, height / 2, width / 4, 0, 2 * Math.PI)
         ctx.stroke()*/
 
-      this.canvas.style.display = 'block'
+      //this.canvas.style.display = 'block'
+      //this.$refs.canvWrap.style.display = 'block'
     },
     async openFullscreen(elem) {
       try {
@@ -435,13 +438,16 @@ export default {
       }
     },
     exitHandler() {
-      if (!this.fullscreen) {
-        this.canvas.style.display = 'none'
-        this.fullscreen = true
-      }
-      else {
-        this.canvas.height = this.origHeight
-        this.canvas.width = this.origWidth
+      if (
+        !(
+          document.fullscreenElement ||
+          document.webkitFullscreenElement ||
+          document.mozFullScreenElement
+        )
+      ) {
+        document.getElementById('canvWrap').style.display = 'none'
+      } else {
+        document.getElementById('canvWrap').style.display = 'block'
       }
     },
     exitRoom() {
