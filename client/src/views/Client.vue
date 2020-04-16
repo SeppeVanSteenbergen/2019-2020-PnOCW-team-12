@@ -566,6 +566,8 @@ export default {
       return imgData
     },
     animationInitHandler(data) {
+      console.log('animation init data')
+      console.log(data)
       //create animation object
       this.animation = new Animation(
         data.triangulation,
@@ -574,33 +576,39 @@ export default {
         data.list
       )
 
+      this.animationFrame = 0
+
       this.delaunayHandler(data)
     },
     animationStartHandler(data) {
       if (!this.animationRunning) return
+      if (this.animationFrame > 5) {
+        let ctx = this.canvas.getContext('2d')
+        this.animation.drawSnow(this.canvas)
+        let c = document.createElement('canvas')
+        let ctx2 = c.getContext('2d')
+        c.width = this.delaunayImage.width
+        c.height = this.delaunayImage.height
+        ctx2.putImageData(this.delaunayImage, 0, 0)
+        ctx.drawImage(c, 0, 0)
+        let info = this.animation.getNextFrame(
+          this.animationFrame,
+          data.startTime,
+          Date.now() + this.$store.state.sync.delta
+        )
+        this.animation.drawAnimal(
+          this.canvas,
+          info.x,
+          info.y,
+          info.angle,
+          info.frame,
+          info.right,
+          true
+        )
+        this.animationFrame += info.extraFrame
+      }
 
-      let ctx = this.canvas.getContext('2d')
-      this.animation.drawSnow(this.canvas)
-      let c = document.createElement('canvas')
-      let ctx2 = c.getContext('2d')
-      c.width = this.delaunayImage.width
-      c.height = this.delaunayImage.height
-      ctx2.putImageData(this.delaunayImage, 0, 0)
-      ctx.drawImage(c, 0, 0)
-      let info = this.animation.getNextFrame(
-        this.animationFrame,
-        data.startTime,
-        Date.now() + this.$store.state.sync.delta
-      )
-      this.animation.drawAnimal(
-        this.canvas,
-        info.x,
-        info.y,
-        info.angle,
-        info.frame,
-        info.right,
-        true
-      )
+      this.animationFrame++
       requestAnimationFrame(() => this.animationStartHandler(data))
     },
     delaunayHandler(data) {
