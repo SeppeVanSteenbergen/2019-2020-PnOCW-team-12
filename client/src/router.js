@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import Home from './views/Home.vue'
 import Master from './views/Master'
 import Client from './views/Client'
-
+import Controller from './views/Controller.vue'
 Vue.use(Router)
 
 export default new Router({
@@ -29,6 +29,11 @@ export default new Router({
       path: '/client/:room_id?',
       name: 'client',
       component: Client
+    },
+    {
+      path: '/controller/:room_id?',
+      name: 'controller',
+      component: Controller
     }
   ]
 })

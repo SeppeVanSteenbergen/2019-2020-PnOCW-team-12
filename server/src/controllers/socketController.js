@@ -61,6 +61,23 @@ registrationList = []
  */
 pingList = {}
 
+/**
+ * contains all the controller information
+ *  {
+ *    room_id: {
+ *      socket_id: {   // this defines a player
+ *        id:   // optional given id
+ *        pos: {
+ *          x:
+ *          y:
+ *        },
+ *        dir:    // direction
+ *      }
+ *    }
+ *  }
+ */
+controllerList = {}
+
 module.exports = io => {
   io.on('connect', socket => {
     console.log('client connected')
@@ -95,6 +112,8 @@ module.exports = io => {
       }*/
       console.log('client disconnected')
       socketHelper.updateAllRoomLists()
+
+      socketHelper.removeController(socket.id)
     })
 
     socket.on('registerUserSocket', data => {
@@ -204,6 +223,14 @@ module.exports = io => {
         dataHelper.getUserIDFromSocketID(socket.id),
         data
       )
+    })
+
+    socket.on('move', data => {
+      socketHelper.updateSendControllerData(data, socket.id)
+    })
+
+    socket.on('connectController', room_id => {
+      socketHelper.connectController(room_id, socket.id)
     })
   })
 }

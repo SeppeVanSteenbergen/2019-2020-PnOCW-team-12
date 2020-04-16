@@ -359,7 +359,17 @@
                     </v-card>
                   </v-expansion-panel-content>
                 </v-expansion-panel>
+                <v-expansion-panel>
+                  <v-expansion-panel-header>Game</v-expansion-panel-header>
+                  <v-expansion-panel-content>
+                    <v-card class="mb-12 fullheight" elevation="0">
+                      <v-btn color="primary" @click="executeInitGame">Init Game</v-btn>
+                    </v-card>
+                  </v-expansion-panel-content>
+                </v-expansion-panel>
               </v-expansion-panels>
+
+
 
               <v-btn text @click="screenDetectionDialog = false">Cancel</v-btn>
 
@@ -1027,6 +1037,7 @@ export default {
       for (let i = 0; i < 20; i++) {
         list.push(Math.round(Math.random() * 30))
       }
+      console.log(list)
 
       for (let i = 0; i < this.analysedImage.screens.length; i++) {
         console.log('looping through screens')
@@ -1085,6 +1096,17 @@ export default {
         },
         false
       )
+    },
+
+    executeInitGame() {
+      let obj = {
+        payload: {
+          type: 'game-init',
+          data: {}
+        },
+        to: 'all'
+      }
+      this.$socket.emit('screenCommand', obj)
     },
     executeStartVideo() {
       let obj = {

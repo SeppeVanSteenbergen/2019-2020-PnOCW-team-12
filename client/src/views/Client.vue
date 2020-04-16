@@ -41,7 +41,12 @@
         <v-btn @click="goFullscreen()">
           Go Fullscreen
         </v-btn>
-        <div ref="canvWrap" id="canvWrap" style="display:none" class="fullscreen">
+        <div
+          ref="canvWrap"
+          id="canvWrap"
+          style="display:none"
+          class="fullscreen"
+        >
           <canvas ref="canvas"> </canvas>
           <video ref="vid">
             <source :src="videoURL" />
@@ -58,7 +63,6 @@
 import DetectionDrawer from '../algorithms/DetectionDrawer'
 import AlgorithmService from '../services/AlgorithmService'
 import Animation from '../algorithms/Animations'
-import ImageTools from '../algorithms/ImageTools'
 
 export default {
   name: 'client',
@@ -76,7 +80,13 @@ export default {
       videoSpeedupDelta: 0.05,
       videoSyncThreshold: 16, // how many ms difference from clock before speeding up/slowing down video
       animationRunning: false, // if the animation is currently running
-      animationFrame: 0
+      animationFrame: 0,
+      // game variables
+      players: {},
+      transCSS: null,
+      transWidth: null,
+      transHeight: null,
+      gameInterval: null
     }
   },
   mounted() {
@@ -164,6 +174,10 @@ export default {
           this.setDefaultCSS()
           this.loadImageHandler(message.data)
           break
+        case 'game-init':
+          this.setDefaultCSS()
+          this.initGame()
+          break
         default:
           console.log('command not supported')
           break
@@ -186,16 +200,21 @@ export default {
     },
     af(data) {
       this.animationFrameHandler(data)
+    },
+    playerPositions(players) {
+      this.players = players
     }
   },
   methods: {
     setDefaultCSS() {
+      clearInterval(this.gameInterval)
       clearInterval(this.videoInterval)
       this.canvas.style = this.defaultCSS
       this.canvasMode = true
       this.animationRunning = false
     },
     setVideoMode() {
+      clearInterval(this.gameInterval)
       this.canvasMode = false
     },
     floodScreenHandler(data) {
@@ -671,6 +690,35 @@ export default {
 
       this.minx = data.ox
       this.miny = data.oy
+      this.transCSS = data.css
+      this.transWidth = data.w
+      this.transHeight = data.h
+    },
+    initGame() {
+      this.gameInterval = setInterval(this.gameUpdate, 30)
+    },
+    gameUpdate() {
+      this.canvas.style = this.transCSS
+      let ctx = this.canvas.getContext('2d')
+      ctx.fillStyle = 'white'
+      ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
+      ctx.fillStyle = 'blue'
+      try {
+        for (let i in this.players) {
+          //console.log(i)
+          ctx.fillRect(this.players[i].pos.x, this.players[i].pos.y, 40, 40)
+
+          ctx.beginPath()
+          ctx.moveTo(this.players[i].pos.x + 20, this.players[i].pos.y + 20)
+          ctx.lineTo(
+            this.players[i].pos.x + 20 + Math.cos(this.players[i].dir) * 70,
+            this.players[i].pos.y + 20 + Math.sin(-this.players[i].dir) * 70
+          )
+          ctx.stroke()
+        }
+      } catch (e) {
+        console.log(e)
+      }
     },
     /**
      *

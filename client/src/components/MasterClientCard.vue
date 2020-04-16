@@ -10,6 +10,9 @@
         <br />
         <br />
         <v-btn color="error" @click="$emit('client')"> Client </v-btn>
+        <br />
+        <br />
+        <v-btn color="green" @click="$emit('controller')">Controller</v-btn>
       </div>
     </v-container>
   </v-card>

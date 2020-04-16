@@ -507,5 +507,51 @@ module.exports = {
 
     //TODO remove only the room_id from the list
     pingList[room_id] = {}
+  },
+
+  updateSendControllerData(data, socket_id) {
+    let width = 500
+    let height = 500
+    let size = {
+      x: 40,
+      y: 40
+    }
+    controllerList[data.room_id][socket_id].pos.x += data.pos.x * 4
+    controllerList[data.room_id][socket_id].pos.y += data.pos.y * 4
+
+    if (data.dir !== null)
+      controllerList[data.room_id][socket_id].dir = data.dir
+
+    // limitations
+    /*if (controllerList[data.room_id][socket_id].pos.x > width - size.x)
+      controllerList[data.room_id][socket_id].pos.x = width - size.x
+    if (controllerList[data.room_id][socket_id].pos.y > height - size.y)
+      controllerList[data.room_id][socket_id].pos.y = height - size.y
+    if (controllerList[data.room_id][socket_id].pos.x < 0)
+      controllerList[data.room_id][socket_id].pos.x = 0
+    if (controllerList[data.room_id][socket_id].pos.y < 0)
+      controllerList[data.room_id][socket_id].pos.y = 0*/
+
+    this.sendDataToRoom(
+      'playerPositions',
+      controllerList[data.room_id],
+      data.room_id
+    )
+  },
+  connectController(room_id, socket_id) {
+    if (typeof controllerList[room_id] === 'undefined') {
+      controllerList[room_id] = {}
+    }
+    controllerList[room_id][socket_id] = {
+      pos: {
+        x: 200,
+        y:200
+      },
+      dir: 0,
+      id:'player'
+    }
+  },
+  removeController(socket_id) {
+
   }
 }
