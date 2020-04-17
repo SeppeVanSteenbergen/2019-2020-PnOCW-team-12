@@ -2,6 +2,12 @@
   <v-container class="fill-height" fluid>
     <v-row align="center" justify="center" min-height="300px">
       <div>
+        <v-text-field
+                label="Enter Name"
+                single-line
+                solo
+                v-model="playerName"
+        ></v-text-field>
         <v-card max-width="400px">
           <v-toolbar color="primary" dark flat>
             <v-toolbar-title>{{
@@ -93,7 +99,8 @@ export default {
       speed: 2,
       RNipple: false,
       LNipple: false,
-      interval: null
+      interval: null,
+      playerName: ''
     }
   },
   methods: {
@@ -104,7 +111,10 @@ export default {
     },
     joinControllerRoom(room_id) {
       this.controllerRoom = room_id
-      this.$socket.emit('connectController', room_id)
+      this.$socket.emit('connectController', {
+        name: this.playerName,
+        room_id: room_id
+      })
     },
     openController() {
       this.openFullscreen(this.$refs.controllerView)

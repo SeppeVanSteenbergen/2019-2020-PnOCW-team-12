@@ -73,6 +73,8 @@ pingList = {}
  *        },
  *        dir:    // direction
  *        bullet_amount: 0   // amount of bullets the player has in the screen
+ *        hp:   // 100 is max
+ *        score:  // how many points player has
  *      }
  *    }
  *  }
@@ -98,7 +100,7 @@ controllerList = {}
  */
 bulletList = {}
 
-let bulletUpdateTimeout = 25
+let bulletUpdateTimeout = 18
 
 
 setInterval(socketHelper.updateBullets.bind(socketHelper), bulletUpdateTimeout)
@@ -254,9 +256,9 @@ module.exports = io => {
       socketHelper.updateSendControllerData(data, socket.id)
     })
 
-    socket.on('connectController', room_id => {
+    socket.on('connectController', data => {
       socketHelper.removeController(socket.id)
-      socketHelper.connectController(room_id, socket.id)
+      socketHelper.connectController(data.room_id,data.name, socket.id)
     })
   })
 }

@@ -304,15 +304,15 @@ export default {
 
       image.onload = function() {
         let ratio = Math.max(data.w / image.width, data.h / image.height)
-        vue.canvas
-          .getContext('2d')
-          .drawImage(
-            image,
-            0,
-            0,
-            Math.round(image.width * ratio),
-            Math.round(image.height * ratio)
-          )
+        vue.canvas.getContext('2d').drawImage(
+          image,
+          //-data.offx,
+          //-data.offy,
+          0,
+          0,
+          Math.round(image.width * ratio),
+          Math.round(image.height * ratio)
+        )
       }
       image.src = data.image
     },
@@ -712,21 +712,72 @@ export default {
       ctx.fillStyle = 'blue'
       try {
         for (let i in this.players) {
-          //console.log(i)
-          ctx.fillRect(this.players[i].pos.x, this.players[i].pos.y, this.playerWidth, this.playerHeight)
+          // draw life
+          ctx.fillStyle = 'red'
+          ctx.fillRect(
+            this.players[i].pos.x,
+            this.players[i].pos.y - 7,
+            this.playerWidth,
+            5
+          )
+          ctx.fillStyle = 'green'
+          ctx.fillRect(
+            this.players[i].pos.x,
+            this.players[i].pos.y - 7,
+            (this.playerWidth * this.players[i].hp) / 100,
+            5
+          )
+
+          // draw name
+          ctx.fillStyle = 'black'
+          ctx.font = '10px Comic Sans MS'
+          ctx.textAlign = 'center'
+          ctx.fillText(
+            this.players[i].name,
+            this.players[i].pos.x + this.playerWidth / 2,
+            this.players[i].pos.y + this.playerHeight + 15
+          )
+          // draw points
+          ctx.fillText(
+                  this.players[i].score,
+                  this.players[i].pos.x + this.playerWidth / 2,
+                  this.players[i].pos.y + this.playerHeight + 25
+          )
+
+          ctx.fillStyle = 'blue'
+          // draw player
+          ctx.fillRect(
+            this.players[i].pos.x,
+            this.players[i].pos.y,
+            this.playerWidth,
+            this.playerHeight
+          )
 
           ctx.beginPath()
-          ctx.moveTo(this.players[i].pos.x + this.playerWidth/2, this.players[i].pos.y + this.playerHeight/2)
+          ctx.moveTo(
+            this.players[i].pos.x + this.playerWidth / 2,
+            this.players[i].pos.y + this.playerHeight / 2
+          )
           ctx.lineTo(
-            this.players[i].pos.x + this.playerWidth/2 + Math.cos(this.players[i].dir) * 60,
-            this.players[i].pos.y + this.playerHeight/2 + Math.sin(-this.players[i].dir) * 60
+            this.players[i].pos.x +
+              this.playerWidth / 2 +
+              Math.cos(this.players[i].dir) * 60,
+            this.players[i].pos.y +
+              this.playerHeight / 2 +
+              Math.sin(-this.players[i].dir) * 60
           )
           ctx.stroke()
         }
         ctx.fillStyle = 'black'
         for (let i in this.bulletList) {
           ctx.beginPath()
-          ctx.arc(this.bulletList[i].pos.x + this.playerWidth/2, this.bulletList[i].pos.y + this.playerHeight/2, 5, 0, 2*Math.PI )
+          ctx.arc(
+            this.bulletList[i].pos.x + this.playerWidth / 2,
+            this.bulletList[i].pos.y + this.playerHeight / 2,
+            5,
+            0,
+            2 * Math.PI
+          )
           ctx.fill()
         }
       } catch (e) {

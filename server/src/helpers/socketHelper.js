@@ -3,6 +3,10 @@ const io = require('../app').io
 
 let pingAmount = 10
 
+// bullet settings
+let maxBullets = 10 // max alive bullets per player
+let bulletShootTimeout = 120 // in ms   how many time between bullet
+
 module.exports = {
   updateAllRoomLists() {
     console.log('updating all roomlists')
@@ -510,14 +514,6 @@ module.exports = {
   updateSendControllerData(data, socket_id) {
     if (typeof controllerList[data.room_id] === 'undefined') return
     if (typeof controllerList[data.room_id][socket_id] === 'undefined') return
-    let width = 500
-    let height = 500
-    let size = {
-      x: 40,
-      y: 40
-    }
-    let maxBullets = 10
-    let bulletShootTimeout = 120 // in ms
 
     controllerList[data.room_id][socket_id].pos.x += data.pos.x * 6
     controllerList[data.room_id][socket_id].pos.y += data.pos.y * 6
@@ -562,7 +558,7 @@ module.exports = {
       data.room_id
     )
   },
-  connectController(room_id, socket_id) {
+  connectController(room_id, name, socket_id) {
     if (room_id < 0) return
     if (typeof controllerList[room_id] === 'undefined') {
       controllerList[room_id] = {}
@@ -573,26 +569,22 @@ module.exports = {
         y: 200
       },
       dir: 0,
-      name: 'player',
+      name: name,
       bullet_amount: 0,
-      lastBulletTime: 0
+      lastBulletTime: 0,
+      hp: 100,
+      score: 0
     }
 
     this.sendDataToRoom('playerPositions', controllerList[room_id], room_id)
   },
   removeController(socket_id) {
     for (let room_id in controllerList) {
-      for (let sock in controllerList[room_id]) {
-        if (typeof controllerList[room_id][socket_id] !== 'undefined') {
-          delete controllerList[room_id][socket_id]
+      if (typeof controllerList[room_id][socket_id] !== 'undefined') {
+        delete controllerList[room_id][socket_id]
 
-          this.sendDataToRoom(
-            'playerPositions',
-            controllerList[room_id],
-            room_id
-          )
-          return
-        }
+        this.sendDataToRoom('playerPositions', controllerList[room_id], room_id)
+        return
       }
     }
   },
@@ -624,12 +616,58 @@ module.exports = {
 
           bulletList[room_id][i].pos.x += dx
           bulletList[room_id][i].pos.y += dy
+
+          this.checkBulletCollission(room_id, i)
         }
       }
     }
     // send bullets to rooms
     for (let room_id in bulletList) {
-      this.sendDataToRoom('bulletListUpdate', bulletList[room_id], room_id)
+      if (bulletList[room_id].length > 0)
+        this.sendDataToRoom('bulletListUpdate', bulletList[room_id], room_id)
+    }
+  },
+  checkBulletCollission(room_id, bulletNumber) {
+    let playerSize = {
+      x: 40,
+      y: 40
+    }
+    let bulletRadius = 5
+    let bulletDamage = 15
+
+    let bullet = bulletList[room_id][bulletNumber]
+    for (let socket_id in controllerList[room_id]) {
+      // check if bullet colliding
+      if (
+        bullet.socket_id !== socket_id &&
+        bullet.pos.x + bulletRadius >=
+          controllerList[room_id][socket_id].pos.x - playerSize.x/2 &&
+        bullet.pos.x - bulletRadius <=
+          controllerList[room_id][socket_id].pos.x + playerSize.x/2 &&
+        bullet.pos.y + bulletRadius >=
+          controllerList[room_id][socket_id].pos.y - playerSize.y/2 &&
+        bullet.pos.y - bulletRadius <=
+          controllerList[room_id][socket_id].pos.y + playerSize.y/2
+      ) {
+        controllerList[room_id][socket_id].hp -= bulletDamage
+
+        // remove the bullet
+        bulletList[room_id].splice(bulletNumber, 1)
+        // add bullet to user of bullet
+        controllerList[room_id][bullet.socket_id].bullet_amount--
+
+        // reset position if dead & add point
+        if (controllerList[room_id][socket_id].hp <= 0) {
+          controllerList[room_id][socket_id].hp = 100
+          controllerList[room_id][socket_id].pos.x = 200
+          controllerList[room_id][socket_id].pos.y = 200
+
+          // add points to killer
+          controllerList[room_id][bullet.socket_id].score++
+        }
+
+        return
+      }
     }
   }
 }
