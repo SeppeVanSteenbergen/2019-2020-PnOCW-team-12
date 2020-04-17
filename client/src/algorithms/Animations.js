@@ -70,8 +70,8 @@ export default class Animations {
   }
 
   setPosition(x, y) {
-    if (x > 0 && x < this.width) this.position.x = x
-    if (y > 0 && y < this.height) this.position.y = y
+    if (x > 0 ) this.position.x = x
+    if (y > 0 ) this.position.y = y
   }
 
   getPosition() {
