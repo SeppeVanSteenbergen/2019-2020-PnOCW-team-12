@@ -247,7 +247,7 @@ export default class Animations {
    */
   updateFrame() {
     let canReturn = false
-    if (this.triangulation[0].point1 === this.triangulation[0].point2) {
+    if (JSON.stringify({...this.triangulation[0].point1}) === JSON.stringify({...this.triangulation[0].point2})) {
       canReturn = true
     }
     if (!this.inRange(this.endPoint)) {
