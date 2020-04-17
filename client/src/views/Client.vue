@@ -603,6 +603,7 @@ export default {
       return imgData
     },
     animationInitHandler(data) {
+      this.startTime = null
       console.log('animation init data')
       console.log(data)
       //create animation object
@@ -619,18 +620,21 @@ export default {
     },
     animationStartHandler(data) {
       if (!this.animationRunning) return
+      let ctx = this.canvas.getContext('2d')
+      this.animation.drawSnow(this.canvas)
+      let c = document.createElement('canvas')
+      let ctx2 = c.getContext('2d')
+      c.width = this.delaunayImage.width
+      c.height = this.delaunayImage.height
+      ctx2.putImageData(this.delaunayImage, 0, 0)
+      ctx.drawImage(c, 0, 0)
       if (this.animationFrame > 5) {
-        let ctx = this.canvas.getContext('2d')
-        this.animation.drawSnow(this.canvas)
-        let c = document.createElement('canvas')
-        let ctx2 = c.getContext('2d')
-        c.width = this.delaunayImage.width
-        c.height = this.delaunayImage.height
-        ctx2.putImageData(this.delaunayImage, 0, 0)
-        ctx.drawImage(c, 0, 0)
+        if (this.startTime === null){
+          this.startTime = Date.now()+ this.$store.state.sync.delta
+        }
         let info = this.animation.getNextFrame(
           this.animationFrame,
-          data.startTime,
+          this.startTime,
           Date.now() + this.$store.state.sync.delta
         )
         this.animation.drawAnimal(
