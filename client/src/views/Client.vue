@@ -635,8 +635,8 @@ export default {
         )
         this.animation.drawAnimal(
           this.canvas,
-          info.x,
-          info.y,
+          info.x - this.minx,
+          info.y - this.miny,
           info.angle,
           info.frame,
           info.right,
