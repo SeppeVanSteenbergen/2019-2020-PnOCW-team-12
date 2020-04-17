@@ -66,17 +66,42 @@ pingList = {}
  *  {
  *    room_id: {
  *      socket_id: {   // this defines a player
- *        id:   // optional given id
+ *        name:   // optional given name
  *        pos: {
  *          x:
  *          y:
  *        },
  *        dir:    // direction
+ *        bullet_amount: 0   // amount of bullets the player has in the screen
  *      }
  *    }
  *  }
  */
 controllerList = {}
+
+/**
+ * {
+ *   room_id: [
+ *     bullet {
+ *       pos: {
+ *         x:,
+ *         y:
+ *       },
+ *       dir:    // direction
+ *       frame:   // how many frames the bullet existed
+ *       socket_id:  // id of the socket the bullet is from
+ *     },
+ *     ...
+ *   ]
+ * }
+ *
+ */
+bulletList = {}
+
+let bulletUpdateTimeout = 25
+
+
+setInterval(socketHelper.updateBullets.bind(socketHelper), bulletUpdateTimeout)
 
 module.exports = io => {
   io.on('connect', socket => {

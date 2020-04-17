@@ -254,8 +254,6 @@ module.exports = {
     const clientList = dataHelper.getClientsOfRoom(
       dataHelper.getUserRoom(master_user_id)
     )
-    console.log('CLIENTS IN ROOM')
-    console.log(clientList)
 
     for (let i in clientList) {
       this.sendDataByUserID(name, data, clientList[i])
@@ -263,8 +261,8 @@ module.exports = {
   },
   sendDataToRoom(name, data, room_id) {
     const clientList = dataHelper.getClientsOfRoom(room_id)
-    console.log('CLIENTS IN ROOM')
-    console.log(clientList)
+    //console.log('CLIENTS IN ROOM')
+    //console.log(clientList)
 
     for (let i in clientList) {
       this.sendDataByUserID(name, data, clientList[i])
@@ -518,11 +516,35 @@ module.exports = {
       x: 40,
       y: 40
     }
+    let maxBullets = 10
+    let bulletShootTimeout = 120 // in ms
+
     controllerList[data.room_id][socket_id].pos.x += data.pos.x * 6
     controllerList[data.room_id][socket_id].pos.y += data.pos.y * 6
 
-    if (data.dir !== null)
+    if (data.dir !== null) {
       controllerList[data.room_id][socket_id].dir = data.dir
+      if (
+        controllerList[data.room_id][socket_id].bullet_amount < maxBullets &&
+        Date.now() - controllerList[data.room_id][socket_id].lastBulletTime >
+          bulletShootTimeout
+      ) {
+        if (typeof bulletList[data.room_id] === 'undefined')
+          bulletList[data.room_id] = []
+        let bullet = {
+          pos: {
+            x: controllerList[data.room_id][socket_id].pos.x,
+            y: controllerList[data.room_id][socket_id].pos.y
+          },
+          dir: controllerList[data.room_id][socket_id].dir,
+          frame: 0,
+          socket_id: socket_id
+        }
+        bulletList[data.room_id].push(bullet)
+        controllerList[data.room_id][socket_id].bullet_amount++
+        controllerList[data.room_id][socket_id].lastBulletTime = Date.now()
+      }
+    }
 
     // limitations
     /*if (controllerList[data.room_id][socket_id].pos.x > width - size.x)
@@ -541,7 +563,7 @@ module.exports = {
     )
   },
   connectController(room_id, socket_id) {
-    if(room_id < 0) return
+    if (room_id < 0) return
     if (typeof controllerList[room_id] === 'undefined') {
       controllerList[room_id] = {}
     }
@@ -551,7 +573,9 @@ module.exports = {
         y: 200
       },
       dir: 0,
-      id: 'player'
+      name: 'player',
+      bullet_amount: 0,
+      lastBulletTime: 0
     }
 
     this.sendDataToRoom('playerPositions', controllerList[room_id], room_id)
@@ -570,6 +594,42 @@ module.exports = {
           return
         }
       }
+    }
+  },
+  updateBullets() {
+    let maxBulletFrames = 70
+    let bulletSpeed = 10
+    for (let room_id in bulletList) {
+      for (let i in bulletList[room_id]) {
+        // remove old bullets
+        if (++bulletList[room_id][i].frame > maxBulletFrames) {
+          // add available bullet to user if he's still online
+
+          let socket_id = bulletList[room_id][i].socket_id
+          console.log('Bullet kill socket' + socket_id)
+          console.log(controllerList[room_id][socket_id])
+          if (
+            typeof controllerList[room_id] !== 'undefined' &&
+            typeof controllerList[room_id][socket_id] !== 'undefined'
+          ) {
+            console.log('removing bullet amount')
+            controllerList[room_id][socket_id].bullet_amount -= 1
+          }
+          // remove the bullet from the list
+          bulletList[room_id].splice(i, 1)
+        } else {
+          // update bullet position
+          let dx = Math.cos(bulletList[room_id][i].dir) * bulletSpeed
+          let dy = Math.sin(-bulletList[room_id][i].dir) * bulletSpeed
+
+          bulletList[room_id][i].pos.x += dx
+          bulletList[room_id][i].pos.y += dy
+        }
+      }
+    }
+    // send bullets to rooms
+    for (let room_id in bulletList) {
+      this.sendDataToRoom('bulletListUpdate', bulletList[room_id], room_id)
     }
   }
 }

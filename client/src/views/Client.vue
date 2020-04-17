@@ -86,7 +86,10 @@ export default {
       transCSS: null,
       transWidth: null,
       transHeight: null,
-      gameInterval: null
+      gameInterval: null,
+      bulletList: null,
+      playerWidth: 40,
+      playerHeight: 40
     }
   },
   mounted() {
@@ -203,6 +206,9 @@ export default {
     },
     playerPositions(players) {
       this.players = players
+    },
+    bulletListUpdate(bulletList) {
+      this.bulletList = bulletList
     }
   },
   methods: {
@@ -707,15 +713,21 @@ export default {
       try {
         for (let i in this.players) {
           //console.log(i)
-          ctx.fillRect(this.players[i].pos.x, this.players[i].pos.y, 40, 40)
+          ctx.fillRect(this.players[i].pos.x, this.players[i].pos.y, this.playerWidth, this.playerHeight)
 
           ctx.beginPath()
-          ctx.moveTo(this.players[i].pos.x + 20, this.players[i].pos.y + 20)
+          ctx.moveTo(this.players[i].pos.x + this.playerWidth/2, this.players[i].pos.y + this.playerHeight/2)
           ctx.lineTo(
-            this.players[i].pos.x + 20 + Math.cos(this.players[i].dir) * 70,
-            this.players[i].pos.y + 20 + Math.sin(-this.players[i].dir) * 70
+            this.players[i].pos.x + this.playerWidth/2 + Math.cos(this.players[i].dir) * 60,
+            this.players[i].pos.y + this.playerHeight/2 + Math.sin(-this.players[i].dir) * 60
           )
           ctx.stroke()
+        }
+        ctx.fillStyle = 'black'
+        for (let i in this.bulletList) {
+          ctx.beginPath()
+          ctx.arc(this.bulletList[i].pos.x + this.playerWidth/2, this.bulletList[i].pos.y + this.playerHeight/2, 5, 0, 2*Math.PI )
+          ctx.fill()
         }
       } catch (e) {
         console.log(e)
