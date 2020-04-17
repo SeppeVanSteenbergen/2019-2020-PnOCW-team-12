@@ -4,11 +4,13 @@
       <div>
         <v-card max-width="400px">
           <v-toolbar color="primary" dark flat>
-            <v-toolbar-title>{{
+            <v-toolbar-title>
+              {{
               $store.getters.getRole.room >= 0
-                ? 'Connected to room ' + $store.getters.getRole.room
-                : 'Choose a room'
-            }}</v-toolbar-title>
+              ? 'Connected to room ' + $store.getters.getRole.room
+              : 'Choose a room'
+              }}
+            </v-toolbar-title>
             <div class="flex-grow-1"></div>
           </v-toolbar>
           <v-container>
@@ -20,17 +22,14 @@
                   @click="joinRoom(room_id)"
                 >
                   <v-list-item-icon>
-                    <v-icon
-                      :color="roomList[room_id].open ? 'success' : 'error'"
-                      >{{
-                        roomList[room_id].open ? 'mdi-lock-open' : 'mdi-lock'
-                      }}</v-icon
-                    >
+                    <v-icon :color="roomList[room_id].open ? 'success' : 'error'">
+                      {{
+                      roomList[room_id].open ? 'mdi-lock-open' : 'mdi-lock'
+                      }}
+                    </v-icon>
                   </v-list-item-icon>
                   <v-list-item-content>
-                    <v-list-item-title
-                      v-text="roomList[room_id].name"
-                    ></v-list-item-title>
+                    <v-list-item-title v-text="roomList[room_id].name"></v-list-item-title>
                   </v-list-item-content>
                 </v-list-item>
               </v-list>
@@ -38,16 +37,9 @@
           </v-container>
         </v-card>
         <br />
-        <v-btn @click="goFullscreen()">
-          Go Fullscreen
-        </v-btn>
-        <div
-          ref="canvWrap"
-          id="canvWrap"
-          style="display:none"
-          class="fullscreen"
-        >
-          <canvas ref="canvas"> </canvas>
+        <v-btn @click="goFullscreen()">Go Fullscreen</v-btn>
+        <div ref="canvWrap" id="canvWrap" style="display:none" class="fullscreen">
+          <canvas ref="canvas"></canvas>
           <video ref="vid">
             <source :src="videoURL" />
           </video>
@@ -239,6 +231,9 @@ export default {
       let drawer = new DetectionDrawer(this.canvas, screen, borderWidth)
 
       drawer.barcode(id, 6)
+
+      this.bufferedImgData = this.canvas.getContext('2d').getImageData(0,0, this.canvas.width, this.canvas.height)
+
     },
     runFloodScreenCommandList(list, startIndex) {
       for (let i = startIndex; i < list.length; i++) {
@@ -304,15 +299,17 @@ export default {
 
       image.onload = function() {
         let ratio = Math.max(data.w / image.width, data.h / image.height)
-        vue.canvas.getContext('2d').drawImage(
-          image,
-          //-data.offx,
-          //-data.offy,
-          0,
-          0,
-          Math.round(image.width * ratio),
-          Math.round(image.height * ratio)
-        )
+        vue.canvas
+          .getContext('2d')
+          .drawImage(
+            image,
+            0,
+            0,
+            Math.round(image.width * ratio),
+            Math.round(image.height * ratio)
+          )
+
+          vue.bufferedImgData = null
       }
       image.src = data.image
     },
@@ -473,6 +470,10 @@ export default {
         document.getElementById('canvWrap').style.display = 'none'
       } else {
         document.getElementById('canvWrap').style.display = 'block'
+
+        if(this.canvasMode && this.bufferedImgData != null){
+          this.$refs.canvas.getContext('2d').putImageData(this.bufferedImgData, 0,0)
+        }
       }
     },
     exitRoom() {
@@ -486,6 +487,8 @@ export default {
       const canvas = this.canvas
       let ctx = this.canvas.getContext('2d')
       let image = new window.Image()
+
+      let vue = this
 
       image.onload = function() {
         let wRatio = canvas.width / image.width
@@ -504,8 +507,13 @@ export default {
           image.width * ratio,
           image.height * ratio
         )
+
+        vue.bufferedImgData = ctx.getImageData(0,0, canvas.width, canvas.height)
+        // vue.bufferedImgData = image.getImageData()
       }
-      image.src = base64Image
+      image.crossOrigin = "Anonymous"
+      image.src = base64Image //+ '?' + new Date().getTime()
+      // image.crossOrigin = "Anonymous"
     },
     stopRunning() {
       clearInterval(this.intervalObj)
