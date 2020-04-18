@@ -36,13 +36,10 @@ class Island {
     this.HSLImage = HSLImage
     this.RGBImage = RGBImage
     this.midPoint = this.calcMid()
+    if (this.midPoint === null) throw 'No midpoint in island '
     this.clientCode = null
     console.log('Island ' + id + ' created')
     // console.log('Island ' + id + ' created')
-  }
-
-  isValid() {
-    return this.midPoint !== null
   }
 
   setScreenMatrix(matrix) {
