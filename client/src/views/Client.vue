@@ -37,13 +37,20 @@
           </v-container>
         </v-card>
         <br />
+        <!-- <v-btn @click="goFullscreen()">Go Fullscreen</v-btn> -->
         <v-btn @click="goFullscreen()">Go Fullscreen</v-btn>
-        <div ref="canvWrap" id="canvWrap" style="display:none" class="fullscreen">
-          <canvas ref="canvas"></canvas>
+        <div v-show="isFullscreen" ref="canvWrap" id="canvWrap" class="fullscreen">
+          <canvas ref="canvas" @click="isFullscreen = false" style="position:fixed; left:0; top:0; z-index:10; width:100%; height:100%"></canvas>
           <video ref="vid">
             <source :src="videoURL" />
           </video>
         </div>
+        <!-- <div ref="canvWrap" id="canvWrap" style="display:none" class="fullscreen">
+          <canvas ref="canvas"></canvas>
+          <video ref="vid">
+            <source :src="videoURL" />
+          </video>
+        </div> -->
       </div>
     </v-row>
     <v-btn color="error" fab large dark bottom left fixed @click="exitRoom()">
@@ -81,7 +88,9 @@ export default {
       gameInterval: null,
       bulletList: null,
       playerWidth: 40,
-      playerHeight: 40
+      playerHeight: 40,
+
+      isFullscreen: false
     }
   },
   mounted() {
@@ -109,7 +118,7 @@ export default {
   },
   sockets: {
     screenCommand(message) {
-      if (!this.fullscreen) {
+      if (!this.isFullscreen) {
         this.goFullscreen()
       }
       switch (message.type) {
@@ -207,7 +216,7 @@ export default {
     setDefaultCSS() {
       clearInterval(this.gameInterval)
       clearInterval(this.videoInterval)
-      this.canvas.style = this.defaultCSS
+      // this.canvas.style = this.defaultCSS
       this.canvasMode = true
       this.animationRunning = false
     },
@@ -421,61 +430,70 @@ export default {
       //this.$refs['full'].toggle()
       //this.fullscreen = !this.fullscreen
 
+      console.log("FULLSCREEN CANVAS LOADED IN")
+
+      this.isFullscreen = true
+
       this.canvas = this.$refs['canvas']
       const width = window.screen.width
       const height = window.screen.height
       this.canvas.height = height
       this.canvas.width = width
-      this.openFullscreen(this.$refs.canvWrap)
 
-      /*
+      if(this.bufferedImgData != null){
+        this.setDefaultCSS()
+        this.canvas.getContext('2d').putImageData(this.bufferedImgData, 0,0)
+      }else{
+        // this.setDefaultCSS()
+
         let ctx = this.canvas.getContext('2d')
-        ctx.fillStyle = 'white'
-        ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
-        ctx.fillStyle = 'black'
-        ctx.beginPath()
-        ctx.arc(width / 2, height / 2, width / 4, 0, 2 * Math.PI)
-        ctx.stroke()*/
 
-      //this.canvas.style.display = 'block'
-      //this.$refs.canvWrap.style.display = 'block'
-    },
-    async openFullscreen(elem) {
-      try {
-        if (elem.requestFullscreen) {
-          await elem.requestFullscreen()
-        } else if (elem.mozRequestFullScreen) {
-          /* Firefox */
-          await elem.mozRequestFullScreen()
-        } else if (elem.webkitRequestFullscreen) {
-          /* Chrome, Safari and Opera */
-          await elem.webkitRequestFullscreen()
-        } else if (elem.msRequestFullscreen) {
-          /* IE/Edge */
-          await elem.msRequestFullscreen()
-        }
-      } catch (err) {
-        console.log(err)
-        this.$notif('cannot open fullscreen without user gesture', 'error')
+        ctx.fillRect(0,0,this.canvas.width, this.canvas.height)
+        ctx.fillStyle = "grey"
+        ctx.fill()
       }
     },
-    exitHandler() {
-      if (
-        !(
-          document.fullscreenElement ||
-          document.webkitFullscreenElement ||
-          document.mozFullScreenElement
-        )
-      ) {
-        document.getElementById('canvWrap').style.display = 'none'
-      } else {
-        document.getElementById('canvWrap').style.display = 'block'
+    // async openFullscreen(elem) {
+    //   try {
+    //     if (elem.requestFullscreen) {
+    //       await elem.requestFullscreen()
+    //     } else if (elem.mozRequestFullScreen) {
+    //       /* Firefox */
+    //       await elem.mozRequestFullScreen()
+    //     } else if (elem.webkitRequestFullscreen) {
+    //       /* Chrome, Safari and Opera */
+    //       await elem.webkitRequestFullscreen()
+    //     } else if (elem.msRequestFullscreen) {
+    //       /* IE/Edge */
+    //       await elem.msRequestFullscreen()
+    //     }
+    //   } catch (err) {
+    //     console.log(err)
+    //     this.$notif('cannot open fullscreen without user gesture', 'error')
+    //   }
+    // },
+    // exitHandler() {
+    //   if (
+    //     !(
+    //       document.fullscreenElement ||
+    //       document.webkitFullscreenElement ||
+    //       document.mozFullScreenElement
+    //     )
+    //   ) {
+    //     document.getElementById('canvWrap').style.display = 'none'
+    //   } else {
+    //     document.getElementById('canvWrap').style.display = 'block'
 
-        if(this.canvasMode && this.bufferedImgData != null){
-          this.$refs.canvas.getContext('2d').putImageData(this.bufferedImgData, 0,0)
-        }
-      }
-    },
+    //     if(this.canvasMode && this.bufferedImgData != null){
+    //       this.$refs.canvas.getContext('2d').putImageData(this.bufferedImgData, 0,0)
+    //     }
+    //   }
+    // },
+    // exitFullScreen(){
+
+    //   this.isFullscreen = false
+
+    // },
     exitRoom() {
       this.$socket.emit('exitRoom')
       this.$router.push({ name: 'home' })

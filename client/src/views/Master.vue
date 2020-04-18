@@ -911,7 +911,7 @@ export default {
             ]
 
             let css =
-              'position: absolute; left:' +
+              'z-index: 10; position: fixed; left:' +
               info.minx +
               'px; top: ' +
               info.miny +
@@ -987,7 +987,7 @@ export default {
             ]
 
             let css =
-              'position: absolute; left:' +
+              'z-index:10; position: fixed; left:' +
               info.minx +
               'px; top: ' +
               info.miny +
@@ -1097,7 +1097,7 @@ export default {
         ]
 
         let css =
-          'position: absolute; left:' +
+          'z-index:10; position: fixed; left:' +
           info.minx +
           'px; top: ' +
           info.miny +
@@ -1328,7 +1328,7 @@ export default {
         ]
 
         let css =
-          'position: absolute; left:' +
+          'z-index:10; position: fixed; left:' +
           info.minx +
           'px; top: ' +
           info.miny +
@@ -1528,7 +1528,7 @@ export default {
         ]
 
         let css =
-          'position: absolute; left:' +
+          'z-index:10; position: fixed; left:' +
           info.minx +
           'px; top: ' +
           info.miny +
