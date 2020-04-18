@@ -257,21 +257,12 @@ export default class Animations {
       let random = this.nextInList() % newNeighbours.length
       // let random = Math.floor(Math.random() * newNeighbours.length);
       let newNeighbour = newNeighbours[random]
-      if (this.triangulation.length === 1) {
-        while (
-          newNeighbour[0] === this.endPoint[0] &&
-          newNeighbour[1] === this.endPoint[1]
-        ) {
-          newNeighbour = newNeighbours[++random % newNeighbour.length]
-        }
-      } else {
-        while (
-          canReturn === false &&
-          newNeighbour[0] === this.firstPoint[0] &&
-          newNeighbour[1] === this.firstPoint[1]
-        ) {
-          newNeighbour = newNeighbours[++random % newNeighbour.length]
-        }
+      while (
+        canReturn === false &&
+        newNeighbour[0] === this.firstPoint[0] &&
+        newNeighbour[1] === this.firstPoint[1]
+      ) {
+        newNeighbour = newNeighbours[++random % newNeighbour.length]
       }
 
       this.setPosition(this.endPoint[0], this.endPoint[1])
