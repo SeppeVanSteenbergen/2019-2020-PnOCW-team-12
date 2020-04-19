@@ -407,9 +407,6 @@
                   <v-expansion-panel-content>
                     <v-card class="mb-12 fullheight" elevation="0">
                       <v-btn color="primary" @click="executeInitAnimation"
-                        >Init Animation</v-btn
-                      >
-                      <v-btn color="primary" @click="executeStartAnimation"
                         >Start Animation</v-btn
                       >
                       <v-btn color="primary" @click="executeStopAnimation"
@@ -1051,21 +1048,73 @@ export default {
       this.$socket.emit('af', obj)
     },
     executeStopAnimation() {
-      //old way
-      /*if (this.animationInterval !== null) {
-        clearInterval(this.animationInterval)
+      let tri = []
+      for (let i = 0; i < this.analysedImage.triangulation.length; i++) {
+        tri.push(this.analysedImage.triangulation[i].toObject())
       }
-      this.animationInterval = null*/
+      console.log('Sent Triangulation')
+      console.log(tri)
 
-      // new way
-      let obj = {
-        payload: {
-          type: 'animation-stop',
-          data: {}
-        },
-        to: 'all'
+      let midpoints = this.analysedImage.midPoints
+
+      let width = this.analysedImage.width
+      let height = this.analysedImage.height
+
+      let info = ImageTools.createPictureCanvas(0, 0, this.analysedImage)
+
+      let list = []
+      for (let i = 0; i < 20; i++) {
+        list.push(Math.round(Math.random() * 30))
       }
-      this.$socket.emit('screenCommand', obj)
+      console.log(list)
+
+      for (let i = 0; i < this.analysedImage.screens.length; i++) {
+        console.log('looping through screens')
+        let cssMatrix = this.analysedImage.screens[i].cssMatrix
+
+        let user_id = this.myRoom.clients[
+          this.analysedImage.screens[i].clientCode
+        ]
+
+        let css =
+          'position: absolute; left:' +
+          info.minx +
+          'px; top: ' +
+          info.miny +
+          'px; transform: matrix3d(' +
+          cssMatrix.join(', ') +
+          '); transform-origin: ' +
+          -info.minx +
+          'px ' +
+          -info.miny +
+          'px; width: ' +
+          info.w +
+          'px; height: ' +
+          info.h +
+          'px; object-fit: none'
+
+        let obj = {
+          payload: {
+            type: 'animation-stop',
+            data: {
+              triangulation: tri,
+              midpoints: midpoints,
+              width: width,
+              height: height,
+              list: list,
+
+              css: css,
+              ox: info.minx,
+              oy: info.miny,
+              w: info.w,
+              h: info.h
+            }
+          },
+          to: user_id
+        }
+
+        this.$socket.emit('screenCommand', obj)
+      }
     },
     executeInitAnimation() {
       let tri = []

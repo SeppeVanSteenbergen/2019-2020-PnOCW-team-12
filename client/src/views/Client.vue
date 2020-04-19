@@ -151,15 +151,11 @@ export default {
           this.restartVideoHandler()
           break
         case 'animation-init':
-          this.setDefaultCSS()
           this.animationInitHandler(message.data)
-          break
-        case 'animation-start':
-          this.animationRunning = true
-          this.animationStartHandler(message.data)
           break
         case 'animation-stop':
           this.animationRunning = false
+          this.delaunayHandler(message.data)
           break
         case 'delaunay-image':
           this.setDefaultCSS()
@@ -209,7 +205,6 @@ export default {
       clearInterval(this.videoInterval)
       this.canvas.style = this.defaultCSS
       this.canvasMode = true
-      this.animationRunning = false
     },
     setVideoMode() {
       clearInterval(this.gameInterval)
@@ -611,20 +606,22 @@ export default {
       return imgData
     },
     animationInitHandler(data) {
-      this.startTime = null
-      console.log('animation init data')
-      console.log(data)
-      //create animation object
-      this.animation = new Animation(
-        data.triangulation,
-        this.delaunayImage,
-        true,
-        data.list
-      )
+      if(!this.animationRunning) {
+        this.setDefaultCSS()
+        this.startTime = null
+        console.log('animation init data')
+        console.log(data)
+        //create animation object
+        this.animation = new Animation(
+          data.triangulation, this.delaunayImage, true, data.list
+        )
 
-      this.animationFrame = 0
+        this.animationFrame = 0
 
-      this.delaunayHandler(data)
+        this.delaunayHandler(data)
+        this.animationRunning = true
+        this.animationStartHandler(data)
+      }
     },
     animationStartHandler(data) {
       if (!this.animationRunning) return
