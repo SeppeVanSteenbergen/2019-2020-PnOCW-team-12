@@ -1,5 +1,4 @@
 class Image {
-
   constructor(imgData, colorSpace, clientInfo) {
     this.clientInfo = clientInfo
     // this.setCommunicator(communicator)
@@ -37,16 +36,24 @@ class Image {
     ColorSpace.rgbaToHsla(this.pixels)
     this.setColorSpace('HSLA')
 
-    self.postMessage({text: 'UPDATE', pct: 10, msg: 'Converted Colorspace To HSLA'})
+    self.postMessage({
+      text: 'UPDATE',
+      pct: 10,
+      msg: 'Converted Colorspace To HSLA'
+    })
 
     this.createBigMask()
 
-    self.postMessage({text: 'UPDATE', pct: 10, msg: 'Created Value Matrix from Image'})
+    self.postMessage({
+      text: 'UPDATE',
+      pct: 10,
+      msg: 'Created Value Matrix from Image'
+    })
 
     this.createOffset(this.offSet)
     this.createScreens()
 
-    self.postMessage({text: 'UPDATE', pct: 60, msg: 'Created Screens'})
+    self.postMessage({ text: 'UPDATE', pct: 60, msg: 'Created Screens' })
 
     return this.screens
   }
@@ -82,25 +89,24 @@ class Image {
         if (this.checkId(x, y)) {
           let newIslandCoo = this.floodfill(x, y, this.islandID)
           if (this.isPossibleIsland(newIslandCoo)) {
-            let newIsland = new Island (
-              [newIslandCoo[0], newIslandCoo[1]],
-              [newIslandCoo[2], newIslandCoo[3]],
-              this.islandID,
-              this.getImgData(),
-              this.imgOriginalRGB,
-              this.matrix
-            )
-            if (newIsland.isValid()) {
+            try {
+              let newIsland = new Island(
+                [newIslandCoo[0], newIslandCoo[1]],
+                [newIslandCoo[2], newIslandCoo[3]],
+                this.islandID,
+                this.getImgData(),
+                this.imgOriginalRGB,
+                this.matrix
+              )
               console.log('Island ' + this.islandID + 'is valid')
-              try {
-                newIsland.finishIsland()
-                this.islands.push(newIsland)
-              } catch (err) {
-                self.postMessage({text:'ERROR', msg:err + this.getRealIslandID()})
-                console.log('Error :' + err + this.getRealIslandID())
-              }
-            } else {
-              throw 'No midpoint in island ' + this.getRealIslandID()
+              newIsland.finishIsland()
+              this.islands.push(newIsland)
+            } catch (err) {
+              self.postMessage({
+                text: 'ERROR',
+                msg: err + this.getRealIslandID()
+              })
+              console.log('Error :' + err + this.getRealIslandID())
             }
             this.islandID += 3
           }
@@ -157,10 +163,7 @@ class Image {
     }
 
     let ids = matrix.flat()
-    return (
-      ids.includes(this.islandID) &&
-      ids.includes(this.islandID + 1)
-    )
+    return ids.includes(this.islandID) && ids.includes(this.islandID + 1)
   }
 
   /**
@@ -185,12 +188,15 @@ class Image {
     try {
       this.calcIslandsFloodfill()
     } catch (err) {
-      self.postMessage({text:'ERROR', msg: err})
+      self.postMessage({ text: 'ERROR', msg: err })
     }
-    self.postMessage({text: 'UPDATE', pct: 20, msg: 'Floodfill done: found ' + this.islands.length + " island(s)"})
+    self.postMessage({
+      text: 'UPDATE',
+      pct: 20,
+      msg: 'Floodfill done: found ' + this.getRealIslandID() + ' island(s)'
+    })
 
     for (let i = 0; i < this.islands.length; i++) {
-
       let newScreen = this.islands[i].createScreen(this.clientInfo)
       this.screens.push(newScreen)
     }
@@ -351,7 +357,7 @@ class Image {
 
   /**
    * Makes
-   * 
+   *
    * @param factor
    */
   createOffset(factor) {
@@ -399,11 +405,11 @@ class Image {
    * @returns {*|ImageData}
    */
   getImgData() {
-    return this.imgData;
+    return this.imgData
   }
 
   getRealIslandID() {
-    return parseInt(Math.floor(this.islandID/3))-1
+    return parseInt(Math.floor(this.islandID / 3)) - 1
   }
 
   getColorSpace() {
