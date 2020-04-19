@@ -233,11 +233,11 @@ export default {
       const id = this.$store.getters.getRole.client_id
       let factor = 0.06
       const borderWidth =
-        screen.width < screen.height
-          ? screen.width * factor
-          : screen.height * factor
+        window.innerWidth < window.innerHeight
+          ? window.innerWidth * factor
+          : window.innerHeight * factor
 
-      let drawer = new DetectionDrawer(this.canvas, screen, borderWidth)
+      let drawer = new DetectionDrawer(this.canvas, {width: window.innerWidth, height: window.innerHeight}, borderWidth)
 
       drawer.barcode(id, 6)
 
@@ -436,7 +436,8 @@ export default {
       this.canvas.width = width
 
       if(this.bufferedImgData != null){
-        this.setDefaultCSS()
+        // this.setDefaultCSS()
+        this.canvas.style = this.defaultCSS
         this.canvas.getContext('2d').putImageData(this.bufferedImgData, 0,0)
       }else{
         let ctx = this.canvas.getContext('2d')
