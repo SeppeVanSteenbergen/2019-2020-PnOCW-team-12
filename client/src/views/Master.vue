@@ -1392,19 +1392,18 @@ export default {
     async analyseImage() {
       console.log('starting analysis')
 
+      //update roomclientinfo for new connected devices
+      this.$socket.emit('updateRoomClientInfo')
+      // this.getClientInfo()
+      setTimeout(this.getClientInfo, 500)
+
       this.isAnalysing = true
 
       let inC = this.$refs.canva
       let outC = this.$refs.resultCanvas
 
-      // outC.style.visibility = "hidden"
-      // this.$refs.delaunay.visibility = "hidden"
-      // this.$refs.delaunay2.visibility = "hidden"
-
       let progressBarContainer = this.$refs.progressBarcontainer
       let messageBoxContainer = this.$refs.messageBoxContainer
-
-      // console.log("parent: " + outC.parentElement)
 
       let inctx = inC.getContext('2d')
       let outctx = outC.getContext('2d')

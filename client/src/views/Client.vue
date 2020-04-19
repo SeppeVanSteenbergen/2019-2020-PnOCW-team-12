@@ -90,7 +90,8 @@ export default {
       playerWidth: 40,
       playerHeight: 40,
 
-      isFullscreen: false
+      isFullscreen: false,
+      initialFull: true
     }
   },
   mounted() {
@@ -241,8 +242,6 @@ export default {
 
       drawer.barcode(id, 6)
 
-      this.bufferedImgData = this.canvas.getContext('2d').getImageData(0,0, this.canvas.width, this.canvas.height)
-
     },
     runFloodScreenCommandList(list, startIndex) {
       for (let i = startIndex; i < list.length; i++) {
@@ -318,7 +317,6 @@ export default {
             Math.round(image.height * ratio)
           )
 
-          vue.bufferedImgData = null
       }
       image.src = data.image
     },
@@ -430,22 +428,12 @@ export default {
       this.isFullscreen = true
 
       this.canvas = this.$refs['canvas']
-      const width = window.innerWidth
-      const height = window.innerHeight
-      this.canvas.height = height
-      this.canvas.width = width
 
-      if(this.bufferedImgData != null){
-        // this.setDefaultCSS()
-        this.canvas.style = this.defaultCSS
-        this.canvas.getContext('2d').putImageData(this.bufferedImgData, 0,0)
-      }else{
-        let ctx = this.canvas.getContext('2d')
-
-        ctx.fillRect(0,0,this.canvas.width, this.canvas.height)
-        ctx.fillStyle = "grey"
-        ctx.fill()
+      if(this.initialFull){
+        this.canvas.getContext('2d').fillRect(0,0, this.canvas.width, this.canvas.height)
+        this.initialFull = false
       }
+      
     },
     exitRoom() {
       this.$socket.emit('exitRoom')
@@ -479,8 +467,6 @@ export default {
           image.height * ratio
         )
 
-        vue.bufferedImgData = ctx.getImageData(0,0, canvas.width, canvas.height)
-        // vue.bufferedImgData = image.getImageData()
       }
       image.src = base64Image
     },

@@ -42,7 +42,6 @@ export default {
 
   drawScreenOutlines(c, aImage, dx = 0, dy = 0) {
     let ctx = c.getContext('2d')
-    // ctx.strokeStyle = '#ff0000'
     ctx.lineWidth = 4
     let s = aImage.screens
     for (let i = 0; i < s.length; i++) {
