@@ -292,7 +292,7 @@
                 <v-btn
                   :disabled="isBusyAnalysing()"
                   color="primary"
-                  @click="nextStep(1)"
+                  @click="executeDisplayDetectionScreens(); nextStep(1)"
                   >Retake Picture</v-btn
                 >
                 <v-btn
@@ -775,26 +775,26 @@ export default {
           c.width = vue.drawingImg.width * scale
           c.height = vue.drawingImg.height * scale
 
-          c.removeEventListener('mousedown', vue.mouseDownHandler, false)
-          document.removeEventListener('mouseup', vue.mouseUpHandler, false)
-          c.removeEventListener('mousemove', vue.mouseMoveHandler, false)
+          // c.removeEventListener('mousedown', vue.mouseDownHandler, false)
+          // document.removeEventListener('mouseup', vue.mouseUpHandler, false)
+          // c.removeEventListener('mousemove', vue.mouseMoveHandler, false)
 
-          vue.mouseDown = false
-          vue.Xpos = null
-          vue.Ypos = null
-          vue.x = 0
-          vue.y = 0
-          vue.pictureCanvasInfo = info
+          // vue.mouseDown = false
+          // vue.Xpos = null
+          // vue.Ypos = null
+          // vue.x = 0
+          // vue.y = 0
+          // vue.pictureCanvasInfo = info
 
-          c.addEventListener('mousedown', vue.mouseDownHandler, false)
-          c.addEventListener('mouseup', vue.mouseUpHandler, false)
-          c.addEventListener('mousemove', vue.mouseMoveHandler, false)
+          // c.addEventListener('mousedown', vue.mouseDownHandler, false)
+          // c.addEventListener('mouseup', vue.mouseUpHandler, false)
+          // c.addEventListener('mousemove', vue.mouseMoveHandler, false)
 
-          c.addEventListener('touchstart', vue.mouseDownHandler, false)
-          c.addEventListener('touchend', vue.mouseUpHandler, false)
-          //el.addEventListener("touchcancel", handleCancel, false)
-          //el.addEventListener("touchleave", handleEnd, false)
-          c.addEventListener('touchmove', vue.mouseMoveHandler, false)
+          // c.addEventListener('touchstart', vue.mouseDownHandler, false)
+          // c.addEventListener('touchend', vue.mouseUpHandler, false)
+          // //el.addEventListener("touchcancel", handleCancel, false)
+          // //el.addEventListener("touchleave", handleEnd, false)
+          // c.addEventListener('touchmove', vue.mouseMoveHandler, false)
 
           ctx.drawImage(vue.drawingImg, 0, 0, c.width, c.height)
 

@@ -42,10 +42,11 @@ export default {
 
   drawScreenOutlines(c, aImage, dx = 0, dy = 0) {
     let ctx = c.getContext('2d')
-    ctx.strokeStyle = '#ff0000'
+    // ctx.strokeStyle = '#ff0000'
     ctx.lineWidth = 4
     let s = aImage.screens
     for (let i = 0; i < s.length; i++) {
+      ctx.strokeStyle = '#ff0000'
       ctx.beginPath()
       ctx.moveTo(s[i].corners[0][0] - dx, s[i].corners[0][1] - dy)
       ctx.lineTo(s[i].corners[1][0] - dx, s[i].corners[1][1] - dy)
@@ -54,6 +55,10 @@ export default {
       ctx.lineTo(s[i].corners[0][0] - dx, s[i].corners[0][1] - dy)
       ctx.closePath()
       ctx.stroke()
+
+      ctx.strokeStyle = 'black'
+      ctx.font = '30px Comic Sans MS'
+      ctx.strokeText(s[i].clientCode, s[i].midPoint[0] - dx, s[i].midPoint[1] - dy)
     }
   },
 
