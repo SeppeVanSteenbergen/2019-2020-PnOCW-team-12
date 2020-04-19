@@ -941,6 +941,8 @@ export default {
 
             this.$socket.emit('screenCommand', obj)
           }
+
+          this.startSync()
         })
         .catch(err => {
           console.log(err)
