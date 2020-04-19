@@ -70,7 +70,7 @@ export default {
       canvas: null,
       canvWrap: null,
       intervalObj: null,
-      defaultCSS: 'width:100%;height:100%',
+      defaultCSS: 'z-index:10; position:fixed; left:0; top:0; width:100%;height:100%',
       videoURL: '',
       canvasMode: true,
       videoTimeout: null,
@@ -190,8 +190,8 @@ export default {
     updateScreenSize() {
       this.$socket.emit('setScreenSize', {
         size: {
-          width: screen.width,
-          height: screen.height
+          width: window.innerWidth,
+          height: window.innerHeight
         }
       })
     },
@@ -216,7 +216,7 @@ export default {
     setDefaultCSS() {
       clearInterval(this.gameInterval)
       clearInterval(this.videoInterval)
-      // this.canvas.style = this.defaultCSS
+      this.canvas.style = this.defaultCSS
       this.canvasMode = true
       this.animationRunning = false
     },
@@ -427,16 +427,11 @@ export default {
       this.$router.push({ params: { room_id: room_id } })
     },
     goFullscreen() {
-      //this.$refs['full'].toggle()
-      //this.fullscreen = !this.fullscreen
-
-      console.log("FULLSCREEN CANVAS LOADED IN")
-
       this.isFullscreen = true
 
       this.canvas = this.$refs['canvas']
-      const width = window.screen.width
-      const height = window.screen.height
+      const width = window.innerWidth
+      const height = window.innerHeight
       this.canvas.height = height
       this.canvas.width = width
 
@@ -444,8 +439,6 @@ export default {
         this.setDefaultCSS()
         this.canvas.getContext('2d').putImageData(this.bufferedImgData, 0,0)
       }else{
-        // this.setDefaultCSS()
-
         let ctx = this.canvas.getContext('2d')
 
         ctx.fillRect(0,0,this.canvas.width, this.canvas.height)
@@ -453,47 +446,6 @@ export default {
         ctx.fill()
       }
     },
-    // async openFullscreen(elem) {
-    //   try {
-    //     if (elem.requestFullscreen) {
-    //       await elem.requestFullscreen()
-    //     } else if (elem.mozRequestFullScreen) {
-    //       /* Firefox */
-    //       await elem.mozRequestFullScreen()
-    //     } else if (elem.webkitRequestFullscreen) {
-    //       /* Chrome, Safari and Opera */
-    //       await elem.webkitRequestFullscreen()
-    //     } else if (elem.msRequestFullscreen) {
-    //       /* IE/Edge */
-    //       await elem.msRequestFullscreen()
-    //     }
-    //   } catch (err) {
-    //     console.log(err)
-    //     this.$notif('cannot open fullscreen without user gesture', 'error')
-    //   }
-    // },
-    // exitHandler() {
-    //   if (
-    //     !(
-    //       document.fullscreenElement ||
-    //       document.webkitFullscreenElement ||
-    //       document.mozFullScreenElement
-    //     )
-    //   ) {
-    //     document.getElementById('canvWrap').style.display = 'none'
-    //   } else {
-    //     document.getElementById('canvWrap').style.display = 'block'
-
-    //     if(this.canvasMode && this.bufferedImgData != null){
-    //       this.$refs.canvas.getContext('2d').putImageData(this.bufferedImgData, 0,0)
-    //     }
-    //   }
-    // },
-    // exitFullScreen(){
-
-    //   this.isFullscreen = false
-
-    // },
     exitRoom() {
       this.$socket.emit('exitRoom')
       this.$router.push({ name: 'home' })
@@ -529,9 +481,7 @@ export default {
         vue.bufferedImgData = ctx.getImageData(0,0, canvas.width, canvas.height)
         // vue.bufferedImgData = image.getImageData()
       }
-      image.crossOrigin = "Anonymous"
-      image.src = base64Image //+ '?' + new Date().getTime()
-      // image.crossOrigin = "Anonymous"
+      image.src = base64Image
     },
     stopRunning() {
       clearInterval(this.intervalObj)
