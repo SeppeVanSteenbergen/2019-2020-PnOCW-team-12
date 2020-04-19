@@ -18,7 +18,7 @@ class CornerDetector {
       this.width,
       this.height
     )
-    this.radiusFactor = 1/4
+    this.radiusFactor = 1 / 4
     this.radius = null //will be set later
     this.blue = id
     this.green = id + 1
@@ -36,20 +36,24 @@ class CornerDetector {
     this.reconstructor.setRadius(this.radius)
     //returns 4 corners in relative position
     let nonPositionCorners = this.validateCorners(tmpCorners)
-    if (
-      nonPositionCorners.filter(function(point) {
-        return point != null
-      }).length < 2
-    ){
-      throw 'Not enough good corners to make reconstruction of island '
-    }
 
     this.corners = this.orderCorners(nonPositionCorners)
     nonPositionCorners = nonPositionCorners.filter(function(point) {
       return point != null
     })
+    if (
+        nonPositionCorners.length < 2
+    ) {
+      throw 'Not enough good corners to make reconstruction of island '
+    }
     if (nonPositionCorners.length < 4) {
-      self.postMessage({text: 'MESSAGE', msg: 'Found ' + nonPositionCorners.length +' corners, reconstructing missing corners' })
+      self.postMessage({
+        text: 'MESSAGE',
+        msg:
+          'Found ' +
+          nonPositionCorners.length +
+          ' corners, reconstructing missing corners'
+      })
       let corners = this.corners
       this.corners = this.reconstructor.reconstructCorners(corners)
     }
@@ -355,14 +359,8 @@ class CornerDetector {
       let i1 = distances.indexOf(minDistance)
       let i2 = (i1 + 1) % tmpCorners.length
 
-      let c1, c2
-      if (i1 < tmpCorners.length - 1) {
-        c1 = tmpCorners[i1]
-        c2 = tmpCorners[i2]
-      } else {
-        c1 = tmpCorners[i1]
-        c2 = tmpCorners[i2]
-      }
+      let c1 = tmpCorners[i1]
+      let c2 = tmpCorners[i2]
 
       let mid = [
         Math.round((c1[0] + c2[0]) / 2),
@@ -371,13 +369,10 @@ class CornerDetector {
       ]
 
       let nextC = tmpCorners[(i2 + 1) % tmpCorners.length]
-      let newDistance = Math.sqrt(
-        Math.pow(nextC[0] - mid[0], 2) + Math.pow(nextC[1] - mid[1], 2)
-      )
 
-      if (newDistance > maxDistance) {
-        tmpCorners[i1] = mid
-        tmpCorners[i2] = null
+      if (nextC[2] === c2[2]) {
+        tmpCorners[i1] = null
+        tmpCorners[i2] = mid
       } else {
         tmpCorners[i1] = mid
         tmpCorners[i2] = null
@@ -387,12 +382,16 @@ class CornerDetector {
     let validCorners = []
     for (let c = 0; c < tmpCorners.length; c++) {
       let tmpCorner = tmpCorners[c]
-      if (
-        this.reconstructor.reconstructCircle([tmpCorner[0], tmpCorner[1]])
-          .length >= 3
-      ) {
-        validCorners.push(tmpCorner)
-      } else validCorners.push(null)
+      if (tmpCorner !== null) {
+        if (
+          this.reconstructor.reconstructCircle([tmpCorner[0], tmpCorner[1]])
+            .length >= 3
+        ) {
+          validCorners.push(tmpCorner)
+        } else validCorners.push(null)
+      } else {
+        validCorners.push(null)
+      }
     }
 
     return validCorners
@@ -425,5 +424,4 @@ class CornerDetector {
     if (y < 0 || y >= this.matrix.length) return 0
     return this.matrix[y][x]
   }
-
 }
