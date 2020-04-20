@@ -950,7 +950,7 @@ export default {
     },
 
     executeUploadImage() {
-      if (this.analysedImage.screens.length !== this.myRoom.clients.length) {
+      if (this.analysedImage.screens.length > this.myRoom.clients.length) {
         this.$notif('Detection was not succesful', 'error')
         return
       }
