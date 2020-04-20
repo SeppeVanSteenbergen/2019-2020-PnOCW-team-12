@@ -37,13 +37,20 @@
           </v-container>
         </v-card>
         <br />
+        <!-- <v-btn @click="goFullscreen()">Go Fullscreen</v-btn> -->
         <v-btn @click="goFullscreen()">Go Fullscreen</v-btn>
-        <div ref="canvWrap" id="canvWrap" style="display:none" class="fullscreen">
-          <canvas ref="canvas"></canvas>
+        <div v-show="isFullscreen" ref="canvWrap" id="canvWrap" class="fullscreen">
+          <canvas ref="canvas" @click="isFullscreen = false" style="position:fixed; left:0; top:0; z-index:10; width:100%; height:100%"></canvas>
           <video ref="vid">
             <source :src="videoURL" />
           </video>
         </div>
+        <!-- <div ref="canvWrap" id="canvWrap" style="display:none" class="fullscreen">
+          <canvas ref="canvas"></canvas>
+          <video ref="vid">
+            <source :src="videoURL" />
+          </video>
+        </div> -->
       </div>
     </v-row>
     <v-btn color="error" fab large dark bottom left fixed @click="exitRoom()">
@@ -63,7 +70,7 @@ export default {
       canvas: null,
       canvWrap: null,
       intervalObj: null,
-      defaultCSS: 'width:100%;height:100%',
+      defaultCSS: 'z-index:10; position:fixed; left:0; top:0; width:100%;height:100%',
       videoURL: '',
       canvasMode: true,
       videoTimeout: null,
@@ -81,7 +88,10 @@ export default {
       gameInterval: null,
       bulletList: null,
       playerWidth: 40,
-      playerHeight: 40
+      playerHeight: 40,
+
+      isFullscreen: false,
+      initialFull: true
     }
   },
   mounted() {
@@ -109,7 +119,7 @@ export default {
   },
   sockets: {
     screenCommand(message) {
-      if (!this.fullscreen) {
+      if (!this.isFullscreen) {
         this.goFullscreen()
       }
       switch (message.type) {
@@ -177,8 +187,8 @@ export default {
     updateScreenSize() {
       this.$socket.emit('setScreenSize', {
         size: {
-          width: screen.width,
-          height: screen.height
+          width: window.innerWidth,
+          height: window.innerHeight
         }
       })
     },
@@ -219,15 +229,13 @@ export default {
       const id = this.$store.getters.getRole.client_id
       let factor = 0.06
       const borderWidth =
-        screen.width < screen.height
-          ? screen.width * factor
-          : screen.height * factor
+        window.innerWidth < window.innerHeight
+          ? window.innerWidth * factor
+          : window.innerHeight * factor
 
-      let drawer = new DetectionDrawer(this.canvas, screen, borderWidth)
+      let drawer = new DetectionDrawer(this.canvas, {width: window.innerWidth, height: window.innerHeight}, borderWidth)
 
       drawer.barcode(id, 6)
-
-      this.bufferedImgData = this.canvas.getContext('2d').getImageData(0,0, this.canvas.width, this.canvas.height)
 
     },
     runFloodScreenCommandList(list, startIndex) {
@@ -304,7 +312,6 @@ export default {
             Math.round(image.height * ratio)
           )
 
-          vue.bufferedImgData = null
       }
       image.src = data.image
     },
@@ -413,63 +420,15 @@ export default {
       this.$router.push({ params: { room_id: room_id } })
     },
     goFullscreen() {
-      //this.$refs['full'].toggle()
-      //this.fullscreen = !this.fullscreen
+      this.isFullscreen = true
 
       this.canvas = this.$refs['canvas']
-      const width = window.screen.width
-      const height = window.screen.height
-      this.canvas.height = height
-      this.canvas.width = width
-      this.openFullscreen(this.$refs.canvWrap)
 
-      /*
-        let ctx = this.canvas.getContext('2d')
-        ctx.fillStyle = 'white'
-        ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
-        ctx.fillStyle = 'black'
-        ctx.beginPath()
-        ctx.arc(width / 2, height / 2, width / 4, 0, 2 * Math.PI)
-        ctx.stroke()*/
-
-      //this.canvas.style.display = 'block'
-      //this.$refs.canvWrap.style.display = 'block'
-    },
-    async openFullscreen(elem) {
-      try {
-        if (elem.requestFullscreen) {
-          await elem.requestFullscreen()
-        } else if (elem.mozRequestFullScreen) {
-          /* Firefox */
-          await elem.mozRequestFullScreen()
-        } else if (elem.webkitRequestFullscreen) {
-          /* Chrome, Safari and Opera */
-          await elem.webkitRequestFullscreen()
-        } else if (elem.msRequestFullscreen) {
-          /* IE/Edge */
-          await elem.msRequestFullscreen()
-        }
-      } catch (err) {
-        console.log(err)
-        this.$notif('cannot open fullscreen without user gesture', 'error')
+      if(this.initialFull){
+        this.canvas.getContext('2d').fillRect(0,0, this.canvas.width, this.canvas.height)
+        this.initialFull = false
       }
-    },
-    exitHandler() {
-      if (
-        !(
-          document.fullscreenElement ||
-          document.webkitFullscreenElement ||
-          document.mozFullScreenElement
-        )
-      ) {
-        document.getElementById('canvWrap').style.display = 'none'
-      } else {
-        document.getElementById('canvWrap').style.display = 'block'
-
-        if(this.canvasMode && this.bufferedImgData != null){
-          this.$refs.canvas.getContext('2d').putImageData(this.bufferedImgData, 0,0)
-        }
-      }
+      
     },
     exitRoom() {
       this.$socket.emit('exitRoom')
@@ -503,12 +462,8 @@ export default {
           image.height * ratio
         )
 
-        vue.bufferedImgData = ctx.getImageData(0,0, canvas.width, canvas.height)
-        // vue.bufferedImgData = image.getImageData()
       }
-      image.crossOrigin = "Anonymous"
-      image.src = base64Image //+ '?' + new Date().getTime()
-      // image.crossOrigin = "Anonymous"
+      image.src = base64Image
     },
     stopRunning() {
       clearInterval(this.intervalObj)

@@ -41,7 +41,7 @@ class Reconstructor {
           otherCorner = corners.RD
           helpPoint = this.findHelpPoint(helpPoints, helpCorner, otherCorner)
         }
-      } else if (this.corners.LD !== null) {
+      } else if (corners.LD !== null) {
         helpPoints = this.reconstructCircle(corners.LD)
         if (helpPoints.length >= 3) {
           helpPoints = helpPoints.slice(0, 2)

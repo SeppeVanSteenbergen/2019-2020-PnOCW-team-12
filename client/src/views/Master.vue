@@ -292,7 +292,7 @@
                 <v-btn
                   :disabled="isBusyAnalysing()"
                   color="primary"
-                  @click="nextStep(1)"
+                  @click="executeDisplayDetectionScreens(); nextStep(1)"
                   >Retake Picture</v-btn
                 >
                 <v-btn
@@ -772,26 +772,26 @@ export default {
           c.width = vue.drawingImg.width * scale
           c.height = vue.drawingImg.height * scale
 
-          c.removeEventListener('mousedown', vue.mouseDownHandler, false)
-          document.removeEventListener('mouseup', vue.mouseUpHandler, false)
-          c.removeEventListener('mousemove', vue.mouseMoveHandler, false)
+          // c.removeEventListener('mousedown', vue.mouseDownHandler, false)
+          // document.removeEventListener('mouseup', vue.mouseUpHandler, false)
+          // c.removeEventListener('mousemove', vue.mouseMoveHandler, false)
 
-          vue.mouseDown = false
-          vue.Xpos = null
-          vue.Ypos = null
-          vue.x = 0
-          vue.y = 0
-          vue.pictureCanvasInfo = info
+          // vue.mouseDown = false
+          // vue.Xpos = null
+          // vue.Ypos = null
+          // vue.x = 0
+          // vue.y = 0
+          // vue.pictureCanvasInfo = info
 
-          c.addEventListener('mousedown', vue.mouseDownHandler, false)
-          c.addEventListener('mouseup', vue.mouseUpHandler, false)
-          c.addEventListener('mousemove', vue.mouseMoveHandler, false)
+          // c.addEventListener('mousedown', vue.mouseDownHandler, false)
+          // c.addEventListener('mouseup', vue.mouseUpHandler, false)
+          // c.addEventListener('mousemove', vue.mouseMoveHandler, false)
 
-          c.addEventListener('touchstart', vue.mouseDownHandler, false)
-          c.addEventListener('touchend', vue.mouseUpHandler, false)
-          //el.addEventListener("touchcancel", handleCancel, false)
-          //el.addEventListener("touchleave", handleEnd, false)
-          c.addEventListener('touchmove', vue.mouseMoveHandler, false)
+          // c.addEventListener('touchstart', vue.mouseDownHandler, false)
+          // c.addEventListener('touchend', vue.mouseUpHandler, false)
+          // //el.addEventListener("touchcancel", handleCancel, false)
+          // //el.addEventListener("touchleave", handleEnd, false)
+          // c.addEventListener('touchmove', vue.mouseMoveHandler, false)
 
           ctx.drawImage(vue.drawingImg, 0, 0, c.width, c.height)
 
@@ -908,7 +908,7 @@ export default {
             ]
 
             let css =
-              'position: absolute; left:' +
+              'z-index: 10; position: fixed; left:' +
               info.minx +
               'px; top: ' +
               info.miny +
@@ -986,7 +986,7 @@ export default {
             ]
 
             let css =
-              'position: absolute; left:' +
+              'z-index:10; position: fixed; left:' +
               info.minx +
               'px; top: ' +
               info.miny +
@@ -1148,7 +1148,7 @@ export default {
         ]
 
         let css =
-          'position: absolute; left:' +
+          'z-index:10; position: fixed; left:' +
           info.minx +
           'px; top: ' +
           info.miny +
@@ -1379,7 +1379,7 @@ export default {
         ]
 
         let css =
-          'position: absolute; left:' +
+          'z-index:10; position: fixed; left:' +
           info.minx +
           'px; top: ' +
           info.miny +
@@ -1443,19 +1443,18 @@ export default {
     async analyseImage() {
       console.log('starting analysis')
 
+      //update roomclientinfo for new connected devices
+      this.$socket.emit('updateRoomClientInfo')
+      // this.getClientInfo()
+      setTimeout(this.getClientInfo, 500)
+
       this.isAnalysing = true
 
       let inC = this.$refs.canva
       let outC = this.$refs.resultCanvas
 
-      // outC.style.visibility = "hidden"
-      // this.$refs.delaunay.visibility = "hidden"
-      // this.$refs.delaunay2.visibility = "hidden"
-
       let progressBarContainer = this.$refs.progressBarcontainer
       let messageBoxContainer = this.$refs.messageBoxContainer
-
-      // console.log("parent: " + outC.parentElement)
 
       let inctx = inC.getContext('2d')
       let outctx = outC.getContext('2d')
@@ -1579,7 +1578,7 @@ export default {
         ]
 
         let css =
-          'position: absolute; left:' +
+          'z-index:10; position: fixed; left:' +
           info.minx +
           'px; top: ' +
           info.miny +
