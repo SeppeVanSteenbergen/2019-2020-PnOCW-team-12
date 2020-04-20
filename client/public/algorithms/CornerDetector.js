@@ -55,6 +55,14 @@ class CornerDetector {
           ' corners, reconstructing missing corners'
       })
       let corners = this.corners
+      if (nonPositionCorners.length === 2) {
+        if (corners.LU === null && corners.RD === null) {
+          throw 'No two adjacent corners to calculate reconstruction!'
+        }
+        if (corners.RU === null && corners.LD === null) {
+          throw 'No two adjacent corners to calculate reconstruction!'
+        }
+      }
       this.corners = this.reconstructor.reconstructCorners(corners)
     }
     return this.corners

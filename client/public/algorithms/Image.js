@@ -104,7 +104,7 @@ class Image {
             } catch (err) {
               self.postMessage({
                 text: 'ERROR',
-                msg: err + this.getRealIslandID()
+                msg: err + ' in island: ' + this.getRealIslandID()
               })
               console.log('Error :' + err + this.getRealIslandID())
             }
