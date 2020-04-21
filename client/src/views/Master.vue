@@ -392,6 +392,7 @@
                       <v-btn color="primary" @click="executeUploadVideo"
                         >UploadVideo</v-btn
                       >
+                      <v-spacer></v-spacer>
                       <v-text-field
                         v-model="videoLink"
                         value="url"
@@ -403,7 +404,9 @@
                         @click="sendVideoURLToClients(videoLink)"
                         >Set Video Link</v-btn
                       >
-                      <br />
+                      <v-spacer></v-spacer>
+                      <v-divider class="mx-4"></v-divider>
+                      <v-spacer></v-spacer>
                       <v-btn color="primary" @click="executeStartVideo"
                         >Start Video</v-btn
                       >
@@ -412,6 +415,9 @@
                       >
                       <v-btn color="primary" @click="executePauseVideo"
                         >Pause Video</v-btn
+                      >
+                      <v-btn color="primary" @click="startSync()"
+                      >Resync</v-btn
                       >
                       <!-- <canvas ref="drawCanvas"></canvas> -->
                     </v-card>
@@ -553,13 +559,13 @@ export default {
 
       isAnalysing: false,
 
-      videofile: null,
+      videofile: '',
       animationInterval: null,
       animationFramerate: 50,
 
       videoUploadingActive: false,
       videoUploadProgress: 0,
-      videoLink: '',
+      videoLink: 'https://stylify.duckdns.org/vid.mp4',
 
       pictureCanvasInfo: null
     }
