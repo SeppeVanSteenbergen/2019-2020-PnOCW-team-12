@@ -70,6 +70,7 @@ export default {
       canvas: null,
       canvWrap: null,
       intervalObj: null,
+      countDownRunning: false,
       defaultCSS: 'z-index:10; position:fixed; left:0; top:0; width:100%;height:100%',
       videoURL: '',
       canvasMode: true,
@@ -210,6 +211,8 @@ export default {
     setDefaultCSS() {
       clearInterval(this.gameInterval)
       clearInterval(this.videoInterval)
+      clearInterval(this.intervalObj)
+      this.countDownRunning = false
       this.canvas.style = this.defaultCSS
       this.canvasMode = true
       this.animationRunning = false
@@ -271,13 +274,15 @@ export default {
     },
     countDownIntervalHandler(start, interval, startTime) {
       clearInterval(this.intervalObj)
+      this.countDownRunning = true
       this.intervalObj = setInterval(
         this.countDownInterval,
-        Math.floor(interval / 2),
+        Math.floor(33),
         start,
         interval,
         startTime
       )
+      //setTimeout(this.countDownInterval, parseInt(33), start, interval, startTime)
     },
     /**
      *
@@ -314,6 +319,7 @@ export default {
       image.src = data.image
     },
     countDownInterval(start, interval, startTime) {
+      if (!this.countDownRunning) return
       let time = this.$store.state.sync.delta + Date.now()
       console.log('server time: ' + time)
       if (time < startTime) return
@@ -324,7 +330,9 @@ export default {
       } else {
         this.drawCounterFinish()
         clearInterval(this.intervalObj)
+        this.countDownRunning = false
       }
+     //setTimeout(this.countDownInterval, parseInt(33), start, interval, startTime)
     },
     drawNumberOnCanvas(num) {
       this.clearCanvas()
@@ -426,7 +434,7 @@ export default {
         this.canvas.getContext('2d').fillRect(0,0, this.canvas.width, this.canvas.height)
         this.initialFull = false
       }
-      
+
     },
     exitRoom() {
       this.$socket.emit('exitRoom')
@@ -472,6 +480,7 @@ export default {
       this.canvas.height = data.h
       this.canvas.width = data.w
       this.$refs.vid.load()
+      this.$refs.vid.currentTime = 0.1
       this.$refs.vid.style = 'display:none'
       this.beginVideoTimeout()
     },
