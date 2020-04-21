@@ -36,7 +36,11 @@ class CornerDetector {
     this.reconstructor.setRadius(this.radius)
     //returns 4 corners in relative position
     let nonPositionCorners = this.validateCorners(tmpCorners)
-
+    let counter = 0
+    for (let i = 0; i < 4; i++) {
+      if (nonPositionCorners[i] === null) counter++
+    }
+    if (counter > 2) throw 'Not enough good corners to make reconstruction of island '
     this.corners = this.orderCorners(nonPositionCorners)
     nonPositionCorners = nonPositionCorners.filter(function(point) {
       return point != null
