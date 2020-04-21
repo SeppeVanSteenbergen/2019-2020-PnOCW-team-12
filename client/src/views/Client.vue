@@ -196,13 +196,6 @@ export default {
         }
       })
     },
-    pings(data) {
-      if (typeof data !== 'undefined') {
-        data.clientTime = window.Date.now()
-        console.log(data)
-        this.$socket.emit('pongs', data)
-      }
-    },
     af(data) {
       this.animationFrameHandler(data)
     },
