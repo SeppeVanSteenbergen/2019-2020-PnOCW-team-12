@@ -5,9 +5,9 @@
         <v-toolbar color="primary" dark flat>
           <v-toolbar-title>
             {{
-            $store.getters.getRole.room >= 0
-            ? 'Room ' + $store.getters.getRole.room
-            : 'Not in Room'
+              $store.getters.getRole.room >= 0
+                ? 'Room ' + $store.getters.getRole.room
+                : 'Not in Room'
             }}
           </v-toolbar-title>
           <div class="flex-grow-1"></div>
@@ -19,7 +19,7 @@
           >
             <v-icon>
               {{
-              myRoom !== null && myRoom.open ? 'mdi-lock-open' : 'mdi-lock'
+                myRoom !== null && myRoom.open ? 'mdi-lock-open' : 'mdi-lock'
               }}
             </v-icon>
           </v-btn>
@@ -31,7 +31,9 @@
                 <v-icon v-if="false" color="pink">mdi-star</v-icon>
               </v-list-item-icon>
               <v-list-item-content>
-                <v-list-item-title v-text="'Client ' + myRoom.clients.indexOf(client_id)"></v-list-item-title>
+                <v-list-item-title
+                  v-text="'Client ' + myRoom.clients.indexOf(client_id)"
+                ></v-list-item-title>
               </v-list-item-content>
               <!--<v-list-item-avatar>
                                     <v-img :src="item.avatar"></v-img>
@@ -60,7 +62,9 @@
           touchless
         >
           <!--<v-tabs-slider></v-tabs-slider>-->
-          <v-tab v-for="i in tabs" :key="tabs.indexOf(i)" vertical>{{ i.title }}</v-tab>
+          <v-tab v-for="i in tabs" :key="tabs.indexOf(i)" vertical>{{
+            i.title
+          }}</v-tab>
 
           <v-tab-item>
             <v-btn @click="floodFillDialog = true">open dialog</v-btn>
@@ -71,8 +75,16 @@
               <v-card flat tile>
                 <v-card-title>Draw Directions</v-card-title>
                 <v-card-text>
-                  <v-slider v-model="angleSlider" thumb-label="always" :min="0" :max="360"></v-slider>
-                  <v-switch v-model="continousDrawDirectionMode" label="continuous mode"></v-switch>
+                  <v-slider
+                    v-model="angleSlider"
+                    thumb-label="always"
+                    :min="0"
+                    :max="360"
+                  ></v-slider>
+                  <v-switch
+                    v-model="continousDrawDirectionMode"
+                    label="continuous mode"
+                  ></v-switch>
                 </v-card-text>
 
                 <v-card-actions>
@@ -110,7 +122,8 @@
                   nextStep(0)
                 "
                 class="mx-auto"
-              >open dialog</v-btn>
+                >open dialog</v-btn
+              >
             </v-content>
           </v-tab-item>
 
@@ -130,10 +143,17 @@
           <span class="headline">Apply Colors</span>
         </v-card-title>
         <v-card-text>
-          <v-color-picker v-model="color" hide-mode-switch class="mx-auto" style="width:100%;"></v-color-picker>
+          <v-color-picker
+            v-model="color"
+            hide-mode-switch
+            class="mx-auto"
+            style="width:100%;"
+          ></v-color-picker>
           <v-expansion-panels :popout="false" :inset="false" :focusable="false">
             <v-expansion-panel>
-              <v-expansion-panel-header>Send To Client</v-expansion-panel-header>
+              <v-expansion-panel-header
+                >Send To Client</v-expansion-panel-header
+              >
               <v-expansion-panel-content>
                 <v-list v-if="myRoom !== null">
                   <v-list-item
@@ -142,7 +162,9 @@
                     @click="colorClient(client_id)"
                   >
                     <v-list-item-content>
-                      <v-list-item-title v-text="'Client ' + myRoom.clients.indexOf(client_id)"></v-list-item-title>
+                      <v-list-item-title
+                        v-text="'Client ' + myRoom.clients.indexOf(client_id)"
+                      ></v-list-item-title>
                     </v-list-item-content>
                     <!--<v-list-item-avatar>
                                           <v-img :src="item.avatar"></v-img>
@@ -155,7 +177,10 @@
         </v-card-text>
         <br />
         <v-card-actions>
-          <v-switch v-model="continousFloodMode" label="continuous mode"></v-switch>
+          <v-switch
+            v-model="continousFloodMode"
+            label="continuous mode"
+          ></v-switch>
           <div class="flex-grow-1"></div>
           <v-btn @click="colorClient()" color="success">Send To All</v-btn>
           <v-btn
@@ -165,7 +190,8 @@
             "
             color="error"
             text
-          >close</v-btn>
+            >close</v-btn
+          >
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -176,25 +202,35 @@
       <v-stepper v-model="pictureStepper" class="fullheight">
         <template>
           <v-stepper-header>
-            <v-stepper-step :complete="pictureStepper > 1" step="1" editable>Detection Screen</v-stepper-step>
+            <v-stepper-step :complete="pictureStepper > 1" step="1" editable
+              >Detection Screen</v-stepper-step
+            >
 
             <v-divider></v-divider>
 
-            <v-stepper-step :complete="pictureStepper > 2" step="2" editable>Take Picture</v-stepper-step>
+            <v-stepper-step :complete="pictureStepper > 2" step="2" editable
+              >Take Picture</v-stepper-step
+            >
 
             <v-divider></v-divider>
 
-            <v-stepper-step :complete="pictureStepper > 3" step="3" editable>Result Display</v-stepper-step>
+            <v-stepper-step :complete="pictureStepper > 3" step="3" editable
+              >Result Display</v-stepper-step
+            >
 
             <v-divider></v-divider>
 
-            <v-stepper-step :complete="pictureStepper > 4" step="4" editable>Usage</v-stepper-step>
+            <v-stepper-step :complete="pictureStepper > 4" step="4" editable
+              >Usage</v-stepper-step
+            >
           </v-stepper-header>
 
           <v-stepper-items class="fullheight overflow-y-auto">
             <v-stepper-content step="1" class="fullheight">
               <v-card class="mb-12 fullheight" elevation="0">
-                <v-btn @click="executeDisplayDetectionScreens" color="cyan">display detection screen</v-btn>
+                <v-btn @click="executeDisplayDetectionScreens" color="cyan"
+                  >display detection screen</v-btn
+                >
               </v-card>
 
               <v-btn color="primary" @click="nextStep(1)">Continue</v-btn>
@@ -231,9 +267,12 @@
                     nextStep(2)
                     analyseImageAsync()
                   "
-                >Analyse image</v-btn>
+                  >Analyse image</v-btn
+                >
 
-                <v-btn text @click="screenDetectionDialog = false">Cancel</v-btn>
+                <v-btn text @click="screenDetectionDialog = false"
+                  >Cancel</v-btn
+                >
               </v-card>
             </v-stepper-content>
 
@@ -253,13 +292,18 @@
                 <v-btn
                   :disabled="isBusyAnalysing()"
                   color="primary"
-                  @click="executeDisplayDetectionScreens(); nextStep(1)"
-                >Retake Picture</v-btn>
+                  @click="
+                    executeDisplayDetectionScreens()
+                    nextStep(1)
+                  "
+                  >Retake Picture</v-btn
+                >
                 <v-btn
                   :disabled="isBusyAnalysing()"
                   color="primary"
                   @click="analyseImageAsync()"
-                >Re-Analyse Image</v-btn>
+                  >Re-Analyse Image</v-btn
+                >
 
                 <v-expansion-panels :value="[0, 1]" :multiple="true">
                   <v-expansion-panel>
@@ -269,7 +313,9 @@
                     </v-expansion-panel-content>
                   </v-expansion-panel>
                   <v-expansion-panel>
-                    <v-expansion-panel-header>Delaunay</v-expansion-panel-header>
+                    <v-expansion-panel-header
+                      >Delaunay</v-expansion-panel-header
+                    >
                     <v-expansion-panel-content>
                       <canvas ref="delaunay2"></canvas>
                     </v-expansion-panel-content>
@@ -310,7 +356,9 @@
                         min="0.05"
                         hide-details
                       ></v-slider>-->
-                      <v-btn color="primary" @click="executeUploadImage">Send Image</v-btn>
+                      <v-btn color="primary" @click="executeUploadImage"
+                        >Send Image</v-btn
+                      >
                       <!-- <v-btn color="primary" @click="sendImageCSS">Send Image Socket</v-btn> -->
                       <!--<v-btn color="primary" @click="sendCustomImage">
                         Send Image
@@ -335,12 +383,36 @@
                         @change="loadVideoDisplayFile"
                       ></v-file-input>
 
-                      <canvas ref="videoPreview" height="0px" width="0px"></canvas>
+                      <canvas
+                        ref="videoPreview"
+                        height="0px"
+                        width="0px"
+                      ></canvas>
 
-                      <v-btn color="primary" @click="executeUploadVideo">UploadVideo</v-btn>
-                      <v-btn color="primary" @click="executeStartVideo">Start Video</v-btn>
-                      <v-btn color="primary" @click="executeRestartVideo">Restart Video</v-btn>
-                      <v-btn color="primary" @click="executePauseVideo">Pause Video</v-btn>
+                      <v-btn color="primary" @click="executeUploadVideo"
+                        >UploadVideo</v-btn
+                      >
+                      <v-text-field
+                        v-model="videoLink"
+                        value="url"
+                        label="video link"
+                        outlined
+                      ></v-text-field>
+                      <v-btn
+                        color="primary"
+                        @click="sendVideoURLToClients(videoLink)"
+                        >Set Video Link</v-btn
+                      >
+                      <br />
+                      <v-btn color="primary" @click="executeStartVideo"
+                        >Start Video</v-btn
+                      >
+                      <v-btn color="primary" @click="executeRestartVideo"
+                        >Restart Video</v-btn
+                      >
+                      <v-btn color="primary" @click="executePauseVideo"
+                        >Pause Video</v-btn
+                      >
                       <!-- <canvas ref="drawCanvas"></canvas> -->
                     </v-card>
                   </v-expansion-panel-content>
@@ -365,7 +437,9 @@
                   <v-expansion-panel-header>Game</v-expansion-panel-header>
                   <v-expansion-panel-content>
                     <v-card class="mb-12 fullheight" elevation="0">
-                      <v-btn color="primary" @click="executeInitGame">Init Game</v-btn>
+                      <v-btn color="primary" @click="executeInitGame"
+                        >Init Game</v-btn
+                      >
                     </v-card>
                   </v-expansion-panel-content>
                 </v-expansion-panel>
@@ -445,9 +519,9 @@ export default {
         {
           title: 'Screen Detection'
         },
-        {
+        /*{
           title: 'Picture Upload'
-        }
+        }*/
       ],
       color: { r: 200, g: 100, b: 0, a: 1 },
       floodFillDialog: false,
@@ -485,6 +559,7 @@ export default {
 
       videoUploadingActive: false,
       videoUploadProgress: 0,
+      videoLink: '',
 
       pictureCanvasInfo: null
     }
@@ -833,64 +908,68 @@ export default {
         .then(result => {
           this.$notif('video upload successful', 'success')
           console.log('upload successful for video: ' + result.data.videoURL)
-          this.videoUploadingActive = false
-          this.videoUploadProgress = 0
-
-          // get all the data
-          let info = ImageTools.createPictureCanvas(
-            this.analysedImage.width,
-            this.analysedImage.height,
-            this.analysedImage
-          )
-
-          for (let i = 0; i < this.analysedImage.screens.length; i++) {
-            console.log('looping through screens')
-            let cssMatrix = this.analysedImage.screens[i].cssMatrix
-
-            let user_id = this.myRoom.clients[
-              this.analysedImage.screens[i].clientCode
-            ]
-
-            let css =
-              'z-index: 10; position: fixed; left:' +
-              info.minx +
-              'px; top: ' +
-              info.miny +
-              'px; transform: matrix3d(' +
-              cssMatrix.join(', ') +
-              '); transform-origin: ' +
-              -info.minx +
-              'px ' +
-              -info.miny +
-              'px; width: ' +
-              info.w +
-              'px; height: ' +
-              info.h +
-              'px; object-fit: none'
-
-            let obj = {
-              payload: {
-                type: 'load-video',
-                data: {
-                  videoURL: result.data.videoURL,
-                  css: css,
-                  w: info.w,
-                  h: info.h,
-                  ox: info.minx,
-                  oy: info.miny
-                }
-              },
-              to: user_id
-            }
-
-            this.$socket.emit('screenCommand', obj)
-          }
-
-          this.startSync()
+          this.sendVideoURLToClients(result.data.videoURL)
         })
         .catch(err => {
           console.log(err)
         })
+    },
+
+    sendVideoURLToClients(videoURL) {
+      this.videoUploadingActive = false
+      this.videoUploadProgress = 0
+
+      // get all the data
+      let info = ImageTools.createPictureCanvas(
+        this.analysedImage.width,
+        this.analysedImage.height,
+        this.analysedImage
+      )
+
+      for (let i = 0; i < this.analysedImage.screens.length; i++) {
+        console.log('looping through screens')
+        let cssMatrix = this.analysedImage.screens[i].cssMatrix
+
+        let user_id = this.myRoom.clients[
+          this.analysedImage.screens[i].clientCode
+        ]
+
+        let css =
+          'z-index: 10; position: fixed; left:' +
+          info.minx +
+          'px; top: ' +
+          info.miny +
+          'px; transform: matrix3d(' +
+          cssMatrix.join(', ') +
+          '); transform-origin: ' +
+          -info.minx +
+          'px ' +
+          -info.miny +
+          'px; width: ' +
+          info.w +
+          'px; height: ' +
+          info.h +
+          'px; object-fit: none'
+
+        let obj = {
+          payload: {
+            type: 'load-video',
+            data: {
+              videoURL: videoURL,
+              css: css,
+              w: info.w,
+              h: info.h,
+              ox: info.minx,
+              oy: info.miny
+            }
+          },
+          to: user_id
+        }
+
+        this.$socket.emit('screenCommand', obj)
+      }
+
+      this.startSync()
     },
 
     executeUploadImage() {
