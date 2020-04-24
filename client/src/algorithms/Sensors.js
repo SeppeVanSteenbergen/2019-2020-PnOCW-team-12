@@ -1,6 +1,5 @@
 export default class Sensors {
-  constructor(cssMatrix, callback) {
-    this.originalTransformation = new DOMMatrix(cssMatrix)
+  constructor(callback) {
     this.startMatrix = null
 
     Promise.all([
