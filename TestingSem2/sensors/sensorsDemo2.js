@@ -1,4 +1,4 @@
-let cssMatrix = "matrix3d(-1, 0, 0, 0, 0, -1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)";
+let cssMatrix = "matrix3d(0.74572, -0.0274542, 0.665696, 0, 0.0461469, 0.998881, -0.0104958, 0, -0.664664, 0.0385486, 0.746149, 0, 0, 0, 0, 1)";
 let originalTransformation = new DOMMatrix(cssMatrix);
 let startMatrix = null;
 
