@@ -5,37 +5,32 @@
     <title>Sensors demo</title>
 
     <style>
-        .container {
-            perspective: 300;
-            -webkit-perspective: 300;
+        #image {
+            max-width: 100%;
+            max-height: 100%;
+            display: inline-block;
         }
 
-        #imgLogo {
-            margin-left: auto;
-            margin-right: auto;
+        .centered-wrapper {
+            position: relative;
             text-align: center;
-            display: block;
+        }
+        .centered-wrapper:before {
+            content: "";
+            position: relative;
+            display: inline-block;
+            width: 0; height: 100%;
+            vertical-align: center;
+        }
+        .centered-content {
+            display: inline-block;
+            vertical-align: center;
         }
     </style>
 </head>
-<body>
-<table>
-    <tr>
-        <td>Tilt Left/Right [gamma]</td>
-        <td id="doTiltLR"></td>
-    </tr>
-    <tr>
-        <td>Tilt Front/Back [beta]</td>
-        <td id="doTiltFB"></td>
-    </tr>
-    <tr>
-        <td>Direction [alpha]</td>
-        <td id="doDirection"></td>
-    </tr>
-</table>
-
-<div id="logoContainer">
-    <img src="test.jpeg" id="imgLogo" width="50%">
+<body class="centered-wrapper">
+<div id="imageContainer" class="centered-content">
+    <img src="test.jpeg" id="image" style="visibility: hidden">
 </div>
 
 <script src="https://threejs.org/build/three.js"></script>
