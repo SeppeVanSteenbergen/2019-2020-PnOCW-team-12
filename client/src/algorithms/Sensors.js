@@ -39,8 +39,8 @@ export default class Sensors {
     this.startMatrix = rotationMatrix.inverse()
   }
 
-  static transformationMatrix(originalTransforMation, rotationMatrix) {
-    let originalTransformation = new DOMMatrix(originalTransforMation)
+  static transformationMatrix(originalTransformation, rotationMatrix) {
+    originalTransformation = new DOMMatrix(originalTransformation)
     rotationMatrix = new DOMMatrix(rotationMatrix)
     rotationMatrix.multiplySelf(originalTransformation)
     rotationMatrix.invertSelf()
