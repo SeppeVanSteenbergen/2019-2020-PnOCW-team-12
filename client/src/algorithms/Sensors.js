@@ -18,7 +18,7 @@ export default class Sensors {
           this.sensor.populateMatrix(rotationMatrix)
           rotationMatrix.multiplySelf(this.startMatrix)
 
-          callback(rotationMatrix)
+          callback(rotationMatrix.toString())
         })
         this.sensor.addEventListener('error', error => {
           if (event.error.name === 'NotReadableError') {
