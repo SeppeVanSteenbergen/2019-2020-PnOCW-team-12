@@ -14,10 +14,10 @@ sensorData.('Position z-axis (in m)') = cumtrapz(sensorData.Time, sensorData.('V
 sensorData.Time = milliseconds(sensorData.Time);
 sensorData = table2timetable(sensorData);
 
-figure('Name', 'Oriëntatie smartphone volgens de x-as, y-as en z-as', 'NumberTitle', 'off')
+figure('Name', 'Oriëntatie apparaat volgens de x-as, y-as en z-as', 'NumberTitle', 'off')
 s = stackedplot(sensorData, {'Orientation x-axis (in degrees)', 'Orientation y-axis (in degrees)', 'Orientation z-axis (in degrees)'});
 s.LineWidth = 2;
 
-figure('Name', 'Positie smartphone volgens de x-as, y-as en z-as', 'NumberTitle', 'off')
+figure('Name', 'Positie apparaat volgens de x-as, y-as en z-as', 'NumberTitle', 'off')
 s = stackedplot(sensorData, {'Position x-axis (in m)', 'Position y-axis (in m)', 'Position z-axis (in m)'});
 s.LineWidth = 2;
