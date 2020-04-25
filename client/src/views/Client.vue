@@ -826,7 +826,7 @@ export default {
     trackingUpdateHandler(data) {
       this.canvas.style.tranform = Sensors.transformationMatrix(
         this.trackingDefaultCSS,
-        data
+        data.css
       )
     },
 
