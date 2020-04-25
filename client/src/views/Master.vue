@@ -450,12 +450,12 @@
                   </v-expansion-panel-content>
                 </v-expansion-panel>
                 <v-expansion-panel>
-                  <v-expansion-panel-header>Game</v-expansion-panel-header>
+                  <v-expansion-panel-header>Tracking</v-expansion-panel-header>
                   <v-expansion-panel-content>
                     <v-card class="mb-12 fullheight" elevation="0">
                       <v-btn color="primary" @click="executeInitTracking">Start Tracking</v-btn>
                       <v-btn color="primary" @click="executeResetTracking">Reset Tracking</v-btn>
-                      <v-btn color="primary" @click="executeStopTracking">Reset Tracking</v-btn>
+                      <v-btn color="primary" @click="executeStopTracking">Stop Tracking</v-btn>
                     </v-card>
                   </v-expansion-panel-content>
                 </v-expansion-panel>
