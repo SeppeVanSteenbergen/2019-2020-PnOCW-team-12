@@ -11,6 +11,7 @@ export default class Sensors {
         this.sensor = new RelativeOrientationSensor(options)
 
         this.sensor.addEventListener('reading', () => {
+          console.log('sensor value ' + this.sensor)
           if (this.startMatrix === null) this.setStartMatrix()
 
           let rotationMatrix = new DOMMatrix()

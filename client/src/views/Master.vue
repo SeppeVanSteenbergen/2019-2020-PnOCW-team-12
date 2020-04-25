@@ -449,6 +449,16 @@
                     </v-card>
                   </v-expansion-panel-content>
                 </v-expansion-panel>
+                <v-expansion-panel>
+                  <v-expansion-panel-header>Game</v-expansion-panel-header>
+                  <v-expansion-panel-content>
+                    <v-card class="mb-12 fullheight" elevation="0">
+                      <v-btn color="primary" @click="executeInitTracking">Start Tracking</v-btn>
+                      <v-btn color="primary" @click="executeResetTracking">Reset Tracking</v-btn>
+                      <v-btn color="primary" @click="executeStopTracking">Reset Tracking</v-btn>
+                    </v-card>
+                  </v-expansion-panel-content>
+                </v-expansion-panel>
               </v-expansion-panels>
 
               <v-btn text @click="screenDetectionDialog = false">Cancel</v-btn>
@@ -506,6 +516,7 @@ import Communicator from '../algorithms/Communicator'
 import AnalyseEnv from '../env/AnalyseEnv'
 import WaitEnv from '../env/WaitEnv'
 import ImageTools from '../algorithms/ImageTools'
+import Sensors from '../algorithms/Sensors'
 
 export default {
   name: 'master',
@@ -567,7 +578,9 @@ export default {
       videoUploadProgress: 0,
       videoLink: 'https://stylify.duckdns.org/vid.mp4',
 
-      pictureCanvasInfo: null
+      pictureCanvasInfo: null,
+
+      tracking: null
     }
   },
   components: {
@@ -1594,6 +1607,41 @@ export default {
 
         this.$socket.emit('screenCommand', obj)
       }
+    },
+    executeInitTracking() {
+      let object = {
+        payload: {
+          type: 'tracking-init',
+          data: {}
+        },
+        to: 'all'
+      }
+      this.$socket.emit('screenCommand', object)
+      this.tracking = new Sensors(this.handleTracking)
+    },
+    executeResetTracking(){
+    },
+    executeStopTracking(){
+      let object = {
+        payload: {
+          type: 'tracking-stop',
+          data: {}
+        },
+        to: 'all'
+      }
+      this.$socket.emit('screenCommand', object)
+    },
+    handleTracking(data) {
+      let object = {
+        payload: {
+          type: 'tracking-update',
+          data: {
+            css: data
+          }
+        },
+        to: 'all'
+      }
+      this.$socket.emit('screenCommand', object)
     }
   },
   mounted() {

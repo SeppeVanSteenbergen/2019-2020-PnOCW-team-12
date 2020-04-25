@@ -163,6 +163,25 @@ module.exports = {
         type: 'animation-stop'
         data: {}
       }
+
+      initTracking
+      {
+        type: 'tracking-init',
+        data: {}
+      }
+      updateTracking
+      {
+        type: 'tracking-update',
+        data: {
+          css: // css transformation matrix
+        }
+      }
+
+      stopTracking
+      {
+        type: 'tracking-stop',
+        data: {}
+      }
      
 	**/
 

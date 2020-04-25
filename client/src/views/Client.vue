@@ -6,9 +6,9 @@
           <v-toolbar color="primary" dark flat>
             <v-toolbar-title>
               {{
-              $store.getters.getRole.room >= 0
-              ? 'Connected to room ' + $store.getters.getRole.room
-              : 'Choose a room'
+                $store.getters.getRole.room >= 0
+                  ? 'Connected to room ' + $store.getters.getRole.room
+                  : 'Choose a room'
               }}
             </v-toolbar-title>
             <div class="flex-grow-1"></div>
@@ -22,14 +22,18 @@
                   @click="joinRoom(room_id)"
                 >
                   <v-list-item-icon>
-                    <v-icon :color="roomList[room_id].open ? 'success' : 'error'">
+                    <v-icon
+                      :color="roomList[room_id].open ? 'success' : 'error'"
+                    >
                       {{
-                      roomList[room_id].open ? 'mdi-lock-open' : 'mdi-lock'
+                        roomList[room_id].open ? 'mdi-lock-open' : 'mdi-lock'
                       }}
                     </v-icon>
                   </v-list-item-icon>
                   <v-list-item-content>
-                    <v-list-item-title v-text="roomList[room_id].name"></v-list-item-title>
+                    <v-list-item-title
+                      v-text="roomList[room_id].name"
+                    ></v-list-item-title>
                   </v-list-item-content>
                 </v-list-item>
               </v-list>
@@ -39,8 +43,17 @@
         <br />
         <!-- <v-btn @click="goFullscreen()">Go Fullscreen</v-btn> -->
         <v-btn @click="goFullscreen()">Go Fullscreen</v-btn>
-        <div v-show="isFullscreen" ref="canvWrap" id="canvWrap" class="fullscreen">
-          <canvas ref="canvas" @click="isFullscreen = false" style="position:fixed; left:0; top:0; z-index:10; width:100%; height:100%"></canvas>
+        <div
+          v-show="isFullscreen"
+          ref="canvWrap"
+          id="canvWrap"
+          class="fullscreen"
+        >
+          <canvas
+            ref="canvas"
+            @click="isFullscreen = false"
+            style="position:fixed; left:0; top:0; z-index:10; width:100%; height:100%"
+          ></canvas>
           <video ref="vid">
             <source :src="videoURL" />
           </video>
@@ -62,6 +75,7 @@
 import DetectionDrawer from '../algorithms/DetectionDrawer'
 import AlgorithmService from '../services/AlgorithmService'
 import Animation from '../algorithms/Animations'
+import Sensors from '../algorithms/Sensors'
 
 export default {
   name: 'client',
@@ -71,7 +85,8 @@ export default {
       canvWrap: null,
       intervalObj: null,
       countDownRunning: false,
-      defaultCSS: 'z-index:10; position:fixed; left:0; top:0; width:100%;height:100%',
+      defaultCSS:
+        'z-index:10; position:fixed; left:0; top:0; width:100%;height:100%',
       videoURL: '',
       canvasMode: true,
       videoTimeout: null,
@@ -92,7 +107,11 @@ export default {
       playerHeight: 40,
 
       isFullscreen: false,
-      initialFull: true
+      initialFull: true,
+
+      trackingRunning: false,
+      trackingCSS: null,
+      trackingDefaultCSS: null
     }
   },
   mounted() {
@@ -184,6 +203,16 @@ export default {
           this.setDefaultCSS()
           this.initGame()
           break
+        case 'tracking-init':
+          this.resetDefault()
+          this.trackingInitHandler(message.data)
+          break
+        case 'tracking-update':
+          this.trackingUpdateHandler(message.data)
+          break
+        case 'tracking-stop':
+          this.trackingStopHandler(message.data)
+          break
         default:
           console.log('command not supported')
           break
@@ -217,6 +246,15 @@ export default {
       this.canvasMode = true
       this.animationRunning = false
     },
+    resetDefault() {
+      clearInterval(this.gameInterval)
+      clearInterval(this.videoInterval)
+      clearInterval(this.intervalObj)
+      this.countDownRunning = false
+      this.canvasMode = true
+      this.animationRunning = false
+    },
+
     setVideoMode() {
       clearInterval(this.gameInterval)
       this.canvasMode = false
@@ -234,10 +272,13 @@ export default {
           ? window.innerWidth * factor
           : window.innerHeight * factor
 
-      let drawer = new DetectionDrawer(this.canvas, {width: window.innerWidth, height: window.innerHeight}, borderWidth)
+      let drawer = new DetectionDrawer(
+        this.canvas,
+        { width: window.innerWidth, height: window.innerHeight },
+        borderWidth
+      )
 
       drawer.barcode(id, 6)
-
     },
     runFloodScreenCommandList(list, startIndex) {
       for (let i = startIndex; i < list.length; i++) {
@@ -314,7 +355,6 @@ export default {
             Math.round(image.width * ratio),
             Math.round(image.height * ratio)
           )
-
       }
       image.src = data.image
     },
@@ -332,7 +372,7 @@ export default {
         clearInterval(this.intervalObj)
         this.countDownRunning = false
       }
-     //setTimeout(this.countDownInterval, parseInt(33), start, interval, startTime)
+      //setTimeout(this.countDownInterval, parseInt(33), start, interval, startTime)
     },
     drawNumberOnCanvas(num) {
       this.clearCanvas()
@@ -430,11 +470,12 @@ export default {
 
       this.canvas = this.$refs['canvas']
 
-      if(this.initialFull){
-        this.canvas.getContext('2d').fillRect(0,0, this.canvas.width, this.canvas.height)
+      if (this.initialFull) {
+        this.canvas
+          .getContext('2d')
+          .fillRect(0, 0, this.canvas.width, this.canvas.height)
         this.initialFull = false
       }
-
     },
     exitRoom() {
       this.$socket.emit('exitRoom')
@@ -467,7 +508,6 @@ export default {
           image.width * ratio,
           image.height * ratio
         )
-
       }
       image.src = base64Image
     },
@@ -594,8 +634,8 @@ export default {
       ctx2.putImageData(this.delaunayImage, 0, 0)
       ctx.drawImage(c, 0, 0)
       if (this.animationFrame > 5) {
-        if (this.startTime === null){
-          this.startTime = Date.now()+ this.$store.state.sync.delta
+        if (this.startTime === null) {
+          this.startTime = Date.now() + this.$store.state.sync.delta
         }
         let info = this.animation.getNextFrame(
           this.animationFrame,
@@ -708,9 +748,9 @@ export default {
           )
           // draw points
           ctx.fillText(
-                  this.players[i].score,
-                  this.players[i].pos.x + this.playerWidth / 2,
-                  this.players[i].pos.y + this.playerHeight + 25
+            this.players[i].score,
+            this.players[i].pos.x + this.playerWidth / 2,
+            this.players[i].pos.y + this.playerHeight + 25
           )
 
           ctx.fillStyle = 'blue'
@@ -777,6 +817,21 @@ export default {
         data[3],
         data[4]
       )
+    },
+    trackingInitHandler() {
+      this.trackingRunning = true
+      this.trackingDefaultCSS = this.canvas.style.transform
+    },
+
+    trackingUpdateHandler(data) {
+      this.canvas.style.tranform = Sensors.transformationMatrix(
+        this.trackingDefaultCSS,
+        data
+      )
+    },
+
+    trackingStopHandler() {
+      this.trackingRunning = false
     }
   }
 }
