@@ -16,7 +16,9 @@ Promise.all([
 
       if (startMatrix === null) startMatrix = rotationMatrix.inverse();
       rotationMatrix.multiplySelf(startMatrix);
+/*
       rotationMatrix.multiplySelf(originalTransformation);
+*/
       rotationMatrix.invertSelf();
 
       let image = document.getElementById("image");

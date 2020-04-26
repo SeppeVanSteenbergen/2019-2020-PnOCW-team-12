@@ -4,12 +4,9 @@ let startMatrix = null;
 
 let image = document.getElementById("image");
 let translation = image.style.transformOrigin.split(" ");
-let translationMatrix = new DOMMatrix();
-translationMatrix.m13 = parseInt(translation[0]);
-translationMatrix.m23 = parseInt(translation[1]);
-let inverseTranslationMatrix = new DOMMatrix();
-inverseTranslationMatrix.m13 = -parseInt(translation[0]);
-inverseTranslationMatrix.m23 = -parseInt(translation[1]);
+let translationMatrix = new DOMMatrix("translate(" + translation[0] + ", " + translation[1] + ")");
+translationMatrix.m41 -= image.width / 2;
+translationMatrix.m42 -= image.height / 2;
 
 Promise.all([
   navigator.permissions.query({ name: "accelerometer" }),
@@ -24,10 +21,11 @@ Promise.all([
       sensor.populateMatrix(rotationMatrix);
 
       if (startMatrix === null) startMatrix = rotationMatrix.inverse();
-      let orientationMatrix = DOMMatrix.fromMatrix(translationMatrix);
+      let orientationMatrix = DOMMatrix.fromMatrix(translationMatrix).inverse();
       rotationMatrix.multiplySelf(startMatrix);
       orientationMatrix.multiplySelf(rotationMatrix);
-      orientationMatrix.multiplySelf(inverseTranslationMatrix);
+      orientationMatrix.multiplySelf(translationMatrix);
+      orientationMatrix.invertSelf();
 
       image.style.transform = orientationMatrix;
 
