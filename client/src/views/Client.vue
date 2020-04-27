@@ -853,8 +853,9 @@ export default {
       this.trackingRunning = false
     },
     getTransformedCanvas(canvas, CSSTransform) {
+      let vue = this
       return new Promise(function(res, rej) {
-        let dim = this.getTransformedDimensions(canvas, CSSTransform)
+        let dim = vue.getTransformedDimensions(canvas, CSSTransform)
         let xlinkNS = 'http://www.w3.org/1999/xlink',
           svgNS = 'http://www.w3.org/2000/svg'
         let svg = document.createElementNS(svgNS, 'svg'),
