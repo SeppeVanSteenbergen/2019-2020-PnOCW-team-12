@@ -5,7 +5,7 @@ export default class Sensors {
     Promise.all([
       navigator.permissions.query({ name: 'accelerometer' }),
       navigator.permissions.query({ name: 'gyroscope' })
-    ]).then(results => {
+    ]).then(function (results) {
       if (results.every(result => result.state === 'granted')) {
         const options = { frequency: 30, coordinateSystem: 'device' }
         this.sensor = new RelativeOrientationSensor(options)
@@ -57,4 +57,12 @@ export default class Sensors {
 
     return orientationMatrix
   }
+
+  startSensor() {
+    this.sensor.start()
+  }
+  stopSensor() {
+    this.sensor.stop()
+  }
+
 }

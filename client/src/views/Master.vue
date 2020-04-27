@@ -416,9 +416,7 @@
                       <v-btn color="primary" @click="executePauseVideo"
                         >Pause Video</v-btn
                       >
-                      <v-btn color="primary" @click="startSync()"
-                      >Resync</v-btn
-                      >
+                      <v-btn color="primary" @click="startSync()">Resync</v-btn>
                       <!-- <canvas ref="drawCanvas"></canvas> -->
                     </v-card>
                   </v-expansion-panel-content>
@@ -453,9 +451,19 @@
                   <v-expansion-panel-header>Tracking</v-expansion-panel-header>
                   <v-expansion-panel-content>
                     <v-card class="mb-12 fullheight" elevation="0">
-                      <v-btn color="primary" @click="executeInitTracking">Start Tracking</v-btn>
-                      <v-btn color="primary" @click="executeResetTracking">Reset Tracking</v-btn>
-                      <v-btn color="primary" @click="executeStopTracking">Stop Tracking</v-btn>
+                      <v-btn color="primary" @click="executeInitTracking"
+                        >Init Tracking</v-btn
+                      >
+                      <v-btn color="primary" @click="executeStartTracking"
+                      >Start Tracking</v-btn
+                      >
+                      <v-btn color="primary" @click="executeStopTracking"
+                      >Stop Tracking</v-btn
+                      >
+                      <v-btn color="primary" @click="executeResetTracking"
+                        >Reset Tracking</v-btn
+                      >
+
                     </v-card>
                   </v-expansion-panel-content>
                 </v-expansion-panel>
@@ -535,7 +543,7 @@ export default {
         },
         {
           title: 'Screen Detection'
-        },
+        }
         /*{
           title: 'Picture Upload'
         }*/
@@ -1617,11 +1625,11 @@ export default {
         to: 'all'
       }
       this.$socket.emit('screenCommand', object)
-      this.tracking = new Sensors(this.handleTracking)
+      if (this.tracking === null)
+        this.tracking = new Sensors(this.handleTracking)
     },
-    executeResetTracking(){
-    },
-    executeStopTracking(){
+    executeResetTracking() {},
+    executeStopTracking() {
       let object = {
         payload: {
           type: 'tracking-stop',
@@ -1630,6 +1638,11 @@ export default {
         to: 'all'
       }
       this.$socket.emit('screenCommand', object)
+
+      this.tracking.stopSensor()
+    },
+    executeStartTracking() {
+      this.tracking.startSensor()
     },
     handleTracking(data) {
       let object = {
