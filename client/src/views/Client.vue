@@ -347,7 +347,7 @@ export default {
       let vue = this
 
       image.onload = function() {
-        this.trackingImage = image
+        vue.trackingImage = image
 
         let ratio = Math.max(data.w / image.width, data.h / image.height)
         vue.canvas
