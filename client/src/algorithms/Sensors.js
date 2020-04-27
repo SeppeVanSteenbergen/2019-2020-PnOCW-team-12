@@ -7,7 +7,7 @@ export default class Sensors {
       navigator.permissions.query({ name: 'gyroscope' })
     ]).then( results => {
       if (results.every(result => result.state === 'granted')) {
-        const options = { frequency: 20, coordinateSystem: 'device' }
+        const options = { frequency: 10, coordinateSystem: 'device' }
         this.sensor = new RelativeOrientationSensor(options)
 
         this.sensor.addEventListener('reading', () => {

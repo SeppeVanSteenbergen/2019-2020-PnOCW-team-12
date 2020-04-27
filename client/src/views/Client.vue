@@ -112,7 +112,8 @@ export default {
 
       trackingRunning: false,
       trackingCSS: null,
-      trackingDefaultCSS: null
+      trackingDefaultCSS: null,
+      trackingImage: null
     }
   },
   mounted() {
@@ -346,6 +347,8 @@ export default {
       let vue = this
 
       image.onload = function() {
+        this.trackingImage = image
+
         let ratio = Math.max(data.w / image.width, data.h / image.height)
         vue.canvas
           .getContext('2d')
@@ -830,11 +833,66 @@ export default {
     },
 
     trackingUpdateHandler(data) {
-      this.canvas.style.transform =  Sensors.transformationMatrix(this.trackingDefaultCSS, data.css)
+      let c = document.getElementById('canvas')
+      c.width = this.canvas.width
+      c.height = this.canvas.height
+      let ctx = c.getContext('2d')
+      let transform = Sensors.transformationMatrix(
+        this.trackingDefaultCSS,
+        data.css
+      )
+      let ratio = Math.max(c.width / this.trackingImage.width, c.height / this.trackingImage.height)
+      ctx.drawImage(this.trackingImage, 0, 0, c.width * ratio, c.height * ratio)
+
+      let transformedImage = this.getTransformedCanvas(c, transform.toString())
+
+      this.canvas.drawImage(transformedImage, 0, 0, c.width * ratio, c.height * ratio)
     },
 
     trackingStopHandler() {
       this.trackingRunning = false
+    },
+    getTransformedCanvas(canvas, CSSTransform) {
+      return new Promise(function(res, rej) {
+        let dim = this.getTransformedDimensions(canvas, CSSTransform)
+        let xlinkNS = 'http://www.w3.org/1999/xlink',
+          svgNS = 'http://www.w3.org/2000/svg'
+        let svg = document.createElementNS(svgNS, 'svg'),
+          defs = document.createElementNS(svgNS, 'defs'),
+          style = document.createElementNS(svgNS, 'style'),
+          image = document.createElementNS(svgNS, 'image')
+        image.setAttributeNS(xlinkNS, 'href', canvas.toDataURL())
+        image.setAttribute('width', canvas.width)
+        image.setAttribute('height', canvas.height)
+        style.innerHTML = 'image{transform:' + CSSTransform + ';}'
+        svg.appendChild(defs)
+        defs.appendChild(style)
+        let rect = document.createElement('rect')
+
+        svg.appendChild(image)
+        svg.setAttribute('width', dim.width)
+        svg.setAttribute('height', dim.height)
+        let svgStr = new XMLSerializer().serializeToString(svg)
+        let img = new Image()
+        img.onload = function() {
+          res(img)
+        }
+        img.onerror = rej
+        img.src = URL.createObjectURL(
+          new Blob([svgStr], { type: 'image/svg+xml' })
+        )
+      })
+    },
+
+    getTransformedDimensions(canvas, CSSTransform) {
+      let orphan = !canvas.parentNode
+      if (orphan) document.body.appendChild(canvas)
+      let oldTrans = getComputedStyle(canvas).transform
+      canvas.style.transform = CSSTransform
+      let rect = canvas.getBoundingClientRect()
+      canvas.style.transform = oldTrans
+      if (orphan) document.body.removeChild(canvas)
+      return rect
     }
   }
 }
