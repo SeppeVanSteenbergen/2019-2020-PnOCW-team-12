@@ -1628,7 +1628,9 @@ export default {
       if (this.tracking === null)
         this.tracking = new Sensors(this.handleTracking)
     },
-    executeResetTracking() {},
+    executeResetTracking() {
+      this.tracking.setStartMatrix()
+    },
     executeStopTracking() {
       let object = {
         payload: {
