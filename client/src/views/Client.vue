@@ -833,20 +833,10 @@ export default {
     },
 
     trackingUpdateHandler(data) {
-      let c = document.createElement('canvas')
-      c.width = this.canvas.width
-      c.height = this.canvas.height
-      let ctx = c.getContext('2d')
-      let transform = Sensors.transformationMatrix(
+      this.canvas.style.transform = Sensors.transformationMatrix(
         this.trackingDefaultCSS,
         data.css
       )
-      let ratio = Math.max(c.width / this.trackingImage.width, c.height / this.trackingImage.height)
-      ctx.drawImage(this.trackingImage, 0, 0, c.width * ratio, c.height * ratio)
-
-      let transformedImage = this.getTransformedCanvas(c, transform.toString())
-
-      this.canvas.drawImage(transformedImage, 0, 0, c.width * ratio, c.height * ratio)
     },
 
     trackingStopHandler() {
