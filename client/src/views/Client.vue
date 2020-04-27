@@ -833,7 +833,7 @@ export default {
     },
 
     trackingUpdateHandler(data) {
-      let c = document.getElementById('canvas')
+      let c = document.createElement('canvas')
       c.width = this.canvas.width
       c.height = this.canvas.height
       let ctx = c.getContext('2d')
