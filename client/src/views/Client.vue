@@ -833,7 +833,7 @@ export default {
       document.getElementById('mainCanvas').style.tranform = Sensors.transformationMatrix(
         this.trackingDefaultCSS,
         data.css
-      )
+      ).toString()
     },
 
     trackingStopHandler() {
