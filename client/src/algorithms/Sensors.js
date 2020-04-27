@@ -7,7 +7,7 @@ export default class Sensors {
       navigator.permissions.query({ name: 'gyroscope' })
     ]).then(results => {
       if (results.every(result => result.state === 'granted')) {
-        const options = { frequency: 60, coordinateSystem: 'device' }
+        const options = { frequency: 30, coordinateSystem: 'device' }
         this.sensor = new RelativeOrientationSensor(options)
 
         this.sensor.addEventListener('reading', () => {
@@ -17,6 +17,7 @@ export default class Sensors {
           let rotationMatrix = new DOMMatrix()
           this.sensor.populateMatrix(rotationMatrix)
           rotationMatrix.multiplySelf(this.startMatrix)
+          rotationMatrix.invertSelf()
 
           callback(rotationMatrix.toString())
         })
@@ -39,11 +40,21 @@ export default class Sensors {
     this.startMatrix = rotationMatrix.inverse()
   }
 
-  static transformationMatrix(originalTransformation, rotationMatrix) {
-    originalTransformation = new DOMMatrix(originalTransformation)
+  static transformationMatrix(originalCSS, rotationMatrix) {
+    let originalTransformation = new DOMMatrix(originalCSS[0])
+    let translation = originalCSS[1].split(' ')
+    let translationMatrix = new DOMMatrix(
+      'translate(' + translation[0] + ', ' + translation[1] + ')'
+    )
+    translationMatrix.m41 -= originalCSS[2] / 2
+    translationMatrix.m42 -= originalCSS[3] / 2
     rotationMatrix = new DOMMatrix(rotationMatrix)
-    rotationMatrix.multiplySelf(originalTransformation)
-    rotationMatrix.invertSelf()
-    return rotationMatrix
+
+    let orientationMatrix = DOMMatrix.fromMatrix(translationMatrix.inverse())
+    orientationMatrix.multiplySelf(rotationMatrix)
+    orientationMatrix.multiplySelf(translationMatrix)
+    orientationMatrix.multiplySelf(originalTransformation)
+
+    return orientationMatrix
   }
 }

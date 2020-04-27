@@ -820,7 +820,12 @@ export default {
     },
     trackingInitHandler() {
       this.trackingRunning = true
-      this.trackingDefaultCSS = this.canvas.style.transform
+      this.trackingDefaultCSS = [
+        this.canvas.style.transform,
+        this.canvas.style.transformOrigin,
+        this.canvas.width,
+        this.canvas.height
+      ]
     },
 
     trackingUpdateHandler(data) {
