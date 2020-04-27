@@ -846,7 +846,7 @@ export default {
 
       let transformedImage = this.getTransformedCanvas(c, transform.toString())
 
-      this.canvas.drawImage(transformedImage, 0, 0, c.width * ratio, c.height * ratio)
+      this.canvas.getContext('2d').drawImage(transformedImage, 0, 0, c.width * ratio, c.height * ratio)
     },
 
     trackingStopHandler() {
