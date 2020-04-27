@@ -830,8 +830,8 @@ export default {
     },
 
     trackingUpdateHandler(data) {
-      let newTransform = Sensors.transformationMatrix(this.trackingDefaultCSS, data.css)
-      document.getElementById('mainCanvas').style.tranform = newTransform
+      let newTransform = Sensors.transformationMatrix(this.trackingDefaultCSS, data.css).toString()
+      document.getElementById('mainCanvas').style.transform = newTransform
     },
 
     trackingStopHandler() {
