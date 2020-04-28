@@ -25,6 +25,7 @@ export default class Sensors {
           }
         })
 
+        this.sensor.start()
       } else {
         console.log('No permissions to use RelativeOrientationSensor.')
       }

@@ -1639,8 +1639,9 @@ export default {
     executeStartTracking() {
       if (this.tracking === null) {
         this.executeInitTracking()
+      } else {
+        this.tracking.startSensor()
       }
-      this.tracking.startSensor()
     },
     executeStopTracking() {
       let object = {

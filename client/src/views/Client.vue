@@ -48,6 +48,7 @@
           ref="canvWrap"
           id="canvWrap"
           class="fullscreen"
+          style="background: #000000"
         >
           <canvas
             ref="canvas"
