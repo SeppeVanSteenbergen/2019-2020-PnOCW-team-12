@@ -17,8 +17,8 @@
 <button onclick="x = 0; y = 0">Reset Position</button>
 <p id="out"></p>
 <canvas id="canv"></canvas>
-<canvas style="border: 1px solid black" id="game"></canvas>
 <canvas style="position: absolute; left: 0; top: 200px; z-index: 0;" id="box" width="1920" height="880"></canvas>
+<canvas style="border: 1px solid black" id="game"></canvas>
 <video id="vid"></video>
 <img id="homer" src="build/homer.jpg" style="display:none"/>
 </body>
@@ -211,7 +211,7 @@
 					y = trans.y
 				} else {
 					x += trans.x
-					y += trans.y
+					y -= trans.y
 				}
 				let dommatrix = new DOMMatrix("translate(" + x + "px, " + y + "px)");
 				game.style.transform = dommatrix;
