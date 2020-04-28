@@ -58,80 +58,14 @@
           style="height:100%"
           touchless
         >
-          <!--<v-tabs-slider></v-tabs-slider>-->
           <v-tab
             v-for="tab in tabs"
             :key="tabs.indexOf(tab)"
             @click="openDialog(tab.title)"
+            centered
             vertical
             >{{ tab.title }}</v-tab
           >
-
-          <!--          <v-tab-item>
-            <v-btn @click="floodFillDialog = true">open dialog</v-btn>
-          </v-tab-item>-->
-
-          <!--          <v-tab-item>
-            <v-container>
-              <v-card flat tile>
-                <v-card-title>Draw Directions</v-card-title>
-                <v-card-text>
-                  <v-slider
-                    v-model="angleSlider"
-                    thumb-label="always"
-                    :min="0"
-                    :max="360"
-                  ></v-slider>
-                  <v-switch
-                    v-model="continousDrawDirectionMode"
-                    label="continuous mode"
-                  ></v-switch>
-                </v-card-text>
-
-                <v-card-actions>
-                  <v-btn @click="executeDirections()">Send To All</v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-container>
-          </v-tab-item>-->
-
-          <v-tab-item>
-            <v-content>
-              <v-text-field
-                label="Starting number"
-                outlined
-                type="number"
-                v-model="countDownNumber"
-              ></v-text-field>
-
-              <v-text-field
-                label="Interval in ms"
-                outlined
-                type="number"
-                v-model="countDownInterval"
-              ></v-text-field>
-
-              <v-btn @click="executeCountdown()">Send To all</v-btn>
-            </v-content>
-          </v-tab-item>
-
-          <v-tab-item>
-            <v-content>
-              <v-btn
-                @click="
-                  screenDetectionDialog = true
-                  executeDisplayDetectionScreens()
-                  nextStep(0)
-                "
-                class="mx-auto"
-                >open dialog</v-btn
-              >
-            </v-content>
-          </v-tab-item>
-
-          <v-tab-item>
-            <PictureUpload />
-          </v-tab-item>
         </v-tabs>
       </v-card>
     </v-row>
@@ -203,7 +137,7 @@
     <v-dialog v-model="drawDirectionDialog">
       <v-card class="pa-4">
         <v-card-title>
-          <span class="headline">Draw Directions</span>
+          <span class="headline">Draw Direction</span>
         </v-card-title>
         <v-card-text>
           <v-slider
@@ -251,6 +185,43 @@
         <v-card-actions>
           <div class="flex-grow-1"></div>
           <v-btn @click="drawDirectionDialog = false" color="error" text
+            >close</v-btn
+          >
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <!--COUNTDOWN DIALOG -->
+    <v-dialog v-model="countdownDialog">
+      <v-card class="pa-4">
+        <v-card-title>
+          <span class="headline">Countdown</span>
+        </v-card-title>
+        <v-card-text>
+          <v-content>
+            <v-text-field
+              label="Starting number"
+              outlined
+              type="number"
+              v-model="countDownNumber"
+            ></v-text-field>
+
+            <v-text-field
+              label="Interval in ms"
+              outlined
+              type="number"
+              v-model="countDownInterval"
+            ></v-text-field>
+          </v-content>
+        </v-card-text>
+        <br />
+        <v-card-actions>
+          <div class="flex-grow-1"></div>
+          <v-btn @click="executeCountdown()" color="success">Send To All</v-btn>
+        </v-card-actions>
+        <v-card-actions>
+          <div class="flex-grow-1"></div>
+          <v-btn @click="countdownDialog = false" color="error" text
             >close</v-btn
           >
         </v-card-actions>
@@ -590,6 +561,7 @@ export default {
       directionLabel: 'Hello',
 
       //countdown mode
+      countdownDialog: false,
       countDownNumber: null,
       countDownInterval: null,
       continousDrawDirectionMode: false,
@@ -671,6 +643,7 @@ export default {
           this.drawDirectionDialog = true
           break
         case 'Countdown':
+          this.countdownDialog = true
           break
         case 'Screen Detection':
           this.screenDetectionDialog = true
