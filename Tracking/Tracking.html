@@ -18,7 +18,7 @@
 <p id="out"></p>
 <canvas id="canv"></canvas>
 <canvas style="position: absolute; left: 0; top: 200px; z-index: 0;" id="box" width="1920" height="880"></canvas>
-<canvas style="border: 1px solid black" id="game"></canvas>
+<canvas style="border: 5px solid black" id="game"></canvas>
 <video id="vid"></video>
 <img id="homer" src="build/homer.jpg" style="display:none"/>
 </body>
@@ -217,23 +217,28 @@
 				game.style.transform = dommatrix;
 
 				ctg.clearRect(0, 0, game.width, game.height)
-				// ctg.drawImage(homer, -130,0, 700,400)
+				ctg.fillStyle="rgba(0, 0, 0, 0.7)"
+				ctg.fillRect(0, 0, game.width, game.height);
+
 				ctb.beginPath()
+				ctb.lineWidth = 5;
 				ctb.rect(650,100,game.width,game.height)
 				ctb.stroke()
 
 				ctb.clearRect(0,0,box.width, box.height)
+				ctb.drawImage(homer, 650,100, game.width,game.height)
+
 				ctb.moveTo(650, 100);
-				ctb.lineTo(x+650, y+100);
+				ctb.lineTo(x+655, y+95);
 
 				ctb.moveTo(650+game.width, 100);
-				ctb.lineTo(x+650+game.width, y+100);
+				ctb.lineTo(x+655+game.width, y+95);
 
 				ctb.moveTo(650+game.width, 100+game.height);
-				ctb.lineTo(x+650+game.width, y+100+game.height);
+				ctb.lineTo(x+655+game.width, y+95+game.height);
 
 				ctb.moveTo(650, 100+game.height);
-				ctb.lineTo(x+650, y+100+game.height);
+				ctb.lineTo(x+655, y+100+game.height);
 
 				ctb.stroke();
 
