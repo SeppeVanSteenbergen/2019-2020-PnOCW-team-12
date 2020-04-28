@@ -337,16 +337,17 @@ export default {
       this.canvWrap.style = data.css
 
       let image = new window.Image()
+      let canvas = this.canvas
 
       /*let vue = this*/
 
       image.onload = function() {
        /* vue.trackingImage = image*/
-        this.canvas.width = image.width
-        this.canvas.height = image.height
+        canvas.width = image.width
+        canvas.height = image.height
 
 /*        let ratio = Math.max(data.w / image.width, data.h / image.height)*/
-        this.canvas.getContext('2d').drawImage(image, 0, 0)
+        canvas.getContext('2d').drawImage(image, 0, 0)
 /*            Math.round(image.width ),
             Math.round(image.height)
           )*/
