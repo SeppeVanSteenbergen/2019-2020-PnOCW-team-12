@@ -973,7 +973,7 @@ export default {
           info.w +
           'px; height: ' +
           info.h +
-          'px; object-fit: none'
+          'px; object-fit: none; background:#000000'
 
         let obj = {
           payload: {

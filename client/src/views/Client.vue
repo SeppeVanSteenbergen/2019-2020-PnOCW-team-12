@@ -41,14 +41,12 @@
           </v-container>
         </v-card>
         <br />
-        <!-- <v-btn @click="goFullscreen()">Go Fullscreen</v-btn> -->
         <v-btn @click="goFullscreen()">Go Fullscreen</v-btn>
         <div
           v-show="isFullscreen"
           ref="canvWrap"
           id="canvWrap"
           class="fullscreen"
-          style="background: #000000"
         >
           <canvas
             ref="canvas"
@@ -60,12 +58,6 @@
             <source :src="videoURL" />
           </video>
         </div>
-        <!-- <div ref="canvWrap" id="canvWrap" style="display:none" class="fullscreen">
-          <canvas ref="canvas"></canvas>
-          <video ref="vid">
-            <source :src="videoURL" />
-          </video>
-        </div> -->
       </div>
     </v-row>
     <v-btn color="error" fab large dark bottom left fixed @click="exitRoom()">
@@ -88,7 +80,7 @@ export default {
       intervalObj: null,
       countDownRunning: false,
       defaultCSS:
-        'z-index:10; position:fixed; left:0; top:0; width:100%;height:100%',
+        'z-index:10; position:fixed; left:0; top:0; width:100%; height:100%; background:#000000',
       videoURL: '',
       canvasMode: true,
       videoTimeout: null,
