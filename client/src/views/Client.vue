@@ -332,25 +332,16 @@ export default {
      *        h:
      */
     displayImageCSSHandler(data) {
-      this.canvWrap.width = data.w
-      this.canvWrap.height = data.h
       this.canvWrap.style = data.css
 
       let image = new window.Image()
+      let canvWrap = this.canvWrap
       let canvas = this.canvas
 
-      /*let vue = this*/
-
       image.onload = function() {
-       /* vue.trackingImage = image*/
-        canvas.width = image.width
-        canvas.height = image.height
-
-/*        let ratio = Math.max(data.w / image.width, data.h / image.height)*/
+        canvWrap.width = image.width
+        canvWrap.height = image.height
         canvas.getContext('2d').drawImage(image, 0, 0)
-/*            Math.round(image.width ),
-            Math.round(image.height)
-          )*/
       }
       image.src = data.image
     },
