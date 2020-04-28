@@ -824,7 +824,7 @@ export default {
     },
     trackingInitHandler() {
       this.trackingRunning = true
-      
+
       let canvas = document.createElement('canvas')
       canvas.style = this.transCSS
       this.trackingDefaultCSS = [
@@ -844,6 +844,7 @@ export default {
 
     trackingStopHandler() {
       this.trackingRunning = false
+      this.canvas.style = this.transCSS
     },
   }
 }

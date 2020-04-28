@@ -1627,6 +1627,8 @@ export default {
       this.$socket.emit('screenCommand', object)
       if (this.tracking === null)
         this.tracking = new Sensors(this.handleTracking)
+      else
+        this.tracking.setStartMatrix()
     },
     executeResetTracking() {
       this.tracking.setStartMatrix()

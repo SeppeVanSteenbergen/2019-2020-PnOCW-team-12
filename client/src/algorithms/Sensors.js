@@ -45,8 +45,8 @@ export default class Sensors {
     let translationMatrix = new DOMMatrix(
       'translate(' + translation[0] + ', ' + translation[1] + ')'
     )
-    translationMatrix.m41 -= originalCSS[2] / 2
-    translationMatrix.m42 -= originalCSS[3] / 2
+/*    translationMatrix.m41 -= originalCSS[2] / 2
+    translationMatrix.m42 -= originalCSS[3] / 2*/
     rotationMatrix = new DOMMatrix(rotationMatrix)
 
     let orientationMatrix = DOMMatrix.fromMatrix(translationMatrix.inverse())
