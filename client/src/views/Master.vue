@@ -35,9 +35,6 @@
                   v-text="'Client ' + myRoom.clients.indexOf(client_id)"
                 ></v-list-item-title>
               </v-list-item-content>
-              <!--<v-list-item-avatar>
-                                    <v-img :src="item.avatar"></v-img>
-              </v-list-item-avatar>-->
             </v-list-item>
           </v-list>
         </v-container>
@@ -62,15 +59,19 @@
           touchless
         >
           <!--<v-tabs-slider></v-tabs-slider>-->
-          <v-tab v-for="i in tabs" :key="tabs.indexOf(i)" vertical>{{
-            i.title
-          }}</v-tab>
+          <v-tab
+            v-for="tab in tabs"
+            :key="tabs.indexOf(tab)"
+            @click="openDialog(tab.title)"
+            vertical
+            >{{ tab.title }}</v-tab
+          >
 
-          <v-tab-item>
+          <!--          <v-tab-item>
             <v-btn @click="floodFillDialog = true">open dialog</v-btn>
-          </v-tab-item>
+          </v-tab-item>-->
 
-          <v-tab-item>
+          <!--          <v-tab-item>
             <v-container>
               <v-card flat tile>
                 <v-card-title>Draw Directions</v-card-title>
@@ -92,7 +93,7 @@
                 </v-card-actions>
               </v-card>
             </v-container>
-          </v-tab-item>
+          </v-tab-item>-->
 
           <v-tab-item>
             <v-content>
@@ -119,6 +120,7 @@
               <v-btn
                 @click="
                   screenDetectionDialog = true
+                  executeDisplayDetectionScreens()
                   nextStep(0)
                 "
                 class="mx-auto"
@@ -137,10 +139,11 @@
       <v-icon class="v-rotate-90">mdi-exit-to-app</v-icon>
     </v-btn>
 
+    <!-- FLOODFILL DIALOG -->
     <v-dialog v-model="floodFillDialog">
       <v-card class="pa-4">
         <v-card-title>
-          <span class="headline">Apply Colors</span>
+          <span class="headline">FLOODFILL</span>
         </v-card-title>
         <v-card-text>
           <v-color-picker
@@ -166,9 +169,6 @@
                         v-text="'Client ' + myRoom.clients.indexOf(client_id)"
                       ></v-list-item-title>
                     </v-list-item-content>
-                    <!--<v-list-item-avatar>
-                                          <v-img :src="item.avatar"></v-img>
-                    </v-list-item-avatar>-->
                   </v-list-item>
                 </v-list>
               </v-expansion-panel-content>
@@ -183,6 +183,9 @@
           ></v-switch>
           <div class="flex-grow-1"></div>
           <v-btn @click="colorClient()" color="success">Send To All</v-btn>
+        </v-card-actions>
+        <v-card-actions>
+          <div class="flex-grow-1"></div>
           <v-btn
             @click="
               floodFillDialog = false
@@ -196,49 +199,88 @@
       </v-card>
     </v-dialog>
 
-    <!-- SCREEN DETECTION DIALOG -->
+    <!-- DRAW DIRECTION DIALOG -->
+    <v-dialog v-model="drawDirectionDialog">
+      <v-card class="pa-4">
+        <v-card-title>
+          <span class="headline">Draw Directions</span>
+        </v-card-title>
+        <v-card-text>
+          <v-slider
+            style="padding-top: 50px"
+            v-model="angleSlider"
+            thumb-label="always"
+            :min="0"
+            :max="360"
+          ></v-slider>
 
+          <v-expansion-panels :popout="false" :inset="false" :focusable="false">
+            <v-expansion-panel>
+              <v-expansion-panel-header
+                >Send To Client</v-expansion-panel-header
+              >
+              <v-expansion-panel-content>
+                <v-list v-if="myRoom !== null">
+                  <v-list-item
+                    v-for="client_id in myRoom.clients"
+                    :key="client_id"
+                    @click="executeDirections(client_id)"
+                  >
+                    <v-list-item-content>
+                      <v-list-item-title
+                        v-text="'Client ' + myRoom.clients.indexOf(client_id)"
+                      ></v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-list>
+              </v-expansion-panel-content>
+            </v-expansion-panel>
+          </v-expansion-panels>
+        </v-card-text>
+        <br />
+        <v-card-actions>
+          <v-switch
+            v-model="continousDrawDirectionMode"
+            label="continuous mode"
+          ></v-switch>
+          <div class="flex-grow-1"></div>
+          <v-btn @click="executeDirections()" color="success"
+            >Send To All</v-btn
+          >
+        </v-card-actions>
+        <v-card-actions>
+          <div class="flex-grow-1"></div>
+          <v-btn @click="drawDirectionDialog = false" color="error" text
+            >close</v-btn
+          >
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <!-- SCREEN DETECTION DIALOG -->
     <v-dialog v-model="screenDetectionDialog" fullscreen>
       <v-stepper v-model="pictureStepper" class="fullheight">
         <template>
           <v-stepper-header>
             <v-stepper-step :complete="pictureStepper > 1" step="1" editable
-              >Detection Screen</v-stepper-step
-            >
-
-            <v-divider></v-divider>
-
-            <v-stepper-step :complete="pictureStepper > 2" step="2" editable
               >Take Picture</v-stepper-step
             >
 
             <v-divider></v-divider>
 
-            <v-stepper-step :complete="pictureStepper > 3" step="3" editable
+            <v-stepper-step :complete="pictureStepper > 2" step="2" editable
               >Result Display</v-stepper-step
             >
 
             <v-divider></v-divider>
 
-            <v-stepper-step :complete="pictureStepper > 4" step="4" editable
+            <v-stepper-step :complete="pictureStepper > 3" step="3" editable
               >Usage</v-stepper-step
             >
           </v-stepper-header>
 
           <v-stepper-items class="fullheight overflow-y-auto">
-            <v-stepper-content step="1" class="fullheight">
-              <v-card class="mb-12 fullheight" elevation="0">
-                <v-btn @click="executeDisplayDetectionScreens" color="cyan"
-                  >display detection screen</v-btn
-                >
-              </v-card>
-
-              <v-btn color="primary" @click="nextStep(1)">Continue</v-btn>
-
-              <v-btn text @click="screenDetectionDialog = false">Cancel</v-btn>
-            </v-stepper-content>
-
-            <v-stepper-content step="2" class="fullheight overflow-y-auto">
+            <v-stepper-content step="1" class="fullheight overflow-y-auto">
               <v-card class="mb-12" elevation="0">
                 <!-- <video :autoplay="true" id="videoElement" ref="video" class="flex-wrap"></video> -->
                 <div style="height: 25px"></div>
@@ -264,7 +306,7 @@
                 <v-btn
                   color="primary"
                   @click="
-                    nextStep(2)
+                    nextStep(1)
                     analyseImageAsync()
                   "
                   >Analyse image</v-btn
@@ -276,7 +318,7 @@
               </v-card>
             </v-stepper-content>
 
-            <v-stepper-content step="3" class="fullheight overflow-y-auto">
+            <v-stepper-content step="2" class="fullheight overflow-y-auto">
               <v-card class="mb-12 fullheight" elevation="0">
                 <div ref="progressBarcontainer">
                   <div></div>
@@ -294,7 +336,7 @@
                   color="primary"
                   @click="
                     executeDisplayDetectionScreens()
-                    nextStep(1)
+                    nextStep(0)
                   "
                   >Retake Picture</v-btn
                 >
@@ -326,12 +368,12 @@
                 <!-- <canvas ref="delaunay"></canvas> -->
                 <!-- <canvas ref="delaunay2"></canvas> -->
 
-                <v-btn color="primary" @click="nextStep(3)">Continue</v-btn>
+                <v-btn color="primary" @click="nextStep(2)">Continue</v-btn>
               </v-card>
 
               <v-btn text @click="screenDetectionDialog = false">Cancel</v-btn>
             </v-stepper-content>
-            <v-stepper-content step="4" class="fullheight overflow-y-auto">
+            <v-stepper-content step="3" class="fullheight overflow-y-auto">
               <v-expansion-panels>
                 <v-expansion-panel>
                   <v-expansion-panel-header>Image</v-expansion-panel-header>
@@ -451,16 +493,9 @@
                   <v-expansion-panel-header>Tracking</v-expansion-panel-header>
                   <v-expansion-panel-content>
                     <v-card class="mb-12 fullheight" elevation="0">
-                      <v-btn color="primary" @click="executeStartTracking"
-                      >Start Tracking</v-btn
-                      >
-                      <v-btn color="primary" @click="executeStopTracking"
-                      >Stop Tracking</v-btn
-                      >
-                      <v-btn color="primary" @click="executeResetTracking"
-                        >Reset Tracking</v-btn
-                      >
-
+                      <v-btn color="primary" @click="executeTracking">{{
+                        trackingButtonLabel
+                      }}</v-btn>
                     </v-card>
                   </v-expansion-panel-content>
                 </v-expansion-panel>
@@ -541,16 +576,20 @@ export default {
         {
           title: 'Screen Detection'
         }
-        /*{
-          title: 'Picture Upload'
-        }*/
       ],
       color: { r: 200, g: 100, b: 0, a: 1 },
+
+      //floodfill mode
       floodFillDialog: false,
       continousFloodMode: false,
       videoStream: null,
+
+      //draw direction mode
+      drawDirectionDialog: false,
       angleSlider: 0,
       directionLabel: 'Hello',
+
+      //countdown mode
       countDownNumber: null,
       countDownInterval: null,
       continousDrawDirectionMode: false,
@@ -558,7 +597,7 @@ export default {
       videoSendInterval: null,
       facingUser: true,
 
-      // screen detection mode
+      //screen detection mode
       pictureStepper: 0,
       steps: 4,
       screenDetectionDialog: false,
@@ -585,7 +624,9 @@ export default {
 
       pictureCanvasInfo: null,
 
-      tracking: null
+      tracking: null,
+      isTracking: false,
+      trackingButtonLabel: 'Start Tracking'
     }
   },
   components: {
@@ -620,6 +661,23 @@ export default {
 
       console.log(object)
       this.$socket.emit('screenCommand', object)
+    },
+    openDialog(title) {
+      switch (title) {
+        case 'Floodfill':
+          this.floodFillDialog = true
+          break
+        case 'Draw Direction':
+          this.drawDirectionDialog = true
+          break
+        case 'Countdown':
+          break
+        case 'Screen Detection':
+          this.screenDetectionDialog = true
+          this.executeDisplayDetectionScreens()
+          this.nextStep(0)
+          break
+      }
     },
     startVideo() {
       const constraints = {
@@ -1613,6 +1671,17 @@ export default {
         this.$socket.emit('screenCommand', obj)
       }
     },
+    executeTracking() {
+      if (!this.isTracking) {
+        this.isTracking = true
+        this.trackingButtonLabel = 'Stop Tracking'
+        this.executeStartTracking()
+      } else {
+        this.isTracking = false
+        this.trackingButtonLabel = 'Start Tracking'
+        this.executeStopTracking()
+      }
+    },
     executeInitTracking() {
       let object = {
         payload: {
@@ -1641,6 +1710,7 @@ export default {
         this.executeInitTracking()
       } else {
         this.tracking.startSensor()
+        this.executeResetTracking()
       }
     },
     executeStopTracking() {
