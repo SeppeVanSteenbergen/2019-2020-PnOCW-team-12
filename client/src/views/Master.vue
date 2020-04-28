@@ -1,73 +1,76 @@
 <template>
   <v-container class="fill-height" fluid>
-    <v-row align="center" justify="center" min-height="300px">
-      <v-card max-width="400px">
-        <v-toolbar color="primary" dark flat>
-          <v-toolbar-title>
-            {{
-              $store.getters.getRole.room >= 0
-                ? 'Room ' + $store.getters.getRole.room
-                : 'Not in Room'
-            }}
-          </v-toolbar-title>
-          <div class="flex-grow-1"></div>
-          <v-btn
-            v-if="typeof myRoom !== 'undefined'"
-            small
-            :color="myRoom !== null && myRoom.open ? 'success' : 'error'"
-            @click="toggleRoom()"
-          >
-            <v-icon>
+    <v-row dense>
+      <v-col align="center" justify="center">
+        <v-card max-width="200px">
+          <v-toolbar color="primary" dark flat>
+            <v-toolbar-title>
               {{
-                myRoom !== null && myRoom.open ? 'mdi-lock-open' : 'mdi-lock'
+                $store.getters.getRole.room >= 0
+                  ? 'Room ' + $store.getters.getRole.room
+                  : 'Not in Room'
               }}
-            </v-icon>
-          </v-btn>
-        </v-toolbar>
-        <v-container>
-          <v-list v-if="myRoom !== null">
-            <v-list-item v-for="client_id in myRoom.clients" :key="client_id">
-              <v-list-item-icon>
-                <v-icon v-if="false" color="pink">mdi-star</v-icon>
-              </v-list-item-icon>
-              <v-list-item-content>
-                <v-list-item-title
-                  v-text="'Client ' + myRoom.clients.indexOf(client_id)"
-                ></v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-          </v-list>
-        </v-container>
-      </v-card>
-      <v-card
-        class
-        v-if="myRoom !== null && !myRoom.open"
-        style="width:40vw;height:50vh; min-width:320px"
-      >
-        <v-toolbar color="primary" dark flat>
-          <v-toolbar-title>Commands</v-toolbar-title>
-          <div class="flex-grow-1"></div>
-        </v-toolbar>
-        <v-tabs
-          v-model="tab"
-          background-color="blue accent-4"
-          class="elevation-2"
-          dark
-          centered
-          vertical
-          style="height:100%"
-          touchless
+            </v-toolbar-title>
+            <div class="flex-grow-1"></div>
+            <v-btn
+              v-if="typeof myRoom !== 'undefined'"
+              small
+              :color="myRoom !== null && myRoom.open ? 'success' : 'error'"
+              @click="toggleRoom()"
+            >
+              <v-icon>
+                {{
+                  myRoom !== null && myRoom.open ? 'mdi-lock-open' : 'mdi-lock'
+                }}
+              </v-icon>
+            </v-btn>
+          </v-toolbar>
+          <v-container>
+            <v-list v-if="myRoom !== null">
+              <v-list-item v-for="client_id in myRoom.clients" :key="client_id">
+                <v-list-item-icon>
+                  <v-icon v-if="false" color="pink">mdi-star</v-icon>
+                </v-list-item-icon>
+                <v-list-item-content>
+                  <v-list-item-title
+                    v-text="'Client ' + myRoom.clients.indexOf(client_id)"
+                  ></v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+            </v-list>
+          </v-container>
+        </v-card>
+
+        <v-card
+          class
+          v-if="myRoom !== null && !myRoom.open"
+          style="width:20vw;height:30vh; min-width:320px"
         >
-          <v-tab
-            v-for="tab in tabs"
-            :key="tabs.indexOf(tab)"
-            @click="openDialog(tab.title)"
+          <v-toolbar color="primary" dark flat>
+            <v-toolbar-title>Commands</v-toolbar-title>
+            <div class="flex-grow-1"></div>
+          </v-toolbar>
+          <v-tabs
+            v-model="tab"
+            background-color="blue accent-4"
+            class="elevation-2"
+            dark
             centered
             vertical
-            >{{ tab.title }}</v-tab
+            style="height:100%"
+            touchless
           >
-        </v-tabs>
-      </v-card>
+            <v-tab
+              v-for="tab in tabs"
+              :key="tabs.indexOf(tab)"
+              @click="openDialog(tab.title)"
+              centered
+              vertical
+              >{{ tab.title }}</v-tab
+            >
+          </v-tabs>
+        </v-card>
+      </v-col>
     </v-row>
     <v-btn color="error" fab large dark bottom left fixed @click="disconnect()">
       <v-icon class="v-rotate-90">mdi-exit-to-app</v-icon>
