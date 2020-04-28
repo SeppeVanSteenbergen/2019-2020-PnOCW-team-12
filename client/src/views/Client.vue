@@ -332,23 +332,27 @@ export default {
      *        h:
      */
     displayImageCSSHandler(data) {
-      this.canvWrap.width = data.w
-      this.canvWrap.height = data.h
       this.canvWrap.style = data.css
 
       let image = new window.Image()
       let canvas = this.canvas
+      let canvWrap = this.canvWrap
 
       image.onload = function() {
         let ratio = Math.max(data.w / image.width, data.h / image.height)
+        let newWidth = Math.round(image.width * ratio)
+        let newHeight = Math.round(image.height * ratio)
+
+        canvWrap.width = newWidth
+        canvWrap.height = newHeight
         canvas
           .getContext('2d')
           .drawImage(
             image,
             0,
             0,
-            Math.round(image.width * ratio),
-            Math.round(image.height * ratio)
+            newWidth,
+            newHeight
           )
       }
       image.src = data.image
