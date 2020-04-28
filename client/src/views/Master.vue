@@ -451,9 +451,6 @@
                   <v-expansion-panel-header>Tracking</v-expansion-panel-header>
                   <v-expansion-panel-content>
                     <v-card class="mb-12 fullheight" elevation="0">
-                      <v-btn color="primary" @click="executeInitTracking"
-                        >Init Tracking</v-btn
-                      >
                       <v-btn color="primary" @click="executeStartTracking"
                       >Start Tracking</v-btn
                       >
@@ -1625,13 +1622,25 @@ export default {
         to: 'all'
       }
       this.$socket.emit('screenCommand', object)
-      if (this.tracking === null)
-        this.tracking = new Sensors(this.handleTracking)
-      else
-        this.tracking.setStartMatrix()
+      this.tracking = new Sensors(this.handleTracking)
     },
-    executeResetTracking() {
-      this.tracking.setStartMatrix()
+    handleTracking(data) {
+      let object = {
+        payload: {
+          type: 'tracking-update',
+          data: {
+            css: data
+          }
+        },
+        to: 'all'
+      }
+      this.$socket.emit('screenCommand', object)
+    },
+    executeStartTracking() {
+      if (this.tracking === null) {
+        this.executeInitTracking()
+      }
+      this.tracking.startSensor()
     },
     executeStopTracking() {
       let object = {
@@ -1645,20 +1654,8 @@ export default {
 
       this.tracking.stopSensor()
     },
-    executeStartTracking() {
-      this.tracking.startSensor()
-    },
-    handleTracking(data) {
-      let object = {
-        payload: {
-          type: 'tracking-update',
-          data: {
-            css: data
-          }
-        },
-        to: 'all'
-      }
-      this.$socket.emit('screenCommand', object)
+    executeResetTracking() {
+      this.tracking.setStartMatrix()
     }
   },
   mounted() {

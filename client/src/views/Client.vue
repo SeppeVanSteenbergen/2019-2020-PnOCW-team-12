@@ -831,28 +831,15 @@ export default {
     },
     trackingInitHandler() {
       this.trackingRunning = true
-
-      let canvas = document.createElement('canvas')
-      canvas.style = this.transCSS
-      this.trackingDefaultCSS = [
-        canvas.style.transform,
-        canvas.style.transformOrigin,
-        this.transWidth,
-        this.transHeight
-      ]
     },
 
     trackingUpdateHandler(data) {
       this.canvas.style.transform = new DOMMatrix(data.css)
-/*      this.canvas.style.transform = Sensors.transformationMatrix(
-        new DOMMatrix(),
-        data.css
-      )*/
     },
 
     trackingStopHandler() {
       this.trackingRunning = false
-      this.canvas.style = this.transCSS
+      this.canvas.style.transform = new DOMMatrix()
     },
   }
 }

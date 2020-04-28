@@ -16,7 +16,6 @@ export default class Sensors {
           let rotationMatrix = new DOMMatrix()
           this.sensor.populateMatrix(rotationMatrix)
           rotationMatrix.multiplySelf(this.startMatrix)
-          rotationMatrix.invertSelf()
 
           callback(rotationMatrix.toString())
         })
@@ -26,7 +25,6 @@ export default class Sensors {
           }
         })
 
-        this.sensor.start()
       } else {
         console.log('No permissions to use RelativeOrientationSensor.')
       }
@@ -38,14 +36,6 @@ export default class Sensors {
     this.sensor.populateMatrix(startMatrix)
     this.startMatrix = startMatrix.inverse()
   }
-
-/*  static transformationMatrix(originalTransforMation, rotationMatrix) {
-    let originalTransformation = new DOMMatrix(originalTransforMation)
-    rotationMatrix = new DOMMatrix(rotationMatrix)
-    rotationMatrix.multiplySelf(originalTransformation)
-    rotationMatrix.invertSelf()
-    return rotationMatrix
-  }*/
 
   startSensor() {
     this.sensor.start()
