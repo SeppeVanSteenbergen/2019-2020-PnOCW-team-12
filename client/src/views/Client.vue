@@ -843,10 +843,11 @@ export default {
     },
 
     trackingUpdateHandler(data) {
-      this.canvas.style.transform = Sensors.transformationMatrix(
+      this.canvas.style.transform = new DOMMatrix(data.css)
+/*      this.canvas.style.transform = Sensors.transformationMatrix(
         new DOMMatrix(),
         data.css
-      )
+      )*/
     },
 
     trackingStopHandler() {

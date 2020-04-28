@@ -39,13 +39,13 @@ export default class Sensors {
     this.startMatrix = startMatrix.inverse()
   }
 
-  static transformationMatrix(originalTransforMation, rotationMatrix) {
+/*  static transformationMatrix(originalTransforMation, rotationMatrix) {
     let originalTransformation = new DOMMatrix(originalTransforMation)
     rotationMatrix = new DOMMatrix(rotationMatrix)
     rotationMatrix.multiplySelf(originalTransformation)
     rotationMatrix.invertSelf()
     return rotationMatrix
-  }
+  }*/
 
   startSensor() {
     this.sensor.start()
