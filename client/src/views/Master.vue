@@ -267,7 +267,7 @@
               <v-card class="mb-12" elevation="0">
                 <div style="height: 25px"></div>
                 <v-file-input
-                  style="margin: 2%"
+                  style="margin: 10px"
                   v-model="displayFileVideo"
                   color="deep-purple accent-4"
                   counter
@@ -286,17 +286,22 @@
                 <v-row dense>
                   <!-- Analyse button -->
                   <v-btn
-                    style="margin: 2%"
+                    style="margin: 10px"
                     color="primary"
                     @click="
                       nextStep(1)
+                      resultPanel = [0]
                       analyseImageAsync()
                     "
                     >Analyse image</v-btn
                   >
                   <div class="flex-grow-1"></div>
                   <!-- Close button -->
-                  <v-btn style="margin: 1%" text color="error" @click="screenDetectionDialog = false"
+                  <v-btn
+                    style="margin: 10px"
+                    text
+                    color="error"
+                    @click="screenDetectionDialog = false"
                     >Close</v-btn
                   >
                 </v-row>
@@ -308,38 +313,15 @@
                 <div ref="progressBarcontainer">
                   <div></div>
                 </div>
-                <v-expansion-panel>
-                  <v-expansion-panel-header>Console</v-expansion-panel-header>
-                  <div ref="messageBoxContainer">
-                    <ul></ul>
-                  </div>
-                </v-expansion-panel>
-
-                <div style="height: 15px"></div>
-                <v-divider :inset="true"></v-divider>
-                <div style="height: 15px"></div>
-
-                <v-row dense>
-                  <v-btn
-                    style="margin: 10px"
-                    :disabled="isBusyAnalysing()"
-                    color="primary"
-                    @click="
-                      executeDisplayDetectionScreens()
-                      nextStep(0)
-                    "
-                    >Retake Picture</v-btn
-                  >
-                  <div class="flex-grow-1"></div>
-                  <v-btn
-                    style="margin: 10px"
-                    color="primary"
-                    @click="nextStep(2)"
-                    >Continue</v-btn
-                  >
-                </v-row>
-
-                <v-expansion-panels :value="[0, 1]" :multiple="true">
+                <v-expansion-panels v-model="resultPanel" :multiple="true">
+                  <v-expansion-panel>
+                    <v-expansion-panel-header>Log</v-expansion-panel-header>
+                    <v-expansion-panel-content>
+                      <div ref="messageBoxContainer">
+                        <ul></ul>
+                      </div>
+                    </v-expansion-panel-content>
+                  </v-expansion-panel>
                   <v-expansion-panel>
                     <v-expansion-panel-header>Result</v-expansion-panel-header>
                     <v-expansion-panel-content>
@@ -355,20 +337,47 @@
                     </v-expansion-panel-content>
                   </v-expansion-panel>
                 </v-expansion-panels>
+                <div style="height: 15px"></div>
+                <v-divider :inset="true"></v-divider>
+                <div style="height: 15px"></div>
+                <v-row dense>
+                  <v-btn
+                    style="margin: 10px"
+                    :disabled="isBusyAnalysing()"
+                    color="primary"
+                    @click="
+                      executeDisplayDetectionScreens()
+                      nextStep(0)
+                    "
+                    >Try Again</v-btn
+                  >
+                  <div class="flex-grow-1"></div>
+                  <v-btn
+                    style="margin: 10px"
+                    color="primary"
+                    @click="nextStep(2)"
+                    >Continue</v-btn
+                  >
+                </v-row>
 
-                <!-- <canvas ref="resultCanvas"></canvas> -->
-                <!-- <canvas ref="delaunay"></canvas> -->
-                <!-- <canvas ref="delaunay2"></canvas> -->
+                <v-row dense>
+                  <div class="flex-grow-1"></div>
+                  <v-btn
+                    style="margin: 10px"
+                    color="error"
+                    text
+                    @click="screenDetectionDialog = false"
+                    >Close</v-btn
+                  >
+                </v-row>
               </v-card>
-
-              <v-btn text @click="screenDetectionDialog = false">Cancel</v-btn>
             </v-stepper-content>
             <v-stepper-content step="3" class="fullheight overflow-y-auto">
-              <v-expansion-panels>
-                <v-expansion-panel>
-                  <v-expansion-panel-header>Image</v-expansion-panel-header>
-                  <v-expansion-panel-content>
-                    <v-card class="mb-12 fullheight" elevation="0">
+              <v-card>
+                <v-expansion-panels>
+                  <v-expansion-panel>
+                    <v-expansion-panel-header>Image</v-expansion-panel-header>
+                    <v-expansion-panel-content>
                       <v-file-input
                         v-model="displayFile"
                         color="deep-purple accent-4"
@@ -381,118 +390,115 @@
                         accept="image/*"
                         @change="loadFile"
                       ></v-file-input>
-                      <!--<v-slider
-                        v-model="drawingImgScale"
-                        class="align-center"
-                        max="2"
-                        min="0.05"
-                        hide-details
-                      ></v-slider>-->
                       <v-btn color="primary" @click="executeUploadImage"
                         >Send Image</v-btn
                       >
-                      <!-- <v-btn color="primary" @click="sendImageCSS">Send Image Socket</v-btn> -->
-                      <!--<v-btn color="primary" @click="sendCustomImage">
-                        Send Image
-                      </v-btn>-->
-                      <canvas ref="drawCanvas"></canvas>
-                    </v-card>
-                  </v-expansion-panel-content>
-                </v-expansion-panel>
-                <v-expansion-panel>
-                  <v-expansion-panel-header>Video</v-expansion-panel-header>
-                  <v-expansion-panel-content>
-                    <v-card class="mb-12 fullheight" elevation="0">
-                      <v-file-input
-                        v-model="displayFileVideo"
-                        color="deep-purple accent-4"
-                        counter
-                        label="Image input"
-                        placeholder="Select your files"
-                        prepend-icon="mdi-paperclip"
-                        outlined
-                        accept="video/mp4, video/x-m4v, video/*"
-                        @change="loadVideoDisplayFile"
-                      ></v-file-input>
-
                       <canvas
-                        ref="videoPreview"
                         height="0px"
                         width="0px"
+                        ref="drawCanvas"
                       ></canvas>
-
-                      <v-btn color="primary" @click="executeUploadVideo"
-                        >UploadVideo</v-btn
-                      >
-                      <v-spacer></v-spacer>
-                      <v-text-field
-                        v-model="videoLink"
-                        value="url"
-                        label="video link"
-                        outlined
-                      ></v-text-field>
-                      <v-btn
-                        color="primary"
-                        @click="sendVideoURLToClients(videoLink)"
-                        >Set Video Link</v-btn
-                      >
-                      <v-spacer></v-spacer>
+                    </v-expansion-panel-content>
+                  </v-expansion-panel>
+                  <v-expansion-panel>
+                    <v-expansion-panel-header>Video</v-expansion-panel-header>
+                    <v-expansion-panel-content>
+                      <v-expansion-panels>
+                        <v-expansion-panel>
+                          <v-expansion-panel-header
+                            >Upload</v-expansion-panel-header
+                          >
+                          <v-expansion-panel-content>
+                            <v-file-input
+                              v-model="displayFileVideo"
+                              color="deep-purple accent-4"
+                              counter
+                              label="Image input"
+                              placeholder="Select your files"
+                              prepend-icon="mdi-paperclip"
+                              outlined
+                              accept="video/mp4, video/x-m4v, video/*"
+                              @change="loadVideoDisplayFile"
+                            ></v-file-input>
+                            <canvas
+                              ref="videoPreview"
+                              height="0px"
+                              width="0px"
+                            ></canvas>
+                            <v-btn color="primary" @click="executeUploadVideo"
+                              >UploadVideo</v-btn
+                            >
+                          </v-expansion-panel-content>
+                        </v-expansion-panel>
+                        <v-expansion-panel>
+                          <v-expansion-panel-header
+                            >Link</v-expansion-panel-header
+                          >
+                          <v-expansion-panel-content>
+                            <v-text-field
+                              v-model="videoLink"
+                              value="url"
+                              label="video link"
+                              outlined
+                            ></v-text-field>
+                            <v-btn
+                              color="primary"
+                              @click="sendVideoURLToClients(videoLink)"
+                              >Set Video Link</v-btn
+                            >
+                          </v-expansion-panel-content>
+                        </v-expansion-panel>
+                      </v-expansion-panels>
                       <v-divider class="mx-4"></v-divider>
                       <v-spacer></v-spacer>
-                      <v-btn color="primary" @click="executeStartVideo"
-                        >Start Video</v-btn
-                      >
-                      <v-btn color="primary" @click="executeRestartVideo"
-                        >Restart Video</v-btn
-                      >
-                      <v-btn color="primary" @click="executePauseVideo"
-                        >Pause Video</v-btn
-                      >
+                      <v-btn color="primary" @click="executeVideo">{{
+                        videoButtonLabel
+                      }}</v-btn>
                       <v-btn color="primary" @click="startSync()">Resync</v-btn>
-                      <!-- <canvas ref="drawCanvas"></canvas> -->
-                    </v-card>
-                  </v-expansion-panel-content>
-                </v-expansion-panel>
-                <v-expansion-panel>
-                  <v-expansion-panel-header>Animation</v-expansion-panel-header>
-                  <v-expansion-panel-content>
-                    <v-card class="mb-12 fullheight" elevation="0">
-                      <v-btn color="primary" @click="executeInitAnimation"
-                        >Init Animation</v-btn
-                      >
-                      <v-btn color="primary" @click="executeStartAnimation"
-                        >Start Animation</v-btn
-                      >
-                      <v-btn color="primary" @click="executeStopAnimation"
-                        >Stop Animation</v-btn
-                      >
-                    </v-card>
-                  </v-expansion-panel-content>
-                </v-expansion-panel>
-                <v-expansion-panel>
-                  <v-expansion-panel-header>Game</v-expansion-panel-header>
-                  <v-expansion-panel-content>
-                    <v-card class="mb-12 fullheight" elevation="0">
-                      <v-btn color="primary" @click="executeInitGame"
-                        >Init Game</v-btn
-                      >
-                    </v-card>
-                  </v-expansion-panel-content>
-                </v-expansion-panel>
-                <v-expansion-panel>
-                  <v-expansion-panel-header>Tracking</v-expansion-panel-header>
-                  <v-expansion-panel-content>
-                    <v-card class="mb-12 fullheight" elevation="0">
+                    </v-expansion-panel-content>
+                  </v-expansion-panel>
+                  <v-expansion-panel>
+                    <v-expansion-panel-header
+                      >Animation</v-expansion-panel-header
+                    >
+                    <v-expansion-panel-content>
+                      <v-btn color="primary" @click="executeAnimation">{{
+                        animationButtonLabel
+                      }}</v-btn>
+                    </v-expansion-panel-content>
+                  </v-expansion-panel>
+                  <v-expansion-panel>
+                    <v-expansion-panel-header
+                      >Tracking</v-expansion-panel-header
+                    >
+                    <v-expansion-panel-content>
                       <v-btn color="primary" @click="executeTracking">{{
                         trackingButtonLabel
                       }}</v-btn>
-                    </v-card>
-                  </v-expansion-panel-content>
-                </v-expansion-panel>
-              </v-expansion-panels>
+                    </v-expansion-panel-content>
+                  </v-expansion-panel>
+                  <v-expansion-panel>
+                    <v-expansion-panel-header>Game</v-expansion-panel-header>
+                    <v-expansion-panel-content>
+                      <v-btn color="primary" @click="executeInitGame"
+                        >Start Game</v-btn
+                      >
+                    </v-expansion-panel-content>
+                  </v-expansion-panel>
+                </v-expansion-panels>
 
-              <v-btn text @click="screenDetectionDialog = false">Cancel</v-btn>
-
+                <v-row dense>
+                  <div class="flex-grow-1"></div>
+                  <!-- Close button -->
+                  <v-btn
+                    style="margin: 10px"
+                    text
+                    color="error"
+                    @click="screenDetectionDialog = false"
+                    >Close</v-btn
+                  >
+                </v-row>
+              </v-card>
               <v-progress-linear
                 :active="videoUploadingActive"
                 :value="videoUploadProgress"
@@ -504,37 +510,6 @@
           </v-stepper-items>
         </template>
       </v-stepper>
-      <!--
-      <v-card class="pa-4">
-        <v-card-title>
-          <span class="headline">Picture Mode</span>
-        </v-card-title>
-
-        <v-card-text>
-          <video :autoplay="true" id="videoElement" ref="video"></video>
-          <br />
-          <v-btn @click="startVideo">start video</v-btn>
-          <v-btn @click="switchCamera">switch camera</v-btn>
-          <v-btn @click="executeDisplayDetectionScreens"
-            >display detection screen</v-btn
-          >
-          <canvas ref="canv"></canvas>
-        </v-card-text>
-        <br />
-        <v-card-actions>
-          <div class="flex-grow-1"></div>
-          <v-switch
-            v-model="continuousVideoStream"
-            label="Continuous mode"
-          ></v-switch>
-          <v-btn color="success" @click="executeDisplayImage()">
-            Send To All</v-btn
-          >
-          <v-btn @click="screenDetectionDialog = false" color="error" text>
-            close</v-btn
-          >
-        </v-card-actions>
-      </v-card>-->
     </v-dialog>
   </v-container>
 </template>
@@ -575,7 +550,8 @@ export default {
 
       //screen detection mode
       pictureStepper: 0,
-      steps: 4,
+      steps: 3,
+      resultPanel: [0, 1, 2],
       screenDetectionDialog: false,
       analysedImage: null,
       displayFile: null,
@@ -590,9 +566,13 @@ export default {
 
       isAnalysing: false,
 
+      videoButtonLabel: 'Start Video',
+      videoIsPlaying: false,
       videofile: '',
       animationInterval: null,
       animationFramerate: 50,
+      isAnimating: false,
+      animationButtonLabel: 'Start Animation',
 
       videoUploadingActive: false,
       videoUploadProgress: 0,
@@ -819,7 +799,10 @@ export default {
 
           let scale = 1
           let info = null
-          if (vue.analysedImage != null) {
+          if (
+            vue.myRoom.clients.length > 0 &&
+            vue.analysedImage.screens.length > 0
+          ) {
             info = ImageTools.createPictureCanvas(
               vue.drawingImg.width,
               vue.drawingImg.height,
@@ -887,7 +870,10 @@ export default {
 
           let scale = 1
           let info = null
-          if (vue.analysedImage != null) {
+          if (
+            vue.myRoom.clients.length > 0 &&
+            vue.analysedImage.screens.length > 0
+          ) {
             info = ImageTools.createPictureCanvas(
               vue.drawingVideo.videoWidth,
               vue.drawingVideo.videoHeight,
@@ -1083,7 +1069,19 @@ export default {
           console.log(err)
         })
     },
-
+    executeAnimation() {
+      if (!this.isAnimating) {
+        this.isAnimating = true
+        this.animationButtonLabel = 'Stop Animation'
+        this.executeInitAnimation()
+        this.executeStartAnimation()
+      } else {
+        this.isAnimating = false
+        this.animationButtonLabel = 'Start Animation'
+        this.executeStopAnimation()
+        this.executeDelaunayImage()
+      }
+    },
     executeStartAnimation() {
       // old animation way
       /*if (this.animationInterval !== null) {
@@ -1132,74 +1130,7 @@ export default {
     },
     executeInitAnimation() {
       this.startSync()
-
-      let tri = []
-      for (let i = 0; i < this.analysedImage.triangulation.length; i++) {
-        tri.push(this.analysedImage.triangulation[i].toObject())
-      }
-      console.log('Sent Triangulation')
-      console.log(tri)
-
-      let midpoints = this.analysedImage.midPoints
-
-      let width = this.analysedImage.width
-      let height = this.analysedImage.height
-
-      let info = ImageTools.createPictureCanvas(0, 0, this.analysedImage)
-
-      let list = []
-      for (let i = 0; i < 20; i++) {
-        list.push(Math.round(Math.random() * 30))
-      }
-      console.log(list)
-
-      for (let i = 0; i < this.analysedImage.screens.length; i++) {
-        console.log('looping through screens')
-        let cssMatrix = this.analysedImage.screens[i].cssMatrix
-
-        let user_id = this.myRoom.clients[
-          this.analysedImage.screens[i].clientCode
-        ]
-
-        let css =
-          'z-index:10; position: fixed; left:' +
-          info.minx +
-          'px; top: ' +
-          info.miny +
-          'px; transform: matrix3d(' +
-          cssMatrix.join(', ') +
-          '); transform-origin: ' +
-          -info.minx +
-          'px ' +
-          -info.miny +
-          'px; width: ' +
-          info.w +
-          'px; height: ' +
-          info.h +
-          'px; object-fit: none; background:#000000'
-
-        let obj = {
-          payload: {
-            type: 'animation-init',
-            data: {
-              triangulation: tri,
-              midpoints: midpoints,
-              width: width,
-              height: height,
-              list: list,
-
-              css: css,
-              ox: info.minx,
-              oy: info.miny,
-              w: info.w,
-              h: info.h
-            }
-          },
-          to: user_id
-        }
-
-        this.$socket.emit('screenCommand', obj)
-      }
+      this.executeDelaunayImage()
 
       // create animation object
       this.animation = new Animation(
@@ -1221,6 +1152,18 @@ export default {
         to: 'all'
       }
       this.$socket.emit('screenCommand', obj)
+    },
+    executeVideo() {
+      if (!this.videoIsPlaying) {
+        this.videoIsPlaying = true
+        this.videoButtonLabel = 'Stop Video'
+        this.executeStartVideo()
+      } else {
+        this.videoIsPlaying = false
+        this.videoButtonLabel = 'Start Video'
+        this.executePauseVideo()
+        this.executeRestartVideo()
+      }
     },
     executeStartVideo() {
       let obj = {
@@ -1557,11 +1500,8 @@ export default {
 
       this.$refs.delaunay2.style.width = '100%'
 
-      console.log('DIT IS DE PANELS')
-      this.resultPanels = [1, 0]
-      console.log(this.resultPanels)
-
       this.executeDelaunayImage()
+      this.resultPanel = [1]
     },
 
     executeDelaunayImage() {
@@ -1569,65 +1509,63 @@ export default {
       for (let i = 0; i < this.analysedImage.triangulation.length; i++) {
         tri.push(this.analysedImage.triangulation[i].toObject())
       }
-      console.log('Sent Triangulation')
-      console.log(tri)
 
       let midpoints = this.analysedImage.midPoints
 
       let width = this.analysedImage.width
       let height = this.analysedImage.height
 
-      let info = ImageTools.createPictureCanvas(0, 0, this.analysedImage)
+      if (
+        this.myRoom.clients.length > 0 &&
+        this.analysedImage.screens.length > 0
+      ) {
+        let info = ImageTools.createPictureCanvas(0, 0, this.analysedImage)
 
-      for (let i = 0; i < this.analysedImage.screens.length; i++) {
-        console.log('looping through screens')
+        for (let i = 0; i < this.analysedImage.screens.length; i++) {
+          let cssMatrix = this.analysedImage.screens[i].cssMatrix
 
-        console.log('Found screen obj:')
-        console.log(this.analysedImage.screens[i])
+          let user_id = this.myRoom.clients[
+            this.analysedImage.screens[i].clientCode
+          ]
 
-        let cssMatrix = this.analysedImage.screens[i].cssMatrix
+          let css =
+            'z-index:10; position: fixed; left:' +
+            info.minx +
+            'px; top: ' +
+            info.miny +
+            'px; transform: matrix3d(' +
+            cssMatrix.join(', ') +
+            '); transform-origin: ' +
+            -info.minx +
+            'px ' +
+            -info.miny +
+            'px; width: ' +
+            info.w +
+            'px; height: ' +
+            info.h +
+            'px; object-fit: none; background:#000000'
 
-        let user_id = this.myRoom.clients[
-          this.analysedImage.screens[i].clientCode
-        ]
+          let obj = {
+            payload: {
+              type: 'delaunay-image',
+              data: {
+                triangulation: tri,
+                midpoints: midpoints,
+                width: width,
+                height: height,
 
-        let css =
-          'z-index:10; position: fixed; left:' +
-          info.minx +
-          'px; top: ' +
-          info.miny +
-          'px; transform: matrix3d(' +
-          cssMatrix.join(', ') +
-          '); transform-origin: ' +
-          -info.minx +
-          'px ' +
-          -info.miny +
-          'px; width: ' +
-          info.w +
-          'px; height: ' +
-          info.h +
-          'px; object-fit: none; background:#000000'
+                css: css,
+                ox: info.minx,
+                oy: info.miny,
+                w: info.w,
+                h: info.h
+              }
+            },
+            to: user_id
+          }
 
-        let obj = {
-          payload: {
-            type: 'delaunay-image',
-            data: {
-              triangulation: tri,
-              midpoints: midpoints,
-              width: width,
-              height: height,
-
-              css: css,
-              ox: info.minx,
-              oy: info.miny,
-              w: info.w,
-              h: info.h
-            }
-          },
-          to: user_id
+          this.$socket.emit('screenCommand', obj)
         }
-
-        this.$socket.emit('screenCommand', obj)
       }
     },
     executeTracking() {
