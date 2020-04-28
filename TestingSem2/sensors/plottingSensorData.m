@@ -12,6 +12,8 @@ sensorData.('Position x-axis (in m)') = cumtrapz(sensorData.Time, sensorData.('V
 sensorData.('Position y-axis (in m)') = cumtrapz(sensorData.Time, sensorData.('Velocity y-axis'));
 sensorData.('Position z-axis (in m)') = cumtrapz(sensorData.Time, sensorData.('Velocity z-axis'));
 
+fitlm(sensorData.Time, sensorData.('Velocity x-axis'))
+
 sensorData.Time = seconds(sensorData.Time);
 sensorData = table2timetable(sensorData);
 
