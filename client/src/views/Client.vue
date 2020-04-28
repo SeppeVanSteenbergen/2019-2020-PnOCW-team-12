@@ -244,7 +244,8 @@ export default {
       clearInterval(this.videoInterval)
       clearInterval(this.intervalObj)
       this.countDownRunning = false
-      this.canvas.style = this.defaultCSS
+      this.canvWrap.style = this.defaultCSS
+      this.canvas.style.transform = new DOMMatrix()
       this.canvasMode = true
       this.animationRunning = false
     },
@@ -338,9 +339,11 @@ export default {
      *        h:
      */
     displayImageCSSHandler(data) {
+      this.canvWrap.width = data.w
+      this.canvWrap.height = data.h
+      this.canvWrap.style = data.css
       this.canvas.width = data.w
       this.canvas.height = data.h
-      this.canvas.style = data.css
 
       let image = new window.Image()
 
@@ -520,7 +523,9 @@ export default {
     },
     loadVideoHandler(data) {
       this.videoURL = data.videoURL
-      this.canvas.style = data.css
+      this.canvWrap.style = data.css
+      this.canvWrap.height = data.h
+      this.canvWrap.width = data.w
       this.canvas.height = data.h
       this.canvas.width = data.w
       this.$refs.vid.load()
@@ -690,7 +695,9 @@ export default {
 
       let ctx = this.canvas.getContext('2d')
 
-      this.canvas.style = data.css
+      this.canvWrap.style = data.css
+      this.canvWrap.width = data.w
+      this.canvWrap.height = data.h
       this.canvas.width = data.w
       this.canvas.height = data.h
       ctx.fillStyle = 'white'
@@ -718,7 +725,7 @@ export default {
       this.gameInterval = setInterval(this.gameUpdate, 30)
     },
     gameUpdate() {
-      this.canvas.style = this.transCSS
+      this.canvWrap.style = this.transCSS
       let ctx = this.canvas.getContext('2d')
       ctx.fillStyle = 'white'
       ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
@@ -837,7 +844,7 @@ export default {
 
     trackingUpdateHandler(data) {
       this.canvas.style.transform = Sensors.transformationMatrix(
-        this.trackingDefaultCSS,
+        new DOMMatrix(),
         data.css
       )
     },
