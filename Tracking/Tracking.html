@@ -17,7 +17,8 @@
 </div>
 <p id="out"></p>
 <canvas id="canv"></canvas>
-<canvas style="border: 3px solid black" id="game"></canvas>
+<canvas style="border: 1px solid black" id="game"></canvas>
+<canvas style="position: absolute; left: 0; top: 200px; z-index: 0;" id="box" width="1920" height="880"></canvas>
 <video id="vid"></video>
 <img id="homer" src="build/homer.jpg" style="display:none"/>
 </body>
@@ -43,6 +44,7 @@
 
         //// end config ////
 
+		let box = document.getElementById('box')
 
         let video = document.getElementById('vid')
         let canvas = document.getElementById('canv')
@@ -68,7 +70,9 @@
 
         let game = document.getElementById('game')
         let ctg = game.getContext('2d')
-        game.width = 400
+		let ctb = box.getContext('2d')
+
+		game.width = 400
         game.height = 400
 
         let player = {
@@ -213,7 +217,26 @@
 				game.style.transform = dommatrix;
 
 				ctg.clearRect(0, 0, game.width, game.height)
-				ctg.drawImage(homer, -130,0, 700,400)
+				// ctg.drawImage(homer, -130,0, 700,400)
+				ctb.beginPath()
+				ctb.rect(650,100,game.width,game.height)
+				ctb.stroke()
+
+				ctb.clearRect(0,0,box.width, box.height)
+				ctb.moveTo(650, 100);
+				ctb.lineTo(x+650, y+100);
+
+				ctb.moveTo(650+game.width, 100);
+				ctb.lineTo(x+650+game.width, y+100);
+
+				ctb.moveTo(650+game.width, 100+game.height);
+				ctb.lineTo(x+650+game.width, y+100+game.height);
+
+				ctb.moveTo(650, 100+game.height);
+				ctb.lineTo(x+650, y+100+game.height);
+
+				ctb.stroke();
+
 
 
 
