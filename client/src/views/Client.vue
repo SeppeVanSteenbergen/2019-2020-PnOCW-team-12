@@ -824,11 +824,14 @@ export default {
     },
     trackingInitHandler() {
       this.trackingRunning = true
+      
+      let canvas = document.createElement('canvas')
+      canvas.style = this.transCSS
       this.trackingDefaultCSS = [
-        this.canvas.style.transform,
-        this.canvas.style.transformOrigin,
-        this.canvas.width,
-        this.canvas.height
+        canvas.style.transform,
+        canvas.style.transformOrigin,
+        this.transWidth,
+        this.transHeight
       ]
     },
 
@@ -842,49 +845,6 @@ export default {
     trackingStopHandler() {
       this.trackingRunning = false
     },
-    getTransformedCanvas(canvas, CSSTransform) {
-      let vue = this
-      return new Promise(function(res, rej) {
-        let dim = vue.getTransformedDimensions(canvas, CSSTransform)
-        let xlinkNS = 'http://www.w3.org/1999/xlink',
-          svgNS = 'http://www.w3.org/2000/svg'
-        let svg = document.createElementNS(svgNS, 'svg'),
-          defs = document.createElementNS(svgNS, 'defs'),
-          style = document.createElementNS(svgNS, 'style'),
-          image = document.createElementNS(svgNS, 'image')
-        image.setAttributeNS(xlinkNS, 'href', canvas.toDataURL())
-        image.setAttribute('width', canvas.width)
-        image.setAttribute('height', canvas.height)
-        style.innerHTML = 'image{transform:' + CSSTransform + ';}'
-        svg.appendChild(defs)
-        defs.appendChild(style)
-        let rect = document.createElement('rect')
-
-        svg.appendChild(image)
-        svg.setAttribute('width', dim.width)
-        svg.setAttribute('height', dim.height)
-        let svgStr = new XMLSerializer().serializeToString(svg)
-        let img = new Image()
-        img.onload = function() {
-          res(img)
-        }
-        img.onerror = rej
-        img.src = URL.createObjectURL(
-          new Blob([svgStr], { type: 'image/svg+xml' })
-        )
-      })
-    },
-
-    getTransformedDimensions(canvas, CSSTransform) {
-      let orphan = !canvas.parentNode
-      if (orphan) document.body.appendChild(canvas)
-      let oldTrans = getComputedStyle(canvas).transform
-      canvas.style.transform = CSSTransform
-      let rect = canvas.getBoundingClientRect()
-      canvas.style.transform = oldTrans
-      if (orphan) document.body.removeChild(canvas)
-      return rect
-    }
   }
 }
 </script>
