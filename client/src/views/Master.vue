@@ -262,19 +262,19 @@
       <v-stepper v-model="pictureStepper" class="fullheight">
         <template>
           <v-stepper-header>
-            <v-stepper-step :complete="pictureStepper > 1" step="1" editable
+            <v-stepper-step :complete="pictureStepper > 1" step="1"
               >Take Picture</v-stepper-step
             >
 
             <v-divider></v-divider>
 
-            <v-stepper-step :complete="pictureStepper > 2" step="2" editable
+            <v-stepper-step :complete="pictureStepper > 2" step="2"
               >Result Display</v-stepper-step
             >
 
             <v-divider></v-divider>
 
-            <v-stepper-step :complete="pictureStepper > 3" step="3" editable
+            <v-stepper-step :complete="pictureStepper > 3" step="3"
               >Usage</v-stepper-step
             >
           </v-stepper-header>
