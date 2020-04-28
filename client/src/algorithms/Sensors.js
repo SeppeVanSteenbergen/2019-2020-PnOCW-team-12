@@ -43,7 +43,7 @@ export default class Sensors {
     let originalTransformation = new DOMMatrix(originalCSS[0])
     let translation = originalCSS[1].split(' ')
     let translationMatrix = new DOMMatrix(
-      'translate(' + translation[0] + ', ' + translation[1] + ')'
+      'translate(' + 0+ 'px, ' + 0 + 'px)'
     )
 /*    translationMatrix.m41 -= originalCSS[2] / 2
     translationMatrix.m42 -= originalCSS[3] / 2*/
