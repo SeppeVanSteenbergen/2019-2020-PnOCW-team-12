@@ -614,8 +614,6 @@ export default {
         },
         to: user_id === null ? 'all' : user_id
       }
-
-      console.log(object)
       this.$socket.emit('screenCommand', object)
     },
     startVideo() {
@@ -625,27 +623,19 @@ export default {
           facingMode: this.facingUser ? 'user' : 'environment'
         }
       }
-      console.log(constraints)
       let video = this.$refs.video
-      console.log(video)
       navigator.mediaDevices
         .getUserMedia(constraints)
         .then(stream => {
-          console.log(stream)
-
           const track = stream.getVideoTracks()[0]
-          console.log(track.getCapabilities())
-
           const capabilities = track.getCapabilities()
           // Check whether focus distance is supported or not.
           if (capabilities.whiteBalanceMode) {
-            console.log(track)
             track.applyConstraints({
               advanced: [
                 { whiteBalanceMode: 'continuous', colorTempurature: 5500 }
               ]
             })
-            console.log(track)
           }
 
           video.srcObject = stream
@@ -684,9 +674,6 @@ export default {
         },
         to: user_id === null ? 'all' : user_id
       }
-      console.log('executing countdown')
-      console.log(object)
-
       this.$socket.emit('screenCommand', object)
     },
     getClientInfo() {
@@ -744,13 +731,10 @@ export default {
       return c.toDataURL('image/jpeg')
     },
     getBase64Image() {
-      console.log(this.$refs.video)
-      console.log(this.$refs.video.videoWidth)
       const canvas = document.createElement('canvas')
       canvas.width = this.$refs.video.videoWidth
       canvas.height = this.$refs.video.videoHeight
       canvas.getContext('2d').drawImage(this.$refs.video, 0, 0)
-      console.log()
       return canvas.toDataURL('image/jpeg')
     },
     switchCamera() {
@@ -774,7 +758,6 @@ export default {
       let imgWidth = screen.width - 10
       let ratio = this.$refs.video.videoHeight / this.$refs.video.videoWidth
 
-      console.log(this.$refs.canva.width)
       this.$refs.canva
         .getContext('2d')
         .drawImage(
@@ -912,7 +895,6 @@ export default {
       }
     },
     uploadProgress(evt) {
-      console.log(evt)
       this.videoUploadProgress = Math.round((evt.loaded / evt.total) * 100)
     },
     async executeUploadVideo() {
@@ -934,7 +916,6 @@ export default {
         })
         .then(result => {
           this.$notif('video upload successful', 'success')
-          console.log('upload successful for video: ' + result.data.videoURL)
           this.sendVideoURLToClients(result.data.videoURL)
         })
         .catch(err => {
@@ -954,7 +935,6 @@ export default {
       )
 
       for (let i = 0; i < this.analysedImage.screens.length; i++) {
-        console.log('looping through screens')
         let cssMatrix = this.analysedImage.screens[i].cssMatrix
 
         let user_id = this.myRoom.clients[
@@ -1014,8 +994,6 @@ export default {
           }
         })
         .then(result => {
-          console.log('upload successful for image: ' + result.data.imageURL)
-
           // get all the data
           let info = ImageTools.createPictureCanvas(
             this.drawingImg.width,
@@ -1023,12 +1001,7 @@ export default {
             this.analysedImage
           )
 
-          console.log(info)
-
-          console.log(this.analysedImage.screens)
-
           for (let i = 0; i < this.analysedImage.screens.length; i++) {
-            console.log('looping through screens')
             let cssMatrix = this.analysedImage.screens[i].cssMatrix
 
             let user_id = this.myRoom.clients[
@@ -1222,73 +1195,6 @@ export default {
         reader.readAsDataURL(file)
       }
     },
-    mouseDownHandler(event) {
-      let clientX = null
-      let clientY = null
-      if (typeof event.clientX === 'undefined') {
-        clientX = event.targetTouches[0].clientX
-        clientY = event.targetTouches[0].clientY
-      } else {
-        clientX = event.clientX
-        clientY = event.clientY
-      }
-
-      this.mouseDown = true
-      this.Xpos = clientX
-      this.Ypos = clientY
-    },
-    mouseUpHandler(event) {
-      let clientX = null
-      let clientY = null
-      if (typeof event.clientX === 'undefined') {
-        clientX = event.changedTouches[0].clientX
-        clientY = event.changedTouches[0].clientY
-      } else {
-        clientX = event.clientX
-        clientY = event.clientY
-      }
-
-      this.mouseDown = false
-      this.x = this.x + clientX - this.Xpos
-      this.y = this.y + clientY - this.Ypos
-    },
-    mouseMoveHandler(event) {
-      let clientX = null
-      let clientY = null
-      if (typeof event.clientX === 'undefined') {
-        clientX = event.targetTouches[0].clientX
-        clientY = event.targetTouches[0].clientY
-      } else {
-        clientX = event.clientX
-        clientY = event.clientY
-      }
-      console.log(event.clientX, clientY)
-      let c = this.$refs.drawCanvas
-      let ctx = c.getContext('2d')
-      if (this.mouseDown) {
-        //this.drawingImgScale =c.width / this.drawingImg.width//
-        //let scale = this.pictureCanvasInfo.scale
-        let scale = 1
-        ctx.clearRect(0, 0, c.width, c.height)
-        ctx.drawImage(
-          this.drawingImg,
-          (this.x + clientX - this.Xpos) * scale, // / this.drawingImgScale,
-          (this.y + clientY - this.Ypos) * scale, // / this.drawingImgScale,
-          this.drawingImg.width * scale,
-          this.drawingImg.height * scale,
-          0,
-          0,
-          this.drawingImgScale * this.drawingImg.width * scale,
-          this.drawingImgScale * this.drawingImg.height * scale
-        )
-        AlgorithmService.drawScreenOutlines(
-          this.$refs.drawCanvas,
-          this.analysedImage,
-          this.pictureCanvasInfo.minx,
-          this.pictureCanvasInfo.miny
-        )
-      }
-    },
     imageToBase64(img) {
       let c = document.createElement('canvas')
       c.width = img.width
@@ -1311,8 +1217,6 @@ export default {
       this.sendCSSImage(this.drawingImg)
     },
     sendCSSImage(img) {
-      //loaded image to base64 conversion
-      console.log('base64 image')
 
       // get all the data
       let info = ImageTools.createPictureCanvas(
@@ -1323,12 +1227,7 @@ export default {
 
       let base64 = this.imageToBase64(img)
 
-      console.log(info)
-
-      console.log(this.analysedImage.screens)
-
       for (let i = 0; i < this.analysedImage.screens.length; i++) {
-        console.log('looping through screens')
         let cssMatrix = this.analysedImage.screens[i].cssMatrix
 
         let user_id = this.myRoom.clients[
@@ -1392,14 +1291,9 @@ export default {
         },
         to: user_id
       }
-      console.log('payload')
-      console.log(object)
-
       this.$socket.compress(true).emit('screenCommand', object)
     },
     async analyseImage() {
-      console.log('starting analysis')
-
       //update roomclientinfo for new connected devices
       this.$socket.emit('updateRoomClientInfo')
       // this.getClientInfo()
@@ -1443,7 +1337,6 @@ export default {
         progressBarContainer,
         messageBoxContainer
       )
-      console.log('Start waiting for result from worker:')
       await new Promise(resolve => {
         const CHECKWORKERINTERVAL = 500
 
@@ -1653,7 +1546,6 @@ export default {
       }
     },
     screenDetectionDialog(n) {
-      console.log('exit picture ' + n)
       if (!n && this.videoStream !== null) {
         this.videoStream.getTracks().forEach(track => {
           track.stop()
