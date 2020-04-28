@@ -2,7 +2,7 @@
   <v-container class="fill-height" fluid>
     <v-row dense>
       <v-col align="center" justify="center">
-        <v-card max-width="200px">
+        <v-card max-width="220px">
           <v-toolbar color="primary" dark flat>
             <v-toolbar-title>
               {{
@@ -25,50 +25,50 @@
               </v-icon>
             </v-btn>
           </v-toolbar>
-          <v-container>
-            <v-list v-if="myRoom !== null">
-              <v-list-item v-for="client_id in myRoom.clients" :key="client_id">
-                <v-list-item-icon>
-                  <v-icon v-if="false" color="pink">mdi-star</v-icon>
-                </v-list-item-icon>
-                <v-list-item-content>
-                  <v-list-item-title
-                    v-text="'Client ' + myRoom.clients.indexOf(client_id)"
-                  ></v-list-item-title>
-                </v-list-item-content>
-              </v-list-item>
-            </v-list>
-          </v-container>
-        </v-card>
 
-        <v-card
-          class
-          v-if="myRoom !== null && !myRoom.open"
-          style="width:20vw;height:30vh; min-width:320px"
-        >
-          <v-toolbar color="primary" dark flat>
-            <v-toolbar-title>Commands</v-toolbar-title>
-            <div class="flex-grow-1"></div>
-          </v-toolbar>
-          <v-tabs
-            v-model="tab"
-            background-color="blue accent-4"
-            class="elevation-2"
-            dark
-            centered
-            vertical
-            style="height:100%"
-            touchless
-          >
-            <v-tab
-              v-for="tab in tabs"
-              :key="tabs.indexOf(tab)"
-              @click="openDialog(tab.title)"
-              centered
-              vertical
-              >{{ tab.title }}</v-tab
-            >
-          </v-tabs>
+          <v-expansion-panels :popout="false" :inset="false" :focusable="false">
+            <v-expansion-panel>
+              <v-expansion-panel-header>Clients</v-expansion-panel-header>
+              <v-expansion-panel-content>
+                <v-list v-if="myRoom !== null">
+                  <v-list-item
+                    v-for="client_id in myRoom.clients"
+                    :key="client_id"
+                  >
+                    <v-list-item-icon>
+                      <v-icon v-if="false" color="pink">mdi-star</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                      <v-list-item-title
+                        v-text="'Client ' + myRoom.clients.indexOf(client_id)"
+                      ></v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-list>
+              </v-expansion-panel-content>
+            </v-expansion-panel>
+            <v-expansion-panel v-if="myRoom !== null && !myRoom.open">
+              <v-expansion-panel-header>Commands</v-expansion-panel-header>
+              <v-expansion-panel-content>
+                <v-tabs
+                  v-model="tab"
+                  dark
+                  vertical
+                  style="height:100%"
+                  touchless
+                >
+                  <v-tab
+                    v-for="tab in tabs"
+                    :key="tabs.indexOf(tab)"
+                    @click="openDialog(tab.title)"
+                    centered
+                    vertical
+                    >{{ tab.title }}</v-tab
+                  >
+                </v-tabs>
+              </v-expansion-panel-content>
+            </v-expansion-panel>
+          </v-expansion-panels>
         </v-card>
       </v-col>
     </v-row>
