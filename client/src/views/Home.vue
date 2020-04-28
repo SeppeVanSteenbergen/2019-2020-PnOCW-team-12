@@ -1,5 +1,5 @@
 <template>
-  <v-container class="fill-height" fluid>
+  <v-container fluid style="padding-top: 110px">
     <v-row align="center" justify="center" min-height="300px" dense>
       <MasterClientCard v-on:master="master" v-on:client="client" v-on:controller="controller" />
     </v-row>

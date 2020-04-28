@@ -1,5 +1,5 @@
 <template>
-  <v-container class="fill-height" fluid>
+  <v-container fluid style="padding-top: 110px">
     <v-row dense>
       <v-col align="center" justify="center">
         <v-card max-width="220px">
@@ -42,7 +42,6 @@
                       <v-list-item-title
                         class="primary--text"
                         v-text="'Client ' + myRoom.clients.indexOf(client_id)"
-                        color="primary"
                       ></v-list-item-title>
                     </v-list-item-content>
                   </v-list-item>
@@ -86,7 +85,9 @@
         <v-card-text>
           <v-color-picker
             v-model="color"
+            hide-inputs
             hide-mode-switch
+            flat
             class="mx-auto"
             style="width:100%;"
           ></v-color-picker>
@@ -113,7 +114,6 @@
             </v-expansion-panel>
           </v-expansion-panels>
         </v-card-text>
-        <br />
         <v-card-actions>
           <v-switch
             v-model="continousFloodMode"
@@ -175,7 +175,6 @@
             </v-expansion-panel>
           </v-expansion-panels>
         </v-card-text>
-        <br />
         <v-card-actions>
           <v-switch
             v-model="continousDrawDirectionMode"
