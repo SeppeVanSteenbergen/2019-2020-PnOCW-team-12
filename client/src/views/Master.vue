@@ -26,7 +26,7 @@
             </v-btn>
           </v-toolbar>
 
-          <v-expansion-panels :popout="false" :inset="false" :focusable="false">
+          <v-expansion-panels :value="0" :popout="false" :inset="false" :focusable="false">
             <v-expansion-panel>
               <v-expansion-panel-header>Clients</v-expansion-panel-header>
               <v-expansion-panel-content>
@@ -36,11 +36,13 @@
                     :key="client_id"
                   >
                     <v-list-item-icon>
-                      <v-icon v-if="false" color="pink">mdi-star</v-icon>
+                      <v-icon color="primary">mdi-account</v-icon>
                     </v-list-item-icon>
                     <v-list-item-content>
                       <v-list-item-title
+                        class="primary--text"
                         v-text="'Client ' + myRoom.clients.indexOf(client_id)"
+                        color="primary"
                       ></v-list-item-title>
                     </v-list-item-content>
                   </v-list-item>
@@ -50,22 +52,21 @@
             <v-expansion-panel v-if="myRoom !== null && !myRoom.open">
               <v-expansion-panel-header>Commands</v-expansion-panel-header>
               <v-expansion-panel-content>
-                <v-tabs
-                  v-model="tab"
-                  dark
-                  vertical
-                  style="height:100%"
-                  touchless
+                <v-btn @click="floodFillDialog = true" text color="primary">Floodfill</v-btn>
+                <v-btn @click="drawDirectionDialog = true" text color="primary"
+                  >Draw Direction</v-btn
                 >
-                  <v-tab
-                    v-for="tab in tabs"
-                    :key="tabs.indexOf(tab)"
-                    @click="openDialog(tab.title)"
-                    centered
-                    vertical
-                    >{{ tab.title }}</v-tab
-                  >
-                </v-tabs>
+                <v-btn @click="countdownDialog = true" text color="primary">Countdown</v-btn>
+                <v-btn
+                  @click="
+                    screenDetectionDialog = true
+                    executeDisplayDetectionScreens()
+                    nextStep(0)
+                  "
+                  text
+                  color="primary"
+                  >Screen Detection</v-btn
+                >
               </v-expansion-panel-content>
             </v-expansion-panel>
           </v-expansion-panels>
@@ -536,21 +537,6 @@ export default {
   name: 'master',
   data() {
     return {
-      tab: null,
-      tabs: [
-        {
-          title: 'Floodfill'
-        },
-        {
-          title: 'Draw Direction'
-        },
-        {
-          title: 'Countdown'
-        },
-        {
-          title: 'Screen Detection'
-        }
-      ],
       color: { r: 200, g: 100, b: 0, a: 1 },
 
       //floodfill mode
@@ -636,24 +622,6 @@ export default {
 
       console.log(object)
       this.$socket.emit('screenCommand', object)
-    },
-    openDialog(title) {
-      switch (title) {
-        case 'Floodfill':
-          this.floodFillDialog = true
-          break
-        case 'Draw Direction':
-          this.drawDirectionDialog = true
-          break
-        case 'Countdown':
-          this.countdownDialog = true
-          break
-        case 'Screen Detection':
-          this.screenDetectionDialog = true
-          this.executeDisplayDetectionScreens()
-          this.nextStep(0)
-          break
-      }
     },
     startVideo() {
       const constraints = {

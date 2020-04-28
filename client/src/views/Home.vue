@@ -1,14 +1,6 @@
 <template>
-  <!--<div>
-        <v-btn @click="action">
-            Do Something
-        </v-btn>
-        <h1>
-            output data: {{something}}
-        </h1>
-    </div>-->
   <v-container class="fill-height" fluid>
-    <v-row align="center" justify="center" min-height="300px">
+    <v-row align="center" justify="center" min-height="300px" dense>
       <MasterClientCard v-on:master="master" v-on:client="client" v-on:controller="controller" />
     </v-row>
   </v-container>
