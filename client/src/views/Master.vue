@@ -26,7 +26,12 @@
             </v-btn>
           </v-toolbar>
 
-          <v-expansion-panels :value="0" :popout="false" :inset="false" :focusable="false">
+          <v-expansion-panels
+            :value="0"
+            :popout="false"
+            :inset="false"
+            :focusable="false"
+          >
             <v-expansion-panel>
               <v-expansion-panel-header>Clients</v-expansion-panel-header>
               <v-expansion-panel-content>
@@ -51,11 +56,15 @@
             <v-expansion-panel v-if="myRoom !== null && !myRoom.open">
               <v-expansion-panel-header>Commands</v-expansion-panel-header>
               <v-expansion-panel-content>
-                <v-btn @click="floodFillDialog = true" text color="primary">Floodfill</v-btn>
+                <v-btn @click="floodFillDialog = true" text color="primary"
+                  >Floodfill</v-btn
+                >
                 <v-btn @click="drawDirectionDialog = true" text color="primary"
                   >Draw Direction</v-btn
                 >
-                <v-btn @click="countdownDialog = true" text color="primary">Countdown</v-btn>
+                <v-btn @click="countdownDialog = true" text color="primary"
+                  >Countdown</v-btn
+                >
                 <v-btn
                   @click="
                     screenDetectionDialog = true
@@ -256,9 +265,9 @@
           <v-stepper-items class="fullheight overflow-y-auto">
             <v-stepper-content step="1" class="fullheight overflow-y-auto">
               <v-card class="mb-12" elevation="0">
-                <!-- <video :autoplay="true" id="videoElement" ref="video" class="flex-wrap"></video> -->
                 <div style="height: 25px"></div>
                 <v-file-input
+                  style="margin: 2%"
                   v-model="displayFileVideo"
                   color="deep-purple accent-4"
                   counter
@@ -269,26 +278,28 @@
                   accept="image/*"
                   @change="loadFileVideo"
                 ></v-file-input>
+
+                <!-- Preview canvas -->
                 <canvas ref="canva" class="flex-wrap"></canvas>
                 <br />
-                <!-- <v-btn @click="startVideo">start video</v-btn>
-                <v-btn @click="switchCamera">switch camera</v-btn>
-                <v-btn @click="takePicture">Capture Image</v-btn>-->
 
-                <br />
-
-                <v-btn
-                  color="primary"
-                  @click="
-                    nextStep(1)
-                    analyseImageAsync()
-                  "
-                  >Analyse image</v-btn
-                >
-
-                <v-btn text @click="screenDetectionDialog = false"
-                  >Cancel</v-btn
-                >
+                <v-row dense>
+                  <!-- Analyse button -->
+                  <v-btn
+                    style="margin: 2%"
+                    color="primary"
+                    @click="
+                      nextStep(1)
+                      analyseImageAsync()
+                    "
+                    >Analyse image</v-btn
+                  >
+                  <div class="flex-grow-1"></div>
+                  <!-- Close button -->
+                  <v-btn style="margin: 1%" text color="error" @click="screenDetectionDialog = false"
+                    >Close</v-btn
+                  >
+                </v-row>
               </v-card>
             </v-stepper-content>
 
@@ -297,29 +308,36 @@
                 <div ref="progressBarcontainer">
                   <div></div>
                 </div>
-                <div ref="messageBoxContainer">
-                  <ul></ul>
-                </div>
+                <v-expansion-panel>
+                  <v-expansion-panel-header>Console</v-expansion-panel-header>
+                  <div ref="messageBoxContainer">
+                    <ul></ul>
+                  </div>
+                </v-expansion-panel>
 
                 <div style="height: 15px"></div>
                 <v-divider :inset="true"></v-divider>
                 <div style="height: 15px"></div>
 
-                <v-btn
-                  :disabled="isBusyAnalysing()"
-                  color="primary"
-                  @click="
-                    executeDisplayDetectionScreens()
-                    nextStep(0)
-                  "
-                  >Retake Picture</v-btn
-                >
-                <v-btn
-                  :disabled="isBusyAnalysing()"
-                  color="primary"
-                  @click="analyseImageAsync()"
-                  >Re-Analyse Image</v-btn
-                >
+                <v-row dense>
+                  <v-btn
+                    style="margin: 10px"
+                    :disabled="isBusyAnalysing()"
+                    color="primary"
+                    @click="
+                      executeDisplayDetectionScreens()
+                      nextStep(0)
+                    "
+                    >Retake Picture</v-btn
+                  >
+                  <div class="flex-grow-1"></div>
+                  <v-btn
+                    style="margin: 10px"
+                    color="primary"
+                    @click="nextStep(2)"
+                    >Continue</v-btn
+                  >
+                </v-row>
 
                 <v-expansion-panels :value="[0, 1]" :multiple="true">
                   <v-expansion-panel>
@@ -341,8 +359,6 @@
                 <!-- <canvas ref="resultCanvas"></canvas> -->
                 <!-- <canvas ref="delaunay"></canvas> -->
                 <!-- <canvas ref="delaunay2"></canvas> -->
-
-                <v-btn color="primary" @click="nextStep(2)">Continue</v-btn>
               </v-card>
 
               <v-btn text @click="screenDetectionDialog = false">Cancel</v-btn>
