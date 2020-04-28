@@ -40,22 +40,12 @@ export default class Sensors {
     this.startMatrix = rotationMatrix.inverse()
   }
 
-  static transformationMatrix(originalCSS, rotationMatrix) {
-    let originalTransformation = new DOMMatrix(originalCSS[0])
-    let translation = originalCSS[1].split(' ')
-    let translationMatrix = new DOMMatrix(
-      'translate(' + translation[0] + ', ' + translation[1] + ')'
-    )
-    translationMatrix.m41 -= originalCSS[2] / 2
-    translationMatrix.m42 -= originalCSS[3] / 2
+  static transformationMatrix(originalTransforMation, rotationMatrix) {
+    let originalTransformation = new DOMMatrix(originalTransforMation)
     rotationMatrix = new DOMMatrix(rotationMatrix)
-
-    let orientationMatrix = DOMMatrix.fromMatrix(translationMatrix.inverse())
-    orientationMatrix.multiplySelf(rotationMatrix)
-    orientationMatrix.multiplySelf(translationMatrix)
-    orientationMatrix.multiplySelf(originalTransformation)
-
-    return orientationMatrix
+    rotationMatrix.multiplySelf(originalTransformation)
+    rotationMatrix.invertSelf()
+    return rotationMatrix
   }
 
   startSensor() {
