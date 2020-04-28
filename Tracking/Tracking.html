@@ -29,14 +29,14 @@
 
 	<script lang="text/javascript">
         // config
-        let framerate = 300 // ms wait time
-        let firstCompare = true  // only compare next frames with first, or compare with previous frame
+        let framerate = 30 // ms wait time
+        let firstCompare = false  // only compare next frames with first, or compare with previous frame
 
         let translation = false;
 		let sensors = false;
 
         //Fast config
-        let hold = 50 // threshold
+        let hold = 20 // threshold
 
         // Brief settings
         let confidence = 0.7 // how sure when matching keypoints
@@ -75,7 +75,8 @@
             x:200,
             y:200
         }
-
+		let x = 0;
+        let y = 0;
         video.style.display = 'none'
 
         let previousDescriptor = null
@@ -200,19 +201,20 @@
 					previousDescriptor = descriptor
 					previousCorners = corners
 				}
-
 				//draw game
 				if(firstCompare) {
-					player.x = trans.x + 200
-					player.y = trans.y + 200
+					x = trans.x
+					y = trans.y
 				} else {
-					player.x += trans.x
-					player.y += trans.y
+					x += trans.x
+					y += trans.y
 				}
+				let dommatrix = new DOMMatrix("translate(" + x + "px, " + y + "px)");
+				game.style.transform = dommatrix;
+
 				ctg.clearRect(0, 0, game.width, game.height)
 				ctg.drawImage(homer, -130,0, 700,400)
-				ctg.fillStyle = '#f00';
-				ctg.fillRect(player.x, player.y, 20, 20);
+
 
 
 				// draw keypoints
