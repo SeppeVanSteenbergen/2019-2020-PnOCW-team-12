@@ -1,6 +1,6 @@
 <template>
-  <v-container class="fill-height" fluid>
-    <v-row align="center" justify="center" min-height="300px">
+  <v-container fluid style="padding-top: 35px">
+    <v-row align="center" justify="center" min-height="300px" dense>
       <div>
         <v-text-field
                 label="Enter Name"

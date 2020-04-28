@@ -1,8 +1,8 @@
 <template>
-  <v-container class="fill-height" fluid>
-    <v-row align="center" justify="center" min-height="300px">
+  <v-container fluid style="padding-top: 110px">
+    <v-row align="center" justify="center" dense>
       <div>
-        <v-card max-width="400px">
+        <v-card max-width="220px">
           <v-toolbar color="primary" dark flat>
             <v-toolbar-title>
               {{

@@ -1,6 +1,6 @@
 <template>
   <v-container fluid style="padding-top: 110px">
-    <v-row align="center" justify="center" min-height="300px" dense>
+    <v-row align="center" justify="center" max-width="220px" dense>
       <MasterClientCard v-on:master="master" v-on:client="client" v-on:controller="controller" />
     </v-row>
   </v-container>
