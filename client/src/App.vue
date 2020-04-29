@@ -11,14 +11,6 @@
         </v-toolbar-title>
         <v-spacer></v-spacer>
 
-        <v-btn
-          icon
-          color="grey"
-          v-if="getRole().role === 1"
-          @click="startSync()"
-        >
-          <v-icon>mdi-cached</v-icon>
-        </v-btn>
         <v-icon>{{
           getRole().role === 1
             ? 'mdi-account-tie'
@@ -107,11 +99,6 @@ export default {
       }
 
       console.log('socket connected')
-    },
-    customEmit: function(data) {
-      console.log(
-        'this method was fired by the socket server. eg: io.emit("customEmit", data)'
-      )
     },
     data: function(data) {
       console.log(data.message)

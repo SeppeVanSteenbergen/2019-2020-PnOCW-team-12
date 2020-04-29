@@ -658,6 +658,7 @@ export default {
       this.$socket.emit('screenCommand', object)
     },
     executeCountdown(user_id = null) {
+      this.startSync()
       let object = {
         payload: {
           type: 'count-down',
