@@ -15,7 +15,7 @@
             v-if="typeof myRoom !== 'undefined'"
             small
             :color="myRoom !== null && myRoom.open ? 'success' : 'error'"
-            @click="toggleRoom()"
+            @click="masterPanelToggle"
           >
             <v-icon>
               {{
@@ -27,12 +27,15 @@
 
         <v-expansion-panels
           v-model="masterPanel"
+          :readonly="!masterPanelWorking"
           :popout="false"
           :inset="false"
           :focusable="false"
         >
           <v-expansion-panel>
-            <v-expansion-panel-header>Clients</v-expansion-panel-header>
+            <v-expansion-panel-header @click="masterPanelToggle"
+              >Clients</v-expansion-panel-header
+            >
             <v-expansion-panel-content>
               <v-list v-if="myRoom !== null">
                 <v-list-item
@@ -53,7 +56,9 @@
             </v-expansion-panel-content>
           </v-expansion-panel>
           <v-expansion-panel v-if="myRoom !== null">
-            <v-expansion-panel-header>Commands</v-expansion-panel-header>
+            <v-expansion-panel-header @click="masterPanelToggle"
+              >Commands</v-expansion-panel-header
+            >
             <v-expansion-panel-content>
               <v-btn @click="floodFillDialog = true" text color="primary"
                 >Floodfill</v-btn
@@ -68,7 +73,6 @@
                 @click="
                   screenDetectionDialog = true
                   executeDisplayDetectionScreens()
-                  nextStep(0)
                 "
                 text
                 color="primary"
@@ -240,22 +244,22 @@
 
     <!-- SCREEN DETECTION DIALOG -->
     <v-dialog v-model="screenDetectionDialog" fullscreen>
-      <v-stepper v-model="pictureStepper" class="fullheight">
+      <v-stepper v-model="detectionStepper" class="fullheight">
         <template>
           <v-stepper-header>
-            <v-stepper-step :complete="pictureStepper > 1" step="1"
+            <v-stepper-step :complete="detectionStepper > 1" step="1"
               >Take Picture</v-stepper-step
             >
 
             <v-divider></v-divider>
 
-            <v-stepper-step :complete="pictureStepper > 2" step="2"
+            <v-stepper-step :complete="detectionStepper > 2" step="2"
               >Result Display</v-stepper-step
             >
 
             <v-divider></v-divider>
 
-            <v-stepper-step :complete="pictureStepper > 3" step="3"
+            <v-stepper-step :complete="detectionStepper > 3" step="3"
               >Usage</v-stepper-step
             >
           </v-stepper-header>
@@ -278,20 +282,25 @@
 
                 <!-- Preview canvas -->
                 <canvas ref="canva" class="flex-wrap"></canvas>
-                <br />
+
+                <v-divider :inset="true"></v-divider>
+                <div style="height: 15px"></div>
 
                 <v-row dense>
+                  <div class="flex-grow-1"></div>
                   <!-- Analyse button -->
                   <v-btn
                     style="margin: 10px"
                     color="primary"
                     @click="
-                      nextStep(1)
+                      nextDetectionStep()
                       resultPanel = [0]
                       analyseImageAsync()
                     "
                     >Analyse image</v-btn
                   >
+                </v-row>
+                <v-row dense>
                   <div class="flex-grow-1"></div>
                   <!-- Close button -->
                   <v-btn
@@ -344,15 +353,16 @@
                     color="primary"
                     @click="
                       executeDisplayDetectionScreens()
-                      nextStep(0)
+                      previousDetectionStep()
                     "
                     >Try Again</v-btn
                   >
                   <div class="flex-grow-1"></div>
                   <v-btn
                     style="margin: 10px"
+                    :disabled="isBusyAnalysing()"
                     color="primary"
-                    @click="nextStep(2)"
+                    @click="nextDetectionStep()"
                     >Continue</v-btn
                   >
                 </v-row>
@@ -482,6 +492,21 @@
                   </v-expansion-panel>
                 </v-expansion-panels>
 
+                <div style="height: 15px"></div>
+                <v-divider :inset="true"></v-divider>
+                <div style="height: 15px"></div>
+
+                <v-row dense>
+                  <v-btn
+                    style="margin: 10px"
+                    color="primary"
+                    @click="
+                      detectionStepper = 1
+                      executeDisplayDetectionScreens()
+                    "
+                    >New Slave Setup</v-btn
+                  >
+                </v-row>
                 <v-row dense>
                   <div class="flex-grow-1"></div>
                   <!-- Close button -->
@@ -523,6 +548,7 @@ export default {
     return {
       color: { r: 200, g: 100, b: 0, a: 1 },
       masterPanel: 0,
+      masterPanelWorking: false,
 
       //floodfill mode
       floodFillDialog: false,
@@ -544,7 +570,7 @@ export default {
       facingUser: true,
 
       //screen detection mode
-      pictureStepper: 0,
+      detectionStepper: 1,
       steps: 3,
       resultPanel: [0, 1, 2],
       screenDetectionDialog: false,
@@ -589,6 +615,21 @@ export default {
     },
     toggleRoom() {
       this.$socket.emit('toggleRoom')
+    },
+    masterPanelToggle() {
+      this.detectionStepper = 1
+
+      if (this.masterPanel === 0) {
+        if (this.myRoom.clients.length > 0) {
+          this.toggleRoom()
+          this.masterPanel = 1
+        } else {
+          this.$notif('No clients connected', 'error')
+        }
+      } else {
+        this.toggleRoom()
+        this.masterPanel = 0
+      }
     },
     colorClient(user_id = null) {
       let object = {
@@ -733,12 +774,11 @@ export default {
       this.facingUser = !this.facingUser
       this.startVideo()
     },
-    nextStep(n) {
-      if (n === this.steps) {
-        this.pictureStepper = 1
-      } else {
-        this.pictureStepper = n + 1
-      }
+    previousDetectionStep() {
+      this.detectionStepper -= 1
+    },
+    nextDetectionStep() {
+      this.detectionStepper += 1
     },
     isBusyAnalysing() {
       return this.isAnalysing

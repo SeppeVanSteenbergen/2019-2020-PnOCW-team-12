@@ -38,6 +38,14 @@ export default {
   methods: {
     master() {
       try {
+        console.log(this.myRoom)
+
+        if (typeof  this.myRoom !== 'undefined' && this.myRoom !== null) {
+          if (!this.myRoom.open) {
+            this.toggleRoom()
+          }
+        }
+
         this.$router.push({ name: 'master' })
         this.$socket.emit('createRoom')
       } catch (e) {
