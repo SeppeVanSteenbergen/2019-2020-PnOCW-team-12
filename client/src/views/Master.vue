@@ -396,14 +396,14 @@
                         accept="image/*"
                         @change="loadFile"
                       ></v-file-input>
-                      <v-btn color="primary" @click="executeUploadImage"
-                        >Send Image</v-btn
-                      >
                       <canvas
                         height="0px"
                         width="0px"
                         ref="drawCanvas"
                       ></canvas>
+                      <v-btn color="primary" @click="executeUploadImage" style="margin-top: 10px"
+                        >Send Image</v-btn
+                      >
                     </v-expansion-panel-content>
                   </v-expansion-panel>
                   <v-expansion-panel>
@@ -456,9 +456,12 @@
                       </v-expansion-panels>
                       <v-divider class="mx-4"></v-divider>
                       <v-spacer></v-spacer>
-                      <v-btn style="margin:10px" color="primary" @click="executeVideo">{{
-                        videoButtonLabel
-                      }}</v-btn>
+                      <v-btn
+                        style="margin:10px"
+                        color="primary"
+                        @click="executeVideo"
+                        >{{ videoButtonLabel }}</v-btn
+                      >
                       <!--<v-btn color="primary" @click="startSync()">Resync</v-btn>-->
                     </v-expansion-panel-content>
                   </v-expansion-panel>
@@ -941,17 +944,17 @@ export default {
 
         // get all the data
         let info = ImageTools.createPictureCanvas(
-                this.analysedImage.width,
-                this.analysedImage.height,
-                this.analysedImage
+          this.analysedImage.width,
+          this.analysedImage.height,
+          this.analysedImage
         )
 
         for (let i = 0; i < this.analysedImage.screens.length; i++) {
           let cssMatrix = this.analysedImage.screens[i].cssMatrix
 
           let user_id = this.myRoom.clients[
-                  this.analysedImage.screens[i].clientCode
-                  ]
+            this.analysedImage.screens[i].clientCode
+          ]
 
           let css = this.calcCSS(info, cssMatrix)
 

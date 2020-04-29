@@ -6,8 +6,8 @@
       <v-app-bar app clipped-left>
         <v-app-bar-nav-icon @click="toggleDrawer"></v-app-bar-nav-icon>
         <v-toolbar-title class="headline text-uppercase">
-          <span>Screen</span>
-          <span class="font-weight-light">Caster</span>
+          <span style="color: #2196f3; font-weight: bold">S</span>
+          <span class="font-weight-light" style="font-size: 17px">caster</span>
         </v-toolbar-title>
         <v-spacer></v-spacer>
 
