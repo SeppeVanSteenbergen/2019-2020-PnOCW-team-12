@@ -1,8 +1,8 @@
 <template>
   <v-container fluid style="padding-top: 110px">
-    <v-row align="center" justify="center" dense>
+    <v-row align="center" justify="center" max-width="240px" dense>
       <div>
-        <v-card max-width="220px">
+        <v-card width="240px">
           <v-toolbar color="primary" dark flat>
             <v-toolbar-title>
               {{
@@ -41,7 +41,7 @@
           </v-container>
         </v-card>
         <br />
-        <v-btn @click="goFullscreen()">Go Fullscreen</v-btn>
+        <v-btn @click="goFullscreen()">Fullscreen</v-btn>
         <div
           v-show="isFullscreen"
           ref="canvWrap"

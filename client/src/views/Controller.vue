@@ -1,14 +1,14 @@
 <template>
-  <v-container fluid style="padding-top: 35px">
-    <v-row align="center" justify="center" min-height="300px" dense>
+  <v-container fluid style="padding-top: 32px">
+    <v-row align="center" justify="center" max-width="240px" dense>
       <div>
         <v-text-field
-                label="Enter Name"
-                single-line
-                solo
-                v-model="playerName"
+          label="Enter Name"
+          single-line
+          solo
+          v-model="playerName"
         ></v-text-field>
-        <v-card max-width="400px">
+        <v-card width="240px">
           <v-toolbar color="primary" dark flat>
             <v-toolbar-title>{{
               controllerRoom > -1

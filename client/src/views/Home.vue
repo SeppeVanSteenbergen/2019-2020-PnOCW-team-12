@@ -1,47 +1,45 @@
 <template>
   <v-container fluid style="padding-top: 110px">
-    <v-row align="center" justify="center" max-width="220px" dense>
-      <MasterClientCard v-on:master="master" v-on:client="client" v-on:controller="controller" />
+    <v-row align="center" justify="center" max-width="240px" dense>
+      <v-card width="240px">
+        <v-toolbar color="primary" dark flat>
+          <div class="flex-grow-1"></div>
+          <v-toolbar-title>Select your device role</v-toolbar-title>
+          <div class="flex-grow-1"></div>
+        </v-toolbar>
+        <v-container>
+          <div justify="center" align="center">
+            <v-btn
+              color="warning"
+              @click="master()"
+              style="margin-top: 13px; margin-bottom: 25px;"
+              >Master</v-btn
+            >
+            <br />
+            <v-btn color="error" @click="client()" style="margin-bottom: 25px;"
+              >Client</v-btn
+            >
+            <br />
+            <v-btn
+              color="green"
+              @click="controller()"
+              style="margin-bottom: 13px;"
+              >Controller</v-btn
+            >
+          </div>
+        </v-container>
+      </v-card>
     </v-row>
   </v-container>
 </template>
 <script>
-import axios from '../plugins/axios'
-import MasterClientCard from '../components/MasterClientCard'
 export default {
   name: 'home',
-  components: {
-    MasterClientCard
-  },
-  data() {
-    return {
-      something: ''
-    }
-  },
   methods: {
-    async action() {
-      /*console.log('sending request')
-      let result = await axios
-        .get('/login/guest')
-        .then(function(data) {
-          this.something = data.data
-        })
-        .catch(err => {
-          console.log(err)
-        })*/
-    },
-    showSnack() {
-      this.$store.dispatch('showSnackbar', {
-        text: 'hello there',
-        color: 'red',
-        time: 10000
-      })
-    },
     master() {
-      console.log('master')
-      this.$socket.emit('createRoom')
       try {
         this.$router.push({ name: 'master' })
+        this.$socket.emit('createRoom')
       } catch (e) {
         console.log(e)
       }

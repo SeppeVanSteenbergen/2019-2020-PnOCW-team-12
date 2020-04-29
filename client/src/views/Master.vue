@@ -1,85 +1,83 @@
 <template>
   <v-container fluid style="padding-top: 110px">
-    <v-row dense>
-      <v-col align="center" justify="center">
-        <v-card max-width="220px">
-          <v-toolbar color="primary" dark flat>
-            <v-toolbar-title>
-              {{
-                $store.getters.getRole.room >= 0
-                  ? 'Room ' + $store.getters.getRole.room
-                  : 'Not in Room'
-              }}
-            </v-toolbar-title>
-            <div class="flex-grow-1"></div>
-            <v-btn
-              v-if="typeof myRoom !== 'undefined'"
-              small
-              :color="myRoom !== null && myRoom.open ? 'success' : 'error'"
-              @click="toggleRoom()"
-            >
-              <v-icon>
-                {{
-                  myRoom !== null && myRoom.open ? 'mdi-lock-open' : 'mdi-lock'
-                }}
-              </v-icon>
-            </v-btn>
-          </v-toolbar>
-
-          <v-expansion-panels
-            :value="0"
-            :popout="false"
-            :inset="false"
-            :focusable="false"
+    <v-row align="center" justify="center" max-width="240px" dense>
+      <v-card width="240px">
+        <v-toolbar color="primary" dark flat>
+          <v-toolbar-title>
+            {{
+              $store.getters.getRole.room >= 0
+                ? 'Room ' + $store.getters.getRole.room
+                : 'Not in Room'
+            }}
+          </v-toolbar-title>
+          <div class="flex-grow-1"></div>
+          <v-btn
+            v-if="typeof myRoom !== 'undefined'"
+            small
+            :color="myRoom !== null && myRoom.open ? 'success' : 'error'"
+            @click="toggleRoom()"
           >
-            <v-expansion-panel>
-              <v-expansion-panel-header>Clients</v-expansion-panel-header>
-              <v-expansion-panel-content>
-                <v-list v-if="myRoom !== null">
-                  <v-list-item
-                    v-for="client_id in myRoom.clients"
-                    :key="client_id"
-                  >
-                    <v-list-item-icon>
-                      <v-icon color="primary">mdi-account</v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-content>
-                      <v-list-item-title
-                        class="primary--text"
-                        v-text="'Client ' + myRoom.clients.indexOf(client_id)"
-                      ></v-list-item-title>
-                    </v-list-item-content>
-                  </v-list-item>
-                </v-list>
-              </v-expansion-panel-content>
-            </v-expansion-panel>
-            <v-expansion-panel v-if="myRoom !== null && !myRoom.open">
-              <v-expansion-panel-header>Commands</v-expansion-panel-header>
-              <v-expansion-panel-content>
-                <v-btn @click="floodFillDialog = true" text color="primary"
-                  >Floodfill</v-btn
+            <v-icon>
+              {{
+                myRoom !== null && myRoom.open ? 'mdi-lock-open' : 'mdi-lock'
+              }}
+            </v-icon>
+          </v-btn>
+        </v-toolbar>
+
+        <v-expansion-panels
+          v-model="masterPanel"
+          :popout="false"
+          :inset="false"
+          :focusable="false"
+        >
+          <v-expansion-panel>
+            <v-expansion-panel-header>Clients</v-expansion-panel-header>
+            <v-expansion-panel-content>
+              <v-list v-if="myRoom !== null">
+                <v-list-item
+                  v-for="client_id in myRoom.clients"
+                  :key="client_id"
                 >
-                <v-btn @click="drawDirectionDialog = true" text color="primary"
-                  >Draw Direction</v-btn
-                >
-                <v-btn @click="countdownDialog = true" text color="primary"
-                  >Countdown</v-btn
-                >
-                <v-btn
-                  @click="
-                    screenDetectionDialog = true
-                    executeDisplayDetectionScreens()
-                    nextStep(0)
-                  "
-                  text
-                  color="primary"
-                  >Screen Detection</v-btn
-                >
-              </v-expansion-panel-content>
-            </v-expansion-panel>
-          </v-expansion-panels>
-        </v-card>
-      </v-col>
+                  <v-list-item-icon>
+                    <v-icon color="primary">mdi-account</v-icon>
+                  </v-list-item-icon>
+                  <v-list-item-content>
+                    <v-list-item-title
+                      class="primary--text"
+                      v-text="'Client ' + myRoom.clients.indexOf(client_id)"
+                    ></v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-list>
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+          <v-expansion-panel v-if="myRoom !== null">
+            <v-expansion-panel-header>Commands</v-expansion-panel-header>
+            <v-expansion-panel-content>
+              <v-btn @click="floodFillDialog = true" text color="primary"
+                >Floodfill</v-btn
+              >
+              <v-btn @click="drawDirectionDialog = true" text color="primary"
+                >Draw Direction</v-btn
+              >
+              <v-btn @click="countdownDialog = true" text color="primary"
+                >Countdown</v-btn
+              >
+              <v-btn
+                @click="
+                  screenDetectionDialog = true
+                  executeDisplayDetectionScreens()
+                  nextStep(0)
+                "
+                text
+                color="primary"
+                >Screen Detection</v-btn
+              >
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+        </v-expansion-panels>
+      </v-card>
     </v-row>
     <v-btn color="error" fab large dark bottom left fixed @click="disconnect()">
       <v-icon class="v-rotate-90">mdi-exit-to-app</v-icon>
@@ -514,7 +512,6 @@
   </v-container>
 </template>
 <script>
-import PictureUpload from '../components/PictureUpload'
 import AlgorithmService from '../services/AlgorithmService'
 import Animation from '../algorithms/Animations'
 import Communicator from '../algorithms/Communicator'
@@ -528,6 +525,7 @@ export default {
   data() {
     return {
       color: { r: 200, g: 100, b: 0, a: 1 },
+      masterPanel: 0,
 
       //floodfill mode
       floodFillDialog: false,
@@ -585,11 +583,7 @@ export default {
       trackingButtonLabel: 'Start Tracking'
     }
   },
-  components: {
-    PictureUpload
-  },
   methods: {
-    action() {},
     master() {},
     client() {},
     disconnect() {
@@ -882,7 +876,7 @@ export default {
       }
       let formData = new FormData()
       formData.append('videofile', this.videoFile)
-      this.$notif('uploading video..', 'info')
+      this.$notif('uploading video...', 'info')
       this.videoUploadProgress = 0
       this.videoUploadingActive = true
       this.$axios
@@ -1197,7 +1191,6 @@ export default {
       this.sendCSSImage(this.drawingImg)
     },
     sendCSSImage(img) {
-
       // get all the data
       let info = ImageTools.createPictureCanvas(
         this.drawingImg.width,
