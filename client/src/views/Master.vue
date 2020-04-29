@@ -267,10 +267,9 @@
                 <v-file-input
                   style="margin: 10px"
                   v-model="displayFileVideo"
-                  color="deep-purple accent-4"
-                  counter
+                  color="primary"
                   label="Image input"
-                  placeholder="Select your files"
+                  placeholder="Select slave setup image"
                   prepend-icon="mdi-paperclip"
                   outlined
                   accept="image/*"
@@ -378,10 +377,9 @@
                     <v-expansion-panel-content>
                       <v-file-input
                         v-model="displayFile"
-                        color="deep-purple accent-4"
-                        counter
+                        color="primary"
                         label="Image input"
-                        placeholder="Select your files"
+                        placeholder="Select image"
                         prepend-icon="mdi-paperclip"
                         outlined
                         :show-size="1000"
@@ -409,10 +407,9 @@
                           <v-expansion-panel-content>
                             <v-file-input
                               v-model="displayFileVideo"
-                              color="deep-purple accent-4"
-                              counter
+                              color="primary"
                               label="Image input"
-                              placeholder="Select your files"
+                              placeholder="Select video"
                               prepend-icon="mdi-paperclip"
                               outlined
                               accept="video/mp4, video/x-m4v, video/*"
@@ -449,10 +446,10 @@
                       </v-expansion-panels>
                       <v-divider class="mx-4"></v-divider>
                       <v-spacer></v-spacer>
-                      <v-btn color="primary" @click="executeVideo">{{
+                      <v-btn style="margin:10px" color="primary" @click="executeVideo">{{
                         videoButtonLabel
                       }}</v-btn>
-                      <v-btn color="primary" @click="startSync()">Resync</v-btn>
+                      <!--<v-btn color="primary" @click="startSync()">Resync</v-btn>-->
                     </v-expansion-panel-content>
                   </v-expansion-panel>
                   <v-expansion-panel>
@@ -898,49 +895,52 @@ export default {
     },
 
     sendVideoURLToClients(videoURL) {
-      this.videoUploadingActive = false
-      this.videoUploadProgress = 0
+      try {
+        this.videoUploadingActive = false
+        this.videoUploadProgress = 0
 
-      // get all the data
-      let info = ImageTools.createPictureCanvas(
-        this.analysedImage.width,
-        this.analysedImage.height,
-        this.analysedImage
-      )
+        // get all the data
+        let info = ImageTools.createPictureCanvas(
+                this.analysedImage.width,
+                this.analysedImage.height,
+                this.analysedImage
+        )
 
-      for (let i = 0; i < this.analysedImage.screens.length; i++) {
-        let cssMatrix = this.analysedImage.screens[i].cssMatrix
+        for (let i = 0; i < this.analysedImage.screens.length; i++) {
+          let cssMatrix = this.analysedImage.screens[i].cssMatrix
 
-        let user_id = this.myRoom.clients[
-          this.analysedImage.screens[i].clientCode
-        ]
+          let user_id = this.myRoom.clients[
+                  this.analysedImage.screens[i].clientCode
+                  ]
 
-        let css = this.calcCSS(info, cssMatrix)
+          let css = this.calcCSS(info, cssMatrix)
 
-        let obj = {
-          payload: {
-            type: 'load-video',
-            data: {
-              videoURL: videoURL,
-              css: css,
-              w: info.w,
-              h: info.h,
-              ox: info.minx,
-              oy: info.miny
-            }
-          },
-          to: user_id
+          let obj = {
+            payload: {
+              type: 'load-video',
+              data: {
+                videoURL: videoURL,
+                css: css,
+                w: info.w,
+                h: info.h,
+                ox: info.minx,
+                oy: info.miny
+              }
+            },
+            to: user_id
+          }
+
+          this.$socket.emit('screenCommand', obj)
         }
-
-        this.$socket.emit('screenCommand', obj)
+        this.startSync()
+      } catch (e) {
+        this.$notif('Uploading video failed!', 'error')
       }
-
-      this.startSync()
     },
 
     executeUploadImage() {
       if (this.analysedImage.screens.length > this.myRoom.clients.length) {
-        this.$notif('Detection was not succesful', 'error')
+        this.$notif('Detection was not succesful!', 'error')
         return
       }
       let formData = new FormData()
