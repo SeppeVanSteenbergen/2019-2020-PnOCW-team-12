@@ -915,22 +915,7 @@ export default {
           this.analysedImage.screens[i].clientCode
         ]
 
-        let css =
-          'z-index: 10; position: fixed; left:' +
-          info.minx +
-          'px; top: ' +
-          info.miny +
-          'px; transform: matrix3d(' +
-          cssMatrix.join(', ') +
-          '); transform-origin: ' +
-          -info.minx +
-          'px ' +
-          -info.miny +
-          'px; width: ' +
-          info.w +
-          'px; height: ' +
-          info.h +
-          'px; object-fit: none; background:#000000'
+        let css = this.calcCSS(info, cssMatrix)
 
         let obj = {
           payload: {
@@ -982,22 +967,7 @@ export default {
               this.analysedImage.screens[i].clientCode
             ]
 
-            let css =
-              'z-index:10; position: fixed; left:' +
-              info.minx +
-              'px; top: ' +
-              info.miny +
-              'px; transform: matrix3d(' +
-              cssMatrix.join(', ') +
-              '); transform-origin: ' +
-              -info.minx +
-              'px ' +
-              -info.miny +
-              'px; width: ' +
-              info.w +
-              'px; height: ' +
-              info.h +
-              'px; object-fit: none; background:#000000'
+            let css = this.calcCSS(info, cssMatrix)
 
             this.executeDisplayImageCSS(
               user_id,
@@ -1191,6 +1161,25 @@ export default {
     sendImageCSS() {
       this.sendCSSImage(this.drawingImg)
     },
+    calcCSS(info, cssMatrix) {
+      let css =
+        'z-index: 10; position: fixed; left:' +
+        info.minx +
+        'px; top: ' +
+        info.miny +
+        'px; transform: matrix3d(' +
+        cssMatrix.join(', ') +
+        '); transform-origin: ' +
+        -info.minx +
+        'px ' +
+        -info.miny +
+        'px; width: ' +
+        info.w +
+        'px; height: ' +
+        info.h +
+        'px; object-fit: none; background:#000000'
+      return css
+    },
     sendCSSImage(img) {
       // get all the data
       let info = ImageTools.createPictureCanvas(
@@ -1208,22 +1197,7 @@ export default {
           this.analysedImage.screens[i].clientCode
         ]
 
-        let css =
-          'z-index:10; position: fixed; left:' +
-          info.minx +
-          'px; top: ' +
-          info.miny +
-          'px; transform: matrix3d(' +
-          cssMatrix.join(', ') +
-          '); transform-origin: ' +
-          -info.minx +
-          'px ' +
-          -info.miny +
-          'px; width: ' +
-          info.w +
-          'px; height: ' +
-          info.h +
-          'px; object-fit: none; background:#000000'
+        let css = this.calcCSS(info, cssMatrix)
 
         this.executeDisplayImageCSS(
           user_id,
@@ -1395,22 +1369,7 @@ export default {
             this.analysedImage.screens[i].clientCode
           ]
 
-          let css =
-            'z-index:10; position: fixed; left:' +
-            info.minx +
-            'px; top: ' +
-            info.miny +
-            'px; transform: matrix3d(' +
-            cssMatrix.join(', ') +
-            '); transform-origin: ' +
-            -info.minx +
-            'px ' +
-            -info.miny +
-            'px; width: ' +
-            info.w +
-            'px; height: ' +
-            info.h +
-            'px; object-fit: none; background:#000000'
+          let css = this.calcCSS(info, cssMatrix)
 
           let obj = {
             payload: {
