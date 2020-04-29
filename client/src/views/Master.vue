@@ -520,8 +520,8 @@
                 </v-row>
               </v-card>
               <v-progress-linear
-                :active="videoUploadingActive"
-                :value="videoUploadProgress"
+                :active="fileUploadingActive"
+                :value="fileUploadProgress"
                 height="20"
                 top
                 style="z-index: 9999; width: 100vw;position:fixed;left:0px"
@@ -595,8 +595,8 @@ export default {
       isAnimating: false,
       animationButtonLabel: 'Start Animation',
 
-      videoUploadingActive: false,
-      videoUploadProgress: 0,
+      fileUploadingActive: false,
+      fileUploadProgress: 0,
       videoLink: 'https://stylify.duckdns.org/vid.mp4',
 
       pictureCanvasInfo: null,
@@ -905,7 +905,7 @@ export default {
       }
     },
     uploadProgress(evt) {
-      this.videoUploadProgress = Math.round((evt.loaded / evt.total) * 100)
+      this.fileUploadProgress = Math.round((evt.loaded / evt.total) * 100)
     },
     async executeUploadVideo() {
       if (this.analysedImage.screens.length > this.myRoom.clients.length) {
@@ -915,8 +915,8 @@ export default {
       let formData = new FormData()
       formData.append('videofile', this.videoFile)
       this.$notif('uploading video...', 'info')
-      this.videoUploadProgress = 0
-      this.videoUploadingActive = true
+      this.fileUploadProgress = 0
+      this.fileUploadingActive = true
       this.$axios
         .post('upload/video', formData, {
           headers: {
@@ -936,8 +936,8 @@ export default {
 
     sendVideoURLToClients(videoURL) {
       try {
-        this.videoUploadingActive = false
-        this.videoUploadProgress = 0
+        this.fileUploadingActive = false
+        this.fileUploadProgress = 0
 
         // get all the data
         let info = ImageTools.createPictureCanvas(
@@ -978,21 +978,27 @@ export default {
       }
     },
 
-    executeUploadImage() {
+    async executeUploadImage() {
       if (this.analysedImage.screens.length > this.myRoom.clients.length) {
         this.$notif('Detection was not succesful!', 'error')
         return
       }
       let formData = new FormData()
       formData.append('imagefile', this.imageFile)
-
+      this.$notif('uploading image...', 'info')
+      this.fileUploadProgress = 0
+      this.fileUploadingActive = true
       this.$axios
         .post('upload/image', formData, {
           headers: {
             'Content-Type': 'multipart/formData'
-          }
+          },
+          onUploadProgress: this.uploadProgress
         })
         .then(result => {
+          this.$notif('Image upload successful', 'success')
+          this.fileUploadingActive = false
+          this.fileUploadProgress = 0
           // get all the data
           let info = ImageTools.createPictureCanvas(
             this.drawingImg.width,
@@ -1027,6 +1033,7 @@ export default {
           this.$notif('Image upload failed, Try Again', 'error')
         })
     },
+
     executeAnimation() {
       if (!this.isAnimating) {
         this.isAnimating = true
