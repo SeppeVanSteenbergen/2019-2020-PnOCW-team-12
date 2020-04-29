@@ -29,12 +29,9 @@
               : ''
           }}</span
         >
-        <!--<span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>-->
       </v-app-bar>
 
       <v-content>
-        <!--<H1>TEST {{socketMessage}}</H1>-->
         <router-view />
       </v-content>
       <v-snackbar
