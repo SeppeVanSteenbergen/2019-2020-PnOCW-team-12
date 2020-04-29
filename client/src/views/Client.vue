@@ -256,8 +256,6 @@ export default {
       this.canvasMode = false
     },
     floodScreenHandler(data) {
-      console.log('given command:')
-      console.log(data.command)
       this.runFloodScreenCommandList(data.command, 0)
     },
     displayDetectionScreenHandler(data) {
@@ -294,9 +292,6 @@ export default {
       this.countDownIntervalHandler(data.start, data.interval, data.startTime)
     },
     countdownRecursive(number, interval) {
-      console.log(
-        'countdown recursive num: ' + number + ' interval: ' + interval
-      )
       if (number === 0) {
         this.drawCounterFinish()
       } else {
@@ -360,7 +355,6 @@ export default {
     countDownInterval(start, interval, startTime) {
       if (!this.countDownRunning) return
       let time = this.$store.state.sync.delta + Date.now()
-      console.log('server time: ' + time)
       if (time < startTime) return
       let number = start - Math.floor((time - startTime) / interval)
 
@@ -410,7 +404,6 @@ export default {
       this.drawNumberOnCanvas('BOOM!')
     },
     drawDirectionsHandler(data) {
-      console.log('clearing console')
       this.clearCanvas()
       let ctx = this.canvas.getContext('2d')
       ctx.beginPath()
@@ -482,8 +475,6 @@ export default {
     },
     drawImageHandler(data) {
       const base64Image = data.image
-      console.log('got image as base64')
-      console.log(base64Image)
       const canvas = this.canvas
       let ctx = this.canvas.getContext('2d')
       let image = new window.Image()
@@ -610,8 +601,6 @@ export default {
     },
     animationInitHandler(data) {
       this.startTime = null
-      console.log('animation init data')
-      console.log(data)
       //create animation object
       this.animation = new Animation(
         data.triangulation,
@@ -660,8 +649,6 @@ export default {
     },
     delaunayHandler(data) {
       //create delaunay image and drawSnow on canvas
-      console.log('received triangulation')
-      console.log(data.triangulation)
       this.delaunayImage = AlgorithmService.delaunayImageTransparent(
         data.triangulation,
         data.midpoints,
