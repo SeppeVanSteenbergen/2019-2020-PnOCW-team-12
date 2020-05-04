@@ -1,3 +1,6 @@
+import Brief from './Brief'
+import './FASTDetector'
+
 export default class CameraTracking {
     constructor(callback) {
         this.framerate = 30;

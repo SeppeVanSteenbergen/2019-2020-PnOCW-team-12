@@ -1,6 +1,6 @@
 
 // https://trackingjs.com/api/Brief.js.html
-class Brief {
+export default class Brief {
   static N = 512
   static randomImageOffsets = {}
   static randomWindowOffsets = null

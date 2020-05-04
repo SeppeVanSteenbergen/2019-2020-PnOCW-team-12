@@ -1,5 +1,4 @@
 import Triangle from './Triangle'
-import Point from './Point'
 
 export default class Delaunay {
   static randomPointsGenerator(nbPoints, canvas) {
