@@ -3,6 +3,7 @@ import './FASTDetector'
 
 export default class CameraTracking {
     constructor(callback) {
+        console.log("start tracking")
         this.framerate = 30;
         this.video = document.createElement('canvas');
         this.canvas = document.createElement('canvas');
@@ -21,6 +22,7 @@ export default class CameraTracking {
             if (results.every(result => result.state === 'granted')) {
                 const options = { frequency: 10, coordinateSystem: 'device' }
                 this.sensor = new RelativeOrientationSensor(options)
+                console.log("granted");
 
                 this.sensor.addEventListener('error', error => {
                     if (event.error.name === 'NotReadableError') {
@@ -33,6 +35,7 @@ export default class CameraTracking {
                 console.log('No permissions to use RelativeOrientationSensor.')
             }
         })
+        console.log("seted up sensors");
         //setup camera en beginnen lezen (door toe te wijzen aan video element)
         navigator.mediaDevices.getUserMedia({
                 video: {
@@ -41,6 +44,7 @@ export default class CameraTracking {
                 audio:false
             }
         ).then(function(stream) {
+            console.log("setted up video")
             this.video.srcObject = stream;
             this.video.onloadedmetadata = function(e) {
                 this.video.play();
@@ -62,7 +66,6 @@ export default class CameraTracking {
     }
     stopSensor() {
         this.sensor.stop()
-        this.video.srcObject.endOfStream();
     }
 
     calculateTransformation(callback){
