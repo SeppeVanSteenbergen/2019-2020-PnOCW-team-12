@@ -608,6 +608,7 @@ export default {
       pictureCanvasInfo: null,
 
       tracking: null,
+      beginOffsetTracking: 0,
       isTracking: false,
       trackingButtonLabel: 'Start Tracking'
     }
@@ -1467,19 +1468,25 @@ export default {
         to: 'all'
       }
       this.$socket.emit('screenCommand', object)
+      this.beginOffsetTracking = 0
       this.tracking = new Sensors(this.handleTracking)
     },
     handleTracking(data) {
-      let object = {
-        payload: {
-          type: 'tracking-update',
-          data: {
-            css: data
-          }
-        },
-        to: 'all'
+      if (this.beginOffsetTracking < 10) {
+        this.beginOffsetTracking += 1
+        this.tracking.resetStartMatrix()
+      } else {
+        let object = {
+          payload: {
+            type: 'tracking-update',
+            data: {
+              css: data
+            }
+          },
+          to: 'all'
+        }
+        this.$socket.emit('screenCommand', object)
       }
-      this.$socket.emit('screenCommand', object)
     },
     executeStartTracking() {
       this.executeInitTracking()

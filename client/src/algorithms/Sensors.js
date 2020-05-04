@@ -17,7 +17,7 @@ export default class Sensors {
           if (this.startMatrix === null) {
             this.startMatrix = DOMMatrix.fromMatrix(rotationMatrix.inverse())
           }
-          rotationMatrix.preMultiplySelf(this.startMatrix)
+          rotationMatrix.multiplySelf(this.startMatrix)
 
           callback(rotationMatrix.toString())
         })
@@ -32,6 +32,9 @@ export default class Sensors {
         console.log('No permissions to use RelativeOrientationSensor.')
       }
     })
+  }
+  resetStartMatrix() {
+    this.startMatrix = null
   }
   startSensor() {
     this.sensor.start()
