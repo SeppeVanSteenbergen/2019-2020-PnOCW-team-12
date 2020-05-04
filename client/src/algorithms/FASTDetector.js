@@ -1,48 +1,48 @@
-function FASTDetector(rgbaPixels, width, threshold){
-    let nbContiguous = 12;
-    let interestingPoints = [];
+function FASTDetector(rgbaPixels, width, threshold) {
+  let nbContiguous = 12
+  let interestingPoints = []
 
-  let grayMatrix = grayScaleMatrix(rgbaPixels, width);
+  let grayMatrix = grayScaleMatrix(rgbaPixels, width)
 
   for (let y = 3; y < grayMatrix.length - 3; y++) {
     for (let x = 3; x < grayMatrix[0].length - 3; x++) {
-      let intensity = grayMatrix[y][x];
-      let circle = bresenhamCircle([x, y]);
+      let intensity = grayMatrix[y][x]
+      let circle = bresenhamCircle([x, y])
       for (let i = 0; i < circle.length; i++)
-          circle[i] = grayMatrix[circle[i][1]][circle[i][0]];
-      let nbOutOfThreshold = 0;
+        circle[i] = grayMatrix[circle[i][1]][circle[i][0]]
+      let nbOutOfThreshold = 0
 
-      if (outOfThreshold(intensity, circle[0], threshold)) nbOutOfThreshold++;
-      if (outOfThreshold(intensity, circle[4], threshold)) nbOutOfThreshold++;
-      if (outOfThreshold(intensity, circle[8], threshold)) nbOutOfThreshold++;
-      if (outOfThreshold(intensity, circle[12], threshold)) nbOutOfThreshold++;
+      if (outOfThreshold(intensity, circle[0], threshold)) nbOutOfThreshold++
+      if (outOfThreshold(intensity, circle[4], threshold)) nbOutOfThreshold++
+      if (outOfThreshold(intensity, circle[8], threshold)) nbOutOfThreshold++
+      if (outOfThreshold(intensity, circle[12], threshold)) nbOutOfThreshold++
 
-      let intensityStreak = 0;
+      let intensityStreak = 0
 
       if (nbOutOfThreshold >= 3) {
-        nbOutOfThreshold = 0;
+        nbOutOfThreshold = 0
         for (let i in circle) {
           if (outOfThreshold(intensity, circle[i], threshold)) {
-            nbOutOfThreshold++;
+            nbOutOfThreshold++
           } else {
-            intensityStreak = Math.max(intensityStreak, nbOutOfThreshold);
-            nbOutOfThreshold = 0;
+            intensityStreak = Math.max(intensityStreak, nbOutOfThreshold)
+            nbOutOfThreshold = 0
           }
         }
         //x en y apart, dit is efficiënter qua geheugen
         if (nbOutOfThreshold >= nbContiguous) {
-          interestingPoints.push(x);
-          interestingPoints.push(y);
+          interestingPoints.push(x)
+          interestingPoints.push(y)
         }
       }
     }
   }
 
-  return interestingPoints;
+  return interestingPoints
 }
 
 function outOfThreshold(intensity1, intensity2, threshold) {
-  return Math.abs(intensity1 - intensity2) > threshold;
+  return Math.abs(intensity1 - intensity2) > threshold
 }
 //radius = 3 voor FAST! => dit moet 16 pixels teruggeven
 function bresenhamCircle(midPointCoo) {
@@ -63,49 +63,50 @@ function bresenhamCircle(midPointCoo) {
     [-3, -1],
     [-2, -2],
     [-1, -3]
-  ];
+  ]
   for (let i = 0; i < circle.length; i++) {
-    circle[i][0] += midPointCoo[0];
-    circle[i][1] += midPointCoo[1];
+    circle[i][0] += midPointCoo[0]
+    circle[i][1] += midPointCoo[1]
   }
 
-  return circle;
+  return circle
 }
 
 function grayScaleMatrix(rgbaPixels, width) {
-    let y = 0;
-    let matrix = [[]];
-    for(let i = 0; i < rgbaPixels.length; i += 4){
-        //Verschil zie: https://www.tutorialspoint.com/dip/grayscale_to_rgb_conversion.htm
-        let grayScale = 0.3 * rgbaPixels[i] + 0.59 * rgbaPixels[i + 1] + 0.11 * rgbaPixels[i + 1];
-        //let grayScale = (rgbaPixels[i] + rgbaPixels[i + 1] + rgbaPixels[i + 2]) / 3;
-        if(matrix[y].length >= width){
-            y++;
-            if(i !== rgbaPixels.length - 1)
-            matrix.push([]);
-        }
-        matrix[y].push(grayScale);
+  let y = 0
+  let matrix = [[]]
+  for (let i = 0; i < rgbaPixels.length; i += 4) {
+    //Verschil zie: https://www.tutorialspoint.com/dip/grayscale_to_rgb_conversion.htm
+    let grayScale =
+      0.3 * rgbaPixels[i] + 0.59 * rgbaPixels[i + 1] + 0.11 * rgbaPixels[i + 1]
+    //let grayScale = (rgbaPixels[i] + rgbaPixels[i + 1] + rgbaPixels[i + 2]) / 3;
+    if (matrix[y].length >= width) {
+      y++
+      if (i !== rgbaPixels.length - 1) matrix.push([])
+    }
+    matrix[y].push(grayScale)
   }
 
-  return matrix;
+  return matrix
 }
 
-function grayScaleImgData(imgData,fillRGBA) {
-    let pixels = imgData.data
-    let gray = new Uint8ClampedArray(pixels.length);
-    let p = 0;
-    let w = 0;
-    for (let i = 0; i < imgData.height; i++) {
-        for (let j = 0; j < imgData.width; j++) {
-            let value = pixels[w] * 0.299 + pixels[w + 1] * 0.587 + pixels[w + 2] * 0.114;
-            gray[p++] = value;
-            if (fillRGBA) {
-                gray[p++] = value;
-                gray[p++] = value;
-                gray[p++] = pixels[w + 3];
-            }
-            w += 4;
-        }
+function grayScaleImgData(imgData, fillRGBA) {
+  let pixels = imgData.data
+  let gray = new Uint8ClampedArray(pixels.length)
+  let p = 0
+  let w = 0
+  for (let i = 0; i < imgData.height; i++) {
+    for (let j = 0; j < imgData.width; j++) {
+      let value =
+        pixels[w] * 0.299 + pixels[w + 1] * 0.587 + pixels[w + 2] * 0.114
+      gray[p++] = value
+      if (fillRGBA) {
+        gray[p++] = value
+        gray[p++] = value
+        gray[p++] = pixels[w + 3]
+      }
+      w += 4
     }
-    return gray;
+  }
+  return gray
 }
