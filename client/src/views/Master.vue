@@ -565,7 +565,6 @@ export default {
       //draw direction mode
       drawDirectionDialog: false,
       angleSlider: 0,
-      directionLabel: 'Hello',
 
       //countdown mode
       countdownDialog: false,
@@ -693,7 +692,6 @@ export default {
             command: [
               {
                 deg: this.angleSlider,
-                label: this.directionLabel
               }
             ]
           }
@@ -737,20 +735,6 @@ export default {
     },
     executeDisplayImage(user_id = null) {
       let base64 = this.getBase64Image()
-      let object = {
-        payload: {
-          type: 'display-image',
-          data: {
-            image: base64 // base64 image
-          }
-        },
-        to: user_id === null ? 'all' : user_id
-      }
-
-      this.$socket.emit('screenCommand', object)
-    },
-    sendImageToUser(imgData, user_id = null) {
-      let base64 = this.imgDataToBase64(imgData)
       let object = {
         payload: {
           type: 'display-image',
