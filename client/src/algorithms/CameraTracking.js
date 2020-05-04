@@ -56,7 +56,14 @@ export default class CameraTracking {
           this.canvas.height = this.video.videoHeight
           console.log('setted up video')
 
-          this.calculateTransformation(callback)
+          new Promise(() => {
+            while (true) {
+              Promise.resolve(this.calculateTransformation())
+            }
+          }).then(result => {
+            console.log('callback succeeded')
+            callback(result)
+          })
         }
       })
       .catch(function(err) {
@@ -155,9 +162,7 @@ export default class CameraTracking {
     rotationMatrix.translateSelf(trans.x, trans.y)
     console.log('final rotation Matrix')
     console.log(rotationMatrix)
-    callback(rotationMatrix.toString())
-    console.log('callback succeeded')
-    //en opnieuw
-    this.calculateTransformation(callback)
+
+    return rotationMatrix.toString()
   }
 }
