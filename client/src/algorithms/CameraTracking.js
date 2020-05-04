@@ -52,7 +52,7 @@ export default class CameraTracking {
 
     if (results.every(result => result.state === 'granted')) {
       const options = { frequency: 10, coordinateSystem: 'device' }
-      let sensor = new RelativeOrientationSensor(options)
+      let sensor = await new RelativeOrientationSensor(options)
 
       sensor.addEventListener('error', error => {
         if (event.error.name === 'NotReadableError') {
