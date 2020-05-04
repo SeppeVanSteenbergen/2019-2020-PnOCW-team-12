@@ -1483,7 +1483,6 @@ export default {
         this.executeInitTracking()
       } else {
         this.tracking.startSensor()
-        this.executeResetTracking()
       }
     },
     executeStopTracking() {
@@ -1497,9 +1496,10 @@ export default {
       this.$socket.emit('screenCommand', object)
 
       this.tracking.stopSensor()
+      this.executeResetTracking()
     },
     executeResetTracking() {
-      this.tracking.setStartMatrix()
+      this.tracking.resetStartMatrix()
     }
   },
   mounted() {
