@@ -329,7 +329,7 @@ export default {
     displayImageCSSHandler(data) {
       this.canvWrap.style = data.css
 
-      let image = new window.Image()
+      let image = new Image()
       let canvas = this.canvas
       let canvWrap = this.canvWrap
 
