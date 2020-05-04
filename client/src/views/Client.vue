@@ -52,7 +52,7 @@
             ref="canvas"
             id="mainCanvas"
             @click="isFullscreen = false"
-            style="position:fixed; left:0; top:0; z-index:10; width:100%; height:100%"
+            style="position:fixed; left:0; top:0; z-index:10"
           ></canvas>
           <video ref="vid">
             <source :src="videoURL" />
