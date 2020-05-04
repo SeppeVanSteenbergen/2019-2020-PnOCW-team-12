@@ -1469,14 +1469,9 @@ export default {
         to: 'all'
       }
       this.$socket.emit('screenCommand', object)
-      this.beginOffsetTracking = 0
       this.tracking = new CameraTracking(this.handleTracking)
     },
     handleTracking(data) {
-      if (this.beginOffsetTracking < 5) {
-        this.beginOffsetTracking += 1
-        this.tracking.resetStartMatrix()
-      } else {
         let object = {
           payload: {
             type: 'tracking-update',
