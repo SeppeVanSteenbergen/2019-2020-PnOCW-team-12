@@ -547,6 +547,7 @@ import AnalyseEnv from '../env/AnalyseEnv'
 import WaitEnv from '../env/WaitEnv'
 import ImageTools from '../algorithms/ImageTools'
 import Sensors from '../algorithms/Sensors'
+import CameraTracking from "../algorithms/CameraTracking";
 
 export default {
   name: 'master',
@@ -1469,7 +1470,7 @@ export default {
       }
       this.$socket.emit('screenCommand', object)
       this.beginOffsetTracking = 0
-      this.tracking = new Sensors(this.handleTracking)
+      this.tracking = new CameraTracking(this.handleTracking)
     },
     handleTracking(data) {
       if (this.beginOffsetTracking < 5) {
