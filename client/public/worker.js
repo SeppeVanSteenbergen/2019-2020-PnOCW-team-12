@@ -6,7 +6,6 @@ importScripts(
   'algorithms/Image.js',
   'algorithms/Island.js',
   'algorithms/Line.js',
-  'algorithms/PermutationConverter.js',
   'algorithms/PixelIterator.js',
   'algorithms/Reconstructor.js',
   'algorithms/RGBBarcodeScanner.js',

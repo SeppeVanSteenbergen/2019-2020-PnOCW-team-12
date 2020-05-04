@@ -11,19 +11,6 @@ class Screen {
     this.clientCode = clientCode
 
     if (screenImgOriginal !== null && clientInfo !== null) {
-      //let transformedTempImage = screenImgOriginal
-      /*this.map(
-        screenImgOriginal,
-        this.corners,
-        600,
-        600
-      );*/
-
-      console.log('transformed image')
-      //console.log(transformedTempImage);
-      //this.clientCode = this.findClientCode(transformedTempImage)
-      console.log('clientCode: ' + this.clientCode)
-
       if (typeof this.clientInfo !== 'undefined' && this.clientCode !== null) {
         try {
           this.width = this.clientInfo[this.clientCode].size.width
@@ -36,27 +23,6 @@ class Screen {
         }
       }
     }
-  }
-
-  orientationMatrix() {
-    return [
-      [Math.cos(this.orientation), -Math.sin(this.orientation)],
-      [Math.sin(this.orientation), Math.cos(this.orientation)]
-    ]
-  }
-
-  /**
-   * Find the client code from the encoded barcode in the screen
-   */
-  findClientCode(img) {
-    let barcode = BarcodeScanner.scan(img, 30)
-    // let barcode2 = BarcodeScanner.scan2(img, 30)
-    console.log('barcode 1: ' + barcode)
-    // console.log('barcode 2: ' + barcode2)
-    if (barcode !== null) {
-      return PermutationConverter.decode(barcode)
-    }
-    return null
   }
 
   /**

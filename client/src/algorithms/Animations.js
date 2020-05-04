@@ -193,10 +193,6 @@ export default class Animations {
   }
 
   getNextFrame(frame, startTime, currentTime) {
-    // console.log(frame-6)
-    // console.log(Math.round((Date.now()-startTime)/(1000/this.fps)))
-    // console.log("-----")
-
     if (frame - 6 < Math.round((currentTime - startTime) / (1000 / this.fps))) {
       this.updateFrame()
       this.updateFrame()
@@ -269,10 +265,6 @@ export default class Animations {
       this.setDirection(this.endPoint, newNeighbour)
       this.firstPoint = this.endPoint.slice()
       this.endPoint = newNeighbour
-      console.log(
-        this.firstPoint + ' ---> ' + this.endPoint + ' angle: ' + this.angle
-      )
-      console.log(this.dy)
     }
 
     this.angle =
@@ -308,7 +300,6 @@ export default class Animations {
     let line = new Line(beginPoint, endPoint)
     this.dx = line.dx / Math.abs(line.dx)
     this.dy = line.slope * this.dx
-    console.log('bruh', line.dx, this.dy)
     let scale = Math.sqrt(Math.pow(this.dx, 2) + Math.pow(this.dy, 2))
     this.dx /= scale / this.speed
     this.dy /= scale / this.speed
