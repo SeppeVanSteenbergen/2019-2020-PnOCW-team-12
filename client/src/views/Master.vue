@@ -1469,7 +1469,7 @@ export default {
         to: 'all'
       }
       this.$socket.emit('screenCommand', object)
-      this.tracking = new CameraTracking(this.handleTracking)
+      this.tracking = new CameraTracking()
     },
     handleTracking(data) {
       let object = {
@@ -1485,6 +1485,12 @@ export default {
     },
     executeStartTracking() {
       this.executeInitTracking()
+
+      while (this.isTracking) {
+        let transformation = this.tracking.calculateTransformation()
+        console.log(transformation)
+        this.handleTracking(transformation)
+      }
     },
     executeStopTracking() {
       let object = {

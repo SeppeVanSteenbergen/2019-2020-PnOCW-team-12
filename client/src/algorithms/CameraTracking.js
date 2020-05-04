@@ -2,7 +2,7 @@ import Brief from './Brief'
 import { FASTDetector, grayScaleImgData } from './FASTDetector'
 
 export default class CameraTracking {
-  constructor(callback) {
+  constructor() {
     console.log('start tracking')
     this.framerate = 30
     this.video = document.createElement('video')
@@ -55,8 +55,6 @@ export default class CameraTracking {
           this.canvas.width = this.video.videoWidth
           this.canvas.height = this.video.videoHeight
           console.log('setted up video')
-
-          this.calculateTransformation(callback)
         }
       })
       .catch(function(err) {
@@ -77,7 +75,7 @@ export default class CameraTracking {
     this.video.pause()
   }
 
-  calculateTransformation(callback) {
+  calculateTransformation() {
     let fictiveDistance = 1000
 
     //transformatie (rotatie) door de sensors
@@ -144,11 +142,7 @@ export default class CameraTracking {
     }
 
     rotationMatrix.translateSelf(trans.x, trans.y)
-    console.log('final rotation Matrix')
-    console.log(rotationMatrix)
-    callback(rotationMatrix.toString())
-    console.log('callback succeeded')
-    //en opnieuw
-    this.calculateTransformation(callback)
+
+    return rotationMatrix.toString()
   }
 }
