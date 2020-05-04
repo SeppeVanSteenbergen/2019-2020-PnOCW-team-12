@@ -401,7 +401,10 @@
                         width="0px"
                         ref="drawCanvas"
                       ></canvas>
-                      <v-btn color="primary" @click="executeUploadImage" style="margin-top: 10px"
+                      <v-btn
+                        color="primary"
+                        @click="executeUploadImage"
+                        style="margin-top: 10px"
                         >Send Image</v-btn
                       >
                     </v-expansion-panel-content>
@@ -1479,7 +1482,7 @@ export default {
       this.$socket.emit('screenCommand', object)
     },
     executeStartTracking() {
-        this.executeInitTracking()
+      this.executeInitTracking()
     },
     executeStopTracking() {
       let object = {

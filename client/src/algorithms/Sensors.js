@@ -7,12 +7,13 @@ export default class Sensors {
       navigator.permissions.query({ name: 'gyroscope' })
     ]).then(results => {
       if (results.every(result => result.state === 'granted')) {
-        const options = { frequency: 30, coordinateSystem: 'device' }
+        const options = { frequency: 10, coordinateSystem: 'device' }
         this.sensor = new RelativeOrientationSensor(options)
 
         this.sensor.addEventListener('reading', () => {
           let rotationMatrix = new DOMMatrix()
           this.sensor.populateMatrix(rotationMatrix)
+          console.log(rotationMatrix)
 
           if (this.startMatrix === null) this.startMatrix = rotationMatrix.inverse()
           rotationMatrix.multiplySelf(this.startMatrix)
@@ -36,5 +37,6 @@ export default class Sensors {
   }
   stopSensor() {
     this.sensor.stop()
+    this.sensor.deactivate()
   }
 }
