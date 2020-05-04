@@ -14,64 +14,69 @@ export default class CameraTracking {
         //Setup sensors
         this.startMatrix = null
 
-        //Vragen voor permissie sensors, en starten van deze te lezen
-        Promise.all([
-            navigator.permissions.query({ name: 'accelerometer' }),
-            navigator.permissions.query({ name: 'gyroscope' })
-        ]).then( results => {
-            if (results.every(result => result.state === 'granted')) {
-                const options = { frequency: 10, coordinateSystem: 'device' }
-                this.sensor = new RelativeOrientationSensor(options)
-                console.log("setted up sensors");
-                navigator.mediaDevices.getUserMedia({
-                        video: {
-                            facingMode: 'environment'
-                        },
-                        audio:false
-                    }
-                ).then(function(stream) {
-                    console.log(this.video)
-                    console.log(stream)
-                    this.video.srcObject = stream;
-                    console.log(stream);
-                    console.log(this.video);
-                    console.log("setted up video")
-                    this.video.onloadedmetadata = function(e) {
-                        console.log("print")
-                        this.video.play();
-                        this.canvas.width = this.video.videoWidth
-                        this.canvas.height = this.video.videoHeight
-                        this.calculateTransformation(callback);
-                    };
-                }).catch(function(err) {
-                    // deal with an error (such as no webcam)
-                });
-
-                this.sensor.addEventListener('error', error => {
-                    if (event.error.name === 'NotReadableError') {
-                        console.log('Sensor is not available.')
-                    }
-                })
-
-                this.sensor.start()
-            } else {
-                console.log('No permissions to use RelativeOrientationSensor.')
+        navigator.mediaDevices.getUserMedia({
+                video: {
+                    facingMode: 'environment'
+                },
+                audio:false
             }
-        })
-        console.log("setted up all");
+        ).then(function(stream) {
+            console.log(this.video)
+            console.log(stream)
+            this.video.srcObject = stream;
+            console.log(stream);
+            console.log(this.video);
+            console.log("setted up video")
+            this.video.onloadedmetadata = function(e) {
+                console.log("print")
+                this.video.play();
+                this.canvas.width = this.video.videoWidth
+                this.canvas.height = this.video.videoHeight
+            };
+            Promise.all([
+                navigator.permissions.query({ name: 'accelerometer' }),
+                navigator.permissions.query({ name: 'gyroscope' })
+            ]).then( results => {
+                if (results.every(result => result.state === 'granted')) {
+                    const options = { frequency: 10, coordinateSystem: 'device' }
+                    this.sensor = new RelativeOrientationSensor(options)
+                    console.log("granted");
+                    this.calculateTransformation(callback);
+
+                    this.sensor.addEventListener('error', error => {
+                        if (event.error.name === 'NotReadableError') {
+                            console.log('Sensor is not available.')
+                        }
+                    })
+
+                    this.sensor.start()
+                } else {
+                    console.log('No permissions to use RelativeOrientationSensor.')
+                }
+            })
+            console.log("setted up sensors");
+        }).catch(function(err) {
+            // deal with an error (such as no webcam)
+        });
+
+        //Vragen voor permissie sensors, en starten van deze te lezen
+
         //setup camera en beginnen lezen (door toe te wijzen aan video element)
 
     }
 
     setStartMatrix() {
         this.startMatrix = null;
+
     }
 
     startSensor() {
         this.sensor.start()
+        this.video.play();
     }
     stopSensor() {
         this.sensor.stop()
+        this.video.pause();
     }
 
     calculateTransformation(callback){
