@@ -56,14 +56,7 @@ export default class CameraTracking {
           this.canvas.height = this.video.videoHeight
           console.log('setted up video')
 
-          new Promise(() => {
-            while (true) {
-              Promise.resolve(this.calculateTransformation())
-            }
-          }).then(result => {
-            console.log('callback succeeded')
-            callback(result)
-          })
+          this.calculateTransformation(callback)
         }
       })
       .catch(function(err) {
@@ -84,7 +77,7 @@ export default class CameraTracking {
     this.video.pause()
   }
 
-  calculateTransformation(callback) {
+  async calculateTransformation(callback) {
     let fictiveDistance = 1000
 
     //transformatie (rotatie) door de sensors
@@ -163,6 +156,9 @@ export default class CameraTracking {
     console.log('final rotation Matrix')
     console.log(rotationMatrix)
 
-    return rotationMatrix.toString()
+    callback(rotationMatrix.toString())
+
+    //run opnieuw
+    this.calculateTransformation(callback)
   }
 }
