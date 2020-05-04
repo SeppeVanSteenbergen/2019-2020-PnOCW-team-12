@@ -1482,7 +1482,6 @@ export default {
           to: 'all'
         }
         this.$socket.emit('screenCommand', object)
-      }
     },
     executeStartTracking() {
       this.executeInitTracking()
