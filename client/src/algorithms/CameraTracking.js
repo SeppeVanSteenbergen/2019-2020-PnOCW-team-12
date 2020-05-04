@@ -5,7 +5,7 @@ export default class CameraTracking {
   constructor(callback) {
     console.log('start tracking')
     this.framerate = 30
-    this.video = document.createElement('canvas')
+    this.video = document.createElement('video')
     this.canvas = document.createElement('canvas')
     this.ctx = this.canvas.getContext('2d')
     this.previousDescriptor = null
@@ -48,11 +48,13 @@ export default class CameraTracking {
         this.video.srcObject = stream
 
         console.log('setted up video')
-        this.video.onloadedmetadata = function(e) {
+        let video = this.video
+        let canvas = this.canvas
+        this.video.onloadedmetadata = function(event) {
           console.log('print')
-          this.video.play()
-          this.canvas.width = this.video.videoWidth
-          this.canvas.height = this.video.videoHeight
+          video.play()
+          canvas.width = video.videoWidth
+          canvas.height = video.videoHeight
 
 /*
           this.calculateTransformation(callback)
