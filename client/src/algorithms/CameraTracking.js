@@ -9,6 +9,7 @@ export default class CameraTracking {
     this.canvas = document.createElement('canvas')
     this.ctx = this.canvas.getContext('2d')
     this.previousDescriptor = null
+    this.threshold = 20
     this.confidence = 0.75
 
     //Setup sensors
@@ -90,8 +91,8 @@ export default class CameraTracking {
     console.log(rotationMatrix)
     //translatie door camera
     this.ctx.drawImage(this.video, 0, 0)
-    let imageData = this.ctx.getImageData(0, 0, canvas.width, canvas.height)
-    let corners = FASTDetector(imageData.data, canvas.width, hold)
+    let imageData = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height)
+    let corners = FASTDetector(imageData.data, this.canvas.width, this.threshold)
     console.log('founded corners with fast')
     let transformedcorners = []
     for (let i = 0; i < corners.length; i += 2) {
