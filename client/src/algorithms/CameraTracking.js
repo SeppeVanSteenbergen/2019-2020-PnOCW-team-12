@@ -15,7 +15,7 @@ export default class CameraTracking {
 
     //Setup sensors
     this.startMatrix = null
-    this.setupSensors()
+    this.sensor = this.setupSensors()
 
     console.log('setted up sensors')
 
@@ -52,15 +52,17 @@ export default class CameraTracking {
 
     if (results.every(result => result.state === 'granted')) {
       const options = { frequency: 10, coordinateSystem: 'device' }
-      this.sensor = new RelativeOrientationSensor(options)
+      let sensor = new RelativeOrientationSensor(options)
 
-      this.sensor.addEventListener('error', error => {
+      sensor.addEventListener('error', error => {
         if (event.error.name === 'NotReadableError') {
           console.log('Sensor is not available.')
         }
       })
 
-      this.sensor.start()
+      sensor.start()
+
+      return sensor
     } else {
       console.log('No permissions to use RelativeOrientationSensor.')
     }
