@@ -13,13 +13,11 @@ export default class Sensors {
         this.sensor.addEventListener('reading', () => {
           let rotationMatrix = new DOMMatrix()
           this.sensor.populateMatrix(rotationMatrix)
-          console.log(rotationMatrix)
 
           if (this.startMatrix === null) {
             this.startMatrix = DOMMatrix.fromMatrix(rotationMatrix.inverse())
-            console.log(this.startMatrix)
           }
-          rotationMatrix.multiplySelf(this.startMatrix)
+          rotationMatrix.preMultiplySelf(this.startMatrix)
 
           callback(rotationMatrix.toString())
         })
