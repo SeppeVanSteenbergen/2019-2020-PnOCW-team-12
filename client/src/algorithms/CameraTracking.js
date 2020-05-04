@@ -15,9 +15,7 @@ export default class CameraTracking {
 
     //Setup sensors
     this.startMatrix = null
-    this.sensor = this.setupSensors()
-
-    console.log('setted up sensors')
+    this.sensor = null
 
     //setup camera en beginnen lezen (door toe te wijzen aan video element)
     navigator.mediaDevices
@@ -44,27 +42,23 @@ export default class CameraTracking {
       })
   }
 
-  setupSensors() {
-    let results = async function() {
-      await Promise.all([
-        navigator.permissions.query({ name: 'accelerometer' }),
-        navigator.permissions.query({ name: 'gyroscope' })
-      ])
-    }
+  async setupSensors() {
+    let results = await Promise.all([
+      navigator.permissions.query({ name: 'accelerometer' }),
+      navigator.permissions.query({ name: 'gyroscope' })
+    ])
 
     if (results.every(result => result.state === 'granted')) {
       const options = { frequency: 10, coordinateSystem: 'device' }
-      let sensor = new RelativeOrientationSensor(options)
+      this.sensor = new RelativeOrientationSensor(options)
 
-      sensor.addEventListener('error', error => {
+      this.sensor.addEventListener('error', error => {
         if (event.error.name === 'NotReadableError') {
           console.log('Sensor is not available.')
         }
       })
 
-      sensor.start()
-
-      return sensor
+      this.sensor.start()
     } else {
       console.log('No permissions to use RelativeOrientationSensor.')
     }
