@@ -15,26 +15,8 @@ export default class CameraTracking {
 
     //Setup sensors
     this.startMatrix = null
+    this.setupSensors()
 
-    Promise.all([
-      navigator.permissions.query({ name: 'accelerometer' }),
-      navigator.permissions.query({ name: 'gyroscope' })
-    ]).then(results => {
-      if (results.every(result => result.state === 'granted')) {
-        const options = { frequency: 10, coordinateSystem: 'device' }
-        this.sensor = new RelativeOrientationSensor(options)
-
-        this.sensor.addEventListener('error', error => {
-          if (event.error.name === 'NotReadableError') {
-            console.log('Sensor is not available.')
-          }
-        })
-
-        this.sensor.start()
-      } else {
-        console.log('No permissions to use RelativeOrientationSensor.')
-      }
-    })
     console.log('setted up sensors')
 
     //setup camera en beginnen lezen (door toe te wijzen aan video element)
@@ -50,7 +32,7 @@ export default class CameraTracking {
         this.video.srcObject = stream
 
         console.log(this.video)
-        this.video.onloadedmetadata = (event) => {
+        this.video.onloadedmetadata = event => {
           this.video.play()
           this.canvas.width = this.video.videoWidth
           this.canvas.height = this.video.videoHeight
@@ -60,6 +42,28 @@ export default class CameraTracking {
       .catch(function(err) {
         // deal with an error (such as no webcam)
       })
+  }
+
+  async setupSensors() {
+    let results = await Promise.all([
+      navigator.permissions.query({ name: 'accelerometer' }),
+      navigator.permissions.query({ name: 'gyroscope' })
+    ])
+
+    if (results.every(result => result.state === 'granted')) {
+      const options = { frequency: 10, coordinateSystem: 'device' }
+      this.sensor = new RelativeOrientationSensor(options)
+
+      this.sensor.addEventListener('error', error => {
+        if (event.error.name === 'NotReadableError') {
+          console.log('Sensor is not available.')
+        }
+      })
+
+      this.sensor.start()
+    } else {
+      console.log('No permissions to use RelativeOrientationSensor.')
+    }
   }
 
   resetStartMatrix() {
@@ -90,8 +94,17 @@ export default class CameraTracking {
     console.log(rotationMatrix)
     //translatie door camera
     this.ctx.drawImage(this.video, 0, 0)
-    let imageData = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height)
-    let corners = FASTDetector(imageData.data, this.canvas.width, this.threshold)
+    let imageData = this.ctx.getImageData(
+      0,
+      0,
+      this.canvas.width,
+      this.canvas.height
+    )
+    let corners = FASTDetector(
+      imageData.data,
+      this.canvas.width,
+      this.threshold
+    )
     console.log('founded corners with fast')
     let transformedcorners = []
     for (let i = 0; i < corners.length; i += 2) {
