@@ -15,7 +15,10 @@ export default class Sensors {
           this.sensor.populateMatrix(rotationMatrix)
           console.log(rotationMatrix)
 
-          if (this.startMatrix === null) this.startMatrix = rotationMatrix.inverse()
+          if (this.startMatrix === null) {
+            this.startMatrix = DOMMatrix.fromMatrix(rotationMatrix.inverse())
+            console.log(this.startMatrix)
+          }
           rotationMatrix.multiplySelf(this.startMatrix)
 
           callback(rotationMatrix.toString())
@@ -37,6 +40,5 @@ export default class Sensors {
   }
   stopSensor() {
     this.sensor.stop()
-    this.sensor.deactivate()
   }
 }
