@@ -43,22 +43,22 @@ export default class CameraTracking {
   }
 
   async setupSensors() {
+    const options = { frequency: 10, coordinateSystem: 'device' }
+    this.sensor = new RelativeOrientationSensor(options)
+
     let results = await Promise.all([
       navigator.permissions.query({ name: 'accelerometer' }),
       navigator.permissions.query({ name: 'gyroscope' })
     ])
 
     if (results.every(result => result.state === 'granted')) {
-      const options = { frequency: 10, coordinateSystem: 'device' }
-      this.sensor = new RelativeOrientationSensor(options)
-
       this.sensor.addEventListener('error', error => {
         if (event.error.name === 'NotReadableError') {
           console.log('Sensor is not available.')
         }
       })
 
-      this.sensor.start()
+      await this.sensor.start()
     } else {
       console.log('No permissions to use RelativeOrientationSensor.')
     }
