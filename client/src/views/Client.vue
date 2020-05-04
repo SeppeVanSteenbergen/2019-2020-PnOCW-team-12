@@ -338,8 +338,8 @@ export default {
         let newWidth = Math.round(image.width * ratio)
         let newHeight = Math.round(image.height * ratio)
 
-        canvWrap.style.width = newWidth.toString() + 'px'
-        canvWrap.style.height = newHeight.toString() + 'px'
+/*        canvWrap.style.width = newWidth.toString() + 'px'
+        canvWrap.style.height = newHeight.toString() + 'px'*/
         canvas
           .getContext('2d')
           .drawImage(
