@@ -547,7 +547,7 @@ import AnalyseEnv from '../env/AnalyseEnv'
 import WaitEnv from '../env/WaitEnv'
 import ImageTools from '../algorithms/ImageTools'
 import Sensors from '../algorithms/Sensors'
-import CameraTracking from "../algorithms/CameraTracking";
+import CameraTracking from '../algorithms/CameraTracking'
 
 export default {
   name: 'master',
@@ -1472,16 +1472,16 @@ export default {
       this.tracking = new CameraTracking(this.handleTracking)
     },
     handleTracking(data) {
-        let object = {
-          payload: {
-            type: 'tracking-update',
-            data: {
-              css: data
-            }
-          },
-          to: 'all'
-        }
-        this.$socket.emit('screenCommand', object)
+      let object = {
+        payload: {
+          type: 'tracking-update',
+          data: {
+            css: data
+          }
+        },
+        to: 'all'
+      }
+      this.$socket.emit('screenCommand', object)
     },
     executeStartTracking() {
       this.executeInitTracking()
