@@ -1,21 +1,20 @@
 
 // https://trackingjs.com/api/Brief.js.html
+let N = 512,
+    randomImageOffsets = {},
+    randomWindowOffsets = {};
 export default class Brief {
-  static N = 512
-  static randomImageOffsets = {}
-  static randomWindowOffsets = null
-
   static getDescriptors(pixels, width, keyPoints) {
     // Optimizing divide by 32 operation using binary shift
     // (this.N >> 5) === this.N/32.
-    let descriptors = new Int32Array((keyPoints.length >> 1) * (this.N >> 5));
+    let descriptors = new Int32Array((keyPoints.length >> 1) * (N >> 5));
     let descriptorWord = 0;
     let offsets = this.getRandomOffsets(width);
     let position = 0;
     for (let i = 0; i < keyPoints.length; i += 2) {
       let w = width * keyPoints[i + 1] + keyPoints[i];
       let offsetsPosition = 0;
-      for (let j = 0, n = this.N; j < n; j++) {
+      for (let j = 0, n = N; j < n; j++) {
         if (pixels[offsets[offsetsPosition++] + w] < pixels[offsets[offsetsPosition++] + w]) {
           // The bit in the position `j % 32` of descriptorWord should be set to 1. We do
           // this by making an OR operation with a binary number that only has the bit
@@ -35,7 +34,7 @@ export default class Brief {
   }
 
   static getRandomOffsets(width) {
-    if (!this.randomWindowOffsets) {
+    if (!randomWindowOffsets) {
       let windowPosition = 0;
       let windowOffsets = new Int32Array(4 * this.N);
       for (let i = 0; i < this.N; i++) {
@@ -44,18 +43,18 @@ export default class Brief {
         windowOffsets[windowPosition++] = Math.round(this.uniformRandom(-15, 16));
         windowOffsets[windowPosition++] = Math.round(this.uniformRandom(-15, 16));
       }
-      this.randomWindowOffsets = windowOffsets;
+      randomWindowOffsets = windowOffsets;
     }
-    if (!this.randomImageOffsets[width]) {
+    if (!randomImageOffsets[width]) {
       let imagePosition = 0;
       let imageOffsets = new Int32Array(2 * this.N);
       for (let j = 0; j < this.N; j++) {
-        imageOffsets[imagePosition++] = this.randomWindowOffsets[4 * j] * width + this.randomWindowOffsets[4 * j + 1];
-        imageOffsets[imagePosition++] = this.randomWindowOffsets[4 * j + 2] * width + this.randomWindowOffsets[4 * j + 3];
+        imageOffsets[imagePosition++] = randomWindowOffsets[4 * j] * width + randomWindowOffsets[4 * j + 1];
+        imageOffsets[imagePosition++] = randomWindowOffsets[4 * j + 2] * width + randomWindowOffsets[4 * j + 3];
       }
-      this.randomImageOffsets[width] = imageOffsets;
+      randomImageOffsets[width] = imageOffsets;
     }
-    return this.randomImageOffsets[width];
+    return randomImageOffsets[width];
   }
 
   static uniformRandom(a, b) {
