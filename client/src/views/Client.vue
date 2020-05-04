@@ -150,10 +150,6 @@ export default {
           this.setDefaultCSS()
           this.drawDirectionsHandler(message.data)
           break
-        case 'display-image':
-          this.setDefaultCSS()
-          this.drawImageHandler(message.data)
-          break
         case 'display-detection-screen':
           this.setDefaultCSS()
           this.displayDetectionScreenHandler(message.data)
@@ -291,19 +287,6 @@ export default {
     countDownHandler(data) {
       this.countDownIntervalHandler(data.start, data.interval, data.startTime)
     },
-    countdownRecursive(number, interval) {
-      if (number === 0) {
-        this.drawCounterFinish()
-      } else {
-        this.drawNumberOnCanvas(number)
-        setTimeout(
-          this.countdownRecursive,
-          parseInt(interval),
-          number - 1,
-          interval
-        )
-      }
-    },
     countDownIntervalHandler(start, interval, startTime) {
       clearInterval(this.intervalObj)
       this.countDownRunning = true
@@ -316,16 +299,6 @@ export default {
       )
       //setTimeout(this.countDownInterval, parseInt(33), start, interval, startTime)
     },
-    /**
-     *
-     * @param data
-     *        image: base64
-     *        css: css of canvas
-     *        ox:
-     *        oy:
-     *        w:
-     *        h:
-     */
     displayImageCSSHandler(data) {
       this.canvWrap.style = data.css
 
@@ -338,8 +311,10 @@ export default {
         let newWidth = Math.round(image.width * ratio)
         let newHeight = Math.round(image.height * ratio)
 
-/*        canvWrap.style.width = newWidth.toString() + 'px'
-        canvWrap.style.height = newHeight.toString() + 'px'*/
+        canvWrap.style.width = newWidth.toString() + 'px'
+        canvWrap.style.height = newHeight.toString() + 'px'
+        canvas.width = newWidth
+        canvas.height = newHeight
         canvas
           .getContext('2d')
           .drawImage(
@@ -386,20 +361,15 @@ export default {
     },
     drawCounterFinish() {
       /*let img = new Image()
-
         img.onload = function() {
           let c = document.createElement('canvas')
           c.width = img.width
           c.height = img.height
           let ctx = c.getContext('2d')
-
           ctx.drawImage(img, 0, 0)
-
           let base64 = c.toDataURL('image/jpeg')
-
           this.drawImageHandler({ image: base64 })
         }
-
         img.src = 'https://penocw12.student.cs.kuleuven.be/img/martijn.jpg'*/
       this.drawNumberOnCanvas('BOOM!')
     },
@@ -413,7 +383,7 @@ export default {
       }
       ctx.stroke()
     },
-    drawArrow(ctx, orientation, label) {
+    drawArrow(ctx, orientation) {
       let headLen = 10
       const radians = (orientation * Math.PI) / 180
       const arrowLength =
@@ -472,37 +442,6 @@ export default {
     exitRoom() {
       this.$socket.emit('exitRoom')
       this.$router.push({ name: 'home' })
-    },
-    drawImageHandler(data) {
-      const base64Image = data.image
-      const canvas = this.canvas
-      let ctx = this.canvas.getContext('2d')
-      let image = new window.Image()
-
-      let vue = this
-
-      image.onload = function() {
-        let wRatio = canvas.width / image.width
-        let hRatio = canvas.height / image.height
-
-        let ratio = Math.min(wRatio, hRatio)
-
-        ctx.drawImage(
-          image,
-          0,
-          0,
-          image.width,
-          image.height,
-          canvas.width / 2 - (image.width * ratio) / 2,
-          canvas.height / 2 - (image.height * ratio) / 2,
-          image.width * ratio,
-          image.height * ratio
-        )
-      }
-      image.src = base64Image
-    },
-    stopRunning() {
-      clearInterval(this.intervalObj)
     },
     loadVideoHandler(data) {
       this.videoURL = data.videoURL
