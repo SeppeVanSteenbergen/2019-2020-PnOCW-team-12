@@ -1496,6 +1496,7 @@ export default {
     },
     executeResetTracking() {
       this.tracking = null
+    }
   },
   mounted() {
     this.$socket.emit('updateRoomList')
