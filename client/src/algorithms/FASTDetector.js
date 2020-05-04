@@ -1,4 +1,4 @@
-function FASTDetector(rgbaPixels, width, threshold) {
+export function FASTDetector(rgbaPixels, width, threshold) {
   let nbContiguous = 12
   let interestingPoints = []
 
@@ -90,7 +90,7 @@ function grayScaleMatrix(rgbaPixels, width) {
   return matrix
 }
 
-function grayScaleImgData(imgData, fillRGBA) {
+export function grayScaleImgData(imgData, fillRGBA) {
   let pixels = imgData.data
   let gray = new Uint8ClampedArray(pixels.length)
   let p = 0

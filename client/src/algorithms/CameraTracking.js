@@ -1,5 +1,5 @@
 import Brief from './Brief'
-import './FASTDetector'
+import { FASTDetector, grayScaleImgData } from './FASTDetector'
 
 export default class CameraTracking {
   constructor(callback) {
@@ -9,6 +9,7 @@ export default class CameraTracking {
     this.canvas = document.createElement('canvas')
     this.ctx = this.canvas.getContext('2d')
     this.previousDescriptor = null
+    this.matches = null
     this.threshold = 20
     this.confidence = 0.75
 
@@ -108,7 +109,7 @@ export default class CameraTracking {
 
     let descriptor = Brief.getDescriptors(
       grayScaleImgData(imageData, false),
-      canvas.width,
+      this.canvas.width,
       transformedcorners
     )
     let trans = {
@@ -116,18 +117,18 @@ export default class CameraTracking {
       y: 0
     }
     if (this.previousDescriptor !== null) {
-      matches = Brief.reciprocalMatch(
+      this.matches = Brief.reciprocalMatch(
         this.previousCorners,
         this.previousDescriptor,
         transformedcorners,
         descriptor
       )
       let selectedCount = 0
-      for (let i = 0; i < matches.length; i++) {
-        if (matches[i].confidence > this.confidence) {
+      for (let i = 0; i < this.matches.length; i++) {
+        if (this.matches[i].confidence > this.confidence) {
           selectedCount++
-          trans.x += matches[i].keypoint2[0] - matches[i].keypoint1[0]
-          trans.y += matches[i].keypoint2[1] - matches[i].keypoint1[1]
+          trans.x += this.matches[i].keypoint2[0] - this.matches[i].keypoint1[0]
+          trans.y += this.matches[i].keypoint2[1] - this.matches[i].keypoint1[1]
         }
       }
       if (selectedCount > 0) {
