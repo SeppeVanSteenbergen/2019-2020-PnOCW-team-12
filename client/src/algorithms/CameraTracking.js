@@ -4,9 +4,9 @@ import './FASTDetector'
 export default class CameraTracking {
     constructor(callback) {
         this.framerate = 30;
-        this.video = document.createElement('CANVAS');
-        this.canvas = document.createElement('CANVAS');
-        this.ctx = canvas.getContext('2d');
+        this.video = document.createElement('canvas');
+        this.canvas = document.createElement('canvas');
+        this.ctx = this.canvas.getContext('2d');
         this.previousDescriptor = null;
         this.confidence = 0.75;
 
