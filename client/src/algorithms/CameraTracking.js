@@ -43,7 +43,7 @@ export default class CameraTracking {
         },
         audio: false
       })
-      .then(function(stream) {
+      .then(stream => {
         console.log(stream)
         this.video.srcObject = stream
 
