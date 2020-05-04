@@ -1453,6 +1453,7 @@ export default {
         to: 'all'
       }
       this.$socket.emit('screenCommand', object)
+      this.tracking = new CameraTracking(this.handleTracking)
     },
     handleTracking(data) {
       let object = {
@@ -1466,20 +1467,8 @@ export default {
       }
       this.$socket.emit('screenCommand', object)
     },
-    async executeStartTracking() {
+    executeStartTracking() {
       this.executeInitTracking()
-      this.tracking = new CameraTracking()
-      await this.tracking.setupSensors()
-
-      console.log('setted up sensors')
-
-      new Promise(() => {
-        while (this.isTracking) {
-          Promise.resolve(this.tracking.calculateTransformation())
-        }
-      }).then(result => {
-        this.handleTracking(result)
-      })
     },
     executeStopTracking() {
       let object = {
@@ -1490,7 +1479,6 @@ export default {
         to: 'all'
       }
       this.$socket.emit('screenCommand', object)
-
       this.tracking.stopSensor()
       this.executeResetTracking()
     },

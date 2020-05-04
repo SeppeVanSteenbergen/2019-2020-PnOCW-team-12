@@ -2,7 +2,7 @@ import Brief from './Brief'
 import { FASTDetector, grayScaleImgData } from './FASTDetector'
 
 export default class CameraTracking {
-  constructor() {
+  constructor(callback) {
     console.log('start tracking')
     this.framerate = 30
     this.video = document.createElement('video')
@@ -15,7 +15,27 @@ export default class CameraTracking {
 
     //Setup sensors
     this.startMatrix = null
-    this.sensor = null
+
+    Promise.all([
+      navigator.permissions.query({ name: 'accelerometer' }),
+      navigator.permissions.query({ name: 'gyroscope' })
+    ]).then(results => {
+      if (results.every(result => result.state === 'granted')) {
+        const options = { frequency: 10, coordinateSystem: 'device' }
+        this.sensor = new RelativeOrientationSensor(options)
+
+        this.sensor.addEventListener('error', error => {
+          if (event.error.name === 'NotReadableError') {
+            console.log('Sensor is not available.')
+          }
+        })
+
+        this.sensor.start()
+      } else {
+        console.log('No permissions to use RelativeOrientationSensor.')
+      }
+    })
+    console.log('setted up sensors')
 
     //setup camera en beginnen lezen (door toe te wijzen aan video element)
     navigator.mediaDevices
@@ -35,33 +55,13 @@ export default class CameraTracking {
           this.canvas.width = this.video.videoWidth
           this.canvas.height = this.video.videoHeight
           console.log('setted up video')
+
+          this.calculateTransformation(callback)
         }
       })
       .catch(function(err) {
         // deal with an error (such as no webcam)
       })
-  }
-
-  async setupSensors() {
-    const options = { frequency: 10, coordinateSystem: 'device' }
-    this.sensor = new RelativeOrientationSensor(options)
-
-    let results = await Promise.all([
-      navigator.permissions.query({ name: 'accelerometer' }),
-      navigator.permissions.query({ name: 'gyroscope' })
-    ])
-
-    if (results.every(result => result.state === 'granted')) {
-      this.sensor.addEventListener('error', error => {
-        if (event.error.name === 'NotReadableError') {
-          console.log('Sensor is not available.')
-        }
-      })
-
-      await this.sensor.start()
-    } else {
-      console.log('No permissions to use RelativeOrientationSensor.')
-    }
   }
 
   resetStartMatrix() {
@@ -77,7 +77,7 @@ export default class CameraTracking {
     this.video.pause()
   }
 
-  calculateTransformation() {
+  calculateTransformation(callback) {
     let fictiveDistance = 1000
 
     //transformatie (rotatie) door de sensors
@@ -153,7 +153,11 @@ export default class CameraTracking {
     }
 
     rotationMatrix.translateSelf(trans.x, trans.y)
-
-    return rotationMatrix.toString()
+    console.log('final rotation Matrix')
+    console.log(rotationMatrix)
+    callback(rotationMatrix.toString())
+    console.log('callback succeeded')
+    //en opnieuw
+    this.calculateTransformation(callback)
   }
 }
