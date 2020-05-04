@@ -22,7 +22,30 @@ export default class CameraTracking {
             if (results.every(result => result.state === 'granted')) {
                 const options = { frequency: 10, coordinateSystem: 'device' }
                 this.sensor = new RelativeOrientationSensor(options)
-                console.log("granted");
+                console.log("setted up sensors");
+                navigator.mediaDevices.getUserMedia({
+                        video: {
+                            facingMode: 'environment'
+                        },
+                        audio:false
+                    }
+                ).then(function(stream) {
+                    console.log(this.video)
+                    console.log(stream)
+                    this.video.srcObject = stream;
+                    console.log(stream);
+                    console.log(this.video);
+                    console.log("setted up video")
+                    this.video.onloadedmetadata = function(e) {
+                        console.log("print")
+                        this.video.play();
+                        this.canvas.width = this.video.videoWidth
+                        this.canvas.height = this.video.videoHeight
+                        this.calculateTransformation(callback);
+                    };
+                }).catch(function(err) {
+                    // deal with an error (such as no webcam)
+                });
 
                 this.sensor.addEventListener('error', error => {
                     if (event.error.name === 'NotReadableError') {
@@ -35,31 +58,9 @@ export default class CameraTracking {
                 console.log('No permissions to use RelativeOrientationSensor.')
             }
         })
-        console.log("setted up sensors");
+        console.log("setted up all");
         //setup camera en beginnen lezen (door toe te wijzen aan video element)
-        navigator.mediaDevices.getUserMedia({
-                video: {
-                    facingMode: 'environment'
-                },
-                audio:false
-            }
-        ).then(function(stream) {
-            console.log(this.video)
-            console.log(stream)
-            this.video.srcObject = stream;
-            console.log(stream);
-            console.log(this.video);
-            console.log("setted up video")
-            this.video.onloadedmetadata = function(e) {
-                console.log("print")
-                this.video.play();
-                this.canvas.width = this.video.videoWidth
-                this.canvas.height = this.video.videoHeight
-                this.calculateTransformation(callback);
-            };
-        }).catch(function(err) {
-            // deal with an error (such as no webcam)
-        });
+
     }
 
     setStartMatrix() {
