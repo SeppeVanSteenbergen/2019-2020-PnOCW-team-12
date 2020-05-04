@@ -35,7 +35,7 @@ export default class CameraTracking {
                 console.log('No permissions to use RelativeOrientationSensor.')
             }
         })
-        console.log("seted up sensors");
+        console.log("setted up sensors");
         //setup camera en beginnen lezen (door toe te wijzen aan video element)
         navigator.mediaDevices.getUserMedia({
                 video: {
@@ -44,9 +44,12 @@ export default class CameraTracking {
                 audio:false
             }
         ).then(function(stream) {
-            console.log("setted up video")
             this.video.srcObject = stream;
+            console.log(stream);
+            console.log(this.video);
+            console.log("setted up video")
             this.video.onloadedmetadata = function(e) {
+                console.log("print")
                 this.video.play();
                 this.canvas.width = this.video.videoWidth
                 this.canvas.height = this.video.videoHeight
