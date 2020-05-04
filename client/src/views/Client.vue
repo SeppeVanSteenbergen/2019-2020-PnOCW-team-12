@@ -52,7 +52,7 @@
             ref="canvas"
             id="mainCanvas"
             @click="isFullscreen = false"
-            style="position:fixed; left:0; top:0; z-index:10"
+            style="position:fixed; left:0; top:0; z-index:10; width:100%; height:100%"
           ></canvas>
           <video ref="vid">
             <source :src="videoURL" />
@@ -338,8 +338,8 @@ export default {
         let newWidth = Math.round(image.width * ratio)
         let newHeight = Math.round(image.height * ratio)
 
-        canvWrap.width = newWidth
-        canvWrap.height = newHeight
+        canvWrap.style.width = newWidth.toString() + 'px'
+        canvWrap.style.height = newHeight.toString() + 'px'
         canvas
           .getContext('2d')
           .drawImage(
