@@ -1486,11 +1486,13 @@ export default {
     executeStartTracking() {
       this.executeInitTracking()
 
-      while (this.isTracking) {
-        let transformation = this.tracking.calculateTransformation()
-        console.log(transformation)
-        this.handleTracking(transformation)
-      }
+      new Promise(() => {
+        while (this.isTracking) {
+          Promise.resolve(this.tracking.calculateTransformation())
+        }
+      }).then((result) => {
+        this.handleTracking(result)
+      })
     },
     executeStopTracking() {
       let object = {
