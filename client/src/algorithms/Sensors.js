@@ -31,11 +31,6 @@ export default class Sensors {
       }
     })
   }
-
-  resetStartMatrix() {
-    this.startMatrix = null
-  }
-
   startSensor() {
     this.sensor.start()
   }

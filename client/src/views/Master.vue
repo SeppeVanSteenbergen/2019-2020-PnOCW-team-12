@@ -1479,11 +1479,7 @@ export default {
       this.$socket.emit('screenCommand', object)
     },
     executeStartTracking() {
-      if (this.tracking === null) {
         this.executeInitTracking()
-      } else {
-        this.tracking.startSensor()
-      }
     },
     executeStopTracking() {
       let object = {
@@ -1499,8 +1495,7 @@ export default {
       this.executeResetTracking()
     },
     executeResetTracking() {
-      this.tracking.resetStartMatrix()
-    }
+      this.tracking = null
   },
   mounted() {
     this.$socket.emit('updateRoomList')
