@@ -44,6 +44,8 @@ export default class CameraTracking {
                 audio:false
             }
         ).then(function(stream) {
+            console.log(this.video)
+            console.log(stream)
             this.video.srcObject = stream;
             console.log(stream);
             console.log(this.video);
