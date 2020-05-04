@@ -44,15 +44,17 @@ export default class CameraTracking {
       })
   }
 
-  async setupSensors() {
-    let results = await Promise.all([
-      navigator.permissions.query({ name: 'accelerometer' }),
-      navigator.permissions.query({ name: 'gyroscope' })
-    ])
+  setupSensors() {
+    let results = async function() {
+      await Promise.all([
+        navigator.permissions.query({ name: 'accelerometer' }),
+        navigator.permissions.query({ name: 'gyroscope' })
+      ])
+    }
 
     if (results.every(result => result.state === 'granted')) {
       const options = { frequency: 10, coordinateSystem: 'device' }
-      let sensor = await new RelativeOrientationSensor(options)
+      let sensor = new RelativeOrientationSensor(options)
 
       sensor.addEventListener('error', error => {
         if (event.error.name === 'NotReadableError') {
