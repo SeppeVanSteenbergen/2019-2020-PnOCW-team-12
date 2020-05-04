@@ -1472,7 +1472,7 @@ export default {
       this.tracking = new Sensors(this.handleTracking)
     },
     handleTracking(data) {
-      if (this.beginOffsetTracking < 1) {
+      if (this.beginOffsetTracking < 5) {
         this.beginOffsetTracking += 1
         this.tracking.resetStartMatrix()
       } else {
