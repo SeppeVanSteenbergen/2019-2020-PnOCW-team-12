@@ -47,18 +47,14 @@ export default class CameraTracking {
         console.log(stream)
         this.video.srcObject = stream
 
-        console.log('setted up video')
-        let video = this.video
-        let canvas = this.canvas
-        this.video.onloadedmetadata = function(event) {
-          console.log('print')
-          video.play()
-          canvas.width = video.videoWidth
-          canvas.height = video.videoHeight
+        console.log(this.video)
+        this.video.onloadedmetadata = (event) => {
+          this.video.play()
+          this.canvas.width = this.video.videoWidth
+          this.canvas.height = this.video.videoHeight
+          console.log('setted up video')
 
-/*
           this.calculateTransformation(callback)
-*/
         }
       })
       .catch(function(err) {
