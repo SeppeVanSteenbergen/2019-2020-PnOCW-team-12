@@ -62,6 +62,7 @@ export default class CameraTracking {
     }
     stopSensor() {
         this.sensor.stop()
+        this.video.srcObject.endOfStream();
     }
 
     calculateTransformation(callback){
@@ -75,11 +76,13 @@ export default class CameraTracking {
         }
 
         rotationMatrix.multiplySelf(this.startMatrix)
-
+        console.log("calculated tranformation matrix from sensors")
+        console.log(rotationMatrix);
         //translatie door camera
-        this.ctx.drawImage(video, 0, 0);
+        this.ctx.drawImage(this.video, 0, 0);
         let imageData = this.ctx.getImageData(0, 0, canvas.width, canvas.height);
         let corners = FASTDetector(imageData.data, canvas.width, hold)
+        console.log("founded corners with fast")
         let transformedcorners = [];
         for(let i = 0; i < corners.length; i += 2){
             let point = new DOMPoint(corners[i], corners[i+1], fictiveDistance);
@@ -89,6 +92,8 @@ export default class CameraTracking {
             transformedcorners.push(point.x)
             transformedcorners.push(point.y)
         }
+
+        console.log("founded transformed corners")
 
 
         let descriptor = Brief.getDescriptors(grayScaleImgData(imageData,false), canvas.width, transformedcorners)
@@ -112,15 +117,17 @@ export default class CameraTracking {
             }
         }
 
-
+        console.log("found transformation x: " + trans.x + " y: " +trans.y);
         if(this.previousDescriptor === null) {
             this.previousDescriptor = descriptor
             this.previousCorners = transformedcorners
         }
 
         rotationMatrix.translateSelf(trans.x, trans.y);
+        console.log("final rotation Matrix")
+        console.log(rotationMatrix)
         callback(rotationMatrix.toString());
-
+        console.log("callback succeeded")
         //en opnieuw
         this.calculateTransformation(callback);
     }
