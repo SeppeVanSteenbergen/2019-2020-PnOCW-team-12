@@ -127,6 +127,7 @@ async function calculateTransformationCamera(
     x: 0,
     y: 0
   }
+  console.log('nb previousCorners: ' + previousCorners.length)
   if (previousDescriptor !== null) {
     let matches = Brief.reciprocalMatch(
       previousCorners,
@@ -146,6 +147,7 @@ async function calculateTransformationCamera(
       trans.x = trans.x / selectedCount
       trans.y = trans.y / selectedCount
     }
+    console.log('nb useful key points: ' + selectedCount)
   }
 
   console.log('found transformation x: ' + trans.x + ' y: ' + trans.y)
