@@ -180,6 +180,7 @@
 				}
 
 				let descriptor = Brief.getDescriptors(grayPixels, canvas.width, corners)
+				console.log(descriptor)
 				if(previousDescriptor !== null) {
 					matches = Brief.reciprocalMatch(
 							previousCorners,

@@ -3,8 +3,8 @@ export default class Brief {
   constructor(N){
     this.N = N
     this.randomImageOffsets = {}
-    this.randomWindowOffsets = {}
-  }
+    this.randomWindowOffsets = null
+
   getDescriptors(pixels, width, keyPoints) {
     // Optimizing divide by 32 operation using binary shift
     // (this.N >> 5) === this.N/32.
