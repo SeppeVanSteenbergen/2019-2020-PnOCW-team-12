@@ -28,7 +28,7 @@ async function setupSensor(){
                     console.log('Sensor is not available.')
                 }
             })
-
+            sensor.start()
             return sensor
         } else {
             console.log('No permissions to use RelativeOrientationSensor.')
@@ -51,6 +51,7 @@ async function setupCamera(){
             video.srcObject = stream
             console.log(video)
             this.video.onloadedmetadata = event => {
+                video.play()
                 return video
             }
         })

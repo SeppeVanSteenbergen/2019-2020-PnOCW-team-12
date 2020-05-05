@@ -1468,18 +1468,18 @@ export default {
       }
       this.$socket.emit('screenCommand', object)
     },
-    async executeStartTracking() {
-      await this.executeInitTracking()
-      startTracking(this.tracking.sensor, this.tracking.video)
-      calculateTransformation(
-              this.handleTracking,
-              this.tracking.sensor,
-              this.tracking.video,
-              null,
-              null,
-              null,
-              {threshold: 20, fictiveDepth: 1000, confidence: 0.75}
-              )
+    executeStartTracking() {
+      this.executeInitTracking().then(() => {
+        calculateTransformation(
+        this.handleTracking,
+        this.tracking.sensor,
+        this.tracking.video,
+        null,
+        null,
+        null,
+      {threshold: 20, fictiveDepth: 1000, confidence: 0.75}
+    )
+      })
     },
     executeStopTracking() {
       let object = {
