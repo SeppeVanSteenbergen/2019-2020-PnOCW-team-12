@@ -96,6 +96,7 @@ async function calculateTransformationCamera(
   brief,
   parameters
 ) {
+  let t1 = performance.now()
   let canvas = document.createElement('canvas')
   canvas.width = video.videoWidth
   canvas.height = video.videoHeight
@@ -104,27 +105,40 @@ async function calculateTransformationCamera(
   ctx.drawImage(video, 0, 0)
 
   let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+  let t2 = performance.now()
+  console.log("init transformation camera took " + (t2-t1) + "ms")
+  t1 = performance.now()
   let corners = FASTDetector(imageData.data, canvas.width, parameters.threshold)
-
+  t2 = performance.now()
+  console.log("FastDetector took " + (t2-t1) + "ms")
+  t1 = performance.now()
   let descriptor = brief.getDescriptors(
     grayScaleImgData(imageData),
     canvas.width,
     corners
   )
+  t2 = performance.now()
+  console.log("making descriptor took " + (t2-t1) + "ms")
 
   let trans = {
     x: 0,
     y: 0
   }
 
+
   if (previousDescriptor !== null) {
+    t1 = performance.now()
     let matches = brief.reciprocalMatch(
       previousCorners,
       previousDescriptor,
       corners,
       descriptor
     )
+  t2 = performance.now()
 
+    console.log("matching took " + (t2-t1) + "ms")
+
+    t1 = performance.now()
     let selectedCount = 0
     for (let i = 0; i < matches.length; i++) {
       if (matches[i].confidence > parameters.confidence) {
@@ -142,7 +156,8 @@ async function calculateTransformationCamera(
 
     trans.x = point.x + previousTranslation.x
     trans.y = point.y + previousTranslation.y
-
+    t2 = performance.now()
+    console.log("calculating translation took " + (t2-t1) + "ms")
   }
   return {
     transformation: trans,
