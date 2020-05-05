@@ -65,7 +65,10 @@ export function stopTracking(sensor, video){
 }
 
 export function startTracking(sensor, video){
-    sensor.start()
+    while(Promise.resolve(sensor) == sensor || Promise.resolve(video) == video){
+        setTimeout(() => {console.log("waiting for sensor and/or camera")}, 1000)
+    }
+    sensor.start() 
     video.play()
 }
 
