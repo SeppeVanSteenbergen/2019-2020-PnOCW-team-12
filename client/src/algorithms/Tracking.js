@@ -9,6 +9,7 @@ export function initializeTracking() {
         console.log(video)
 
         video.onloadedmetadata = event => {
+          video.play()
           resolve({ sensors: sensor, camera: video })
         }
       })
@@ -30,6 +31,7 @@ function setupSensor() {
           console.log('Sensor is not available.')
         }
       })
+      sensor.start()
       return sensor
     } else {
       console.log('No permissions to use RelativeOrientationSensor.')

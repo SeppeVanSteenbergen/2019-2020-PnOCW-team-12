@@ -1461,7 +1461,6 @@ export default {
 
       return initializeTracking().then(result => {
         this.tracking = result
-        startTracking(this.tracking.sensors, this.tracking.camera)
       })
     },
     handleTracking(data) {
@@ -1478,9 +1477,7 @@ export default {
     },
     executeStartTracking() {
       this.executeInitTracking().then(() => {
-        while (!this.tracking.sensors.hasReading) {
-          //Wait for sensors
-        }
+        console.log('Done init')
         calculateTransformation(
           this.handleTracking,
           this.tracking.sensors,
