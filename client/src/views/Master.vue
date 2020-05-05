@@ -548,6 +548,7 @@ import WaitEnv from '../env/WaitEnv'
 import ImageTools from '../algorithms/ImageTools'
 import Sensors from '../algorithms/Sensors'
 import CameraTracking from '../algorithms/CameraTracking'
+import {calculateTransformation, initializeTracking, startTracking, stopTracking} from "../algorithms/Tracking";
 
 export default {
   name: 'master',
@@ -1453,7 +1454,7 @@ export default {
         to: 'all'
       }
       this.$socket.emit('screenCommand', object)
-      this.tracking = new CameraTracking(this.handleTracking)
+      this.tracking = initializeTracking()
     },
     handleTracking(data) {
       let object = {
@@ -1469,6 +1470,16 @@ export default {
     },
     executeStartTracking() {
       this.executeInitTracking()
+      startTracking(this.tracking.sensor, this.tracking.video)
+      calculateTransformation(
+              this.handleTracking,
+              this.tracking.sensor,
+              this.tracking.video,
+              null,
+              null,
+              null,
+              {threshold: 20, fictiveDepth: 1000, confidence: 0.75}
+              )
     },
     executeStopTracking() {
       let object = {
@@ -1479,7 +1490,7 @@ export default {
         to: 'all'
       }
       this.$socket.emit('screenCommand', object)
-      this.tracking.stopSensor()
+      stopTracking(this.tracking.sensor, this.tracking.video)
       this.executeResetTracking()
     },
     executeResetTracking() {
