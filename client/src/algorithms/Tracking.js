@@ -6,11 +6,16 @@ export function initializeTracking(callback) {
     setupCamera().then(video => {
       console.log(sensor)
       console.log(video)
-      calculateTransformation(callback, sensor, video, null, null, null, {
-        threshold: 20,
-        fictiveDepth: 1000,
-        confidence: 0.75
-      })
+
+      video.onloadedmetadata = event => {
+        video.play()
+
+        calculateTransformation(callback, sensor, video, null, null, null, {
+          threshold: 20,
+          fictiveDepth: 1000,
+          confidence: 0.75
+        })
+      }
     })
   })
 }
@@ -39,28 +44,20 @@ function setupSensor() {
 }
 
 function setupCamera() {
-  return new Promise(() => {
-    navigator.mediaDevices
-      .getUserMedia({
-        video: {
-          facingMode: 'environment'
-        },
-        audio: false
-      })
-      .then(stream => {
-        let video = document.createElement('video')
-        console.log(stream)
-        video.srcObject = stream
-        console.log(video.srcObject)
-        video.onloadedmetadata = event => {
-          video.play()
-          return video
-        }
-      })
-      .catch(function(err) {
-        return null
-      })
-  })
+  return navigator.mediaDevices
+    .getUserMedia({
+      video: {
+        facingMode: 'environment'
+      },
+      audio: false
+    })
+    .then(stream => {
+      let video = document.createElement('video')
+      video.srcObject = stream
+      console.log(video.srcObject)
+
+      return video
+    })
 }
 
 export function stopTracking(sensor, video) {
