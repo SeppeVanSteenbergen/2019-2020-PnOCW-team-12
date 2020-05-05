@@ -3,26 +3,24 @@ import Brief from './Brief'
 
 export function initializeTracking() {
   setupSensor().then(sensor => {
-    setupCamera().then(video =>{
+    setupCamera().then(video => {
       console.log(sensor)
       console.log(video)
       calculateTransformation(
-          this.handleTracking,
-          sensor,
-          video,
-          null,
-          null,
-          null,
-          { threshold: 20, fictiveDepth: 1000, confidence: 0.75 }
+        this.handleTracking,
+        sensor,
+        video,
+        null,
+        null,
+        null,
+        { threshold: 20, fictiveDepth: 1000, confidence: 0.75 }
       )
     })
   })
-
-
 }
 
-async function setupSensor() {
-  await Promise.all([
+function setupSensor() {
+  return Promise.all([
     navigator.permissions.query({ name: 'accelerometer' }),
     navigator.permissions.query({ name: 'gyroscope' })
   ]).then(results => {
@@ -44,9 +42,9 @@ async function setupSensor() {
   })
 }
 
-async function setupCamera() {
+function setupCamera() {
   let video = document.createElement('video')
-  await navigator.mediaDevices
+  return navigator.mediaDevices
     .getUserMedia({
       video: {
         facingMode: 'environment'
@@ -57,7 +55,7 @@ async function setupCamera() {
       console.log(stream)
       video.srcObject = stream
       console.log(video)
-      this.video.onloadedmetadata = event => {
+      video.onloadedmetadata = event => {
         video.play()
         return video
       }
