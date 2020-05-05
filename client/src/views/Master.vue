@@ -548,7 +548,12 @@ import WaitEnv from '../env/WaitEnv'
 import ImageTools from '../algorithms/ImageTools'
 import Sensors from '../algorithms/Sensors'
 import CameraTracking from '../algorithms/CameraTracking'
-import {calculateTransformation, initializeTracking, startTracking, stopTracking} from "../algorithms/Tracking";
+import {
+  calculateTransformation,
+  initializeTracking,
+  startTracking,
+  stopTracking
+} from '../algorithms/Tracking'
 
 export default {
   name: 'master',
@@ -692,7 +697,7 @@ export default {
           data: {
             command: [
               {
-                deg: this.angleSlider,
+                deg: this.angleSlider
               }
             ]
           }
@@ -1474,14 +1479,14 @@ export default {
     executeStartTracking() {
       this.executeInitTracking().then(result => {
         calculateTransformation(
-        this.handleTracking,
-        result.sensor,
-        result.video,
-        null,
-        null,
-        null,
-      {threshold: 20, fictiveDepth: 1000, confidence: 0.75}
-    )
+          this.handleTracking,
+          result.sensor,
+          result.video,
+          null,
+          null,
+          null,
+          { threshold: 20, fictiveDepth: 1000, confidence: 0.75 }
+        )
       })
     },
     executeStopTracking() {
