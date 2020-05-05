@@ -22,7 +22,7 @@ export function initializeTracking() {
 }
 
 async function setupSensor() {
-  Promise.all([
+  await Promise.all([
     navigator.permissions.query({ name: 'accelerometer' }),
     navigator.permissions.query({ name: 'gyroscope' })
   ]).then(results => {
@@ -46,7 +46,7 @@ async function setupSensor() {
 
 async function setupCamera() {
   let video = document.createElement('video')
-  navigator.mediaDevices
+  await navigator.mediaDevices
     .getUserMedia({
       video: {
         facingMode: 'environment'

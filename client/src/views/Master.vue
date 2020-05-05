@@ -1450,7 +1450,7 @@ export default {
         this.executeStopTracking()
       }
     },
-    async executeInitTracking() {
+    executeInitTracking() {
       let object = {
         payload: {
           type: 'tracking-init',
@@ -1459,11 +1459,7 @@ export default {
         to: 'all'
       }
       this.$socket.emit('screenCommand', object)
-      initializeTracking().then(result => {
-        this.tracking = result
-        console.log(result)
-        return result
-      })
+      initializeTracking()
     },
     handleTracking(data) {
       let object = {
@@ -1478,15 +1474,7 @@ export default {
       this.$socket.emit('screenCommand', object)
     },
     executeStartTracking() {
-      let object = {
-        payload: {
-          type: 'tracking-init',
-          data: {}
-        },
-        to: 'all'
-      }
-      this.$socket.emit('screenCommand', object)
-      initializeTracking()
+      this.executeInitTracking()
     },
     executeStopTracking() {
       let object = {
