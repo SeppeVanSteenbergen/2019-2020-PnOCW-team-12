@@ -1479,7 +1479,7 @@ export default {
     },
     executeStartTracking() {
       this.executeInitTracking().then(result => {
-        console.log(this.tracking)
+        console.log(this.tracking.sensors.quaternion)
         calculateTransformation(
           this.handleTracking,
           this.tracking.sensors,
