@@ -1,12 +1,14 @@
 // https://trackingjs.com/api/Brief.js.html
-let N = 512,
-  randomImageOffsets = {},
-  randomWindowOffsets = {}
 export default class Brief {
-  static getDescriptors(pixels, width, keyPoints) {
+  constructor(N){
+    this.N = N
+    this.randomImageOffsets = {}
+    this.randomWindowOffsets = {}
+  }
+  getDescriptors(pixels, width, keyPoints) {
     // Optimizing divide by 32 operation using binary shift
     // (this.N >> 5) === this.N/32.
-    let descriptors = new Int32Array((keyPoints.length >> 1) * (N >> 5))
+    let descriptors = new Int32Array((keyPoints.length >> 1) * (this.N >> 5))
     let descriptorWord = 0
     let offsets = this.getRandomOffsets(width)
     let position = 0
@@ -35,8 +37,8 @@ export default class Brief {
     return descriptors
   }
 
-  static getRandomOffsets(width) {
-    if (!randomWindowOffsets) {
+  getRandomOffsets(width) {
+    if (!this.randomWindowOffsets) {
       let windowPosition = 0
       let windowOffsets = new Int32Array(4 * this.N)
       for (let i = 0; i < this.N; i++) {
@@ -53,28 +55,28 @@ export default class Brief {
           this.uniformRandom(-15, 16)
         )
       }
-      randomWindowOffsets = windowOffsets
+      this.randomWindowOffsets = windowOffsets
     }
-    if (!randomImageOffsets[width]) {
+    if (!this.randomImageOffsets[width]) {
       let imagePosition = 0
       let imageOffsets = new Int32Array(2 * this.N)
       for (let j = 0; j < this.N; j++) {
         imageOffsets[imagePosition++] =
-          randomWindowOffsets[4 * j] * width + randomWindowOffsets[4 * j + 1]
+          this.randomWindowOffsets[4 * j] * width + this.randomWindowOffsets[4 * j + 1]
         imageOffsets[imagePosition++] =
-          randomWindowOffsets[4 * j + 2] * width +
-          randomWindowOffsets[4 * j + 3]
+          this.randomWindowOffsets[4 * j + 2] * width +
+          this.randomWindowOffsets[4 * j + 3]
       }
-      randomImageOffsets[width] = imageOffsets
+      this.randomImageOffsets[width] = imageOffsets
     }
-    return randomImageOffsets[width]
+    return this.randomImageOffsets[width]
   }
 
-  static uniformRandom(a, b) {
+  uniformRandom(a, b) {
     return a + Math.random() * (b - a)
   }
 
-  static reciprocalMatch(keypoints1, descriptors1, keypoints2, descriptors2) {
+  reciprocalMatch(keypoints1, descriptors1, keypoints2, descriptors2) {
     let matches = []
     if (keypoints1.length === 0 || keypoints2.length === 0) {
       return matches
@@ -99,7 +101,7 @@ export default class Brief {
     return matches
   }
 
-  static match(keypoints1, descriptors1, keypoints2, descriptors2) {
+  match(keypoints1, descriptors1, keypoints2, descriptors2) {
     let len1 = keypoints1.length >> 1
     let len2 = keypoints2.length >> 1
     let matches = new Array(len1)
@@ -131,7 +133,7 @@ export default class Brief {
     return matches
   }
 
-  static hammingWeight(i) {
+  hammingWeight(i) {
     i = i - ((i >> 1) & 0x55555555)
     i = (i & 0x33333333) + ((i >> 2) & 0x33333333)
     return (((i + (i >> 4)) & 0xf0f0f0f) * 0x1010101) >> 24

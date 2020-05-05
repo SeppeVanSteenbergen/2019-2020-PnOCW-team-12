@@ -93,6 +93,7 @@ async function calculateTransformationCamera(
   startTransformation,
   previousDescriptor,
   previousCorners,
+  brief,
   parameters
 ) {
   let canvas = document.createElement('canvas')
@@ -125,7 +126,7 @@ async function calculateTransformationCamera(
 
   console.log(imageData)
   console.log(grayScaleImgData(imageData, false))
-  let descriptor = Brief.getDescriptors(
+  let descriptor = brief.getDescriptors(
     grayScaleImgData(imageData),
     canvas.width,
     transformedcorners
@@ -141,7 +142,7 @@ async function calculateTransformationCamera(
     console.log('nb previousCorners: ' + previousCorners.length)
     console.log('previousDescriptor')
     console.log(previousDescriptor)
-    let matches = Brief.reciprocalMatch(
+    let matches = brief.reciprocalMatch(
       previousCorners,
       previousDescriptor,
       transformedcorners,
@@ -179,8 +180,11 @@ export function calculateTransformation(
   startMatrix,
   previousDescriptor,
   previousCorners,
+  brief,
   videoParameters
 ) {
+  if(brief == null)
+    brief = new Brief(512)
   calculateTransformationSensors(sensor, startMatrix).then(result => {
     if (result === null) return
 
@@ -189,6 +193,7 @@ export function calculateTransformation(
       result.transformationMatrix,
       previousDescriptor,
       previousCorners,
+      brief,
       videoParameters
     ).then(cameraResult => {
       result.transformationMatrix.translateSelf(
@@ -205,6 +210,7 @@ export function calculateTransformation(
           result.startMatrix,
           cameraResult.previousDescriptor,
           cameraResult.previousCorners,
+          brief,
           videoParameters
         )
       }, 50)
