@@ -1454,7 +1454,10 @@ export default {
         to: 'all'
       }
       this.$socket.emit('screenCommand', object)
-      this.tracking = await initializeTracking()
+      initializeTracking().then(result => {
+        this.tracking = result
+        return result
+      })
     },
     handleTracking(data) {
       let object = {
@@ -1469,11 +1472,11 @@ export default {
       this.$socket.emit('screenCommand', object)
     },
     executeStartTracking() {
-      this.executeInitTracking().then(() => {
+      this.executeInitTracking().then(result => {
         calculateTransformation(
         this.handleTracking,
-        this.tracking.sensor,
-        this.tracking.video,
+        result.sensor,
+        result.video,
         null,
         null,
         null,
