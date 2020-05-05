@@ -1461,6 +1461,7 @@ export default {
       this.$socket.emit('screenCommand', object)
       initializeTracking().then(result => {
         this.tracking = result
+        console.log(result)
         return result
       })
     },
@@ -1478,6 +1479,7 @@ export default {
     },
     executeStartTracking() {
       this.executeInitTracking().then(result => {
+        console.log("dit moet achter vorige result komen ;)")
         calculateTransformation(
           this.handleTracking,
           result.sensor,
