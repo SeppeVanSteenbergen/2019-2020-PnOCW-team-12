@@ -81,8 +81,7 @@ async function calculateTransformationSensors(sensor, startMatrix) {
   }
 
   rotationMatrix.multiplySelf(startMatrix)
-  console.log('calculated tranformation matrix from sensors')
-  console.log(rotationMatrix)
+
 
   return { transformationMatrix: rotationMatrix, startMatrix: startMatrix }
 }
@@ -113,7 +112,6 @@ async function calculateTransformationCamera(
     corners
   )
 
-  console.log(descriptor)
   let trans = {
     x: 0,
     y: 0
