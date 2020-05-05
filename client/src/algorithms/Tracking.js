@@ -126,7 +126,7 @@ async function calculateTransformationCamera(
   console.log(imageData)
   console.log(grayScaleImgData(imageData, false))
   let descriptor = Brief.getDescriptors(
-    grayScaleImgData(imageData, false),
+    grayScaleImgData(imageData),
     canvas.width,
     transformedcorners
   )

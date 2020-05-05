@@ -90,23 +90,12 @@ function grayScaleMatrix(rgbaPixels, width) {
   return matrix
 }
 
-export function grayScaleImgData(imgData, fillRGBA) {
+export function grayScaleImgData(imgData) {
   let pixels = imgData.data
-  let gray = new Uint8ClampedArray(pixels.length)
-  let p = 0
+  let gray = new Uint8ClampedArray(pixels.length / 4)
   let w = 0
-  for (let i = 0; i < imgData.height; i++) {
-    for (let j = 0; j < imgData.width; j++) {
-      let value =
-        pixels[w] * 0.299 + pixels[w + 1] * 0.587 + pixels[w + 2] * 0.114
-      gray[p++] = value
-      if (fillRGBA) {
-        gray[p++] = value
-        gray[p++] = value
-        gray[p++] = pixels[w + 3]
-      }
-      w += 4
-    }
-  }
+  for (let p = 0; p < pixels.length; p += 4)
+      gray[w++] = pixels[p] * 0.299 + pixels[p + 1] * 0.587 + pixels[p + 2] * 0.114
+
   return gray
 }

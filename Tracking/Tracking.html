@@ -181,7 +181,9 @@
 
 				let descriptor = Brief.getDescriptors(grayPixels, canvas.width, corners)
 				if(previousDescriptor !== null) {
-					matches = Brief.reciprocalMatch(previousCorners, previousDescriptor, corners, descriptor)
+					matches = Brief.reciprocalMatch(
+							previousCorners,
+							previousDescriptor, corners, descriptor)
 					let selectedCount = 0
 					for (let i = 0; i < matches.length; i++) {
 						if (matches[i].confidence > confidence) {
