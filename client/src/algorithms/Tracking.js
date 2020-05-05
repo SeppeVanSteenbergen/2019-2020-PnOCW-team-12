@@ -10,12 +10,6 @@ export function initializeTracking() {
 
         video.onloadedmetadata = event => {
           resolve({ sensors: sensor, camera: video })
-
-          /*                  calculateTransformation(callback, sensor, video, null, null, null, {
-                      threshold: 20,
-                      fictiveDepth: 1000,
-                      confidence: 0.75
-                  })*/
         }
       })
     })

@@ -1464,7 +1464,6 @@ export default {
         startTracking(this.tracking.sensors, this.tracking.camera)
         console.log('Klaar met init')
       })
-      /*     initializeTracking(this.handleTracking)*/
     },
     handleTracking(data) {
       let object = {
@@ -1479,9 +1478,20 @@ export default {
       this.$socket.emit('screenCommand', object)
     },
     executeStartTracking() {
-      this.executeInitTracking().then(result => {
-        console.log('Achter init')
-        console.log(this.tracking)
+      this.executeInitTracking().then(() => {
+        calculateTransformation(
+          this.handleTracking,
+          this.tracking.sensors,
+          this.tracking.camera,
+          null,
+          null,
+          null,
+          {
+            threshold: 20,
+            fictiveDepth: 1000,
+            confidence: 0.75
+          }
+        )
       })
     },
     executeStopTracking() {
