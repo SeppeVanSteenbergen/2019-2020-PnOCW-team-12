@@ -161,7 +161,7 @@ export default class CameraTracking {
       if (this.isTracking) {
         setTimeout(() => {
           this.run(callback)
-        }, 500)
+        }, 10)
       }
     })
   }
