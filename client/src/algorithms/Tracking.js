@@ -120,8 +120,11 @@ async function calculateTransformationCamera(
     transformedcorners.push(point.y)
   }
 
+  console.log(transformedcorners)
   console.log('founded transformed corners')
 
+  console.log(imageData)
+  console.log(grayScaleImgData(imageData, false))
   let descriptor = Brief.getDescriptors(
     grayScaleImgData(imageData, false),
     canvas.width,
