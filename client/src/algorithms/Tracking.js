@@ -164,7 +164,7 @@ async function calculateTransformationCamera(
       trans.y = trans.y / selectedCount
     }
     let point = new DOMPoint(trans.x, trans.y, parameters.fictiveDepth)
-    point.matrixTransform(startTransformation)
+    point.matrixTransform(startTransformation.inverse())
 
     trans.x = point.x + previousTranslation.x
     trans.y = point.y + previousTranslation.y
