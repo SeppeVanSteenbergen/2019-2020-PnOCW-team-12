@@ -1483,9 +1483,10 @@ export default {
           this.tracking.sensors,
           this.tracking.camera,
           null,
+          { x: 0, y: 0 },
           null,
           null,
-                null,
+          null,
           {
             threshold: 30,
             fictiveDepth: 1000,

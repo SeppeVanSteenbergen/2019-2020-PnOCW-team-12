@@ -91,6 +91,7 @@ async function calculateTransformationSensors(sensor, startMatrix) {
 async function calculateTransformationCamera(
   video,
   startTransformation,
+  previousTranslation,
   previousDescriptor,
   previousCorners,
   brief,
@@ -161,6 +162,10 @@ async function calculateTransformationCamera(
       trans.x = trans.x / selectedCount
       trans.y = trans.y / selectedCount
     }
+
+    trans.x += previousTranslation.x
+    trans.y += previousTranslation.y
+
     console.log('nb useful key points: ' + selectedCount)
   }
 
@@ -178,6 +183,7 @@ export function calculateTransformation(
   sensor,
   video,
   startMatrix,
+  previousTransformation,
   previousDescriptor,
   previousCorners,
   brief,
@@ -191,6 +197,7 @@ export function calculateTransformation(
     calculateTransformationCamera(
       video,
       result.transformationMatrix,
+      previousTransformation,
       previousDescriptor,
       previousCorners,
       brief,
@@ -208,6 +215,7 @@ export function calculateTransformation(
           sensor,
           video,
           result.startMatrix,
+          cameraResult.transformation,
           cameraResult.previousDescriptor,
           cameraResult.previousCorners,
           brief,
