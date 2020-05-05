@@ -69,6 +69,10 @@ export function startTracking(sensor, video) {
 
 //Returns a DOMMatrix
 async function calculateTransformationSensors(sensor, startMatrix) {
+  if (!sensor.activated) {
+    return null
+  }
+
   //transformatie (rotatie) door de sensors
   let rotationMatrix = new DOMMatrix()
   sensor.populateMatrix(rotationMatrix)
@@ -175,6 +179,8 @@ export function calculateTransformation(
   videoParameters
 ) {
   calculateTransformationSensors(sensor, startMatrix).then(result => {
+    if (result === null) return
+
     calculateTransformationCamera(
       video,
       result.transformationMatrix,
