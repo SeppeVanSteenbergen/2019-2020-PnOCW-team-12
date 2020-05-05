@@ -1502,7 +1502,8 @@ export default {
         to: 'all'
       }
       this.$socket.emit('screenCommand', object)
-      stopTracking(this.tracking.sensor, this.tracking.video)
+      console.log(this.tracking)
+      stopTracking(this.tracking.sensors, this.tracking.camera)
       this.executeResetTracking()
     },
     executeResetTracking() {
