@@ -1458,13 +1458,12 @@ export default {
         to: 'all'
       }
       this.$socket.emit('screenCommand', object)
-      initializeTracking().then(result => {
+
+      return initializeTracking().then(result => {
         this.tracking = result
         startTracking(this.tracking.sensors, this.tracking.camera)
         console.log('Klaar met init')
       })
-      console.log('Komt dit achter init')
-
       /*     initializeTracking(this.handleTracking)*/
     },
     handleTracking(data) {
@@ -1480,7 +1479,10 @@ export default {
       this.$socket.emit('screenCommand', object)
     },
     executeStartTracking() {
-      this.executeInitTracking()
+      this.executeInitTracking().then(result => {
+        console.log('Achter init')
+        console.log(this.tracking)
+      })
     },
     executeStopTracking() {
       let object = {
