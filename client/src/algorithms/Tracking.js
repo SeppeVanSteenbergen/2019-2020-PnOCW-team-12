@@ -1,21 +1,25 @@
 import { FASTDetector, grayScaleImgData } from './FASTDetector'
 import Brief from './Brief'
 
-export function initializeTracking(callback) {
-  setupSensor().then(sensor => {
-    setupCamera().then(video => {
-      console.log(sensor)
-      console.log(video)
+export function initializeTracking() {
+  return new Promise(resolve => {
+    setupSensor().then(sensor => {
+      setupCamera().then(video => {
+        console.log(sensor)
+        console.log(video)
 
-      video.onloadedmetadata = event => {
-        video.play()
+        video.onloadedmetadata = event => {
+          video.play()
 
-        calculateTransformation(callback, sensor, video, null, null, null, {
-          threshold: 20,
-          fictiveDepth: 1000,
-          confidence: 0.75
-        })
-      }
+          resolve({ sensors: sensor, camera: video })
+
+          /*                  calculateTransformation(callback, sensor, video, null, null, null, {
+                      threshold: 20,
+                      fictiveDepth: 1000,
+                      confidence: 0.75
+                  })*/
+        }
+      })
     })
   })
 }

@@ -546,8 +546,7 @@ import Communicator from '../algorithms/Communicator'
 import AnalyseEnv from '../env/AnalyseEnv'
 import WaitEnv from '../env/WaitEnv'
 import ImageTools from '../algorithms/ImageTools'
-import Sensors from '../algorithms/Sensors'
-import CameraTracking from '../algorithms/CameraTracking'
+
 import {
   calculateTransformation,
   initializeTracking,
@@ -1459,7 +1458,12 @@ export default {
         to: 'all'
       }
       this.$socket.emit('screenCommand', object)
-      initializeTracking(this.handleTracking)
+      initializeTracking().then(result => {
+        console.log(result)
+        this.tracking = result
+      })
+
+      /*     initializeTracking(this.handleTracking)*/
     },
     handleTracking(data) {
       let object = {
