@@ -4,6 +4,8 @@ import { FASTDetector, grayScaleImgData } from './FASTDetector'
 export default class CameraTracking {
   constructor(callback) {
     console.log('start tracking')
+    this.isTracking = true
+
     this.framerate = 30
     this.video = document.createElement('video')
     this.canvas = document.createElement('canvas')
@@ -64,20 +66,13 @@ export default class CameraTracking {
       })
   }
 
-  resetStartMatrix() {
-    this.startMatrix = null
-  }
-
-  startSensor() {
-    this.sensor.start()
-    this.video.play()
-  }
   stopSensor() {
+    this.isTracking = false
     this.sensor.stop()
     this.video.pause()
   }
 
-  async calculateTransformation(callback) {
+  async calculateTransformation() {
     let fictiveDistance = 1000
 
     //transformatie (rotatie) door de sensors
@@ -162,9 +157,12 @@ export default class CameraTracking {
   async run(callback) {
     this.calculateTransformation().then(result => {
       callback(result)
-      setTimeout(() => {
-        this.run(callback)
-      }, 2000)
+
+      if (this.isTracking) {
+        setTimeout(() => {
+          this.run(callback)
+        }, 500)
+      }
     })
   }
 }
