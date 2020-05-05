@@ -15,7 +15,7 @@ export default class Brief {
     for (let i = 0; i < keyPoints.length; i += 2) {
       let w = width * keyPoints[i + 1] + keyPoints[i]
       let offsetsPosition = 0
-      for (let j = 0, n = N; j < n; j++) {
+      for (let j = 0, n = this.N; j < n; j++) {
         if (
           pixels[offsets[offsetsPosition++] + w] <
           pixels[offsets[offsetsPosition++] + w]
