@@ -107,7 +107,7 @@ async function calculateTransformationCamera(
   let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
   let corners = FASTDetector(imageData.data, canvas.width, parameters.threshold)
   console.log('founded corners with fast')
-
+/*
   let transformedcorners = []
   for (let i = 0; i < corners.length; i += 2) {
     let point = new DOMPoint(
@@ -116,13 +116,14 @@ async function calculateTransformationCamera(
       parameters.fictiveDepth
     )
     point.matrixTransform(startTransformation)
-    //TODO kan probleem zijn dat rotationmatrix ingesteld staat op roteren rond middenpunt
-    //  punten staan t.o.v. linkerbovenhoek
+
     transformedcorners.push(point.x)
     transformedcorners.push(point.y)
   }
 
-  console.log(transformedcorners)
+ */
+
+  console.log(corners)
   console.log('founded transformed corners')
 
   console.log(imageData)
@@ -130,7 +131,7 @@ async function calculateTransformationCamera(
   let descriptor = brief.getDescriptors(
     grayScaleImgData(imageData),
     canvas.width,
-    transformedcorners
+    corners
   )
   console.log('descriptor')
   console.log(descriptor)
@@ -146,7 +147,7 @@ async function calculateTransformationCamera(
     let matches = brief.reciprocalMatch(
       previousCorners,
       previousDescriptor,
-      transformedcorners,
+      corners,
       descriptor
     )
     console.log(matches)
@@ -162,9 +163,11 @@ async function calculateTransformationCamera(
       trans.x = trans.x / selectedCount
       trans.y = trans.y / selectedCount
     }
+    let point = new DOMPoint(trans.x, trans.y, parameters.fictiveDepth)
+    point.matrixTransform(startTransformation)
 
-    trans.x += previousTranslation.x
-    trans.y += previousTranslation.y
+    trans.x = point.x + previousTranslation.x
+    trans.y = point.y + previousTranslation.y
 
     console.log('nb useful key points: ' + selectedCount)
   }
