@@ -1459,9 +1459,11 @@ export default {
       }
       this.$socket.emit('screenCommand', object)
       initializeTracking().then(result => {
-        console.log(result)
         this.tracking = result
+        startTracking(this.tracking.sensors, this.tracking.camera)
+        console.log('Klaar met init')
       })
+      console.log('Komt dit achter init')
 
       /*     initializeTracking(this.handleTracking)*/
     },
