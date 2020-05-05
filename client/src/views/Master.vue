@@ -1462,7 +1462,6 @@ export default {
       return initializeTracking().then(result => {
         this.tracking = result
         startTracking(this.tracking.sensors, this.tracking.camera)
-        return true
       })
     },
     handleTracking(data) {
@@ -1478,8 +1477,10 @@ export default {
       this.$socket.emit('screenCommand', object)
     },
     executeStartTracking() {
-      this.executeInitTracking().then(result => {
-        console.log(this.tracking.sensors.quaternion)
+      this.executeInitTracking().then(() => {
+        while (!this.tracking.sensors.hasReading) {
+          //Wait for sensors
+        }
         calculateTransformation(
           this.handleTracking,
           this.tracking.sensors,
