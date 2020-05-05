@@ -182,15 +182,18 @@ export function calculateTransformation(
         cameraResult.transformation.y
       )
       callback(result.transformationMatrix.toString())
-      calculateTransformation(
-        callback,
-        sensor,
-        video,
-        result.startMatrix,
-        cameraResult.previousDescriptor,
-        cameraResult.previousCorners,
-        videoParameters
-      )
+
+      setTimeout(() => {
+        calculateTransformation(
+          callback,
+          sensor,
+          video,
+          result.startMatrix,
+          cameraResult.previousDescriptor,
+          cameraResult.previousCorners,
+          videoParameters
+        )
+      }, 50)
     })
     //calculateTransformation(callback, sensor, video, startMatrix, previousDescriptor, previousCorners, videoParameters)
   })
