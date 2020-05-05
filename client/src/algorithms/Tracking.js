@@ -1,20 +1,16 @@
 import { FASTDetector, grayScaleImgData } from './FASTDetector'
 import Brief from './Brief'
 
-export function initializeTracking() {
+export function initializeTracking(callback) {
   setupSensor().then(sensor => {
     setupCamera().then(video => {
       console.log(sensor)
       console.log(video)
-      calculateTransformation(
-        this.handleTracking,
-        sensor,
-        video,
-        null,
-        null,
-        null,
-        { threshold: 20, fictiveDepth: 1000, confidence: 0.75 }
-      )
+      calculateTransformation(callback, sensor, video, null, null, null, {
+        threshold: 20,
+        fictiveDepth: 1000,
+        confidence: 0.75
+      })
     })
   })
 }
@@ -43,26 +39,28 @@ function setupSensor() {
 }
 
 function setupCamera() {
-  let video = document.createElement('video')
-  return navigator.mediaDevices
-    .getUserMedia({
-      video: {
-        facingMode: 'environment'
-      },
-      audio: false
-    })
-    .then(stream => {
-      console.log(stream)
-      video.srcObject = stream
-      console.log(video)
-      video.onloadedmetadata = event => {
-        video.play()
-        return video
-      }
-    })
-    .catch(function(err) {
-      return null
-    })
+  return new Promise(() => {
+    navigator.mediaDevices
+      .getUserMedia({
+        video: {
+          facingMode: 'environment'
+        },
+        audio: false
+      })
+      .then(stream => {
+        let video = document.createElement('video')
+        console.log(stream)
+        video.srcObject = stream
+        console.log(video.srcObject)
+        video.onloadedmetadata = event => {
+          video.play()
+          return video
+        }
+      })
+      .catch(function(err) {
+        return null
+      })
+  })
 }
 
 export function stopTracking(sensor, video) {

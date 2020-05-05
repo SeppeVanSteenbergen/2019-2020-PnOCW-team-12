@@ -1459,7 +1459,7 @@ export default {
         to: 'all'
       }
       this.$socket.emit('screenCommand', object)
-      initializeTracking()
+      initializeTracking(this.handleTracking)
     },
     handleTracking(data) {
       let object = {
