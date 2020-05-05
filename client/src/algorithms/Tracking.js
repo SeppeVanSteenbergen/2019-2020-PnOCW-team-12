@@ -106,34 +106,13 @@ async function calculateTransformationCamera(
 
   let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
   let corners = FASTDetector(imageData.data, canvas.width, parameters.threshold)
-  console.log('founded corners with fast')
-/*
-  let transformedcorners = []
-  for (let i = 0; i < corners.length; i += 2) {
-    let point = new DOMPoint(
-      corners[i],
-      corners[i + 1],
-      parameters.fictiveDepth
-    )
-    point.matrixTransform(startTransformation)
 
-    transformedcorners.push(point.x)
-    transformedcorners.push(point.y)
-  }
-
- */
-
-  console.log(corners)
-  console.log('founded transformed corners')
-
-  console.log(imageData)
-  console.log(grayScaleImgData(imageData, false))
   let descriptor = brief.getDescriptors(
     grayScaleImgData(imageData),
     canvas.width,
     corners
   )
-  console.log('descriptor')
+
   console.log(descriptor)
   let trans = {
     x: 0,
@@ -141,16 +120,13 @@ async function calculateTransformationCamera(
   }
 
   if (previousDescriptor !== null) {
-    console.log('nb previousCorners: ' + previousCorners.length)
-    console.log('previousDescriptor')
-    console.log(previousDescriptor)
     let matches = brief.reciprocalMatch(
       previousCorners,
       previousDescriptor,
       corners,
       descriptor
     )
-    console.log(matches)
+
     let selectedCount = 0
     for (let i = 0; i < matches.length; i++) {
       if (matches[i].confidence > parameters.confidence) {
@@ -169,11 +145,7 @@ async function calculateTransformationCamera(
     trans.x = point.x + previousTranslation.x
     trans.y = point.y + previousTranslation.y
 
-    console.log('nb useful key points: ' + selectedCount)
   }
-
-  console.log('found transformation x: ' + trans.x + ' y: ' + trans.y)
-
   return {
     transformation: trans,
     previousCorners: corners,
