@@ -114,7 +114,7 @@ async function calculateTransformationCamera(
       corners[i + 1],
       parameters.fictiveDepth
     )
-    //point.matrixTransform(startTransformation)
+    point.matrixTransform(startTransformation)
     //TODO kan probleem zijn dat rotationmatrix ingesteld staat op roteren rond middenpunt
     //  punten staan t.o.v. linkerbovenhoek
     transformedcorners.push(point.x)
@@ -153,8 +153,8 @@ async function calculateTransformationCamera(
     for (let i = 0; i < matches.length; i++) {
       if (matches[i].confidence > parameters.confidence) {
         selectedCount++
-        trans.x += matches[i].keypoint2[0] - matches[i].keypoint1[0]
-        trans.y += matches[i].keypoint2[1] - matches[i].keypoint1[1]
+        trans.x += matches[i].keypoint1[0] - matches[i].keypoint2[0]
+        trans.y += matches[i].keypoint1[1] - matches[i].keypoint2[1]
       }
     }
     if (selectedCount > 0) {
