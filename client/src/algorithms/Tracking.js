@@ -123,6 +123,8 @@ async function calculateTransformationCamera(
     canvas.width,
     transformedcorners
   )
+  console.log('descriptor')
+  console.log(descriptor)
   let trans = {
     x: 0,
     y: 0
@@ -130,6 +132,8 @@ async function calculateTransformationCamera(
 
   if (previousDescriptor !== null) {
     console.log('nb previousCorners: ' + previousCorners.length)
+    console.log('previousDescriptor')
+    console.log(previousDescriptor)
     let matches = Brief.reciprocalMatch(
       previousCorners,
       previousDescriptor,
