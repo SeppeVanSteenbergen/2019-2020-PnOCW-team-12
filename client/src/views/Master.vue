@@ -71,8 +71,7 @@
               >
               <v-btn
                 @click="
-                  screenDetectionDialog = true
-                  executeDisplayDetectionScreens()
+                  handleDetectionButton
                 "
                 text
                 color="primary"
@@ -247,19 +246,19 @@
       <v-stepper v-model="detectionStepper" class="fullheight">
         <template>
           <v-stepper-header>
-            <v-stepper-step :complete="detectionStepper > 1" step="1"
+            <v-stepper-step :complete="detectionStepper > 1" step="1" editable
               >Take Picture</v-stepper-step
             >
 
             <v-divider></v-divider>
 
-            <v-stepper-step :complete="detectionStepper > 2" step="2"
+            <v-stepper-step :complete="detectionStepper > 2" step="2" editable
               >Result Display</v-stepper-step
             >
 
             <v-divider></v-divider>
 
-            <v-stepper-step :complete="detectionStepper > 3" step="3"
+            <v-stepper-step :complete="detectionStepper > 3" step="3" editable
               >Usage</v-stepper-step
             >
           </v-stepper-header>
@@ -506,10 +505,8 @@
                   <v-btn
                     style="margin: 10px"
                     color="primary"
-                    @click="
-                      detectionStepper = 1
-                      executeDisplayDetectionScreens()
-                    "
+                    @click="displayDialog = 1
+                            "
                     >New Slave Setup</v-btn
                   >
                 </v-row>
@@ -722,6 +719,13 @@ export default {
     },
     getClientInfo() {
       this.$socket.emit('getClientInfo')
+    },
+    handleDetectionButton() {
+      this.screenDetectionDialog = true
+      if (!this.analysedImage) {
+        this.detectionStepper = 1
+        this.executeDisplayDetectionScreens()
+      }
     },
     executeDisplayDetectionScreens() {
       let object = {

@@ -235,6 +235,8 @@ export default {
       this.countDownRunning = false
       this.canvWrap.style = this.defaultCSS
       this.canvas.style.transform = new DOMMatrix()
+      this.canvas.width = window.innerWidth
+      this.canvas.height = window.innerHeight
       this.canvasMode = true
       this.animationRunning = false
     },
