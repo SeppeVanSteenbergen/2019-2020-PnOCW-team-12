@@ -176,7 +176,7 @@ async function calculateTransformationCamera(
 
   return {
     transformation: trans,
-    previousCorners: transformedcorners,
+    previousCorners: corners,
     previousDescriptor: descriptor
   }
 }
