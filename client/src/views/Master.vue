@@ -1445,7 +1445,7 @@ export default {
         this.executeStopTracking()
       }
     },
-    executeInitTracking() {
+    async executeInitTracking() {
       let object = {
         payload: {
           type: 'tracking-init',
@@ -1454,7 +1454,7 @@ export default {
         to: 'all'
       }
       this.$socket.emit('screenCommand', object)
-      this.tracking = initializeTracking()
+      this.tracking = await initializeTracking()
     },
     handleTracking(data) {
       let object = {
@@ -1468,8 +1468,8 @@ export default {
       }
       this.$socket.emit('screenCommand', object)
     },
-    executeStartTracking() {
-      this.executeInitTracking()
+    async executeStartTracking() {
+      await this.executeInitTracking()
       startTracking(this.tracking.sensor, this.tracking.video)
       calculateTransformation(
               this.handleTracking,

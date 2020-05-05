@@ -1,12 +1,12 @@
 import {FASTDetector, grayScaleImgData} from "./FASTDetector";
 import Brief from "./Brief";
 
-export function initializeTracking(){
-    let sensor = setupSensor();
+export async function initializeTracking(){
+    let sensor = await setupSensor();
     if(sensor === null)
         throw "sensor equals null"
 
-    let video = setupCamera();
+    let video = await setupCamera();
     if(video === null)
         throw "video equals null"
     //TODO videoWidth en videoHeight aan canvaselement geven
@@ -65,10 +65,7 @@ export function stopTracking(sensor, video){
 }
 
 export function startTracking(sensor, video){
-    while(Promise.resolve(sensor) == sensor || Promise.resolve(video) == video){
-        setTimeout(() => {console.log("waiting for sensor and/or camera")}, 1000)
-    }
-    sensor.start() 
+    sensor.start()
     video.play()
 }
 
