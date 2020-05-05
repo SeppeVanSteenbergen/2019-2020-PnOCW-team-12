@@ -1,9 +1,10 @@
 // https://trackingjs.com/api/Brief.js.html
 export default class Brief {
-  constructor(N){
+  constructor(N) {
     this.N = N
     this.randomImageOffsets = {}
     this.randomWindowOffsets = null
+  }
 
   getDescriptors(pixels, width, keyPoints) {
     // Optimizing divide by 32 operation using binary shift
