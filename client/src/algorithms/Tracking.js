@@ -1,15 +1,24 @@
 import { FASTDetector, grayScaleImgData } from './FASTDetector'
 import Brief from './Brief'
 
-export async function initializeTracking() {
-  let sensor = await setupSensor()
-  if (sensor === null) throw 'sensor equals null'
+export function initializeTracking() {
+  setupSensor().then(sensor => {
+    setupCamera().then(video =>{
+      console.log(sensor)
+      console.log(video)
+      calculateTransformation(
+          this.handleTracking,
+          sensor,
+          video,
+          null,
+          null,
+          null,
+          { threshold: 20, fictiveDepth: 1000, confidence: 0.75 }
+      )
+    })
+  })
 
-  let video = await setupCamera()
-  if (video === null) throw 'video equals null'
-  //TODO videoWidth en videoHeight aan canvaselement geven
 
-  return { video: video, sensor: sensor }
 }
 
 async function setupSensor() {
