@@ -136,6 +136,7 @@ async function calculateTransformationCamera(
       transformedcorners,
       descriptor
     )
+    console.log(matches)
     let selectedCount = 0
     for (let i = 0; i < matches.length; i++) {
       if (matches[i].confidence > parameters.confidence) {
