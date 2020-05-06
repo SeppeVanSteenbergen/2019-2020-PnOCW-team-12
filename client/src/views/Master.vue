@@ -1494,9 +1494,9 @@ export default {
           null,
           null,
           {
-            threshold: 40,
+            threshold: 35,
             fictiveDepth: 1000,
-            confidence: 0.75
+            confidence: 0.9
           }
         )
       })

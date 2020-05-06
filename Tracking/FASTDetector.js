@@ -1,11 +1,30 @@
-function FASTDetector(pixels, width, height, threshold){
-    let nbContiguous = 12
+function FASTDetector(pixels, width, height, threshold) {
+    let blocks = 20
+    //Width and height of video are 640x480.
+    let blockWidth = width / blocks
+    let blockHeight = height / blocks
     let interestingPoints = []
+    for (let i = 0; i < blocks * blocks; i++) {
+        let blockX = i % blocks
+        let blockY = (i / blocks) >> 0
+
+        let point = blockFASTDetector(pixels, width, blockX, blockY, blockWidth, blockHeight, threshold)
+        if (point !== null) {
+            interestingPoints.push(point[0])
+            interestingPoints.push(point[1])
+        }
+    }
+
+    return interestingPoints
+}
+
+function blockFASTDetector(pixels, width, blockX, blockY, blockWidth, blockHeight, threshold) {
+    let nbContiguous = 12
 
     let offsets = bresenhamCircle(width)
-    for (let i = 0; i < (width - 6) * (height - 6); i++) {
-        let x = 3 + (i % (width - 6))
-        let y = (3 + i / width) >> 0
+    for (let i = 0; i < (blockWidth - 6) * (blockHeight - 6); i++) {
+        let x = blockX * blockWidth + 3 + (i % (blockWidth - 6))
+        let y = (blockY * blockHeight + 3 + i / blockWidth) >> 0
         let position = y * width + x
 
         let intensity = pixels[position]
@@ -33,18 +52,14 @@ function FASTDetector(pixels, width, height, threshold){
             }
             //x en y apart, dit is efficiënter qua geheugen
             if (intensityStreak >= nbContiguous) {
-                interestingPoints.push(x)
-                interestingPoints.push(y)
+                return [x, y]
             }
         }
     }
 
-    return interestingPoints
+    return null
 }
 
-function outOfThreshold(intensity1, intensity2, threshold) {
-  return Math.abs(intensity1 - intensity2) > threshold;
-}
 //radius = 3 voor FAST! => dit moet 16 pixels teruggeven
 function bresenhamCircle(width) {
     return [
@@ -65,6 +80,10 @@ function bresenhamCircle(width) {
         -2 * width - 2,
         -3 * width - 1
     ]
+}
+
+function outOfThreshold(intensity1, intensity2, threshold) {
+    return Math.abs(intensity1 - intensity2) > threshold
 }
 
 function grayScaleImgData(pixels) {
