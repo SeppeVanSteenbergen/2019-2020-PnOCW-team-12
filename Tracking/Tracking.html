@@ -13,11 +13,12 @@
 	<label><input type="text"  id="confidence" oninput="confidence = this.value"> confidenceThreshold</label><br/>
 	<label><input type="checkbox" id="sensors" onchange="sensors = this.checked">Sensors</label><br/>
 	<label><input type="checkbox" id="translation" onchange="translation = this.checked">Translation</label><br/>
-	<button onclick="player = {x:200,y:200};">Reset Position</button>
 </div>
+<button onclick="x = 0; y = 0">Reset Position</button>
 <p id="out"></p>
 <canvas id="canv"></canvas>
-<canvas style="border: 3px solid black" id="game"></canvas>
+<canvas style="position: absolute; left: 0; top: 200px; z-index: 0;" id="box" width="1920" height="880"></canvas>
+<canvas style="border: 5px solid black" id="game"></canvas>
 <video id="vid"></video>
 <img id="homer" src="build/homer.jpg" style="display:none"/>
 </body>
@@ -28,62 +29,66 @@
 	<script src="https://threejs.org/build/three.js"></script>
 
 	<script lang="text/javascript">
-        // config
-        let framerate = 300 // ms wait time
-        let firstCompare = true  // only compare next frames with first, or compare with previous frame
+		// config
+		let framerate = 30 // ms wait time
+		let firstCompare = false  // only compare next frames with first, or compare with previous frame
 
-        let translation = false;
+		let translation = true;
 		let sensors = false;
 
-        //Fast config
-        let hold = 50 // threshold
+		//Fast config
+		let hold = 20 // threshold
 
-        // Brief settings
-        let confidence = 0.7 // how sure when matching keypoints
+		// Brief settings
+		let confidence = 0.7 // how sure when matching keypoints
 
-        //// end config ////
+		//// end config ////
 
+		let box = document.getElementById('box')
 
-        let video = document.getElementById('vid')
-        let canvas = document.getElementById('canv')
-        let ctx = canvas.getContext('2d')
-        let settings = document.getElementById('settings')
+		let video = document.getElementById('vid')
+		let canvas = document.getElementById('canv')
+		let ctx = canvas.getContext('2d')
+		let settings = document.getElementById('settings')
 
-        let homer = document.getElementById('homer')
+		let homer = document.getElementById('homer')
 
-        document.getElementById('checkboxCompare').checked = firstCompare
-        document.getElementById('framerate').value = framerate
-        document.getElementById('hold').value = hold
-        document.getElementById('confidence').value = confidence
-        document.getElementById('translation').checked = translation
+		document.getElementById('checkboxCompare').checked = firstCompare
+		document.getElementById('framerate').value = framerate
+		document.getElementById('hold').value = hold
+		document.getElementById('confidence').value = confidence
+		document.getElementById('translation').checked = translation
 		document.getElementById('sensors').checked = sensors
 
-        function toggleSettings() {
-            if(settings.style.display === 'none') {
-                settings.style.display = 'block'
-            } else {
-                settings.style.display = 'none'
-            }
-        }
+		function toggleSettings() {
+			if(settings.style.display === 'none') {
+				settings.style.display = 'block'
+			} else {
+				settings.style.display = 'none'
+			}
+		}
 
-        let game = document.getElementById('game')
-        let ctg = game.getContext('2d')
-        game.width = 400
-        game.height = 400
+		let game = document.getElementById('game')
+		let ctg = game.getContext('2d')
+		let ctb = box.getContext('2d')
 
-        let player = {
-            x:200,
-            y:200
-        }
+		game.width = 400
+		game.height = 400
 
-        video.style.display = 'none'
+		let player = {
+			x:200,
+			y:200
+		}
+		let x = 0;
+		let y = 0;
+		video.style.display = 'none'
 
-        let previousDescriptor = null
-        let previousCorners = null
+		let previousDescriptor = null
+		let previousCorners = null
 
-        let matches = null
-        let trans
-        let out = document.getElementById('out')
+		let matches = null
+		let trans
+		let out = document.getElementById('out')
 
 		const sensor = new AbsoluteOrientationSensor();
 		let axisOffset = new THREE.Quaternion(0, 0, 0, 1);
@@ -130,7 +135,7 @@
 								game.style.MozTransform = `matrix3d(${b1}, ${-c1}, ${a1}, ${d1}, ${b2}, ${-c2}, ${a2}, ${d2}, ${b3}, ${-c3}, ${a3}, ${d3}, ${a4}, ${b4}, ${c4}, ${d4})` + "rotate(90deg)";
 								game.style.transform = `matrix3d(${b1}, ${-c1}, ${a1}, ${d1}, ${b2}, ${-c2}, ${a2}, ${d2}, ${b3}, ${-c3}, ${a3}, ${d3}, ${a4}, ${b4}, ${c4}, ${d4})` + "rotate(90deg)";
 							}
-							});
+						});
 						sensor.addEventListener('error', error => {
 							if (event.error.name == 'NotReadableError') {
 								console.log("Sensor is not available.");
@@ -142,34 +147,32 @@
 						console.log("No permissions to use AbsoluteOrientationSensor.");
 					}
 				});
-        // Javascript
-        navigator.mediaDevices.getUserMedia({
-                video: {
-                    facingMode: 'environment'
-                },
-                audio:false
-            }
-        ).then(function(stream) {
-            video.srcObject = stream;
-            video.onloadedmetadata = function(e) {
-                video.play();
-                canvas.width = video.videoWidth
-                canvas.height = video.videoHeight
-				//calc
-				//callback
-                draw()
-            };
-        }).catch(function(err) {
-            // deal with an error (such as no webcam)
-        });
+		// Javascript
+		navigator.mediaDevices.getUserMedia({
+					video: {
+						facingMode: 'environment'
+					},
+					audio:false
+				}
+		).then(function(stream) {
+			video.srcObject = stream;
+			video.onloadedmetadata = function(e) {
+				video.play();
+				canvas.width = video.videoWidth
+				canvas.height = video.videoHeight
+				draw()
+			};
+		}).catch(function(err) {
+			// deal with an error (such as no webcam)
+		});
 
 
-        function draw() {
-            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-            let imgData = ctx.getImageData(0,0,canvas.width, canvas.height)
+		function draw() {
+			ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+			let imgData = ctx.getImageData(0,0,canvas.width, canvas.height)
 			if(translation){
-				let grayPixels = grayScaleImgData(imgData,false)
-				let corners = FASTDetector(imgData.data, canvas.width, hold)
+				let grayPixels = grayScaleImgData(imgData.data)
+				let corners = FASTDetector(grayPixels, canvas.width, canvas.height, hold)
 				for (let i = 0; i < corners.length; i++) {
 					ctx.fillStyle = '#f00';
 					ctx.fillRect(corners[i][0], corners[i][1], 3, 3);
@@ -180,11 +183,8 @@
 				}
 
 				let descriptor = Brief.getDescriptors(grayPixels, canvas.width, corners)
-				console.log(descriptor)
 				if(previousDescriptor !== null) {
-					matches = Brief.reciprocalMatch(
-							previousCorners,
-							previousDescriptor, corners, descriptor)
+					matches = Brief.reciprocalMatch(previousCorners, previousDescriptor, corners, descriptor)
 					let selectedCount = 0
 					for (let i = 0; i < matches.length; i++) {
 						if (matches[i].confidence > confidence) {
@@ -205,19 +205,44 @@
 					previousDescriptor = descriptor
 					previousCorners = corners
 				}
-
 				//draw game
 				if(firstCompare) {
-					player.x = trans.x + 200
-					player.y = trans.y + 200
+					x = trans.x
+					y = trans.y
 				} else {
-					player.x += trans.x
-					player.y += trans.y
+					x += trans.x
+					y -= trans.y
 				}
+				let dommatrix = new DOMMatrix("translate(" + x + "px, " + y + "px)");
+				game.style.transform = dommatrix;
+
 				ctg.clearRect(0, 0, game.width, game.height)
-				ctg.drawImage(homer, -130,0, 700,400)
-				ctg.fillStyle = '#f00';
-				ctg.fillRect(player.x, player.y, 20, 20);
+				ctg.fillStyle="rgba(0, 0, 0, 0.7)"
+				ctg.fillRect(0, 0, game.width, game.height);
+
+				ctb.beginPath()
+				ctb.lineWidth = 5;
+				ctb.rect(650,100,game.width,game.height)
+				ctb.stroke()
+
+				ctb.clearRect(0,0,box.width, box.height)
+				ctb.drawImage(homer, 650,100, game.width,game.height)
+
+				ctb.moveTo(650, 100);
+				ctb.lineTo(x+655, y+95);
+
+				ctb.moveTo(650+game.width, 100);
+				ctb.lineTo(x+655+game.width, y+95);
+
+				ctb.moveTo(650+game.width, 100+game.height);
+				ctb.lineTo(x+655+game.width, y+95+game.height);
+
+				ctb.moveTo(650, 100+game.height);
+				ctb.lineTo(x+655, y+100+game.height);
+
+				ctb.stroke();
+
+
 
 
 				// draw keypoints
@@ -227,31 +252,31 @@
 				}
 			}
 
-            setTimeout(draw, framerate);
-        }
+			setTimeout(draw, framerate);
+		}
 
 
-        /**
-         * multiply matrix. as matrix[row][col]
-         * @param matrixA
-         * @param matrixB
-         * @returns {any[]}
-         */
-        function multiply(a, b) {
-            var aNumRows = a.length, aNumCols = a[0].length,
-                bNumRows = b.length, bNumCols = b[0].length,
-                m = new Array(aNumRows);  // initialize array of rows
-            for (var r = 0; r < aNumRows; ++r) {
-                m[r] = new Array(bNumCols); // initialize the current row
-                for (var c = 0; c < bNumCols; ++c) {
-                    m[r][c] = 0;             // initialize the current cell
-                    for (var i = 0; i < aNumCols; ++i) {
-                        m[r][c] += a[r][i] * b[i][c];
-                    }
-                }
-            }
-            return m;
-        }
+		/**
+		 * multiply matrix. as matrix[row][col]
+		 * @param matrixA
+		 * @param matrixB
+		 * @returns {any[]}
+		 */
+		function multiply(a, b) {
+			var aNumRows = a.length, aNumCols = a[0].length,
+					bNumRows = b.length, bNumCols = b[0].length,
+					m = new Array(aNumRows);  // initialize array of rows
+			for (var r = 0; r < aNumRows; ++r) {
+				m[r] = new Array(bNumCols); // initialize the current row
+				for (var c = 0; c < bNumCols; ++c) {
+					m[r][c] = 0;             // initialize the current cell
+					for (var i = 0; i < aNumCols; ++i) {
+						m[r][c] += a[r][i] * b[i][c];
+					}
+				}
+			}
+			return m;
+		}
 
 	</script>
 </footer>

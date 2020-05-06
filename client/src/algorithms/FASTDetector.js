@@ -1,39 +1,40 @@
-export function FASTDetector(rgbaPixels, width, threshold) {
+export function FASTDetector(pixels, width, height, threshold) {
   let nbContiguous = 12
   let interestingPoints = []
 
-  let grayMatrix = grayScaleMatrix(rgbaPixels, width)
+  let offsets = bresenhamCircle(width)
+  for (let i = 0; i < (width - 6) * (height - 6); i++) {
+    let x = 3 + (i % (width - 6))
+    let y = (3 + i / width) >> 0
+    let position = y * width + x
 
-  for (let y = 3; y < grayMatrix.length - 3; y++) {
-    for (let x = 3; x < grayMatrix[0].length - 3; x++) {
-      let intensity = grayMatrix[y][x]
-      let circle = bresenhamCircle([x, y])
-      for (let i = 0; i < circle.length; i++)
-        circle[i] = grayMatrix[circle[i][1]][circle[i][0]]
-      let nbOutOfThreshold = 0
+    let intensity = pixels[position]
+    let circles = new Array(offsets.length)
+    for (let j = 0; j < offsets.length; j++) {
+      circles[j] = pixels[position + offsets[j]]
+    }
 
-      if (outOfThreshold(intensity, circle[0], threshold)) nbOutOfThreshold++
-      if (outOfThreshold(intensity, circle[4], threshold)) nbOutOfThreshold++
-      if (outOfThreshold(intensity, circle[8], threshold)) nbOutOfThreshold++
-      if (outOfThreshold(intensity, circle[12], threshold)) nbOutOfThreshold++
+    let nbOutOfThreshold = 0
+    if (outOfThreshold(intensity, circles[0], threshold)) nbOutOfThreshold++
+    if (outOfThreshold(intensity, circles[4], threshold)) nbOutOfThreshold++
+    if (outOfThreshold(intensity, circles[8], threshold)) nbOutOfThreshold++
+    if (outOfThreshold(intensity, circles[12], threshold)) nbOutOfThreshold++
 
-      let intensityStreak = 0
-
-      if (nbOutOfThreshold >= 3) {
-        nbOutOfThreshold = 0
-        for (let i in circle) {
-          if (outOfThreshold(intensity, circle[i], threshold)) {
-            nbOutOfThreshold++
-          } else {
-            intensityStreak = Math.max(intensityStreak, nbOutOfThreshold)
-            nbOutOfThreshold = 0
-          }
+    let intensityStreak = 0
+    if (nbOutOfThreshold >= 3) {
+      nbOutOfThreshold = 0
+      for (let circle of circles) {
+        if (outOfThreshold(intensity, circle, threshold)) {
+          nbOutOfThreshold++
+        } else {
+          intensityStreak = Math.max(intensityStreak, nbOutOfThreshold)
+          nbOutOfThreshold = 0
         }
-        //x en y apart, dit is efficiënter qua geheugen
-        if (nbOutOfThreshold >= nbContiguous) {
-          interestingPoints.push(x)
-          interestingPoints.push(y)
-        }
+      }
+      //x en y apart, dit is efficiënter qua geheugen
+      if (intensityStreak >= nbContiguous) {
+        interestingPoints.push(x)
+        interestingPoints.push(y)
       }
     }
   }
@@ -41,61 +42,38 @@ export function FASTDetector(rgbaPixels, width, threshold) {
   return interestingPoints
 }
 
+//radius = 3 voor FAST! => dit moet 16 pixels teruggeven
+function bresenhamCircle(width) {
+  return [
+    -3 * width,
+    -3 * width + 1,
+    -2 * width + 2,
+    -1 * width + 3,
+    3,
+    1 * width + 3,
+    2 * width + 2,
+    3 * width + 1,
+    3 * width,
+    3 * width - 1,
+    2 * width - 2,
+    1 * width - 3,
+    -3,
+    -1 * width - 3,
+    -2 * width - 2,
+    -3 * width - 1
+  ]
+}
+
 function outOfThreshold(intensity1, intensity2, threshold) {
   return Math.abs(intensity1 - intensity2) > threshold
 }
-//radius = 3 voor FAST! => dit moet 16 pixels teruggeven
-function bresenhamCircle(midPointCoo) {
-  let circle = [
-    [0, -3],
-    [1, -3],
-    [2, -2],
-    [3, -1],
-    [3, 0],
-    [3, 1],
-    [2, 2],
-    [1, 3],
-    [0, 3],
-    [-1, 3],
-    [-2, 2],
-    [-3, 1],
-    [-3, 0],
-    [-3, -1],
-    [-2, -2],
-    [-1, -3]
-  ]
-  for (let i = 0; i < circle.length; i++) {
-    circle[i][0] += midPointCoo[0]
-    circle[i][1] += midPointCoo[1]
-  }
 
-  return circle
-}
-
-function grayScaleMatrix(rgbaPixels, width) {
-  let y = 0
-  let matrix = [[]]
-  for (let i = 0; i < rgbaPixels.length; i += 4) {
-    //Verschil zie: https://www.tutorialspoint.com/dip/grayscale_to_rgb_conversion.htm
-    let grayScale =
-      0.3 * rgbaPixels[i] + 0.59 * rgbaPixels[i + 1] + 0.11 * rgbaPixels[i + 1]
-    //let grayScale = (rgbaPixels[i] + rgbaPixels[i + 1] + rgbaPixels[i + 2]) / 3;
-    if (matrix[y].length >= width) {
-      y++
-      if (i !== rgbaPixels.length - 1) matrix.push([])
-    }
-    matrix[y].push(grayScale)
-  }
-
-  return matrix
-}
-
-export function grayScaleImgData(imgData) {
-  let pixels = imgData.data
-  let gray = new Uint8ClampedArray(pixels.length / 4)
+export function grayScaleImgData(pixels) {
+  let gray = new Uint8ClampedArray(pixels.length >> 2)
   let w = 0
   for (let p = 0; p < pixels.length; p += 4)
-      gray[w++] = pixels[p] * 0.299 + pixels[p + 1] * 0.587 + pixels[p + 2] * 0.114
+    gray[w++] =
+      pixels[p] * 0.299 + pixels[p + 1] * 0.587 + pixels[p + 2] * 0.114
 
   return gray
 }
