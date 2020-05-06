@@ -107,25 +107,32 @@ async function calculateTransformationCamera(
     video.videoHeight
   )
   let t2 = performance.now()
-  console.log('init transformation camera took ' + (t2 - t1) + 'ms')
+  console.log('Drawing video on canvas took: ' + (t2 - t1) + 'ms')
+
+  t1 = performance.now()
+  let grayScalePixels = grayScaleImgData(imageData.data)
+  t2 = performance.now()
+  console.log('Creating gray scale pixels took: ' + (t2 - t1) + 'ms')
+
 
   t1 = performance.now()
   let corners = FASTDetector(
-    imageData.data,
+    grayScalePixels,
     video.videoWidth,
+    video.videoHeight,
     parameters.threshold
   )
   t2 = performance.now()
-  console.log('FastDetector took ' + (t2 - t1) + 'ms')
+  console.log('FastDetector took: ' + (t2 - t1) + 'ms')
 
   t1 = performance.now()
   let descriptor = brief.getDescriptors(
-    grayScaleImgData(imageData),
+    grayScalePixels,
     video.videoWidth,
     corners
   )
   t2 = performance.now()
-  console.log('making descriptor took ' + (t2 - t1) + 'ms')
+  console.log('making descriptor took: ' + (t2 - t1) + 'ms')
 
   let trans = {
     x: 0,
@@ -142,7 +149,7 @@ async function calculateTransformationCamera(
     )
     t2 = performance.now()
 
-    console.log('matching took ' + (t2 - t1) + 'ms')
+    console.log('matching took: ' + (t2 - t1) + 'ms')
 
     t1 = performance.now()
     let selectedCount = 0
@@ -163,7 +170,7 @@ async function calculateTransformationCamera(
     trans.x = point.x + previousTranslation.x
     trans.y = point.y + previousTranslation.y
     t2 = performance.now()
-    console.log('calculating translation took ' + (t2 - t1) + 'ms')
+    console.log('calculating translation took: ' + (t2 - t1) + 'ms')
   }
   return {
     transformation: trans,
