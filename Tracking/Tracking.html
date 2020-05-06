@@ -30,17 +30,17 @@
 
 	<script lang="text/javascript">
 		// config
-		let framerate = 30 // ms wait time
+		let framerate = 0 // ms wait time
 		let firstCompare = false  // only compare next frames with first, or compare with previous frame
 
 		let translation = true;
 		let sensors = false;
 
 		//Fast config
-		let hold = 20 // threshold
+		let hold = 40 // threshold
 
 		// Brief settings
-		let confidence = 0.7 // how sure when matching keypoints
+		let confidence = 0.9 // how sure when matching keypoints
 
 		//// end config ////
 
@@ -150,9 +150,9 @@
 		// Javascript
 		navigator.mediaDevices.getUserMedia({
 					video: {
-						facingMode: 'environment',
-						width: 640,
-						height: 480
+						facingMode: 'environment'/*,
+						width: 1920,
+						height: 1080*/
 					},
 					audio:false
 				}
@@ -188,20 +188,34 @@
 				if(previousDescriptor !== null) {
 					matches = Brief.reciprocalMatch(previousCorners, previousDescriptor, corners, descriptor)
 					let selectedCount = 0
+					let ricos = []
 					for (let i = 0; i < matches.length; i++) {
 						if (matches[i].confidence > confidence) {
 							selectedCount++
-							trans.x += matches[i].keypoint2[0] - matches[i].keypoint1[0]
-							trans.y += matches[i].keypoint2[1] - matches[i].keypoint1[1]
+
+							let difX = matches[i].keypoint2[0] - matches[i].keypoint1[0]
+							let difY = matches[i].keypoint2[1] - matches[i].keypoint1[1]
+
+							trans.x += difX
+							trans.y += difY
+
+							if (difX === 0) {
+								ricos.push(0)
+							} else {
+								ricos.push(difY / difX)
+							}
 						}
 					}
+
+					console.log(ricos)
+					console.log(Math.max(...ricos) - Math.min(...ricos))
+
 					if (selectedCount > 0) {
 						trans.x = trans.x / selectedCount
 						trans.y = trans.y / selectedCount
 					}
 					out.innerText = "x: " + trans.x + " y: " + trans.y
 				}
-
 
 				if(!firstCompare || previousDescriptor === null) {
 					previousDescriptor = descriptor

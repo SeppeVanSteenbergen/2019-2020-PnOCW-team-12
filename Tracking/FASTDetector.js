@@ -1,12 +1,11 @@
 function FASTDetector(pixels, width, height, threshold) {
-    let blocks = 20
+    let blocks = 40
     //Width and height of video are 640x480.
     let blockWidth = width / blocks
     let blockHeight = height / blocks
     let interestingPoints = []
     for (let i = 0; i < blocks * blocks; i++) {
-        //& == % x + 1
-        let blockX = i & (blocks - 1)
+        let blockX = i % blocks
         let blockY = (i / blocks) >> 0
 
         let point = blockFASTDetector(pixels, width, blockX, blockY, blockWidth, blockHeight, threshold)
@@ -22,7 +21,7 @@ function FASTDetector(pixels, width, height, threshold) {
 function blockFASTDetector(pixels, width, blockX, blockY, blockWidth, blockHeight, threshold) {
     let offsets = bresenhamCircle(width)
     for (let i = 0; i < (blockWidth - 6) * (blockHeight - 6); i++) {
-        let x = blockX * blockWidth + 3 + (i & (blockWidth - 1 - 6))
+        let x = blockX * blockWidth + 3 + (i % (blockWidth - 6))
         let y = (blockY * blockHeight + 3 + i / blockWidth) >> 0
         let position = y * width + x
 
