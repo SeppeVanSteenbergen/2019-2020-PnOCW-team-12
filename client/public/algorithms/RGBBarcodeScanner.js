@@ -8,29 +8,28 @@ class RGBBarcodeScanner {
     )
     let iterator = new PixelIterator(LU, RU, imageData.width, imageData.height)
 
-    let barcodes = {}
     let spectrum = this.channelAvg(imageData.data)
+
+    let barcodes = {}
+    let grey = spectrum[0]
+    let distance = Math.round((spectrum[1] - spectrum[2]) / 2)
+    let black = [grey[0] - distance, grey[1] - distance, grey[2] - distance]
+    let white = [grey[0] + distance, grey[1] + distance, grey[2] + distance]
+
     while (iterator.hasNextRow()) {
       let row = iterator.nextRow()
-      let filteredRow = this.noiseFilter(imageData, row, spectrum)
+      let filteredRow = this.noiseFilter(imageData, row, grey, black, white)
       imageData = this.getMaskRow(imageData, row, filteredRow)
       barcodes = this.scanRow(filteredRow, barcodes)
     }
-    let highest = this.getHighestCode(barcodes)
-    let values = Object.keys(barcodes).map(function(key) {
-      return barcodes[key]
-    })
-    let totalScanned = values.reduce((a, b) => a + b, 0)
-    console.log(barcodes[highest] / totalScanned)
-    console.log(barcodes)
-    return highest
+    return this.getHighestCode(barcodes)
   }
 
   static scanRow(pixels, barcodes) {
     let scanned = []
     let greyScan = false
-
     for (let value of pixels) {
+      let binary = value/255
       if (!greyScan) {
         if (value === 128) {
           greyScan = true
@@ -51,12 +50,12 @@ class RGBBarcodeScanner {
             scanned = []
           }
         } else if (scanned.length > 0) {
-          if (scanned[scanned.length - 1] !== value / 255) {
-            scanned.push(value / 255)
+          if (scanned[scanned.length - 1] !== binary) {
+            scanned.push(binary)
           }
         }
       } else if (value !== 128) {
-        scanned.push(value / 255) // set to ones and zeros
+        scanned.push(binary) // set to ones and zeros
         greyScan = false
       }
     }
@@ -72,12 +71,8 @@ class RGBBarcodeScanner {
   }
 
   //spectrum = [[R/pixelNb, G/pixelNb, B/pixelNb], closestWhite, closestBlack]
-  static noiseFilter(imgData, row, spectrum) {
+  static noiseFilter(imgData, row, grey, black, white) {
     let pixels = imgData.data
-    let grey = spectrum[0]
-    let distance = Math.round((spectrum[1] - spectrum[2]) / 2)
-    let black = [grey[0] - distance, grey[1] - distance, grey[2] - distance]
-    let white = [grey[0] + distance, grey[1] + distance, grey[2] + distance]
     let kSize = 15
     let half = Math.floor(kSize / 2)
     let filteredRow = []
