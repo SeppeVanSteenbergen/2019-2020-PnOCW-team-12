@@ -9,8 +9,6 @@ class Island {
    * @param matrix
    */
   constructor(leftUpperCoo, rightBottomCoo, id, HSLImage, RGBImage, matrix) {
-    console.log('Start creating island with ID ' + id)
-    // console.log('Start creating island with ID ' + id)
     this.corners = {
       LU: null,
       RU: null,
@@ -38,8 +36,6 @@ class Island {
     this.midPoint = this.calcMid()
     if (this.midPoint === null) throw 'No midpoint in island '
     this.clientCode = null
-    console.log('Island ' + id + ' created')
-    // console.log('Island ' + id + ' created')
   }
 
   setScreenMatrix(matrix) {
@@ -104,7 +100,6 @@ class Island {
     xValues = Island.filterPoints(xValues)
     yValues = Island.filterPoints(yValues)
 
-    console.log('Midpoint of island ' + this.getRealID() + ' calculated')
     self.postMessage({text: 'MESSAGE', msg:'Midpoint of island ' + this.getRealID() + ' calculated'})
     return [
       xValues[Math.round(xValues.length / 2)],
@@ -179,7 +174,6 @@ class Island {
   }
 
   finishIsland() {
-    console.log('Try to identify island ' + this.id)
     this.findCorners()
     this.clientCode = RGBBarcodeScanner.scan(
       this.getScreenImgData(this.RGBImage),
@@ -192,7 +186,6 @@ class Island {
       text: 'MESSAGE',
       msg: 'Detected client code for screen ' + this.getRealID() + ': ' + this.clientCode
     })
-    console.log('Detected screen: ' + this.clientCode)
   }
 
   localToWorld() {
@@ -242,7 +235,6 @@ class Island {
   }
 
   getScreenImg(image) {
-    console.log('trying to get screen img from doc...')
     let canvas = document.createElement('canvas')
     canvas.width = image.width
     canvas.height = image.height
@@ -291,15 +283,6 @@ class Island {
 
   getWidth() {
     return this.width
-  }
-
-  getSize() {
-    return this.width * this.height
-  }
-
-  print() {
-    console.log('starting co: ' + this.minx + ', ' + this.miny)
-    console.log('ending co: ' + this.maxx + ', ' + this.maxy)
   }
 }
 

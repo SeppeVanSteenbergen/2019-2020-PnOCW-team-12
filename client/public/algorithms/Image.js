@@ -68,7 +68,6 @@ class Image {
 
   setColorSpace(newColorSpace) {
     if (!this.colorSpaces.includes(newColorSpace)) {
-      console.error('colorspace ' + newColorSpace + ' doesn not exist!')
     }
     this.colorSpace = newColorSpace
   }
@@ -98,7 +97,6 @@ class Image {
                 this.imgOriginalRGB,
                 this.matrix
               )
-              console.log('Island ' + this.islandID + 'is valid')
               newIsland.finishIsland()
               this.islands.push(newIsland)
             } catch (err) {
@@ -106,7 +104,6 @@ class Image {
                 text: 'ERROR',
                 msg: err + ' in island: ' + this.getRealIslandID()
               })
-              console.log('Error :' + err + this.getRealIslandID())
             }
             this.islandID += 3
           }

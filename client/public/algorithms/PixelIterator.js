@@ -72,11 +72,4 @@ class PixelIterator {
 
     return row
   }
-
-  test() {
-    while (this.hasNextRow()) {
-      console.log(this.nextRow())
-      console.log(this.b)
-    }
-  }
 }

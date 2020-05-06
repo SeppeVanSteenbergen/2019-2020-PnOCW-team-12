@@ -27,6 +27,7 @@
 	<script src="FASTDetector.js"></script>
 	<script src="Brief.js"></script>
 	<script src="https://threejs.org/build/three.js"></script>
+	<script src="jsfeat.js"></script>
 
 	<script lang="text/javascript">
 		// config
@@ -173,6 +174,11 @@
 			ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 			let imgData = ctx.getImageData(0,0,canvas.width, canvas.height)
 			if(translation){
+				let meanX = 0
+				let meanY = 0
+				let varianceX = 0
+				let varianceY = 0
+
 				let grayPixels = grayScaleImgData(imgData.data)
 				let corners = FASTDetector(grayPixels, canvas.width, canvas.height, hold)
 				for (let i = 0; i < corners.length; i++) {
@@ -181,71 +187,95 @@
 				}
 				trans = {
 					x: 0,
-					y: 0
+					y: 0,
+					z: 0
 				}
 
 				let descriptor = Brief.getDescriptors(grayPixels, canvas.width, corners)
 				if(previousDescriptor !== null) {
 					matches = Brief.reciprocalMatch(previousCorners, previousDescriptor, corners, descriptor)
 					let selectedCount = 0
-					for (let i = 0; i < matches.length; i++) {
-						if (matches[i].confidence > confidence) {
+					for(let i = 0; i < matches.length; i++) {
+						if(matches[i].confidence > confidence) {
 							selectedCount++
 							trans.x += matches[i].keypoint2[0] - matches[i].keypoint1[0]
 							trans.y += matches[i].keypoint2[1] - matches[i].keypoint1[1]
 						}
 					}
-					if (selectedCount > 0) {
+					for (let i = 0; i < matches.length; i +=1) { //TODO: make variance based on matches instead of corners
+						meanX += matches[i].keypoint2[0]
+						meanY += matches[i].keypoint2[1]
+					}
+					meanX = meanX/(matches.length)
+					meanY = meanY/(matches.length)
+					for (let i = 0; i < matches.length; i+=1) {
+						varianceX += (matches[i].keypoint2[0]-meanX)^2
+						varianceY += (matches[i].keypoint2[1]-meanY)^2
+					}
+					varianceX = varianceX/(matches.length)
+					varianceY = varianceY/(matches.length)
+					if(selectedCount > 0) {
 						trans.x = trans.x / selectedCount
 						trans.y = trans.y / selectedCount
 					}
+					let diff = previousVarianceX-varianceX
+					if(diff < 0) {
+						console.log("zoom in: " + diff)
+					} else if (diff > 0) {
+						console.log("zoom out: "+ diff)
+					}
 					out.innerText = "x: " + trans.x + " y: " + trans.y
 				}
+				try {
+					if (previousCorners !== null) {
+						let k1 = []
+						let k2 = []
 
+						for(let i = 0; i < matches.length; i++) {
+							k1[i] = {x:matches[i].keypoint1[0], y: matches[i].keypoint1[1]}
+							k2[i] = {x:matches[i].keypoint2[0], y: matches[i].keypoint2[1]}
+						}
+						//mtx
+						let m = estimateTransformation(k1, k2)
+
+						if(matrix3d){
+							game.style.transform = 'matrix3d('+m[0]+','+m[3]+',0,'+m[6]+','+
+									m[1]+','+m[4]+',0,'+m[7]+','+
+									'0,0,1,0,'+
+									m[2]+','+m[5]+',0,'+m[8]+')'
+						} else {
+							game.style.transform = 'matrix('+m[0]+','+m[3]+','+
+									m[1]+','+m[4]+','+
+									m[2]+','+m[5]+')'
+						}
+
+						//console.log(m)
+					} else {
+						game.style.transform = ''
+					}
+				}catch(e) {
+					console.log(e)
+				}
 
 				if(!firstCompare || previousDescriptor === null) {
 					previousDescriptor = descriptor
 					previousCorners = corners
+					previousVarianceX = varianceX
+					previousVarianceY = varianceY
 				}
+
 				//draw game
 				if(firstCompare) {
-					x = trans.x
-					y = trans.y
+					player.x = trans.x + 200
+					player.y = trans.y + 200
 				} else {
-					x += trans.x
-					y -= trans.y
+					player.x += trans.x
+					player.y += trans.y
 				}
-				let dommatrix = new DOMMatrix("translate(" + x + "px, " + y + "px)");
-				game.style.transform = dommatrix;
-
 				ctg.clearRect(0, 0, game.width, game.height)
-				ctg.fillStyle="rgba(0, 0, 0, 0.7)"
-				ctg.fillRect(0, 0, game.width, game.height);
-
-				ctb.beginPath()
-				ctb.lineWidth = 5;
-				ctb.rect(650,100,game.width,game.height)
-				ctb.stroke()
-
-				ctb.clearRect(0,0,box.width, box.height)
-				ctb.drawImage(homer, 650,100, game.width,game.height)
-
-				ctb.moveTo(650, 100);
-				ctb.lineTo(x+655, y+95);
-
-				ctb.moveTo(650+game.width, 100);
-				ctb.lineTo(x+655+game.width, y+95);
-
-				ctb.moveTo(650+game.width, 100+game.height);
-				ctb.lineTo(x+655+game.width, y+95+game.height);
-
-				ctb.moveTo(650, 100+game.height);
-				ctb.lineTo(x+655, y+100+game.height);
-
-				ctb.stroke();
-
-
-
+				ctg.drawImage(homer, -130,0, 700,400)
+				ctg.fillStyle = '#f00';
+				ctg.fillRect(player.x, player.y, 20, 20);
 
 				// draw keypoints
 				for (let i = 0; i < corners.length; i += 2) {
@@ -255,6 +285,50 @@
 			}
 
 			setTimeout(draw, framerate);
+		}
+
+		/**
+		 * returns an estimated 2d transformation from keypoints1 to keypoints2
+		 * @param from format: [{x:,y:}, ..]
+		 * @param to
+		 */
+		function estimateTransformation(from, to) {
+			// this class allows you to use above Motion Kernels
+			// to estimate motion even with wrong correspondences
+			let ransac = jsfeat.motion_estimator.ransac;
+
+			// create homography kernel
+			// you can reuse it for different point sets
+			let homo_kernel = new jsfeat.motion_model.homography2d();
+			let transform = new jsfeat.matrix_t(3, 3, jsfeat.F32_t | jsfeat.C1_t);
+			let count = from.length;
+			//let from = [];
+			//let to = [];
+
+			/*for(let i = 0; i < count; ++i) {
+              // you can use keypoint_t structure
+              // or just provide object with x and y properties
+              from[i] = { "x":Math.random()*320, "y":Math.random()*240 };
+              to[i] = { "x":from[i].x + Math.random()*5, "y":from[i].y+Math.random()*5 };
+            }*/
+
+			/*for(let i = 0; i < keypoints1.length; i += 2) {
+              from[i/2] = {x:keypoints1[i], y:keypoints1[i+1]}
+              to[i/2] = {x:keypoints2[i], y:keypoints2[i+1]}
+            }*/
+
+
+			// each point will be marked as good(1) or bad(0)
+			let mask = new jsfeat.matrix_t(count, 1, jsfeat.U8_t | jsfeat.C1_t);
+
+
+			let params = new jsfeat.ransac_params_t(model_size, thresh, eps, prob);
+
+
+
+			let ok =  ransac(params, homo_kernel, from, to, count, transform, mask, max_iters);
+
+			return transform.data
 		}
 
 

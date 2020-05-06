@@ -1,8 +1,8 @@
 <template>
   <v-app id="inspire">
     <v-content>
-      <v-container class="fill-height" fluid>
-        <v-row align="center" justify="center">
+      <v-container fluid style="padding-top: 110px">
+        <v-row align="center" justify="center" dense>
           <v-col cols="12" sm="8" md="4">
             <v-card class="elevation-12" min-height="300px">
               <v-toolbar color="primary" dark flat>

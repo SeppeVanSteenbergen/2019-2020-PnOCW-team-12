@@ -1,8 +1,8 @@
 <template>
-  <v-container class="fill-height" fluid>
-    <v-row align="center" justify="center" min-height="300px">
+  <v-container fluid style="padding-top: 110px">
+    <v-row align="center" justify="center" max-width="240px" dense>
       <div>
-        <v-card max-width="400px">
+        <v-card width="240px">
           <v-toolbar color="primary" dark flat>
             <v-toolbar-title>
               {{
@@ -41,7 +41,7 @@
           </v-container>
         </v-card>
         <br />
-        <v-btn @click="goFullscreen()">Go Fullscreen</v-btn>
+        <v-btn @click="goFullscreen()">Fullscreen</v-btn>
         <div
           v-show="isFullscreen"
           ref="canvWrap"
@@ -150,10 +150,6 @@ export default {
           this.setDefaultCSS()
           this.drawDirectionsHandler(message.data)
           break
-        case 'display-image':
-          this.setDefaultCSS()
-          this.drawImageHandler(message.data)
-          break
         case 'display-detection-screen':
           this.setDefaultCSS()
           this.displayDetectionScreenHandler(message.data)
@@ -256,8 +252,6 @@ export default {
       this.canvasMode = false
     },
     floodScreenHandler(data) {
-      console.log('given command:')
-      console.log(data.command)
       this.runFloodScreenCommandList(data.command, 0)
     },
     displayDetectionScreenHandler(data) {
@@ -293,22 +287,6 @@ export default {
     countDownHandler(data) {
       this.countDownIntervalHandler(data.start, data.interval, data.startTime)
     },
-    countdownRecursive(number, interval) {
-      console.log(
-        'countdown recursive num: ' + number + ' interval: ' + interval
-      )
-      if (number === 0) {
-        this.drawCounterFinish()
-      } else {
-        this.drawNumberOnCanvas(number)
-        setTimeout(
-          this.countdownRecursive,
-          parseInt(interval),
-          number - 1,
-          interval
-        )
-      }
-    },
     countDownIntervalHandler(start, interval, startTime) {
       clearInterval(this.intervalObj)
       this.countDownRunning = true
@@ -321,34 +299,30 @@ export default {
       )
       //setTimeout(this.countDownInterval, parseInt(33), start, interval, startTime)
     },
-    /**
-     *
-     * @param data
-     *        image: base64
-     *        css: css of canvas
-     *        ox:
-     *        oy:
-     *        w:
-     *        h:
-     */
     displayImageCSSHandler(data) {
-      this.canvWrap.width = data.w
-      this.canvWrap.height = data.h
       this.canvWrap.style = data.css
 
-      let image = new window.Image()
+      let image = new Image()
       let canvas = this.canvas
+      let canvWrap = this.canvWrap
 
       image.onload = function() {
         let ratio = Math.max(data.w / image.width, data.h / image.height)
+        let newWidth = Math.round(image.width * ratio)
+        let newHeight = Math.round(image.height * ratio)
+
+        canvWrap.style.width = newWidth.toString() + 'px'
+        canvWrap.style.height = newHeight.toString() + 'px'
+        canvas.width = newWidth
+        canvas.height = newHeight
         canvas
           .getContext('2d')
           .drawImage(
             image,
             0,
             0,
-            Math.round(image.width * ratio),
-            Math.round(image.height * ratio)
+            newWidth,
+            newHeight
           )
       }
       image.src = data.image
@@ -356,7 +330,6 @@ export default {
     countDownInterval(start, interval, startTime) {
       if (!this.countDownRunning) return
       let time = this.$store.state.sync.delta + Date.now()
-      console.log('server time: ' + time)
       if (time < startTime) return
       let number = start - Math.floor((time - startTime) / interval)
 
@@ -388,25 +361,19 @@ export default {
     },
     drawCounterFinish() {
       /*let img = new Image()
-
         img.onload = function() {
           let c = document.createElement('canvas')
           c.width = img.width
           c.height = img.height
           let ctx = c.getContext('2d')
-
           ctx.drawImage(img, 0, 0)
-
           let base64 = c.toDataURL('image/jpeg')
-
           this.drawImageHandler({ image: base64 })
         }
-
         img.src = 'https://penocw12.student.cs.kuleuven.be/img/martijn.jpg'*/
       this.drawNumberOnCanvas('BOOM!')
     },
     drawDirectionsHandler(data) {
-      console.log('clearing console')
       this.clearCanvas()
       let ctx = this.canvas.getContext('2d')
       ctx.beginPath()
@@ -416,7 +383,7 @@ export default {
       }
       ctx.stroke()
     },
-    drawArrow(ctx, orientation, label) {
+    drawArrow(ctx, orientation) {
       let headLen = 10
       const radians = (orientation * Math.PI) / 180
       const arrowLength =
@@ -475,39 +442,6 @@ export default {
     exitRoom() {
       this.$socket.emit('exitRoom')
       this.$router.push({ name: 'home' })
-    },
-    drawImageHandler(data) {
-      const base64Image = data.image
-      console.log('got image as base64')
-      console.log(base64Image)
-      const canvas = this.canvas
-      let ctx = this.canvas.getContext('2d')
-      let image = new window.Image()
-
-      let vue = this
-
-      image.onload = function() {
-        let wRatio = canvas.width / image.width
-        let hRatio = canvas.height / image.height
-
-        let ratio = Math.min(wRatio, hRatio)
-
-        ctx.drawImage(
-          image,
-          0,
-          0,
-          image.width,
-          image.height,
-          canvas.width / 2 - (image.width * ratio) / 2,
-          canvas.height / 2 - (image.height * ratio) / 2,
-          image.width * ratio,
-          image.height * ratio
-        )
-      }
-      image.src = base64Image
-    },
-    stopRunning() {
-      clearInterval(this.intervalObj)
     },
     loadVideoHandler(data) {
       this.videoURL = data.videoURL
@@ -606,8 +540,6 @@ export default {
     },
     animationInitHandler(data) {
       this.startTime = null
-      console.log('animation init data')
-      console.log(data)
       //create animation object
       this.animation = new Animation(
         data.triangulation,
@@ -656,8 +588,6 @@ export default {
     },
     delaunayHandler(data) {
       //create delaunay image and drawSnow on canvas
-      console.log('received triangulation')
-      console.log(data.triangulation)
       this.delaunayImage = AlgorithmService.delaunayImageTransparent(
         data.triangulation,
         data.midpoints,

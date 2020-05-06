@@ -47,6 +47,9 @@ module.exports = {
     }
 
     clientList[user_id].socket_id = socket_id
+    if (clientList[user_id].room !== -1) {
+      roomList[clientList[user_id].room].open = true
+    }
 
     console.log(clientList)
 

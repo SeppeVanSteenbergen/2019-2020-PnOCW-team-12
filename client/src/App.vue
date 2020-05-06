@@ -6,19 +6,11 @@
       <v-app-bar app clipped-left>
         <v-app-bar-nav-icon @click="toggleDrawer"></v-app-bar-nav-icon>
         <v-toolbar-title class="headline text-uppercase">
-          <span>Screen</span>
-          <span class="font-weight-light">Caster</span>
+          <span style="color: #2196f3; font-weight: bold">S</span>
+          <span class="font-weight-light" style="font-size: 17px">caster</span>
         </v-toolbar-title>
         <v-spacer></v-spacer>
 
-        <v-btn
-          icon
-          color="grey"
-          v-if="getRole().role === 1"
-          @click="startSync()"
-        >
-          <v-icon>mdi-cached</v-icon>
-        </v-btn>
         <v-icon>{{
           getRole().role === 1
             ? 'mdi-account-tie'
@@ -37,12 +29,9 @@
               : ''
           }}</span
         >
-        <!--<span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>-->
       </v-app-bar>
 
       <v-content>
-        <!--<H1>TEST {{socketMessage}}</H1>-->
         <router-view />
       </v-content>
       <v-snackbar
@@ -107,11 +96,6 @@ export default {
       }
 
       console.log('socket connected')
-    },
-    customEmit: function(data) {
-      console.log(
-        'this method was fired by the socket server. eg: io.emit("customEmit", data)'
-      )
     },
     data: function(data) {
       console.log(data.message)
