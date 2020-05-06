@@ -45,8 +45,8 @@ function setupCamera() {
     .getUserMedia({
       video: {
         facingMode: { exact: 'environment' },
-        width: 1280,
-        height: 720
+        width: 640,
+        height: 480
       },
       audio: false
     })
