@@ -64,9 +64,9 @@ class RGBBarcodeScanner {
 
   static distance(first, second) {
     return Math.sqrt(
-      (second[0] - first[0]) ** 2 +
-        (second[1] - first[1]) ** 2 +
-        (second[2] - first[2]) ** 2
+      (second[0] - first[0]) * (second[0] - first[0]) +
+        (second[1] - first[1]) * (second[1] - first[1]) +
+        (second[2] - first[2]) * (second[2] - first[2])
     )
   }
 
@@ -74,7 +74,7 @@ class RGBBarcodeScanner {
   static noiseFilter(imgData, row, grey, black, white) {
     let pixels = imgData.data
     let kSize = 15
-    let half = Math.floor(kSize / 2)
+    let half = Math.floor(kSize/2)
     let filteredRow = []
 
     for (let i = 0; i < row.length; i++) {
