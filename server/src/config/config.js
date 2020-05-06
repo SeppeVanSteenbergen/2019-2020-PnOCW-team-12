@@ -66,5 +66,7 @@ module.exports = {
     url: server.frontend.url,
     port: server.frontend.port
   },
-  secure: secure // true for https, false for http
+  secure: secure, // true for https, false for http
+  dev: dev,
+  kul: kuleuven
 }
