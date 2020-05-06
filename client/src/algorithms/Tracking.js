@@ -44,7 +44,9 @@ function setupCamera() {
   return navigator.mediaDevices
     .getUserMedia({
       video: {
-        facingMode: 'environment'
+        facingMode: { exact: 'environment' },
+        width: 240,
+        height: 320
       },
       audio: false
     })
@@ -82,13 +84,13 @@ async function calculateTransformationSensors(sensor, startMatrix) {
 
   rotationMatrix.multiplySelf(startMatrix)
 
-
   return { transformationMatrix: rotationMatrix, startMatrix: startMatrix }
 }
 
 //Parameters consists of threshold, fictiveDepth and confidence
 async function calculateTransformationCamera(
   video,
+  context,
   startTransformation,
   previousTranslation,
   previousDescriptor,
@@ -97,34 +99,38 @@ async function calculateTransformationCamera(
   parameters
 ) {
   let t1 = performance.now()
-  let canvas = document.createElement('canvas')
-  canvas.width = video.videoWidth
-  canvas.height = video.videoHeight
-  let ctx = canvas.getContext('2d')
-
-  ctx.drawImage(video, 0, 0)
-
-  let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+  context.drawImage(video, 0, 0)
+  let imageData = context.getImageData(
+    0,
+    0,
+    video.videoWidth,
+    video.videoHeight
+  )
   let t2 = performance.now()
-  console.log("init transformation camera took " + (t2-t1) + "ms")
+  console.log('init transformation camera took ' + (t2 - t1) + 'ms')
+
   t1 = performance.now()
-  let corners = FASTDetector(imageData.data, canvas.width, parameters.threshold)
+  let corners = FASTDetector(
+    imageData.data,
+    video.videoWidth,
+    parameters.threshold
+  )
   t2 = performance.now()
-  console.log("FastDetector took " + (t2-t1) + "ms")
+  console.log('FastDetector took ' + (t2 - t1) + 'ms')
+
   t1 = performance.now()
   let descriptor = brief.getDescriptors(
     grayScaleImgData(imageData),
-    canvas.width,
+    video.videoWidth,
     corners
   )
   t2 = performance.now()
-  console.log("making descriptor took " + (t2-t1) + "ms")
+  console.log('making descriptor took ' + (t2 - t1) + 'ms')
 
   let trans = {
     x: 0,
     y: 0
   }
-
 
   if (previousDescriptor !== null) {
     t1 = performance.now()
@@ -134,9 +140,9 @@ async function calculateTransformationCamera(
       corners,
       descriptor
     )
-  t2 = performance.now()
+    t2 = performance.now()
 
-    console.log("matching took " + (t2-t1) + "ms")
+    console.log('matching took ' + (t2 - t1) + 'ms')
 
     t1 = performance.now()
     let selectedCount = 0
@@ -157,7 +163,7 @@ async function calculateTransformationCamera(
     trans.x = point.x + previousTranslation.x
     trans.y = point.y + previousTranslation.y
     t2 = performance.now()
-    console.log("calculating translation took " + (t2-t1) + "ms")
+    console.log('calculating translation took ' + (t2 - t1) + 'ms')
   }
   return {
     transformation: trans,
@@ -170,6 +176,7 @@ export function calculateTransformation(
   callback,
   sensor,
   video,
+  context,
   startMatrix,
   previousTransformation,
   previousDescriptor,
@@ -177,13 +184,13 @@ export function calculateTransformation(
   brief,
   videoParameters
 ) {
-  if(brief == null)
-    brief = new Brief(512)
+  if (brief == null) brief = new Brief(512)
   calculateTransformationSensors(sensor, startMatrix).then(result => {
     if (result === null) return
 
     calculateTransformationCamera(
       video,
+      context,
       result.transformationMatrix,
       previousTransformation,
       previousDescriptor,
@@ -202,6 +209,7 @@ export function calculateTransformation(
           callback,
           sensor,
           video,
+          context,
           result.startMatrix,
           cameraResult.transformation,
           cameraResult.previousDescriptor,

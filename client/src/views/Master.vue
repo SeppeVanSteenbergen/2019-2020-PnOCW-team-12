@@ -1047,12 +1047,12 @@ export default {
     executeStartAnimation() {
       // old animation way
       /*if (this.animationInterval !== null) {
-        clearInterval(this.animationInterval)
-      }
-      this.animationInterval = setInterval(
-        this.sendAnimation,
-        this.animationFramerate
-      )*/
+          clearInterval(this.animationInterval)
+        }
+        this.animationInterval = setInterval(
+          this.sendAnimation,
+          this.animationFramerate
+        )*/
 
       // new way
       let obj = {
@@ -1076,9 +1076,9 @@ export default {
     executeStopAnimation() {
       //old way
       /*if (this.animationInterval !== null) {
-        clearInterval(this.animationInterval)
-      }
-      this.animationInterval = null*/
+          clearInterval(this.animationInterval)
+        }
+        this.animationInterval = null*/
 
       // new way
       let obj = {
@@ -1478,17 +1478,23 @@ export default {
     executeStartTracking() {
       this.executeInitTracking().then(() => {
         console.log('Done init')
+        let canvas = document.createElement('canvas')
+        canvas.width = this.tracking.camera.videoWidth
+        canvas.height = this.tracking.camera.videoHeight
+        let context = canvas.getContext('2d')
+
         calculateTransformation(
           this.handleTracking,
           this.tracking.sensors,
           this.tracking.camera,
+          context,
           null,
           { x: 0, y: 0 },
           null,
           null,
           null,
           {
-            threshold: 40,
+            threshold: 50,
             fictiveDepth: 1000,
             confidence: 0.75
           }
