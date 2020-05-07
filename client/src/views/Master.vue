@@ -1494,7 +1494,7 @@ export default {
         payload: {
           type: 'tracking-update',
           data: {
-            css: transformation
+            css: transformation.toString()
           }
         },
         to: 'all'
