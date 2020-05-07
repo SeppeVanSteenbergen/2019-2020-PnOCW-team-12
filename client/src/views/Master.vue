@@ -1518,9 +1518,17 @@ export default {
         this.translationCoord.y += results.trans.y
         this.handleTracking()
 
-        setTimeout(() => {
-          this.calculateTranslation(video, context, brief, parameters, results)
-        }, 50)
+        if (this.isTracking) {
+          setTimeout(() => {
+            this.calculateTranslation(
+              video,
+              context,
+              brief,
+              parameters,
+              results
+            )
+          }, 50)
+        }
       })
     },
     executeStartTracking() {
@@ -1528,6 +1536,8 @@ export default {
         startTracking(this.tracking.sensors, this.tracking.camera)
 
         this.tracking.sensors.addEventListener('reading', () => {
+          console.log('Sensor reading')
+
           let results = calculateRotation(
             this.tracking.sensors,
             this.startOrientation
