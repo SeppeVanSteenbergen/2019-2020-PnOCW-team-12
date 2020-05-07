@@ -20,9 +20,10 @@ function FASTDetector(pixels, width, height, threshold) {
 
 function blockFASTDetector(pixels, width, blockX, blockY, blockWidth, blockHeight, threshold) {
     let offsets = bresenhamCircle(width)
+
     for (let i = 0; i < (blockWidth - 6) * (blockHeight - 6); i++) {
         let x = blockX * blockWidth + 3 + (i % (blockWidth - 6))
-        let y = (blockY * blockHeight + 3 + i / blockWidth) >> 0
+        let y = blockY * blockHeight + 3 + (i / blockWidth) >> 0
         let position = y * width + x
 
         let intensity = pixels[position]

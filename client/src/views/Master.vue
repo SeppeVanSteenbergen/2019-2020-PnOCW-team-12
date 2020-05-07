@@ -487,11 +487,11 @@
                         trackingButtonLabel
                       }}</v-btn>
                       <v-switch
-                        v-model="rotationSwitch"
+                        v-model="rotation"
                         :label="`Track rotation`"
                       ></v-switch>
                       <v-switch
-                        v-model="translationSwitch"
+                        v-model="translation"
                         :label="`Track translation`"
                       ></v-switch>
                     </v-expansion-panel-content>
@@ -556,11 +556,14 @@ import WaitEnv from '../env/WaitEnv'
 import ImageTools from '../algorithms/ImageTools'
 
 import {
+  calculateRotation,
   calculateTransformation,
+  calculateFrameTranslation,
   initializeTracking,
   startTracking,
   stopTracking
 } from '../algorithms/Tracking'
+import Brief from './Brief'
 
 export default {
   name: 'master',
@@ -620,12 +623,14 @@ export default {
 
       pictureCanvasInfo: null,
 
-      tracking: null,
-      beginOffsetTracking: 0,
       isTracking: false,
       trackingButtonLabel: 'Start Tracking',
-      rotationSwitch: false,
-      translationSwitch: false
+      tracking: null,
+      rotation: false,
+      translation: false,
+      startOrientation: null,
+      rotationMatrix: new DOMMatrix(),
+      translationCoord: { x: 0, y: 0 }
     }
   },
   methods: {
@@ -1473,40 +1478,82 @@ export default {
         this.tracking = result
       })
     },
-    handleTracking(data) {
+    handleTracking() {
+      if (!this.rotation) {
+        this.rotationMatrix = new DOMMatrix()
+      }
+      if (!this.translation) {
+        this.translationCoord = { x: 0, y: 0 }
+      }
+
+      let transformation = this.rotationMatrix.translateSelf(
+        this.translationCoord.x,
+        this.translationCoord.y
+      )
+
       let object = {
         payload: {
           type: 'tracking-update',
           data: {
-            css: data
+            css: transformation
           }
         },
         to: 'all'
       }
       this.$socket.emit('screenCommand', object)
     },
+    calculateTranslation(video, context, brief, parameters, previousResults) {
+      calculateFrameTranslation(
+        video,
+        context,
+        brief,
+        parameters,
+        previousResults
+      ).then(results => {
+        this.translationCoord = results.translation
+        this.handleTracking()
+
+        setTimeout(() => {
+          this.calculateTranslation(
+            video,
+            context,
+            brief,
+            parameters,
+            results
+          )
+        }, 50)
+      })
+    },
     executeStartTracking() {
       this.executeInitTracking().then(() => {
-        console.log('Done init')
+        startTracking(this.tracking.sensors, this.tracking.camera)
+
+        this.tracking.sensors.addEventListener('reading', () => {
+          let results = calculateRotation(
+            this.tracking.sensors,
+            this.startOrientation
+          )
+          this.startOrientation = results.startMatrix
+          this.rotation = results.rotation
+
+          this.handleTracking()
+        })
+
         let canvas = document.createElement('canvas')
         canvas.width = this.tracking.camera.videoWidth
         canvas.height = this.tracking.camera.videoHeight
         let context = canvas.getContext('2d')
-
-        calculateTransformation(
-          this.handleTracking,
-          this.tracking.sensors,
+        let brief = new Brief(512)
+        let parameters = { threshold: 15, confidence: 0.9 }
+        this.calculateTranslation(
           this.tracking.camera,
           context,
-          null,
-          { x: 0, y: 0 },
-          null,
-          null,
-          null,
+          brief,
+          parameters,
           {
-            threshold: 35,
-            fictiveDepth: 1000,
-            confidence: 0.9
+            translation: this.translationCoord,
+            corners: null,
+            descriptor: null
           }
         )
       })

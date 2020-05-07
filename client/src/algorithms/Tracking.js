@@ -5,11 +5,7 @@ export function initializeTracking() {
   return new Promise(resolve => {
     setupSensor().then(sensor => {
       setupCamera().then(video => {
-        console.log(sensor)
-        console.log(video)
-
         video.onloadedmetadata = event => {
-          video.play()
           resolve({ sensors: sensor, camera: video })
         }
       })
@@ -32,7 +28,7 @@ function setupSensor() {
           this.$notif('Sensor is not available', 'error')
         }
       })
-      sensor.start()
+
       return sensor
     } else {
       console.log('No permissions to use RelativeOrientationSensor.')
@@ -56,7 +52,6 @@ function setupCamera() {
     .then(stream => {
       let video = document.createElement('video')
       video.srcObject = stream
-      console.log(video.srcObject)
 
       return video
     })
@@ -90,16 +85,25 @@ async function calculateTransformationSensors(sensor, startMatrix) {
   return { transformationMatrix: rotationMatrix, startMatrix: startMatrix }
 }
 
-//Parameters consists of threshold, fictiveDepth and confidence
-async function calculateTransformationCamera(
+export function calculateRotation(sensors, startMatrix) {
+  let rotationMatrix = new DOMMatrix()
+  sensors.populateMatrix(rotationMatrix)
+
+  if (startMatrix === null) {
+    startMatrix = DOMMatrix.fromMatrix(rotationMatrix.inverse())
+  }
+  rotationMatrix.multiplySelf(startMatrix)
+
+  return { rotation: rotationMatrix, startMatrix: startMatrix }
+}
+
+//Parameters consists of threshold and confidence
+export async function calculateFrameTranslation(
   video,
   context,
-  startTransformation,
-  previousTranslation,
-  previousDescriptor,
-  previousCorners,
   brief,
-  parameters
+  parameters,
+  previousResults
 ) {
   let t1 = performance.now()
   context.drawImage(video, 0, 0)
@@ -116,7 +120,6 @@ async function calculateTransformationCamera(
   let grayScalePixels = grayScaleImgData(imageData.data)
   t2 = performance.now()
   console.log('Creating gray scale pixels took: ' + (t2 - t1) + 'ms')
-
 
   t1 = performance.now()
   let corners = FASTDetector(
@@ -137,16 +140,12 @@ async function calculateTransformationCamera(
   t2 = performance.now()
   console.log('making descriptor took: ' + (t2 - t1) + 'ms')
 
-  let trans = {
-    x: 0,
-    y: 0
-  }
-
-  if (previousDescriptor !== null) {
+  let trans = previousResults.translation
+  if (previousResults.descriptor !== null) {
     t1 = performance.now()
     let matches = brief.reciprocalMatch(
-      previousCorners,
-      previousDescriptor,
+      previousResults.corners,
+      previousResults.descriptor,
       corners,
       descriptor
     )
@@ -156,79 +155,26 @@ async function calculateTransformationCamera(
 
     t1 = performance.now()
     let selectedCount = 0
+    let x = 0
+    let y = 0
     for (let i = 0; i < matches.length; i++) {
       if (matches[i].confidence > parameters.confidence) {
         selectedCount++
-        trans.x += matches[i].keypoint1[0] - matches[i].keypoint2[0]
-        trans.y += matches[i].keypoint1[1] - matches[i].keypoint2[1]
+        x += matches[i].keypoint1[0] - matches[i].keypoint2[0]
+        y += matches[i].keypoint1[1] - matches[i].keypoint2[1]
       }
     }
     if (selectedCount > 0) {
-      trans.x = trans.x / selectedCount
-      trans.y = trans.y / selectedCount
+      trans.x += x / selectedCount
+      trans.y += y / selectedCount
     }
-    let point = new DOMPoint(trans.x, trans.y, parameters.fictiveDepth)
-    point.matrixTransform(startTransformation.inverse())
 
-    trans.x = point.x + previousTranslation.x
-    trans.y = point.y + previousTranslation.y
     t2 = performance.now()
     console.log('calculating translation took: ' + (t2 - t1) + 'ms')
   }
   return {
-    transformation: trans,
-    previousCorners: corners,
-    previousDescriptor: descriptor
+    translation: trans,
+    corners: corners,
+    descriptor: descriptor
   }
-}
-
-export function calculateTransformation(
-  callback,
-  sensor,
-  video,
-  context,
-  startMatrix,
-  previousTransformation,
-  previousDescriptor,
-  previousCorners,
-  brief,
-  videoParameters
-) {
-  if (brief == null) brief = new Brief(512)
-  calculateTransformationSensors(sensor, startMatrix).then(result => {
-    if (result === null) return
-
-    calculateTransformationCamera(
-      video,
-      context,
-      result.transformationMatrix,
-      previousTransformation,
-      previousDescriptor,
-      previousCorners,
-      brief,
-      videoParameters
-    ).then(cameraResult => {
-      result.transformationMatrix.translateSelf(
-        cameraResult.transformation.x,
-        cameraResult.transformation.y
-      )
-      callback(result.transformationMatrix.toString())
-
-      setTimeout(() => {
-        calculateTransformation(
-          callback,
-          sensor,
-          video,
-          context,
-          result.startMatrix,
-          cameraResult.transformation,
-          cameraResult.previousDescriptor,
-          cameraResult.previousCorners,
-          brief,
-          videoParameters
-        )
-      }, 50)
-    })
-    //calculateTransformation(callback, sensor, video, startMatrix, previousDescriptor, previousCorners, videoParameters)
-  })
 }
