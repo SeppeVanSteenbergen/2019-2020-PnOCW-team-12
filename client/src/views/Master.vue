@@ -557,13 +557,12 @@ import ImageTools from '../algorithms/ImageTools'
 
 import {
   calculateRotation,
-  calculateTransformation,
   calculateFrameTranslation,
   initializeTracking,
   startTracking,
   stopTracking
 } from '../algorithms/Tracking'
-import Brief from './Brief'
+import Brief from '../algorithms/Brief'
 
 export default {
   name: 'master',
