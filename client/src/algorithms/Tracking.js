@@ -114,12 +114,16 @@ export async function calculateFrameTranslation(
     video.videoHeight
   )
   let t2 = performance.now()
+/*
   console.log('Drawing video on canvas took: ' + (t2 - t1) + 'ms')
+*/
 
   t1 = performance.now()
   let grayScalePixels = grayScaleImgData(imageData.data)
   t2 = performance.now()
+/*
   console.log('Creating gray scale pixels took: ' + (t2 - t1) + 'ms')
+*/
 
   t1 = performance.now()
   let corners = FASTDetector(
@@ -129,7 +133,9 @@ export async function calculateFrameTranslation(
     parameters.threshold
   )
   t2 = performance.now()
+/*
   console.log('FastDetector took: ' + (t2 - t1) + 'ms')
+*/
 
   t1 = performance.now()
   let descriptor = brief.getDescriptors(
@@ -138,9 +144,11 @@ export async function calculateFrameTranslation(
     corners
   )
   t2 = performance.now()
+/*
   console.log('making descriptor took: ' + (t2 - t1) + 'ms')
+*/
 
-  let trans = previousResults.translation
+  let trans = previousResults.trans
   if (previousResults.descriptor !== null) {
     t1 = performance.now()
     let matches = brief.reciprocalMatch(
@@ -151,7 +159,9 @@ export async function calculateFrameTranslation(
     )
     t2 = performance.now()
 
+/*
     console.log('matching took: ' + (t2 - t1) + 'ms')
+*/
 
     t1 = performance.now()
     let selectedCount = 0
@@ -170,10 +180,12 @@ export async function calculateFrameTranslation(
     }
 
     t2 = performance.now()
+/*
     console.log('calculating translation took: ' + (t2 - t1) + 'ms')
+*/
   }
   return {
-    translation: trans,
+    trans: trans,
     corners: corners,
     descriptor: descriptor
   }

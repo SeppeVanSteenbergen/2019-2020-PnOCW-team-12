@@ -628,7 +628,9 @@ export default {
       rotation: false,
       translation: false,
       startOrientation: null,
-      rotationMatrix: new DOMMatrix(),
+      rotationMatrix: new DOMMatrix(
+        'matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)'
+      ),
       translationCoord: { x: 0, y: 0 }
     }
   },
@@ -1479,7 +1481,9 @@ export default {
     },
     handleTracking() {
       if (!this.rotation) {
-        this.rotationMatrix = new DOMMatrix()
+        this.rotationMatrix = new DOMMatrix(
+          'matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)'
+        )
       }
       if (!this.translation) {
         this.translationCoord = { x: 0, y: 0 }
@@ -1509,17 +1513,11 @@ export default {
         parameters,
         previousResults
       ).then(results => {
-        this.translationCoord = results.translation
+        this.translationCoord = results.trans
         this.handleTracking()
 
         setTimeout(() => {
-          this.calculateTranslation(
-            video,
-            context,
-            brief,
-            parameters,
-            results
-          )
+          this.calculateTranslation(video, context, brief, parameters, results)
         }, 50)
       })
     },
@@ -1528,6 +1526,8 @@ export default {
         startTracking(this.tracking.sensors, this.tracking.camera)
 
         this.tracking.sensors.addEventListener('reading', () => {
+          console.log('Senors work')
+
           let results = calculateRotation(
             this.tracking.sensors,
             this.startOrientation
@@ -1550,7 +1550,7 @@ export default {
           brief,
           parameters,
           {
-            translation: this.translationCoord,
+            trans: this.translationCoord,
             corners: null,
             descriptor: null
           }
