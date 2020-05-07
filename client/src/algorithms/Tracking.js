@@ -94,7 +94,7 @@ export function calculateRotation(sensors, startMatrix) {
   }
   rotationMatrix.multiplySelf(startMatrix)
 
-  return { rotation: rotationMatrix, startMatrix: startMatrix }
+  return { calculatedRotation: rotationMatrix, startMatrix: startMatrix }
 }
 
 //Parameters consists of threshold and confidence
@@ -148,7 +148,7 @@ export async function calculateFrameTranslation(
   console.log('making descriptor took: ' + (t2 - t1) + 'ms')
 */
 
-  let trans = previousResults.trans
+  let trans = {x: 0, y: 0}
   if (previousResults.descriptor !== null) {
     t1 = performance.now()
     let matches = brief.reciprocalMatch(
@@ -165,18 +165,16 @@ export async function calculateFrameTranslation(
 
     t1 = performance.now()
     let selectedCount = 0
-    let x = 0
-    let y = 0
     for (let i = 0; i < matches.length; i++) {
       if (matches[i].confidence > parameters.confidence) {
         selectedCount++
-        x += matches[i].keypoint1[0] - matches[i].keypoint2[0]
-        y += matches[i].keypoint1[1] - matches[i].keypoint2[1]
+        trans.x += matches[i].keypoint1[0] - matches[i].keypoint2[0]
+        trans.y += matches[i].keypoint1[1] - matches[i].keypoint2[1]
       }
     }
     if (selectedCount > 0) {
-      trans.x += x / selectedCount
-      trans.y += y / selectedCount
+      trans.x = trans.x / selectedCount
+      trans.y = trans.y / selectedCount
     }
 
     t2 = performance.now()

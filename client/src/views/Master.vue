@@ -1513,7 +1513,8 @@ export default {
         parameters,
         previousResults
       ).then(results => {
-        this.translationCoord = results.trans
+        this.translationCoord.x += results.trans.x
+        this.translationCoord.y += results.trans.y
         this.handleTracking()
 
         setTimeout(() => {
@@ -1526,14 +1527,13 @@ export default {
         startTracking(this.tracking.sensors, this.tracking.camera)
 
         this.tracking.sensors.addEventListener('reading', () => {
-          console.log('Senors work')
-
           let results = calculateRotation(
             this.tracking.sensors,
             this.startOrientation
           )
           this.startOrientation = results.startMatrix
-          this.rotation = results.rotation
+          this.rotationMatrix = results.calculatedRotation
+          console.log(this.rotationMatrix.toString())
 
           this.handleTracking()
         })
