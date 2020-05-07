@@ -185,30 +185,23 @@
 				}
 
 				let descriptor = Brief.getDescriptors(grayPixels, canvas.width, corners)
+				let selectedMatches = []
+
 				if(previousDescriptor !== null) {
 					matches = Brief.reciprocalMatch(previousCorners, previousDescriptor, corners, descriptor)
 					let selectedCount = 0
-					let ricos = []
 					for (let i = 0; i < matches.length; i++) {
 						if (matches[i].confidence > confidence) {
 							selectedCount++
-
 							let difX = matches[i].keypoint2[0] - matches[i].keypoint1[0]
 							let difY = matches[i].keypoint2[1] - matches[i].keypoint1[1]
 
 							trans.x += difX
 							trans.y += difY
 
-							if (difX === 0) {
-								ricos.push(0)
-							} else {
-								ricos.push(difY / difX)
-							}
+							selectedMatches.push(matches[i])
 						}
 					}
-
-					console.log(ricos)
-					console.log(Math.max(...ricos) - Math.min(...ricos))
 
 					if (selectedCount > 0) {
 						trans.x = trans.x / selectedCount
@@ -266,6 +259,21 @@
 					ctx.fillStyle = '#f00';
 					ctx.fillRect(corners[i], corners[i + 1], 3, 3);
 				}
+
+				for (let i = 0; i < selectedMatches.length; i++) {
+/*					console.log(selectedMatches[i])*/
+
+					ctx.fillStyle = '#0f0';
+					ctx.fillRect(selectedMatches[i].keypoint1[0], selectedMatches[i].keypoint1[1], 3, 3);
+
+/*					ctx.fillStyle = '#00f'
+					ctx.beginPath()
+					ctx.moveTo(selectedMatches[i].keypoint1[0], selectedMatches[i].keypoint1[1])
+					ctx.lineTo(selectedMatches[i].keypoint2[0], selectedMatches[i].keypoint2[1])
+					ctx.lineWidth = 200
+					ctx.stroke()*/
+				}
+
 			}
 
 			setTimeout(draw, framerate);
