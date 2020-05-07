@@ -1,5 +1,5 @@
 function FASTDetector(pixels, width, height, threshold) {
-    let blocks = 40
+    let blocks = 20
     //Width and height of video are 640x480.
     let blockWidth = width / blocks
     let blockHeight = height / blocks

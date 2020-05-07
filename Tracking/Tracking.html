@@ -37,7 +37,7 @@
 		let sensors = false;
 
 		//Fast config
-		let hold = 40 // threshold
+		let hold = 15 // threshold
 
 		// Brief settings
 		let confidence = 0.9 // how sure when matching keypoints
@@ -150,9 +150,9 @@
 		// Javascript
 		navigator.mediaDevices.getUserMedia({
 					video: {
-						facingMode: 'environment'/*,
-						width: 1920,
-						height: 1080*/
+						facingMode: 'environment',
+						width: 640,
+						height: 480
 					},
 					audio:false
 				}
