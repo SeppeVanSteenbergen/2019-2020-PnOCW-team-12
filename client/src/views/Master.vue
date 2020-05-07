@@ -486,6 +486,14 @@
                       <v-btn color="primary" @click="executeTracking">{{
                         trackingButtonLabel
                       }}</v-btn>
+                      <v-switch
+                        v-model="rotationSwitch"
+                        :label="`Track rotation`"
+                      ></v-switch>
+                      <v-switch
+                        v-model="translationSwitch"
+                        :label="`Track translation`"
+                      ></v-switch>
                     </v-expansion-panel-content>
                   </v-expansion-panel>
                   <v-expansion-panel>
@@ -615,7 +623,9 @@ export default {
       tracking: null,
       beginOffsetTracking: 0,
       isTracking: false,
-      trackingButtonLabel: 'Start Tracking'
+      trackingButtonLabel: 'Start Tracking',
+      rotationSwitch: false,
+      translationSwitch: false
     }
   },
   methods: {

@@ -29,12 +29,15 @@ function setupSensor() {
       sensor.addEventListener('error', error => {
         if (error.name === 'NotReadableError') {
           console.log('Sensor is not available.')
+          this.$notif('Sensor is not available', 'error')
         }
       })
       sensor.start()
       return sensor
     } else {
       console.log('No permissions to use RelativeOrientationSensor.')
+      this.$notif('No permissions to use RelativeOrientationSensor.', 'error')
+
       return null
     }
   })
