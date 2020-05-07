@@ -1,5 +1,4 @@
 import { FASTDetector, grayScaleImgData } from './FASTDetector'
-import Brief from './Brief'
 
 export function initializeTracking() {
   return new Promise(resolve => {
@@ -67,24 +66,6 @@ export function startTracking(sensor, video) {
   video.play()
 }
 
-//Returns a DOMMatrix
-async function calculateTransformationSensors(sensor, startMatrix) {
-  if (!sensor.activated) {
-    return null
-  }
-
-  //transformatie (rotatie) door de sensors
-  let rotationMatrix = new DOMMatrix()
-  sensor.populateMatrix(rotationMatrix)
-  if (startMatrix === null) {
-    startMatrix = DOMMatrix.fromMatrix(rotationMatrix.inverse())
-  }
-
-  rotationMatrix.multiplySelf(startMatrix)
-
-  return { transformationMatrix: rotationMatrix, startMatrix: startMatrix }
-}
-
 export function calculateRotation(sensors, startMatrix) {
   let rotationMatrix = new DOMMatrix()
   sensors.populateMatrix(rotationMatrix)
@@ -105,7 +86,9 @@ export async function calculateFrameTranslation(
   parameters,
   previousResults
 ) {
+/*
   let t1 = performance.now()
+*/
   context.drawImage(video, 0, 0)
   let imageData = context.getImageData(
     0,
@@ -113,57 +96,49 @@ export async function calculateFrameTranslation(
     video.videoWidth,
     video.videoHeight
   )
-  let t2 = performance.now()
-/*
+/*  let t2 = performance.now()
   console.log('Drawing video on canvas took: ' + (t2 - t1) + 'ms')
-*/
 
-  t1 = performance.now()
+  t1 = performance.now()*/
   let grayScalePixels = grayScaleImgData(imageData.data)
-  t2 = performance.now()
-/*
+/*  t2 = performance.now()
   console.log('Creating gray scale pixels took: ' + (t2 - t1) + 'ms')
-*/
 
-  t1 = performance.now()
+  t1 = performance.now()*/
   let corners = FASTDetector(
     grayScalePixels,
     video.videoWidth,
     video.videoHeight,
     parameters.threshold
   )
-  t2 = performance.now()
-/*
+/*  t2 = performance.now()
   console.log('FastDetector took: ' + (t2 - t1) + 'ms')
-*/
 
-  t1 = performance.now()
+  t1 = performance.now()*/
   let descriptor = brief.getDescriptors(
     grayScalePixels,
     video.videoWidth,
     corners
   )
-  t2 = performance.now()
-/*
-  console.log('making descriptor took: ' + (t2 - t1) + 'ms')
-*/
+/*  t2 = performance.now()
+  console.log('making descriptor took: ' + (t2 - t1) + 'ms')*/
 
   let trans = {x: 0, y: 0}
   if (previousResults.descriptor !== null) {
+/*
     t1 = performance.now()
+*/
     let matches = brief.reciprocalMatch(
       previousResults.corners,
       previousResults.descriptor,
       corners,
       descriptor
     )
-    t2 = performance.now()
+/*    t2 = performance.now()
 
-/*
     console.log('matching took: ' + (t2 - t1) + 'ms')
-*/
 
-    t1 = performance.now()
+    t1 = performance.now()*/
     let selectedCount = 0
     for (let i = 0; i < matches.length; i++) {
       if (matches[i].confidence > parameters.confidence) {
@@ -177,10 +152,8 @@ export async function calculateFrameTranslation(
       trans.y = trans.y / selectedCount
     }
 
-    t2 = performance.now()
-/*
-    console.log('calculating translation took: ' + (t2 - t1) + 'ms')
-*/
+/*    t2 = performance.now()
+    console.log('calculating translation took: ' + (t2 - t1) + 'ms')*/
   }
   return {
     trans: trans,

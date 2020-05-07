@@ -487,10 +487,12 @@
                         trackingButtonLabel
                       }}</v-btn>
                       <v-switch
+                        v-if="isTracking"
                         v-model="rotation"
                         :label="`Track rotation`"
                       ></v-switch>
                       <v-switch
+                        v-if="isTracking"
                         v-model="translation"
                         :label="`Track translation`"
                       ></v-switch>
@@ -943,7 +945,6 @@ export default {
         })
         .catch(err => {
           this.$notif('Video upload failed, Try Again', 'error')
-          console.log(err)
         })
     },
 
@@ -1042,7 +1043,6 @@ export default {
           }
         })
         .catch(err => {
-          console.log(err)
           this.$notif('Image upload failed, Try Again', 'error')
         })
     },
@@ -1481,6 +1481,7 @@ export default {
     },
     handleTracking() {
       if (!this.rotation) {
+        this.startOrientation = null
         this.rotationMatrix = new DOMMatrix(
           'matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)'
         )
@@ -1533,7 +1534,6 @@ export default {
           )
           this.startOrientation = results.startMatrix
           this.rotationMatrix = results.calculatedRotation
-          console.log(this.rotationMatrix.toString())
 
           this.handleTracking()
         })
@@ -1566,7 +1566,6 @@ export default {
         to: 'all'
       }
       this.$socket.emit('screenCommand', object)
-      console.log(this.tracking)
       stopTracking(this.tracking.sensors, this.tracking.camera)
       this.executeResetTracking()
     },
