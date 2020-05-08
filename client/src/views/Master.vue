@@ -1536,8 +1536,6 @@ export default {
         startTracking(this.tracking.sensors, this.tracking.camera)
 
         this.tracking.sensors.addEventListener('reading', () => {
-          console.log('Sensor reading')
-
           let results = calculateRotation(
             this.tracking.sensors,
             this.startOrientation
