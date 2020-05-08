@@ -24,7 +24,7 @@ class RGBBarcodeScanner {
     }
     let totalScanned = Object.values(barcodes).reduce((a, b) => a + b, 0)
     let highest = this.getHighestCode(barcodes)
-    let ratio = (barcodes[highest] / totalScanned)*100
+    let ratio = Math.round((barcodes[highest] / totalScanned)*100)
     self.postMessage({ text: 'MESSAGE', msg: 'Barcode accuracy: '+ ratio +'%'})
     return highest
   }
