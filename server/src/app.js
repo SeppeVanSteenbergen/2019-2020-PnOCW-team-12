@@ -11,10 +11,9 @@ const routes = require('./routes')
 const passport = require('./auth')
 const https = require('https')
 const fs = require('fs')
-const path = require('path')
 const credentials = {
-  key: fs.readFileSync((!config.dev && !config.kul)?'/ssl/key.pem':path.join(__dirname, 'keys/private.key'), 'utf8'),
-  cert: fs.readFileSync((!config.dev && !config.kul)?'/ssl/cert.pem':path.join(__dirname, 'keys/certificate.crt'), 'utf8')
+  key: fs.readFileSync('C:\\Users\\Dirk Vanbeveren\\.ssl\\stylify\\key.pem', 'utf8'),
+  cert: fs.readFileSync('C:\\Users\\Dirk Vanbeveren\\.ssl\\stylify\\cert.pem', 'utf8')
 }
 const httpsServer = https.createServer(credentials, app)
 
