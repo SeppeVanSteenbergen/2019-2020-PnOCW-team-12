@@ -71,7 +71,8 @@
               >
               <v-btn
                 @click="
-                  handleDetectionButton
+                  screenDetectionDialog = true
+                  executeDisplayDetectionScreens()
                 "
                 text
                 color="primary"
@@ -246,19 +247,19 @@
       <v-stepper v-model="detectionStepper" class="fullheight">
         <template>
           <v-stepper-header>
-            <v-stepper-step :complete="detectionStepper > 1" step="1" editable
+            <v-stepper-step :complete="detectionStepper > 1" step="1"
               >Take Picture</v-stepper-step
             >
 
             <v-divider></v-divider>
 
-            <v-stepper-step :complete="detectionStepper > 2" step="2" editable
+            <v-stepper-step :complete="detectionStepper > 2" step="2"
               >Result Display</v-stepper-step
             >
 
             <v-divider></v-divider>
 
-            <v-stepper-step :complete="detectionStepper > 3" step="3" editable
+            <v-stepper-step :complete="detectionStepper > 3" step="3"
               >Usage</v-stepper-step
             >
           </v-stepper-header>
@@ -473,7 +474,7 @@
                     >
                     <v-expansion-panel-content>
                       <v-btn color="primary" @click="executeAnimation">{{
-                        isAnimating ? 'Stop Animation' : 'Start Animation'
+                        animationButtonLabel
                       }}</v-btn>
                     </v-expansion-panel-content>
                   </v-expansion-panel>
@@ -483,11 +484,7 @@
                     >
                     <v-expansion-panel-content>
                       <v-btn color="primary" @click="executeTracking">{{
-                        isTracking ? 'Stop Tracking' : 'Start Tracking'
-                      }}</v-btn>
-
-                      <v-btn color="primary" @click="executeScene">{{
-                        sceneRunning ? 'Stop 3D Scene' : 'Start 3D Scene'
+                        trackingButtonLabel
                       }}</v-btn>
                       <v-switch
                         v-if="isTracking"
@@ -619,6 +616,7 @@ export default {
       animationInterval: null,
       animationFramerate: 50,
       isAnimating: false,
+      animationButtonLabel: 'Start Animation',
 
       fileUploadingActive: false,
       fileUploadProgress: 0,
@@ -627,6 +625,7 @@ export default {
       pictureCanvasInfo: null,
 
       isTracking: false,
+      trackingButtonLabel: 'Start Tracking',
       tracking: null,
       rotation: false,
       translation: false,
@@ -634,9 +633,7 @@ export default {
       rotationMatrix: new DOMMatrix(
         'matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)'
       ),
-      translationCoord: { x: 0, y: 0 },
-
-      sceneRunning: false
+      translationCoord: { x: 0, y: 0 }
     }
   },
   methods: {
@@ -930,10 +927,6 @@ export default {
         this.$notif('Detection was not succesful', 'error')
         return
       }
-      if(!this.fileUploadingActive) {
-        this.$notif('upload already in progress')
-        return
-      }
       let formData = new FormData()
       formData.append('videofile', this.videoFile)
       this.$notif('uploading video...', 'info')
@@ -1057,10 +1050,12 @@ export default {
     executeAnimation() {
       if (!this.isAnimating) {
         this.isAnimating = true
+        this.animationButtonLabel = 'Stop Animation'
         this.executeInitAnimation()
         this.executeStartAnimation()
       } else {
         this.isAnimating = false
+        this.animationButtonLabel = 'Start Animation'
         this.executeStopAnimation()
         this.executeDelaunayImage()
       }
@@ -1462,9 +1457,11 @@ export default {
     executeTracking() {
       if (!this.isTracking) {
         this.isTracking = true
+        this.trackingButtonLabel = 'Stop Tracking'
         this.executeStartTracking()
       } else {
         this.isTracking = false
+        this.trackingButtonLabel = 'Start Tracking'
         this.executeStopTracking()
       }
     },
@@ -1582,44 +1579,13 @@ export default {
     },
     executeResetTracking() {
       this.tracking = null
-    },
-    executeScene() {
-      let obj
-      if (!this.sceneRunning) {
-        obj = {
-          payload: {
-            type: 'dimension-init',
-            data: {}
-          },
-          to: 'all'
-        }
-      } else {
-        obj = {
-          payload: {
-            type: 'dimension-stop',
-            data: {}
-          },
-          to: 'all'
-        }
-      }
-
-      this.$socket.emit('screenCommand', obj)
-
-      this.sceneRunning = !this.sceneRunning
-    },
-    handleDetectionButton() {
-      this.screenDetectionDialog = true
-      if (!this.analysedImage) {
-        this.detectionStepper = 1
-        this.executeDisplayDetectionScreens()
-      }
-    },
+    }
   },
   mounted() {
     this.$socket.emit('updateRoomList')
   },
   computed: {
-     myRoom() {
+    myRoom() {
       for (let i in this.$store.state.roomList) {
         if (
           typeof this.$store.state.roomList[i] !== 'undefined' &&

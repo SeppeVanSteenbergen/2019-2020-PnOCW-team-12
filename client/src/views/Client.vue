@@ -48,9 +48,6 @@
           id="canvWrap"
           class="fullscreen"
         >
-          <div id="sceneWrapper" v-show="dimensionRunning" style="position:fixed; left:0; top:0; z-index:12; width:100%; height:100%">
-
-          </div>
           <canvas
             ref="canvas"
             id="mainCanvas"
@@ -73,7 +70,6 @@ import DetectionDrawer from '../algorithms/DetectionDrawer'
 import AlgorithmService from '../services/AlgorithmService'
 import Animation from '../algorithms/Animations'
 import Sensors from '../algorithms/Sensors'
-import Scene from '../algorithms/Scene'
 
 export default {
   name: 'client',
@@ -110,10 +106,7 @@ export default {
       trackingRunning: false,
       trackingCSS: null,
       trackingDefaultCSS: null,
-      trackingImage: null,
-
-      scene: null, // Scene obeject to display 3D scene
-      dimensionRunning: false
+      trackingImage: null
     }
   },
   mounted() {
@@ -211,14 +204,6 @@ export default {
         case 'tracking-stop':
           this.trackingStopHandler(message.data)
           break
-        case 'dimension-init':
-          this.resetDefault()
-          this.dimensionInitHandler(message.data)
-          break
-        case 'dimension-stop':
-          this.resetDefault()
-          this.dimensionStopHandler(message.data)
-          break
         default:
           console.log('command not supported')
           break
@@ -244,12 +229,14 @@ export default {
   },
   methods: {
     setDefaultCSS() {
-      this.resetDefault()
+      clearInterval(this.gameInterval)
+      clearInterval(this.videoInterval)
+      clearInterval(this.intervalObj)
+      this.countDownRunning = false
       this.canvWrap.style = this.defaultCSS
       this.canvas.style.transform = new DOMMatrix()
-      this.canvas.width = window.innerWidth
-      this.canvas.height = window.innerHeight
-      this.dimensionRunning = false
+      this.canvasMode = true
+      this.animationRunning = false
     },
     resetDefault() {
       clearInterval(this.gameInterval)
@@ -258,7 +245,6 @@ export default {
       this.countDownRunning = false
       this.canvasMode = true
       this.animationRunning = false
-
     },
 
     setVideoMode() {
@@ -329,7 +315,15 @@ export default {
         canvWrap.style.height = newHeight.toString() + 'px'
         canvas.width = newWidth
         canvas.height = newHeight
-        canvas.getContext('2d').drawImage(image, 0, 0, newWidth, newHeight)
+        canvas
+          .getContext('2d')
+          .drawImage(
+            image,
+            0,
+            0,
+            newWidth,
+            newHeight
+          )
       }
       image.src = data.image
     },
@@ -758,34 +752,13 @@ export default {
     },
 
     trackingUpdateHandler(data) {
-      let domMatrix = new DOMMatrix(data.css)
-      if (this.dimensionRunning) {
-        this.scene.updateMatrix(domMatrix)
-      } else {
-        this.canvas.style.transform = domMatrix
-      }
+      this.canvas.style.transform = new DOMMatrix(data.css)
     },
 
     trackingStopHandler() {
       this.trackingRunning = false
       this.canvas.style.transform = new DOMMatrix()
     },
-    dimensionInitHandler() {
-      this.dimensionRunning = true
-      this.dimensionUpdater()
-      if (this.scene) {
-        sceneWrapper.innerHTML = ''
-      }
-      this.scene = new Scene(document.getElementById('sceneWrapper'))
-    },
-    dimensionStopHandler() {
-      this.dimensionRunning = false
-    },
-    dimensionUpdater() {
-      if (!this.dimensionRunning) return
-      if (this.scene !== null) this.scene.render()
-      requestAnimationFrame(this.dimensionUpdater.bind(this))
-    }
   }
 }
 </script>
