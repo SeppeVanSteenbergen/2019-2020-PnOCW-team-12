@@ -26,11 +26,12 @@
 <footer>
 	<script src="FASTDetector.js"></script>
 	<script src="Brief.js"></script>
+	<script src="Numeric.js"></script>
 	<script src="https://threejs.org/build/three.js"></script>
 
-	<script lang="text/javascript">
+	<script type="text/javascript">
 		// config
-		let framerate = 0 // ms wait time
+		let framerate = 1000 // ms wait time
 		let firstCompare = false  // only compare next frames with first, or compare with previous frame
 
 		let translation = true;
@@ -181,11 +182,25 @@
 					y: 0
 				}
 
+				let mapTranslation = [0, 0, 0, 1]
+
 				let descriptor = Brief.getDescriptors(grayPixels, canvas.width, corners)
 				let selectedMatches = []
+				let fourBestMatches = []
 
 				if(previousDescriptor !== null) {
 					matches = Brief.reciprocalMatch(previousCorners, previousDescriptor, corners, descriptor)
+					fourBestMatches = matches.sort((a, b) => {
+						return b.confidence - a.confidence
+					}).slice(0, 4)
+
+					let r1 = [fourBestMatches[0].keypoint1, fourBestMatches[1].keypoint1, fourBestMatches[2].keypoint1, fourBestMatches[3].keypoint1]
+					let r2 = [fourBestMatches[0].keypoint2, fourBestMatches[1].keypoint2, fourBestMatches[2].keypoint2, fourBestMatches[3].keypoint2]
+
+					let transformation = PerspT(r1, r2)
+					mapTranslation = [transformation[6], transformation[7], 0, transformation[8]]
+					console.log(mapTranslation)
+
 					let selectedCount = 0
 					for (let i = 0; i < matches.length; i++) {
 						if (matches[i].confidence > confidence) {
@@ -216,15 +231,17 @@
 					x = trans.x
 					y = trans.y
 				} else {
-					x += trans.x
-					y -= trans.y
+					x += mapTranslation[0] * 100
+					y += mapTranslation[1] * 100
 				}
 				let dommatrix = new DOMMatrix("translate(" + x + "px, " + y + "px)");
 				game.style.transform = dommatrix;
 
 				ctg.clearRect(0, 0, game.width, game.height)
-				ctg.fillStyle="rgba(0, 0, 0, 0.7)"
-				ctg.fillRect(0, 0, game.width, game.height);
+				ctb.drawImage(homer, 650,100, game.width,game.height)
+
+
+/*				ctg.fillRect(0, 0, game.width, game.height);
 
 				ctb.beginPath()
 				ctb.lineWidth = 5;
@@ -246,13 +263,13 @@
 				ctb.moveTo(650, 100+game.height);
 				ctb.lineTo(x+655, y+100+game.height);
 
-				ctb.stroke();
+				ctb.stroke();*/
 
 
 
 
 				// draw keypoints
-				for (let i = 0; i < corners.length; i += 2) {
+/*				for (let i = 0; i < corners.length; i += 2) {
 					ctx.fillStyle = '#f00';
 					ctx.fillRect(corners[i], corners[i + 1], 3, 3);
 				}
@@ -260,6 +277,12 @@
 				for (let i = 0; i < selectedMatches.length; i++) {
 					ctx.fillStyle = '#0f0';
 					ctx.fillRect(selectedMatches[i].keypoint2[0], selectedMatches[i].keypoint2[1], 3, 3);
+				}*/
+
+				console.log(fourBestMatches)
+				for (let i = 0; i < fourBestMatches.length; i++) {
+					ctx.fillStyle = '#00f';
+					ctx.fillRect(fourBestMatches[i].keypoint2[0], fourBestMatches[i].keypoint2[1], 12, 12);
 				}
 
 			}
@@ -267,27 +290,68 @@
 			setTimeout(draw, framerate);
 		}
 
+		function round(num){
+			return Math.round(num*10000000000)/10000000000;
+		}
 
-		/**
-		 * multiply matrix. as matrix[row][col]
-		 * @param matrixA
-		 * @param matrixB
-		 * @returns {any[]}
-		 */
-		function multiply(a, b) {
-			var aNumRows = a.length, aNumCols = a[0].length,
-					bNumRows = b.length, bNumCols = b[0].length,
-					m = new Array(aNumRows);  // initialize array of rows
-			for (var r = 0; r < aNumRows; ++r) {
-				m[r] = new Array(bNumCols); // initialize the current row
-				for (var c = 0; c < bNumCols; ++c) {
-					m[r][c] = 0;             // initialize the current cell
-					for (var i = 0; i < aNumCols; ++i) {
-						m[r][c] += a[r][i] * b[i][c];
-					}
-				}
+		function getNormalizationCoefficients(srcPts, dstPts){
+			let r1 = [srcPts[0], srcPts[1], 1, 0, 0, 0, -1*dstPts[0]*srcPts[0], -1*dstPts[0]*srcPts[1]];
+			let r2 = [0, 0, 0, srcPts[0], srcPts[1], 1, -1*dstPts[1]*srcPts[0], -1*dstPts[1]*srcPts[1]];
+			let r3 = [srcPts[2], srcPts[3], 1, 0, 0, 0, -1*dstPts[2]*srcPts[2], -1*dstPts[2]*srcPts[3]];
+			let r4 = [0, 0, 0, srcPts[2], srcPts[3], 1, -1*dstPts[3]*srcPts[2], -1*dstPts[3]*srcPts[3]];
+			let r5 = [srcPts[4], srcPts[5], 1, 0, 0, 0, -1*dstPts[4]*srcPts[4], -1*dstPts[4]*srcPts[5]];
+			let r6 = [0, 0, 0, srcPts[4], srcPts[5], 1, -1*dstPts[5]*srcPts[4], -1*dstPts[5]*srcPts[5]];
+			let r7 = [srcPts[6], srcPts[7], 1, 0, 0, 0, -1*dstPts[6]*srcPts[6], -1*dstPts[6]*srcPts[7]];
+			let r8 = [0, 0, 0, srcPts[6], srcPts[7], 1, -1*dstPts[7]*srcPts[6], -1*dstPts[7]*srcPts[7]];
+
+			let matA = [r1, r2, r3, r4, r5, r6, r7, r8];
+			let matB = dstPts;
+			let matC = inv(dotMMsmall(transpose(matA), matA));
+
+			let matD = dotMMsmall(matC, transpose(matA));
+			let matX = dotMV(matD, matB);
+			for(let i = 0; i < matX.length; i++) {
+				matX[i] = round(matX[i]);
 			}
-			return m;
+			console.log(matX)
+			matX[8] = 1;
+
+			return matX;
+		}
+
+		function PerspT(r1, r2){
+			let srcPts = []
+			let dstPts = []
+			for (let i = 0; i < 4; i++) {
+				srcPts.push(r1[i][0])
+				srcPts.push(r1[i][1])
+				dstPts.push(r2[i][0])
+				dstPts.push(r2[i][1])
+			}
+
+			return getNormalizationCoefficients(srcPts, dstPts);
+		}
+
+		function cssTransMatrix(transMatrix) {
+			let transArray = new Float64Array(16);
+			transArray[0] = transMatrix[0];
+			transArray[1] = transMatrix[1];
+			transArray[2] = 0;
+			transArray[3] = transMatrix[2];
+			transArray[4] = transMatrix[3];
+			transArray[5] = transMatrix[4];
+			transArray[6] = 0;
+			transArray[7] = transMatrix[5];
+			transArray[8] = 0;
+			transArray[9] = 0;
+			transArray[10] = 1;
+			transArray[11] = 0;
+			transArray[12] = transMatrix[6];
+			transArray[13] = transMatrix[7];
+			transArray[14] = 0;
+			transArray[15] = transMatrix[8];
+
+			return transArray
 		}
 
 	</script>
