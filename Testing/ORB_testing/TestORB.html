@@ -1,0 +1,36 @@
+<html>
+<head>
+    <title>Test ORB</title>
+</head>
+<body>
+<img id="baseImageimg" src="pictures/IMG_2716.jpeg">
+<canvas id="baseImage"></canvas>
+<canvas id="image"></canvas>
+</body>
+<script src="FASTDetector.js"></script>
+<script src="Brief.js"></script>
+<script src="TestORB.js"></script>
+<script type="text/javascript">
+    let img = document.getElementById("baseImageimg")
+    let start = 1500
+    let width = 3000;
+    let height = 3000;
+    let baseImageCanvas = document.getElementById("baseImage")
+    let baseImageCtx = baseImageCanvas.getContext("2d")
+    baseImageCtx.drawImage(img, start, start, width, height, 0, 0, width, height);
+
+
+    for(let i = 0; i < 10; i++){
+        let dx = Math.round(Math.random() * 30);
+        let dy = Math.round(Math.random() * 30);
+        let imageCanvas = document.getElementById("image")
+        let imageCtx = imageCanvas.getContext("2d")
+        imageCtx.drawImage(img,start + dx, start + dy, width, height, 0, 0, width, height)
+        console.log("wanted translation: " + dx + ", " + dy)
+        let translation = getTranslation(baseImageCtx.getImageData(0,0,width,height), imageCtx.getImageData(0,0,width,height), width, height, 20)
+        console.log(translation)
+    }
+
+
+</script>
+</html>
