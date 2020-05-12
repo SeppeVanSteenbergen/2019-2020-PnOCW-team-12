@@ -1,0 +1,51 @@
+<html>
+<head>
+    <title>Test ORB</title>
+</head>
+<body>
+<img id="baseImageimg" src="pictures/IMG_2716.jpeg">
+<canvas id="baseImage"></canvas>
+<canvas id="image"></canvas>
+</body>
+<script src="FASTDetector.js"></script>
+<script src="Brief.js"></script>
+<script src="TestORB.js"></script>
+<script type="text/javascript">
+    function start(){
+        let img = document.getElementById("baseImageimg")
+        let maxTranslation = 30
+        let baseImageCanvas = document.getElementById("baseImage")
+
+        let baseImageCtx = baseImageCanvas.getContext("2d")
+
+        let imageCanvas = document.getElementById("image")
+
+        let imageCtx = imageCanvas.getContext("2d")
+        for(let nbPixels = 50000; nbPixels < 2000000; nbPixels += 50000){
+            let timeTook = 0;
+            let width = Math.round(Math.sqrt(nbPixels))
+            let height = width;
+            baseImageCanvas.height= height;
+            baseImageCanvas.width = width;
+            imageCanvas.height= height;
+            imageCanvas.width = width;
+            for(let i = 0; i < 5; i++){
+                let start = Math.round(Math.random() * 2000)
+                let dx = Math.round(Math.random() * maxTranslation);
+                let dy = Math.round(Math.random() * maxTranslation);
+                baseImageCtx.drawImage(img, start, start, width, height, 0, 0, width, height);
+                imageCtx.drawImage(img,start + dx, start + dy, width, height, 0, 0, width, height)
+                let t0 = performance.now()
+                getTranslation(baseImageCtx.getImageData(0,0,width,height), imageCtx.getImageData(0,0,width,height), width, height, 20)
+                let t1 = performance.now();
+                timeTook += (t1 - t0);
+            }
+            console.log(nbPixels + " time: " + timeTook/5 + " ms")
+        }
+    }
+
+
+
+
+</script>
+</html>

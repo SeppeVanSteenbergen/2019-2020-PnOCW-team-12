@@ -22,7 +22,11 @@ class RGBBarcodeScanner {
       imageData = this.getMaskRow(imageData, row, filteredRow)
       barcodes = this.scanRow(filteredRow, barcodes)
     }
-    return this.getHighestCode(barcodes)
+    let totalScanned = Object.values(barcodes).reduce((a, b) => a + b, 0)
+    let highest = this.getHighestCode(barcodes)
+    let ratio = Math.round((barcodes[highest] / totalScanned)*100)
+    self.postMessage({ text: 'MESSAGE', msg: 'Barcode accuracy: '+ ratio +'%'})
+    return highest
   }
 
   static scanRow(pixels, barcodes) {

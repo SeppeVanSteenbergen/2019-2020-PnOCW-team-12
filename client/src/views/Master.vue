@@ -69,13 +69,7 @@
               <v-btn @click="countdownDialog = true" text color="primary"
                 >Countdown</v-btn
               >
-              <v-btn
-                @click="
-                  screenDetectionDialog = true
-                  executeDisplayDetectionScreens()
-                "
-                text
-                color="primary"
+              <v-btn @click="handleDetectionButton" text color="primary"
                 >Screen Detection</v-btn
               >
             </v-expansion-panel-content>
@@ -247,19 +241,19 @@
       <v-stepper v-model="detectionStepper" class="fullheight">
         <template>
           <v-stepper-header>
-            <v-stepper-step :complete="detectionStepper > 1" step="1"
+            <v-stepper-step :complete="detectionStepper > 1" step="1" :editable="developerMode"
               >Take Picture</v-stepper-step
             >
 
             <v-divider></v-divider>
 
-            <v-stepper-step :complete="detectionStepper > 2" step="2"
+            <v-stepper-step :complete="detectionStepper > 2" step="2" :editable="developerMode"
               >Result Display</v-stepper-step
             >
 
             <v-divider></v-divider>
 
-            <v-stepper-step :complete="detectionStepper > 3" step="3"
+            <v-stepper-step :complete="detectionStepper > 3" step="3" :editable="developerMode"
               >Usage</v-stepper-step
             >
           </v-stepper-header>
@@ -474,7 +468,7 @@
                     >
                     <v-expansion-panel-content>
                       <v-btn color="primary" @click="executeAnimation">{{
-                        animationButtonLabel
+                        isAnimating ? 'Stop Animation' : 'Start Animation'
                       }}</v-btn>
                     </v-expansion-panel-content>
                   </v-expansion-panel>
@@ -484,8 +478,22 @@
                     >
                     <v-expansion-panel-content>
                       <v-btn color="primary" @click="executeTracking">{{
-                        trackingButtonLabel
+                        isTracking ? 'Stop Tracking' : 'Start Tracking'
                       }}</v-btn>
+
+                      <v-switch
+                        v-if="isTracking"
+                        v-model="rotation"
+                        :label="`Track rotation`"
+                      ></v-switch>
+                      <v-switch
+                        v-if="isTracking"
+                        v-model="translation"
+                        :label="`Track translation`"
+                      ></v-switch>
+                      <v-btn v-if="isTracking" color="primary" @click="executeScene">{{
+                        sceneRunning ? 'Exit 3D Scene' : 'View 3D Scene'
+                        }}</v-btn>
                     </v-expansion-panel-content>
                   </v-expansion-panel>
                   <v-expansion-panel>
@@ -548,18 +556,19 @@ import WaitEnv from '../env/WaitEnv'
 import ImageTools from '../algorithms/ImageTools'
 
 import {
-  calculateTransformation,
+  calculateRotation,
+  calculateFrameTranslation,
   initializeTracking,
   startTracking,
   stopTracking
 } from '../algorithms/Tracking'
+import Brief from '../algorithms/Brief'
 
 export default {
   name: 'master',
   data() {
     return {
       color: { r: 200, g: 100, b: 0, a: 1 },
-      masterPanel: 0,
       masterPanelWorking: false,
 
       //floodfill mode
@@ -604,7 +613,6 @@ export default {
       animationInterval: null,
       animationFramerate: 50,
       isAnimating: false,
-      animationButtonLabel: 'Start Animation',
 
       fileUploadingActive: false,
       fileUploadProgress: 0,
@@ -612,10 +620,17 @@ export default {
 
       pictureCanvasInfo: null,
 
-      tracking: null,
-      beginOffsetTracking: 0,
       isTracking: false,
-      trackingButtonLabel: 'Start Tracking'
+      tracking: null,
+      rotation: false,
+      translation: false,
+      startOrientation: null,
+      rotationMatrix: new DOMMatrix(
+        'matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)'
+      ),
+      translationCoord: { x: 0, y: 0 },
+
+      sceneRunning: false
     }
   },
   methods: {
@@ -634,13 +649,13 @@ export default {
       if (this.masterPanel === 0) {
         if (this.myRoom.clients.length > 0) {
           this.toggleRoom()
-          this.masterPanel = 1
+          //this.masterPanel = 1
         } else {
           this.$notif('No clients connected', 'error')
         }
       } else {
         this.toggleRoom()
-        this.masterPanel = 0
+        //this.masterPanel = 0
       }
     },
     colorClient(user_id = null) {
@@ -909,6 +924,10 @@ export default {
         this.$notif('Detection was not succesful', 'error')
         return
       }
+      if (!this.fileUploadingActive) {
+        this.$notif('upload already in progress')
+        return
+      }
       let formData = new FormData()
       formData.append('videofile', this.videoFile)
       this.$notif('uploading video...', 'info')
@@ -927,7 +946,6 @@ export default {
         })
         .catch(err => {
           this.$notif('Video upload failed, Try Again', 'error')
-          console.log(err)
         })
     },
 
@@ -1026,7 +1044,6 @@ export default {
           }
         })
         .catch(err => {
-          console.log(err)
           this.$notif('Image upload failed, Try Again', 'error')
         })
     },
@@ -1034,12 +1051,10 @@ export default {
     executeAnimation() {
       if (!this.isAnimating) {
         this.isAnimating = true
-        this.animationButtonLabel = 'Stop Animation'
         this.executeInitAnimation()
         this.executeStartAnimation()
       } else {
         this.isAnimating = false
-        this.animationButtonLabel = 'Start Animation'
         this.executeStopAnimation()
         this.executeDelaunayImage()
       }
@@ -1441,12 +1456,13 @@ export default {
     executeTracking() {
       if (!this.isTracking) {
         this.isTracking = true
-        this.trackingButtonLabel = 'Stop Tracking'
         this.executeStartTracking()
       } else {
         this.isTracking = false
-        this.trackingButtonLabel = 'Start Tracking'
         this.executeStopTracking()
+        if (this.sceneRunning) {
+          this.executeScene()
+        }
       }
     },
     executeInitTracking() {
@@ -1463,40 +1479,88 @@ export default {
         this.tracking = result
       })
     },
-    handleTracking(data) {
+    handleTracking() {
+      if (!this.rotation) {
+        this.startOrientation = null
+        this.rotationMatrix = new DOMMatrix(
+          'matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)'
+        )
+      }
+      if (!this.translation) {
+        this.translationCoord = { x: 0, y: 0 }
+      }
+
+      let transformation = this.rotationMatrix.translateSelf(
+        this.translationCoord.x,
+        this.translationCoord.y
+      )
+
       let object = {
         payload: {
           type: 'tracking-update',
           data: {
-            css: data
+            css: transformation.toString()
           }
         },
         to: 'all'
       }
       this.$socket.emit('screenCommand', object)
     },
+    calculateTranslation(video, context, brief, parameters, previousResults) {
+      calculateFrameTranslation(
+        video,
+        context,
+        brief,
+        parameters,
+        previousResults
+      ).then(results => {
+        this.translationCoord.x += results.trans.x
+        this.translationCoord.y += results.trans.y
+        this.handleTracking()
+
+        if (this.isTracking) {
+          setTimeout(() => {
+            this.calculateTranslation(
+              video,
+              context,
+              brief,
+              parameters,
+              results
+            )
+          }, 50)
+        }
+      })
+    },
     executeStartTracking() {
       this.executeInitTracking().then(() => {
-        console.log('Done init')
+        startTracking(this.tracking.sensors, this.tracking.camera)
+
+        this.tracking.sensors.addEventListener('reading', () => {
+          let results = calculateRotation(
+            this.tracking.sensors,
+            this.startOrientation
+          )
+          this.startOrientation = results.startMatrix
+          this.rotationMatrix = results.calculatedRotation
+
+          this.handleTracking()
+        })
+
         let canvas = document.createElement('canvas')
         canvas.width = this.tracking.camera.videoWidth
         canvas.height = this.tracking.camera.videoHeight
         let context = canvas.getContext('2d')
-
-        calculateTransformation(
-          this.handleTracking,
-          this.tracking.sensors,
+        let brief = new Brief(512)
+        let parameters = { threshold: 15, confidence: 0.9 }
+        this.calculateTranslation(
           this.tracking.camera,
           context,
-          null,
-          { x: 0, y: 0 },
-          null,
-          null,
-          null,
+          brief,
+          parameters,
           {
-            threshold: 40,
-            fictiveDepth: 1000,
-            confidence: 0.75
+            trans: this.translationCoord,
+            corners: null,
+            descriptor: null
           }
         )
       })
@@ -1510,12 +1574,42 @@ export default {
         to: 'all'
       }
       this.$socket.emit('screenCommand', object)
-      console.log(this.tracking)
       stopTracking(this.tracking.sensors, this.tracking.camera)
       this.executeResetTracking()
     },
     executeResetTracking() {
       this.tracking = null
+    },
+    executeScene() {
+      let obj
+      if (!this.sceneRunning) {
+        obj = {
+          payload: {
+            type: 'dimension-init',
+            data: {}
+          },
+          to: 'all'
+        }
+      } else {
+        obj = {
+          payload: {
+            type: 'dimension-stop',
+            data: {}
+          },
+          to: 'all'
+        }
+      }
+
+      this.$socket.emit('screenCommand', obj)
+
+      this.sceneRunning = !this.sceneRunning
+    },
+    handleDetectionButton() {
+      this.screenDetectionDialog = true
+      if (!this.analysedImage) {
+        this.detectionStepper = 1
+        this.executeDisplayDetectionScreens()
+      }
     }
   },
   mounted() {
@@ -1536,6 +1630,17 @@ export default {
     },
     roomList() {
       return this.$store.state.roomList
+    },
+    masterPanel: {
+      get() {
+        return this.myRoom !== null && this.myRoom.open ? 0 : 1
+      },
+      set() {
+        this.toggleRoom()
+      }
+    },
+    developerMode(){
+      return this.$store.state.developerMode
     }
   },
   watch: {
