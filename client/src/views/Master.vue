@@ -69,12 +69,7 @@
               <v-btn @click="countdownDialog = true" text color="primary"
                 >Countdown</v-btn
               >
-              <v-btn
-                @click="
-                  handleDetectionButton
-                "
-                text
-                color="primary"
+              <v-btn @click="handleDetectionButton" text color="primary"
                 >Screen Detection</v-btn
               >
             </v-expansion-panel-content>
@@ -246,19 +241,19 @@
       <v-stepper v-model="detectionStepper" class="fullheight">
         <template>
           <v-stepper-header>
-            <v-stepper-step :complete="detectionStepper > 1" step="1" editable
+            <v-stepper-step :complete="detectionStepper > 1" step="1" :editable="developerMode"
               >Take Picture</v-stepper-step
             >
 
             <v-divider></v-divider>
 
-            <v-stepper-step :complete="detectionStepper > 2" step="2" editable
+            <v-stepper-step :complete="detectionStepper > 2" step="2" :editable="developerMode"
               >Result Display</v-stepper-step
             >
 
             <v-divider></v-divider>
 
-            <v-stepper-step :complete="detectionStepper > 3" step="3" editable
+            <v-stepper-step :complete="detectionStepper > 3" step="3" :editable="developerMode"
               >Usage</v-stepper-step
             >
           </v-stepper-header>
@@ -574,7 +569,6 @@ export default {
   data() {
     return {
       color: { r: 200, g: 100, b: 0, a: 1 },
-      masterPanel: 0,
       masterPanelWorking: false,
 
       //floodfill mode
@@ -655,13 +649,13 @@ export default {
       if (this.masterPanel === 0) {
         if (this.myRoom.clients.length > 0) {
           this.toggleRoom()
-          this.masterPanel = 1
+          //this.masterPanel = 1
         } else {
           this.$notif('No clients connected', 'error')
         }
       } else {
         this.toggleRoom()
-        this.masterPanel = 0
+        //this.masterPanel = 0
       }
     },
     colorClient(user_id = null) {
@@ -930,7 +924,7 @@ export default {
         this.$notif('Detection was not succesful', 'error')
         return
       }
-      if(!this.fileUploadingActive) {
+      if (!this.fileUploadingActive) {
         this.$notif('upload already in progress')
         return
       }
@@ -1613,13 +1607,13 @@ export default {
         this.detectionStepper = 1
         this.executeDisplayDetectionScreens()
       }
-    },
+    }
   },
   mounted() {
     this.$socket.emit('updateRoomList')
   },
   computed: {
-     myRoom() {
+    myRoom() {
       for (let i in this.$store.state.roomList) {
         if (
           typeof this.$store.state.roomList[i] !== 'undefined' &&
@@ -1633,6 +1627,17 @@ export default {
     },
     roomList() {
       return this.$store.state.roomList
+    },
+    masterPanel: {
+      get() {
+        return this.myRoom !== null && this.myRoom.open ? 0 : 1
+      },
+      set() {
+        this.toggleRoom()
+      }
+    },
+    developerMode(){
+      return this.$store.state.developerMode
     }
   },
   watch: {

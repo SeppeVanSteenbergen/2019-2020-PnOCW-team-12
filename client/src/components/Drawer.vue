@@ -43,6 +43,9 @@
         <v-switch v-model="darkThemeComputed" label="Dark Mode"></v-switch>
       </v-list-item>
       <v-list-item>
+        <v-switch v-model="developerMode" label="Developer Mode"></v-switch>
+      </v-list-item>
+      <v-list-item>
         <v-list-item-title>{{ deltaTime + 'ms time offset' }}</v-list-item-title>
       </v-list-item>
     </v-list>
@@ -100,6 +103,14 @@ export default {
       set(n) {
         this.$vuetify.theme.dark = n
         this.setDrawer(false)
+      }
+    },
+    developerMode: {
+      get() {
+        return this.$store.state.developerMode
+      },
+      set(n) {
+        this.$store.state.developerMode = n
       }
     },
     deltaTime: {

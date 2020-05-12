@@ -25,7 +25,8 @@ export default new Vuex.Store({
     sync: {
       delta: 0,
       active: false
-    }
+    },
+    developerMode: false
   },
   mutations: {
     SOCKET_CONNECT(state) {
