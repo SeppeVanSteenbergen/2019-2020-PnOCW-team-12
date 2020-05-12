@@ -481,9 +481,6 @@
                         isTracking ? 'Stop Tracking' : 'Start Tracking'
                       }}</v-btn>
 
-                      <v-btn color="primary" @click="executeScene">{{
-                        sceneRunning ? 'Stop 3D Scene' : 'Start 3D Scene'
-                      }}</v-btn>
                       <v-switch
                         v-if="isTracking"
                         v-model="rotation"
@@ -494,6 +491,9 @@
                         v-model="translation"
                         :label="`Track translation`"
                       ></v-switch>
+                      <v-btn v-if="isTracking" color="primary" @click="executeScene">{{
+                        sceneRunning ? 'Exit 3D Scene' : 'View 3D Scene'
+                        }}</v-btn>
                     </v-expansion-panel-content>
                   </v-expansion-panel>
                   <v-expansion-panel>
@@ -1460,6 +1460,9 @@ export default {
       } else {
         this.isTracking = false
         this.executeStopTracking()
+        if (this.sceneRunning) {
+          this.executeScene()
+        }
       }
     },
     executeInitTracking() {
