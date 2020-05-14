@@ -241,19 +241,28 @@
       <v-stepper v-model="detectionStepper" class="fullheight">
         <template>
           <v-stepper-header>
-            <v-stepper-step :complete="detectionStepper > 1" step="1" :editable="developerMode"
+            <v-stepper-step
+              :complete="detectionStepper > 1"
+              step="1"
+              :editable="developerMode"
               >Take Picture</v-stepper-step
             >
 
             <v-divider></v-divider>
 
-            <v-stepper-step :complete="detectionStepper > 2" step="2" :editable="developerMode"
+            <v-stepper-step
+              :complete="detectionStepper > 2"
+              step="2"
+              :editable="developerMode"
               >Result Display</v-stepper-step
             >
 
             <v-divider></v-divider>
 
-            <v-stepper-step :complete="detectionStepper > 3" step="3" :editable="developerMode"
+            <v-stepper-step
+              :complete="detectionStepper > 3"
+              step="3"
+              :editable="developerMode"
               >Usage</v-stepper-step
             >
           </v-stepper-header>
@@ -491,9 +500,14 @@
                         v-model="translation"
                         :label="`Track translation`"
                       ></v-switch>
-                      <v-btn v-if="isTracking" color="primary" @click="executeScene">{{
-                        sceneRunning ? 'Exit 3D Scene' : 'View 3D Scene'
-                        }}</v-btn>
+                      <v-btn
+                        v-if="isTracking"
+                        color="primary"
+                        @click="executeScene"
+                        >{{
+                          sceneRunning ? 'Exit 3D Scene' : 'View 3D Scene'
+                        }}</v-btn
+                      >
                     </v-expansion-panel-content>
                   </v-expansion-panel>
                   <v-expansion-panel>
@@ -924,7 +938,7 @@ export default {
         this.$notif('Detection was not succesful', 'error')
         return
       }
-      if (!this.fileUploadingActive) {
+      if (this.fileUploadingActive) {
         this.$notif('upload already in progress')
         return
       }
@@ -1107,7 +1121,67 @@ export default {
     },
     executeInitAnimation() {
       this.startSync()
-      this.executeDelaunayImage()
+
+      let tri = []
+      for (let i = 0; i < this.analysedImage.triangulation.length; i++) {
+        tri.push(this.analysedImage.triangulation[i].toObject())
+      }
+      console.log('Sent Triangulation')
+      console.log(tri)
+
+      let midpoints = this.analysedImage.midPoints
+
+      let width = this.analysedImage.width
+      let height = this.analysedImage.height
+
+      let info = this.analysedImage.createPictureCanvas(0, 0)
+
+      for (let i = 0; i < this.analysedImage.screens.length; i++) {
+        console.log('looping through screens')
+        let cssMatrix = this.analysedImage.screens[i].cssMatrix
+
+        let user_id = this.myRoom.clients[
+          this.analysedImage.screens[i].clientCode
+        ]
+
+        let css =
+          'position: absolute; left:' +
+          info.minx +
+          'px; top: ' +
+          info.miny +
+          'px; transform: matrix3d(' +
+          cssMatrix.join(', ') +
+          '); transform-origin: ' +
+          -info.minx +
+          'px ' +
+          -info.miny +
+          'px; width: ' +
+          info.w +
+          'px; height: ' +
+          info.h +
+          'px; object-fit: none'
+
+        let obj = {
+          payload: {
+            type: 'animation-init',
+            data: {
+              triangulation: tri,
+              midpoints: midpoints,
+              width: width,
+              height: height,
+
+              css: css,
+              ox: info.minx,
+              oy: info.miny,
+              w: info.w,
+              h: info.h
+            }
+          },
+          to: user_id
+        }
+
+        this.$socket.emit('screenCommand', obj)
+      }
 
       // create animation object
       this.animation = new Animation(
@@ -1639,7 +1713,7 @@ export default {
         this.toggleRoom()
       }
     },
-    developerMode(){
+    developerMode() {
       return this.$store.state.developerMode
     }
   },
