@@ -1066,7 +1066,7 @@ export default {
       if (!this.isAnimating) {
         this.isAnimating = true
         this.executeInitAnimation()
-        this.executeStartAnimation()
+        setTimeout(this.executeStartAnimation.bind(this), 500)
       } else {
         this.isAnimating = false
         this.executeStopAnimation()
@@ -1134,32 +1134,38 @@ export default {
       let width = this.analysedImage.width
       let height = this.analysedImage.height
 
-      let info = this.analysedImage.createPictureCanvas(0, 0)
+      let info = ImageTools.createPictureCanvas(0, 0, this.analysedImage)
+
+      let list = []
+      for (let i = 0; i < 20; i++) {
+        list.push(Math.round(Math.random() * 30))
+      }
+      console.log(list)
 
       for (let i = 0; i < this.analysedImage.screens.length; i++) {
         console.log('looping through screens')
         let cssMatrix = this.analysedImage.screens[i].cssMatrix
 
         let user_id = this.myRoom.clients[
-          this.analysedImage.screens[i].clientCode
-        ]
+                this.analysedImage.screens[i].clientCode
+                ]
 
         let css =
-          'position: absolute; left:' +
-          info.minx +
-          'px; top: ' +
-          info.miny +
-          'px; transform: matrix3d(' +
-          cssMatrix.join(', ') +
-          '); transform-origin: ' +
-          -info.minx +
-          'px ' +
-          -info.miny +
-          'px; width: ' +
-          info.w +
-          'px; height: ' +
-          info.h +
-          'px; object-fit: none'
+                'z-index:10; position: fixed; left:' +
+                info.minx +
+                'px; top: ' +
+                info.miny +
+                'px; transform: matrix3d(' +
+                cssMatrix.join(', ') +
+                '); transform-origin: ' +
+                -info.minx +
+                'px ' +
+                -info.miny +
+                'px; width: ' +
+                info.w +
+                'px; height: ' +
+                info.h +
+                'px; object-fit: none'
 
         let obj = {
           payload: {
@@ -1169,6 +1175,7 @@ export default {
               midpoints: midpoints,
               width: width,
               height: height,
+              list: list,
 
               css: css,
               ox: info.minx,
@@ -1184,14 +1191,14 @@ export default {
       }
 
       // create animation object
-      this.animation = new Animation(
+      /*this.animation = new Animation(
         this.analysedImage.triangulation,
         {
           width: this.analysedImage.width,
           height: this.analysedImage.height
         },
         false
-      )
+      )*/
     },
 
     executeInitGame() {

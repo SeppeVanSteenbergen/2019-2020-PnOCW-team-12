@@ -198,7 +198,7 @@ export default {
           this.loadImageHandler(message.data)
           break
         case 'game-init':
-          this.setDefaultCSS()
+          this.resetDefault()
           this.initGame()
           break
         case 'tracking-init':
