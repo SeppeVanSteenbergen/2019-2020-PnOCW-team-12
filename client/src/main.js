@@ -35,6 +35,37 @@ Vue.use(
   })
 )
 
+Vue.prototype.startSync = function() {
+  this.$store.state.sync.active = true
+  this.$store.dispatch('showSnackbar', {
+    text: 'Starting synchronisation',
+    color: 'info'
+  })
+  this.$socket.emit('startSync', '')
+}
+
+Vue.prototype.printToConsole = function(message, color, time) {
+  this.$store.dispatch('showSnackbar', {
+    text: message,
+    color: color,
+    time: time
+  })
+}
+
+Vue.prototype.printToConsole = function(message, color) {
+  this.$store.dispatch('showSnackbar', {
+    text: message,
+    color: color
+  })
+}
+
+Vue.prototype.$notif = function(message, color) {
+  this.$store.dispatch('showSnackbar', {
+    text: message,
+    color: color
+  })
+}
+
 new Vue({
   router,
   store,

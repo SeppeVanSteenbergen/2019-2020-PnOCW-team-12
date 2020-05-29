@@ -3,14 +3,15 @@ import config from '../config/config'
 import Delaunay from './Delaunay'
 
 export default class Animations {
-  constructor(triangulation, canvas, xmasMode) {
+  constructor(triangulation, canvas, xmasMode, randomList) {
+    this.randomList = randomList
     this.xmasMode = xmasMode
     this.catImage = new window.Image()
     this.mouseImage = new window.Image()
     if (typeof config !== 'undefined') {
       if (xmasMode) {
-        this.catImage.src = config.backend.url + '/img/cat4_trans_xmas.png'
-        this.mouseImage.src = config.backend.url + '/img/mouse2_trans_xmas.png'
+        this.catImage.src = config.frontend.url + '/img/cat4_trans_xmas.png'
+        this.mouseImage.src = config.frontend.url + '/img/mouse2_trans_xmas.png'
       } else {
         this.catImage.src = config.backend.url + '/img/cat4_trans.png'
         this.mouseImage.src = config.backend.url + '/img/mouse2_trans.png'
@@ -25,6 +26,7 @@ export default class Animations {
       }
     }
 
+    this.currentListPos = -1
     this.nbFrames = 7
     this.width = canvas.width
     this.height = canvas.height
@@ -33,11 +35,11 @@ export default class Animations {
     this.radius = 5
     this.fillStyle = 'red '
     this.range = 7
-    this.speed = 12
+    this.speed = 7
     this.frame = 0
     this.angle = 0
     this.snowAngle = 0
-    this.posStack = []
+    this.fps = 60
 
     if (triangulation !== null) {
       let firstPoint = triangulation[0].point1
@@ -68,8 +70,8 @@ export default class Animations {
   }
 
   setPosition(x, y) {
-    if (x > 0 && x < this.width) this.position.x = x
-    if (y > 0 && y < this.height) this.position.y = y
+    if (x > 0 ) this.position.x = x
+    if (y > 0 ) this.position.y = y
   }
 
   getPosition() {
@@ -190,15 +192,49 @@ export default class Animations {
     ctx.restore()
   }
 
-  getNextFrame() {
-    this.updateFrame()
-    return {
-      x: this.position.x,
-      y: this.position.y,
-      angle: this.angle,
-      frame: this.frame,
-      right: this.endPoint[0] >= this.firstPoint[0]
+  getNextFrame(frame, startTime, currentTime) {
+    if (frame - 6 < Math.round((currentTime - startTime) / (1000 / this.fps))) {
+      this.updateFrame()
+      this.updateFrame()
+      return {
+        x: this.position.x,
+        y: this.position.y,
+        angle: this.angle,
+        frame: Math.floor(this.frame),
+        right: this.endPoint[0] >= this.firstPoint[0],
+        extraFrame: 1
+      }
+    } else if (
+      frame - 6 >
+      Math.round((currentTime - startTime) / (1000 / this.fps))
+    ) {
+      return {
+        x: this.position.x,
+        y: this.position.y,
+        angle: this.angle,
+        frame: Math.floor(this.frame),
+        right: this.endPoint[0] >= this.firstPoint[0],
+        extraFrame: -1
+      }
+    } else {
+      this.updateFrame()
+      return {
+        x: this.position.x,
+        y: this.position.y,
+        angle: this.angle,
+        frame: Math.floor(this.frame),
+        right: this.endPoint[0] >= this.firstPoint[0],
+        extraFrame: 0
+      }
     }
+  }
+
+  nextInList() {
+    if (this.currentListPos === this.randomList.length - 1) {
+      this.currentListPos = -1
+    }
+    this.currentListPos++
+    return this.randomList[this.currentListPos]
   }
 
   /**
@@ -207,31 +243,28 @@ export default class Animations {
    */
   updateFrame() {
     let canReturn = false
-    if (this.triangulation[0].point1 === this.triangulation[0].point2) {
+    if (JSON.stringify({...this.triangulation[0].point1}) === JSON.stringify({...this.triangulation[0].point2})) {
       canReturn = true
     }
     if (!this.inRange(this.endPoint)) {
       this.go(this.dx, this.dy)
     } else {
       let newNeighbours = this.findNeighbours(this.endPoint, this.triangulation)
-      let random = Math.floor(Math.random() * newNeighbours.length)
+      let random = this.nextInList() % newNeighbours.length
+      // let random = Math.floor(Math.random() * newNeighbours.length);
       let newNeighbour = newNeighbours[random]
       while (
         canReturn === false &&
         newNeighbour[0] === this.firstPoint[0] &&
         newNeighbour[1] === this.firstPoint[1]
       ) {
-        random = Math.floor(Math.random() * newNeighbours.length)
-        newNeighbour = newNeighbours[random]
+        newNeighbour = newNeighbours[++random % newNeighbour.length]
       }
+
       this.setPosition(this.endPoint[0], this.endPoint[1])
       this.setDirection(this.endPoint, newNeighbour)
       this.firstPoint = this.endPoint.slice()
       this.endPoint = newNeighbour
-      console.log(
-        this.firstPoint + ' ---> ' + this.endPoint + ' angle: ' + this.angle
-      )
-      console.log(this.dy)
     }
 
     this.angle =
@@ -246,7 +279,8 @@ export default class Animations {
       this.angle += 180
     }
 
-    this.frame += 1
+    this.frame = this.frame + this.speed / 23 //TODO
+
     if (this.frame >= this.nbFrames) {
       this.frame = 0
     }
@@ -266,7 +300,6 @@ export default class Animations {
     let line = new Line(beginPoint, endPoint)
     this.dx = line.dx / Math.abs(line.dx)
     this.dy = line.slope * this.dx
-    console.log("bruh", line.dx, this.dy)
     let scale = Math.sqrt(Math.pow(this.dx, 2) + Math.pow(this.dy, 2))
     this.dx /= scale / this.speed
     this.dy /= scale / this.speed
@@ -344,42 +377,4 @@ export default class Animations {
       }
     }
   }
-
-  // animateSprite(x, y, image, spriteWidth, spriteHeight, nbFrames) {
-  //   this.ctx.save()
-  //   this.ctx.translate(x, y)
-  //   this.ctx.rotate((this.angle * Math.PI) / 180)
-  //   this.ctx.translate(-x, -y)
-  //
-  //   if (this.endPoint[0] >= this.firstPoint[0]) {
-  //     this.ctx.drawImage(
-  //       image,
-  //       (this.frame * spriteWidth) / nbFrames,
-  //       0,
-  //       spriteWidth / nbFrames,
-  //       spriteHeight,
-  //       x - spriteWidth / (2 * nbFrames),
-  //       y - spriteHeight / 2,
-  //       spriteWidth / nbFrames,
-  //       spriteHeight
-  //     )
-  //   } else {
-  //     this.ctx.save()
-  //     this.ctx.translate(this.width, 0)
-  //     this.ctx.scale(-1, 1)
-  //     this.ctx.drawImage(
-  //       image,
-  //       (this.frame * spriteWidth) / nbFrames,
-  //       0,
-  //       spriteWidth / nbFrames,
-  //       spriteHeight,
-  //       -(x + spriteWidth / (2 * nbFrames)) + this.width,
-  //       y - spriteHeight / 2,
-  //       spriteWidth / nbFrames,
-  //       spriteHeight
-  //     )
-  //     this.ctx.restore()
-  //   }
-  //   this.ctx.restore()
-  // }
 }

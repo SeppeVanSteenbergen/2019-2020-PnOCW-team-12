@@ -1,0 +1,38 @@
+WAT IS ER VERANDERD:
+
+Alle 'Analyse' algoritmes zoals Image.js, Island.js, Reconstructor.js,... staan in client/public/algorithms/
+- Classes in deze folder zijn zonder default export en kunnen niet buiten de analyse gebruikt worden.
+- Als er een nieuwe klasse in analyse geïntroduceerd wil worden, moet die ook geïmporteerd worden in de file client/public/worker.js
+
+Alle classes die opgeroepen worden door de main thread staan nog op hun originele plaats: client/src/algorithms/
+- De classe Image.js dat hier vroeger stond is nu vervangen door ImageTools.js, hier zitten de overblijvende functies en
+static functies in die nodig zijn op de main thread.
+
+De grootste aanpassingen aan de algemene executie van de analyse zijn terug te vinden in de clien: Master.vue>analyseImage()
+- AnalyseEnv() class wordt gebruikt om de worker te spawnen en de originele image data en nodige parameters door te geven aan de worker thread
+- WaitEnv() class wordt gebruikt om de lineaire executie te onderbreken tot het resultaat van de worker ontvangen is. Deze klasse 
+handled ook de messages van worker->main thread en update de UI.
+
+(deze ...Env() klasse zijn te vinden in client/src/env/)
+
+Hoe update messages toe voegen van de analyse?
+
+in elk bestand dat gebruikt wordt door de analyse (elk bestand in client/public/algorithms/) kan er op eender welke lijn een message naar
+de main thread verstuurd worden via het commande self.postMessage()
+De verschillende parameters zijn als volgt:
+
+- self.postMessage({text: 'UPDATE', pct: 10, msg: 'Converted Colorspace To HSLA'}) om de progress bar te updaten met 10% en een message in de lijst toe te voegen
+opmerking: de percentages zijn super naief en moeten in totaal op 100 komen. Dit moet manueel verdeeld worden.
+
+- self.postMessage({text: 'MESSAGE', msg: 'Found ' + nonPositionCorners.length +' corners, reconstructing missing corners' })
+een voorbeeld om enkel een message in de lijst weer te geven zonder de progress bar te updaten.
+
+Dingen die makkelijk nog aangepast kunnen worden:
+- Hoogte van message lijst (staat nu niet bepaald lang om de scroll te testen)
+- Eventueel verschillende kleuren van messages (om errors weer te geven?)
+
+Evenuele TODO's om de demo nog mooier te maken:
+- Een echte weergave van de te projecteren afbeelding met de schermen er over getekend op de master
+- De logout knop ergens anders plaatsen want op een mobile device overlapt deze half met de ui om de master te bedienen...
+- Een algemene Error log om alle errors weer te geven, niet enkel van de analyse (makkelijk om te zien waar het fout gaat op mobile device)
+- ... (open voor suggesties) 

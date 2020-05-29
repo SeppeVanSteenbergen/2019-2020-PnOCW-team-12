@@ -1,8 +1,8 @@
 const dev = true
 
-let secure = true // true for https, false for http
+let secure = false // true for https, false for http
 
-let kuleuven = true
+let kuleuven = false
 
 const kuleuvenServer = {
   backend: {
@@ -19,11 +19,11 @@ if (dev) secure = false
 
 const devServ = {
   backend: {
-    url: 'http://localhost:8012',
+    url: 'http://192.168.0.146:8012',
     port: 8012
   },
   frontend: {
-    url: 'http://localhost:8080',
+    url: 'http://192.168.0.146:8080',
     port: 8080
   }
 }
@@ -66,5 +66,7 @@ module.exports = {
     url: server.frontend.url,
     port: server.frontend.port
   },
-  secure: secure // true for https, false for http
+  secure: secure, // true for https, false for http
+  dev: dev,
+  kul: kuleuven
 }

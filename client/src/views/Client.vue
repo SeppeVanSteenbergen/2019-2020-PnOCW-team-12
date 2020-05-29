@@ -1,31 +1,34 @@
 <template>
-  <v-container class="fill-height" fluid>
-    <v-row align="center" justify="center" min-height="300px">
+  <v-container fluid style="padding-top: 110px">
+    <v-row align="center" justify="center" max-width="240px" dense>
       <div>
-        <v-card max-width="400px">
+        <v-card width="240px">
           <v-toolbar color="primary" dark flat>
-            <v-toolbar-title>{{
-              $store.getters.getRole.room >= 0
-                ? 'Connected to room ' + $store.getters.getRole.room
-                : 'Choose a room'
-            }}</v-toolbar-title>
+            <v-toolbar-title>
+              {{
+                $store.getters.getRole.room >= 0
+                  ? 'Connected to room ' + $store.getters.getRole.room
+                  : 'Choose a room'
+              }}
+            </v-toolbar-title>
             <div class="flex-grow-1"></div>
           </v-toolbar>
           <v-container>
             <v-list v-if="roomList.length !== 0">
               <v-list>
                 <v-list-item
-                 v-for="room_id in Object.keys(roomList)"
+                  v-for="room_id in Object.keys(roomList)"
                   :key="room_id"
                   @click="joinRoom(room_id)"
                 >
                   <v-list-item-icon>
                     <v-icon
                       :color="roomList[room_id].open ? 'success' : 'error'"
-                      >{{
-                        roomList[room_id].open ? 'mdi-lock-open' : 'mdi-lock'
-                      }}</v-icon
                     >
+                      {{
+                        roomList[room_id].open ? 'mdi-lock-open' : 'mdi-lock'
+                      }}
+                    </v-icon>
                   </v-list-item-icon>
                   <v-list-item-content>
                     <v-list-item-title
@@ -38,11 +41,22 @@
           </v-container>
         </v-card>
         <br />
-        <v-btn @click="goFullscreen()">
-          Go Fullscreen
-        </v-btn>
-        <div ref="canvWrap" class="fullscreen">
-          <canvas ref="canvas"> </canvas>
+        <v-btn @click="goFullscreen()">Fullscreen</v-btn>
+        <div
+          v-show="isFullscreen"
+          ref="canvWrap"
+          id="canvWrap"
+          class="fullscreen"
+        >
+          <div id="sceneWrapper" v-show="dimensionRunning" style="position:fixed; left:0; top:0; z-index:12; width:100%; height:100%">
+
+          </div>
+          <canvas
+            ref="canvas"
+            id="mainCanvas"
+            @click="isFullscreen = false"
+            style="position:fixed; left:0; top:0; z-index:10; width:100%; height:100%"
+          ></canvas>
           <video ref="vid">
             <source :src="videoURL" />
           </video>
@@ -57,27 +71,56 @@
 <script>
 import DetectionDrawer from '../algorithms/DetectionDrawer'
 import AlgorithmService from '../services/AlgorithmService'
-import NumberConverter from '../algorithms/PermutationConverter'
 import Animation from '../algorithms/Animations'
-import Image from '../algorithms/Image'
+import Sensors from '../algorithms/Sensors'
+import Scene from '../algorithms/Scene'
 
 export default {
   name: 'client',
   data() {
     return {
-      fullscreen: false,
       canvas: null,
+      canvWrap: null,
       intervalObj: null,
-      defaultCSS: 'width:100%;height:100%',
+      countDownRunning: false,
+      defaultCSS:
+        'z-index:10; position:fixed; left:0; top:0; width:100%; height:100%; background:#000000',
       videoURL: '',
       canvasMode: true,
       videoTimeout: null,
-      delaunayImage: null
+      delaunayImage: null,
+      videoStartTime: null,
+      videoSpeedupDelta: 0.05,
+      videoSyncThreshold: 16, // how many ms difference from clock before speeding up/slowing down video
+      animationRunning: false, // if the animation is currently running
+      animationFrame: 0,
+      // game variables
+      players: {},
+      transCSS: null,
+      transWidth: null,
+      transHeight: null,
+      gameInterval: null,
+      bulletList: null,
+      playerWidth: 40,
+      playerHeight: 40,
+
+      isFullscreen: false,
+      initialFull: true,
+
+      trackingRunning: false,
+      trackingCSS: null,
+      trackingDefaultCSS: null,
+      trackingImage: null,
+
+      scene: null, // Scene obeject to display 3D scene
+      dimensionRunning: false
     }
   },
   mounted() {
     console.log('updateRoomList')
     this.$socket.emit('updateRoomList')
+
+    this.canvWrap = this.$refs.canvWrap
 
     document.addEventListener('fullscreenchange', this.exitHandler, false)
     document.addEventListener('mozfullscreenchange', this.exitHandler, false)
@@ -87,11 +130,18 @@ export default {
   computed: {
     roomList() {
       return this.$store.state.roomList
+    },
+    fullscreen() {
+      return !!(
+        document.fullscreenElement ||
+        document.webkitFullscreenElement ||
+        document.mozFullScreenElement
+      )
     }
   },
   sockets: {
     screenCommand(message) {
-      if (!this.fullscreen) {
+      if (!this.isFullscreen) {
         this.goFullscreen()
       }
       switch (message.type) {
@@ -107,10 +157,6 @@ export default {
           this.setDefaultCSS()
           this.drawDirectionsHandler(message.data)
           break
-        case 'display-image':
-          this.setDefaultCSS()
-          this.drawImageHandler(message.data)
-          break
         case 'display-detection-screen':
           this.setDefaultCSS()
           this.displayDetectionScreenHandler(message.data)
@@ -124,7 +170,7 @@ export default {
           this.loadVideoHandler(message.data)
           break
         case 'start-video':
-          this.startVideoHandler()
+          this.startVideoHandler(message.data)
           break
         case 'pause-video':
           this.pauseVideoHandler()
@@ -136,6 +182,13 @@ export default {
           this.setDefaultCSS()
           this.animationInitHandler(message.data)
           break
+        case 'animation-start':
+          this.animationRunning = true
+          this.animationStartHandler(message.data)
+          break
+        case 'animation-stop':
+          this.animationRunning = false
+          break
         case 'delaunay-image':
           this.setDefaultCSS()
           this.delaunayHandler(message.data)
@@ -143,6 +196,29 @@ export default {
         case 'load-image':
           this.setDefaultCSS()
           this.loadImageHandler(message.data)
+          break
+        case 'game-init':
+          this.resetDefault()
+          this.initGame()
+          break
+        case 'tracking-init':
+          this.resetDefault()
+          this.trackingInitHandler(message.data)
+          break
+        case 'tracking-update':
+          this.trackingUpdateHandler(message.data)
+          break
+        case 'tracking-stop':
+          this.trackingStopHandler(message.data)
+          break
+        case 'dimension-init':
+          this.resetDefault()
+          this.dimensionInitHandler(message.data)
+          break
+        case 'dimension-stop':
+          this.resetDefault()
+          this.dimensionStopHandler(message.data)
+          break
         default:
           console.log('command not supported')
           break
@@ -151,48 +227,62 @@ export default {
     updateScreenSize() {
       this.$socket.emit('setScreenSize', {
         size: {
-          width: screen.width,
-          height: screen.height
+          width: window.innerWidth,
+          height: window.innerHeight
         }
       })
     },
-    pings(data) {
-      if (typeof data !== 'undefined') {
-        data.clientTime = window.Date.now()
-        console.log(data)
-        this.$socket.emit('pongs', data)
-      }
-    },
     af(data) {
       this.animationFrameHandler(data)
+    },
+    playerPositions(players) {
+      this.players = players
+    },
+    bulletListUpdate(bulletList) {
+      this.bulletList = bulletList
     }
   },
   methods: {
     setDefaultCSS() {
-      this.canvas.style = this.defaultCSS
-      this.canvasMode = true
+      this.resetDefault()
+      this.canvWrap.style = this.defaultCSS
+      this.canvas.style.transform = new DOMMatrix()
+      this.canvas.width = window.innerWidth
+      this.canvas.height = window.innerHeight
+      this.dimensionRunning = false
     },
+    resetDefault() {
+      clearInterval(this.gameInterval)
+      clearInterval(this.videoInterval)
+      clearInterval(this.intervalObj)
+      this.countDownRunning = false
+      this.canvasMode = true
+      this.animationRunning = false
+
+    },
+
     setVideoMode() {
+      clearInterval(this.gameInterval)
       this.canvasMode = false
     },
     floodScreenHandler(data) {
-      console.log('given command:')
-      console.log(data.command)
       this.runFloodScreenCommandList(data.command, 0)
     },
     displayDetectionScreenHandler(data) {
       const id = this.$store.getters.getRole.client_id
       let factor = 0.06
       const borderWidth =
-        screen.width < screen.height
-          ? screen.width * factor
-          : screen.height * factor
+        window.innerWidth < window.innerHeight
+          ? window.innerWidth * factor
+          : window.innerHeight * factor
 
-      let drawer = new DetectionDrawer(this.canvas, screen, borderWidth)
+      let drawer = new DetectionDrawer(
+        this.canvas,
+        { width: window.innerWidth, height: window.innerHeight },
+        borderWidth
+      )
 
-      //drawer.drawBorder()
-
-      drawer.barcode(id + 2, 7)
+      drawer.barcode(id, 6)
     },
     runFloodScreenCommandList(list, startIndex) {
       for (let i = startIndex; i < list.length; i++) {
@@ -211,61 +301,41 @@ export default {
     countDownHandler(data) {
       this.countDownIntervalHandler(data.start, data.interval, data.startTime)
     },
-    countdownRecursive(number, interval) {
-      console.log(
-        'countdown recursive num: ' + number + ' interval: ' + interval
-      )
-      if (number === 0) {
-        this.drawCounterFinish()
-      } else {
-        this.drawNumberOnCanvas(number)
-        setTimeout(
-          this.countdownRecursive,
-          parseInt(interval),
-          number - 1,
-          interval
-        )
-      }
-    },
     countDownIntervalHandler(start, interval, startTime) {
       clearInterval(this.intervalObj)
+      this.countDownRunning = true
       this.intervalObj = setInterval(
         this.countDownInterval,
-        Math.floor(interval / 2),
+        Math.floor(33),
         start,
         interval,
         startTime
       )
+      //setTimeout(this.countDownInterval, parseInt(33), start, interval, startTime)
     },
-    /**
-     *
-     * @param data
-     *        image: base64
-     *        css: css of canvas
-     *        ox:
-     *        oy:
-     *        w:
-     *        h:
-     */
     displayImageCSSHandler(data) {
-      this.canvas.width = data.w
-      this.canvas.height = data.h
-      this.canvas.style = data.css
+      this.canvWrap.style = data.css
 
-
-
-      let image = new window.Image()
-
-      let vue = this
+      let image = new Image()
+      let canvas = this.canvas
+      let canvWrap = this.canvWrap
 
       image.onload = function() {
         let ratio = Math.max(data.w / image.width, data.h / image.height)
-        vue.canvas.getContext('2d').drawImage(image, 0, 0, Math.round(image.width * ratio), Math.round(image.height * ratio))
+        let newWidth = Math.round(image.width * ratio)
+        let newHeight = Math.round(image.height * ratio)
+
+        canvWrap.style.width = newWidth.toString() + 'px'
+        canvWrap.style.height = newHeight.toString() + 'px'
+        canvas.width = newWidth
+        canvas.height = newHeight
+        canvas.getContext('2d').drawImage(image, 0, 0, newWidth, newHeight)
       }
       image.src = data.image
     },
     countDownInterval(start, interval, startTime) {
-      let time = new Date().getTime()
+      if (!this.countDownRunning) return
+      let time = this.$store.state.sync.delta + Date.now()
       if (time < startTime) return
       let number = start - Math.floor((time - startTime) / interval)
 
@@ -274,7 +344,9 @@ export default {
       } else {
         this.drawCounterFinish()
         clearInterval(this.intervalObj)
+        this.countDownRunning = false
       }
+      //setTimeout(this.countDownInterval, parseInt(33), start, interval, startTime)
     },
     drawNumberOnCanvas(num) {
       this.clearCanvas()
@@ -295,25 +367,19 @@ export default {
     },
     drawCounterFinish() {
       /*let img = new Image()
-
         img.onload = function() {
           let c = document.createElement('canvas')
           c.width = img.width
           c.height = img.height
           let ctx = c.getContext('2d')
-
           ctx.drawImage(img, 0, 0)
-
           let base64 = c.toDataURL('image/jpeg')
-
           this.drawImageHandler({ image: base64 })
         }
-
         img.src = 'https://penocw12.student.cs.kuleuven.be/img/martijn.jpg'*/
       this.drawNumberOnCanvas('BOOM!')
     },
     drawDirectionsHandler(data) {
-      console.log('clearing console')
       this.clearCanvas()
       let ctx = this.canvas.getContext('2d')
       ctx.beginPath()
@@ -323,7 +389,7 @@ export default {
       }
       ctx.stroke()
     },
-    drawArrow(ctx, orientation, label) {
+    drawArrow(ctx, orientation) {
       let headLen = 10
       const radians = (orientation * Math.PI) / 180
       const arrowLength =
@@ -368,90 +434,30 @@ export default {
       this.$router.push({ params: { room_id: room_id } })
     },
     goFullscreen() {
-      this.fullscreen = true
-      //this.$refs['full'].toggle()
-      //this.fullscreen = !this.fullscreen
+      this.isFullscreen = true
 
       this.canvas = this.$refs['canvas']
-      this.openFullscreen(this.$refs.canvWrap)
-      const width = window.screen.width
-      const height = window.screen.height
 
-      this.canvas.height = height
-      this.canvas.width = width
-      /*
-        let ctx = this.canvas.getContext('2d')
-        ctx.fillStyle = 'white'
-        ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
-        ctx.fillStyle = 'black'
-        ctx.beginPath()
-        ctx.arc(width / 2, height / 2, width / 4, 0, 2 * Math.PI)
-        ctx.stroke()*/
-
-      this.canvas.style.display = 'block'
-    },
-    openFullscreen(elem) {
-      if (elem.requestFullscreen) {
-        elem.requestFullscreen()
-      } else if (elem.mozRequestFullScreen) {
-        /* Firefox */
-        elem.mozRequestFullScreen()
-      } else if (elem.webkitRequestFullscreen) {
-        /* Chrome, Safari and Opera */
-        elem.webkitRequestFullscreen()
-      } else if (elem.msRequestFullscreen) {
-        /* IE/Edge */
-        elem.msRequestFullscreen()
-      }
-    },
-    exitHandler() {
-      if (!this.fullscreen) {
-        this.canvas.style.display = 'none'
-      } else {
-        this.fullscreen = false
+      if (this.initialFull) {
+        this.canvas
+          .getContext('2d')
+          .fillRect(0, 0, this.canvas.width, this.canvas.height)
+        this.initialFull = false
       }
     },
     exitRoom() {
       this.$socket.emit('exitRoom')
       this.$router.push({ name: 'home' })
     },
-    drawImageHandler(data) {
-      const base64Image = data.image
-      console.log('got image as base64')
-      console.log(base64Image)
-      const canvas = this.canvas
-      let ctx = this.canvas.getContext('2d')
-      let image = new window.Image()
-
-      image.onload = function() {
-        let wRatio = canvas.width / image.width
-        let hRatio = canvas.height / image.height
-
-        let ratio = Math.min(wRatio, hRatio)
-
-        ctx.drawImage(
-          image,
-          0,
-          0,
-          image.width,
-          image.height,
-          canvas.width / 2 - (image.width * ratio) / 2,
-          canvas.height / 2 - (image.height * ratio) / 2,
-          image.width * ratio,
-          image.height * ratio
-        )
-      }
-      image.src = base64Image
-    },
-    stopRunning() {
-      clearInterval(this.intervalObj)
-    },
     loadVideoHandler(data) {
       this.videoURL = data.videoURL
-      this.canvas.style = data.css
+      this.canvWrap.style = data.css
+      this.canvWrap.height = data.h
+      this.canvWrap.width = data.w
       this.canvas.height = data.h
       this.canvas.width = data.w
       this.$refs.vid.load()
+      this.$refs.vid.currentTime = 0.1
       this.$refs.vid.style = 'display:none'
       this.beginVideoTimeout()
     },
@@ -463,19 +469,49 @@ export default {
     },
     videoLoop(ctx) {
       if (!this.canvasMode) {
-        let ratio = Math.max(this.canvas.width / this.$refs.vid.videoWidth , this.canvas.height /this.$refs.vid.videoHeight)
-        ctx.drawImage(this.$refs.vid, 0,0, Math.round(this.$refs.vid.videoWidth * ratio ), Math.round(this.$refs.vid.videoHeight * ratio))
+        let ratio = Math.max(
+          this.canvas.width / this.$refs.vid.videoWidth,
+          this.canvas.height / this.$refs.vid.videoHeight
+        )
+        ctx.drawImage(
+          this.$refs.vid,
+          0,
+          0,
+          Math.round(this.$refs.vid.videoWidth * ratio),
+          Math.round(this.$refs.vid.videoHeight * ratio)
+        )
         setTimeout(this.videoLoop, 1000 / 30, ctx) // drawing at 30fps
       }
     },
-    startVideoHandler() {
+    syncVideo() {
+      let time = Date.now() + this.$store.state.sync.delta
+      let videoTime = this.videoStartTime + this.$refs.vid.currentTime * 1000
+      if (Math.abs(videoTime - time) > 1000) {
+        this.$refs.vid.currentTime = Math.round(
+          (time - this.videoStartTime) / 1000
+        )
+      } else if (Math.abs(videoTime - time) < this.videoSyncThreshold) {
+        this.$refs.vid.playbackRate = 1
+      } else if (videoTime < time) {
+        this.$refs.vid.playbackRate = 1 + this.videoSpeedupDelta
+      } else {
+        this.$refs.vid.playbackRate = 1 - this.videoSpeedupDelta
+      }
+    },
+    startVideoHandler(data) {
+      clearInterval(this.videoInterval)
+      this.videoInterval = setInterval(this.syncVideo, 30)
+      this.videoStartTime = data.startTime
       this.$refs.vid.play()
     },
     pauseVideoHandler() {
+      clearInterval(this.videoInterval)
       this.$refs.vid.pause()
     },
     restartVideoHandler() {
-      this.$refs.vid.load()
+      clearInterval(this.videoInterval)
+      this.$refs.vid.currentTime = 0
+      //this.$refs.vid.load()
     },
 
     cutout(imgData, w, h, minx, miny) {
@@ -484,9 +520,8 @@ export default {
       c.height = imgData.height
       let ctx = c.getContext('2d')
 
-
-      ctx.putImageData(imgData, 0,0)
-      return ctx.getImageData(minx,miny,w,h)
+      ctx.putImageData(imgData, 0, 0)
+      return ctx.getImageData(minx, miny, w, h)
     },
     cutoutTrans(imgData, w, h, minx, miny) {
       let c = document.createElement('canvas')
@@ -494,39 +529,87 @@ export default {
       c.height = imgData.height
       let ctx = c.getContext('2d')
 
-
-      ctx.putImageData(imgData, 0,0)
-      imgData = ctx.getImageData(minx,miny,w,h)
+      ctx.putImageData(imgData, 0, 0)
+      imgData = ctx.getImageData(minx, miny, w, h)
 
       for (let i = 0; i < c.width * c.height; i++) {
         if (
-            imgData.data[i * 4 + 0] === 255 &&
-            imgData.data[i * 4 + 1] === 255 &&
-            imgData.data[i * 4 + 2] === 255
+          imgData.data[i * 4] === 255 &&
+          imgData.data[i * 4 + 1] === 255 &&
+          imgData.data[i * 4 + 2] === 255
         ) {
           imgData.data[i * 4 + 3] = 0
         }
-
       }
 
       return imgData
     },
     animationInitHandler(data) {
+      this.startTime = null
       //create animation object
-      this.animation = new Animation(null, this.delaunayImage, true)
+      this.animation = new Animation(
+        data.triangulation,
+        this.delaunayImage,
+        true,
+        data.list
+      )
+
+      this.animationFrame = 0
 
       this.delaunayHandler(data)
     },
+    animationStartHandler(data) {
+      if (!this.animationRunning) return
+      let ctx = this.canvas.getContext('2d')
+      this.animation.drawSnow(this.canvas)
+      let c = document.createElement('canvas')
+      let ctx2 = c.getContext('2d')
+      c.width = this.delaunayImage.width
+      c.height = this.delaunayImage.height
+      ctx2.putImageData(this.delaunayImage, 0, 0)
+      ctx.drawImage(c, 0, 0)
+      if (this.animationFrame > 5) {
+        if (this.startTime === null) {
+          this.startTime = Date.now() + this.$store.state.sync.delta
+        }
+        let info = this.animation.getNextFrame(
+          this.animationFrame,
+          this.startTime,
+          Date.now() + this.$store.state.sync.delta
+        )
+        this.animation.drawAnimal(
+          this.canvas,
+          info.x - this.minx,
+          info.y - this.miny,
+          info.angle,
+          info.frame,
+          info.right,
+          true
+        )
+        this.animationFrame += info.extraFrame
+      }
+
+      this.animationFrame++
+      requestAnimationFrame(() => this.animationStartHandler(data))
+    },
     delaunayHandler(data) {
       //create delaunay image and drawSnow on canvas
-      console.log("received triangulation")
-      console.log(data.triangulation)
-      this.delaunayImage = AlgorithmService.delaunayImageTransparent(data.triangulation, data.midpoints, data.width, data.height)
+      this.delaunayImage = AlgorithmService.delaunayImageTransparent(
+        data.triangulation,
+        data.midpoints,
+        data.width,
+        data.height
+      )
 
       // cut right part out of delaunay image
-      this.delaunayImage = this.cutoutTrans(this.delaunayImage, data.w, data.h, data.ox, data.oy)
+      this.delaunayImage = this.cutoutTrans(
+        this.delaunayImage,
+        data.w,
+        data.h,
+        data.ox,
+        data.oy
+      )
       //this.delaunayImage = Image.resizeImageData(this.delaunayImage, [data.w, data.h])
-
 
       //display the image on the screen
       let c = document.createElement('canvas')
@@ -536,11 +619,13 @@ export default {
 
       let ctx = this.canvas.getContext('2d')
 
-      this.canvas.style = data.css
+      this.canvWrap.style = data.css
+      this.canvWrap.width = data.w
+      this.canvWrap.height = data.h
       this.canvas.width = data.w
       this.canvas.height = data.h
       ctx.fillStyle = 'white'
-      ctx.fillRect(0,0,this.canvas.width,this.canvas.height)
+      ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
 
       let c2 = document.createElement('canvas')
       let ctx2 = c2.getContext('2d')
@@ -548,13 +633,100 @@ export default {
       c2.width = this.delaunayImage.width
       c2.height = this.delaunayImage.height
 
-      ctx2.putImageData(this.delaunayImage, 0,0)
-      ctx.drawImage(c2, 0,0)
+      ctx2.putImageData(this.delaunayImage, 0, 0)
+      ctx.drawImage(c2, 0, 0)
 
       //ctx.putImageData(this.delaunayImage, 0,0)
 
       this.minx = data.ox
       this.miny = data.oy
+      this.transCSS = data.css
+      this.transWidth = data.w
+      this.transHeight = data.h
+    },
+    initGame() {
+      this.players = {}
+      this.gameInterval = setInterval(this.gameUpdate, 30)
+    },
+    gameUpdate() {
+      this.canvWrap.style = this.transCSS
+      let ctx = this.canvas.getContext('2d')
+      ctx.fillStyle = 'white'
+      ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
+      ctx.fillStyle = 'blue'
+      try {
+        for (let i in this.players) {
+          // draw life
+          ctx.fillStyle = 'red'
+          ctx.fillRect(
+            this.players[i].pos.x,
+            this.players[i].pos.y - 7,
+            this.playerWidth,
+            5
+          )
+          ctx.fillStyle = 'green'
+          ctx.fillRect(
+            this.players[i].pos.x,
+            this.players[i].pos.y - 7,
+            (this.playerWidth * this.players[i].hp) / 100,
+            5
+          )
+
+          // draw name
+          ctx.fillStyle = 'black'
+          ctx.font = '10px Comic Sans MS'
+          ctx.textAlign = 'center'
+          ctx.fillText(
+            this.players[i].name,
+            this.players[i].pos.x + this.playerWidth / 2,
+            this.players[i].pos.y + this.playerHeight + 15
+          )
+          // draw points
+          ctx.fillText(
+            this.players[i].score,
+            this.players[i].pos.x + this.playerWidth / 2,
+            this.players[i].pos.y + this.playerHeight + 25
+          )
+
+          ctx.fillStyle = 'blue'
+          // draw player
+          ctx.fillRect(
+            this.players[i].pos.x,
+            this.players[i].pos.y,
+            this.playerWidth,
+            this.playerHeight
+          )
+
+          ctx.beginPath()
+          ctx.moveTo(
+            this.players[i].pos.x + this.playerWidth / 2,
+            this.players[i].pos.y + this.playerHeight / 2
+          )
+          ctx.lineTo(
+            this.players[i].pos.x +
+              this.playerWidth / 2 +
+              Math.cos(this.players[i].dir) * 60,
+            this.players[i].pos.y +
+              this.playerHeight / 2 +
+              Math.sin(-this.players[i].dir) * 60
+          )
+          ctx.stroke()
+        }
+        ctx.fillStyle = 'black'
+        for (let i in this.bulletList) {
+          ctx.beginPath()
+          ctx.arc(
+            this.bulletList[i].pos.x + this.playerWidth / 2,
+            this.bulletList[i].pos.y + this.playerHeight / 2,
+            5,
+            0,
+            2 * Math.PI
+          )
+          ctx.fill()
+        }
+      } catch (e) {
+        console.log(e)
+      }
     },
     /**
      *
@@ -568,9 +740,51 @@ export default {
       let ctx2 = c.getContext('2d')
       c.width = this.delaunayImage.width
       c.height = this.delaunayImage.height
-      ctx2.putImageData(this.delaunayImage, 0,0)
-      ctx.drawImage(c, 0,0)
-      this.animation.drawAnimals(5,150,this.canvas, data[0] - this.minx, data[1] - this.miny, data[2], data[3], data[4])
+      ctx2.putImageData(this.delaunayImage, 0, 0)
+      ctx.drawImage(c, 0, 0)
+      this.animation.drawAnimals(
+        5,
+        150,
+        this.canvas,
+        data[0] - this.minx,
+        data[1] - this.miny,
+        data[2],
+        data[3],
+        data[4]
+      )
+    },
+    trackingInitHandler() {
+      this.trackingRunning = true
+    },
+
+    trackingUpdateHandler(data) {
+      let domMatrix = new DOMMatrix(data.css)
+      if (this.dimensionRunning) {
+        this.scene.updateMatrix(domMatrix)
+      } else {
+        this.canvas.style.transform = domMatrix
+      }
+    },
+
+    trackingStopHandler() {
+      this.trackingRunning = false
+      this.canvas.style.transform = new DOMMatrix()
+    },
+    dimensionInitHandler() {
+      this.dimensionRunning = true
+      this.dimensionUpdater()
+      if (this.scene) {
+        sceneWrapper.innerHTML = ''
+      }
+      this.scene = new Scene(document.getElementById('sceneWrapper'))
+    },
+    dimensionStopHandler() {
+      this.dimensionRunning = false
+    },
+    dimensionUpdater() {
+      if (!this.dimensionRunning) return
+      if (this.scene !== null) this.scene.render()
+      requestAnimationFrame(this.dimensionUpdater.bind(this))
     }
   }
 }

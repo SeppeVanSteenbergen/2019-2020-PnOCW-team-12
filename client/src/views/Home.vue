@@ -1,56 +1,70 @@
 <template>
-  <!--<div>
-        <v-btn @click="action">
-            Do Something
-        </v-btn>
-        <h1>
-            output data: {{something}}
-        </h1>
-    </div>-->
-  <v-container class="fill-height" fluid>
-    <v-row align="center" justify="center" min-height="300px">
-      <MasterClientCard v-on:master="master" v-on:client="client" />
+  <v-container fluid style="padding-top: 110px">
+    <v-row align="center" justify="center" max-width="240px" dense>
+      <v-card width="240px">
+        <v-toolbar color="primary" dark flat>
+          <div class="flex-grow-1"></div>
+          <v-toolbar-title>Select your device role</v-toolbar-title>
+          <div class="flex-grow-1"></div>
+        </v-toolbar>
+        <v-container>
+          <div justify="center" align="center">
+            <v-btn
+              color="warning"
+              @click="master()"
+              style="margin-top: 13px; margin-bottom: 25px;"
+              >Master</v-btn
+            >
+            <br />
+            <v-btn color="error" @click="client()" style="margin-bottom: 25px;"
+              >Client</v-btn
+            >
+            <br />
+            <v-btn
+              color="green"
+              @click="controller()"
+              style="margin-bottom: 13px;"
+              >Controller</v-btn
+            >
+          </div>
+        </v-container>
+      </v-card>
     </v-row>
   </v-container>
 </template>
 <script>
-import axios from '../plugins/axios'
-import MasterClientCard from '../components/MasterClientCard'
 export default {
   name: 'home',
-  components: {
-    MasterClientCard
-  },
-  data() {
-    return {
-      something: ''
-    }
-  },
   methods: {
-    async action() {
-      /*console.log('sending request')
-      let result = await axios
-        .get('/login/guest')
-        .then(function(data) {
-          this.something = data.data
-        })
-        .catch(err => {
-          console.log(err)
-        })*/
-    },
     master() {
-      console.log('master')
-      this.$socket.emit('createRoom')
       try {
+        console.log(this.myRoom)
+
+        if (typeof  this.myRoom !== 'undefined' && this.myRoom !== null) {
+          if (!this.myRoom.open) {
+            this.toggleRoom()
+          }
+        }
+
         this.$router.push({ name: 'master' })
-      } catch(e) {
+        this.$socket.emit('createRoom')
+      } catch (e) {
         console.log(e)
       }
     },
     client() {
       try {
         this.$router.push({ name: 'client' })
-      } catch(e) {
+      } catch (e) {
+        console.log(e)
+      }
+    },
+    controller() {
+      try {
+        this.$router.push({
+          name: 'controller'
+        })
+      } catch (e) {
         console.log(e)
       }
     }

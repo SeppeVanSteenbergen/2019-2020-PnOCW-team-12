@@ -1,0 +1,16 @@
+Het onderscheiden en detecteren van verschillende kleuren speelt een belangrijke rol bij het detecteren van schermen. De waarneming van een kleur aan de hand van een foto stemt echter niet altijd overeen met de afgebeelde kleur op een scherm. De voornaamste oorzaken hiervan zijn lichtinval en reflectie. Tijdens detectie moet er dus rekening gehouden worden met deze factoren. De keuze van de kleurruimte zal hierbij essentieel zijn om een goede range op te stellen voor detectie van de verschillende kleuren.
+
+\subsection{Kleurmodellen en ruimtes}
+
+\paragraph{RGB} is een additief kleurmodel waarbij een kleur wordt beschreven aan de hand van de drie primaire kleuren: rood, groen en blauw. Elke kleur wordt gevormd aan de hand van een combinatie van deze drie kleuren. RGB wordt heel veel gebruikt in grafische toepassingen. Wanneer een foto door een computer wordt uitgelezen zal dit ook in RGB-waarden gebeuren. Het RGB-model vormt een niet-lineaire en discontinue ruimte. Deze discontinuïteit maakt het beschrijven van een verandering in tint moeilijk. Daarnaast is het RGB-model gevoelig aan verandering van licht, wat resulteert in een verandering van tint.
+
+\paragraph{HSL en HSV} maken allebei deel uit van het cylindrisch model. Deze worden beschreven in drie dimensies: een hoek, die de tint voorstelt gaande van 0\degree (rood), naar 120\degree (groen), richting 240\degree (blauw), om uiteindelijk bij 360\degree (rood) rond te zijn (zie figuur \ref{colorWheel}). Een horizontale dimensie, die de saturatie beschrijft en een verticale dimensie, die de lichtheid (HSL) of waarde (HSV) bepaalt. Het voornaamste voordeel van deze modellen over andere modellen is het feit dat ze immuun zijn aan veranderingen in licht. Want deze zitten in een aparte dimensie. Een ander voordeel is de continue tint in de HSV- en HSL-modellen. HSL wordt uiteindelijk boven HSV verkozen door zijn symmetrie voor licht en donker. \cite{inbook} \cite{rasouli2017effect}
+
+\begin{figure}[h]
+	\center
+	\includegraphics[width=0.6\textwidth]{img/hslColorWheel.png}
+	\caption{De waarden van de verschillende tinten in HSL. \cite{hslColorWheel}}
+	\label{colorWheel}
+\end{figure}
+
+\paragraph{CIE} is gemaakt door de Commission Internationale de l'Éclairage (CIE). Het was het eerste model dat kleuren wiskundig kan voorstellen. Hierbij wordt gebruik gemaakt van de link tussen de verschillende golflengtes van het visueel spectrum en de manier waarop mensen kleuren waarnemen. Het CIE-model lag ook aan de basis van bijna alle andere kleurmodellen die achteraf ontwikkeld zijn. Het grootste nadeel van het gebruik van dit model is de complexe omzetting van RGB naar CIE. Om deze reden wordt dit model niet verder bekeken.

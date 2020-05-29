@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<style></style>
+	<title>Animation test</title>
+</head>
+
+<body>
+    <script src="Animations.js" type="text/javascript"></script>
+    <script src="Triangle.js" type="text/javascript"></script>
+    <script src="Delaunay.js" type="text/javascript"></script>
+    <script src="Point.js" type="text/javascript"></script>
+    <script src="Line.js" type="text/javascript"></script>
+
+<!--    <h2>Animation Test</h2>-->
+    <canvas id="canvas" width= "900" height= "900"></canvas>
+    <script>
+        var canvas = document.getElementById("canvas");
+        // var triangulation = Delaunay.triangulation(Delaunay.randomPointsGenerator(4, canvas), canvas.width, canvas.height);
+        var triangulation = Delaunay.triangulation([[201,700],[51,500],[50,50],[0,0]], canvas.width, canvas.height)
+        // var animation1 = new Animations(triangulation, {width: canvas.width, height:canvas.height})
+
+        var list = [1,7,5,8,7,4];
+        var frame = 0;
+        var startTime = null;
+
+
+        var animationClient = new Animations(triangulation, {width: canvas.width, height:canvas.height}, true, list);
+        // catImage  = new Image()
+        // catImage.src = "catsmall2.png"
+
+
+        //animation loop
+
+        function drawDelaunay(){
+
+            for(let tri = 0; tri < triangulation.length; tri++){
+                let ctx = canvas.getContext("2d");
+                let triangle = triangulation[tri];
+                ctx.beginPath();
+                ctx.moveTo(triangle.point1[0], triangle.point1[1]);
+                ctx.lineTo(triangle.point2[0], triangle.point2[1]);
+                ctx.lineTo(triangle.point3[0], triangle.point3[1]);
+                ctx.lineTo(triangle.point1[0], triangle.point1[1]);
+                ctx.closePath();
+                ctx.lineWidth = 2;
+                ctx.strokeStyle = '#000';
+                ctx.stroke();
+            }
+
+        }
+        // setInterval(function(){
+        //
+        //     canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
+        //
+        //     animationClient.drawBackground(canvas);
+        //     drawDelaunay();
+        //     let info1 = animationClient.getNextFrame();
+        //     animationClient.drawAnimal(canvas, info1.x, info1.y, info1.angle, info1.frame, info1.right, true);
+        //
+        // }, 50);
+
+        function startAnimation(){
+
+            canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
+
+            animationClient.drawBackground(canvas);
+            drawDelaunay();
+
+
+            if (frame>5){
+                if(startTime ===null){
+                    startTime = Date.now()
+                }
+                let info1 = animationClient.getNextFrame(frame, startTime, Date.now());
+                animationClient.drawAnimal(canvas, info1.x, info1.y, info1.angle, info1.frame, info1.right, true);
+                frame += info1.extraFrame
+
+            }
+            frame++;
+
+
+
+            requestAnimationFrame(startAnimation);
+
+        }
+        requestAnimationFrame(startAnimation);
+
+
+    </script>
+	
+
+</body>
+
+</html>

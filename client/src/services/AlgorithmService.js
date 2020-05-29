@@ -1,27 +1,63 @@
-import Image from '../algorithms/Image'
 import Delaunay from '../algorithms/Delaunay'
 
 export default {
-  fullAnalysis(imgData, clientInfo) {
-    imgData = Image.resizeImageData(imgData, [1920, 1080])
-    let inputImage = new Image(imgData, null, 'RGBA', clientInfo)
+  fullAnalysis(imgData, clientInfo, masterVue) {
+    // DEPRECATED, MOVED TO workerEnv AND waitEnv
 
-    return inputImage
+    // imgData = Image.resizeImageData(imgData, [1920, 1080])
+    // let communicator = new Communicator(masterVue)
+    // let inputImage = new Image(imgData, null, 'RGBA', clientInfo, communicator)
+
+    // return inputImage
+
+    // let result = null;
+    // let analysed = false
+
+    // let analyseWorker = new Worker("worker.js")
+
+    // let comm = new Communicator(masterVue)
+    // comm.sendSuccessMessage("Started Analyse on a worker!")
+
+    // analyseWorker.onmessage = function(m) {
+    //   if(m.data.text === "DONE"){
+    //     console.log(m.data.result)
+    //     result = m.data.result
+    //     analysed = true
+    //     analyseWorker.terminate()
+    //   }
+    // }
+
+    // let sizedImgData = Image.resizeImageData(imgData, [1920, 1080])
+
+    // analyseWorker.postMessage({
+    //   text: "START",
+    //   param: [sizedImgData, clientInfo]
+    // })
+
+    //busy wait om te testen nog
+    // while(!analysed){}
+
+    // return result;
   },
 
-  drawScreenOutlines(c, aImage) {
+  drawScreenOutlines(c, aImage, dx = 0, dy = 0) {
     let ctx = c.getContext('2d')
-    ctx.strokeStyle = '#ff0000'
+    ctx.lineWidth = 4
     let s = aImage.screens
     for (let i = 0; i < s.length; i++) {
+      ctx.strokeStyle = '#ff0000'
       ctx.beginPath()
-      ctx.moveTo(s[i].corners[0][0], s[i].corners[0][1])
-      ctx.lineTo(s[i].corners[1][0], s[i].corners[1][1])
-      ctx.lineTo(s[i].corners[2][0], s[i].corners[2][1])
-      ctx.lineTo(s[i].corners[3][0], s[i].corners[3][1])
-      ctx.lineTo(s[i].corners[0][0], s[i].corners[0][1])
+      ctx.moveTo(s[i].corners[0][0] - dx, s[i].corners[0][1] - dy)
+      ctx.lineTo(s[i].corners[1][0] - dx, s[i].corners[1][1] - dy)
+      ctx.lineTo(s[i].corners[2][0] - dx, s[i].corners[2][1] - dy)
+      ctx.lineTo(s[i].corners[3][0] - dx, s[i].corners[3][1] - dy)
+      ctx.lineTo(s[i].corners[0][0] - dx, s[i].corners[0][1] - dy)
       ctx.closePath()
       ctx.stroke()
+
+      ctx.strokeStyle = 'black'
+      ctx.font = '30px Comic Sans MS'
+      ctx.strokeText(s[i].clientCode, s[i].midPoint[0] - dx, s[i].midPoint[1] - dy)
     }
   },
 
@@ -91,7 +127,6 @@ export default {
       ) {
         imgData.data[i * 4 + 3] = 0
       }
-
     }
 
     return imgData

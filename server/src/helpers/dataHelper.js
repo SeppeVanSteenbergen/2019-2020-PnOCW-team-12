@@ -1,3 +1,5 @@
+/*globals clientList, roomList, registrationList*/
+
 /*
 
 the connected clients have a format
@@ -38,14 +40,16 @@ module.exports = {
    * Links the active socket connection to the user_id
    */
   registerUserSocket(user_id, socket_id) {
-
     if (typeof clientList[user_id] === 'undefined') this.addUser(user_id)
 
-    if(clientList[user_id].socket_id !== -1) {
+    if (clientList[user_id].socket_id !== -1) {
       return 1
     }
 
     clientList[user_id].socket_id = socket_id
+    if (clientList[user_id].room !== -1) {
+      roomList[clientList[user_id].room].open = true
+    }
 
     console.log(clientList)
 
@@ -115,7 +119,7 @@ module.exports = {
     return 1
   },
 
-   exitRoom(user_id) {
+  exitRoom(user_id) {
     console.log('start exit room func')
     if (clientList[user_id].room === -1) {
       console.log('Client is not in a room')
@@ -132,6 +136,7 @@ module.exports = {
     console.log('try disconnecting master')
     if (roomList[room_id].master === user_id) {
       this.disconnectAllClientsFromRoom(room_id)
+      delete controllerList[room_id]
       console.log('removing master')
       console.log(roomList)
       delete roomList[room_id]
@@ -274,6 +279,9 @@ module.exports = {
   },
 
   getClientsOfRoom(room_id) {
+    if (typeof roomList[room_id] === 'undefined'){
+      return []
+    }
     return roomList[room_id].clients
   },
   addUserRegistration(user_id, key) {
@@ -283,25 +291,27 @@ module.exports = {
     })
   },
   validRegistration(user_id, key) {
-    for(let i = 0; i < Object.keys(registrationList).length; i++) {
-      if(registrationList[i].user_id === user_id && registrationList[i].key === key) {
+    for (let i = 0; i < Object.keys(registrationList).length; i++) {
+      if (
+        registrationList[i].user_id === user_id &&
+        registrationList[i].key === key
+      ) {
         registrationList.splice(i, 1)
         return true
-
       }
     }
     return false
   },
   isRegisteredSocket(socket_id) {
-    for(let user_id in clientList) {
-      if(clientList[user_id].socket_id === socket_id) {
+    for (let user_id in clientList) {
+      if (clientList[user_id].socket_id === socket_id) {
         return true
       }
     }
     return false
   },
   disableSocket(user_id) {
-    if(typeof clientList[user_id] !== 'undefined') {
+    if (typeof clientList[user_id] !== 'undefined') {
       clientList[user_id].socket_id = -1
       return 0
     }

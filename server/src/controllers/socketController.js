@@ -61,6 +61,50 @@ registrationList = []
  */
 pingList = {}
 
+/**
+ * contains all the controller information
+ *  {
+ *    room_id: {
+ *      socket_id: {   // this defines a player
+ *        name:   // optional given name
+ *        pos: {
+ *          x:
+ *          y:
+ *        },
+ *        dir:    // direction
+ *        bullet_amount: 0   // amount of bullets the player has in the screen
+ *        hp:   // 100 is max
+ *        score:  // how many points player has
+ *      }
+ *    }
+ *  }
+ */
+controllerList = {}
+
+/**
+ * {
+ *   room_id: [
+ *     bullet {
+ *       pos: {
+ *         x:,
+ *         y:
+ *       },
+ *       dir:    // direction
+ *       frame:   // how many frames the bullet existed
+ *       socket_id:  // id of the socket the bullet is from
+ *     },
+ *     ...
+ *   ]
+ * }
+ *
+ */
+bulletList = {}
+
+let bulletUpdateTimeout = 18
+
+
+setInterval(socketHelper.updateBullets.bind(socketHelper), bulletUpdateTimeout)
+
 module.exports = io => {
   io.on('connect', socket => {
     console.log('client connected')
@@ -95,6 +139,8 @@ module.exports = io => {
       }*/
       console.log('client disconnected')
       socketHelper.updateAllRoomLists()
+
+      socketHelper.removeController(socket.id)
     })
 
     socket.on('registerUserSocket', data => {
@@ -194,8 +240,25 @@ module.exports = io => {
       socketHelper.pong(dataHelper.getUserIDFromSocketID(socket.id), data)
     })
 
+    socket.on('startSync', () => {
+      console.log('starting synchronisation')
+      socketHelper.syncRoomOfMaster(dataHelper.getUserIDFromSocketID(socket.id))
+    })
+
     socket.on('af', data => {
-      socketHelper.animationFrame(dataHelper.getUserIDFromSocketID(socket.id),data)
+      socketHelper.animationFrame(
+        dataHelper.getUserIDFromSocketID(socket.id),
+        data
+      )
+    })
+
+    socket.on('move', data => {
+      socketHelper.updateSendControllerData(data, socket.id)
+    })
+
+    socket.on('connectController', data => {
+      socketHelper.removeController(socket.id)
+      socketHelper.connectController(data.room_id,data.name, socket.id)
     })
   })
 }

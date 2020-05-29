@@ -1,5 +1,4 @@
 import Triangle from './Triangle'
-import Point from './Point'
 
 export default class Delaunay {
   static randomPointsGenerator(nbPoints, canvas) {
@@ -16,20 +15,6 @@ export default class Delaunay {
     return Math.sqrt(
       Math.pow(point1[0] - point2[0], 2) + Math.pow(point1[1] - point2[1], 2)
     )
-  }
-
-  /*
-  input points = array of all points
-  sorts all points in points in function of distance to seedPoint in descending order to seedPoint
-  */
-  radialSort(points, point) {
-    points.sort(function(a, b) {
-      let distanceA = this.calcDistance(a, point)
-      let distanceB = this.calcDistance(b, point)
-      return distanceB - distanceA
-    })
-
-    return points
   }
 
   static triangulationEdges(triangulation) {
@@ -164,7 +149,6 @@ export default class Delaunay {
 
   //correct
   static calcRadius(point1, point2, point3) {
-    // console.log("3 punten", point1, point2, point3)
     let dist1 = this.calcDistance(point2, point3)
     let dist2 = this.calcDistance(point1, point3)
     let dist3 = this.calcDistance(point1, point2)
