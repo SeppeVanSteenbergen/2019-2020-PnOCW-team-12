@@ -11,6 +11,7 @@ class Image {
     this.height = imgData.height
     this.islands = []
     this.offSet = 1
+    this.rgbChannelAvg = []
 
     if (colorSpace === 'RGBA') {
       if (typeof ImageAlg !== 'undefined') {
@@ -33,7 +34,7 @@ class Image {
   }
 
   analyse() {
-    ColorSpace.rgbaToHsla(this.pixels)
+    this.rgbChannelAvg = ColorSpace.rgbaToHsla(this.pixels)
     this.setColorSpace('HSLA')
 
     self.postMessage({

@@ -178,7 +178,8 @@ class Island {
     this.clientCode = RGBBarcodeScanner.scan(
       this.getScreenImgData(this.RGBImage),
       this.corners.LU,
-      this.corners.RU
+      this.corners.RU,
+      this.HSLImage.rgbChannelAvg
     )
     this.localToWorld()
 

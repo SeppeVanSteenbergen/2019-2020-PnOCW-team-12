@@ -1,6 +1,6 @@
 class RGBBarcodeScanner {
   //The imageObject must be a copy bcs it will be changed!!!!.
-  static scan(imageObjectOrig, LU, RU) {
+  static scan(imageObjectOrig, LU, RU, rgbChannelAvg) {
     let imageData = new ImageData(
       new Uint8ClampedArray(imageObjectOrig.data),
       imageObjectOrig.width,
@@ -8,11 +8,11 @@ class RGBBarcodeScanner {
     )
     let iterator = new PixelIterator(LU, RU, imageData.width, imageData.height)
 
-    let spectrum = this.channelAvg(imageData.data)
+    let spectrum = rgbChannelAvg
 
     let barcodes = {}
     let grey = spectrum[0]
-    let distance = Math.round((spectrum[1] - spectrum[2]) / 2)
+    let distance = Math.round((spectrum[1] - spectrum[2]) >> 1)
     let black = [grey[0] - distance, grey[1] - distance, grey[2] - distance]
     let white = [grey[0] + distance, grey[1] + distance, grey[2] + distance]
 

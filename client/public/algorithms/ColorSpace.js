@@ -1,9 +1,18 @@
 class ColorSpace {
   /**
    * pixels as array in rgba colorspace
+   * pixels will be in hsl after execution of the function and the
+   * function returns the rgb channel average of rgb for the barcodescanner.
    * math from https://www.rapidtables.com/convert/color/rgb-to-hsl.html
    */
   static rgbaToHsla(pixels) {
+    let R = 0
+    let G = 0
+    let B = 0
+    let black = [0, 0, 0]
+    let white = [255, 255, 255]
+    let closestBlack = [255, 255, 255]
+    let closestWhite = [0, 0, 0]
     for (let i = 0; i < pixels.length; i += 4) {
       // Convert rgb spectrum to 0-1
       let red = pixels[i] / 255
@@ -20,7 +29,26 @@ class ColorSpace {
       pixels[i] = H / 2
       pixels[i + 1] = Math.round(S * 100)
       pixels[i + 2] = Math.round(L * 100)
+
+      //calc channel avg
+      R += red
+      G += green
+      B += blue
+      let pixel = [red, green, blue]
+      if (this.distance(pixel, white) < this.distance(closestWhite, white)) {
+        closestWhite = pixel
+      }
+      if (this.distance(pixel, black) < this.distance(closestBlack, black)) {
+        closestBlack = pixel
+      }
     }
+    let pixelNb = pixels.length >> 2
+    return [
+      [R / pixelNb, G / pixelNb, B / pixelNb],
+      closestWhite.reduce((a, b) => a + b, 0) / 3,
+      closestBlack.reduce((a, b) => a + b, 0) / 3
+    ]
+
   }
 
   static findSaturation(min, max, L) {
@@ -264,5 +292,12 @@ class ColorSpace {
     )
 
     return deltaC00
+  }
+  static distance(first, second) {
+    return Math.sqrt(
+      (second[0] - first[0]) * (second[0] - first[0]) +
+        (second[1] - first[1]) * (second[1] - first[1]) +
+        (second[2] - first[2]) * (second[2] - first[2])
+    )
   }
 }
